@@ -145,7 +145,7 @@ $( document ).ready(function() {
     });
 
     btnSettings.listen("click", function(event) {
-        window.open("setting.html","_blank","");
+        windowOpen("setting.html","_blank","");
 //        fn_OpenPop("setting.html");
     });
 
@@ -452,7 +452,7 @@ $( document ).ready(function() {
         if ( tIdx == 2) {
             setTimeout(function(){
 //            window.open("http://softm.net/t/search.html?idx=1","_blank","");
-            window.open("search.html?idx=1","_blank","");
+                windowOpen("search.html?idx=1","_blank","");
 //            fn_OpenPop("search.html");
             },500);
         }
@@ -582,7 +582,7 @@ $( document ).ready(function() {
 					console.info(poi);
 					if ( poi.gubun.value == NaviGubun.SEARCH.value ) {
 						console.info("검색화면");
-						window.open("search.html?idx=1&search="+poi.name,"_blank","");
+						windowOpen("search.html?idx=1&search="+poi.name,"_blank","");
 					} else if ( poi.gubun.value == NaviGubun.POI.value ) {
 						fn_StartNavi(poi.getName(),poi.getLat(),poi.getLon());
 					}
