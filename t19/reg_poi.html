@@ -1029,7 +1029,8 @@ function onChangeButton(enableNavi,enableConfirm) {
                 var icon = index<9?"pin_b_m_" + (index+1) + ".png":"pin_b_s_simple.png";
                 var widthHeight = "";
                     widthHeight= "width='30' height='40'";
-                row.children[0].innerHTML = "<img src='http://tmapapis.sktelecom.com/upload/tmap/marker/" + icon + "' " + widthHeight + " class='position_r' />";
+                // row.children[0].innerHTML = "<img src='http://tmapapis.sktelecom.com/upload/tmap/marker/" + icon + "' " + widthHeight + " class='position_r' />";
+                row.children[0].innerHTML = "<img src='./images/tmap/marker/" + icon + "' " + widthHeight + " class='position_r' />";
                 row.children[1].children[0].innerText = poi.getName();
                 row.children[1].children[1].innerText = detail.join(" ");
 //              if (tIdx == 2) { // 즐겨찾기
