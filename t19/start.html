@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>티</title>
+  <!-- <link href="./lib/material-components-web.min.css" rel="stylesheet"> -->
+  <link href="./lib/material-components-web.min.new.css" rel="stylesheet">
+  <!-- <script src="./lib/material-components-web.min.js"></script> -->
+  <script src="./lib/material-components-web.min.new.js"></script>
+  <link rel="stylesheet" href="./lib/icon.css">
+  <link rel="stylesheet" href="./lib/common.css?a=">
+  <link href='https://fonts.googleapis.com/css?family=Audiowide|Iceland|Monoton|Pacifico|Press+Start+2P|Vampiro+One' rel='stylesheet' type='text/css'>
+
+ </head>
+
+<!--  using - default i18next-->
+<!--
+<script src="https://unpkg.com/i18next/i18next.js"></script>
+<script src="https://unpkg.com/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+<script src="https://unpkg.com/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.js"></script>
+-->
+
+<!-- using - jquery i18next -->
+<!-- -->
+  <script src="./lib/jquery-3.6.4.min.js"></script>
+  <script src="./lib/i18next.min.js"></script>
+  <script src="./lib/common.js?a=2"></script>
+  <script src="./lib/interface.js"></script>
+<script>
+var checkMode = getParam("p_check_mode");
+var btnFirstStart = null;
+
+$( document ).ready(function() {
+
+  btnFirstStart    = new mdc.ripple.MDCRipple(document.querySelector("#btnFirstStart"));
+	btnFirstStart.listen("click", function(event) {
+		// self.close();
+    fn_OpenUrl("permission.html");
+	});
+
+});
+
+function go() {
+  // overlay : 다른 앱 위에 표시
+  // location :> 위치 권한 설정
+  // usagestats :> 사용정보 접근 허용
+  // gps :> 위치 서비스 활성화
+  // notification_access :> 알람 접근 설정
+	// if ( granted.length == 4 ) {
+	// if ( granted.includes("notification_access") && granted.includes("overlay") ) {
+    
+  // debugger;
+  if ( initCheckGrants.every((item,idx)=> granted.includes(item)) ) {    
+		snackbar( t("toast.grant") );
+    //alert("index.html")
+    fn_GetURL("WEB_MAIN","fReload");
+		// document.location.replace("index.html?lng="+navigator.language.split("-")[0]);
+	}
+}
+</script>
+<style>
+</style>
+</head>
+<body>
+<div class="i18n">
+<header class="mdc-top-app-bar mdc-top-app-bar--fixed">
+</header>
+
+<div class="main mdc-top-app-bar--fixed-adjust i18n">
+  <div class="row">
+    
+    <div>
+      <span style="font-size:20px"><span style="font-size:29px">"</span><h2  style="display:inline;color:var(--softm-start);" data-i18n="[html]label.app_name">티맵자동실행</h2><span style="font-size:29px">"</span></span>
+    </div>
+
+  </div>
+  <div class="row" style="padding-top:30px">
+      <div class="row" style="height:80px">
+          <img src="./images/logo_100.svg"/>
+      </div>
+
+      <div class="row"></div>
+      <div class="row"></div>
+      <div class="row">
+      </div>
+
+      <!-- 다른 앱 위에 표시 -->
+      <div class="row" id="permission_overlay" style="margin-top: 35px !important;margin-bottom: 20px !important;">
+        <div>
+          <span style="font-size:20px;font-weight: bold;">
+            <span data-i18n="[html]message.first_start">시동을 켜면 자동으로 티맵이 실행됩니다.</span>
+          </span>
+        </div>
+
+        <div style="font-size:16px;margin-left:20px;margin-top:50px;margin-bottom:10px">
+          <!-- <div style="text-align:center;">
+            <h3><span data-i18n="[html]message.first_start">시동을 켜면 자동으로 티맵이 실행됩니다. </span></h3>
+          </div> -->
+          <div style="text-align:center;margin-top:100px">
+            <span style="font-size:18px"><span data-i18n="[html]message.first_start2">전원, 블루투스, 와이파이 연결하면,<br/>
+내비게이션을 시작, 종료할 수 있습니다.
+            </span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+      </div>
+  </div>
+
+  <footer style="margin-bottom:50px; padding:30px">
+      <div class="row" id="permission_overlay" style="margin-top: 20px !important;margin-bottom: 20px !important;">
+        <button id="btnFirstStart" class="mdc-button mdc-button--raised margin_right_5" style="width:100%;font-size:16px">
+          <strong data-i18n="label.first_start">설정 시작</strong>
+            <!-- <strong data-i18n="label.permission_overlay">Show over other apps</strong> -->
+            <!-- <strong>시작</strong> -->
+        </button>
+      </div>
+  </footer>
+
+  <div class="mdc-snackbar">
+    <div class="mdc-snackbar__surface">
+      <div class="mdc-snackbar__label" role="status" aria-live="polite">~~</div>
+      <div class="mdc-snackbar__actions"><button type="button" class="mdc-button mdc-snackbar__action"><button
+            class="mdc-icon-button mdc-snackbar__dismiss material-icons" title="Dismiss">close</button></div>
+    </div>
+  </div>
+
+  <div class="basic mdc-dialog">
+    <div class="mdc-dialog__container">
+      <div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" aria-labelledby="my-dialog-title"
+        aria-describedby="my-dialog-content">
+        <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+        <h2 class="mdc-dialog__title" id="my-dialog-title">
+          <!--
+      -->Choose a Ringtone
+          <!--
+    -->
+        </h2>
+        <div class="mdc-dialog__content" id="my-dialog-content">
+        </div>
+        <footer class="mdc-dialog__actions">
+          <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+            <div class="mdc-button__ripple"></div>
+            <span class="mdc-button__label" data-i18n="label.cancel">Cancel</span>
+          </button>
+          <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="accept" data-mdc-dialog-button-default>
+            <div class="mdc-button__ripple"></div>
+            <span class="mdc-button__label" data-i18n="label.ok">OK</span>
+          </button>
+        </footer>
+      </div>
+    </div>
+    <div class="mdc-dialog__scrim"></div>
+  </div>
+</div>
+ </body>
+
+
+</html>
