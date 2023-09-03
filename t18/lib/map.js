@@ -235,7 +235,7 @@ http://tmapapi.sktelecom.com/main.html#webservice/guide/webserviceGuide.guide4
         var name= poi.getName ();
         poi.marker = newMarker(
             map,lat,lon
-            , "http://softm.net/t/images/home.svg"
+            , "./images/home.svg"
             , name
             , '<span onClick="zoomHome()" style="position:relative;top:0px;left:0px;top:5px">' +
               "<span style='background-color: #1266DC;color:white;font-size:14px;padding:5px;'><strong>집</strong></span>" +
@@ -260,7 +260,7 @@ http://tmapapi.sktelecom.com/main.html#webservice/guide/webserviceGuide.guide4
 
         poi.marker = newMarker(
             map,lat,lon
-            , "http://softm.net/t/images/company.svg"
+            , "./images/company.svg"
             , name
             , '<span onClick="zoomCompany()" style="position:relative;top:0px;left:0px;top:5px">' +
               "<span style='background-color: #1266DC;color:white;font-size:14px;padding:5px;'><strong>회사</strong></span>" +
@@ -284,7 +284,7 @@ http://tmapapi.sktelecom.com/main.html#webservice/guide/webserviceGuide.guide4
 
         poi.marker = newMarker(
             map,lat,lon
-            , "http://softm.net/t/images/favorite.svg"
+            , "./images/favorite.svg"
             , name
             , '<span onClick="zoomFavorite()" style="position:relative;top:0px;left:0px;top:5px">' +
               "<span style='background-color: #1266DC;color:white;font-size:14px;padding:5px;'><strong>즐겨찾기</strong></span>" +
