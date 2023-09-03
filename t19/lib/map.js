@@ -126,7 +126,8 @@ http://tmapapi.sktelecom.com/main.html#webservice/guide/webserviceGuide.guide4
         var mk =  newMarker(map
                         , lat
                         , lon
-                        , "http://tmapapis.sktelecom.com/upload/tmap/marker/" + icon
+                        // , "http://tmapapis.sktelecom.com/upload/tmap/marker/" + icon
+                        , "./images/tmap/marker/" + icon
                         , name
                         , label
                         , iconWidth
@@ -199,7 +200,8 @@ http://tmapapi.sktelecom.com/main.html#webservice/guide/webserviceGuide.guide4
         poi.marker = newMarker(map
                         , lat
                         , lon
-                        , "http://tmapapis.sktelecom.com/upload/tmap/marker/" + icon
+//                        , "http://tmapapis.sktelecom.com/upload/tmap/marker/" + icon
+                        , "./images/tmap/marker/" + icon
                         , name
                         , label
                         , iconWidth
