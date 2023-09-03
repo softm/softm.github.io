@@ -981,7 +981,8 @@ $( document ).ready(function() {
                         home_screen:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
                         power_off:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
                     },
-                    serverHost:"http://www.softm.net/tdev"
+                    serverHost:location.origin + location.pathname.substr(0,location.pathname.length-1)
+                    // + "http://www.softm.net/tdev"
                 }
             } else {
                 window.info = (JSON.parse(data));
