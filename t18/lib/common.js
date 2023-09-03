@@ -964,7 +964,7 @@ var footerNavigation = [];
 
 function windowOpen(url) {
   // window.name = "softm";
-  window.open(window.info.serverHost +"/" + url,"softm","");
+  window.open(window.info.serverHost +"/" + window.info.pathName + "/" + url,"softm","");
   // fn_OpenPop(window.info.serverHost+"/" + url);
 
 }
