@@ -3,7 +3,7 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
-  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
   <title>티</title>
   <!-- <link href="./lib/material-components-web.min.css" rel="stylesheet"> -->
   <!-- <link href="./lib/material-components-web.min.new.css" rel="stylesheet"> -->
@@ -17,7 +17,14 @@
   <link rel="stylesheet" href="./lib/icon.css">
   <link rel="stylesheet" href="./lib/common.css?a=4">
   <script src="./lib/hangul.js"></script>
-
+  <script>
+    if ( location.protocol.startsWith("https:") ) {
+      var meta = document.createElement('meta');
+      meta.httpEquiv = "Content-Security-Policy";
+      meta.content = "upgrade-insecure-requests";
+      document.getElementsByTagName('head')[0].appendChild(meta);
+    }
+    </script>
  </head>
 
 <!--  using - default i18next-->
