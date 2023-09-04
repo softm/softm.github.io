@@ -656,6 +656,65 @@ $( document ).ready(function() {
     }
 
     fn_DeviceLoadData("_NAVI_DESTINATION", "readNaviDestination");
+
+
+    window.getInfoCallBack = function (data) {
+        if (isWeb) {
+            window.info = {
+                "appPackage": "com.skt.tmap.ku",
+                "chargingMode": "1",
+                "startWifi": true,
+                "usingRegHome": true,
+                "wifi": {
+                    "bssid": "00:0D:18:00:00:01",
+                    "ssid": "SoftmWifi",
+                    "connected": true
+                },
+                "workGotoOffTime": false,
+                "startPower": true,
+                "naviGeofenceRadius": 200,
+                "naviDestination": "1",
+                "workOffTimeFrom": "17:30",
+                "naviMode": "1",
+                "workGotoTimeTo": "08:50",
+                "naviOverlayWaitTime": 3,
+                "naviPopupMode": true,
+                "bluetooth": {
+                    "bondState": 12,
+                    "address": "00:0D:18:00:00:01",
+                    "name": "OBDII",
+                    "type": 1,
+                    "diassembled": "OBDII"
+                },
+                "startBluetooth": false,
+                "workGotoTimeFrom": "06:00",
+                "naviRenaviPreventTime": 3,
+                "naviAutoStart": true,
+                "workOffTimeTo": "19:00",
+                "notiIcon": true,
+                "btnSwitchIndependenceCondition": true,
+                "startStopOnOff":{
+                    bluetooth:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
+                    wifi:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
+                    tethering:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
+                    airplane_mode:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
+                    screen_on:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
+                    unlock:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
+                    play_music:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
+                    home_screen:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
+                    power_off:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
+                },
+                serverHost:location.origin,
+                pathName:location.pathname.substring(1,location.pathname.length-1)
+                // + "http://www.softm.net/tdev"
+            }
+        } else {
+            window.info = (JSON.parse(data));
+        }
+    }
+
+    fn_GetInfo("", "getInfoCallBack");
+
 });
 
 function getLocationInitTab(mayId, lat, lon, address) {
