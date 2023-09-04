@@ -569,7 +569,7 @@ $( document ).ready(function() {
     );
     snackbarMDC.timeoutMs = 4000; // min 4000
     snackbarMDC.timeout = 4000; // min 4000
-
+    
     // snackbar.open();
 
     const dialogMDC = new mdc.dialog.MDCDialog(
@@ -601,6 +601,9 @@ $( document ).ready(function() {
             snackbarMDC.close();
       },snackbarMDC.timeout);
     }
+    snackbarMDC.listen("click",function() {
+      snackbarMDC.close();
+    })
     window.material.confirm = function (v, f, felse) {
       document.querySelector("#my-dialog-title").innerHTML = v;
       document.querySelector(".mdc-dialog .mdc-dialog__actions button:nth-child(1)").style.visibility = "visible";    
