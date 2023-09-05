@@ -72,7 +72,8 @@ $( document ).ready(function() {
 
     btnSettings.listen("click", function (event) {
           //        window.open("setting.html","_blank","");
-          window.open("search.html?idx=2","_blank","");
+          // window.open("search.html?idx=2","_blank","");
+          windowOpen("search.html?idx=1");
           // fn_OpenPop("search.html");
           // fn_OpenPop("setting.html");
     });
@@ -343,11 +344,8 @@ console.info( v, (/^[0-9]+$/).test(""+v) );
     });
 
   window.getInfoCallBack = function (data) {
-    window.info = (JSON.parse(data));
-    var v = window.info;
-
     if (isWeb) {
-        v = {
+      window.info = {
             "appPackage": "com.skt.tmap.ku",
             "chargingMode": "1",
             "startWifi": true,
@@ -381,23 +379,34 @@ console.info( v, (/^[0-9]+$/).test(""+v) );
             "notiIcon": true,
             "btnSwitchIndependenceCondition": true,
             "startStopOnOff":{
-                bluetooth:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
-                wifi:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
-                tethering:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
-                airplane_mode:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
-                screen_on:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
-                unlock:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
-                play_music:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
-                home_screen:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
-                power_off:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
+              bluetooth:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              wifi:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              tethering:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              airplane_mode:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              screen_on:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              lock:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              completed_lock:{start:{use_yn:true,onoff:"off"},stop:{use_yn:true,onoff:"on"}},
+              play_music:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              home_screen:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              power_off:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
             },
+            "startMode":"1",
+            "stopMode":"1",
+            "onlyStopAfterNaving":true,
             serverHost:location.origin,
-            pathName:location.pathname.substring(1,location.pathname.length-1),
+            pathName:location.pathname.split("/")[1],
             versionCode:11,
             versionName:"0.0.0.1",
             // + "http://www.softm.net/tdev"
         }
+    } else {
+      window.info = (JSON.parse(data));
     }
+
+    var v = window.info;
+    
+    $(".version-name").text(v.versionName);
+    $(".app_name").text(v.versionName);
 
     $("#divPopupMode").show();
 	//		snackbar(modeNames[v] + "으로 설정 되어 있습니다.");
@@ -558,33 +567,41 @@ console.info( v, (/^[0-9]+$/).test(""+v) );
         </div>
       <div class="mdc-drawer__content">
           <div class="mdc-deprecated-list">
-              <a class="mdc-deprecated-list-item mdc-deprecated-list-item--activated" href="#" aria-current="page">
-                  <span class="mdc-deprecated-list-item__ripple"></span>
-                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home</i>
-                  <span class="mdc-deprecated-list-item__text" data-i18n="label.home_page">Home</span>
-              </a>
-              <a class="mdc-deprecated-list-item" href="#">
-                  <span class="mdc-deprecated-list-item__ripple"></span>
-                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">forum</i>
-                  <span class="mdc-deprecated-list-item__text">문의하기</span>
-              </a>
+            <a class="mdc-deprecated-list-item" href="#" aria-current="page">
+                <span class="mdc-deprecated-list-item__ripple"></span>
+                <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home</i>
+                <span class="mdc-deprecated-list-item__text" data-i18n="label.home_page">Home</span>
+            </a>
+            <a class="mdc-deprecated-list-item" href="#">
+                <span class="mdc-deprecated-list-item__ripple"></span>
+                <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">forum</i>
+                <span class="mdc-deprecated-list-item__text" data-i18n="title.contact_us">문의하기</span>
+            </a>
 
-              <a class="mdc-deprecated-list-item" href="#">
-                  <span class="mdc-deprecated-list-item__ripple"></span>
-                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">star</i>
-                  <span class="mdc-deprecated-list-item__text">어플 평가하기</span>
-              </a>
+            <a class="mdc-deprecated-list-item" href="#">
+                <span class="mdc-deprecated-list-item__ripple"></span>
+                <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">star</i>
+                <span class="mdc-deprecated-list-item__text" data-i18n="label.rate_the_app">어플 평가하기</span>
+            </a>
 
-              <!-- <a class="mdc-deprecated-list-item">
-                  <span class="mdc-deprecated-list-item__ripple"></span>
-                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">settings</i>
-                  <span class="mdc-deprecated-list-item__text">설정</span>
-              </a> -->
-              <!-- <a class="mdc-deprecated-list-item" href="#">
-                  <span class="mdc-deprecated-list-item__ripple"></span>
-                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">drafts</i>
-                  <span class="mdc-deprecated-list-item__text">Drafts</span>
-              </a> -->
+            <a class="mdc-deprecated-list-item mdc-deprecated-list-item--activated" href="#">
+                <span class="mdc-deprecated-list-item__ripple"></span>
+                <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">settings</i>
+                <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_setting">설정</span>
+            </a>
+
+            <a class="none mdc-deprecated-list-item" href="#">
+                <span class="mdc-deprecated-list-item__ripple"></span>
+                <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">toggle_on</i>
+                <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_start_stop">시작/종료</span>
+            </a>
+
+
+            <a class="none mdc-deprecated-list-item" href="#">
+                <span class="mdc-deprecated-list-item__ripple"></span>
+                <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">card_membership</i>
+                <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_membership">멤버쉽</span>
+            </a>
           </div>
       </div>
   </aside>
@@ -907,39 +924,45 @@ console.info( v, (/^[0-9]+$/).test(""+v) );
     <footer>
         <div class="mdc-bottom-navigation">
             <nav class="mdc-bottom-navigation__list">
-                <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
-                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
-                    <span class="material-icons mdc-bottom-navigation__list-item__icon">home</span>
-                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_home">홈</span>
-                </span>
+              <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                  data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                  <span class="material-icons mdc-bottom-navigation__list-item__icon">home</span>
+                  <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_home">홈</span>
+              </span>
 
-                <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
-                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
-                    <span class="material-icons mdc-bottom-navigation__list-item__icon">settings</span>
-                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_setting">설정</span>
-                </span>
+              <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                  data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                  <span class="material-icons mdc-bottom-navigation__list-item__icon">settings</span>
+                  <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_setting">설정</span>
+              </span>
 
-                <span
-                    class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
-                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
-                    <span class="material-icons mdc-bottom-navigation__list-item__icon">toggle_on</span>
-                    <!-- <span class="material-icons mdc-bottom-navigation__list-item__icon">directions_walk</span>
-                    <span class="material-icons mdc-bottom-navigation__list-item__icon">directions_run</span> -->
-                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_start_stop">시작/종료</span>
-                </span>
+              <span
+                  class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                  data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                  <span class="material-icons mdc-bottom-navigation__list-item__icon">toggle_on</span>
+                  <!-- <span class="material-icons mdc-bottom-navigation__list-item__icon">directions_walk</span>
+                  <span class="material-icons mdc-bottom-navigation__list-item__icon">directions_run</span> -->
+                  <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_start_stop">시작/종료</span>
+              </span>
 
-                <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
-                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
-                    <span class="material-icons mdc-bottom-navigation__list-item__icon">card_membership</span>
-                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_membership">멤버쉽</span>
-                </span>
+              <span style="display:none" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                  data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                  <span class="material-icons mdc-bottom-navigation__list-item__icon">card_membership</span>
+                  <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_membership">멤버쉽</span>
+              </span>
 
-                <!-- <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
-                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
-                    <span class="material-icons mdc-bottom-navigation__list-item__icon">lock</span>
-                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_permission">권한</span>
-                </span> -->
-                
+              <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                  data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                  <span class="material-icons mdc-bottom-navigation__list-item__icon">forum</span>
+                  <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.contact_us">문의하기</span>
+              </span>
+
+              <!-- <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                  data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                  <span class="material-icons mdc-bottom-navigation__list-item__icon">lock</span>
+                  <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_permission">권한</span>
+              </span> -->
+              
             </nav>
         </div>
     </footer>

@@ -119,6 +119,15 @@ var messages  = {
             set_whether_run_app :"Set whether to run the app.",
             home_n_company_reg: "Change Home/Company",
             stop_recent_all: "All",
+            mail_qna: "E-mail",
+            qna_top_message: "If you experience any inconvenience while using the app or have any questions, please contact us and we will quickly check and respond. :)",
+            qna_comment_message: "Please send us the following information to help us identify the issue:",
+            qna_comment_detail_message1: "Related screenshots or videos",
+            qna_comment_detail_message2: "Detailed path/description to reproduce problem symptoms",
+            qna_comment_detail_message3: "Model name",
+            qna_comment_detail_message4: "Device system (OS) version",
+            qna_comment_detail_message5: "app version",
+            rate_the_app: "Rate the app",
           },
           title: {
             main: "Basic Settings",
@@ -129,6 +138,7 @@ var messages  = {
             navi: "Navi",
             start_stop_on_off: "On/Off",
             destination: "Destination",
+            contact_us: "Contact us",
           },
           message:{
             save: "Saved.",
@@ -226,7 +236,7 @@ var messages  = {
       ko : {
         translation: {
           label: {
-            app_name : "티맵자동실행",
+            app_nameapp_name : "티맵자동실행",
             top_bar : "티맵자동실행",
             first_start : "설정 시작",
             after_second : "초 후 실행됨",
@@ -343,7 +353,15 @@ var messages  = {
             set_whether_run_app :"앱 실행 여부를 설정합니다.",
             home_n_company_reg: "집/회사 등록",
             stop_recent_all: "모두닫기",
-
+            mail_qna: "메일 문의하기",
+            qna_top_message: "앱 사용중 불편하거나, 궁금한 점을 문의주시면 빠르게 확인 후 답변 드리도록 하겠습니다. :)",
+            qna_comment_message: "다음 내용을 보내주시면 문제 파악에 도움이 됩니다.",
+            qna_comment_detail_message1: "관련 스크린샷 또는 비디오",
+            qna_comment_detail_message2: "문제 증상 재현을 할 수 있는 자세한 경로/설명",
+            qna_comment_detail_message3: "기종 이름",
+            qna_comment_detail_message4: "기기 시스템(OS) 버전",
+            qna_comment_detail_message5: "앱 버전",
+            rate_the_app: "어플 평가하기",
           },
           title: {
             main: "기본",
@@ -354,6 +372,7 @@ var messages  = {
             navi:"안내",
             start_stop_on_off: "On/Off",
             destination: "목적지",
+            contact_us: "문의하기",
           },
           message:{
             save : "저장 되었습니다.",
@@ -550,12 +569,14 @@ $( document ).ready(function() {
             if (drawer.innerList.selectedIndex === 0) {
                 location.replace("index.html");
             } else if (drawer.innerList.selectedIndex === 1) {
-              fn_OpenUrl("setting.html");
+              fn_OpenUrl("qna.html");
                 // fn_OpenPop("setting.html");
 
             } else if (drawer.innerList.selectedIndex === 2) {
-              fn_OpenUrl("setting.html");
-                // fn_OpenPop("grant.html");
+              // fn_OpenUrl("qna.html");
+              fn_GotoMarket("net.softm.startnavi.poweron");
+            } else {
+                location.reload();
             }
             drawer.innerList.selectedIndex = 0;
         }, 100)
@@ -965,7 +986,8 @@ Date.prototype.yyyymmddhhmmss = function() {
 
 var isWeb = !navigator.userAgent.includes("COMPANY=softm");
 
-var footerNavigationUrl = ["index.html","setting.html","onoff.html","membership.html"];
+// var footerNavigationUrl = ["index.html","setting.html","onoff.html","membership.html"];
+var footerNavigationUrl = ["index.html","setting.html","onoff.html","membership.html","qna.html"];
 var footerNavigation = [];
 
 function windowOpen(url) {
