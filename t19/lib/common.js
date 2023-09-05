@@ -575,6 +575,7 @@ $( document ).ready(function() {
             } else if (drawer.innerList.selectedIndex === 2) {
               // fn_OpenUrl("qna.html");
               fn_GotoMarket("net.softm.startnavi.poweron");
+              event.preventDefault();
             } else {
                 location.reload();
             }
