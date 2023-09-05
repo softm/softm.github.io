@@ -550,9 +550,12 @@ $( document ).ready(function() {
             if (drawer.innerList.selectedIndex === 0) {
                 location.replace("index.html");
             } else if (drawer.innerList.selectedIndex === 1) {
-                fn_OpenPop("setting.html");
+              fn_OpenUrl("setting.html");
+                // fn_OpenPop("setting.html");
+
             } else if (drawer.innerList.selectedIndex === 2) {
-                fn_OpenPop("grant.html");
+              fn_OpenUrl("setting.html");
+                // fn_OpenPop("grant.html");
             }
             drawer.innerList.selectedIndex = 0;
         }, 100)

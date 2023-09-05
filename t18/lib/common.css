@@ -542,3 +542,7 @@ hr.sub {
   /* width: 15px; */
   height: 18px;
 }
+
+.mdc-drawer__title::before {
+  height:auto !important;
+}
