@@ -442,7 +442,7 @@ function fn_Reload(reload, callBackFunc) {
  * @date 2016. 07. 13.
  */
 function fn_CopyClipboard(copy, callBackFunc) {
-	var result = { "header":{ "api":"402" }, "body":{ "copy":copy?true:false, "callBackFunc":callBackFunc } };
+	var result = { "header":{ "api":"402" }, "body":{ "copy":copy, "callBackFunc":callBackFunc } };
 	//로그인 초시계 초기화처리
 //	remaining = timeIni;
 	if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
