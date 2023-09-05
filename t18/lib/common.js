@@ -557,6 +557,12 @@ $( document ).ready(function() {
         drawer.open = !drawer.open;
     });
     const mainContentEl = document.querySelector('.main-content');
+
+    document.body.addEventListener('MDCDrawer:opened', () => {
+      // mainContentEl.querySelector('input, button').focus();
+      window.drawerSelectedIndex = drawer.innerList.selectedIndex;
+    });
+
     document.body.addEventListener('MDCDrawer:closed', () => {
         // mainContentEl.querySelector('input, button').focus();
     });
@@ -574,6 +580,7 @@ $( document ).ready(function() {
 
             } else if (drawer.innerList.selectedIndex === 2) {
               // fn_OpenUrl("qna.html");
+              drawer.innerList.selectedIndex  = window.drawerSelectedIndex;
               fn_GotoMarket("net.softm.startnavi.poweron");
               event.preventDefault();
             } else {
