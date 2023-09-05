@@ -39,12 +39,14 @@
 var btnHome;
 var btnSettings;
 var btnEmail;
+var btnCopyemail;
 
 var firstLoad = true;
 $( document ).ready(function() {
         btnHome    = new mdc.ripple.MDCRipple(document.querySelector("#btnHome"));
         btnSettings    = new mdc.ripple.MDCRipple(document.querySelector("#btnSettings"));
         btnEmail    = new mdc.ripple.MDCRipple(document.querySelector("#btnEmail"));
+        btnCopyemail    = new mdc.ripple.MDCRipple(document.querySelector("#btnCopyemail"));
 
         btnHome.listen("click", function(event) {
 	        //	self.close();
@@ -58,6 +60,11 @@ $( document ).ready(function() {
 
         btnEmail.listen("click", function (event) {
             location.href ="mailto:autorunnavi@gmail.com";
+        });
+
+        btnCopyemail.listen("click", function (event) {
+            fn_CopyClipboard("autorunnavi@gmail.com");
+            snackbar("Copied");
         });
 
         footerNavigationIndex = footerNavigationUrl.indexOf(location.pathname.split("/")[2]);
@@ -267,6 +274,10 @@ function pageInit() {
             <div class="row padding_top_10  padding_bottom_10 padding_left_10  padding_right_10" style="background-color: #F1F1F1;">
                 <div class="row basic_font_medium4 align-self-center bold black" data-i18n="[html]label.app_name!" style="color:#F1F1F1;margin: 0px !important;">
                     <a href="mailto:autorunnavi@gmail.com" class="black">autorunnavi@gmail.com</a>
+                    <button id="btnCopyemail" type="button" class="mdc-button" style="align-items: normal;">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="material-icons mdc-bottom-navigation__list-item__icon">content_copy</span>
+                    </button>
                 </div>
             </div>
 

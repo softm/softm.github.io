@@ -431,6 +431,33 @@ function fn_Reload(reload, callBackFunc) {
 	}
 }
 
+/**
+ * API 402 : 네이티브 url webview.reload
+ *
+ * @param url    		호출 URL
+ * @param title    		팝업 타이틀
+ * @param callBackFunc  콜백 함수명
+ *
+ * @corrector  WooYoung.Yoon
+ * @date 2016. 07. 13.
+ */
+function fn_CopyClipboard(copy, callBackFunc) {
+	var result = { "header":{ "api":"402" }, "body":{ "copy":copy?true:false, "callBackFunc":callBackFunc } };
+	//로그인 초시계 초기화처리
+//	remaining = timeIni;
+	if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
+	    fn_Js_Bridge(result);
+	}else{
+		var tempElem = document.createElement('textarea');
+		tempElem.value = copy;  
+		document.body.appendChild(tempElem);
+	  
+		tempElem.select();
+		document.execCommand("copy");
+		document.body.removeChild(tempElem);
+	}
+}
+
 
 
 /**
