@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
   <title>티</title>
+  <link rel="shortcut icon" href="#">
+
   <!-- <link href="./lib/material-components-web.min.css" rel="stylesheet"> -->
   <link href="./lib/material-components-web.min.new.css" rel="stylesheet">
   <!-- <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"> -->
@@ -145,12 +147,10 @@ $( document ).ready(function() {
         }
         initPage(window.info);
     }
-    debugger;
     fn_GetInfo("", "getInfoCallBack");
 });
 
 function initPage(v) {
-    debugger;
     if ( fowardPage ) {
         if (fowardPage == "SEARCH") {
             var p_tidx = getParam("p_tidx");
@@ -240,7 +240,6 @@ function initLoad(v){
         , "안전운전"
     ];
     chipSetNaviMode.listen("click", function (e) {
-        debugger;
         var seq = e.srcElement.offsetParent.id.replace(/[^0-9]/g, "");
         var adapter = chipSetNaviMode.getDefaultFoundation().adapter;
         var selectId = chipSetNaviMode.selectedChipIds[0];
@@ -454,9 +453,9 @@ function initLoad(v){
     });
 
 
-    if (fowardPage) {
-        $(document.body).hide();
-    }
+    // if (fowardPage) {
+        // $(document.body).hide();
+    // }
     btnSelectNavi = new mdc.ripple.MDCRipple(document.querySelector("#btnSelectNavi"));
     btnSelectNavi.listen("click", function (event) {
         let eventListener = function (e) {
@@ -1112,7 +1111,7 @@ function initLoad(v){
     fn_DeviceLoadData("_POI_COMPANY","bindPoiCompany");
 
     $(".version-name").text(v.versionName);
-    $(".app_name").text(v.versionName);
+    // $(".app_name").text(v.versionName);
 
     window.getInstallPackagesKeyCallBack = function (data) {
         var appListItem = (JSON.parse(data) || [{}])[0];
@@ -1806,7 +1805,7 @@ function getStatusMessage() {
                       <span class="mdc-list-item__text">None</span>
                     </li>
                     <li class="mdc-list-item" data-mdc-dialog-action="callisto">
-                      <img class="mdc-list-item__graphic" src="/images/animal1.svg" width="56" height="56" alt="Panda">
+                      <img class="mdc-list-item__graphic" src="" width="56" height="56" alt="Panda">
                       <span class="mdc-list-item__text">Callisto</span>
                     </li>
                     <li class="mdc-deprecated-list-item" data-mdc-dialog-action="v2" tabindex="0">
