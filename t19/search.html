@@ -101,9 +101,8 @@ if ( location.protocol.startsWith("https:") ) {
     search = new mdc.textField.MDCTextField(document.querySelector('#search'));
     list = new mdc.list.MDCList(document.querySelector('.mdc-list'));
     list.singleSelection = true;
-
+    
     document.addEventListener("MDCTabBar:activated", (e) => {
-
       tIdx = tabBar.foundation.adapter.getFocusedTabIndex();
       [].map.call(document.querySelectorAll(".tab_area"), el => {
         el.hide();

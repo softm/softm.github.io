@@ -472,7 +472,15 @@ http://tmapapi.sktelecom.com/main.html#webservice/guide/webserviceGuide.guide4
                 callback(this._responseData);
             },
             onProgress:function(){},
-            onError:function(){}
+            onError:function(){
+                callback({
+                    addressInfo:{
+                        lat:lat,
+                        lng:lng,
+                        fullAddress:""
+                    }
+                });
+            }
         };
         (new Tmapv2.extension.TData()).getAddressFromGeoJson(lat,lng, optionObj, params);
     }

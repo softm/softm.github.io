@@ -62,6 +62,7 @@ var btnSwitchUsingRegHome = null;
 
 var btnSwitchStartPower = null;
 var btnSettings = null;
+var btnSearch = null;
 var btnStartNaviHome     = null;
 var btnStartNaviCompany  = null;
 var btnStartN    = null;
@@ -83,1135 +84,1143 @@ var allGranted = false;
 var btnSearchWifi = null;
 
 $( document ).ready(function() {
-    // if (fowardPage == "SETTING") {
+    window.getInfoCallBack = function (data) {
+        if (isWeb) {
+            window.info = {
+                "appPackage": "com.skt.tmap.ku",
+                "chargingMode": "1",
+                "startWifi": true,
+                "usingRegHome": true,
+                "wifi": {
+                    "bssid": "00:0D:18:00:00:01",
+                    "ssid": "SoftmWifi",
+                    "connected": true
+                },
+                "workGotoOffTime": false,
+                "startPower": true,
+                "naviGeofenceRadius": 200,
+                "naviDestination": "1",
+                "workOffTimeFrom": "17:30",
+                "naviMode": "1",
+                "workGotoTimeTo": "08:50",
+                "naviOverlayWaitTime": 3,
+                "naviPopupMode": true,
+                "bluetooth": {
+                    "bondState": 12,
+                    "address": "00:0D:18:00:00:01",
+                    "name": "OBDII",
+                    "type": 1,
+                    "diassembled": "OBDII"
+                },
+                "startBluetooth": false,
+                "workGotoTimeFrom": "06:00",
+                "naviRenaviPreventTime": 3,
+                "naviAutoStart": true,
+                "workOffTimeTo": "19:00",
+                "notiIcon": true,
+                "btnSwitchIndependenceCondition": true,
+                "startStopOnOff":{
+                    bluetooth:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    wifi:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    tethering:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    airplane_mode:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    screen_on:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    lock:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    completed_lock:{start:{use_yn:true,onoff:"off"},stop:{use_yn:true,onoff:"on"}},
+                    play_music:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    home_screen:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    power_off:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                },
+                "startMode":"1",
+                "stopMode":"1",
+                "onlyStopAfterNaving":true,
+                serverHost:location.origin,
+                pathName:location.pathname.split("/")[1],
+                versionCode:11,
+                versionName:"0.0.0.1",
+                // + "http://www.softm.net/tdev"
+            }
+        } else {
+            window.info = (JSON.parse(data));
+        }
+        initPage(window.info);
+    }
+    debugger;
+    fn_GetInfo("", "getInfoCallBack");
+});
+
+function initPage(v) {
+    debugger;
     if ( fowardPage ) {
-        var url = fowardPage.toLowerCase() + ".html?1=1"
-        //getParam("p_check");
-        //fn_OpenPop(url) ;
+        if (fowardPage == "SEARCH") {
+            var p_tidx = getParam("p_tidx");
+            windowOpen("search.html?idx="+(p_tidx?p_tidx:0));
+        } else {
+            var url = fowardPage.toLowerCase() + ".html?1=1"
+            //getParam("p_check");
+            //fn_OpenPop(url) ;
 
-        var p_check_mode = getParam("p_check_mode");
-        var p_params = getParam("p_params");
-        var p_tidx = getParam("p_tidx");
+            var p_check_mode = getParam("p_check_mode");
+            var p_params = getParam("p_params");
+            var p_tidx = getParam("p_tidx");
 
-        url +=  "&p_check_mode=" + p_check_mode;
-        url +=  "&p_params=" + p_params;
-        url +=  "&p_tidx=" + p_tidx;
-            
-        fn_OpenUrl(url);
-        setTimeout(function () { $(document.body).show() }, 2000);
-        //			window.open("setting.html","_blank","");
-        //			document.body.show();
+            url +=  "&p_check_mode=" + p_check_mode;
+            url +=  "&p_params=" + p_params;
+            url +=  "&p_tidx=" + p_tidx;
+                
+            fn_OpenUrl(url);
+            //			window.open("setting.html","_blank","");
+            //			document.body.show();
+        }
+        setTimeout(function () { 
+            // $(document.body).show();
+            $("body").removeClass("none");
+            initLoad(v);
+         }, 2000);
     } else {
+        initLoad(v);
+    } // end else
+}
 
-        appListItems = JSON.parse(sessionStorage.getItem("appListItems"));
+function initLoad(v){
+    $("body").removeClass("none");
+    appListItems = JSON.parse(sessionStorage.getItem("appListItems"));
 
-        footerNavigationIndex = 0;
-        // $(footerNavigation[0]).trigger("click");
-        footerNavigation[footerNavigationIndex].emit("click", footerNavigationIndex);
+    footerNavigationIndex = 0;
+    // $(footerNavigation[0]).trigger("click");
+    footerNavigation[footerNavigationIndex].emit("click", footerNavigationIndex);
 
-        chipSetNaviMode = new mdc.chips.MDCChipSet(document.querySelector('#chip_navi_mode'));
-        chipSetChargingMode = new mdc.chips.MDCChipSet(document.querySelector('#chip_charging_mode'));
+    chipSetNaviMode = new mdc.chips.MDCChipSet(document.querySelector('#chip_navi_mode'));
+    chipSetChargingMode = new mdc.chips.MDCChipSet(document.querySelector('#chip_charging_mode'));
 
-        chipSetChargingMode.listen("click", function (e) {
-            var seq = e.srcElement.offsetParent.id.replace(/[^0-9]/g, "");
-            var adapter = chipSetChargingMode.getDefaultFoundation().adapter;
-            var selectId = chipSetChargingMode.selectedChipIds[0];
-            var index = adapter.getIndexOfChipById(selectId);
-            if (index == -1) {
-                if (selectId) {
-                    chipSetChargingMode.chips[seq - 1].selected = true;
-                } else { // error
-                    chipSetChargingMode.chips[chipChargingModeSelectedIndex].selected = true;
-                    index = chipChargingModeSelectedIndex;
-                }
-            } else {
-                chipChargingModeSelectedIndex = index;
+    chipSetChargingMode.listen("click", function (e) {
+        var seq = e.srcElement.offsetParent.id.replace(/[^0-9]/g, "");
+        var adapter = chipSetChargingMode.getDefaultFoundation().adapter;
+        var selectId = chipSetChargingMode.selectedChipIds[0];
+        var index = adapter.getIndexOfChipById(selectId);
+        if (index == -1) {
+            if (selectId) {
+                chipSetChargingMode.chips[seq - 1].selected = true;
+            } else { // error
+                chipSetChargingMode.chips[chipChargingModeSelectedIndex].selected = true;
+                index = chipChargingModeSelectedIndex;
             }
-            if (index == 0) { // 모두
-                // document.querySelector('#mode_guide').innerHTML = t("message.mode_guide_1");
-                if (!e.onlySelect) {
-                    fn_DeviceSaveData("_CHARGING_MODE", "1");
-                    snackbar(t("message.save"));
-                }
-            } else if (index == 1) { // 무선
-                // document.querySelector('#mode_guide').innerHTML = t("message.mode_guide_2");
-                if (!e.onlySelect) {
-                    fn_DeviceSaveData("_CHARGING_MODE", "2");
-                    snackbar(t("message.save"));
-                }
-            } else if (index == 2) { // 무선
-                // document.querySelector('#mode_guide').innerHTML = t("message.mode_guide_2");
-                if (!e.onlySelect) {
-                    fn_DeviceSaveData("_CHARGING_MODE", "3");
-                    snackbar(t("message.save"));
-                }
+        } else {
+            chipChargingModeSelectedIndex = index;
+        }
+        if (index == 0) { // 모두
+            // document.querySelector('#mode_guide').innerHTML = t("message.mode_guide_1");
+            if (!e.onlySelect) {
+                fn_DeviceSaveData("_CHARGING_MODE", "1");
+                snackbar(t("message.save"));
             }
-        });
-
-        /**
-        1 : 집↔회사
-        2 : 집↔목적지
-        */
-        var naviModeNames = [
-            ""
-            , "집↔회사"
-            , "집↔목적지"
-            , "안전운전"
-        ];
-        chipSetNaviMode.listen("click", function (e) {
-            var seq = e.srcElement.offsetParent.id.replace(/[^0-9]/g, "");
-            var adapter = chipSetNaviMode.getDefaultFoundation().adapter;
-            var selectId = chipSetNaviMode.selectedChipIds[0];
-            var index = adapter.getIndexOfChipById(selectId);
-            if (index == -1) {
-                if (selectId) {
-                    chipSetNaviMode.chips[seq - 1].selected = true;
-                } else { // error
-                    chipSetNaviMode.chips[chipNaviModeSelectedIndex].selected = true;
-                    index = chipNaviModeSelectedIndex;
-                }
-            } else {
-                chipNaviModeSelectedIndex = index;
+        } else if (index == 1) { // 무선
+            // document.querySelector('#mode_guide').innerHTML = t("message.mode_guide_2");
+            if (!e.onlySelect) {
+                fn_DeviceSaveData("_CHARGING_MODE", "2");
+                snackbar(t("message.save"));
             }
-            if (index == 0) { // 집↔회사
-                document.querySelector('#mode_guide').innerHTML = t("message.mode_guide_1");
-                if (!e.onlySelect) {
-                    fn_DeviceSaveData("_NAVI_MODE", "1");
-                    snackbar(t("message.save"));
-                }
-            } else if (index == 1) { // 집↔목적지
-                document.querySelector('#mode_guide').innerHTML = t("message.mode_guide_2");
-                if (!e.onlySelect) {
-                    fn_DeviceSaveData("_NAVI_MODE", "2");
-                    snackbar(t("message.save"));
-                }
-            } else if (index == 2) { // 운전
-                document.querySelector('#mode_guide').innerHTML = t("message.mode_guide_3");
-                if (!e.onlySelect) {
-                    fn_DeviceSaveData("_NAVI_MODE", "3");
-                    snackbar(t("message.save"));
-                }
+        } else if (index == 2) { // 무선
+            // document.querySelector('#mode_guide').innerHTML = t("message.mode_guide_2");
+            if (!e.onlySelect) {
+                fn_DeviceSaveData("_CHARGING_MODE", "3");
+                snackbar(t("message.save"));
             }
+        }
+    });
+
+    /**
+    1 : 집↔회사
+    2 : 집↔목적지
+    */
+    var naviModeNames = [
+        ""
+        , "집↔회사"
+        , "집↔목적지"
+        , "안전운전"
+    ];
+    chipSetNaviMode.listen("click", function (e) {
+        debugger;
+        var seq = e.srcElement.offsetParent.id.replace(/[^0-9]/g, "");
+        var adapter = chipSetNaviMode.getDefaultFoundation().adapter;
+        var selectId = chipSetNaviMode.selectedChipIds[0];
+        var index = adapter.getIndexOfChipById(selectId);
+        if (index == -1) {
+            if (selectId) {
+                chipSetNaviMode.chips[seq - 1].selected = true;
+            } else { // error
+                chipSetNaviMode.chips[chipNaviModeSelectedIndex].selected = true;
+                index = chipNaviModeSelectedIndex;
+            }
+        } else {
+            chipNaviModeSelectedIndex = index;
+        }
+        if (index == 0) { // 집↔회사
+            document.querySelector('#mode_guide').innerHTML = t("message.mode_guide_1");
+            if (!e.onlySelect) {
+                fn_DeviceSaveData("_NAVI_MODE", "1");
+                snackbar(t("message.save"));
+            }
+        } else if (index == 1) { // 집↔목적지
+            document.querySelector('#mode_guide').innerHTML = t("message.mode_guide_2");
+            if (!e.onlySelect) {
+                fn_DeviceSaveData("_NAVI_MODE", "2");
+                snackbar(t("message.save"));
+            }
+        } else if (index == 2) { // 운전
+            document.querySelector('#mode_guide').innerHTML = t("message.mode_guide_3");
+            if (!e.onlySelect) {
+                fn_DeviceSaveData("_NAVI_MODE", "3");
+                snackbar(t("message.save"));
+            }
+        }
+    });
+
+    var closeAppList = new mdc.ripple.MDCRipple(document.querySelector("#close_app_list"));
+    closeAppList.listen("click", function (event) {
+        naviSelectDialog.close();
+    });
+
+    var closeBluetoothList = new mdc.ripple.MDCRipple(document.querySelector("#close_bluetooth_list"));
+    closeBluetoothList.listen("click", function (event) {
+        bluetoothSelectDialog.close();
+    });
+
+    var closeWifiList = new mdc.ripple.MDCRipple(document.querySelector("#close_wifi_list"));
+    closeWifiList.listen("click", function (event) {
+        wifiSelectDialog.close();
+    });
+    var searchClear = new mdc.ripple.MDCRipple(document.querySelector("#search_clear"));
+    searchClear.listen("click", function (event) {
+        searchClear.root.hide();
+        search.value = "";
+        drawAppList("");
+    });
+    var searchBluetoothClear = new mdc.ripple.MDCRipple(document.querySelector("#search_bluetooth_clear"));
+    searchBluetoothClear.listen("click", function (event) {
+        searchBluetoothClear.root.hide();
+        searchBluetooth.value = "";
+        drawBluetoothList("");
+    });
+    var searchWifiClear = new mdc.ripple.MDCRipple(document.querySelector("#search_wifi_clear"));
+    searchWifiClear.listen("click", function (event) {
+        searchWifiClear.root.hide();
+        searchWifi.value = "";
+        drawWifiList("");
+    });
+
+    function drawBluetoothList(v) {
+        showLoading(true);
+
+        $('.bluetooth_select .list .mdc-list').empty();
+        bluetoothListItems.filter(function (item) {
+            return !searchBluetooth.value || item.name.toLowerCase().includes(searchBluetooth.value.toLowerCase()) || item.diassembled.includes(v);
+        })
+        // .concat(
+        //     bluetoothListItems.filter(function (item) {
+        //      // return item.detail.category == 6;
+        //         return true;
+        //     })
+        // )
+        .forEach(function (item, index) {
+            var row = document.querySelector(".bluetooth_select .list .clone").cloneNode(true); //mdc-list-item fisrt node;
+            row.show();
+            row.className = row.className.replace("clone", "");
+            // row.children[2].innerText = item.name;
+            // row.children[1].innerText = item.icon;
+            row.setAttribute("tabIndex", index);
+            row.setAttribute("address", item.address);
+
+            $(row).find(".name").text(item.name);
+            $(row).find(".address").text(item.address);
+            row.setAttribute("data-mdc-dialog-action", item.address);
+            document.querySelector('.bluetooth_select .list .mdc-list').appendChild(row);
         });
 
-        var closeAppList = new mdc.ripple.MDCRipple(document.querySelector("#close_app_list"));
-        closeAppList.listen("click", function (event) {
-            naviSelectDialog.close();
+        hideLoading(true);
+    }
+
+    function drawWifiList(v) {
+
+        showLoading(true);
+
+        $('.wifi_select .list .mdc-list').empty();
+        wifiListItems.filter(function (item) {
+            return !searchWifi.value || item.name.toLowerCase().includes(searchWifi.value.toLowerCase()) || item.diassembled.includes(v);
+        })
+        // .concat(
+        //     wifiListItems.filter(function (item) {
+        //      // return item.detail.category == 6;
+        //         return true;
+        //     })
+        // )
+        .forEach(function (item, index) {
+            var row = document.querySelector(".wifi_select .list .clone").cloneNode(true); //mdc-list-item fisrt node;
+            row.show();
+            row.className = row.className.replace("clone", "");
+            // row.children[2].innerText = item.name;
+            // row.children[1].innerText = item.icon;
+            row.setAttribute("tabIndex", index);
+            row.setAttribute("bssid", item.bssid);
+            $(row).find(".connected").css({"display":item.connected?"":"none",color:item.connected?"#00f":"grey"});
+            $(row).find(".icon").css("fill",item.connected?"#00f":"grey");
+            $(row).find(".ssid").text(item.ssid);
+            $(row).find(".bssid").text(item.bssid);
+            row.setAttribute("data-mdc-dialog-action", item.ssid);
+            document.querySelector('.wifi_select .list .mdc-list').appendChild(row);
         });
 
-        var closeBluetoothList = new mdc.ripple.MDCRipple(document.querySelector("#close_bluetooth_list"));
-        closeBluetoothList.listen("click", function (event) {
-            bluetoothSelectDialog.close();
-        });
+        hideLoading(true);
 
-        var closeWifiList = new mdc.ripple.MDCRipple(document.querySelector("#close_wifi_list"));
-        closeWifiList.listen("click", function (event) {
-            wifiSelectDialog.close();
-        });
-        var searchClear = new mdc.ripple.MDCRipple(document.querySelector("#search_clear"));
-        searchClear.listen("click", function (event) {
-            searchClear.root.hide();
-            search.value = "";
-            drawAppList("");
-        });
-        var searchBluetoothClear = new mdc.ripple.MDCRipple(document.querySelector("#search_bluetooth_clear"));
-        searchBluetoothClear.listen("click", function (event) {
-            searchBluetoothClear.root.hide();
-            searchBluetooth.value = "";
-            drawBluetoothList("");
-        });
-        var searchWifiClear = new mdc.ripple.MDCRipple(document.querySelector("#search_wifi_clear"));
-        searchWifiClear.listen("click", function (event) {
-            searchWifiClear.root.hide();
-            searchWifi.value = "";
-            drawWifiList("");
-        });
+    }
 
-        function drawBluetoothList(v) {
-            showLoading(true);
+    function drawAppList(v) {
+        showLoading(true);
 
-            $('.bluetooth_select .list .mdc-list').empty();
-            bluetoothListItems.filter(function (item) {
-                return !searchBluetooth.value || item.name.toLowerCase().includes(searchBluetooth.value.toLowerCase()) || item.diassembled.includes(v);
-            })
-            // .concat(
-            //     bluetoothListItems.filter(function (item) {
-            //      // return item.detail.category == 6;
-            //         return true;
-            //     })
-            // )
-            .forEach(function (item, index) {
-                var row = document.querySelector(".bluetooth_select .list .clone").cloneNode(true); //mdc-list-item fisrt node;
-                row.show();
-                row.className = row.className.replace("clone", "");
-                // row.children[2].innerText = item.name;
-                // row.children[1].innerText = item.icon;
-                row.setAttribute("tabIndex", index);
-                row.setAttribute("address", item.address);
-
-                $(row).find(".name").text(item.name);
-                $(row).find(".address").text(item.address);
-                row.setAttribute("data-mdc-dialog-action", item.address);
-                document.querySelector('.bluetooth_select .list .mdc-list').appendChild(row);
+        const inso = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    var sectionName = $(entry.target).attr("class");
+                    // var subGubun = sectionName.split(" ")[1];
+                    //console.log( "active.class", subGubun );
+                    // $(entry.target).addClass('active').trigger("activeClass");
+                    var fIdx = entry.target.getAttribute("tabIndex");
+                    console.log("entry.target", entry.target);
+                    window["getInstallPackagesKeyCallBack" + fIdx] = function (data) {
+                        var appListItem = (JSON.parse(data) || [{}])[0];
+                        entry.target.querySelector(".mdc-list-item__graphic").setAttribute("src", "data:image/png;base64," + appListItem.icon);
+                    }
+                    fn_getInstallPackages(entry.target.getAttribute("package"), "getInstallPackagesKeyCallBack" + fIdx);
+                }
             });
-
-            hideLoading(true);
-        }
-        
-        function drawWifiList(v) {
-
-            showLoading(true);
-
-            $('.wifi_select .list .mdc-list').empty();
-            wifiListItems.filter(function (item) {
-                return !searchWifi.value || item.name.toLowerCase().includes(searchWifi.value.toLowerCase()) || item.diassembled.includes(v);
-            })
-            // .concat(
-            //     wifiListItems.filter(function (item) {
-            //      // return item.detail.category == 6;
-            //         return true;
-            //     })
-            // )
-            .forEach(function (item, index) {
-                var row = document.querySelector(".wifi_select .list .clone").cloneNode(true); //mdc-list-item fisrt node;
-                row.show();
-                row.className = row.className.replace("clone", "");
-                // row.children[2].innerText = item.name;
-                // row.children[1].innerText = item.icon;
-                row.setAttribute("tabIndex", index);
-                row.setAttribute("bssid", item.bssid);
-                $(row).find(".connected").css({"display":item.connected?"":"none",color:item.connected?"#00f":"grey"});
-                $(row).find(".icon").css("fill",item.connected?"#00f":"grey");
-                $(row).find(".ssid").text(item.ssid);
-                $(row).find(".bssid").text(item.bssid);
-                row.setAttribute("data-mdc-dialog-action", item.ssid);
-                document.querySelector('.wifi_select .list .mdc-list').appendChild(row);
-            });
-
-            hideLoading(true);
-
-        }
-        
-        function drawAppList(v) {
-            showLoading(true);
-
-            const inso = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        var sectionName = $(entry.target).attr("class");
-                        // var subGubun = sectionName.split(" ")[1];
-                        //console.log( "active.class", subGubun );
-                        // $(entry.target).addClass('active').trigger("activeClass");
-                        var fIdx = entry.target.getAttribute("tabIndex");
-                        console.log("entry.target", entry.target);
-                        window["getInstallPackagesKeyCallBack" + fIdx] = function (data) {
-                            var appListItem = (JSON.parse(data) || [{}])[0];
-                            entry.target.querySelector(".mdc-list-item__graphic").setAttribute("src", "data:image/png;base64," + appListItem.icon);
-                        }
-                        fn_getInstallPackages(entry.target.getAttribute("package"), "getInstallPackagesKeyCallBack" + fIdx);
-                    }
-                });
-            });
-
-            $('.navi_select .list .mdc-list').empty();
-            appListItems.filter(function (item) {
-                return !search.value || item.name.toLowerCase().includes(search.value.toLowerCase()) || item.diassembled.includes(v);
-            }).concat(
-                appListItems.filter(function (item) {
-                    return item.detail && item.detail.category == 6;
-                })
-            )
-                .forEach(function (item, index) {
-                    var row = document.querySelector(".navi_select .list .clone").cloneNode(true); //mdc-list-item fisrt node;
-                    row.show();
-                    row.className = row.className.replace("clone", "");
-                    row.children[2].innerText = item.name;
-                    // row.children[1].innerText = item.icon;
-                    if (item.icon) row.querySelector(".mdc-list-item__graphic").setAttribute("src", "data:image/png;base64," + item.icon);
-                    row.setAttribute("tabIndex", index);
-                    row.setAttribute("package", item.package);
-                    row.setAttribute("data-mdc-dialog-action", item.package);
-                    document.querySelector('.navi_select .list .mdc-list').appendChild(row);
-                    inso.observe(row);
-                });
-
-
-            // document.querySelectorAll(".navi_select .list .mdc-list .mdc-deprecated-list-item").forEach((item) => {
-            //     inso.observe(item);
-            // });
-
-            hideLoading(true);
-
-        }
-
-        search = new mdc.textField.MDCTextField(document.querySelector('#search'));
-        search.listen("input", function (event) {
-            if (search.value) searchClear.root.show("inline");
-            else searchClear.root.hide();
-
-            var disassemble = Hangul.disassemble(search.value).join("");  // ㄺ=>ㄹㄱ
-            drawAppList(disassemble);
-        });
-
-        searchBluetooth = new mdc.textField.MDCTextField(document.querySelector('#searchBluetooth'));
-        searchBluetooth.listen("input", function (event) {
-            if (searchBluetooth.value) searchBluetoothClear.root.show("inline");
-            else searchBluetoothClear.root.hide();
-
-            var disassemble = Hangul.disassemble(searchBluetooth.value).join("");  // ㄺ=>ㄹㄱ
-            drawBluetoothList(disassemble);
-        });
-
-        searchWifi = new mdc.textField.MDCTextField(document.querySelector('#searchWifi'));
-        searchWifi.listen("input", function (event) {
-            if (searchWifi.value) searchWifiClear.root.show("inline");
-            else searchWifiClear.root.hide();
-
-            var disassemble = Hangul.disassemble(searchWifi.value).join("");  // ㄺ=>ㄹㄱ
-            drawWifiList(disassemble);
-        });
-
-
-        if (fowardPage) {
-            $(document.body).hide();
-        }
-        btnSelectNavi = new mdc.ripple.MDCRipple(document.querySelector("#btnSelectNavi"));
-        btnSelectNavi.listen("click", function (event) {
-            let eventListener = function (e) {
-                // alert("closed");
-                if (e.detail.action == "close") {
-
-                } else if (e.detail.action) {
-                    fn_DeviceSaveData("_APP_PACKAGE", e.detail.action);
-                    fn_getInstallPackages(e.detail.action, "getInstallPackagesKeyCallBack");
-                }
-                console.info("closed action", e.detail.action);
-                naviSelectDialog.unlisten("MDCDialog:closed", eventListener);
-
-                fn_DeviceSaveData("_OPEN_POPUP", false);
-            };
-            this.blur(); // force unfocus
-
-            window.getInstallPackagesCallBack = function (data) {
-                hideLoading(true);
-                // allGranted = (JSON.parse(data) || []).every(item=>item.value);
-                if ( appListItems === null ) {
-                    if (isWeb) {
-                        appListItems = [{ name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test2", icon: "~" }, { name: "test3", icon: "data:image/png;base64,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" }]
-                    } else {
-                        appListItems = JSON.parse(data);
-                        sessionStorage.setItem("appListItems",data);
-                    }
-                }
-
-                // object 에 초성필드 추가 {name:"홍길동", diassembled:"ㅎㄱㄷ"}
-                appListItems.forEach(function (item) {
-                    var dis = Hangul.disassemble(item.name, true);
-                    var cho = dis.reduce(function (prev, elem) {
-                        elem = elem[0] ? elem[0] : elem;
-                        return prev + elem;
-                    }, "");
-                    item.diassembled = cho;
-                });
-                appListItems.sort((a, b) => a.name > b.name ? 1 : -1);
-                drawAppList(Hangul.disassemble(search.value).join(""));
-
-                list = [].map.call(document.querySelectorAll(".navi_select .list .mdc-list"), el => {
-                    var rtnEl = new mdc.list.MDCList(el);
-                    rtnEl.singleSelection = true;
-                    rtnEl.listen("click", function (e) {
-                        var index = rtnEl.selectedIndex;
-                        // debugger;
-                    });
-                    return rtnEl;
-                });
-                hideLoading(true);
-
-            }
-
-            showLoading(true);            
-            
-            setTimeout(() => {
-                fn_DeviceSaveData("_OPEN_POPUP", true);
-                $('.navi_select .list .mdc-list').empty();
-
-                naviSelectDialog.open();
-                naviSelectDialog.listen("MDCDialog:closed", eventListener);
-                window.fn_BackKeyPressedCallBack = function () {
-                    naviSelectDialog.close();
-                    window.fn_BackKeyPressedCallBack = null;
-                }
-            },400);
-            setTimeout(() => {
-                if (isWeb) {
-                    getInstallPackagesCallBack();
-                } else {
-                    if ( appListItems === null ) fn_getInstallPackages("", "getInstallPackagesCallBack");
-                    else {
-                        getInstallPackagesCallBack();
-                        // search.emit("input");
-                    }
-                }
-            }, 430);
-
-        });
-
-
-        btnSelectBluetooth = new mdc.ripple.MDCRipple(document.querySelector("#btnSelectBluetooth"));
-        btnSelectBluetooth.listen("click", function (event) {
-            let eventListener = function (e) {
-                // alert("closed");
-                if (e.detail.action == "close") {
-
-                } else if (e.detail.action) {
-                    var bt = bluetoothListItems.find(item=>item.address===e.detail.action);
-                    fn_DeviceSaveData("_BLUETOOTH", bt);
-                    $(".bluetooth_info").find(".bluetooth").text(bt.name);
-                    $(".bluetooth_info").show();
-
-                    $("#status_message").html(getStatusMessage());
-                }
-                console.info("closed action", e.detail.action);
-                bluetoothSelectDialog.unlisten("MDCDialog:closed", eventListener);
-
-                fn_DeviceSaveData("_OPEN_POPUP", false);
-            };
-            this.blur(); // force unfocus
-
-            window.getBluetoothsCallBack = function (data) {
-                hideLoading();
-                // allGranted = (JSON.parse(data) || []).every(item=>item.value);
-                if ( bluetoothListItems === null ) {
-                    if (isWeb) {
-                        bluetoothListItems = [{"bondState":12,"address":"D0:C6:37:72:E1:E1","name":"J2S132","type":3},{"bondState":12,"address":"00:0D:18:00:00:01","name":"OBDII","type":1},{"bondState":12,"address":"FC:58:FA:63:1C:A7","name":"MINISO D9","type":1},{"bondState":12,"address":"14:43:19:7E:01:85","name":"O-Air","type":3},{"bondState":12,"address":"70:CF:49:D6:D3:B3","name":"DESKTOP-ERK2C4K","type":1}];
-                    } else {
-                        bluetoothListItems = JSON.parse(data);
-                    }
-                }
-
-                // object 에 초성필드 추가 {name:"홍길동", diassembled:"ㅎㄱㄷ"}
-                bluetoothListItems.forEach(function (item) {
-                    var dis = Hangul.disassemble(item.name, true);
-                    var cho = dis.reduce(function (prev, elem) {
-                        elem = elem[0] ? elem[0] : elem;
-                        return prev + elem;
-                    }, "");
-                    item.diassembled = cho;
-                });
-                bluetoothListItems.sort((a, b) => a.name > b.name ? 1 : -1);
-                drawBluetoothList(Hangul.disassemble(searchBluetooth.value).join(""));
-
-                [].map.call(document.querySelectorAll(".bluetooth_select .list .mdc-list"), el => {
-                    var rtnEl = new mdc.list.MDCList(el);
-                    rtnEl.singleSelection = true;
-                    rtnEl.listen("click", function (e) {
-                        var index = rtnEl.selectedIndex;
-                        // debugger;
-                    });
-                    return rtnEl;
-                });
-                hideLoading();
-
-            }
-
-            window.getSysInfo = function(data) {
-                var si = JSON.parse(data);
-                if ( si.sysInfoBluetoothEnable == "NA" ) {
-                    snackbar(t("message.bluetooth_not_supported"));
-                } else {
-                    if ( si.sysInfoBluetoothEnable) {
-                        showLoading();            
-                        fn_DeviceSaveData("_OPEN_POPUP", true);
-                        $('.bluetooth_select .list .mdc-list').empty();
-
-                        bluetoothSelectDialog.open();
-                        bluetoothSelectDialog.listen("MDCDialog:closed", eventListener);
-                        window.fn_BackKeyPressedCallBack = function () {
-                            bluetoothSelectDialog.close();
-                            window.fn_BackKeyPressedCallBack = null;
-                        }
-                        if (isWeb) {
-                            getBluetoothsCallBack();
-                        } else {
-                            // if ( appListItems === null ) fn_getInstallPackages("", "getBluetoothsCallBack");
-                            // fn_getInstallPackages("", "getBluetoothsCallBack");
-                            fn_getBluetooths("", "getBluetoothsCallBack");
-                        }
-
-                    } else {
-                        material.confirm(
-                        t("message.confirm_enable_bluetooth"),
-                        function () {
-                            window.setSysInfo = function(data) {
-                                var si = JSON.parse(data);
-                                // if (si.sysInfoBluetoothEnable) {
-                                    // debugger;
-                                    setTimeout(function() {
-                                        fn_getSysInfo("_SYS_INFO_BLUETOOTH_ENABLE", "getSysInfo");
-                                    },1000);
-                                // }
-                            }
-                            fn_setSysInfo("_SYS_INFO_BLUETOOTH_ENABLE",true,"setSysInfo");
-                        },
-                        function () {
-                        }
-                    );
-                    }
-                }
-            }
-
-            fn_getSysInfo("_SYS_INFO_BLUETOOTH_ENABLE", "getSysInfo");
-            
-
-        });
-
-        var btnSearchBluetooth = new mdc.ripple.MDCRipple(document.querySelector(".btnSearchBluetooth"));
-        btnSearchBluetooth.listen("click", function(event) {
-            showLoading();
-            fn_getBluetooths("", "getBluetoothsCallBack");
-        });
-
-        btnSelectWifi = new mdc.ripple.MDCRipple(document.querySelector("#btnSelectWifi"));
-        btnSelectWifi.listen("click", function (event) {
-            let eventListener = function (e) {
-                // alert("closed");
-                if (e.detail.action == "close") {
-
-                } else if (e.detail.action) {
-                    var wifi = wifiListItems.find(item=>item.ssid===e.detail.action);
-                    fn_DeviceSaveData("_WIFI", wifi);
-                    $(".wifi_info").find(".wifi").text(wifi.ssid);
-                    $(".wifi_info").show();
-
-                    $("#status_message").html(getStatusMessage());
-                }
-                console.info("closed action", e.detail.action);
-                wifiSelectDialog.unlisten("MDCDialog:closed", eventListener);
-
-                fn_DeviceSaveData("_OPEN_POPUP", false);
-            };
-            this.blur(); // force unfocus
-
-            window.getWifisCallBack = function (data) {
-                // allGranted = (JSON.parse(data) || []).every(item=>item.value);
-                if (isWeb) {
-                    wifiListItems = [ { "connected": true, "bssid": "1c:ec:72:01:9f:86", "ssid": "SoftmWifi", "diassembled": "Main Street" }, { "connected": false, "bssid": "22:ec:72:01:9f:87", "ssid": "", "diassembled": "" }, { "connected": false, "bssid": "1c:ec:72:01:9f:87", "ssid": "Main Street 5G", "diassembled": "Main Street 5G" } ];
-                } else {
-                    wifiListItems = JSON.parse(data);
-                }
-
-                // object 에 초성필드 추가 {name:"홍길동", diassembled:"ㅎㄱㄷ"}
-                wifiListItems.forEach(function (item) {
-                    var dis = Hangul.disassemble(item.ssid, true);
-                    var cho = dis.reduce(function (prev, elem) {
-                        elem = elem[0] ? elem[0] : elem;
-                        return prev + elem;
-                    }, "");
-                    item.diassembled = cho;
-                });
-                wifiListItems.sort((a, b) => b.connected || a.ssid > b.ssid ? 1 : -1);
-                drawWifiList(Hangul.disassemble(searchWifi.value).join(""));
-
-                [].map.call(document.querySelectorAll(".wifi_select .list .mdc-list"), el => {
-                    var rtnEl = new mdc.list.MDCList(el);
-                    rtnEl.singleSelection = true;
-                    rtnEl.listen("click", function (e) {
-                        var index = rtnEl.selectedIndex;
-                        // debugger;
-                    });
-                    return rtnEl;
-                });
-                hideLoading();
-
-            }
-
-            showLoading();            
-            
-            fn_DeviceSaveData("_OPEN_POPUP", true);
-            $('.wifi_select .list .mdc-list').empty();
-
-            wifiSelectDialog.open();
-            wifiSelectDialog.listen("MDCDialog:closed", eventListener);
-            window.fn_BackKeyPressedCallBack = function () {
-                wifiSelectDialog.close();
-                window.fn_BackKeyPressedCallBack = null;
-            }
-
-            if (isWeb) {
-                getWifisCallBack();
-            } else {
-                // if ( appListItems === null ) fn_getInstallPackages("", "getBluetoothsCallBack");
-                // fn_getInstallPackages("", "getBluetoothsCallBack");
-                fn_getWifis("", "getWifisCallBack");
-            }
-
-        });
-
-        var btnSearchWifi = new mdc.ripple.MDCRipple(document.querySelector(".btnSearchWifi"));
-        btnSearchWifi.listen("click", function(event) {
-            fn_getWifis("", "getWifisCallBack");
-        });
-
-        const naviSelectDialog = new mdc.dialog.MDCDialog(document.querySelector(".navi_select.mdc-dialog"));
-        var appList = new mdc.list.MDCList(document.querySelector('.navi_select.mdc-dialog .list .mdc-list'));
-        appList.singleSelection = true;
-        // debugger;
-        naviSelectDialog.listen("MDCDialog:opened", () => {
-            appList.layout();
-            console.info("opened");
         });
 
         $('.navi_select .list .mdc-list').empty();
+        appListItems.filter(function (item) {
+            return !search.value || item.name.toLowerCase().includes(search.value.toLowerCase()) || item.diassembled.includes(v);
+        }).concat(
+            appListItems.filter(function (item) {
+                return item.detail && item.detail.category == 6;
+            })
+        )
+            .forEach(function (item, index) {
+                var row = document.querySelector(".navi_select .list .clone").cloneNode(true); //mdc-list-item fisrt node;
+                row.show();
+                row.className = row.className.replace("clone", "");
+                row.children[2].innerText = item.name;
+                // row.children[1].innerText = item.icon;
+                if (item.icon) row.querySelector(".mdc-list-item__graphic").setAttribute("src", "data:image/png;base64," + item.icon);
+                row.setAttribute("tabIndex", index);
+                row.setAttribute("package", item.package);
+                row.setAttribute("data-mdc-dialog-action", item.package);
+                document.querySelector('.navi_select .list .mdc-list').appendChild(row);
+                inso.observe(row);
+            });
 
-        const bluetoothSelectDialog = new mdc.dialog.MDCDialog(document.querySelector(".bluetooth_select.mdc-dialog"));
-        var bluetoothList = new mdc.list.MDCList(document.querySelector('.bluetooth_select.mdc-dialog .list .mdc-list'));
-        bluetoothList.singleSelection = true;
-        // debugger;
-        bluetoothSelectDialog.listen("MDCDialog:opened", () => {
-            bluetoothList.layout();
-            console.info("opened");
-        });
 
-        $('.bluetooth_select .list .mdc-list').empty();
+        // document.querySelectorAll(".navi_select .list .mdc-list .mdc-deprecated-list-item").forEach((item) => {
+        //     inso.observe(item);
+        // });
 
-        const wifiSelectDialog = new mdc.dialog.MDCDialog(document.querySelector(".wifi_select.mdc-dialog"));
-        var wifiList = new mdc.list.MDCList(document.querySelector('.wifi_select.mdc-dialog .list .mdc-list'));
-        wifiList.singleSelection = true;
-        // debugger;
-        wifiSelectDialog.listen("MDCDialog:opened", () => {
-            wifiList.layout();
-            console.info("opened");
-        });
+        hideLoading(true);
 
+    }
+
+    search = new mdc.textField.MDCTextField(document.querySelector('#search'));
+    search.listen("input", function (event) {
+        if (search.value) searchClear.root.show("inline");
+        else searchClear.root.hide();
+
+        var disassemble = Hangul.disassemble(search.value).join("");  // ㄺ=>ㄹㄱ
+        drawAppList(disassemble);
+    });
+
+    searchBluetooth = new mdc.textField.MDCTextField(document.querySelector('#searchBluetooth'));
+    searchBluetooth.listen("input", function (event) {
+        if (searchBluetooth.value) searchBluetoothClear.root.show("inline");
+        else searchBluetoothClear.root.hide();
+
+        var disassemble = Hangul.disassemble(searchBluetooth.value).join("");  // ㄺ=>ㄹㄱ
+        drawBluetoothList(disassemble);
+    });
+
+    searchWifi = new mdc.textField.MDCTextField(document.querySelector('#searchWifi'));
+    searchWifi.listen("input", function (event) {
+        if (searchWifi.value) searchWifiClear.root.show("inline");
+        else searchWifiClear.root.hide();
+
+        var disassemble = Hangul.disassemble(searchWifi.value).join("");  // ㄺ=>ㄹㄱ
+        drawWifiList(disassemble);
+    });
+
+
+    if (fowardPage) {
+        $(document.body).hide();
+    }
+    btnSelectNavi = new mdc.ripple.MDCRipple(document.querySelector("#btnSelectNavi"));
+    btnSelectNavi.listen("click", function (event) {
+        let eventListener = function (e) {
+            // alert("closed");
+            if (e.detail.action == "close") {
+
+            } else if (e.detail.action) {
+                fn_DeviceSaveData("_APP_PACKAGE", e.detail.action);
+                fn_getInstallPackages(e.detail.action, "getInstallPackagesKeyCallBack");
+            }
+            console.info("closed action", e.detail.action);
+            naviSelectDialog.unlisten("MDCDialog:closed", eventListener);
+
+            fn_DeviceSaveData("_OPEN_POPUP", false);
+        };
+        this.blur(); // force unfocus
+
+        window.getInstallPackagesCallBack = function (data) {
+            hideLoading(true);
+            // allGranted = (JSON.parse(data) || []).every(item=>item.value);
+            if ( appListItems === null ) {
+                if (isWeb) {
+                    appListItems = [{ name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test", icon: "~" }, { name: "test2", icon: "~" }, { name: "test3", icon: "data:image/png;base64,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" }]
+                } else {
+                    appListItems = JSON.parse(data);
+                    sessionStorage.setItem("appListItems",data);
+                }
+            }
+
+            // object 에 초성필드 추가 {name:"홍길동", diassembled:"ㅎㄱㄷ"}
+            appListItems.forEach(function (item) {
+                var dis = Hangul.disassemble(item.name, true);
+                var cho = dis.reduce(function (prev, elem) {
+                    elem = elem[0] ? elem[0] : elem;
+                    return prev + elem;
+                }, "");
+                item.diassembled = cho;
+            });
+            appListItems.sort((a, b) => a.name > b.name ? 1 : -1);
+            drawAppList(Hangul.disassemble(search.value).join(""));
+
+            list = [].map.call(document.querySelectorAll(".navi_select .list .mdc-list"), el => {
+                var rtnEl = new mdc.list.MDCList(el);
+                rtnEl.singleSelection = true;
+                rtnEl.listen("click", function (e) {
+                    var index = rtnEl.selectedIndex;
+                    // debugger;
+                });
+                return rtnEl;
+            });
+            hideLoading(true);
+
+        }
+
+        showLoading(true);            
+        
+        setTimeout(() => {
+            fn_DeviceSaveData("_OPEN_POPUP", true);
+            $('.navi_select .list .mdc-list').empty();
+
+            naviSelectDialog.open();
+            naviSelectDialog.listen("MDCDialog:closed", eventListener);
+            window.fn_BackKeyPressedCallBack = function () {
+                naviSelectDialog.close();
+                window.fn_BackKeyPressedCallBack = null;
+            }
+        },400);
+        setTimeout(() => {
+            if (isWeb) {
+                getInstallPackagesCallBack();
+            } else {
+                if ( appListItems === null ) fn_getInstallPackages("", "getInstallPackagesCallBack");
+                else {
+                    getInstallPackagesCallBack();
+                    // search.emit("input");
+                }
+            }
+        }, 430);
+
+    });
+
+
+    btnSelectBluetooth = new mdc.ripple.MDCRipple(document.querySelector("#btnSelectBluetooth"));
+    btnSelectBluetooth.listen("click", function (event) {
+        let eventListener = function (e) {
+            // alert("closed");
+            if (e.detail.action == "close") {
+
+            } else if (e.detail.action) {
+                var bt = bluetoothListItems.find(item=>item.address===e.detail.action);
+                fn_DeviceSaveData("_BLUETOOTH", bt);
+                $(".bluetooth_info").find(".bluetooth").text(bt.name);
+                $(".bluetooth_info").show();
+
+                $("#status_message").html(getStatusMessage());
+            }
+            console.info("closed action", e.detail.action);
+            bluetoothSelectDialog.unlisten("MDCDialog:closed", eventListener);
+
+            fn_DeviceSaveData("_OPEN_POPUP", false);
+        };
+        this.blur(); // force unfocus
+
+        window.getBluetoothsCallBack = function (data) {
+            hideLoading();
+            // allGranted = (JSON.parse(data) || []).every(item=>item.value);
+            if ( bluetoothListItems === null ) {
+                if (isWeb) {
+                    bluetoothListItems = [{"bondState":12,"address":"D0:C6:37:72:E1:E1","name":"J2S132","type":3},{"bondState":12,"address":"00:0D:18:00:00:01","name":"OBDII","type":1},{"bondState":12,"address":"FC:58:FA:63:1C:A7","name":"MINISO D9","type":1},{"bondState":12,"address":"14:43:19:7E:01:85","name":"O-Air","type":3},{"bondState":12,"address":"70:CF:49:D6:D3:B3","name":"DESKTOP-ERK2C4K","type":1}];
+                } else {
+                    bluetoothListItems = JSON.parse(data);
+                }
+            }
+
+            // object 에 초성필드 추가 {name:"홍길동", diassembled:"ㅎㄱㄷ"}
+            bluetoothListItems.forEach(function (item) {
+                var dis = Hangul.disassemble(item.name, true);
+                var cho = dis.reduce(function (prev, elem) {
+                    elem = elem[0] ? elem[0] : elem;
+                    return prev + elem;
+                }, "");
+                item.diassembled = cho;
+            });
+            bluetoothListItems.sort((a, b) => a.name > b.name ? 1 : -1);
+            drawBluetoothList(Hangul.disassemble(searchBluetooth.value).join(""));
+
+            [].map.call(document.querySelectorAll(".bluetooth_select .list .mdc-list"), el => {
+                var rtnEl = new mdc.list.MDCList(el);
+                rtnEl.singleSelection = true;
+                rtnEl.listen("click", function (e) {
+                    var index = rtnEl.selectedIndex;
+                    // debugger;
+                });
+                return rtnEl;
+            });
+            hideLoading();
+
+        }
+
+        window.getSysInfo = function(data) {
+            var si = JSON.parse(data);
+            if ( si.sysInfoBluetoothEnable == "NA" ) {
+                snackbar(t("message.bluetooth_not_supported"));
+            } else {
+                if ( si.sysInfoBluetoothEnable) {
+                    showLoading();            
+                    fn_DeviceSaveData("_OPEN_POPUP", true);
+                    $('.bluetooth_select .list .mdc-list').empty();
+
+                    bluetoothSelectDialog.open();
+                    bluetoothSelectDialog.listen("MDCDialog:closed", eventListener);
+                    window.fn_BackKeyPressedCallBack = function () {
+                        bluetoothSelectDialog.close();
+                        window.fn_BackKeyPressedCallBack = null;
+                    }
+                    if (isWeb) {
+                        getBluetoothsCallBack();
+                    } else {
+                        // if ( appListItems === null ) fn_getInstallPackages("", "getBluetoothsCallBack");
+                        // fn_getInstallPackages("", "getBluetoothsCallBack");
+                        fn_getBluetooths("", "getBluetoothsCallBack");
+                    }
+
+                } else {
+                    material.confirm(
+                    t("message.confirm_enable_bluetooth"),
+                    function () {
+                        window.setSysInfo = function(data) {
+                            var si = JSON.parse(data);
+                            // if (si.sysInfoBluetoothEnable) {
+                                // debugger;
+                                setTimeout(function() {
+                                    fn_getSysInfo("_SYS_INFO_BLUETOOTH_ENABLE", "getSysInfo");
+                                },1000);
+                            // }
+                        }
+                        fn_setSysInfo("_SYS_INFO_BLUETOOTH_ENABLE",true,"setSysInfo");
+                    },
+                    function () {
+                    }
+                );
+                }
+            }
+        }
+
+        fn_getSysInfo("_SYS_INFO_BLUETOOTH_ENABLE", "getSysInfo");
+        
+
+    });
+
+    var btnSearchBluetooth = new mdc.ripple.MDCRipple(document.querySelector(".btnSearchBluetooth"));
+    btnSearchBluetooth.listen("click", function(event) {
+        showLoading();
+        fn_getBluetooths("", "getBluetoothsCallBack");
+    });
+
+    btnSelectWifi = new mdc.ripple.MDCRipple(document.querySelector("#btnSelectWifi"));
+    btnSelectWifi.listen("click", function (event) {
+        let eventListener = function (e) {
+            // alert("closed");
+            if (e.detail.action == "close") {
+
+            } else if (e.detail.action) {
+                var wifi = wifiListItems.find(item=>item.ssid===e.detail.action);
+                fn_DeviceSaveData("_WIFI", wifi);
+                $(".wifi_info").find(".wifi").text(wifi.ssid);
+                $(".wifi_info").show();
+
+                $("#status_message").html(getStatusMessage());
+            }
+            console.info("closed action", e.detail.action);
+            wifiSelectDialog.unlisten("MDCDialog:closed", eventListener);
+
+            fn_DeviceSaveData("_OPEN_POPUP", false);
+        };
+        this.blur(); // force unfocus
+
+        window.getWifisCallBack = function (data) {
+            // allGranted = (JSON.parse(data) || []).every(item=>item.value);
+            if (isWeb) {
+                wifiListItems = [ { "connected": true, "bssid": "1c:ec:72:01:9f:86", "ssid": "SoftmWifi", "diassembled": "Main Street" }, { "connected": false, "bssid": "22:ec:72:01:9f:87", "ssid": "", "diassembled": "" }, { "connected": false, "bssid": "1c:ec:72:01:9f:87", "ssid": "Main Street 5G", "diassembled": "Main Street 5G" } ];
+            } else {
+                wifiListItems = JSON.parse(data);
+            }
+
+            // object 에 초성필드 추가 {name:"홍길동", diassembled:"ㅎㄱㄷ"}
+            wifiListItems.forEach(function (item) {
+                var dis = Hangul.disassemble(item.ssid, true);
+                var cho = dis.reduce(function (prev, elem) {
+                    elem = elem[0] ? elem[0] : elem;
+                    return prev + elem;
+                }, "");
+                item.diassembled = cho;
+            });
+            wifiListItems.sort((a, b) => b.connected || a.ssid > b.ssid ? 1 : -1);
+            drawWifiList(Hangul.disassemble(searchWifi.value).join(""));
+
+            [].map.call(document.querySelectorAll(".wifi_select .list .mdc-list"), el => {
+                var rtnEl = new mdc.list.MDCList(el);
+                rtnEl.singleSelection = true;
+                rtnEl.listen("click", function (e) {
+                    var index = rtnEl.selectedIndex;
+                    // debugger;
+                });
+                return rtnEl;
+            });
+            hideLoading();
+
+        }
+
+        showLoading();            
+        
+        fn_DeviceSaveData("_OPEN_POPUP", true);
         $('.wifi_select .list .mdc-list').empty();
 
-        btnStatus = new mdc.ripple.MDCRipple(document.querySelector("#btnStatus"));
-        btnStatus.listen("click", function (event) {
-            // self.close();
-            // alert("test");
-            // AlertUtil.fn_Alert("test~");
-            if (allGranted) {
-                snackbar(t("message.all_granted"));
-                // toast("모든 권한이 정상입니다.");
-            } else {
-                // alert("tes");
+        wifiSelectDialog.open();
+        wifiSelectDialog.listen("MDCDialog:closed", eventListener);
+        window.fn_BackKeyPressedCallBack = function () {
+            wifiSelectDialog.close();
+            window.fn_BackKeyPressedCallBack = null;
+        }
 
-                
-                window.getPermissionsCallBackLoop = function (data) {
-                    allGranted = (JSON.parse(data) || []).every(item => item.value);
-                    granted = (JSON.parse(data) || []);
-                    getPermissionsCallBack(data);
-                    if (!allGranted) {
-                        granted.some(grant=>{
-                            if ( !grant.value ) {
-                                console.log(grant.name, grant.value)
-                                fn_StartSetting(grant.name,"startSettingCallback")
-                                // fn_CheckGrant(grant.name,"checkGrantCallBack")
-                            }
-                            return !grant.value ;
-                        });
-                    } else {
-                        
-                    }
-                }
-                
-                window.startSettingCallback = function(grant,ok) {
-                    fn_GetPermissions("", "getPermissionsCallBackLoop");
-                }
+        if (isWeb) {
+            getWifisCallBack();
+        } else {
+            // if ( appListItems === null ) fn_getInstallPackages("", "getBluetoothsCallBack");
+            // fn_getInstallPackages("", "getBluetoothsCallBack");
+            fn_getWifis("", "getWifisCallBack");
+        }
 
-                // fn_CheckGrant("overlay","checkGrantCallBack")
-                // fn_CheckGrant("location","checkGrantCallBack")
-                // fn_CheckGrant("notification_access","checkGrantCallBack")
-                // fn_CheckGrant("accessibility","checkGrantCallBack")
-                // fn_CheckGrant("ignore_battery","checkGrantCallBack")
+    });
 
-                granted.some(grant=>{
-                    if ( !grant.value ) {
-                        console.log(grant.name, grant.value)
-                        fn_StartSetting(grant.name,"startSettingCallback")
-                        // fn_CheckGrant(grant.name,"checkGrantCallBack")
-                    }
-                    return !grant.value ;
-                });
-            }
-        });
+    var btnSearchWifi = new mdc.ripple.MDCRipple(document.querySelector(".btnSearchWifi"));
+    btnSearchWifi.listen("click", function(event) {
+        fn_getWifis("", "getWifisCallBack");
+    });
 
-        btnSwitchIndependenceCondition = new mdc.switchControl.MDCSwitch(document.querySelector('.independence_condition.mdc-switch'));
+    const naviSelectDialog = new mdc.dialog.MDCDialog(document.querySelector(".navi_select.mdc-dialog"));
+    var appList = new mdc.list.MDCList(document.querySelector('.navi_select.mdc-dialog .list .mdc-list'));
+    appList.singleSelection = true;
+    // debugger;
+    naviSelectDialog.listen("MDCDialog:opened", () => {
+        appList.layout();
+        console.info("opened");
+    });
 
-        btnSwitchStartPower = new mdc.switchControl.MDCSwitch(document.querySelector('.start_power.mdc-switch'));
-        btnSwitchStartBluetooth = new mdc.switchControl.MDCSwitch(document.querySelector('.start_bluetooth.mdc-switch'));
-        btnSwitchStartWifi = new mdc.switchControl.MDCSwitch(document.querySelector('.start_wifi.mdc-switch'));
-        btnSwitchUsingRegHome = new mdc.switchControl.MDCSwitch(document.querySelector('.using_reg_home.mdc-switch'));
+    $('.navi_select .list .mdc-list').empty();
 
-        //     for (const el of document.querySelectorAll('.mdc-switch')) {
-        //   const switchControl = new MDCSwitch(el);
-        // }
+    const bluetoothSelectDialog = new mdc.dialog.MDCDialog(document.querySelector(".bluetooth_select.mdc-dialog"));
+    var bluetoothList = new mdc.list.MDCList(document.querySelector('.bluetooth_select.mdc-dialog .list .mdc-list'));
+    bluetoothList.singleSelection = true;
+    // debugger;
+    bluetoothSelectDialog.listen("MDCDialog:opened", () => {
+        bluetoothList.layout();
+        console.info("opened");
+    });
 
-        //    btnSelectNavi = new mdc.ripple.MDCRipple(document.querySelector("#btnSelectNavi"));
-        btnSettings = new mdc.ripple.MDCRipple(document.querySelector("#btnSettings"));
-        btnAddressHome = new mdc.ripple.MDCRipple(document.querySelector("#btnAddressHome"));
-        btnAddressCompany = new mdc.ripple.MDCRipple(document.querySelector("#btnAddressCompany"));
+    $('.bluetooth_select .list .mdc-list').empty();
 
-        btnStartNaviHome = new mdc.ripple.MDCRipple(document.querySelector("#btnStartNaviHome"));
-        btnStartNaviCompany = new mdc.ripple.MDCRipple(document.querySelector("#btnStartNaviCompany"));
-        btnStartNaviDrive = new mdc.ripple.MDCRipple(document.querySelector("#btnStartNaviDrive"));
+    const wifiSelectDialog = new mdc.dialog.MDCDialog(document.querySelector(".wifi_select.mdc-dialog"));
+    var wifiList = new mdc.list.MDCList(document.querySelector('.wifi_select.mdc-dialog .list .mdc-list'));
+    wifiList.singleSelection = true;
+    // debugger;
+    wifiSelectDialog.listen("MDCDialog:opened", () => {
+        wifiList.layout();
+        console.info("opened");
+    });
 
-        /* 
-            btnHome    = new mdc.ripple.MDCRipple(document.querySelector("#btnHome"));
-            btnHome.listen("click", function(event) {
-                self.close();
-            });
-        */
-        btnSettings.listen("click", function (event) {
-            //        window.open("setting.html","_blank","");
-            // fn_OpenUrl("search.html");
-            // fn_OpenPop("search.html");
-            windowOpen("search.html?idx=1");
+    $('.wifi_select .list .mdc-list').empty();
+
+    btnStatus = new mdc.ripple.MDCRipple(document.querySelector("#btnStatus"));
+    btnStatus.listen("click", function (event) {
+        // self.close();
+        // alert("test");
+        // AlertUtil.fn_Alert("test~");
+        if (allGranted) {
+            snackbar(t("message.all_granted"));
+            // toast("모든 권한이 정상입니다.");
+        } else {
+            // alert("tes");
+
             
-        });
-
-
-        btnAddressHome.listen("click", function (event) {
-            console.info("집");
-            windowOpen("reg_poi.html?p_tidx=0");
-            // window.open("search.html?idx=1&set=home","_blank","");
-        });
-        btnAddressCompany.listen("click", function (event) {
-            console.info("회사");
-            windowOpen("reg_poi.html?p_tidx=1","_blank","");
-            // window.open("search.html?idx=1&set=company","_blank","");
-            // window.open("search.html?idx=1&set=company","_blank","");
-        });
-
-        btnSwitchIndependenceCondition.listen("mousedown", function (event) {
-            if (!btnSwitchIndependenceCondition.selected) { // true
-                material.confirm(
-                    t("message.would_change"),
-                    function () {
-                        fn_DeviceSaveData("_INDEPENDENCE_CONDITION", true); // 1 : 독립 조건, 0 : 복합 조건
-                        btnSwitchIndependenceCondition.selected = true;
-                        $("#status_message").html(getStatusMessage());
-                    },
-                    function () {
-                    }
-                );
-            } else { // false
-                material.confirm(
-                    t("message.would_change"),
-                    function () {
-                        btnSwitchIndependenceCondition.selected = false;
-                        fn_DeviceSaveData("_INDEPENDENCE_CONDITION", false); // 1 : 독립 조건, 0 : 복합 조건
-                        $("#status_message").html(getStatusMessage());
-                    },
-                    function () {
-                    }
-                );
-            }
-        });
-
-        btnSwitchStartPower.listen("mousedown", function (event) {
-            if (!btnSwitchStartPower.selected) { // true
-                material.confirm(
-                    t("message.confirm_start"),
-                    function () {
-                        fn_StartService("fn_StartServiceCallback");
-                        $("#status_message").html(getStatusMessage());
-                    },
-                    function () {
-                    }
-                );
-            } else { // false
-                material.confirm(
-                    t("message.confirm_stop"),
-                    function () {
-                        btnSwitchStartPower.selected = false;
-                        //   btnSwitchStartPower.foundation_.setChecked(false);
-                        fn_StopService("fn_StopServiceCallback");
-                        $("#status_message").html(getStatusMessage());
-                    },
-                    function () {
-                    }
-                );
-            }
-        });
-        
-        btnSwitchStartBluetooth.listen("mousedown", function (event) {
-            if (!btnSwitchStartBluetooth.selected) { // true
-                material.confirm(
-                    t("message.confirm_start"),
-                    function () {
-                        btnSwitchStartBluetooth.selected = true;
-                        fn_DeviceSaveData("_START_BLUETOOTH", true); // 1 : 시작, 0 : 중지
-                        document.querySelector("#status_bluetooth").innerHTML = t("label.status_bluetooth_start");
-                        $(btnSelectBluetooth.root).show()
-
-                        if ( window.info.bluetooth && window.info.bluetooth.name ) {
-                            $(".bluetooth_info").show();
+            window.getPermissionsCallBackLoop = function (data) {
+                allGranted = (JSON.parse(data) || []).every(item => item.value);
+                granted = (JSON.parse(data) || []);
+                getPermissionsCallBack(data);
+                if (!allGranted) {
+                    granted.some(grant=>{
+                        if ( !grant.value ) {
+                            console.log(grant.name, grant.value)
+                            fn_StartSetting(grant.name,"startSettingCallback")
+                            // fn_CheckGrant(grant.name,"checkGrantCallBack")
                         }
-                        $("#status_message").html(getStatusMessage());
-                    },
-                    function () {
-                    }
-                );
-            } else { // false
-                material.confirm(
-                    t("message.confirm_stop"),
-                    function () {
-                        btnSwitchStartBluetooth.selected = false;
-                        fn_DeviceSaveData("_START_BLUETOOTH", false); // 1 : 시작, 0 : 중지
-                        document.querySelector("#status_bluetooth").innerHTML = t("label.status_bluetooth_stop");
-                        $(btnSelectBluetooth.root).hide()
-                        $(".bluetooth_info").hide();
-                        $("#status_message").html(getStatusMessage());
-                    },
-                    function () {
-                    }
-                );
-            }
-        });
-
-        btnSwitchStartWifi.listen("mousedown", function (event) {
-            if (!btnSwitchStartWifi.selected) { // true
-                material.confirm(
-                    t("message.confirm_start"),
-                    function () {
-                        btnSwitchStartWifi.selected = true;
-                        fn_DeviceSaveData("_START_WIFI", true); // 1 : 시작, 0 : 중지
-                        document.querySelector("#status_wifi").innerHTML = t("label.status_wifi_start");
-                        $(btnSelectWifi.root).show()
-                        if ( window.info.wifi && window.info.wifi.ssid ) {
-                            $(".wifi_info").show();
-                        }
-                        $("#status_message").html(getStatusMessage());
-                    },
-                    function () {
-                    }
-                );
-            } else { // false
-                material.confirm(
-                    t("message.confirm_stop"),
-                    function () {
-                        btnSwitchStartWifi.selected = false;
-                        fn_DeviceSaveData("_START_WIFI", false); // 1 : 시작, 0 : 중지
-                        document.querySelector("#status_wifi").innerHTML = t("label.status_wifi_stop");
-                        $(btnSelectWifi.root).hide()
-                        $(".wifi_info").hide();
-                        $("#status_message").html(getStatusMessage());
-                    },
-                    function () {
-                    }
-                );
-            }
-        });
-
-        btnSwitchUsingRegHome.listen("mousedown", function (event) {
-            if (!btnSwitchUsingRegHome.selected) { // true
-                // btnSwitchUsingRegHome.selected = true;
-                fn_DeviceSaveData("_USING_REG_HOME", true);
-                $(".using_reg_home_info").show();
-                window.info.usingRegHome = true;
-            } else { // false
-                // btnSwitchUsingRegHome.selected = false;
-                fn_DeviceSaveData("_USING_REG_HOME", false);
-                $(".using_reg_home_info").hide()
-                window.info.usingRegHome = false;;
-            }
-        });
-
-        //    btnSelectNavi.listen("click", function(event) {
-        //	  let eventListener = function(e) {
-        //		// alert("closed");
-        //		if (e.detail.action == "accept") {
-        //debugger;
-        //		}
-        //		if (e.detail.action == "close") {
-        //debugger;
-        //		}
-        //		console.info("closed action", e.detail.action);
-        //		naviSelectDialog.unlisten("MDCDialog:closed",eventListener);
-        //	  };
-        //	  naviSelectDialog.open();
-        //	  naviSelectDialog.listen("MDCDialog:closed", eventListener);
-        //    });
-
-
-        window.getInfoCallBack = function (data) {
-            if (isWeb) {
-                window.info = {
-                    "appPackage": "com.skt.tmap.ku",
-                    "chargingMode": "1",
-                    "startWifi": true,
-                    "usingRegHome": true,
-                    "wifi": {
-                        "bssid": "00:0D:18:00:00:01",
-                        "ssid": "SoftmWifi",
-                        "connected": true
-                    },
-                    "workGotoOffTime": false,
-                    "startPower": true,
-                    "naviGeofenceRadius": 200,
-                    "naviDestination": "1",
-                    "workOffTimeFrom": "17:30",
-                    "naviMode": "1",
-                    "workGotoTimeTo": "08:50",
-                    "naviOverlayWaitTime": 3,
-                    "naviPopupMode": true,
-                    "bluetooth": {
-                        "bondState": 12,
-                        "address": "00:0D:18:00:00:01",
-                        "name": "OBDII",
-                        "type": 1,
-                        "diassembled": "OBDII"
-                    },
-                    "startBluetooth": false,
-                    "workGotoTimeFrom": "06:00",
-                    "naviRenaviPreventTime": 3,
-                    "naviAutoStart": true,
-                    "workOffTimeTo": "19:00",
-                    "notiIcon": true,
-                    "btnSwitchIndependenceCondition": true,
-                    "startStopOnOff":{
-                        bluetooth:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
-                        wifi:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
-                        tethering:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
-                        airplane_mode:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
-                        screen_on:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
-                        lock:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
-                        completed_lock:{start:{use_yn:true,onoff:"off"},stop:{use_yn:true,onoff:"on"}},
-                        play_music:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
-                        home_screen:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
-                        power_off:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
-                    },
-                    "startMode":"1",
-                    "stopMode":"1",
-                    "onlyStopAfterNaving":true,
-                    serverHost:location.origin,
-                    pathName:location.pathname.split("/")[1],
-                    versionCode:11,
-                    versionName:"0.0.0.1",
-                    // + "http://www.softm.net/tdev"
-                }
-            } else {
-                window.info = (JSON.parse(data));
-            }
-
-            var v = window.info;
-            
-            $(".version-name").text(v.versionName);
-            $(".app_name").text(v.versionName);
-
-            window.getInstallPackagesKeyCallBack = function (data) {
-                var appListItem = (JSON.parse(data) || [{}])[0];
-                var appInfo = $(".app_info");
-                if (!appListItem.name) {
-                    // 티맵을 설치하세요.
-                    // fn_GotoMarket(appListItem.package);
-                    appInfo.find(".app_name").html("<a class='color_start' style='font-weight:bold' href='javascript:fn_GotoMarket(\""+appListItem.package+"\")'>"+t("message.install_tmap")+"</a>");
+                        return !grant.value ;
+                    });
                 } else {
-                    appInfo.find(".app_name").text(appListItem.name);
+                    
                 }
-
-                appInfo.find(".package_name").text(appListItem.package);
-                if ( appListItem.icon ) appInfo.find(".icon")[0].setAttribute("src", "data:image/png;base64," + appListItem.icon);
-            }
-            if (isWeb) {
-                getInstallPackagesKeyCallBack('[{"name":"티맵 ABCDE FDF DFDF DFDFDF","package":"com.skt.tmap.ku","icon":""}]');
-            } else {
-                fn_getInstallPackages(v.appPackage, "getInstallPackagesKeyCallBack");
-            }
-
-
-            console.info("window.info", v);
-            console.info("_START_POWER", v.startPower);
-            // v = v!="null"&&v?v:"1";
-            // var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
-            // event.onlySelect=true; // pass data custom 
-
-            // 충전시 실행
-            if (!v.startPower) { // stop
-                document.querySelector("#status").innerHTML = t("label.status_stop");
-                btnSwitchStartPower.selected = false;
-                // btnSwitchStartPower.foundation_.setChecked(false);
-            } else { // start
-                document.querySelector("#status").innerHTML = t("label.status_start");
-                btnSwitchStartPower.selected = true;
-                // btnSwitchStartPower.foundation_.setChecked(true);
-            }
-
-            if (!v.startBluetooth) { // stop
-                document.querySelector("#status_bluetooth").innerHTML = t("label.status_bluetooth_stop");
-                btnSwitchStartBluetooth.selected = false;
-            } else { // start
-                document.querySelector("#status_bluetooth").innerHTML = t("label.status_bluetooth_start");
-                btnSwitchStartBluetooth.selected = true;
-            }
-
-            if (!v.startWifi) { // stop
-                document.querySelector("#status_wifi").innerHTML = t("label.status_wifi_stop");
-                btnSwitchStartWifi.selected = false;
-            } else { // start
-                document.querySelector("#status_wifi").innerHTML = t("label.status_wifi_start");
-                btnSwitchStartWifi.selected = true;
-            }
-
-            if ( !v.startBluetooth ) {
-                $(btnSelectBluetooth.root).hide()
-                $(".bluetooth_info").hide();
-            }
-
-            if ( !v.startWifi ) {
-                $(btnSelectWifi.root).hide()
-                $(".wifi_info").hide();
-            }
-            if ( !v.bluetooth || !v.bluetooth.name ) {
-                $(".bluetooth_info").hide();
-            } else {
-                $(".bluetooth_info").find(".bluetooth").text(v.bluetooth.name);
             }
             
-            if ( !v.wifi || !v.wifi.ssid ) {
-                $(".wifi_info").hide();
-            } else {
-                $(".wifi_info").find(".wifi").text(v.wifi.ssid);
+            window.startSettingCallback = function(grant,ok) {
+                fn_GetPermissions("", "getPermissionsCallBackLoop");
             }
 
-            if (!v.independenceCondition) { // 독립 조건
-                btnSwitchIndependenceCondition.selected = false;
-            } else { // 복합 조건
-                btnSwitchIndependenceCondition.selected = true;
-            }
+            // fn_CheckGrant("overlay","checkGrantCallBack")
+            // fn_CheckGrant("location","checkGrantCallBack")
+            // fn_CheckGrant("notification_access","checkGrantCallBack")
+            // fn_CheckGrant("accessibility","checkGrantCallBack")
+            // fn_CheckGrant("ignore_battery","checkGrantCallBack")
 
-            // snackbar(modeNames[v] + "으로 설정 되어 있습니다.");
-            // v = v!="null"&&v?v:1; // 집↔회사
-            // 안내모드
-            var idx = parseInt(v.naviMode, 10) - 1;
-            chipNaviModeSelectedIndex = idx;
-            // chipSetPopup.chips[chipSelectIndex].selected = true;
-            var event = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
-            event.onlySelect = true; // pass data custom 
-            //		  var cb =document.querySelector("#mdc-chip-" + (chipNaviModeSelectedIndex+1));
-            var cb = $("#chip_navi_mode").find(".mdc-chip:eq(" + chipNaviModeSelectedIndex + ")")[0];
-            var cancelled = !cb.dispatchEvent(event);
-            cb.focus();
+            granted.some(grant=>{
+                if ( !grant.value ) {
+                    console.log(grant.name, grant.value)
+                    fn_StartSetting(grant.name,"startSettingCallback")
+                    // fn_CheckGrant(grant.name,"checkGrantCallBack")
+                }
+                return !grant.value ;
+            });
+        }
+    });
 
-            // 안내모드
-            var idx = parseInt(v.chargingMode, 10) - 1;
-            chipChargingModeSelectedIndex = idx;
-            var cb = $("#chip_charging_mode").find(".mdc-chip:eq(" + chipChargingModeSelectedIndex + ")")[0];
-            var cancelled = !cb.dispatchEvent(event);
-            cb.focus();
+    btnSwitchIndependenceCondition = new mdc.switchControl.MDCSwitch(document.querySelector('.independence_condition.mdc-switch'));
+
+    btnSwitchStartPower = new mdc.switchControl.MDCSwitch(document.querySelector('.start_power.mdc-switch'));
+    btnSwitchStartBluetooth = new mdc.switchControl.MDCSwitch(document.querySelector('.start_bluetooth.mdc-switch'));
+    btnSwitchStartWifi = new mdc.switchControl.MDCSwitch(document.querySelector('.start_wifi.mdc-switch'));
+    btnSwitchUsingRegHome = new mdc.switchControl.MDCSwitch(document.querySelector('.using_reg_home.mdc-switch'));
+
+    //     for (const el of document.querySelectorAll('.mdc-switch')) {
+    //   const switchControl = new MDCSwitch(el);
+    // }
+
+    //    btnSelectNavi = new mdc.ripple.MDCRipple(document.querySelector("#btnSelectNavi"));
+    // btnSettings = new mdc.ripple.MDCRipple(document.querySelector("#btnSettings"));
+    btnSearch = new mdc.ripple.MDCRipple(document.querySelector("#btnSearch"));
+    btnAddressHome = new mdc.ripple.MDCRipple(document.querySelector("#btnAddressHome"));
+    btnAddressCompany = new mdc.ripple.MDCRipple(document.querySelector("#btnAddressCompany"));
+
+    btnStartNaviHome = new mdc.ripple.MDCRipple(document.querySelector("#btnStartNaviHome"));
+    btnStartNaviCompany = new mdc.ripple.MDCRipple(document.querySelector("#btnStartNaviCompany"));
+    btnStartNaviDrive = new mdc.ripple.MDCRipple(document.querySelector("#btnStartNaviDrive"));
+
+    /* 
+        btnHome    = new mdc.ripple.MDCRipple(document.querySelector("#btnHome"));
+        btnHome.listen("click", function(event) {
+            self.close();
+        });
+    */
+    btnSearch.listen("click", function (event) {
+        //        window.open("setting.html","_blank","");
+        // fn_OpenUrl("search.html");
+        // fn_OpenPop("search.html");
+        windowOpen("search.html?idx=1");
+    });
 
 
-            if ( v.usingRegHome ) $(".using_reg_home_info").show();
-            else $(".using_reg_home_info").hide();
-            
-            btnSwitchUsingRegHome.selected = v.usingRegHome;
+    btnAddressHome.listen("click", function (event) {
+        console.info("집");
+        windowOpen("reg_poi.html?p_tidx=0");
+        // window.open("search.html?idx=1&set=home","_blank","");
+    });
+    btnAddressCompany.listen("click", function (event) {
+        console.info("회사");
+        windowOpen("reg_poi.html?p_tidx=1","_blank","");
+        // window.open("search.html?idx=1&set=company","_blank","");
+        // window.open("search.html?idx=1&set=company","_blank","");
+    });
 
+    btnSwitchIndependenceCondition.listen("mousedown", function (event) {
+        if (!btnSwitchIndependenceCondition.selected) { // true
+            material.confirm(
+                t("message.would_change"),
+                function () {
+                    fn_DeviceSaveData("_INDEPENDENCE_CONDITION", true); // 1 : 독립 조건, 0 : 복합 조건
+                    btnSwitchIndependenceCondition.selected = true;
+                    $("#status_message").html(getStatusMessage());
+                },
+                function () {
+                }
+            );
+        } else { // false
+            material.confirm(
+                t("message.would_change"),
+                function () {
+                    btnSwitchIndependenceCondition.selected = false;
+                    fn_DeviceSaveData("_INDEPENDENCE_CONDITION", false); // 1 : 독립 조건, 0 : 복합 조건
+                    $("#status_message").html(getStatusMessage());
+                },
+                function () {
+                }
+            );
+        }
+    });
+
+    btnSwitchStartPower.listen("mousedown", function (event) {
+        if (!btnSwitchStartPower.selected) { // true
+            material.confirm(
+                t("message.confirm_start"),
+                function () {
+                    fn_StartService("fn_StartServiceCallback");
+                    $("#status_message").html(getStatusMessage());
+                },
+                function () {
+                }
+            );
+        } else { // false
+            material.confirm(
+                t("message.confirm_stop"),
+                function () {
+                    btnSwitchStartPower.selected = false;
+                    //   btnSwitchStartPower.foundation_.setChecked(false);
+                    fn_StopService("fn_StopServiceCallback");
+                    $("#status_message").html(getStatusMessage());
+                },
+                function () {
+                }
+            );
+        }
+    });
+
+    btnSwitchStartBluetooth.listen("mousedown", function (event) {
+        if (!btnSwitchStartBluetooth.selected) { // true
+            material.confirm(
+                t("message.confirm_start"),
+                function () {
+                    btnSwitchStartBluetooth.selected = true;
+                    fn_DeviceSaveData("_START_BLUETOOTH", true); // 1 : 시작, 0 : 중지
+                    document.querySelector("#status_bluetooth").innerHTML = t("label.status_bluetooth_start");
+                    $(btnSelectBluetooth.root).show()
+
+                    if ( window.info.bluetooth && window.info.bluetooth.name ) {
+                        $(".bluetooth_info").show();
+                    }
+                    $("#status_message").html(getStatusMessage());
+                },
+                function () {
+                }
+            );
+        } else { // false
+            material.confirm(
+                t("message.confirm_stop"),
+                function () {
+                    btnSwitchStartBluetooth.selected = false;
+                    fn_DeviceSaveData("_START_BLUETOOTH", false); // 1 : 시작, 0 : 중지
+                    document.querySelector("#status_bluetooth").innerHTML = t("label.status_bluetooth_stop");
+                    $(btnSelectBluetooth.root).hide()
+                    $(".bluetooth_info").hide();
+                    $("#status_message").html(getStatusMessage());
+                },
+                function () {
+                }
+            );
+        }
+    });
+
+    btnSwitchStartWifi.listen("mousedown", function (event) {
+        if (!btnSwitchStartWifi.selected) { // true
+            material.confirm(
+                t("message.confirm_start"),
+                function () {
+                    btnSwitchStartWifi.selected = true;
+                    fn_DeviceSaveData("_START_WIFI", true); // 1 : 시작, 0 : 중지
+                    document.querySelector("#status_wifi").innerHTML = t("label.status_wifi_start");
+                    $(btnSelectWifi.root).show()
+                    if ( window.info.wifi && window.info.wifi.ssid ) {
+                        $(".wifi_info").show();
+                    }
+                    $("#status_message").html(getStatusMessage());
+                },
+                function () {
+                }
+            );
+        } else { // false
+            material.confirm(
+                t("message.confirm_stop"),
+                function () {
+                    btnSwitchStartWifi.selected = false;
+                    fn_DeviceSaveData("_START_WIFI", false); // 1 : 시작, 0 : 중지
+                    document.querySelector("#status_wifi").innerHTML = t("label.status_wifi_stop");
+                    $(btnSelectWifi.root).hide()
+                    $(".wifi_info").hide();
+                    $("#status_message").html(getStatusMessage());
+                },
+                function () {
+                }
+            );
+        }
+    });
+
+    btnSwitchUsingRegHome.listen("mousedown", function (event) {
+        if (!btnSwitchUsingRegHome.selected) { // true
+            // btnSwitchUsingRegHome.selected = true;
+            fn_DeviceSaveData("_USING_REG_HOME", true);
+            $(".using_reg_home_info").show();
+            window.info.usingRegHome = true;
+        } else { // false
+            // btnSwitchUsingRegHome.selected = false;
+            fn_DeviceSaveData("_USING_REG_HOME", false);
+            $(".using_reg_home_info").hide()
+            window.info.usingRegHome = false;;
+        }
+    });
+
+    //    btnSelectNavi.listen("click", function(event) {
+    //	  let eventListener = function(e) {
+    //		// alert("closed");
+    //		if (e.detail.action == "accept") {
+    //debugger;
+    //		}
+    //		if (e.detail.action == "close") {
+    //debugger;
+    //		}
+    //		console.info("closed action", e.detail.action);
+    //		naviSelectDialog.unlisten("MDCDialog:closed",eventListener);
+    //	  };
+    //	  naviSelectDialog.open();
+    //	  naviSelectDialog.listen("MDCDialog:closed", eventListener);
+    //    });
+
+    //    const naviSelectDialog = new mdc.dialog.MDCDialog(
+    //      document.querySelector(".navi_select.mdc-dialog")
+    //    );
+    //
+    //	const naviSelectList = new mdc.list.MDCList(document.querySelector('.navi_select.mdc-dialog .mdc-list'));
+    //    naviSelectList.singleSelection = true;
+    //    // debugger;
+    //    naviSelectDialog.listen("MDCDialog:opened", () => {
+    //      // alert("opened");
+    //	  naviSelectList.layout();
+    //      console.info("opened");
+    //    });
+    $("#work_goto_time_from").on("input", function () {
+        var v = this.value ? this.value : window.workGotoTimeFrom;
+        if (v > window.workGotoTimeTo) {
+            v = window.workGotoTimeFrom;
+        }
+        fn_DeviceSaveData("_WORK_GOTO_TIME_FROM", v); // 출근시작시간
+        window.workGotoTimeFrom = v;
+        this.value = v;
+    });
+    $("#work_goto_time_from").on("change", function () {
+        //		if (!this.value) this.blur();
+        console.info("change", this.value);
+    });
+
+    $("#work_goto_time_to").on("input", function () {
+        var v = this.value ? this.value : window.workGotoTimeTo;
+        if (v < window.workGotoTimeFrom) {
+            v = window.workGotoTimeTo;
+        }
+        fn_DeviceSaveData("_WORK_GOTO_TIME_TO", v); // 출근종료시간
+        window.workGotoTimeTo = v;
+        this.value = v;
+    });
+
+    $("#work_off_time_from").on("input", function () {
+        var v = this.value ? this.value : window.workOffTimeFrom;
+        if (v > window.workOffTimeTo) {
+            v = window.workOffTimeFrom;
+        }
+        fn_DeviceSaveData("_WORK_OFF_TIME_FROM", v); // 퇴근시작시간
+        window.workOffTimeFrom = v;
+        this.value = v;
+    });
+
+    $("#work_off_time_to").on("input", function () {
+        var v = this.value ? this.value : window.workOffTimeTo;
+        if (v < window.workOffTimeFrom) {
+            v = window.workOffTimeTo;
+        }
+        fn_DeviceSaveData("_WORK_OFF_TIME_TO", v); // 퇴근종료시간
+        window.workOffTimeTo = v;
+        this.value = v;
+    });
+
+    btnStartNaviHome.listen("click", function (event) {
+        // fn_DeviceSaveData("_NAVI_DESTINATION", "1");
+        fn_StartNaviDestination("1");
+    });
+    btnStartNaviCompany.listen("click", function (event) {
+        // fn_DeviceSaveData("_NAVI_DESTINATION", "2");
+        fn_StartNaviDestination("2");
+    });
+
+    btnStartNaviDrive.listen("click", function (event) {
+        // fn_DeviceSaveData("_NAVI_DESTINATION", "4");
+        fn_StartNaviDestination("4");
+    });
+
+    window.getPermissionsCallBack = function (data) {
+        allGranted = (JSON.parse(data) || []).every(item => item.value);
+        granted = (JSON.parse(data) || []);
+        if (allGranted) {
+            // toast("모든 권한 취득")
+            // snackbar("모든 권한 취득")
+            // t("label.status_stop")
+            $("#status_message").html(getStatusMessage());
+            // $("#status_message").html("충전 + 블루투스 연결시 <span class='color_start'>동작</span>합니다.");
+        } else {
+            $("#status_message").html("<span class='color_stop'>권한설정이 필요합니다.</span>");
         }
 
-        fn_GetInfo("", "getInfoCallBack");
+        // $("#status_message").removeClass("color_start color_stop").addClass(allGranted?"color_start":"color_stop");
+        $("#btnStatus").removeClass("bgcolor_start bgcolor_stop").addClass(allGranted ? "bgcolor_start" : "blink bgcolor_stop")
+            .html(allGranted ? t("label.normal_operation") : t("label.permission_check"));
+        // .html(allGranted ? "정상동작" : "권한확인");
+        if (allGranted) $("#btnStatus").hide(); 
+        else $("#btnStatus").show(); 
 
-        //    const naviSelectDialog = new mdc.dialog.MDCDialog(
-        //      document.querySelector(".navi_select.mdc-dialog")
-        //    );
-        //
-        //	const naviSelectList = new mdc.list.MDCList(document.querySelector('.navi_select.mdc-dialog .mdc-list'));
-        //    naviSelectList.singleSelection = true;
-        //    // debugger;
-        //    naviSelectDialog.listen("MDCDialog:opened", () => {
-        //      // alert("opened");
-        //	  naviSelectList.layout();
-        //      console.info("opened");
-        //    });
-        $("#work_goto_time_from").on("input", function () {
-            var v = this.value ? this.value : window.workGotoTimeFrom;
-            if (v > window.workGotoTimeTo) {
-                v = window.workGotoTimeFrom;
-            }
-            fn_DeviceSaveData("_WORK_GOTO_TIME_FROM", v); // 출근시작시간
-            window.workGotoTimeFrom = v;
-            this.value = v;
-        });
-        $("#work_goto_time_from").on("change", function () {
-            //		if (!this.value) this.blur();
-            console.info("change", this.value);
-        });
-
-        $("#work_goto_time_to").on("input", function () {
-            var v = this.value ? this.value : window.workGotoTimeTo;
-            if (v < window.workGotoTimeFrom) {
-                v = window.workGotoTimeTo;
-            }
-            fn_DeviceSaveData("_WORK_GOTO_TIME_TO", v); // 출근종료시간
-            window.workGotoTimeTo = v;
-            this.value = v;
-        });
-
-        $("#work_off_time_from").on("input", function () {
-            var v = this.value ? this.value : window.workOffTimeFrom;
-            if (v > window.workOffTimeTo) {
-                v = window.workOffTimeFrom;
-            }
-            fn_DeviceSaveData("_WORK_OFF_TIME_FROM", v); // 퇴근시작시간
-            window.workOffTimeFrom = v;
-            this.value = v;
-        });
-
-        $("#work_off_time_to").on("input", function () {
-            var v = this.value ? this.value : window.workOffTimeTo;
-            if (v < window.workOffTimeFrom) {
-                v = window.workOffTimeTo;
-            }
-            fn_DeviceSaveData("_WORK_OFF_TIME_TO", v); // 퇴근종료시간
-            window.workOffTimeTo = v;
-            this.value = v;
-        });
-
-        btnStartNaviHome.listen("click", function (event) {
-            // fn_DeviceSaveData("_NAVI_DESTINATION", "1");
-            fn_StartNaviDestination("1");
-        });
-        btnStartNaviCompany.listen("click", function (event) {
-            // fn_DeviceSaveData("_NAVI_DESTINATION", "2");
-            fn_StartNaviDestination("2");
-        });
-
-        btnStartNaviDrive.listen("click", function (event) {
-            // fn_DeviceSaveData("_NAVI_DESTINATION", "4");
-            fn_StartNaviDestination("4");
-        });
-
-        window.getPermissionsCallBack = function (data) {
-            allGranted = (JSON.parse(data) || []).every(item => item.value);
-            granted = (JSON.parse(data) || []);
-            if (allGranted) {
-                // toast("모든 권한 취득")
-                // snackbar("모든 권한 취득")
-                // t("label.status_stop")
-                $("#status_message").html(getStatusMessage());
-                // $("#status_message").html("충전 + 블루투스 연결시 <span class='color_start'>동작</span>합니다.");
-            } else {
-                $("#status_message").html("<span class='color_stop'>권한설정이 필요합니다.</span>");
-            }
-
-            // $("#status_message").removeClass("color_start color_stop").addClass(allGranted?"color_start":"color_stop");
-            $("#btnStatus").removeClass("bgcolor_start bgcolor_stop").addClass(allGranted ? "bgcolor_start" : "blink bgcolor_stop")
-                .html(allGranted ? t("label.normal_operation") : t("label.permission_check"));
-             // .html(allGranted ? "정상동작" : "권한확인");
-             if (allGranted) $("#btnStatus").hide(); 
-             else $("#btnStatus").show(); 
-
-        }
-        fn_GetPermissions("", "getPermissionsCallBack");
-
-        
-    } // end if
-
-    
+    }
+    fn_GetPermissions("", "getPermissionsCallBack");
     fn_DeviceLoadData("_POI_HOME","bindPoiHome");
     fn_DeviceLoadData("_POI_COMPANY","bindPoiCompany");
-});
 
+    $(".version-name").text(v.versionName);
+    $(".app_name").text(v.versionName);
+
+    window.getInstallPackagesKeyCallBack = function (data) {
+        var appListItem = (JSON.parse(data) || [{}])[0];
+        var appInfo = $(".app_info");
+        if (!appListItem.name) {
+            // 티맵을 설치하세요.
+            // fn_GotoMarket(appListItem.package);
+            appInfo.find(".app_name").html("<a class='color_start' style='font-weight:bold' href='javascript:fn_GotoMarket(\""+appListItem.package+"\")'>"+t("message.install_tmap")+"</a>");
+        } else {
+            appInfo.find(".app_name").text(appListItem.name);
+        }
+
+        appInfo.find(".package_name").text(appListItem.package);
+        if ( appListItem.icon ) appInfo.find(".icon")[0].setAttribute("src", "data:image/png;base64," + appListItem.icon);
+    }
+    if (isWeb) {
+        getInstallPackagesKeyCallBack('[{"name":"티맵 ABCDE FDF DFDF DFDFDF","package":"com.skt.tmap.ku","icon":""}]');
+    } else {
+        fn_getInstallPackages(v.appPackage, "getInstallPackagesKeyCallBack");
+    }
+
+
+    console.info("window.info", v);
+    console.info("_START_POWER", v.startPower);
+    // v = v!="null"&&v?v:"1";
+    // var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
+    // event.onlySelect=true; // pass data custom 
+
+    // 충전시 실행
+    if (!v.startPower) { // stop
+        document.querySelector("#status").innerHTML = t("label.status_stop");
+        btnSwitchStartPower.selected = false;
+        // btnSwitchStartPower.foundation_.setChecked(false);
+    } else { // start
+        document.querySelector("#status").innerHTML = t("label.status_start");
+        btnSwitchStartPower.selected = true;
+        // btnSwitchStartPower.foundation_.setChecked(true);
+    }
+
+    if (!v.startBluetooth) { // stop
+        document.querySelector("#status_bluetooth").innerHTML = t("label.status_bluetooth_stop");
+        btnSwitchStartBluetooth.selected = false;
+    } else { // start
+        document.querySelector("#status_bluetooth").innerHTML = t("label.status_bluetooth_start");
+        btnSwitchStartBluetooth.selected = true;
+    }
+
+    if (!v.startWifi) { // stop
+        document.querySelector("#status_wifi").innerHTML = t("label.status_wifi_stop");
+        btnSwitchStartWifi.selected = false;
+    } else { // start
+        document.querySelector("#status_wifi").innerHTML = t("label.status_wifi_start");
+        btnSwitchStartWifi.selected = true;
+    }
+
+    if ( !v.startBluetooth ) {
+        $(btnSelectBluetooth.root).hide()
+        $(".bluetooth_info").hide();
+    }
+
+    if ( !v.startWifi ) {
+        $(btnSelectWifi.root).hide()
+        $(".wifi_info").hide();
+    }
+    if ( !v.bluetooth || !v.bluetooth.name ) {
+        $(".bluetooth_info").hide();
+    } else {
+        $(".bluetooth_info").find(".bluetooth").text(v.bluetooth.name);
+    }
+    
+    if ( !v.wifi || !v.wifi.ssid ) {
+        $(".wifi_info").hide();
+    } else {
+        $(".wifi_info").find(".wifi").text(v.wifi.ssid);
+    }
+
+    if (!v.independenceCondition) { // 독립 조건
+        btnSwitchIndependenceCondition.selected = false;
+    } else { // 복합 조건
+        btnSwitchIndependenceCondition.selected = true;
+    }
+
+    // snackbar(modeNames[v] + "으로 설정 되어 있습니다.");
+    // v = v!="null"&&v?v:1; // 집↔회사
+    // 안내모드
+    var idx = parseInt(v.naviMode, 10) - 1;
+    chipNaviModeSelectedIndex = idx;
+    // chipSetPopup.chips[chipSelectIndex].selected = true;
+    var event = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
+    event.onlySelect = true; // pass data custom 
+    //		  var cb =document.querySelector("#mdc-chip-" + (chipNaviModeSelectedIndex+1));
+    var cb = $("#chip_navi_mode").find(".mdc-chip:eq(" + chipNaviModeSelectedIndex + ")")[0];
+    var cancelled = !cb.dispatchEvent(event);
+    cb.focus();
+
+    // 안내모드
+    var idx = parseInt(v.chargingMode, 10) - 1;
+    chipChargingModeSelectedIndex = idx;
+    var cb = $("#chip_charging_mode").find(".mdc-chip:eq(" + chipChargingModeSelectedIndex + ")")[0];
+    var cancelled = !cb.dispatchEvent(event);
+    cb.focus();
+
+
+    if ( v.usingRegHome ) $(".using_reg_home_info").show();
+    else $(".using_reg_home_info").hide();
+    
+    btnSwitchUsingRegHome.selected = v.usingRegHome;
+}
 
 function bindPoiHome(v) {
 //	var tmaps = parsePoi(v);
@@ -1259,7 +1268,6 @@ function bindPoiCompany(v) {
 	}
 };
 
-
 function fn_StartServiceCallback(ok) {
     // alert("startCallback");
     snackbar(t("toast.start"));
@@ -1270,6 +1278,7 @@ function fn_StartServiceCallback(ok) {
     // btnSwitchStartPower.root_.disabled = true;
     $("#status_message").html(getStatusMessage());
 }
+
 function fn_StopServiceCallback(ok) {
     // alert("stopCallback");
     snackbar(t("toast.stop"));
@@ -1294,11 +1303,9 @@ function getStatusMessage() {
     }
     return msg;
 }
-
-
 </script>
 </head>
-<body>
+<body class="none">
 <div class="i18n drawer-frame-root">
 	<!--
     !-->
@@ -1314,7 +1321,7 @@ function getStatusMessage() {
                         <span class="mdc-top-app-bar__title" data-i18n="label.top_bar">티맵실행</span>
                     </section>
                     <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
-                        <button id="btnSettings" class="mdc-icon-button material-icons mdc-top-app-bar__action-item--unbounded"
+                        <button id="btnSearch" class="mdc-icon-button material-icons mdc-top-app-bar__action-item--unbounded"
                             aria-label="Print this page">search</button>  <!-- bookmark settings-->
                     </section>
             </div>
