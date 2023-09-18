@@ -109,10 +109,16 @@ body {
   align-self: center;
   font-size: 18px;
 }
+
+.row .main.title {
+  font-size: 20px !important;
+}
+
 .row.comment {
   margin-top: 3px !important;
   text-align: right;
   font-size: 13px;
+  
 }
 
 .row.sub {

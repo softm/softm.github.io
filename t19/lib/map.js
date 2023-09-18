@@ -197,7 +197,7 @@ http://tmapapi.sktelecom.com/main.html#webservice/guide/webserviceGuide.guide4
             iconWidth = 30; 
             iconHeight= 40;
             label = "<span style='background-color: #46414E;color:white;font-size:14px;padding:5px'><strong>"+name+"</strong></span>";
-        poi.marker = newMarker(map
+        var mk = newMarker(map
                         , lat
                         , lon
 //                        , "http://tmapapis.sktelecom.com/upload/tmap/marker/" + icon
@@ -209,7 +209,7 @@ http://tmapapi.sktelecom.com/main.html#webservice/guide/webserviceGuide.guide4
                         , draggable // draggable
                );
         var v = new MapPoint(poi.getLat(),poi.getLon(),poi.getName(),poi.item);
-        v.marker = poi.marker;
+        v.marker = mk;
         if ( cb ) {
             v.marker.addListener("touchend", function(evt) {
                  cb(evt);
@@ -233,7 +233,7 @@ http://tmapapi.sktelecom.com/main.html#webservice/guide/webserviceGuide.guide4
         var lat = poi.getLat  ();
         var lon = poi.getLon  ();
         var name= poi.getName ();
-        poi.marker = newMarker(
+        var mk = newMarker(
             map,lat,lon
             , "./images/home.svg"
             , name
@@ -246,9 +246,9 @@ http://tmapapi.sktelecom.com/main.html#webservice/guide/webserviceGuide.guide4
             maps.setCenter(map,poi.getLat(),poi.getLon());
             maps.setZoom(map,maps.markerSelectZoom);
         }
-        poi.marker.addListener("touchend",zoomHome);
+        mk.addListener("touchend",zoomHome);
         this.setHome(poi);
-        return poi.marker;
+        return mk;
     }
 
     var companyPoi = null;

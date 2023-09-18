@@ -78,11 +78,6 @@ var messages  = {
             permission_check:"Permission check",
             status:"Status",
             navi_app:"App/Navi",
-            menu_home:"Home",
-            menu_setting:"Setting",
-            menu_start_stop:"Start/Stop",
-            menu_permission:"Permission",
-            menu_membership:"Membership",
             all_charging:"All",
             wired_charging:"Wired",
             wireless_charging:"Wireless",
@@ -127,7 +122,7 @@ var messages  = {
             qna_comment_detail_message3: "Model name",
             qna_comment_detail_message4: "Device system (OS) version",
             qna_comment_detail_message5: "app version",
-            rate_the_app: "Rate the app",
+            laboratory:"Laboratory",
           },
           title: {
             main: "Basic Settings",
@@ -138,7 +133,18 @@ var messages  = {
             navi: "Navi",
             start_stop_on_off: "On/Off",
             destination: "Destination",
+            
+            home:"Home",
+            setting:"Setting",
+            run_options: "Run Options",
+            start_stop:"Start/Stop",
+            home_company: "Home/Company",
+            favorite: "Favorite",
             contact_us: "Contact us",
+            rate_the_app: "Rate the app",
+            permission:"Permission",
+            membership:"Membership",
+            laboratory:"Laboratory",
           },
           message:{
             save: "Saved.",
@@ -168,6 +174,7 @@ var messages  = {
 
             navi_auto_start_enable: "Start navigating automatically <span style='color:var(--softm-start)'>Run</span>.",
             navi_auto_start_disable: "Start navigating automatically <span style='color:var(--softm-stop)'>Never</span>.",
+            overlay_wait_time: "Wait pop-up display time before running app",
 
             mode_guide_1: "<B>\"Company\"</B> to <<B><span style='color:var(--softm-start)'>\"AM\"</span></B>, <B><span style='color:var(--softm-stop)'>\"Afternoon\"</span></B> to <B>\"Home\"</B>." ,
             mode_guide_2: "<B>\"Destination\"</B> in <<B><span style='color:var(--softm-start)'>\"AM\"</span></B>, <B><span style='color:var(--softm-stop)'>\"Afternoon\"</span></B> to <B>\"Home\"</B>." ,
@@ -212,7 +219,9 @@ var messages  = {
             bluetooth_not_supported :"<span class=''>Bluetooth is not supported</span>.",
             comming_soon :"<span class=''>Coming soon</span>.",
             drag_pin_to_position :"<span class=''>Drag the pin to position it</span>.",
-
+            reg_home :"\“Home\” has been registered.",
+            reg_company :"\"Company\” has been registered.",
+            reg_favorite :"\"Favorite\” has been registered.",
           },
           toast:{
             start: "T-map is <span style='color:var(--softm-start)'>start</span>.",
@@ -312,11 +321,6 @@ var messages  = {
             permission_check:"권한확인",
             status:"상태",
             navi_app:"앱/내비",
-            menu_home:"홈",
-            menu_setting:"설정",
-            menu_start_stop:"시작/종료",
-            menu_permission:"권한",
-            menu_membership:"멤버쉽",
             all_charging:"모두",
             wired_charging:"유선",
             wireless_charging:"무선",
@@ -361,7 +365,7 @@ var messages  = {
             qna_comment_detail_message3: "기종 이름",
             qna_comment_detail_message4: "기기 시스템(OS) 버전",
             qna_comment_detail_message5: "앱 버전",
-            rate_the_app: "어플 평가하기",
+            laboratory:"연구소",
           },
           title: {
             main: "기본",
@@ -372,14 +376,25 @@ var messages  = {
             navi:"안내",
             start_stop_on_off: "On/Off",
             destination: "목적지",
+            
+            home:"홈",
+            setting:"설정",
+            run_options: "실행옵션",
+            start_stop:"시작/종료",
+            home_company: "집/회사",
+            favorite: "즐겨찾기",
             contact_us: "문의하기",
+            rate_the_app: "어플 평가하기",
+            permission:"권한",
+            membership:"멤버쉽",
+            laboratory:"연구소",
           },
           message:{
             save : "저장 되었습니다.",
             would_save : "저장 하시겠습니까?",
             would_change : "변경 하시겠습니까?",
             first_start : "시동을 켜면 자동으로 네비게이션이 실행됩니다.",
-            first_start2 : "전원, 블루투스, 와이파이 연결하면,<br/>내비게이션을 시작, 종료할 수 있습니다.",
+            first_start2 : "전원, 블루투스, 와이파이 연결하면,<br/>내비게이션 앱을 시작, 종료할 수 있습니다.",
             confirm_favorite_delete : "즐겨찾기를 삭제 하시겠습니까?",
             confirm_start : "<span style='color:var(--softm-start)'>시작</span> 하시겠습니까?",
             confirm_stop : "<span style='color:var(--softm-stop)'>종료</span> 하시겠습니까?",
@@ -402,7 +417,8 @@ var messages  = {
 
             navi_auto_start_enable: "자동으로 내비 시작 <span style='color:var(--softm-start)'>실행</span>.",
             navi_auto_start_disable: "자동으로 내비 시작 <span style='color:var(--softm-stop)'>안함</span>.",
-
+            overlay_wait_time: "앱 실행전 대기 팝업 표시시간",
+            
             mode_guide_1 : "<B><span style='color:var(--softm-start)'>\"오전\"</span></B>에 <B>\"회사\"</B>,  <B><span style='color:var(--softm-stop)'>\"오후\"</span></B>에 <B>\"집\"</B> 안내 합니다.",
             mode_guide_2 : "<B><span style='color:var(--softm-start)'>\"오전\"</span></B>에 <B>\"목적지\"</B>, <B><span style='color:var(--softm-stop)'>\"오후\"</span></B>에 <B>\"집\"</B> 안내 합니다.",
             mode_guide_3 : "<B>\"내비\"</B>만 실행합니다.",
@@ -446,7 +462,9 @@ var messages  = {
             bluetooth_not_supported :"<span class=''>블루투스가 지원되지 않습니다.</span>.",
             comming_soon :"<span class=''>준비중 입니다</span>.",
             drag_pin_to_position :"<span class=''>핀을 드래그해 위치를 지정하세요</span>.",
-            drag_pin_to_position :"즐겨찾기가 등록었습니다.",
+            reg_home :"\"집\"이 등록되었습니다.",
+            reg_company :"\"회사\"가 등록되었습니다.",
+            reg_favorite :"\"즐겨찾기\"가 등록되었습니다.",
             
           },
           toast:{
@@ -535,6 +553,21 @@ var drawer = null;
 var topAppBar = null;
 var drawerListEl = null;
   
+var DRAWER_LIST_INFO = {
+  "index.html" : {icon:"home",label:"title.home"}, // 홈
+  "setting.html" : {icon:"settings",label:"title.setting",showOnlySelf:true}, // 설정
+  "onoff.html" : {icon:"toggle_on",label:"title.start_stop",showOnlySelf:true}, // 시작/종료
+  "run_option.html" : {icon:"link",label:"title.run_options",popup:true,reloadAtReturn:true}, // 실행옵션
+  "home_company.html" : {icon:"home_work",label:"title.home_company",popup:true}, // 집/회사
+  "search.html?idx=2" : {icon:"favorite",label:"title.favorite",pathSearchSame:true,popup:true}, // 즐겨찾기
+  "qna.html" : {icon:"forum",label:"title.contact_us",showOnlySelf:true}, // 문의하기
+  // "membership.html" : {icon:"card_membership",label:"title.membership"}, // 멤버쉽
+  "laboratory.html" : {icon:"emoji_objects",label:"title.laboratory",popup:true}, // 연구소
+  "rate_the_app.html" : {icon:"thumb_up",label:"title.rate_the_app"}, // 어플 평가하기
+}
+
+var drawerSelectedIndex = null;
+
 $( document ).ready(function() {
   footerNavigation = [].map.call(document.querySelectorAll(".mdc-bottom-navigation__list-item"),(el,idx)=>{
       var rtnEl = new mdc.ripple.MDCRipple(el);
@@ -543,10 +576,12 @@ $( document ).ready(function() {
           $(this).addClass("mdc-bottom-navigation__list-item--activated");
           if ( footerNavigationIndex != idx ) {
             fn_OpenUrl(footerNavigationUrl[idx]);
+            // windowOpen(footerNavigationUrl[idx]);
           }
       });
       return rtnEl;
   });
+
 
   if ( document.querySelector('.mdc-drawer') ) {
     
@@ -560,7 +595,10 @@ $( document ).ready(function() {
 
     document.body.addEventListener('MDCDrawer:opened', () => {
       // mainContentEl.querySelector('input, button').focus();
-      window.drawerSelectedIndex = drawer.innerList.selectedIndex;
+      // debugger;
+      // window.drawerSelectedIndex = drawer.innerList.selectedIndex;
+      // drawer.innerList.selectedIndex = window.drawerSelectedIndex;
+      
     });
 
     document.body.addEventListener('MDCDrawer:closed', () => {
@@ -572,27 +610,68 @@ $( document ).ready(function() {
     drawerListEl.addEventListener('click', (event) => {
         drawer.open = false;
         setTimeout(function () {
-            if (drawer.innerList.selectedIndex === 0) {
-                location.replace("index.html");
-            } else if (drawer.innerList.selectedIndex === 1) {
-              fn_OpenUrl("qna.html");
-                // fn_OpenPop("setting.html");
-
-            } else if (drawer.innerList.selectedIndex === 2) {
-              // fn_OpenUrl("qna.html");
-              drawer.innerList.selectedIndex  = window.drawerSelectedIndex;
+            var idx = drawer.innerList.selectedIndex;
+            var drawerInfos = Object.values(DRAWER_LIST_INFO);
+            var urls = Object.keys(DRAWER_LIST_INFO);
+            var url = urls[idx];
+            var drawerInfo = drawerInfos[idx];
+            if ( url  === "rate_the_app.html" ) {
               fn_GotoMarket("net.softm.startnavi.poweron");
+              drawer.innerList.selectedIndex = window.drawerSelectedIndex;
               event.preventDefault();
             } else {
-                location.reload();
+              if ( drawerInfo.popup ) {
+                drawer.innerList.selectedIndex = window.drawerSelectedIndex;
+                fn_OpenPop(url);
+              } else {
+                // windowOpen(url);
+                fn_OpenUrl(url);
+                // document.location.href = url;
+              }
             }
-            drawer.innerList.selectedIndex = 0;
+            // location.reload();
+            // drawer.innerList.selectedIndex = 0;
         }, 100)
         event.preventDefault();
     });
     //        drawer.innerList.selectedIndex = 2;
+    $(".mdc-drawer .mdc-deprecated-list").empty();
+    Object.entries(DRAWER_LIST_INFO).forEach((item,idx)=>{
+      // debugger;
+       var pageUrl = item[0];
+       var drawerInfo = item[1];
+       console.log(pageUrl);
+       var row = $(".mdc-drawer .clone").clone();
+       row.find("i").text(drawerInfo.icon);
+       row.find(".mdc-deprecated-list-item__text").attr("data-i18n",drawerInfo.label);
+       
+       row.removeClass("clone mdc-deprecated-list-item--activated");
+
+       var pathName = document.location.pathname;
+       var pathNameInfo = pathName.split("/");
+       if ( !drawerInfo.showOnlySelf ) {
+         row.removeClass("none");
+       }
+       if ( ( pathNameInfo[2] ) === ( pageUrl + (drawerInfo.pathSearchSame?document.location.search:"") ) ) {
+        // row.addClass("mdc-deprecated-list-item--activated");
+        row.removeClass("none");
+        row.attr("tabindex",0);
+        
+        // document.location.search
+
+        window.drawerSelectedIndex = idx;
+       }
+       $(".mdc-drawer .mdc-deprecated-list").append(row);
+
+       drawer.innerList.selectedIndex = -1; // 한번 초기화화고 선택되어야 오류 없음.
+       drawer.innerList.selectedIndex = window.drawerSelectedIndex;
+
+    });
+    // $(".mdc-deprecated-list").i18n();
+    $(".mdc-drawer .clone").remove();
 
   }
+
 	$( '<div class="mo-ui-layer progress" style="display:none"><div class="mo-ui-innerlayer"><div class="loading-centered-element"><img src="data:image/png;base64,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"></div></div></div>' ).appendTo( $( "body" ) );
 
     $(".i18n").i18n();
@@ -623,6 +702,9 @@ $( document ).ready(function() {
     window.material.wTimeout = null;
     window.material.snackbar = function (v) {
       snackbarMDC.labelText = "";
+      // var h = $("footer").height();
+      var h = $("footer:not(.mdc-dialog__actions)").height();
+      snackbarMDC.root.style.bottom = (h) + "px";
       snackbarMDC.close();
       snackbarMDC.open();
       // snackbarMDC.labelText = v;
@@ -1004,10 +1086,33 @@ function windowOpen(url) {
   // fn_OpenPop(window.info.serverHost+"/" + url);
 
 }
-function windowClose() {
-  window.close();
+
+function windowUrl(url) {
+  // window.name = "softm";
+  location.href = window.info.serverHost +"/" + window.info.pathName + "/" + url;
+  // fn_OpenPop(window.info.serverHost+"/" + url);
+
+}
+
+function windowClose(reload) {
+  try {
+    window.close();
+  } catch (e) {
+  }
   // top.window.open('http://softm?','_self').close();
 	// top.window.opener=self;
 	// top.self.close();
-  // fn_ClosePopData();
+  if ( !reload ) fn_ClosePopData();
+  else fn_ClosePopData(null,"fn_Reload");
 }
+
+  /**
+  1 : 집↔회사
+  2 : 집↔목적지
+  */
+  var naviModeNames = [
+    ""
+    , "집↔회사"
+    , "집↔목적지"
+    , "안전운전"
+];

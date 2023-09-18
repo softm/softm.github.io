@@ -334,7 +334,7 @@ function pageInit() {
                         <span class="mdc-top-app-bar__title" data-i18n="label.top_bar">티맵실행</span>
                     </section>
                     <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
-                        <button id="btnSettings" class="mdc-icon-button material-icons mdc-top-app-bar__action-item--unbounded"
+                        <button id="btnSettings" class="none mdc-icon-button material-icons mdc-top-app-bar__action-item--unbounded"
                             aria-label="Print this page">search</button> <!--settings-->
                     </section>
             </div>
@@ -348,52 +348,73 @@ function pageInit() {
     </div>
     <aside class="mdc-drawer mdc-drawer--modal">
        
-        <div class="mdc-drawer__header app_info">
-            <img src="./images/logo_100.svg" width="50" style="margin-top: 10px;"/>
-            <!-- style="height:55px" -->
-            <h3 class="mdc-drawer__title" data-i18n="[html]label.app_name">티맵자동실행</h3>
-            <h6 class="mdc-drawer__subtitle" >Ver.<span class="version-name">00.00</span></h6>
-          </div>
-        <div class="mdc-drawer__content">
-            <div class="mdc-deprecated-list">
-                <a class="mdc-deprecated-list-item" href="#" aria-current="page">
-                    <span class="mdc-deprecated-list-item__ripple"></span>
-                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home</i>
-                    <span class="mdc-deprecated-list-item__text" data-i18n="label.home_page">Home</span>
-                </a>
-                <a class="mdc-deprecated-list-item" href="#">
-                    <span class="mdc-deprecated-list-item__ripple"></span>
-                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">forum</i>
-                    <span class="mdc-deprecated-list-item__text" data-i18n="title.contact_us">문의하기</span>
-                </a>
-
-                <a class="mdc-deprecated-list-item" href="#">
-                    <span class="mdc-deprecated-list-item__ripple"></span>
-                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">star</i>
-                    <span class="mdc-deprecated-list-item__text" data-i18n="label.rate_the_app">어플 평가하기</span>
-                </a>
-
-                <a class="none mdc-deprecated-list-item" href="#">
-                    <span class="mdc-deprecated-list-item__ripple"></span>
-                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">settings</i>
-                    <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_setting">설정</span>
-                </a>
-
-
-                <a class="mdc-deprecated-list-item mdc-deprecated-list-item--activated" href="#">
-                    <span class="mdc-deprecated-list-item__ripple"></span>
-                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">toggle_on</i>
-                    <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_start_stop">시작/종료</span>
-                </a>
-
-
-                <a class="none mdc-deprecated-list-item" href="#">
-                    <span class="mdc-deprecated-list-item__ripple"></span>
-                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">card_membership</i>
-                    <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_membership">멤버쉽</span>
-                </a>
-            </div>
+      <div class="mdc-drawer__header app_info">
+          <img src="./images/logo_100.svg" width="50" style="margin-top: 10px;"/>
+          <!-- style="height:55px" -->
+          <h3 class="mdc-dramdc-drawer__contentwer__title" data-i18n="[html]label.app_name">티맵자동실행</h3>
+          <h6 class="mdc-drawer__subtitle" >Ver.<span class="version-name">00.00</span></h6>
         </div>
+      <div class="mdc-drawer__content">
+          <a class="clone none mdc-deprecated-list-item mdc-deprecated-list-item--activated">
+              <span class="mdc-deprecated-list-item__ripple"></span>
+              <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home</i>
+              <span class="mdc-deprecated-list-item__text" data-i18n="label.home_page">Home</span>
+          </a>
+
+          <div class="mdc-deprecated-list">
+              <a class="mdc-deprecated-list-item mdc-deprecated-list-item--activated" href="#" aria-current="page">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="label.home_page">Home</span>
+              </a>
+
+              <a class="none mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">settings</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_setting">설정</span>
+              </a>
+
+              <a class="none mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">toggle_on</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_start_stop">시작/종료</span>
+              </a>
+
+              <a class="mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">link</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="title.run_options">실행옵션</span>
+              </a>
+              <a class="mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home_work</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="title.home_company">집/회사</span>
+              </a>
+              <a class="mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">star</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="title.favorite">즐겨찾기</span>
+              </a>
+              <a class="mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">forum</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="title.contact_us">문의하기</span>
+              </a>
+
+              <a class="none mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">card_membership</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_membership">멤버쉽</span>
+              </a>
+
+              <a class="mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">thumb_up</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="label.rate_the_app">어플 평가하기</span>
+              </a>
+
+          </div>
+      </div>
     </aside>
     <div class="mdc-drawer-scrim"></div>
     <div class="drawer-frame-app-content">

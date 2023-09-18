@@ -110,7 +110,6 @@ if ( location.protocol.startsWith("https:") ) {
         el.hide();
       });;
       document.querySelectorAll(".tab_area")[tIdx].show("block");
-
       maps.removeCurrentMarker();
       setAddress();
 
@@ -257,6 +256,8 @@ if ( location.protocol.startsWith("https:") ) {
         
         map.addListener(CommonUtil.fn_IS_APP() == "X"?"drag":"touchend", redrawCurrentMarker);
 
+      }
+      if ( tIdx != 0 ) {
         if ( !isLoaded ) {
           window.getLocationTabIndex3 = function(mayId, lat, lon, address) {
             getMyLocation(mayId, lat, lon, address,function(){
@@ -264,6 +265,8 @@ if ( location.protocol.startsWith("https:") ) {
                 redrawCurrentMarker(evt);
                 // maps.current.marker.addListener("touchend", redrawCurrentMarker);
               });
+
+              maps.poiCurrents[tIdx] = maps.my;
               maps.setCenter(map, maps.my.getLat(), maps.my.getLon());
             });
           }
@@ -273,26 +276,34 @@ if ( location.protocol.startsWith("https:") ) {
             redrawCurrentMarker(evt);
             // maps.current.marker.addListener("touchend", redrawCurrentMarker);
           });
+
           setAddress(maps.poiCurrents[tIdx].item.fullAddress);
 
         }
       }
-      
-
 
     }); // end tab
 
     btnBack.listen("click", function (event) {
-      if ( opener.tIdx ) {
-        if (opener.tIdx == 2) { // 즐겨찾기
-          opener.bindPoiForFavoritePopup();
-        } else if (opener.tIdx == 3) { // 최근
-          opener.reloadRecent();
-        }
-      }
-
+      // if ( opener.tIdx ) {
+      //   if (opener.tIdx == 2) { // 즐겨찾기
+      //     opener.bindPoiForFavoritePopup();
+      //   } else if (opener.tIdx == 3) { // 최근
+      //     opener.reloadRecent();
+      //   }
+      // } else {
+        // if ( opener.fowardPage ) {
+        //   // fn_GetPermissions("", "getPermissionsCallBack");
+        //   // opener.fn_DeviceLoadData("_POI_HOME","opener.bindPoiHome");
+        //   // opener.fn_DeviceLoadData("_POI_COMPANY","opener.bindPoiCompany");
+        //   fn_OpenUrl("index.html");
+        // }
+      // }
       // self.close();
-      windowClose();
+    
+      if ( !document.referrer ) windowClose();
+      else history.back();
+    
     });
 
     //    btnSearch = new mdc.ripple.MDCRipple(document.querySelector("#btnSearch"));
@@ -497,11 +508,15 @@ if ( location.protocol.startsWith("https:") ) {
         maps.removeMarker(maps.current);
         if ( window.map ) {
           maps.addMyMarker(map, maps.my);
+
+          maps.addCurrentMarker(map, maps.my,function(evt){
+            redrawCurrentMarker(evt);
+          });
+          maps.poiCurrents[tIdx] = maps.my;
+
           maps.setCenter(map,maps.my.getLat(),maps.my.getLon());
         }
-
         if ( cb ) cb();
-
       });
     }
 
@@ -796,13 +811,13 @@ if ( location.protocol.startsWith("https:") ) {
     // if ( redraw ) {
       maps.removeCurrentMarker();
       if ( index > -1 ) {
-        maps.addCurrentMarker(map, poiArrs[tIdx][index]);
+        // maps.addCurrentMarker(map, poiArrs[tIdx][index]);
+        maps.addCurrentMarker(map, poiArrs[tIdx][index],function(evt){
+          redrawCurrentMarker(evt);
+        });
+        maps.poiCurrents[tIdx] = poiArrs[tIdx][index];
+
       }
-      // maps.addCurrentMarker(map, poiArrs[tIdx][index],function(evt){
-      //   debugger;;
-      //   redrawCurrentMarker(evt);
-      //   // maps.current.marker.addListener("touchend", redrawCurrentMarker);
-      // });
 
     // } 
     if ( maps.current ) {
@@ -1179,15 +1194,14 @@ if ( location.protocol.startsWith("https:") ) {
     }
   }
 
-  fn_DeviceSaveData("_OPEN_POPUP", true);
+  // fn_DeviceSaveData("_OPEN_POPUP", true);
   window.fn_BackKeyPressedCallBack = function () {
-    debugger;
-    fn_DeviceSaveData("_OPEN_POPUP", false);
+    // fn_DeviceSaveData("_OPEN_POPUP", false);
         // wifiSelectDialog.close();
         // window.fn_BackKeyPressedCallBack = null;
         // material.alert("");
-        windowClose();
-}  
+        btnBack.emit("click");
+  }  
 </script>
 </head>
 
@@ -1358,39 +1372,42 @@ if ( location.protocol.startsWith("https:") ) {
           </div>
         </div><!--fieldset-->
       </div>
-      <div style="position:fixed;bottom:0px;width:100%;border:0px solid red;width:100%;text-align:center;">
-        <div class="mdc-chip-set mdc-chip-set--choice"
-          style="border:0px;width:50px;position:relative;top:-0px;right:calc(-100% + 70px);">
-          <div class="btnMyLocation mdc-chip mdc-ripple-upgraded " role="row"
-            style="background-color:white;padding:15px;padding-bottom:20px;padding-right:12px">
-            <div class="mdc-chip__ripple"></div>
-            <i style="color: var(--mdc-theme-primary);font-size: 25px;" onselectstart="return false;"
-              class="material-icons mdc-chip__icon mdc-chip__icon--leading">my_location</i>
-          </div>
+
+      <div style="position:fixed;bottom:50px;width:100%;border:0px solid red;width:100%;text-align:center;">
+        <div class="mdc-chip-set mdc-chip-set--choice" style="border:0px;width:50px;position:relative;top:-0px;right:calc(-100% + 70px);">
+            <div class="btnMyLocation mdc-chip mdc-ripple-upgraded " role="row" style="background-color:white;padding:15px;padding-bottom:20px;padding-right:12px">
+                <div class="mdc-chip__ripple"></div>
+                <i style="color: var(--mdc-theme-primary);font-size: 25px;" onselectstart="return false;" class="material-icons mdc-chip__icon mdc-chip__icon--leading">my_location</i>
+            </div>
         </div>
-        <div id="place_address"
-          style="font-size:13px;width:100%;border:0px solid blue;background-color: rgba( 0, 0, 0, 0.5 );color:white;font-weight:bold;height:45px;padding-top:15px;margin-bottom:2px">
+        <div id="place_address" style="font-size:13px;width:100%;border:0px solid blue;background-color: rgba( 0, 0, 0, 0.5 );color:white;font-weight:bold;height:45px;padding-top:15px;margin-bottom:2px">
         </div>
-
-        <button id="btnNavi" type="button" class="mdc-button mdc-button--raised none" data-mdc-dialog-action="close"
-          style="height:50px;padding:20px;width:100%;left:0px">
-          <div class="mdc-button__ripple"></div>
-          <span class="mdc-button__label" data-i18n="label.navi">안내</span>
-        </button>
-
-        <button id="btnConfirm" type="button" class="mdc-button mdc-button--raised " data-mdc-dialog-action="close"
-          style="height:50px;padding:20px;width:100%;left:0px">
-          <div class="mdc-button__ripple"></div>
-          <span class="mdc-button__label" data-i18n="label.favorite">즐겨찾기</span>
-        </button>
-
-        <button id="btnConfirm2" type="button" class="mdc-button mdc-button--raised none" data-mdc-dialog-action="close"
-          style="height:50px;padding:20px;width:100%;left:0px">
-          <div class="mdc-button__ripple"></div>
-          <span class="mdc-button__label" data-i18n="label.remove_favorite">즐겨찾기-삭제</span>
-        </button>
-
       </div>
+
+      <footer>
+          <div>
+          <!-- style="position:fixed;bottom:0px;width:100%;border:0px solid red;width:100%;text-align:center;" -->
+          <button id="btnNavi" type="button" class="mdc-button mdc-button--raised none" data-mdc-dialog-action="close"
+            style="height:50px;padding:20px;width:100%;left:0px">
+            <div class="mdc-button__ripple"></div>
+            <span class="mdc-button__label" data-i18n="label.navi">안내</span>
+          </button>
+
+          <button id="btnConfirm" type="button" class="mdc-button mdc-button--raised " data-mdc-dialog-action="close"
+            style="height:50px;padding:20px;width:100%;left:0px">
+            <div class="mdc-button__ripple"></div>
+            <span class="mdc-button__label" data-i18n="label.favorite">즐겨찾기</span>
+          </button>
+
+          <button id="btnConfirm2" type="button" class="mdc-button mdc-button--raised none" data-mdc-dialog-action="close"
+            style="height:50px;padding:20px;width:100%;left:0px">
+            <div class="mdc-button__ripple"></div>
+            <span class="mdc-button__label" data-i18n="label.remove_favorite">즐겨찾기-삭제</span>
+          </button>
+
+          </div>
+      </footer>
+
     </div>
 
     <div class="mdc-snackbar">
