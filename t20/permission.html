@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>티</title>
+  <link rel="shortcut icon" href="#">
+  
+  <!-- <link href="./lib/material-components-web.min.css" rel="stylesheet"> -->
+  <link href="./lib/material-components-web.min.new.css" rel="stylesheet">
+  <!-- <script src="./lib/material-components-web.min.js"></script> -->
+  <script src="./lib/material-components-web.min.new.js"></script>
+  <link rel="stylesheet" href="./lib/icon.css">
+  <link rel="stylesheet" href="./lib/common.css?a=">
+  <link href='https://fonts.googleapis.com/css?family=Audiowide|Iceland|Monoton|Pacifico|Press+Start+2P|Vampiro+One' rel='stylesheet' type='text/css'>
+
+ </head>
+
+<!--  using - default i18next-->
+<!--
+<script src="https://unpkg.com/i18next/i18next.js"></script>
+<script src="https://unpkg.com/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+<script src="https://unpkg.com/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.js"></script>
+-->
+
+<!-- using - jquery i18next -->
+<!-- -->
+  <script src="./lib/jquery-3.6.4.min.js"></script>
+  <script src="./lib/i18next.min.js"></script>
+  <script src="./lib/common.js?a=2"></script>
+  <script src="./lib/interface.js"></script>
+<script>
+var checkMode = getParam("p_check_mode");
+var btnHome = null;
+var btnBack = null;
+
+$( document ).ready(function() {
+
+  btnHome    = new mdc.ripple.MDCRipple(document.querySelector("#btnHome"));
+	btnHome.listen("click", function(event) {
+		self.close();
+	});
+
+  btnBack    = new mdc.ripple.MDCRipple(document.querySelector("#btnBack"));
+	btnBack.listen("click", function(event) {
+    fn_BackKeyPressed();
+    //fn_OpenUrl("index.html?lng="+navigator.language.split("-")[0]);
+	});
+
+    const btnGrantOverlay = new mdc.ripple.MDCRipple(document.querySelector("#btnGrantOverlay"));
+    btnGrantOverlay.listen("click", function(event) {
+          fn_StartSetting("overlay","startSettingCallback");
+    });
+    const btnGrantUsageStats = new mdc.ripple.MDCRipple(document.querySelector("#btnGrantUsageStats"));
+    btnGrantUsageStats.listen("click", function(event) {
+          fn_StartSetting("usagestats","startSettingCallback");
+    });
+    const btnGrantGps = new mdc.ripple.MDCRipple(document.querySelector("#btnGrantGps"));
+    btnGrantGps.listen("click", function(event) {
+          fn_StartSetting("gps","startSettingCallback");
+    });
+    const btnGrantLocation = new mdc.ripple.MDCRipple(document.querySelector("#btnGrantLocation"));
+    btnGrantLocation.listen("click", function(event) {
+          fn_StartSetting("location","startSettingCallback");
+    });
+    const btnGrantBluetooth = new mdc.ripple.MDCRipple(document.querySelector("#btnGrantBluetooth"));
+    btnGrantBluetooth.listen("click", function(event) {
+          fn_StartSetting("bluetooth","startSettingCallback");
+    });
+
+    const btnGrantNotificaionAccess= new mdc.ripple.MDCRipple(document.querySelector("#btnGrantNotificaionAccess"));
+    btnGrantNotificaionAccess.listen("click", function(event) {
+          fn_StartSetting("notification_access","startSettingCallback");
+    });
+
+    const btnGrantAccessibility= new mdc.ripple.MDCRipple(document.querySelector("#btnGrantAccessibility"));
+    btnGrantAccessibility.listen("click", function(event) {
+          fn_StartSetting("accessibility","startSettingCallback");
+    });
+    
+    const btnGrantIgnoreBattery= new mdc.ripple.MDCRipple(document.querySelector("#btnGrantIgnoreBattery"));
+    btnGrantIgnoreBattery.listen("click", function(event) {
+          fn_StartSetting("ignore_battery","startSettingCallback");
+    });
+    
+    const btnGrantWriteSettings= new mdc.ripple.MDCRipple(document.querySelector("#btnGrantWriteSettings"));
+    btnGrantWriteSettings.listen("click", function(event) {
+          fn_StartSetting("write_settings","startSettingCallback");
+    });
+
+	startCheckGrant();
+
+});
+
+var initCheckGrants = [];
+var checkGrants = [];
+
+function initCheckGrant(inits) {
+  for( var i=0;i<inits.length;i++) {
+      initCheckGrants.push(inits[i]);
+      checkGrants.push(inits[i]);
+  }
+}
+
+function completeGrant(grant) {
+  var restoreGrants = [];
+  for( var i=0;i<checkGrants.length;i++) {
+    if ( checkGrants[i] !== grant ) {
+      restoreGrants.push(checkGrants[i]);
+    }
+  }
+  checkGrants = restoreGrants;
+}
+
+function startCheckGrant() {
+	granted =[];
+  // initCheckGrant(["notification_access","overlay","location"]);
+  // initCheckGrant(["gps","overlay","location","notification_access"]);
+  if ( !checkMode ) {
+    // initCheckGrant(["overlay","location","notification_access","accessibility"]);
+    initCheckGrant(["overlay","location","bluetooth","notification_access","write_settings","accessibility","ignore_battery"]);
+    // initCheckGrant(["location","notification_access","accessibility"]);
+    // checkGrant("gps");
+    fn_CheckGrant("overlay","checkGrantCallBack");
+    fn_CheckGrant("location","checkGrantCallBack");
+    fn_CheckGrant("bluetooth","checkGrantCallBack");
+    fn_CheckGrant("notification_access","checkGrantCallBack");
+    fn_CheckGrant("write_settings","checkGrantCallBack");
+    fn_CheckGrant("accessibility","checkGrantCallBack");
+    fn_CheckGrant("ignore_battery","checkGrantCallBack");
+    // checkGrant("accessibility");
+    $(btnHome.root).show();
+  } else if ( checkMode  === "accessibility" ) {
+    initCheckGrant(["accessibility","ignore_battery"]);
+    fn_CheckGrant("accessibility","checkGrantCallBack");
+    fn_CheckGrant("ignore_battery","checkGrantCallBack");
+    $(btnBack.root).show();
+  }
+  // checkGrant("gps");
+	// checkGrant("usagestats");
+  //	alert( granted.length );
+}
+
+///**
+// * API 004 : 권한
+// */
+//function fn_CheckGrant(grant,callBackFunc) {
+//	var result = { "header":{ "api":"4" }, "body":{ "grant":grant, "callBackFunc":callBackFunc } };
+//	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
+//		 fn_Js_Bridge(result);
+//	 }else{
+//		if ( grant == "location" ) {
+//			eval(callBackFunc + "('" + grant+ "','ok')");
+//		} else if ( grant == "overlay" ) {
+//			 eval(callBackFunc + "('" + grant+ "','ok')");
+//		} else if ( grant == "usagestats" ) {
+//			 eval(callBackFunc + "('" + grant+ "','ok')");
+//		}
+//	 }
+//}
+
+function go() {
+  // overlay : 다른 앱 위에 표시
+  // location :> 위치 권한 설정
+  // usagestats :> 사용정보 접근 허용
+  // gps :> 위치 서비스 활성화
+  // notification_access :> 알람 접근 설정
+	// if ( granted.length == 4 ) {
+	// if ( granted.includes("notification_access") && granted.includes("overlay") ) {
+    
+  if ( initCheckGrants.every((item,idx)=> granted.includes(item)) ) {    
+		snackbar( t("toast.grant") );
+    //alert("index.html")
+    fn_GetURL("WEB_MAIN","fReload");
+		// document.location.replace("index.html?lng="+navigator.language.split("-")[0]);
+	}
+}
+
+function fReload(url) {
+  location.href = url + "?lng="+navigator.language.split("-")[0];
+}
+
+function checkGrantCallBack(grant,ok) {
+  var isTopGrant = checkGrants[0] === grant;
+	if (grant == "write_settings") {
+		if( ok == "ok" ) {
+      if ( !granted.includes(grant) ) granted.push(grant);
+			$("#permission_write_settings").hide();
+      completeGrant(grant);
+		} else {
+      if ( isTopGrant ) $("#permission_write_settings").show();
+		}
+		go();
+	} else if (grant == "notification_access") {
+		if( ok == "ok" ) {
+      if ( !granted.includes(grant) ) granted.push(grant);
+			$("#permission_notification_access").hide();
+      completeGrant(grant);
+		} else {
+      if ( isTopGrant ) $("#permission_notification_access").show();
+		}
+		go();
+	} else if (grant == "overlay") {
+    // if ( granted.includes("notification_access") ) {
+      if( ok == "ok" ) {
+        if ( !granted.includes(grant) ) granted.push(grant);
+        $("#permission_overlay").hide();
+        completeGrant(grant);
+        fn_DeviceSaveData("_FIRST_START", "1");
+
+      } else {
+        if ( isTopGrant ) $("#permission_overlay").show();
+      }
+      go();
+    // } else {
+      // $("#permission_overlay").hide();
+    // }
+	} else if (grant == "usagestats") {
+		if( ok == "ok" ) {
+      if ( !granted.includes(grant) ) granted.push(grant);
+			$("#permission_usagestats").hide();
+      completeGrant(grant);
+		} else {
+			if ( isTopGrant ) $("#permission_usagestats").show();
+		}
+		go();
+	} else if (grant == "gps") {
+		if( ok == "ok" ) {
+      if ( !granted.includes(grant) ) granted.push(grant);
+			$("#permission_gps").hide();
+      completeGrant(grant);
+		} else {
+			if ( isTopGrant ) $("#permission_gps").show();
+		}
+		go();
+	} else if (grant == "location") {
+		if( ok == "ok" ) {
+      if ( !granted.includes(grant) ) granted.push(grant);
+			$("#permission_location").hide();
+      completeGrant(grant);
+		} else {
+			if ( isTopGrant ) $("#permission_location").show();
+		}
+		go();
+	} else if (grant == "bluetooth") {
+		if( ok == "ok" ) {
+      if ( !granted.includes(grant) ) granted.push(grant);
+			$("#permission_bluetooth").hide();
+      completeGrant(grant);
+		} else {
+			if ( isTopGrant ) $("#permission_bluetooth").show();
+		}
+		go();
+	} else if (grant == "accessibility") {
+		if( ok == "ok" ) {
+      if ( !granted.includes(grant) ) granted.push(grant);
+			$("#permission_accessibility").hide();
+      completeGrant(grant);
+		} else {
+			if ( isTopGrant ) $("#permission_accessibility").show();
+		}
+		go();
+	} else if (grant == "ignore_battery") {
+		if( ok == "ok" ) {
+      if ( !granted.includes(grant) ) granted.push(grant);
+			$("#permission_ignore_battery").hide();
+      completeGrant(grant);
+		} else {
+			if ( isTopGrant ) $("#permission_ignore_battery").show();
+		}
+		go();
+	}
+    console.info(grant,ok, granted);
+}
+
+var granted =[];
+function startSettingCallback(grant,ok) {
+	if (grant == "notification_access") {
+    //alert("test");
+		if (ok =="ok") {
+      fn_GoMain(true);
+			// fn_CheckGrant(grant,"checkGrantCallBack");
+		} else {
+			snackbar( t("toast.notgrant_notification_access") );
+		}
+  } else if (grant == "overlay") {
+		if (ok =="ok") {
+      fn_GoMain(true);
+			// fn_CheckGrant(grant,"checkGrantCallBack");
+		} else {
+			snackbar( t("toast.notgrant_overlay") );
+		}
+	} else if (grant == "usagestats") {
+		if (ok =="ok") {
+      fn_GoMain(true);
+			// fn_CheckGrant(grant,"checkGrantCallBack");
+		} else {
+			snackbar( t("toast.notgrant_usagestats") );
+		}
+	} else if (grant == "gps") {
+		if (ok =="ok") {
+      fn_GoMain(true);
+			// fn_CheckGrant(grant,"checkGrantCallBack");
+		} else {
+			snackbar( t("toast.notgrant_gps") );
+		}
+	} else if (grant == "location") {
+		if (ok =="ok") {
+      fn_GoMain(true);
+			// fn_CheckGrant(grant,"checkGrantCallBack");
+		} else {
+			snackbar( t("toast.notgrant_location") );
+    }
+	} else if (grant == "bluetooth") {
+		if (ok =="ok") {
+      fn_GoMain(true);
+			// fn_CheckGrant(grant,"checkGrantCallBack");
+		} else {
+			snackbar( t("toast.notgrant_bluetooth") );
+    }
+	} else if (grant == "accessibility") {
+		if (ok =="ok") {
+      fn_GoMain(true);
+			// fn_CheckGrant(grant,"checkGrantCallBack");
+		} else {
+			snackbar( t("toast.notgrant_accessibility") );
+		}
+	} else if (grant == "ignore_battery") {
+		if (ok =="ok") {
+      fn_GoMain(true);
+			// fn_CheckGrant(grant,"checkGrantCallBack");
+		} else {
+			snackbar( t("toast.notgrant_ignore_battery") );
+		}
+  } else if (grant == "write_settings") {
+		if (ok =="ok") {
+      fn_GoMain(true);
+			// fn_CheckGrant(grant,"checkGrantCallBack");
+		} else {
+			snackbar( t("toast.notgrant_write_settings") );
+		}
+	}
+	startCheckGrant();
+  }
+</script>
+</head>
+<body>
+<div class="i18n">
+<header class="mdc-top-app-bar mdc-top-app-bar--fixed">
+  <div class="mdc-top-app-bar__row">
+    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+      <button id="btnHome"
+        class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded none">accessibility_new</button>
+
+        
+      <button id="btnBack"
+        class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded none">arrow_back_ios</button>
+
+      <span class="mdc-top-app-bar__title" data-i18n="label.top_bar">티맵실행</span> </section>
+    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+      <!-- <button id="btnSettings" class="mdc-icon-button material-icons mdc-top-app-bar__action-item--unbounded"
+        aria-label="Print this page">settings</button> -->
+    </section>
+  </div>
+</header>
+
+
+<div class="main mdc-top-app-bar--fixed-adjust i18n">
+  <div class="row">
+      <!--<div class="my_icon" style="">-->
+          <!--<i class="material-icons md-dark logo_image logo_image_car" style="">directions_car</i>-->
+          <!--<i class="material-icons md-dark logo_image" style="z-index:1">credit_card</i>-->
+          <!--<i class="material-icons md-dark logo_image logo_image_key" style="z-index:1">vpn_key</i>-->
+      <!--</div>--> 
+      <div class="row" style="height:80px">
+          <img src="./images/logo_100.svg"/>
+      </div>
+
+      <div class="row"></div>
+      <div class="row"></div>
+      <div class="row">
+      </div>
+
+      <!-- 다른 앱 위에 표시 -->
+      <div class="row none" id="permission_overlay" style="margin-top: 20px !important;margin-bottom: 20px !important;">
+        <div>
+          <span style="font-size:20px"><h5  style="display:inline" data-i18n="[html]message.permission1"></h5></span>
+        </div>
+
+        <div style="font-size:16px;margin-left:20px;margin-top:10px;margin-bottom:10px">
+          <div style="text-align:left;">
+            <span style=""><span>1. </span><span data-i18n="[html]message.permission_grant_on">"권한 허용"을 켜고, </span></span>
+          </div>
+          <div style="text-align:left;margin-top:10px">
+            <span style=""><span>2. </span><span data-i18n="[html]message.permission_grant_backkey_return">"권한 허용"을 켜고,</span></span>
+          </div>
+        </div>
+              <button id="btnGrantOverlay" class="mdc-button mdc-button--raised margin_right_5" style="width:100%;font-size:16px">
+                <strong data-i18n="label.permission_settings">권한 설정</strong>
+                  <!-- <strong data-i18n="label.permission_overlay">Show over other apps</strong> -->
+                  <!-- <strong>시작</strong> -->
+              </button>
+        <img src="images/grant_guide_1.gif" style="width:80%;margin-top:20px">
+      </div>
+
+      <!-- 위치 정보 접근 허용 -->
+      <div class="row none" id="permission_location" style="margin-top: 20px !important;margin-bottom: 20px !important;">
+        <div>
+          <span style="font-size:20px"><h5  style="display:inline" data-i18n="[html]message.permission4">위치 정보 접근 허용</h5></span>
+        </div>
+        <div style="font-size:16px;margin-left:20px;margin-top:10px;margin-bottom:10px">
+          <div style="text-align:left;">
+            <span style=""><span data-i18n="[html]message.permission_grant_on_for_location_information_access">"티맵자동실행"은 앱이 종료되었거나 사용 중이 아닐 때도 위치 데이터를 수집하여 티맵 실행시 중복 실행을 방지하는 기능을 제공합니다. </span></span>
+          </div>
+          <div style="text-align:left;margin-top:10px">
+            <!-- <span style=""><span>2. </span><span data-i18n="[html]message.permission_grant_backkey_return">"권한 허용"을 켜고,</span></span> -->
+          </div>
+        </div>
+        <!-- todo 위치 서비스 활성화에대한 가이이드 작업 필요 -->
+        <button id="btnGrantLocation" class="mdc-button mdc-button--raised margin_right_5" style="width:100%;font-size:16px">
+            <!-- <strong data-i18n="label.permission_location">위치 권한 허용</strong> -->
+            <strong data-i18n="label.permission_settings">권한 설정</strong>
+        </button>
+      </div>
+
+
+      <!-- 블루투스 허용 -->
+      <div class="row none" id="permission_bluetooth" style="margin-top: 20px !important;margin-bottom: 20px !important;">
+        <div>
+          <span style="font-size:20px"><h5  style="display:inline" data-i18n="[html]message.permission7">블루투스</h5></span>
+        </div>
+        <div style="font-size:16px;margin-left:20px;margin-top:10px;margin-bottom:10px">
+          <div style="text-align:left;">
+            <span style=""><span data-i18n="[html]message.permission_grant_on_for_bluetooth">블루투스를 조회 및 켜거나 끄기 위해 필요한 권한입니다.</span></span>
+          </div>
+          <div style="text-align:left;margin-top:10px">
+            <!-- <span style=""><span>2. </span><span data-i18n="[html]message.permission_grant_backkey_return">"권한 허용"을 켜고,</span></span> -->
+          </div>
+        </div>
+        <button id="btnGrantBluetooth" class="mdc-button mdc-button--raised margin_right_5" style="width:100%;font-size:16px">
+            <!-- <strong data-i18n="label.permission_location">위치 권한 허용</strong> -->
+            <strong data-i18n="label.permission_settings">권한 설정</strong>
+        </button>
+      </div>
+
+
+      <!-- 알람 접근 허용 -->
+      <div class="row none" id="permission_notification_access" style="margin-top: 20px !important;margin-bottom: 20px !important;">
+        <div>
+          <span style="font-size:20px"><h5  style="display:inline" data-i18n="[html]message.permission3">알람 접근 허용</h5></span>
+        </div>
+
+        <div style="font-size:16px;margin-left:20px;margin-top:10px;margin-bottom:10px">
+          <div style="text-align:left;">
+            <span style=""><span>1. </span><span data-i18n="[html]message.permission_grant_on_for_notification_access">"알림 접근" 권한을 켜세요.<span></span>
+          </div>
+          <div style="text-align:left;">
+            <span style=""><span>2. </span><span data-i18n="[html]message.permission_grant_on_for_notification_access_2">"알림 접근" 권한을 켜세요.<span></span>
+          </div>
+        </div>
+        
+            <button id="btnGrantNotificaionAccess" class="mdc-button mdc-button--raised margin_right_5" style="width:100%;font-size:16px">
+              <!-- <strong>시작</strong> -->
+              <!-- <strong data-i18n="label.permission_notification_access">알람 접근 허용</strong> -->
+                <strong data-i18n="label.permission_settings">권한 설정</strong>
+            </button>
+      </div>
+
+      <!-- 접근성 권한 -->
+      <div class="row none" id="permission_accessibility" style="margin-top: 20px !important;margin-bottom: 20px !important;">
+        <div>
+          <span style="font-size:20px"><h5  style="display:inline" data-i18n="[html]message.permission5">접근성 권한 허용</h5></span>
+        </div>
+
+        <div style="font-size:16px;margin-left:20px;margin-top:10px;margin-bottom:20px">
+          <div style="text-align:left;">
+            <span style=""><span data-i18n="[html]message.permission_grant_on_for_accessibility">앱 동작의 정밀도를 향상시키고, 실행한 앱을 종료할 수 있습니다.</span></span>
+          </div>
+          <div style="text-align:left;margin-top:10px">
+            <!-- <span style=""><span>2. </span><span data-i18n="[html]message.permission_grant_backkey_return">"권한 허용"을 켜고,</span></span> -->
+          </div>
+        </div>
+
+        <div style="font-size:16px;margin-left:20px;margin-top:10px;margin-bottom:10px">
+          <div style="text-align:left;">
+            <span style=""><span>1. </span><span data-i18n="[html]message.permission_grant_on_for_accessibility2">스마트폰의 접근성 메뉴로 이동되면 '설치된 앱'을 선택합니다.</span></span>
+          </div>
+          <div style="text-align:left;margin-top:10px">
+            <span style=""><span>2. </span><span data-i18n="[html]message.permission_grant_on_for_accessibility3">설치된 앱 목록에서 '티맵자동실행'를 선택한 뒤 '사용 안 함'을 누릅니다.</span></span>
+          </div>
+          <div style="text-align:left;margin-top:10px">
+            <span style=""><span>3. </span><span data-i18n="[html]message.permission_grant_on_for_accessibility4">권한 허용 알림이 나오는 경우, '허용'을 선택하면 사용 중으로 변경됩니다.</span></span>
+          </div>
+        </div>
+
+        <button id="btnGrantAccessibility" class="mdc-button mdc-button--raised margin_right_5" style="width:100%;font-size:16px">
+            <!-- <strong data-i18n="label.permission_accessibility">접근성 권한 허용</strong> -->
+            <strong data-i18n="label.permission_settings">권한 설정</strong>
+        </button>
+
+        <img src="images/grant_guide_accessibility.gif" style="width:65%;margin-top:20px">
+      </div>
+
+      <!-- 절전모드 해제 -->
+      <div class="row none" id="permission_ignore_battery" style="margin-top: 20px !important;margin-bottom: 20px !important;">
+        <div>
+          <span style="font-size:20px"><h5  style="display:inline" data-i18n="[html]message.permission6">절전모드 해제</h5></span>
+        </div>
+
+        <div style="font-size:16px;margin-left:20px;margin-top:10px;margin-bottom:20px">
+          <div style="text-align:left;">
+            <span style=""><span data-i18n="[html]message.permission_grant_on_for_ignore_battery">정상적인 앱 사용을 위해 해당 어플을 \"배터리 사용량 최적화\" 목록에서 \"제외\"해야 합니다., "알림바"를 제거하기 위해 필요합니다.</span></span>
+          </div>
+          <div style="text-align:left;margin-top:10px">
+            <!-- <span style=""><span>2. </span><span data-i18n="[html]message.permission_grant_backkey_return">"권한 허용"을 켜고,</span></span> -->
+          </div>
+
+        </div>
+
+        <div style="font-size:16px;margin-left:20px;margin-top:10px;margin-bottom:10px">
+          <div style="text-align:left;">
+            <span style=""><span>1. </span><span data-i18n="[html]message.permission_grant_on_for_ignore_battery2">[확인] 버튼을 누른 후 시스템 알림 대화 상자가 뜨면 [허용] 을 선택해 주세요.</span></span>
+          </div>
+          <!-- <div style="text-align:left;margin-top:10px">
+            <span style=""><span>2. </span><span data-i18n="[html]message.permission_grant_on_for_ignore_battery3">설치된 앱 목록에서 '티맵자동실행'를 선택한 뒤 '사용 안 함'을 누릅니다.</span></span>
+          </div>
+          <div style="text-align:left;margin-top:10px">
+            <span style=""><span>3. </span><span data-i18n="[html]message.permission_grant_on_for_ignore_battery4">권한 허용 알림이 나오는 경우, '허용'을 선택하면 사용 중으로 변경됩니다.</span></span>
+          </div> -->
+        </div>
+
+        <button id="btnGrantIgnoreBattery" class="mdc-button mdc-button--raised margin_right_5" style="width:100%;font-size:16px">
+            <!-- <strong data-i18n="label.permission_ignore_battery">절전모드 해제</strong> -->
+            <strong data-i18n="label.permission_settings">권한 설정</strong>
+        </button>
+
+
+        <!-- <img src="images/grant_guide_accessibility.gif" style="width:65%;margin-top:20px"> -->
+      </div>
+
+      <!-- 시스템설정 변경 -->
+      <div class="row none" id="permission_write_settings" style="margin-top: 20px !important;margin-bottom: 20px !important;">
+        <div>
+          <span style="font-size:20px"><h5  style="display:inline" data-i18n="[html]message.permission8">시스템설정 변경</h5></span>
+        </div>
+
+        <div style="font-size:16px;margin-left:20px;margin-top:10px;margin-bottom:20px">
+          <div style="text-align:left;">
+            <span style=""><span data-i18n="[html]message.permission_grant_on_for_write_settings">시스템 설정을 변경하기 위해 필요합니다. </span></span>
+          </div>
+          <div style="text-align:left;margin-top:10px">
+            <!-- <span style=""><span>2. </span><span data-i18n="[html]message.permission_grant_backkey_return">"권한 허용"을 켜고,</span></span> -->
+          </div>
+
+        </div>
+        <!-- 화면밝기조정 인터넷을 켜고/끄기 위해 -->
+        <div style="font-size:16px;margin-left:20px;margin-top:10px;margin-bottom:10px">
+          <div style="text-align:left;">
+            <span style=""><span>1. </span><span data-i18n="[html]message.permission_grant_on_for_write_settings2">[확인] 버튼을 누른 후 시스템 알림 대화 상자가 뜨면 [허용] 을 선택해 주세요.</span></span>
+          </div>
+          <!-- <div style="text-align:left;margin-top:10px">
+            <span style=""><span>2. </span><span data-i18n="[html]message.permission_grant_on_for_ignore_battery3">설치된 앱 목록에서 '티맵자동실행'를 선택한 뒤 '사용 안 함'을 누릅니다.</span></span>
+          </div>
+          <div style="text-align:left;margin-top:10px">
+            <span style=""><span>3. </span><span data-i18n="[html]message.permission_grant_on_for_ignore_battery4">권한 허용 알림이 나오는 경우, '허용'을 선택하면 사용 중으로 변경됩니다.</span></span>
+          </div> -->
+        </div>
+
+        <button id="btnGrantWriteSettings" class="mdc-button mdc-button--raised margin_right_5" style="width:100%;font-size:16px">
+            <!-- <strong data-i18n="label.permission_ignore_battery">절전모드 해제</strong> -->
+            <strong data-i18n="label.permission_settings">권한 설정</strong>
+        </button>
+
+
+        <!-- <img src="images/grant_guide_accessibility.gif" style="width:65%;margin-top:20px"> -->
+      </div>
+
+      <!-- 사용정보 접근 허용 : 미사용 -->
+      <div class="row none" id="permission_usagestats" style="margin-top: 20px !important;margin-bottom: 20px !important;">
+        <div>
+          <span style="font-size:20px"><h5  style="display:inline" data-i18n="[html]message.permission2"></h5></span>
+        </div>
+
+        <div style="font-size:16px;margin-left:20px;margin-top:10px;margin-bottom:10px">
+          <div style="text-align:left;">
+            <span style=""><span>1. </span><span data-i18n="[html]message.permission_grant_app_select">티맵자동실행" 앱을 선택하세요.</span></span>
+          </div>
+          <div style="text-align:left;margin-top:10px">
+            <span style=""><span>2. </span><span data-i18n="[html]message.permission_grant_on">"권한 허용"을 켜고, </span></span>
+          </div>
+          <div style="text-align:left;margin-top:10px">
+            <span style=""><span>3. </span><span data-i18n="[html]message.permission_grant_backkey_return">"권한 허용"을 켜고,</span></span>
+          </div>
+        </div>
+        <button id="btnGrantUsageStats" class="mdc-button mdc-button--raised margin_right_5" style="width:100%;font-size:16px">
+            <strong data-i18n="label.permission_usagestats">사용정보 접근 허용</strong>
+        </button>
+        <img src="images/grant_guide_2.gif" style="width:80%;margin-top:20px">
+      </div>
+
+      <!-- 위치 서비스 활성화 : 미사용 -->
+      <div class="row none" id="permission_gps">
+          <button id="btnGrantGps" class="mdc-button mdc-button--raised margin_right_5 margin_top_5" style="width:100%;font-size:16px">
+              <strong data-i18n="label.permission_gps">위치 서비스 활성화</strong>
+          </button>
+      </div>
+
+      <div class="row">
+      </div>
+  </div>
+
+  <div class="mdc-snackbar">
+    <div class="mdc-snackbar__surface">
+      <div class="mdc-snackbar__label" role="status" aria-live="polite">~~</div>
+      <div class="mdc-snackbar__actions"><button type="button" class="mdc-button mdc-snackbar__action"><button
+            class="mdc-icon-button mdc-snackbar__dismiss material-icons" title="Dismiss">close</button></div>
+    </div>
+  </div>
+
+  <div class="basic mdc-dialog">
+    <div class="mdc-dialog__container">
+      <div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" aria-labelledby="my-dialog-title"
+        aria-describedby="my-dialog-content">
+        <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+        <h2 class="mdc-dialog__title" id="my-dialog-title">
+          <!--
+      -->Choose a Ringtone
+          <!--
+    -->
+        </h2>
+        <div class="mdc-dialog__content" id="my-dialog-content">
+        </div>
+        <footer class="mdc-dialog__actions">
+          <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+            <div class="mdc-button__ripple"></div>
+            <span class="mdc-button__label" data-i18n="label.cancel">Cancel</span>
+          </button>
+          <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="accept" data-mdc-dialog-button-default>
+            <div class="mdc-button__ripple"></div>
+            <span class="mdc-button__label" data-i18n="label.ok">OK</span>
+          </button>
+        </footer>
+      </div>
+    </div>
+    <div class="mdc-dialog__scrim"></div>
+  </div>
+</div>
+ </body>
+
+
+</html>
