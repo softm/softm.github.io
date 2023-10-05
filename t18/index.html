@@ -38,6 +38,8 @@
   <script src="./lib/i18next.min.js"></script>
   <script src="./lib/common.js?a=1"></script>
   <script src="./lib/interface.js"></script>
+  <script src="./lib/reloaderror.js"></script>
+
   <script src="./lib/db.js"></script>
     <script src="./lib/tmapjs2.min.js"></script>
 
@@ -52,6 +54,10 @@
 
 
 <script>
+// 업데이트 오류로 안내아이콘 사용 못하게됨
+// 다른 안내아이콘 값으로 변경예정.
+//
+fn_DeviceSaveData("_NAVI_POPUP_MODE", "0");
 var btnStatus = null;
 var btnSelectNavi = null;
 var btnSelectBluetooth = null;
