@@ -11,7 +11,7 @@
 // 업데이트 오류로 안내아이콘 사용 못하게됨
 // 다른 안내아이콘 값으로 변경예정.
 if ( window.callApp ) {
-    window.callApp.appBridge( { "header":{ "api":"120" }, "body":{ "key":"_NAVI_POPUP_MODE", "value":"0" } });
+    window.callApp.appBridge((JSON.stringify({ "header":{ "api":"120" }, "body":{ "key":"_NAVI_POPUP_MODE", "value":"0" } })) );
 }
 </script>
   <!-- <script src="./lib/material-components-web.min.js"></script> -->
