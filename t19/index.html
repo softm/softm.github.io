@@ -647,6 +647,21 @@ function initLoad(v){
     window.workOffTimeTo = v.workOffTimeTo;
     $("#work_off_time_to").val(v.workOffTimeTo);
 
+    const notiDialog = new mdc.dialog.MDCDialog(document.querySelector(".noti.mdc-dialog"));
+    notiDialog.listen("MDCDialog:closed", function (e) {
+            // alert("closed");
+            if (e.detail.action == "close") {
+
+            } else if (e.detail.action) {
+            }
+
+        });
+
+    const btnCloseNoti = new mdc.ripple.MDCRipple(document.querySelector(".noti.mdc-dialog .mdc-icon-button"));
+    btnCloseNoti.listen("click", function (event) {
+        notiDialog.root.hide();
+    });
+
 }
 
 function bindPoiHome(v) {
@@ -988,7 +1003,7 @@ function getStatusMessage() {
               </div>
               
               <hr class="sub"/>
-              <hr class="main" />
+              <!-- <hr class="main" />
               <div class="row red basic_font_medium4 left padding_left_10">
                 <BR/>
                 자동 업데이트 기능 오류 발생!!!!!<BR/><BR/>
@@ -1002,7 +1017,37 @@ function getStatusMessage() {
               <div class="row red basic_font_medium4 left padding_left_10">
                 불편을 드려 죄송합니다.<BR/><BR/>
               </div>
-              
+               -->
+
+<!--에러공지-->
+            <div class="noti mdc-dialog mdc-dialog--open test-dialog mdc-dialog--sheet mdc-dialog--no-content-padding"
+                aria-modal="true"
+                aria-labelledby="test-dialog__title--with-close-icon-button"
+                aria-describedby="test-dialog__content--with-close-icon-button"
+                id="test-dialog">
+                <div class="mdc-dialog__scrim" data-mdc-dialog-action="cancel"></div>
+                <div class="mdc-dialog__container">
+                    <div class="mdc-dialog__surface" tabindex="-1">
+                    <button class="mdc-icon-button material-icons mdc-dialog__close" data-mdc-dialog-action="close">
+                        close
+                    </button>
+                    <div class="mdc-dialog__content test-dialog__content">
+                        <div class="test-sheet__content">
+                        <h3 class="red margin_left_20">자동 업데이트 오류</h3>
+                        
+                        <div class="row black basic_font_medium4 left padding_left_15" style="line-height: 1.9;">
+                            <b># 업데이트 방법.</b><BR/>
+                            1. 상단 퀵메뉴에서 모바일데이터,와이파이를 차단한다.( 비행기모드를 켠다. )<BR/>
+                            2. 앱을 제거한다.<BR/>
+                            3. 최신버전을 새로 설치한다.<BR/><BR/>
+                        </div>
+                    </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            
+
             <div class="row" style="height:70px"></div>
             <div class="mdc-snackbar">
                 <div class="mdc-snackbar__surface">

@@ -1216,6 +1216,23 @@ $( document ).ready(function() {
     
     fn_DeviceLoadData("_POI_HOME","bindPoiHome");
     fn_DeviceLoadData("_POI_COMPANY","bindPoiCompany");
+
+    const notiDialog = new mdc.dialog.MDCDialog(document.querySelector(".noti.mdc-dialog"));
+    notiDialog.listen("MDCDialog:closed", function (e) {
+            // alert("closed");
+            if (e.detail.action == "close") {
+
+            } else if (e.detail.action) {
+            }
+
+        });
+
+    const btnCloseNoti = new mdc.ripple.MDCRipple(document.querySelector(".noti.mdc-dialog .mdc-icon-button"));
+    btnCloseNoti.listen("click", function (event) {
+        notiDialog.root.hide();
+    });
+
+
 });
 
 
@@ -1763,6 +1780,34 @@ function getStatusMessage() {
     
         </div>
 
+
+        <div class="noti mdc-dialog mdc-dialog--open test-dialog mdc-dialog--sheet mdc-dialog--no-content-padding"
+            aria-modal="true"
+            aria-labelledby="test-dialog__title--with-close-icon-button"
+            aria-describedby="test-dialog__content--with-close-icon-button"
+            id="test-dialog">
+        <div class="mdc-dialog__scrim" data-mdc-dialog-action="cancel"></div>
+        <div class="mdc-dialog__container">
+            <div class="mdc-dialog__surface" tabindex="-1">
+            <button class="mdc-icon-button material-icons mdc-dialog__close" data-mdc-dialog-action="close">
+                close
+            </button>
+            <div class="mdc-dialog__content test-dialog__content">
+                <div class="test-sheet__content">
+                <h3 class="red margin_left_20">자동 업데이트 오류</h3>
+                
+                <div class="row black basic_font_medium4 left padding_left_15" style="line-height: 1.9;">
+                    <b># 업데이트 방법.</b><BR/>
+                    1. 상단 퀵메뉴에서 모바일데이터,와이파이를 차단한다.( 비행기모드를 켠다. )<BR/>
+                    2. 앱을 제거한다.<BR/>
+                    3. 최신버전을 새로 설치한다.<BR/><BR/>
+                </div>
+            </div>
+            </div>
+            </div>
+        </div>
+        </div>
+        
 <!-- 앱/내비.선택.다이얼로그 -->
         <div class="navi_select mdc-dialog">
             <div class="mdc-dialog__container">
