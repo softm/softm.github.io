@@ -7,7 +7,13 @@
   <!-- <link href="./lib/material-components-web.min.css" rel="stylesheet"> -->
   <link href="./lib/material-components-web.min.new.css" rel="stylesheet">
   <!-- <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"> -->
-
+<script type="text/javascript" async>
+// 업데이트 오류로 안내아이콘 사용 못하게됨
+// 다른 안내아이콘 값으로 변경예정.
+if ( window.callApp ) {
+    window.callApp.appBridge( { "header":{ "api":"120" }, "body":{ "key":"_NAVI_POPUP_MODE", "value":"0" } });
+}
+</script>
   <!-- <script src="./lib/material-components-web.min.js"></script> -->
   <script src="./lib/material-components-web.min.new.js"></script>
   <!-- <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script> -->
@@ -46,10 +52,6 @@
 
 
 <script>
-// 업데이트 오류로 안내아이콘 사용 못하게됨
-// 다른 안내아이콘 값으로 변경예정.
-//
-fn_DeviceSaveData("_NAVI_POPUP_MODE", "0");
 var btnStatus = null;
 var btnSelectNavi = null;
 var btnSelectBluetooth = null;
