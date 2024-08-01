@@ -156,9 +156,9 @@ function initLoad(v){
     btnSwitchNotiIcon = new mdc.switchControl.MDCSwitch(document.querySelector('.noti_icon.mdc-switch'));
     btnSwitchNotiIcon.listen("mousedown", function (event) {
         if (!btnSwitchNotiIcon.selected) { // true
-            material.confirm(
-                t("message.confirm_start"),
-                function () {
+            // material.confirm(
+            //     t("message.confirm_start"),
+            //     function () {
 
                     document.querySelector(".noti_icon #status").innerHTML = t("label.noti_icon_status_on");
                     btnSwitchNotiIcon.selected = true;
@@ -166,25 +166,26 @@ function initLoad(v){
 
                     btnSwitchNotiIcon.selected = true;
                     fn_DeviceSaveData("_NOTI_ICON", true);
-                },
-                function () {
-                }
-            );
+            //     },
+            //     function () {
+            //     }
+            // );
         } else { // false
-            material.confirm(
-                t("message.confirm_stop"),
-                function () {
+            // material.confirm(
+            //     t("message.confirm_stop"),
+            //     function () {
                     document.querySelector(".noti_icon #status").innerHTML = t("label.noti_icon_status_off");
                     btnSwitchNotiIcon.selected = false;
                     // btnSwitchNotiIcon.foundation_.setChecked(false);
 
                     btnSwitchNotiIcon.selected = false;
                     fn_DeviceSaveData("_NOTI_ICON", false);
-                },
-                function () {
-                }
-            );
+            //     },
+            //     function () {
+            //     }
+            // );
         }
+        snackbar(t("message.save"));
     });
 
 
