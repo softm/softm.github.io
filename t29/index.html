@@ -607,7 +607,7 @@ function initLoad(v,cb){
     fn_DeviceLoadData("_POI_COMPANY","bindPoiCompany");
     fn_GetPermissions("", "getPermissionsCallBack");
 
-    $(".version-name").text(v.versionName);
+    $(".version-name").text(v.versionName + " / " + v.versionCode);
     // $(".app_name").text(v.versionName);
 
     window.getInstallPackagesKeyCallBack = function (data) {
