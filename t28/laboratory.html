@@ -121,6 +121,7 @@ $( document ).ready(function() {
     //W
     // drawer.open = true;
 
+
 });
 
 function initPage(v) {
@@ -135,48 +136,100 @@ function initLoad(v){
       windowClose();
     });
 
+    // window.readNotiIcon = function (v) {
+	// 	console.info("_NOTI_ICON",v);
+	// 	v = v!="null"&&v?v:"1";
+	// 	var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
+	// 	event.onlySelect=true; // pass data custom 
+	// 	if ( v  == "0") { // off
+	// 		document.querySelector(".noti_icon #status").innerHTML = t("label.noti_icon_status_off");
+    //         btnSwitchNotiIcon.selected = false;
+    //         // btnSwitchNotiIcon.foundation_.setChecked(false);
+	// 	} else { // on
+	// 		document.querySelector(".noti_icon #status").innerHTML = t("label.noti_icon_status_on");
+    //         btnSwitchNotiIcon.selected = true;
+    //         // btnSwitchNotiIcon.foundation_.setChecked(true);
+	// 	}
+	// }
+	// fn_DeviceLoadData("_NOTI_ICON"    , "readNotiIcon"   ); // 알림바 아이콘
+
     btnSwitchNotiIcon = new mdc.switchControl.MDCSwitch(document.querySelector('.noti_icon.mdc-switch'));
-
     btnSwitchNotiIcon.listen("mousedown", function (event) {
-        // btnSwitchNotiIcon.foundation_.setChecked(!btnSwitchNotiIcon.checked);
-        var st = btnSwitchNotiIcon.selected;
-        var granted = null;
-        if (!st) {
-            setTimeout(function () { btnSwitchNotiIcon.selected = st; }, 1000);
-            fn_StartSetting("notification_setting", "changeNotiIconSettingCallback");
 
-        } else {
-            window.fnChk1 = function (grant, ok) {
-            if (ok == "ok") {
-                window.fnChk2 = function (grant, ok) {
-                if (ok == "ok") {
-                    setTimeout(function () { btnSwitchNotiIcon.selected = st; }, 1000);
-                    fn_StartSetting("notification_setting", "changeNotiIconSettingCallback");  // 최종선택
-                } else {
-                    confirm(t("message.disable_noti_icon_2"), function () {
-                    btnSwitchNotiIcon.selected = true;
-                    fn_OpenUrl("permission.html?p_check_mode=accessibility");
-                    }, function () {
-                    btnSwitchNotiIcon.selected = true;
-                    });
-                }
-                }
-                fn_CheckGrant("ignore_battery", "fnChk2"); // 2차권한
-            } else {
-                confirm(t("message.disable_noti_icon_1"), function () {
-                if (st) {
-                    btnSwitchNotiIcon.selected = true;
-                    fn_OpenUrl("permission.html?p_check_mode=accessibility");
-                }
-                }, function () {
-                btnSwitchNotiIcon.selected = true;
-                });
-            }
-            }
+        snackbar(t("message.save"));
+        event.preventDefault();
+        event.stopPropagation();
+        if (!btnSwitchNotiIcon.selected) { // true
+            // material.confirm(
+            //     t("message.confirm_start"),
+            //     function () {
+                    document.querySelector(".noti_icon #status").innerHTML = t("label.noti_icon_status_on");
+                    // btnSwitchNotiIcon.selected = true;
+                    fn_DeviceSaveData("_NOTI_ICON", true);
+            //     },
+            //     function () {
+            //     }
+            // );
+        } else { // false
+            // material.confirm(
+            //     t("message.confirm_stop"),
+            //     function () {
+                    document.querySelector(".noti_icon #status").innerHTML = t("label.noti_icon_status_off");
+                    // btnSwitchNotiIcon.selected = false;
+                    fn_DeviceSaveData("_NOTI_ICON", false);
+            //     },
+            //     function () {
+            //     }
+            // );
         }
-        fn_CheckGrant("accessibility", "fnChk1"); // 1차권한
-
     });
+
+
+    // btnSwitchNotiIcon = new mdc.switchControl.MDCSwitch(document.querySelector('.noti_icon.mdc-switch'));
+
+    // btnSwitchNotiIcon.listen("mousedown", function (event) {
+    //     // btnSwitchNotiIcon.foundation_.setChecked(!btnSwitchNotiIcon.checked);
+    //     var st = btnSwitchNotiIcon.selected;
+    //     var granted = null;
+        
+    //     // fn_DeviceSaveData("_POI_HOME", JSON.stringify([mapPointToTmap(newHome)]));
+
+    //     if (!st) {
+    //         setTimeout(function () { btnSwitchNotiIcon.selected = st; }, 1000);
+    //         fn_StartSetting("notification_setting", "changeNotiIconSettingCallback");
+
+    //     } else {
+    //         window.fnChk1 = function (grant, ok) {
+    //         if (ok == "ok") {
+    //             window.fnChk2 = function (grant, ok) {
+    //             if (ok == "ok") {
+    //                 setTimeout(function () { btnSwitchNotiIcon.selected = st; }, 1000);
+    //                 fn_StartSetting("notification_setting", "changeNotiIconSettingCallback");  // 최종선택
+    //             } else {
+    //                 confirm(t("message.disable_noti_icon_2"), function () {
+    //                 btnSwitchNotiIcon.selected = true;
+    //                 fn_OpenUrl("permission.html?p_check_mode=accessibility");
+    //                 }, function () {
+    //                 btnSwitchNotiIcon.selected = true;
+    //                 });
+    //             }
+    //             }
+    //             fn_CheckGrant("ignore_battery", "fnChk2"); // 2차권한
+    //         } else {
+    //             confirm(t("message.disable_noti_icon_1"), function () {
+    //             if (st) {
+    //                 btnSwitchNotiIcon.selected = true;
+    //                 fn_OpenUrl("permission.html?p_check_mode=accessibility");
+    //             }
+    //             }, function () {
+    //             btnSwitchNotiIcon.selected = true;
+    //             });
+    //         }
+    //         }
+    //     }
+    //     fn_CheckGrant("accessibility", "fnChk1"); // 1차권한
+
+    // });
 
     // v = v!="null"&&v?v:"1";
     // var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});

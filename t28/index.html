@@ -6,6 +6,7 @@
   <title>티</title>
   <link rel="shortcut icon" href="#">
 
+ 
   <!-- <link href="./lib/material-components-web.min.css" rel="stylesheet"> -->
   <link href="./lib/material-components-web.min.new.css" rel="stylesheet">
   <!-- <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"> -->
@@ -34,6 +35,8 @@
   <script src="./lib/i18next.min.js"></script>
   <script src="./lib/common.js?a=202309171921"></script>
   <script src="./lib/interface.js"></script>
+  <!-- <script src="./lib/reloaderror.js"></script> -->
+
   <script src="./lib/db.js"></script>
     <script src="./lib/tmapjs2.min.js"></script>
 
@@ -46,13 +49,13 @@
 -->
 <script src="https://unpkg.com/hangul-js" type="text/javascript"></script>
 
-
 <script>
 var btnStatus = null;
 var btnSelectNavi = null;
 var btnHome = null;
 
 var btnSwitchStartPower = null;
+var btnSwitchAllApp = null;
 var btnSettings = null;
 var btnSearch = null;
 var btnStartNaviHome     = null;
@@ -166,8 +169,11 @@ function initPage(v) {
                     url +=  "&p_check_mode=" + p_check_mode;
                     url +=  "&p_params=" + p_params;
                     url +=  "&p_tidx=" + p_tidx;
-                        
-                    windowOpen(url);
+                    if ( fowardPage == "PERMISSION" ) {
+                        fn_OpenUrl(url);
+                    } else {
+                        windowOpen(url);
+                    }
                     // fn_OpenUrl(url);
                     //			window.open("setting.html","_blank","");
                     //			document.body.show();
@@ -179,7 +185,7 @@ function initPage(v) {
         initLoad(v);
     } // end else
 }
-
+ 
 function initLoad(v,cb){
     if ( !cb ) $("body").removeClass("none");
     appListItems = JSON.parse(sessionStorage.getItem("appListItems"));
@@ -187,6 +193,31 @@ function initLoad(v,cb){
     footerNavigationIndex = 0;
     // $(footerNavigation[0]).trigger("click");
     footerNavigation[footerNavigationIndex].emit("click", footerNavigationIndex);
+    btnSwitchAllApp = new mdc.switchControl.MDCSwitch(document.querySelector('.all_app.mdc-switch'));
+    btnSwitchAllApp.listen("mousedown", function (event) {
+
+        if (!btnSwitchAllApp.selected) { // true
+            appListItems = null;
+            sessionStorage.clear("appListItems");
+
+            toast(t("toast.loading_applist"));
+            showLoading(true);
+            fn_getInstallPackages("", "getInstallPackagesCallBack");
+            // material.confirm(
+            //     t("message.confirm_start"),
+            //     function () {
+            //         // fn_StartService("fn_StartServiceCallback");
+            //         // $("#status_message").html(getStatusMessage());
+            //     },
+            //     function () {
+            //     }
+            // );
+        } else {
+            appListItems = null;
+            sessionStorage.clear("appListItems");
+            fn_getInstallPackages("", "getInstallPackagesCallBack",6);
+        }
+    });
 
     btnSwitchStartPower = new mdc.switchControl.MDCSwitch(document.querySelector('.start_power.mdc-switch'));
     btnSwitchStartPower.listen("mousedown", function (event) {
@@ -312,6 +343,7 @@ function initLoad(v,cb){
     // }
     btnSelectNavi = new mdc.ripple.MDCRipple(document.querySelector("#btnSelectNavi"));
     btnSelectNavi.listen("click", function (event) {
+        fn_StopOverlay();
         let eventListener = function (e) {
             // alert("closed");
             if (e.detail.action == "close") {
@@ -377,11 +409,17 @@ function initLoad(v,cb){
                 window.fn_BackKeyPressedCallBack = null;
             }
         },400);
+
+        if ( !btnSwitchAllApp.selected ) {
+            appListItems = null;
+            sessionStorage.clear("appListItems");
+        }
+
         setTimeout(() => {
             if (isWeb) {
                 getInstallPackagesCallBack();
             } else {
-                if ( appListItems === null ) fn_getInstallPackages("", "getInstallPackagesCallBack");
+                if ( appListItems === null ) fn_getInstallPackages("", "getInstallPackagesCallBack",6);
                 else {
                     getInstallPackagesCallBack();
                     // search.emit("input");
@@ -578,7 +616,9 @@ function initLoad(v,cb){
         if (!appListItem.name) {
             // 티맵을 설치하세요.
             // fn_GotoMarket(appListItem.package);
-            appInfo.find(".app_name").html("<a class='color_start' style='font-weight:bold' href='javascript:fn_GotoMarket(\""+appListItem.package+"\")'>"+t("message.install_tmap")+"</a>");
+            appInfo.find(".app_name").html("<a class='color_start' style='font-weight:bold' href='javascript:fn_GotoMarket(\""+appListItem.package+"\")'>"+t("message.install_app")+"</a>");
+            if ( info.appPackageIcon ) appInfo.find(".icon")[0].setAttribute("src", info.appPackageIcon);
+
         } else {
             appInfo.find(".app_name").text(appListItem.name);
         }
@@ -650,6 +690,20 @@ function initLoad(v,cb){
     window.workOffTimeTo = v.workOffTimeTo;
     $("#work_off_time_to").val(v.workOffTimeTo);
 
+    // const notiDialog = new mdc.dialog.MDCDialog(document.querySelector(".noti.mdc-dialog"));
+    // notiDialog.listen("MDCDialog:closed", function (e) {
+    //         // alert("closed");
+    //         if (e.detail.action == "close") {
+
+    //         } else if (e.detail.action) {
+    //         }
+
+    //     });
+
+    // const btnCloseNoti = new mdc.ripple.MDCRipple(document.querySelector(".noti.mdc-dialog .mdc-icon-button"));
+    // btnCloseNoti.listen("click", function (event) {
+    //     notiDialog.root.hide();
+    // });
 }
 
 function bindPoiHome(v) {
@@ -733,6 +787,7 @@ function getStatusMessage() {
     }
     return msg;
 }
+
 </script>
 </head>
 <body class="none">
@@ -991,6 +1046,52 @@ function getStatusMessage() {
               </div>
               
               <hr class="sub"/>
+              
+              <!--공지사항-->
+              <!-- <div style="border:1px solid grey"></div> -->
+              
+              <!-- <hr class="main" />
+              <div class="row red basic_font_medium4 left padding_left_10">
+                <BR/>
+                자동 업데이트 오류 발생!!!!!<BR/><BR/>
+              </div>
+              <div class="row basic_font_medium4 left padding_left_15">
+                # 업데이트 방법.<BR/><BR/>
+                1. 상단 퀵메뉴에서 모바일데이터,와이파이를 차단한다.( 비행기모드를 켠다. )<BR/>
+                2. 앱을 제거한다.<BR/>
+                3. 최신버전을 새로 설치한다.<BR/><BR/>
+              </div>
+              <div class="row red basic_font_medium4 left padding_left_10">
+                불편을 드려 죄송합니다.<BR/><BR/>
+              </div> -->
+<!--에러공지-->
+<!-- 
+            <div class="noti mdc-dialog mdc-dialog--open test-dialog mdc-dialog--sheet mdc-dialog--no-content-padding"
+                aria-modal="true"
+                aria-labelledby="test-dialog__title--with-close-icon-button"
+                aria-describedby="test-dialog__content--with-close-icon-button"
+                id="test-dialog">
+                <div class="mdc-dialog__scrim" data-mdc-dialog-action="cancel"></div>
+                <div class="mdc-dialog__container">
+                    <div class="mdc-dialog__surface" tabindex="-1">
+                    <button class="mdc-icon-button material-icons mdc-dialog__close" data-mdc-dialog-action="close">
+                        close
+                    </button>
+                    <div class="mdc-dialog__content test-dialog__content">
+                        <div class="test-sheet__content">
+                        <h3 class="red margin_left_20">자동 업데이트 오류</h3>
+                        
+                        <div class="row black basic_font_medium4 left padding_left_15" style="line-height: 1.9;">
+                            <b># 업데이트 방법.</b><BR/>
+                            1. 상단 퀵메뉴에서 모바일데이터,와이파이를 차단한다.( 비행기모드를 켠다. )<BR/>
+                            2. 앱을 제거한다.<BR/>
+                            3. 최신버전을 새로 설치한다.<BR/><BR/>
+                        </div>
+                    </div>
+                    </div>
+                    </div>
+                </div>
+            </div> -->
 
             <div class="row" style="height:70px"></div>
             <div class="mdc-snackbar">
@@ -1042,6 +1143,20 @@ function getStatusMessage() {
               aria-describedby="my-dialog-content">
               <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
               <h2 class="mdc-dialog__title" id="my-dialog-title"><span data-i18n="label.appselect">앱 선택</span>
+                <span class="">
+                    <span class="right" style="width: 60%;display: inline-block;padding-right: 10px;">
+                        <label for="" class="title" style=""><span class="basic_font_medium2" data-i18n="label.all_app">전체</span></label>
+                        <!-- <div class="flex-grow basic_font_medium2 align-self-center right" id="status_message">상태메시지</div> -->
+                        <span class="flex-grow right  align-self-center">
+                            <button class="all_app mdc-switch mdc-switch--unselected" type="button" role="switch" aria-checked="false">
+                                <div class="mdc-switch__track"></div>
+                                <div class="mdc-switch__handle-track"><div class="mdc-switch__handle"><div class="mdc-switch__shadow"><div class="mdc-elevation-overlay"></div></div><div class="mdc-switch__ripple"></div></div></div>
+                                <span class="mdc-switch__focus-ring-wrapper"><div class="mdc-switch__focus-ring"></div></span>
+                            </button>
+                        </s>
+                    </span>
+                </span>
+                
                 <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
                   style="position: fixed;right: 5%;" id="close_app_list">clear</i>
             <div class="margin_top_20 left"><!--fieldset-->

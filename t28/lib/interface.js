@@ -653,6 +653,24 @@ function fn_Progress_Hide() {
 }
 
 /**
+ * API 500 : stop overlay
+ *
+ * @date 2016. 07. 06.
+ */
+function fn_StopOverlay() {
+	var result = { "header":{ "api":"500" } };
+
+	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
+		 fn_Js_Bridge(result);
+	 }else{
+		 //alert(JSON.stringify(result));
+	    // $('.mo-ui-layer.progress').hide();
+//		 loading('close');
+	 }
+
+}
+
+/**
  * API 117 : 타이머 프로그래스 on
  *
  * @param time  프로그래스바 오픈시간(1=1초)
@@ -929,8 +947,8 @@ function fn_setSysInfo(key, value, callBackFunc) {
  * @param callBackFunc   콜백 함수
  *
  */
-function fn_getInstallPackages(key, callBackFunc) {
-	var result = { "header":{ "api":"303" }, "body":{ "key":key, "callBackFunc":callBackFunc } };
+function fn_getInstallPackages(key, callBackFunc, category=null) {
+	var result = { "header":{ "api":"303" }, "body":{ "key":key, "callBackFunc":callBackFunc, "category":category?category:"" } };
 	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
 		 fn_Js_Bridge(result);
 	 }else{

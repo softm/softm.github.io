@@ -118,16 +118,24 @@ function startCheckGrant() {
   // initCheckGrant(["gps","overlay","location","notification_access"]);
   if ( !checkMode ) {
     // initCheckGrant(["overlay","location","notification_access","accessibility"]);
-    initCheckGrant(["overlay","location","bluetooth","notification_access","write_settings","accessibility","ignore_battery"]);
+    // TODO softm : 20240718 권한 변경전
+    // initCheckGrant(["overlay","location","bluetooth","notification_access","write_settings","accessibility","ignore_battery"]);
+    // TODO softm : 20240718 write_settings, bluetooth 제거해봄. 문제점 확인필요
+    // write_settings은 안쓰고 있음 음량조절에서 사용예정이었으나 사용안함.
+    // bluetooth는  
+    //   시작/종료 : Bluetooth 켤때 설정
+    //   실행/옵션 : 블루투스 연결시 활성화시 설정
+    initCheckGrant(["overlay","location","notification_access","ignore_battery","accessibility"]);
+
     // initCheckGrant(["location","notification_access","accessibility"]);
     // checkGrant("gps");
     fn_CheckGrant("overlay","checkGrantCallBack");
     fn_CheckGrant("location","checkGrantCallBack");
-    fn_CheckGrant("bluetooth","checkGrantCallBack");
     fn_CheckGrant("notification_access","checkGrantCallBack");
-    fn_CheckGrant("write_settings","checkGrantCallBack");
-    fn_CheckGrant("accessibility","checkGrantCallBack");
     fn_CheckGrant("ignore_battery","checkGrantCallBack");
+    fn_CheckGrant("accessibility","checkGrantCallBack");
+    // fn_CheckGrant("bluetooth","checkGrantCallBack");
+    // fn_CheckGrant("write_settings","checkGrantCallBack");
     // checkGrant("accessibility");
     $(btnHome.root).show();
   } else if ( checkMode  === "accessibility" ) {
