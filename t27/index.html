@@ -55,6 +55,7 @@ var btnSelectNavi = null;
 var btnHome = null;
 
 var btnSwitchStartPower = null;
+var btnSwitchAllApp = null;
 var btnSettings = null;
 var btnSearch = null;
 var btnStartNaviHome     = null;
@@ -192,6 +193,31 @@ function initLoad(v,cb){
     footerNavigationIndex = 0;
     // $(footerNavigation[0]).trigger("click");
     footerNavigation[footerNavigationIndex].emit("click", footerNavigationIndex);
+    btnSwitchAllApp = new mdc.switchControl.MDCSwitch(document.querySelector('.all_app.mdc-switch'));
+    btnSwitchAllApp.listen("mousedown", function (event) {
+
+        if (!btnSwitchAllApp.selected) { // true
+            appListItems = null;
+            sessionStorage.clear("appListItems");
+
+            toast(t("toast.loading_applist"));
+            showLoading(true);
+            fn_getInstallPackages("", "getInstallPackagesCallBack");
+            // material.confirm(
+            //     t("message.confirm_start"),
+            //     function () {
+            //         // fn_StartService("fn_StartServiceCallback");
+            //         // $("#status_message").html(getStatusMessage());
+            //     },
+            //     function () {
+            //     }
+            // );
+        } else {
+            appListItems = null;
+            sessionStorage.clear("appListItems");
+            fn_getInstallPackages("", "getInstallPackagesCallBack",6);
+        }
+    });
 
     btnSwitchStartPower = new mdc.switchControl.MDCSwitch(document.querySelector('.start_power.mdc-switch'));
     btnSwitchStartPower.listen("mousedown", function (event) {
@@ -317,6 +343,7 @@ function initLoad(v,cb){
     // }
     btnSelectNavi = new mdc.ripple.MDCRipple(document.querySelector("#btnSelectNavi"));
     btnSelectNavi.listen("click", function (event) {
+        fn_StopOverlay();
         let eventListener = function (e) {
             // alert("closed");
             if (e.detail.action == "close") {
@@ -382,11 +409,17 @@ function initLoad(v,cb){
                 window.fn_BackKeyPressedCallBack = null;
             }
         },400);
+
+        if ( !btnSwitchAllApp.selected ) {
+            appListItems = null;
+            sessionStorage.clear("appListItems");
+        }
+
         setTimeout(() => {
             if (isWeb) {
                 getInstallPackagesCallBack();
             } else {
-                if ( appListItems === null ) fn_getInstallPackages("", "getInstallPackagesCallBack");
+                if ( appListItems === null ) fn_getInstallPackages("", "getInstallPackagesCallBack",6);
                 else {
                     getInstallPackagesCallBack();
                     // search.emit("input");
@@ -583,7 +616,9 @@ function initLoad(v,cb){
         if (!appListItem.name) {
             // 티맵을 설치하세요.
             // fn_GotoMarket(appListItem.package);
-            appInfo.find(".app_name").html("<a class='color_start' style='font-weight:bold' href='javascript:fn_GotoMarket(\""+appListItem.package+"\")'>"+t("message.install_tmap")+"</a>");
+            appInfo.find(".app_name").html("<a class='color_start' style='font-weight:bold' href='javascript:fn_GotoMarket(\""+appListItem.package+"\")'>"+t("message.install_app")+"</a>");
+            if ( info.appPackageIcon ) appInfo.find(".icon")[0].setAttribute("src", info.appPackageIcon);
+
         } else {
             appInfo.find(".app_name").text(appListItem.name);
         }
@@ -1108,6 +1143,20 @@ function getStatusMessage() {
               aria-describedby="my-dialog-content">
               <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
               <h2 class="mdc-dialog__title" id="my-dialog-title"><span data-i18n="label.appselect">앱 선택</span>
+                <span class="">
+                    <span class="right" style="width: 60%;display: inline-block;padding-right: 10px;">
+                        <label for="" class="title" style=""><span class="basic_font_medium2" data-i18n="label.all_app">전체</span></label>
+                        <!-- <div class="flex-grow basic_font_medium2 align-self-center right" id="status_message">상태메시지</div> -->
+                        <span class="flex-grow right  align-self-center">
+                            <button class="all_app mdc-switch mdc-switch--unselected" type="button" role="switch" aria-checked="false">
+                                <div class="mdc-switch__track"></div>
+                                <div class="mdc-switch__handle-track"><div class="mdc-switch__handle"><div class="mdc-switch__shadow"><div class="mdc-elevation-overlay"></div></div><div class="mdc-switch__ripple"></div></div></div>
+                                <span class="mdc-switch__focus-ring-wrapper"><div class="mdc-switch__focus-ring"></div></span>
+                            </button>
+                        </s>
+                    </span>
+                </span>
+                
                 <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
                   style="position: fixed;right: 5%;" id="close_app_list">clear</i>
             <div class="margin_top_20 left"><!--fieldset-->

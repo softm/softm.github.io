@@ -562,6 +562,20 @@ function initLoad(v){
     });
 
     btnSwitchStartBluetooth.listen("mousedown", function (event) {
+        if ( !info.permissions.BLUETOOTH ) {
+            window.startSettingCallback = function(grant,ok) {
+                if ( ok === "not" ) {
+                    alert(t("message.must_enable_bluetooth"));
+                    btnSwitchStartBluetooth.selected = false;
+                } else {
+                    fn_Reload(true);
+                }
+                // windowReload();
+            }
+            fn_StartSetting("bluetooth","startSettingCallback");
+            return;
+        }
+
         if (!btnSwitchStartBluetooth.selected) { // true
             material.confirm(
                 t("message.confirm_start"),

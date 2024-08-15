@@ -388,6 +388,20 @@ function fn_GoMain(restart) {
 }
 
 /**
+ * API 110 : fn_GoFoward : onCreate
+ *  ---> 여기부터해야함.
+ * @param restart 서비스 재시작
+ */
+function fn_GoFoward(foward) {
+	var result = { "header":{ "api":"110" }, "body":{ "restart":JSON.stringify(restart) } };
+	if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
+	    fn_Js_Bridge(result);
+	} else {
+		document.location.href="index.html";
+	}
+}
+
+/**
  * API 400 : 네이티브 url webview.loadUrl
  *
  * @param url    		호출 URL
