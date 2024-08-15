@@ -159,12 +159,28 @@ function pageInit() {
     var sub = $(el).attr("class").split(" ")[0];
     var sub2 = $(el).attr("class").split(" ")[1];
 
+
     rtnEl.selected = window.info.startStopOnOff[gubun][sub].use_yn;
         rtnEl.listen("click", function(e) {
             // var gubun = $(this).closest("tr").attr("class").split(" ")[0];
             // var sub = $(this).attr("class").split(" ")[0];
             // var sub2 = $(this).attr("class").split(" ")[1];
 
+            if( gubun === "bluetooth" ) {
+                if ( !info.permissions.BLUETOOTH ) {
+                    window.startSettingCallback = function(grant,ok) {
+                        if ( ok === "not" ) {
+                            alert(t("message.must_enable_bluetooth"));
+                            rtnEl.selected = false;
+                        } else {
+                            fn_Reload(true);
+                        }
+                        // windowReload();
+                    }
+                    fn_StartSetting(gubun,"startSettingCallback");
+                    return;
+                }
+            }
                 var items = chipOnOff.filter(item=>{
                     return item != rtnEl && $(item.root).closest("tr").attr("class").split(" ")[0] === gubun &&
                     $(item.root).attr("class").split(" ")[0] === sub;
@@ -258,23 +274,11 @@ function pageInit() {
         var selectId = chipStopMode.selectedChipIds[0];
         var index = adapter.getIndexOfChipById(selectId);
         if (selectId) {
-            if ( index > 1 ) {
-                material.alert(t("message.comming_soon"),function () {
-                    if ( window.info.stopMode == "0" ) {
-                        chipStopMode.chips[0].selected = true;
-                        chipStopMode.chips[1].selected = false;
-                    } else {
-                        chipStopMode.chips[0].selected = false;
-                        chipStopMode.chips[1].selected = true;
-                    }
-                },function () {
-                    if ( window.info.stopMode == "0" ) {
-                        chipStopMode.chips[0].selected = true;
-                        chipStopMode.chips[1].selected = false;
-                    } else {
-                        chipStopMode.chips[0].selected = false;
-                        chipStopMode.chips[1].selected = true;
-                    }
+            if ( index > 2 ) {
+                material.alert(t("message.comming_soon"),function () {                    
+                    chipStopMode.chipsList[info.stopMode].selected = true;
+                },function () {               
+                    chipStopMode.chipsList[info.stopMode].selected = true;
                 });
             } else {
                 chipStopMode.chips[index].selected = true;

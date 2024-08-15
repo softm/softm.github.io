@@ -31,6 +31,9 @@ var messages  = {
             reg_home: "home-registration",
             reg : "Register",
             reg_company: "company-registration",
+            del_home : "home-delete",
+            del_company : "company-delete",
+            del_destination : "basic destination-delete",
             reg_destination: "default destination-registration",
             remove_favorite: "favorite-delete",
             start: "start",
@@ -123,6 +126,7 @@ var messages  = {
             qna_comment_detail_message4: "Device system (OS) version",
             qna_comment_detail_message5: "app version",
             laboratory:"Laboratory",
+            all_app:"All"
           },
           title: {
             main: "Basic Settings",
@@ -152,7 +156,10 @@ var messages  = {
             would_change : "Would you like to change it?",
             first_start : "When you turn on the engine, Navigation App runs automatically.",
             first_start2 : "When connected to power, Bluetooth, or Wi-Fi,<br/>You can start or end navigation.",
-            confirm_favorite_delete: "Are you sure you want to delete favorites?",
+            confirm_home_delete : "Are you sure you want to delete home?",
+            confirm_company_delete : "Are you sure you want to delete company?",
+            confirm_destination_delete : "Are you sure you want to delete basic destination?",
+            confirm_favorite_delete: "Are you sure you want to delete favorite?",
             confirm_start: "<span style='color:var(--softm-start)'>Start</span> Are you sure?",
             confirm_stop: "<span style='color:var(--softm-stop)'>Exit</span> Are you sure?",
             guide_home: "<B>\"Guide\"</B>.",
@@ -221,6 +228,7 @@ var messages  = {
             data_not_found: "No data was found.",
             address_not_exist: "There is no address to guide.",
             all_granted: "All permissions are <span class='color_start'>normal</span>.",
+            install_app: "Install App.",
             install_tmap: "Install Tmap.",
             confirm_enable_bluetooth : "To query the Bluetooth list, you must use Bluetooth.\n Do you want to \"<span style='color:var(--softm-start)'>turn on</span>\"Bluetooth?",
             when_connected :"When connected, <span class='color_start'>runs</span>.",
@@ -231,6 +239,11 @@ var messages  = {
             reg_home :"\“Home\” has been registered.",
             reg_company :"\"Company\” has been registered.",
             reg_favorite :"\"Favorite\” has been registered.",
+            del_home :"\"Home\" has been deleted.",
+            del_company :"\"Company\" has been deleted.",
+            del_favorite :"\"Basic Destination\" has been deleted.",
+            must_enable_bluetooth : "This feature requires Bluetooth permission to be enabled.",
+
           },
           toast:{
             start: "T-map is <span style='color:var(--softm-start)'>start</span>.",
@@ -245,6 +258,7 @@ var messages  = {
             notgrant_accessibility: "This permission is required to disable the alarm bar. <BR/><span style='color:var(--softm-stop)'>\"On\" \"Allow permission\"</span>.",
             notgrant_ignore_battery: "This permission is required to disable the alarm bar. <BR/><span style='color:var(--softm-stop)'>\"On\" \"Allow permission\"</span>.",
             notgrant_write_settings: "This permission is required to change system settings. <BR/><span style='color:var(--softm-stop)'>\"On\" \"Allow permission\"</span>.",
+            loading_applist: "Retrieving app list... Please wait.",
           }
         },
         myModule: {
@@ -283,6 +297,9 @@ var messages  = {
             reg_home : "집-등록",
             reg : "등록",
             reg_company : "회사-등록",
+            del_home : "집-삭제",
+            del_company : "회사-삭제",
+            del_destination : "기본목적지-삭제",
             reg_destination: "기본목적지-등록",
             remove_favorite : "즐겨찾기-삭제",
             start : "시작",
@@ -375,6 +392,7 @@ var messages  = {
             qna_comment_detail_message4: "기기 시스템(OS) 버전",
             qna_comment_detail_message5: "앱 버전",
             laboratory:"연구소",
+            all_app:"전체"
           },
           title: {
             main: "기본",
@@ -404,6 +422,9 @@ var messages  = {
             would_change : "변경 하시겠습니까?",
             first_start : "시동을 켜면 자동으로 네비게이션이 실행됩니다.",
             first_start2 : "전원, 블루투스, 와이파이 연결하면,<br/>내비게이션 앱을 시작, 종료할 수 있습니다.",
+            confirm_home_delete : "집을 삭제 하시겠습니까?",
+            confirm_company_delete : "회사를 삭제 하시겠습니까?",
+            confirm_destination_delete : "기본목적지를 삭제 하시겠습니까?",
             confirm_favorite_delete : "즐겨찾기를 삭제 하시겠습니까?",
             confirm_start : "<span style='color:var(--softm-start)'>시작</span> 하시겠습니까?",
             confirm_stop : "<span style='color:var(--softm-stop)'>종료</span> 하시겠습니까?",
@@ -476,6 +497,7 @@ var messages  = {
             data_not_found : "조회된 자료가 없습니다.",
             address_not_exist: "안내할 주소가 없습니다.",
             all_granted: "모든 권한이 <span class='color_start'>정상</span>입니다.",
+            install_app: "앱을 설치하세요.",
             install_tmap: "티맵을 설치하세요.",
             confirm_enable_bluetooth : "블루트스 목록을 조회하려면, 블루투스를 사용해야합니다.\n 블루트스를 \"<span style='color:var(--softm-start)'>켜</span>\"시겠습니까?",
             when_connected :"연결시 <span class='color_start'>동작</span>.",
@@ -486,7 +508,11 @@ var messages  = {
             reg_home :"\"집\"이 등록되었습니다.",
             reg_company :"\"회사\"가 등록되었습니다.",
             reg_favorite :"\"즐겨찾기\"가 등록되었습니다.",
-            
+            del_home :"\"집\"이 삭제되었습니다.",
+            del_company :"\"회사\"가 삭제되었습니다.",
+            del_favorite :"\"기본목적지\"가 삭제되었습니다.",
+            must_enable_bluetooth : "블루트스 권한을 활성화해야 사용할 수 있는 기능입니다.",
+
           },
           toast:{
             start : "티맵이 <span style='color:var(--softm-start)'>시작</span>되었습니다.",
@@ -501,6 +527,7 @@ var messages  = {
             notgrant_accessibility: "알람바 해제를 위해 필요한 권한입니다. <BR/><span style='color:var(--softm-stop)'>\"권한 허용\"</span>을 \"켜\"주세요.",
             notgrant_ignore_battery: "알람바 해제를 위해 필요한 권한입니다. <BR/><span style='color:var(--softm-stop)'>\"권한 허용\"</span>을 \"켜\"주세요.",
             notgrant_write_settings: "시스템설정 변경을 위해 필요한 권한입니다. <BR/><span style='color:var(--softm-stop)'>\"권한 허용\"</span>을 \"켜\"주세요.",
+            loading_applist: "앱목록 조회중.. 잠시 기다리세요.",
           }
         },
         myModule: {
@@ -1126,6 +1153,10 @@ function windowClose(reload) {
 	// top.self.close();
   if ( !reload ) fn_ClosePopData();
   else fn_ClosePopData(null,"fn_Reload");
+}
+
+function windowReload(url) {
+  location.href = url + "?lng="+navigator.language.split("-")[0];
 }
 
   /**
