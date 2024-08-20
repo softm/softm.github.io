@@ -1,0 +1,18 @@
+{
+    "host": "softm.net",
+    "username": "softm",
+    "password": "jh50541742",
+    "remotePath": "/www/tdev",
+    "protocol": "ftp",
+    "port": 21,
+    "fileNameEncoding": "utf8",
+    "autoUpload": true,
+    "autoDelete": false,
+    "autoDownload": false,
+    "ignore": [
+        "\\.vscode",
+        "\\.git",
+        "\\.DS_Store"
+    ],
+    "ignoreJsonUploadCaution": true
+}

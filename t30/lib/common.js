@@ -2,9 +2,11 @@ var messages  = {
       en: {
         translation: {
           label: {
+            app: "App",
             app_name: "Navi Auto Start",
             top_bar: "Navi Auto Start",
             first_start : "Start Setting",
+            refresh_start : "Refresh",
             after_second: "executed after seconds",
             status_stop:'Execute when charging [<span id="spnState"><span style="color:var(--softm-stop);font-weight:bold">Stop</span></span>]. ',
             status_start:'Execute when charging [<span id="spnState"><span style="color:var(--softm-start);font-weight:bold">start</span></span>]. ',
@@ -154,8 +156,9 @@ var messages  = {
             save: "Saved.",
             would_save : "Would you like to save?",
             would_change : "Would you like to change it?",
-            first_start : "When you turn on the engine, Navigation App runs automatically.",
+            first_start : "Navigation will start automatically.",
             first_start2 : "When connected to power, Bluetooth, or Wi-Fi,<br/>You can start or end navigation.",
+            install_start : "{app_name} is not installed.<br>Would you like to <span style='color:var(--softm-start)'>install</span>  it?",
             confirm_home_delete : "Are you sure you want to delete home?",
             confirm_company_delete : "Are you sure you want to delete company?",
             confirm_destination_delete : "Are you sure you want to delete basic destination?",
@@ -268,9 +271,11 @@ var messages  = {
       ko : {
         translation: {
           label: {
-            app_nameapp_name : "티맵자동실행",
+            app: "앱",
+            app_name : "티맵자동실행",
             top_bar : "티맵자동실행",
             first_start : "설정 시작",
+            refresh_start : "새로고침",
             after_second : "초 후 실행됨",
             status_stop : '충전시 실행 [<span id="spnState"><span style="color:var(--softm-stop);font-weight:bold">중지</span></span>]됨.',
             status_start : '충전시 실행 [<span id="spnState"><span style="color:var(--softm-start);font-weight:bold">시작</span></span>]됨.',
@@ -420,8 +425,11 @@ var messages  = {
             save : "저장 되었습니다.",
             would_save : "저장 하시겠습니까?",
             would_change : "변경 하시겠습니까?",
-            first_start : "시동을 켜면 자동으로 네비게이션이 실행됩니다.",
+            first_start : "네비게이션 자동 실행",
             first_start2 : "전원, 블루투스, 와이파이 연결하면,<br/>내비게이션 앱을 시작, 종료할 수 있습니다.",
+            first_start3 : "<span style='color:var(--softm-start)'>앱을 선택</span>하세요.",
+            install_start : "'{app_name}' 설치 되어 있지 않습니다.<br><span style='color:var(--softm-start)'>설치</span>  하시겟습니까?",
+            install_start : "'{app_name}' 설치 되어 있지 않습니다.<br><span style='color:var(--softm-start)'>설치</span>  하시겟습니까?",
             confirm_home_delete : "집을 삭제 하시겠습니까?",
             confirm_company_delete : "회사를 삭제 하시겠습니까?",
             confirm_destination_delete : "기본목적지를 삭제 하시겠습니까?",
@@ -801,8 +809,17 @@ $( document ).ready(function() {
       dialogMDC.open();
       dialogMDC.listen("MDCDialog:closed", eventListener);
     }
-    window.t = function (v){
-      return $.i18n.t(v);
+    window.t = function (v,option){
+      var vv = $.i18n.t(v);
+      if ( option ) {
+        // Object.entries(option).map((item)=>{
+        //   debugger;
+        // });
+        vv = vv.replace(/{(.*?)}/g, function(match, p1) {
+          return option[p1] || match;
+        });
+      }
+      return vv;
     }
 });
 

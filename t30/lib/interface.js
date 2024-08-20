@@ -807,10 +807,26 @@ function fn_GotoMarket(key, callBackFunc) {
 	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
 		 fn_Js_Bridge(result);
 	 }else{
-		 eval(callBackFunc + "('" + localStorage.getItem(key) + "')");
+		window.open("https://play.google.com/store/apps/details?id=" + key);
 	 }
 }
 
+
+/**
+ * API 333 : getPackagesInfo
+ *
+ * @param key            불러올 데이터 키값
+ * @param callBackFunc   콜백 함수
+ *
+ */
+function fn_GetPackagesInfo(key, callBackFunc) {
+	var result = { "header":{ "api":"333" }, "body":{ "key":key, "callBackFunc":callBackFunc } };
+	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
+		 fn_Js_Bridge(result);
+	 }else{
+		 eval(callBackFunc + "('" + localStorage.getItem(key) + "')");
+	 }
+}
 
 /**
  * API 300 : getInfo

@@ -144,7 +144,6 @@ $( document ).ready(function() {
     fn_GetInfo("", "getInfoCallBack");
     //W
     // drawer.open = true;
-
 });
 
 function initPage(v) {
@@ -155,8 +154,22 @@ function initPage(v) {
                 $("body").removeClass("none");  
                 if (fowardPage == "SEARCH") {
                     var p_tidx = getParam("p_tidx");
-                    windowOpen("search.html?idx="+(p_tidx?p_tidx:1));
+                    // windowOpen("search.html?idx="+(p_tidx?p_tidx:1));
                     // fn_OpenUrl("search.html?idx="+(p_tidx?p_tidx:0));
+
+                    var idx = Object.keys(DRAWER_LIST_INFO).findIndex(item=>item.indexOf(fowardPage.toLowerCase() + ".html")>-1);
+                    var drawerInfos = Object.values(DRAWER_LIST_INFO);
+                    var urls = Object.keys(DRAWER_LIST_INFO);
+                    var url = urls[idx].split("?")[0];
+                    var drawerInfo = drawerInfos[idx];
+                    if ( drawerInfo.popup ) {
+                        drawer.innerList.selectedIndex = window.drawerSelectedIndex;
+                        fn_OpenPop(url+"?idx="+(p_tidx?p_tidx:1));
+                    } else {
+                        fn_OpenUrl(url+"?idx="+(p_tidx?p_tidx:1));
+                    }
+
+
                 } else {
                     var url = fowardPage.toLowerCase() + ".html?1=1"
                     //getParam("p_check");
@@ -272,7 +285,7 @@ function initLoad(v,cb){
                     console.log("entry.target", entry.target);
                     window["getInstallPackagesKeyCallBack" + fIdx] = function (data) {
                         var appListItem = (JSON.parse(data) || [{}])[0];
-                        entry.target.querySelector(".mdc-list-item__graphic").setAttribute("src", "data:image/png;base64," + appListItem.icon);
+                        entry.target.querySelector(".mdc-list-item__graphic").setAttribute("src", "" + appListItem.icon);
                     }
                     fn_getInstallPackages(entry.target.getAttribute("package"), "getInstallPackagesKeyCallBack" + fIdx);
                 }
@@ -293,7 +306,7 @@ function initLoad(v,cb){
                 row.className = row.className.replace("clone", "");
                 row.children[2].innerText = item.name;
                 // row.children[1].innerText = item.icon;
-                if (item.icon) row.querySelector(".mdc-list-item__graphic").setAttribute("src", "data:image/png;base64," + item.icon);
+                if (item.icon) row.querySelector(".mdc-list-item__graphic").setAttribute("src", item.icon);
                 row.setAttribute("tabIndex", index);
                 row.setAttribute("package", item.package);
                 row.setAttribute("data-mdc-dialog-action", item.package);
@@ -371,6 +384,8 @@ function initLoad(v,cb){
                 }
             }
 
+            appListItems.sort((a, b) => a.name > b.name ? 1 : -1);
+            appListItems.sort((a,b)=>a.seq-b.seq);
             // object 에 초성필드 추가 {name:"홍길동", diassembled:"ㅎㄱㄷ"}
             appListItems.forEach(function (item) {
                 var dis = Hangul.disassemble(item.name, true);
@@ -380,7 +395,6 @@ function initLoad(v,cb){
                 }, "");
                 item.diassembled = cho;
             });
-            appListItems.sort((a, b) => a.name > b.name ? 1 : -1);
             drawAppList(Hangul.disassemble(search.value).join(""));
 
             list = [].map.call(document.querySelectorAll(".navi_select .list .mdc-list"), el => {
@@ -624,7 +638,7 @@ function initLoad(v,cb){
         }
 
         appInfo.find(".package_name").text(appListItem.package);
-        if ( appListItem.icon ) appInfo.find(".icon")[0].setAttribute("src", "data:image/png;base64," + appListItem.icon);
+        if ( appListItem.icon ) appInfo.find(".icon")[0].setAttribute("src", appListItem.icon);
     }
     if (isWeb) {
         getInstallPackagesKeyCallBack('[{"name":"티맵 ABCDE FDF DFDF DFDFDF","package":"com.skt.tmap.ku","icon":""}]');
@@ -948,7 +962,7 @@ function getStatusMessage() {
                                 "
                                 title=""
                             >-</span>
-                            <span class="package_namemargin_left_10 middle"></span>
+                            <span class="margin_left_10 middle"></span>
                         </div>
                         <div>
                             <button id="btnSelectNavi" type="button" class="mdc-button mdc-button--raised " data-mdc-dialog-action="close" style="height:25px;margin-top:0px !important;padding:0px !important;text-align:right !important">

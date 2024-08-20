@@ -1,0 +1,373 @@
+{
+  "ftp://softm.net:21@softm": {
+    "www": {
+      "tdev": {
+        ".DS_Store": {
+          "type": "-",
+          "size": 8196,
+          "lmtime": 1682489877581,
+          "modified": false
+        },
+        ".idea": {},
+        ".vscode": {
+          "ftp-kr.diff.common.js": {
+            "type": "-",
+            "size": 0,
+            "lmtime": 1682516047850,
+            "modified": false
+          },
+          "ftp-kr.diff.ftp-kr.diff.permission.10.html": {
+            "type": "-",
+            "size": 15103,
+            "lmtime": 1681696930741,
+            "modified": false
+          },
+          "ftp-kr.diff.ftp-kr.diff.permission.2.html": {
+            "type": "-",
+            "size": 15103,
+            "lmtime": 1681696485205,
+            "modified": false
+          },
+          "ftp-kr.diff.ftp-kr.diff.permission.3.html": {
+            "type": "-",
+            "size": 109,
+            "lmtime": 1681656430667,
+            "modified": false
+          },
+          "ftp-kr.diff.ftp-kr.diff.permission.4.html": {
+            "type": "-",
+            "size": 109,
+            "lmtime": 1681656638672,
+            "modified": false
+          },
+          "ftp-kr.diff.ftp-kr.diff.permission.5.html": {
+            "type": "-",
+            "size": 109,
+            "lmtime": 1681656650418,
+            "modified": false
+          },
+          "ftp-kr.diff.ftp-kr.diff.permission.6.html": {
+            "type": "-",
+            "size": 109,
+            "lmtime": 1681656671414,
+            "modified": false
+          },
+          "ftp-kr.diff.ftp-kr.diff.permission.7.html": {
+            "type": "-",
+            "size": 109,
+            "lmtime": 1681656695791,
+            "modified": false
+          },
+          "ftp-kr.diff.ftp-kr.diff.permission.8.html": {
+            "type": "-",
+            "size": 109,
+            "lmtime": 1681656725031,
+            "modified": false
+          },
+          "ftp-kr.diff.ftp-kr.diff.permission.9.html": {
+            "type": "-",
+            "size": 109,
+            "lmtime": 0,
+            "modified": false
+          },
+          "ftp-kr.diff.ftp-kr.diff.permission.html": {
+            "type": "-",
+            "size": 109,
+            "lmtime": 1681637645898,
+            "modified": false
+          },
+          "ftp-kr.diff.index.2.html": {
+            "type": "-",
+            "size": 0,
+            "lmtime": 1682430962156,
+            "modified": false
+          },
+          "ftp-kr.diff.index.html": {
+            "type": "-",
+            "size": 0,
+            "lmtime": 1682515052905,
+            "modified": false
+          },
+          "ftp-kr.diff.permission.2.html": {
+            "type": "-",
+            "size": 111,
+            "lmtime": 0,
+            "modified": false
+          },
+          "ftp-kr.diff.permission.3.html": {
+            "type": "-",
+            "size": 15103,
+            "lmtime": 0,
+            "modified": false
+          },
+          "ftp-kr.diff.permission.html": {
+            "type": "-",
+            "size": 15103,
+            "lmtime": 1681637615012,
+            "modified": true
+          },
+          "ftp-kr.json": {
+            "type": "-",
+            "size": 381,
+            "lmtime": 0,
+            "modified": false
+          },
+          "ftp-kr.sync.cache.json": {
+            "type": "-",
+            "size": 6747,
+            "lmtime": 0,
+            "modified": true
+          },
+          "ftp-sync.json": {
+            "type": "-",
+            "size": 522,
+            "lmtime": 1682521389158,
+            "modified": false
+          }
+        },
+        "error.html": {
+          "type": "-",
+          "size": 5106,
+          "lmtime": 1681696930669,
+          "modified": false
+        },
+        "images": {},
+        "index.html": {
+          "type": "-",
+          "size": 47937,
+          "lmtime": 1682515774005,
+          "modified": false
+        },
+        "index.html~": {
+          "type": "-",
+          "size": 85,
+          "lmtime": 0,
+          "modified": false
+        },
+        "index_.html": {
+          "type": "-",
+          "size": 54298,
+          "lmtime": 1681696930704,
+          "modified": false
+        },
+        "index_alertimagelist.html": {
+          "type": "-",
+          "size": 17699,
+          "lmtime": 1681696930704,
+          "modified": false
+        },
+        "index_before_map_bak.html": {
+          "type": "-",
+          "size": 56427,
+          "lmtime": 1681696930668,
+          "modified": false
+        },
+        "index_before_setting_20200703.html": {
+          "type": "-",
+          "size": 53508,
+          "lmtime": 1681696930703,
+          "modified": false
+        },
+        "index_map_version.html": {
+          "type": "-",
+          "size": 54304,
+          "lmtime": 1681696930704,
+          "modified": false
+        },
+        "lib": {
+          ".DS_Store": {
+            "type": "-",
+            "size": 6148,
+            "lmtime": 1682495806926,
+            "modified": false
+          },
+          "common.css": {
+            "type": "-",
+            "size": 5217,
+            "lmtime": 0,
+            "modified": false
+          },
+          "common.js": {
+            "type": "-",
+            "size": 31298,
+            "lmtime": 1682516047434,
+            "modified": true
+          },
+          "db.js": {
+            "type": "-",
+            "size": 6901,
+            "lmtime": 0,
+            "modified": false
+          },
+          "flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2": {
+            "type": "-",
+            "size": 60832,
+            "lmtime": 0,
+            "modified": false
+          },
+          "hangul.js": {
+            "type": "-",
+            "size": 20706,
+            "lmtime": 0,
+            "modified": false
+          },
+          "i18next.min.js": {
+            "type": "-",
+            "size": 31895,
+            "lmtime": 0,
+            "modified": false
+          },
+          "icon.css": {
+            "type": "-",
+            "size": 522,
+            "lmtime": 0,
+            "modified": false
+          },
+          "interface.js": {
+            "type": "-",
+            "size": 18311,
+            "lmtime": 1682521438810,
+            "modified": false
+          },
+          "jquery-2.1.4.min_.js": {
+            "type": "-",
+            "size": 97,
+            "lmtime": 0,
+            "modified": false
+          },
+          "jquery-3.6.4.min.js": {
+            "type": "-",
+            "size": 89795,
+            "lmtime": 1681696419828,
+            "modified": false
+          },
+          "map.js": {
+            "type": "-",
+            "size": 16685,
+            "lmtime": 0,
+            "modified": false
+          },
+          "map_point.js": {
+            "type": "-",
+            "size": 5605,
+            "lmtime": 0,
+            "modified": false
+          },
+          "material-components-web.min.css": {
+            "type": "-",
+            "size": 274145,
+            "lmtime": 1682489853472,
+            "modified": false
+          },
+          "material-components-web.min.js": {
+            "type": "-",
+            "size": 480232,
+            "lmtime": 1682489996110,
+            "modified": false
+          },
+          "material-components-web.min.new.css": {
+            "type": "-",
+            "size": 495454,
+            "lmtime": 1682489789408,
+            "modified": false
+          },
+          "material-components-web.min.new.js": {
+            "type": "-",
+            "size": 480232,
+            "lmtime": 1682489996110,
+            "modified": false
+          },
+          "material-components-web.min_old.css": {
+            "type": "-",
+            "size": 274145,
+            "lmtime": 1682489853472,
+            "modified": false
+          },
+          "material-components-web.min_old.js": {
+            "type": "-",
+            "size": 306601,
+            "lmtime": 1622367494669,
+            "modified": false
+          }
+        },
+        "material-components-web.min.css": {
+          "type": "-",
+          "size": 495454,
+          "lmtime": 1682489789408,
+          "modified": false
+        },
+        "permission.html": {
+          "type": "-",
+          "size": 15325,
+          "lmtime": 1681656344867,
+          "modified": true
+        },
+        "permission_.html": {
+          "type": "-",
+          "size": 7870,
+          "lmtime": 1681696930704,
+          "modified": false
+        },
+        "permission_guide.html": {
+          "type": "-",
+          "size": 9690,
+          "lmtime": 1681696930705,
+          "modified": false
+        },
+        "permission_test.html": {
+          "type": "-",
+          "size": 9702,
+          "lmtime": 1681696930668,
+          "modified": false
+        },
+        "search.html": {
+          "type": "-",
+          "size": 45207,
+          "lmtime": 1681696930669,
+          "modified": false
+        },
+        "search_.html": {
+          "type": "-",
+          "size": 32707,
+          "lmtime": 1681696930669,
+          "modified": false
+        },
+        "search_before_map_bak.html": {
+          "type": "-",
+          "size": 35912,
+          "lmtime": 1681696930704,
+          "modified": false
+        },
+        "setting.html": {
+          "type": "-",
+          "size": 31133,
+          "lmtime": 1681696930741,
+          "modified": false
+        },
+        "setting_.html": {
+          "type": "-",
+          "size": 20439,
+          "lmtime": 1681696930704,
+          "modified": false
+        },
+        "status.html": {
+          "type": "-",
+          "size": 141,
+          "lmtime": 0,
+          "modified": false
+        }
+      },
+      "www": {
+        "tdev": {
+          "permission.html": {
+            "type": "-",
+            "size": 14097,
+            "lmtime": 1656498389804,
+            "modified": false
+          }
+        }
+      }
+    }
+  },
+  "$version": 1
+}

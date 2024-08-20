@@ -67,6 +67,11 @@ body {
 .basic_font_medium3 { font-size: 17px }
 .basic_font_medium4 { font-size: 18px }
 
+.basic_font_large1 { font-size: 20px }
+.basic_font_large2 { font-size: 22px }
+.basic_font_large3 { font-size: 24px }
+.basic_font_large4 { font-size: 28px }
+
 .main {
   font-family: 굴림;
   /*     font-family: Helvetica; */
