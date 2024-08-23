@@ -246,7 +246,13 @@ var messages  = {
             del_company :"\"Company\" has been deleted.",
             del_favorite :"\"Basic Destination\" has been deleted.",
             must_enable_bluetooth : "This feature requires Bluetooth permission to be enabled.",
-
+            noti_title:"[Urgent] Background service update error occurred.",
+            noti_msg1:"There is an error in the current version and the app is not working properly.",
+            noti_msg2:"When the next version is updated, <span style='color:var(--softm-stop)'>uninstall</span> and <span span style='color:var(--softm-start)'>reinstall</span>.",
+            noti_msg3:"An update is currently in progress.",
+            noti_msg4:"Please wait a moment and the next version will be updated.",
+            noti_msg4:"Sorry for the inconvenience. TT",
+            noti_msg4:"thank you.",
           },
           toast:{
             start: "T-map is <span style='color:var(--softm-start)'>start</span>.",
@@ -520,7 +526,13 @@ var messages  = {
             del_company :"\"회사\"가 삭제되었습니다.",
             del_favorite :"\"기본목적지\"가 삭제되었습니다.",
             must_enable_bluetooth : "블루트스 권한을 활성화해야 사용할 수 있는 기능입니다.",
-
+            noti_title:"[긴급] 백그라운드 서비스 업데이트 오류 발생.",
+            noti_msg1:"현재 버전에 오류가 있어 앱이 정상적으로 동작하지 않습니다.",
+            noti_msg2:"다음 버전이 업데이트 되면 <span style='color:var(--softm-stop)'>삭제후</span> <span span style='color:var(--softm-start)'>재설치</span>하세요.",
+            noti_msg3:"현재 업데이트가 진행중입니다.",
+            noti_msg4:"조금만 기다리시면 다음 버전이 업데이트 됩니다.",
+            noti_msg5:"사용에 불편을 드려 죄송합니다.TT",
+            noti_msg6:"감사합니다.",
           },
           toast:{
             start : "티맵이 <span style='color:var(--softm-start)'>시작</span>되었습니다.",
