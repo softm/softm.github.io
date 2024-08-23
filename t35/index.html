@@ -63,6 +63,7 @@ var btnStartNaviCompany  = null;
 var btnStartNaviDrive    = null;
 
 var btnSwitchGotoOffWorkTime = null;
+var btnCloseNoti = null;
 
 var fowardPage = getParam("p_foward_page");
 
@@ -704,20 +705,22 @@ function initLoad(v,cb){
     window.workOffTimeTo = v.workOffTimeTo;
     $("#work_off_time_to").val(v.workOffTimeTo);
 
-    // const notiDialog = new mdc.dialog.MDCDialog(document.querySelector(".noti.mdc-dialog"));
-    // notiDialog.listen("MDCDialog:closed", function (e) {
-    //         // alert("closed");
-    //         if (e.detail.action == "close") {
+    const notiDialog = new mdc.dialog.MDCDialog(document.querySelector(".noti.mdc-dialog"));
+    notiDialog.listen("MDCDialog:closed", function (e) {
+        // alert("closed");
+        if (e.detail.action == "close") {
 
-    //         } else if (e.detail.action) {
-    //         }
+        } else if (e.detail.action) {
+        }
 
-    //     });
+    });
 
-    // const btnCloseNoti = new mdc.ripple.MDCRipple(document.querySelector(".noti.mdc-dialog .mdc-icon-button"));
-    // btnCloseNoti.listen("click", function (event) {
-    //     notiDialog.root.hide();
-    // });
+    const btnCloseNoti = new mdc.ripple.MDCRipple(document.querySelector("#btnCloseNoti"));
+    btnCloseNoti.listen("click", function (event) {
+        notiDialog.root.hide();
+    });
+
+    notiDialog.open();
 }
 
 function bindPoiHome(v) {
@@ -1078,9 +1081,18 @@ function getStatusMessage() {
               <div class="row red basic_font_medium4 left padding_left_10">
                 불편을 드려 죄송합니다.<BR/><BR/>
               </div> -->
+<!--
+            <h3 class="red margin_left_20">자동 업데이트 오류</h3>
+            <div class="row black basic_font_medium4 left padding_left_15" style="line-height: 1.9;">
+                <b># 업데이트 방법.</b><BR/>
+                1. 상단 퀵메뉴에서 모바일데이터,와이파이를 차단한다.( 비행기모드를 켠다. )<BR/>
+                2. 앱을 제거한다.<BR/>
+                3. 최신버전을 새로 설치한다.<BR/><BR/>        
+            </div>      
+-->
 <!--에러공지-->
-<!-- 
-            <div class="noti mdc-dialog mdc-dialog--open test-dialog mdc-dialog--sheet mdc-dialog--no-content-padding"
+<!--  -->
+            <div class="noti mdc-dialog mdc-dialog--close test-dialog mdc-dialog--sheet mdc-dialog--no-content-padding"
                 aria-modal="true"
                 aria-labelledby="test-dialog__title--with-close-icon-button"
                 aria-describedby="test-dialog__content--with-close-icon-button"
@@ -1093,19 +1105,35 @@ function getStatusMessage() {
                     </button>
                     <div class="mdc-dialog__content test-dialog__content">
                         <div class="test-sheet__content">
-                        <h3 class="red margin_left_20">자동 업데이트 오류</h3>
+                        <h3 class="red margin_left_20">
+                            <span data-i18n="message.noti_title" class="basic_font_large2">[긴급] 백그라운드 서비스 업데이트 오류 발생.</span><BR/>
+                        </h3>
                         
-                        <div class="row black basic_font_medium4 left padding_left_15" style="line-height: 1.9;">
-                            <b># 업데이트 방법.</b><BR/>
-                            1. 상단 퀵메뉴에서 모바일데이터,와이파이를 차단한다.( 비행기모드를 켠다. )<BR/>
-                            2. 앱을 제거한다.<BR/>
-                            3. 최신버전을 새로 설치한다.<BR/><BR/>
+                        <div class="row left padding_left_15 black basic_font_medium3" style="line-height: 1.9;">
+                            <li data-i18n="[html]message.noti_msg1" class="bold">현재 버전에 오류가 있어 앱이 정상적으로 동작하지 않습니다.</ㅣ><br/>
+                            <li data-i18n="[html]message.noti_msg2" class="bold">다음 버전이 업데이트 되면 <span style='color:var(--softm-stop)'>삭제후</span> <span span style='color:var(--softm-start)'>재설치</span>하세요.</li>
+                            <hr/>
+                        </div>
+                        <div class="row center padding_left_15 black basic_font_medium3" style="line-height: 1.9;">
+                            <span data-i18n="message.noti_msg3" class="bold" >현재 앱 업데이트가 진행중입니다.</span><br/>
+                            <span data-i18n="message.noti_msg4" class="bold" >조금만 기다리시면 다음 버전이 업데이트 됩니다.</span><BR/>
+                            <span data-i18n="message.noti_msg5" class="bold">사용에 불편을 드려 죄송합니다.TT</span><BR/>
+                            <span data-i18n="message.noti_msg6" class="bold">감사합니다.</span><BR/>
                         </div>
                     </div>
+                    <div class="row">
+                        <button id="btnCloseNoti" class="mdc-button mdc-icon-button margin_bottom_15 mdc-button--raised margin_right_5" style="width:100%;font-size:16px">
+                            <strong data-i18n="label.confirm">확인</strong>
+                            
+                              <!-- <strong data-i18n="label.permission_overlay">Show over other apps</strong> -->
+                              <!-- <strong>시작</strong> -->
+                          </button>
+                    </div>
+
                     </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
 
             <div class="row" style="height:70px"></div>
             <div class="mdc-snackbar">
