@@ -975,7 +975,7 @@ function fn_RunOptionOffCallback(ok) {
 function getStatusMessage() {
     var msg = "";
     debugger;
-    var sep = window.info.independenceCondition.selected? "," :"+";
+    var sep = window.info.independenceCondition? "," :"+";
     msg = window.info.startPower? t("label.charge") :"";
     msg = window.info.startBluetooth? (msg?msg + sep:msg) + t("label.bluetooth"):msg;
     msg = window.info.startWifi? (msg?msg + sep:msg) + t("label.wifi") :msg;
