@@ -668,12 +668,16 @@ console.info( v, (/^[0-9]+$/).test(""+v) );
         
             <div class="row sub">
               <div class="flex"><!--fieldset-->
-                <label class="title"><span class="mdc-chip__text"><strong data-i18n="label.renavi_prevent_time">재실행 방지시간</strong></span></label>
+                <label class="title"
+                style="overflow: hidden;
+                text-overflow: ellipsis;
+                width: calc(60%);"><span class="mdc-chip__text"><strong data-i18n="label.renavi_prevent_time"
+                >재실행 방지시간</strong></span></label>
                 <!-- <div style="position: absolute;display: inline;margin-top: -15px;"> -->
                 <div class="flex-grow right">
                   <label id="renavi_prevent_time"
                   class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon "
-                  style="width:40%;">
+                  style="width:60%;">
                   <div class="mdc-text-field__ripple"></div>
                   <input class="mdc-text-field__input" type="number" aria-labelledby="my-label-id" aria-controls="my-helper-id"
                   aria-describedby="my-helper-id" value="10" style="padding: 10px 10px 10px 10px !important;" maxlength="2" min="0" max="999" pattern="[0-9]*">

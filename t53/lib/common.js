@@ -2,9 +2,11 @@ var messages  = {
       en: {
         translation: {
           label: {
+            app: "App",
             app_name: "Navi Auto Start",
             top_bar: "Navi Auto Start",
             first_start : "Start Setting",
+            refresh_start : "Refresh",
             after_second: "executed after seconds",
             status_stop:'Execute when charging [<span id="spnState"><span style="color:var(--softm-stop);font-weight:bold">Stop</span></span>]. ',
             status_start:'Execute when charging [<span id="spnState"><span style="color:var(--softm-start);font-weight:bold">start</span></span>]. ',
@@ -14,6 +16,8 @@ var messages  = {
             status_wifi_start:'Executed when connected to WIFI [<span id="spnState"><span style="color:var(--softm-start);font-weight:bold">started</span></span>]. ',
             noti_icon_status_on : '<span style="color:var(--softm-start);font-weight:bold">Show</span> top notification bar.',
             noti_icon_status_off : '<span style="color:var(--softm-stop);font-weight:bold">Hide</span> top notification bar.',
+            test_status_on : '<span style="color:var(--softm-start);font-weight:bold">On</span> Test.',
+            test_status_off : '<span style="color:var(--softm-stop);font-weight:bold">Off</span> Test.',
             work_goto_off_time_status : 'It operates only at the set time.',
             ok: "yes",
             cancel: "No",
@@ -31,6 +35,9 @@ var messages  = {
             reg_home: "home-registration",
             reg : "Register",
             reg_company: "company-registration",
+            del_home : "home-delete",
+            del_company : "company-delete",
+            del_destination : "basic destination-delete",
             reg_destination: "default destination-registration",
             remove_favorite: "favorite-delete",
             start: "start",
@@ -123,6 +130,7 @@ var messages  = {
             qna_comment_detail_message4: "Device system (OS) version",
             qna_comment_detail_message5: "app version",
             laboratory:"Laboratory",
+            all_app:"All"
           },
           title: {
             main: "Basic Settings",
@@ -150,9 +158,16 @@ var messages  = {
             save: "Saved.",
             would_save : "Would you like to save?",
             would_change : "Would you like to change it?",
-            first_start : "When you turn on the engine, Navigation App runs automatically.",
-            first_start2 : "When connected to power, Bluetooth, or Wi-Fi,<br/>You can start or end navigation.",
-            confirm_favorite_delete: "Are you sure you want to delete favorites?",
+            first_start : "Navigation will start automatically.",
+            first_start1 : "Select an app.",
+            first_start2 : "When charging, connecting to Bluetooth or Wi-Fi, you can start and end the navigation app.",
+            install_start : "{app_name} is not installed.<br>Would you like to <span style='color:var(--softm-start)'>install</span>  it?",
+            confirm_home_delete : "Are you sure you want to delete home?",
+            confirm_company_delete : "Are you sure you want to delete company?",
+            confirm_destination_delete : "Are you sure you want to delete basic destination?",
+            confirm_favorite_delete: "Are you sure you want to delete favorite?",
+            confirm_on : "Would you like to turn it <span style='color:var(--softm-start)'>on</span>?",
+            confirm_off : "Would you like to turn it <span style='color:var(--softm-stop)'>off</span>?",
             confirm_start: "<span style='color:var(--softm-start)'>Start</span> Are you sure?",
             confirm_stop: "<span style='color:var(--softm-stop)'>Exit</span> Are you sure?",
             guide_home: "<B>\"Guide\"</B>.",
@@ -205,7 +220,7 @@ var messages  = {
             permission_grant_on_for_notification_access : '"Notification access"to turn on the right.',
             permission_grant_on_for_notification_access_2 : 'The accuracy of program operation can be improved.',
             permission_grant_on_for_location_information_access : '"<B>Navi Auto Start</B>" collects location data even when the app is closed or not in use, and provides a function to prevent duplicate execution when running Navigation.',
-            permission_grant_on_for_accessibility : 'You can improve the precision of app operation and close the running app.',
+            permission_grant_on_for_accessibility : 'It is used to turn the function On/Off when running the app.<br/>It is used to terminate the function after running the app.',
             permission_grant_on_for_accessibility2 : 'When you get to your smartphone\'s accessibility menu, select "<B>Installed Apps</B>".',
             permission_grant_on_for_accessibility3 : 'Select "<B>Navi Auto Start</B>" from the list of installed apps, then click "<B>Disable</B>".',
             permission_grant_on_for_accessibility4 : 'If permission permission notification appears, select "<B>Allow</B>" and it will be changed to in use.',
@@ -221,6 +236,7 @@ var messages  = {
             data_not_found: "No data was found.",
             address_not_exist: "There is no address to guide.",
             all_granted: "All permissions are <span class='color_start'>normal</span>.",
+            install_app: "Install App.",
             install_tmap: "Install Tmap.",
             confirm_enable_bluetooth : "To query the Bluetooth list, you must use Bluetooth.\n Do you want to \"<span style='color:var(--softm-start)'>turn on</span>\"Bluetooth?",
             when_connected :"When connected, <span class='color_start'>runs</span>.",
@@ -231,8 +247,21 @@ var messages  = {
             reg_home :"\“Home\” has been registered.",
             reg_company :"\"Company\” has been registered.",
             reg_favorite :"\"Favorite\” has been registered.",
+            del_home :"\"Home\" has been deleted.",
+            del_company :"\"Company\" has been deleted.",
+            del_favorite :"\"Basic Destination\" has been deleted.",
+            must_enable_bluetooth : "This feature requires Bluetooth permission to be enabled.",
+            noti_title:"[Urgent] Background service update error occurred.",
+            noti_msg1:"There is an error in the current version and the app is not working properly.",
+            noti_msg2:"When the next version is updated, <span style='color:var(--softm-stop)'>uninstall</span> and <span span style='color:var(--softm-start)'>reinstall</span>.",
+            noti_msg3:"An update is currently in progress.",
+            noti_msg4:"Please wait a moment and the next version will be updated.",
+            noti_msg4:"Sorry for the inconvenience. TT",
+            noti_msg4:"thank you.",
           },
           toast:{
+            run_option_on : "Turn <span style='color:var(--softm-start)'>on</span>.",
+            run_option_off : "Turn <span style='color:var(--softm-stop)'>on</span>.",
             start: "T-map is <span style='color:var(--softm-start)'>start</span>.",
             stop: "T-map is <span style='color:var(--softm-stop)'>exit</span>.",
             grant:"Permission <span style='color:var(--softm-start)'>set</span>.",
@@ -245,6 +274,7 @@ var messages  = {
             notgrant_accessibility: "This permission is required to disable the alarm bar. <BR/><span style='color:var(--softm-stop)'>\"On\" \"Allow permission\"</span>.",
             notgrant_ignore_battery: "This permission is required to disable the alarm bar. <BR/><span style='color:var(--softm-stop)'>\"On\" \"Allow permission\"</span>.",
             notgrant_write_settings: "This permission is required to change system settings. <BR/><span style='color:var(--softm-stop)'>\"On\" \"Allow permission\"</span>.",
+            loading_applist: "Retrieving app list... Please wait.",
           }
         },
         myModule: {
@@ -254,9 +284,11 @@ var messages  = {
       ko : {
         translation: {
           label: {
-            app_nameapp_name : "티맵자동실행",
+            app: "앱",
+            app_name : "티맵자동실행",
             top_bar : "티맵자동실행",
             first_start : "설정 시작",
+            refresh_start : "새로고침",
             after_second : "초 후 실행됨",
             status_stop : '충전시 실행 [<span id="spnState"><span style="color:var(--softm-stop);font-weight:bold">중지</span></span>]됨.',
             status_start : '충전시 실행 [<span id="spnState"><span style="color:var(--softm-start);font-weight:bold">시작</span></span>]됨.',
@@ -266,6 +298,8 @@ var messages  = {
             status_wifi_start : '와이파이연결시 실행 [<span id="spnState"><span style="color:var(--softm-start);font-weight:bold">시작</span></span>]됨.',
             noti_icon_status_on : '상단 알림바에 [<span style="color:var(--softm-start);font-weight:bold">표시</span>].',
             noti_icon_status_off : '상단 알림바에 [<span style="color:var(--softm-stop);font-weight:bold">숨김</span>].',
+            test_status_on : '테스트 [<span style="color:var(--softm-start);font-weight:bold">켜짐</span>].',
+            test_status_off : '테스트 [<span style="color:var(--softm-stop);font-weight:bold">꺼짐</span>].',
             work_goto_off_time_status : '설정된 시간에만 동작합니다.',
             ok : "예",
             cancel : "아니오",
@@ -283,6 +317,9 @@ var messages  = {
             reg_home : "집-등록",
             reg : "등록",
             reg_company : "회사-등록",
+            del_home : "집-삭제",
+            del_company : "회사-삭제",
+            del_destination : "기본목적지-삭제",
             reg_destination: "기본목적지-등록",
             remove_favorite : "즐겨찾기-삭제",
             start : "시작",
@@ -375,6 +412,7 @@ var messages  = {
             qna_comment_detail_message4: "기기 시스템(OS) 버전",
             qna_comment_detail_message5: "앱 버전",
             laboratory:"연구소",
+            all_app:"전체"
           },
           title: {
             main: "기본",
@@ -402,9 +440,18 @@ var messages  = {
             save : "저장 되었습니다.",
             would_save : "저장 하시겠습니까?",
             would_change : "변경 하시겠습니까?",
-            first_start : "시동을 켜면 자동으로 네비게이션이 실행됩니다.",
-            first_start2 : "전원, 블루투스, 와이파이 연결하면,<br/>내비게이션 앱을 시작, 종료할 수 있습니다.",
+            first_start : "네비게이션 자동 실행",
+            first_start1 : "앱을 선택하세요.",
+            first_start2 : "충전, 블루투스, 와이파이 연결하면,<br/>내비게이션 앱을 시작, 종료할 수 있습니다.",
+            first_start3 : "<span style='color:var(--softm-start)'>앱을 선택</span>하세요.",
+            install_start : "'{app_name}' 설치 되어 있지 않습니다.<br><span style='color:var(--softm-start)'>설치</span>  하시겟습니까?",
+            install_start : "'{app_name}' 설치 되어 있지 않습니다.<br><span style='color:var(--softm-start)'>설치</span>  하시겟습니까?",
+            confirm_home_delete : "집을 삭제 하시겠습니까?",
+            confirm_company_delete : "회사를 삭제 하시겠습니까?",
+            confirm_destination_delete : "기본목적지를 삭제 하시겠습니까?",
             confirm_favorite_delete : "즐겨찾기를 삭제 하시겠습니까?",
+            confirm_on : "<span style='color:var(--softm-start)'>켜(on)</span>시겠습니까?",
+            confirm_off : "<span style='color:var(--softm-stop)'>끄(off)</span>시겠습니까?",
             confirm_start : "<span style='color:var(--softm-start)'>시작</span> 하시겠습니까?",
             confirm_stop : "<span style='color:var(--softm-stop)'>종료</span> 하시겠습니까?",
             guide_home : "<B>\"집\"</B>으로 안내 합니다.",
@@ -458,9 +505,7 @@ var messages  = {
             permission_grant_on_for_notification_access : '"<B>알림 접근<B>" 권한을 켜세요.',
             permission_grant_on_for_notification_access_2 : '"프로그램 동작의 정확도를 높힐 수 있습니다.',
             permission_grant_on_for_location_information_access : '"<B>티맵자동실행</B>"은 앱이 종료되었거나 사용 중이 아닐 때도 위치 데이터를 수집하여 티맵 실행시 중복 실행을 방지하는 기능을 제공합니다.',
-            permission_grant_on_for_accessibility : '앱 동작의 정밀도를 향상시키고, 실행한 앱을 종료할 수 있습니다.',
-            permission_grant_on_for_accessibility : '앱 동작의 정밀도를 향상시키고, 실행한 앱을 종료할 수 있습니다.',
-            
+            permission_grant_on_for_accessibility : '앱 실행시 기능을 On/Off를 위해 이용됩니다.<br/>앱 실행후, 종료기능을 위해 이용됩니다.',
             permission_grant_on_for_accessibility2 : '스마트폰의 접근성 메뉴로 이동되면 "<B>설치된 앱</B>"을 선택합니다.',
             permission_grant_on_for_accessibility3 : '설치된 앱 목록에서 "<B>티맵자동실행</B>"를 선택한 뒤 "<B>사용 안 함</B>"을 누릅니다.',
             permission_grant_on_for_accessibility4 : '권한 허용 알림이 나오는 경우, "<B>허용</B>"을 선택하면 사용 중으로 변경됩니다.',
@@ -476,6 +521,7 @@ var messages  = {
             data_not_found : "조회된 자료가 없습니다.",
             address_not_exist: "안내할 주소가 없습니다.",
             all_granted: "모든 권한이 <span class='color_start'>정상</span>입니다.",
+            install_app: "앱을 설치하세요.",
             install_tmap: "티맵을 설치하세요.",
             confirm_enable_bluetooth : "블루트스 목록을 조회하려면, 블루투스를 사용해야합니다.\n 블루트스를 \"<span style='color:var(--softm-start)'>켜</span>\"시겠습니까?",
             when_connected :"연결시 <span class='color_start'>동작</span>.",
@@ -486,9 +532,21 @@ var messages  = {
             reg_home :"\"집\"이 등록되었습니다.",
             reg_company :"\"회사\"가 등록되었습니다.",
             reg_favorite :"\"즐겨찾기\"가 등록되었습니다.",
-            
+            del_home :"\"집\"이 삭제되었습니다.",
+            del_company :"\"회사\"가 삭제되었습니다.",
+            del_favorite :"\"기본목적지\"가 삭제되었습니다.",
+            must_enable_bluetooth : "블루트스 권한을 활성화해야 사용할 수 있는 기능입니다.",
+            noti_title:"[긴급] 백그라운드 서비스 업데이트 오류 발생.",
+            noti_msg1:"현재 버전에 오류가 있어 앱이 정상적으로 동작하지 않습니다.",
+            noti_msg2:"다음 버전이 업데이트 되면 <span style='color:var(--softm-stop)'>삭제후</span> <span span style='color:var(--softm-start)'>재설치</span>하세요.",
+            noti_msg3:"현재 업데이트가 진행중입니다.",
+            noti_msg4:"조금만 기다리시면 다음 버전이 업데이트 됩니다.",
+            noti_msg5:"사용에 불편을 드려 죄송합니다.TT",
+            noti_msg6:"감사합니다.",
           },
           toast:{
+            run_option_on : "설정을 <span style='color:var(--softm-start)'켰</span>습니다.",
+            run_option_off : "설정을 <span style='color:var(--softm-stop)'>껐</span>습니다.",
             start : "티맵이 <span style='color:var(--softm-start)'>시작</span>되었습니다.",
             stop : "티맵이 <span style='color:var(--softm-stop)'>종료</span>되었습니다.",
             grant: "권한이 <span style='color:var(--softm-start)'>설정</span>되었습니다.",
@@ -501,6 +559,7 @@ var messages  = {
             notgrant_accessibility: "알람바 해제를 위해 필요한 권한입니다. <BR/><span style='color:var(--softm-stop)'>\"권한 허용\"</span>을 \"켜\"주세요.",
             notgrant_ignore_battery: "알람바 해제를 위해 필요한 권한입니다. <BR/><span style='color:var(--softm-stop)'>\"권한 허용\"</span>을 \"켜\"주세요.",
             notgrant_write_settings: "시스템설정 변경을 위해 필요한 권한입니다. <BR/><span style='color:var(--softm-stop)'>\"권한 허용\"</span>을 \"켜\"주세요.",
+            loading_applist: "앱목록 조회중.. 잠시 기다리세요.",
           }
         },
         myModule: {
@@ -575,16 +634,16 @@ var topAppBar = null;
 var drawerListEl = null;
   
 var DRAWER_LIST_INFO = {
-  "index.html" : {icon:"home",label:"title.home"}, // 홈
-  "setting.html" : {icon:"settings",label:"title.setting",showOnlySelf:true}, // 설정
-  "onoff.html" : {icon:"toggle_on",label:"title.start_stop",showOnlySelf:true}, // 시작/종료
-  "run_option.html" : {icon:"link",label:"title.run_options",popup:true,reloadAtReturn:true}, // 실행옵션
-  "home_company.html" : {icon:"home_work",label:"title.home_company",popup:true}, // 집/회사
-  "search.html?idx=2" : {icon:"favorite",label:"title.favorite",pathSearchSame:true,popup:true}, // 즐겨찾기
-  "qna.html" : {icon:"forum",label:"title.contact_us",showOnlySelf:true}, // 문의하기
+  "index.html" : {page:"index.html",visible:true,icon:"home",label:"title.home"}, // 홈
+  "setting.html" : {page:"setting.html",visible:true,icon:"settings",label:"title.setting",showOnlySelf:true}, // 설정
+  "onoff.html" : {page:"onoff.html",visible:true,icon:"toggle_on",label:"title.start_stop",showOnlySelf:true}, // 시작/종료
+  "run_option.html" : {page:"run_option.html",visible:true,icon:"link",label:"title.run_options",popup:true,reloadAtReturn:true}, // 실행옵션
+  "home_company.html" : {page:"home_company.html",visible:true,icon:"home_work",label:"title.home_company",popup:true}, // 집/회사
+  "search.html?idx=2" : {page:"search.html",visible:true,icon:"favorite",label:"title.favorite",pathSearchSame:true,popup:true}, // 즐겨찾기
+  "qna.html" : {page:"qna.html",icon:"forum",visible:true,label:"title.contact_us",showOnlySelf:true}, // 문의하기
   // "membership.html" : {icon:"card_membership",label:"title.membership"}, // 멤버쉽
-  "laboratory.html" : {icon:"emoji_objects",label:"title.laboratory",popup:true}, // 연구소
-  "rate_the_app.html" : {icon:"thumb_up",label:"title.rate_the_app"}, // 어플 평가하기
+  "laboratory.html" : {page:"laboratory.html",visible:true,icon:"emoji_objects",label:"title.laboratory",popup:true}, // 연구소
+  "rate_the_app.html" : {page:"rate_the_app.html",visible:true,icon:"thumb_up",label:"title.rate_the_app"}, // 어플 평가하기
 }
 
 var drawerSelectedIndex = null;
@@ -656,40 +715,7 @@ $( document ).ready(function() {
         event.preventDefault();
     });
     //        drawer.innerList.selectedIndex = 2;
-    $(".mdc-drawer .mdc-deprecated-list").empty();
-    Object.entries(DRAWER_LIST_INFO).forEach((item,idx)=>{
-      // debugger;
-       var pageUrl = item[0];
-       var drawerInfo = item[1];
-       console.log(pageUrl);
-       var row = $(".mdc-drawer .clone").clone();
-       row.find("i").text(drawerInfo.icon);
-       row.find(".mdc-deprecated-list-item__text").attr("data-i18n",drawerInfo.label);
-       
-       row.removeClass("clone mdc-deprecated-list-item--activated");
-
-       var pathName = document.location.pathname;
-       var pathNameInfo = pathName.split("/");
-       if ( !drawerInfo.showOnlySelf ) {
-         row.removeClass("none");
-       }
-       if ( ( pathNameInfo[2] ) === ( pageUrl + (drawerInfo.pathSearchSame?document.location.search:"") ) ) {
-        // row.addClass("mdc-deprecated-list-item--activated");
-        row.removeClass("none");
-        row.attr("tabindex",0);
-        
-        // document.location.search
-
-        window.drawerSelectedIndex = idx;
-       }
-       $(".mdc-drawer .mdc-deprecated-list").append(row);
-
-       drawer.innerList.selectedIndex = -1; // 한번 초기화화고 선택되어야 오류 없음.
-       drawer.innerList.selectedIndex = window.drawerSelectedIndex;
-
-    });
-    // $(".mdc-deprecated-list").i18n();
-    $(".mdc-drawer .clone").remove();
+    reDrawDrawer();
 
   }
 
@@ -774,8 +800,17 @@ $( document ).ready(function() {
       dialogMDC.open();
       dialogMDC.listen("MDCDialog:closed", eventListener);
     }
-    window.t = function (v){
-      return $.i18n.t(v);
+    window.t = function (v,option){
+      var vv = $.i18n.t(v);
+      if ( option ) {
+        // Object.entries(option).map((item)=>{
+        //   debugger;
+        // });
+        vv = vv.replace(/{(.*?)}/g, function(match, p1) {
+          return option[p1] || match;
+        });
+      }
+      return vv;
     }
 });
 
@@ -1128,6 +1163,10 @@ function windowClose(reload) {
   else fn_ClosePopData(null,"fn_Reload");
 }
 
+function windowReload(url) {
+  location.href = url + "?lng="+navigator.language.split("-")[0];
+}
+
   /**
   1 : 집↔회사
   2 : 집↔목적지
@@ -1138,3 +1177,52 @@ function windowClose(reload) {
     , "집↔목적지"
     , "안전운전"
 ];
+
+function getPageInfo(pageUrl) {
+  var idx = Object.keys(DRAWER_LIST_INFO).findIndex(item=>item.indexOf(pageUrl.toLowerCase() + ".html")>-1);
+  var drawerInfos = Object.values(DRAWER_LIST_INFO);
+  var urls = Object.keys(DRAWER_LIST_INFO);
+  var url = urls[idx].split("?")[0];
+  var drawerInfo = drawerInfos[idx]; 
+  return drawerInfo;
+}
+
+function reDrawDrawer() {
+  if ( document.querySelector('.mdc-drawer') ) {
+    $(".mdc-drawer .mdc-deprecated-list").empty();
+    Object.entries(DRAWER_LIST_INFO).forEach((item,idx)=>{
+       var pageUrl = item[0];
+       var drawerInfo = item[1];
+       if ( drawerInfo.visible ) {
+         console.log(pageUrl);
+         var row = $(".mdc-drawer .clone").clone();
+         row.find("i").text(drawerInfo.icon);
+         row.find(".mdc-deprecated-list-item__text").attr("data-i18n",drawerInfo.label);
+         
+         row.removeClass("clone mdc-deprecated-list-item--activated");
+  
+         var pathName = document.location.pathname;
+         var pathNameInfo = pathName.split("/");
+         if ( !drawerInfo.showOnlySelf ) {
+           row.removeClass("none");
+         }
+         if ( ( pathNameInfo[2] ) === ( pageUrl + (drawerInfo.pathSearchSame?document.location.search:"") ) ) {
+            // row.addClass("mdc-deprecated-list-item--activated");
+            row.removeClass("none");
+            row.attr("tabindex",0);
+            
+            // document.location.search
+    
+            window.drawerSelectedIndex = idx;
+        }
+       }
+       $(".mdc-drawer .mdc-deprecated-list").append(row);
+
+       drawer.innerList.selectedIndex = -1; // 한번 초기화화고 선택되어야 오류 없음.
+       drawer.innerList.selectedIndex = window.drawerSelectedIndex;
+
+    });
+    $(".mdc-deprecated-list").i18n();
+    // $(".mdc-drawer .clone").remove();
+  }
+}
