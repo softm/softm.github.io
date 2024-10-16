@@ -1,0 +1,1490 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+  <title>티</title>
+  <link rel="shortcut icon" href="#">
+
+  <!-- <link href="./lib/material-components-web.min.css" rel="stylesheet"> -->
+  <link href="./lib/material-components-web.min.new.css" rel="stylesheet">
+  <!-- <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"> -->
+
+  <!-- <script src="./lib/material-components-web.min.js"></script> -->
+  <script src="./lib/material-components-web.min.new.js"></script>
+  <!-- <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script> -->
+  
+  <link rel="stylesheet" href="./lib/icon.css">
+  <link rel="stylesheet" href="./lib/common.css?a=202309171923">
+  <script src="./lib/hangul.js"></script>
+
+ </head>
+
+<!--  using - default i18next-->
+<!--
+<script src="https://unpkg.com/i18next/i18next.js"></script>
+<script src="https://unpkg.com/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+<script src="https://unpkg.com/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.js"></script>
+-->
+
+<!-- using - jquery i18next -->
+<!-- -->
+   <script src="./lib/jquery-3.6.4.min.js"></script>
+<!--<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>-->
+  <script src="./lib/i18next.min.js"></script>
+  <script src="./lib/common.js?a=1"></script>
+  <script src="./lib/interface.js"></script>
+  <script src="./lib/db.js"></script>
+    <script src="./lib/tmapjs2.min.js"></script>
+
+<script src="./lib/db.js"></script>
+<script src="./lib/map.js"></script>
+<script src="./lib/map_point.js"></script>
+
+<!--
+  <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xx2c3bc6b282ed46c9805c99db13f56149"></script>
+-->
+<script src="https://unpkg.com/hangul-js" type="text/javascript"></script>
+
+
+<script>
+var btnBack = null;
+var btnSelectBluetooth = null;
+var btnSelectWifi = null;
+var btnHome = null;
+var btnSwitchStartPower = null;
+var btnSwitchIndependenceCondition = null;
+
+var btnSwitchStartBluetooth = null;
+var btnSwitchStartWifi = null;
+
+var btnSwitchStartPower = null;
+var btnSettings = null;
+var btnSearch = null;
+
+var searchBluetooth = null;
+var searchWifi = null;
+var bluetoothListItems = null;
+var wifiListItems = null;
+var chipChargingModeSelectedIndex = -1;
+
+var bluetoothSelectDialog = null;
+var wifiSelectDialog = null;
+
+var granted =[];
+var btnSearchWifi = null;
+
+$( document ).ready(function() {
+    window.getInfoCallBack = function (data) {
+        if (isWeb) {
+            window.info = {
+                "pathName": "tdev",
+                "appPackage": "com.locnall.KimGiSa",
+                "chargingMode": "1",
+                "startWifi": false,
+                "startStopOnOff": {
+                    "airplane_mode": {
+                        "start": {
+                            "onoff": "off",
+                            "use_yn": false
+                        },
+                        "stop": {
+                            "onoff": "on",
+                            "use_yn": false
+                        }
+                    },
+                    "bluetooth": {
+                        "start": {
+                            "onoff": "on",
+                            "use_yn": false
+                        },
+                        "stop": {
+                            "onoff": "off",
+                            "use_yn": false
+                        }
+                    },
+                    "completed_lock": {
+                        "start": {
+                            "onoff": "off",
+                            "use_yn": false
+                        },
+                        "stop": {
+                            "onoff": "on",
+                            "use_yn": true
+                        }
+                    },
+                    "home_screen": {
+                        "start": {
+                            "onoff": "on",
+                            "use_yn": false
+                        },
+                        "stop": {
+                            "onoff": "on",
+                            "use_yn": false
+                        }
+                    },
+                    "lock": {
+                        "start": {
+                            "onoff": "off",
+                            "use_yn": true
+                        },
+                        "stop": {
+                            "onoff": "off",
+                            "use_yn": true
+                        }
+                    },
+                    "play_music": {
+                        "start": {
+                            "onoff": "on",
+                            "use_yn": false
+                        },
+                        "stop": {
+                            "onoff": "off",
+                            "use_yn": false
+                        }
+                    },
+                    "power_off": {
+                        "start": {
+                            "onoff": "off",
+                            "use_yn": false
+                        },
+                        "stop": {
+                            "onoff": "on",
+                            "use_yn": false
+                        }
+                    },
+                    "screen_on": {
+                        "start": {
+                            "onoff": "on",
+                            "use_yn": true
+                        },
+                        "stop": {
+                            "onoff": "on",
+                            "use_yn": true
+                        }
+                    },
+                    "tethering": {
+                        "start": {
+                            "onoff": "on",
+                            "use_yn": false
+                        },
+                        "stop": {
+                            "onoff": "off",
+                            "use_yn": false
+                        }
+                    },
+                    "wifi": {
+                        "start": {
+                            "onoff": "on",
+                            "use_yn": false
+                        },
+                        "stop": {
+                            "onoff": "off",
+                            "use_yn": false
+                        }
+                    }
+                },
+                "naviDestination": "1",
+                "workOffTimeFrom": "17:30",
+                "versionName": "1.2.1.000",
+                "workGotoTimeTo": "08:50",
+                "permissions": {
+                    "LOCATION": true,
+                    "ACCESSIVILITY": true,
+                    "NOTIFICAION_ACCESS": true,
+                    "WRITE_SETTING": false,
+                    "BLUETOOTH": true,
+                    "IGNORE_BATTERY": true,
+                    "USAGESTATS": false,
+                    "OVERLAY": true
+                },
+                "startBluetooth": true,
+                "workGotoTimeFrom": "06:00",
+                "appPackageIcon": "data:image/webp;base64,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",
+                "naviRenaviPreventTime": 3,
+                "naviAutoStart": true,
+                "usingRegHome": false,
+                "poisFavorite": [],
+                "onlyStopAfterNaving": false,
+                "wifi": {},
+                "workGotoOffTime": false,
+                "test": false,
+                "startPower": false,
+                "naviGeofenceRadius": 200,
+                "independenceCondition": true,
+                "naviMode": "1",
+                "versionCode": 48,
+                "serverHost": "http://www.softm.net",
+                "naviOverlayWaitTime": 3,
+                "naviPopupMode": true,
+                "bluetooth": {
+                    "bondState": 12,
+                    "address": "2A:07:98:00:44:80",
+                    "diassembled": "AB Shutter3",
+                    "name": "AB Shutter3",
+                    "type": 2
+                },
+                "versions": {
+                    "min": 23,
+                    "compile": 33,
+                    "sdk": 31,
+                    "target": 34
+                },
+                "startMode": "1",
+                "stopMode": "1",
+                "workOffTimeTo": "19:00",
+                "applicationId": "net.softm.startnavi.poweron",
+                "notiIcon": true
+            }
+        } else {
+            window.info = (JSON.parse(data));
+        }
+        initPage(window.info);
+    }
+    fn_GetInfo("", "getInfoCallBack");
+    //W
+    // drawer.open = true;
+
+    footerNavigationIndex = footerNavigationUrl.indexOf(location.pathname.split("/")[2]);
+    // $(footerNavigation[0]).trigger("click");
+    footerNavigation[footerNavigationIndex].emit("click",footerNavigationIndex);
+    
+});
+
+function initPage(v) {
+    initLoad(v);
+}
+
+function initLoad(v){
+    $("body").removeClass("none");
+
+    // btnBack = new mdc.ripple.MDCRipple(document.querySelector("#btnBack"));
+    // btnBack.listen("click", function (event) {
+    //     windowClose(true);
+    // });
+
+    chipSetChargingMode = new mdc.chips.MDCChipSet(document.querySelector('#chip_charging_mode'));
+    chipSetChargingMode.listen("click", function (e) {
+        var seq = e.srcElement.offsetParent.id.replace(/[^0-9]/g, "");
+        var adapter = chipSetChargingMode.getDefaultFoundation().adapter;
+        var selectId = chipSetChargingMode.selectedChipIds[0];
+        var index = adapter.getIndexOfChipById(selectId);
+        if (index == -1) {
+            if (selectId) {
+                chipSetChargingMode.chips[seq - 1].selected = true;
+            } else { // error
+                chipSetChargingMode.chips[chipChargingModeSelectedIndex].selected = true;
+                index = chipChargingModeSelectedIndex;
+            }
+        } else {
+            chipChargingModeSelectedIndex = index;
+        }
+        if (index == 0) { // 모두
+            // document.querySelector('#mode_guide').innerHTML = t("message.mode_guide_1");
+            if (!e.onlySelect) {
+                fn_DeviceSaveData("_CHARGING_MODE", "1");
+                snackbar(t("message.save"));
+            }
+        } else if (index == 1) { // 무선
+            // document.querySelector('#mode_guide').innerHTML = t("message.mode_guide_2");
+            if (!e.onlySelect) {
+                fn_DeviceSaveData("_CHARGING_MODE", "2");
+                snackbar(t("message.save"));
+            }
+        } else if (index == 2) { // 무선
+            // document.querySelector('#mode_guide').innerHTML = t("message.mode_guide_2");
+            if (!e.onlySelect) {
+                fn_DeviceSaveData("_CHARGING_MODE", "3");
+                snackbar(t("message.save"));
+            }
+        }
+    });
+
+    var closeBluetoothList = new mdc.ripple.MDCRipple(document.querySelector("#close_bluetooth_list"));
+    closeBluetoothList.listen("click", function (event) {
+        bluetoothSelectDialog.close();
+    });
+
+    var closeWifiList = new mdc.ripple.MDCRipple(document.querySelector("#close_wifi_list"));
+    closeWifiList.listen("click", function (event) {
+        wifiSelectDialog.close();
+    });
+
+    var searchBluetoothClear = new mdc.ripple.MDCRipple(document.querySelector("#search_bluetooth_clear"));
+    searchBluetoothClear.listen("click", function (event) {
+        searchBluetoothClear.root.hide();
+        searchBluetooth.value = "";
+        drawBluetoothList("");
+    });
+    var searchWifiClear = new mdc.ripple.MDCRipple(document.querySelector("#search_wifi_clear"));
+    searchWifiClear.listen("click", function (event) {
+        searchWifiClear.root.hide();
+        searchWifi.value = "";
+        drawWifiList("");
+    });
+
+    function drawBluetoothList(v) {
+        showLoading(true);
+
+        $('.bluetooth_select .list .mdc-list').empty();
+        bluetoothListItems.filter(function (item) {
+            return !searchBluetooth.value || item.name.toLowerCase().includes(searchBluetooth.value.toLowerCase()) || item.diassembled.includes(v);
+        })
+        // .concat(
+        //     bluetoothListItems.filter(function (item) {
+        //      // return item.detail.category == 6;
+        //         return true;
+        //     })
+        // )
+        .forEach(function (item, index) {
+            var row = document.querySelector(".bluetooth_select .list .clone").cloneNode(true); //mdc-list-item fisrt node;
+            row.show();
+            row.className = row.className.replace("clone", "");
+            // row.children[2].innerText = item.name;
+            // row.children[1].innerText = item.icon;
+            row.setAttribute("tabIndex", index);
+            row.setAttribute("address", item.address);
+
+            $(row).find(".name").text(item.name);
+            $(row).find(".address").text(item.address);
+            row.setAttribute("data-mdc-dialog-action", item.address);
+            document.querySelector('.bluetooth_select .list .mdc-list').appendChild(row);
+        });
+
+        hideLoading(true);
+    }
+
+    function drawWifiList(v) {
+
+        showLoading(true);
+
+        $('.wifi_select .list .mdc-list').empty();
+        wifiListItems.filter(function (item) {
+            return !searchWifi.value || item.name.toLowerCase().includes(searchWifi.value.toLowerCase()) || item.diassembled.includes(v);
+        })
+        // .concat(
+        //     wifiListItems.filter(function (item) {
+        //      // return item.detail.category == 6;
+        //         return true;
+        //     })
+        // )
+        .forEach(function (item, index) {
+            var row = document.querySelector(".wifi_select .list .clone").cloneNode(true); //mdc-list-item fisrt node;
+            row.show();
+            row.className = row.className.replace("clone", "");
+            // row.children[2].innerText = item.name;
+            // row.children[1].innerText = item.icon;
+            row.setAttribute("tabIndex", index);
+            row.setAttribute("bssid", item.bssid);
+            $(row).find(".connected").css({"display":item.connected?"":"none",color:item.connected?"#00f":"grey"});
+            $(row).find(".icon").css("fill",item.connected?"#00f":"grey");
+            $(row).find(".ssid").text(item.ssid);
+            $(row).find(".bssid").text(item.bssid);
+            row.setAttribute("data-mdc-dialog-action", item.ssid);
+            document.querySelector('.wifi_select .list .mdc-list').appendChild(row);
+        });
+
+        hideLoading(true);
+
+        }
+
+    searchBluetooth = new mdc.textField.MDCTextField(document.querySelector('#searchBluetooth'));
+    searchBluetooth.listen("input", function (event) {
+        if (searchBluetooth.value) searchBluetoothClear.root.show("inline");
+        else searchBluetoothClear.root.hide();
+
+        var disassemble = Hangul.disassemble(searchBluetooth.value).join("");  // ㄺ=>ㄹㄱ
+        drawBluetoothList(disassemble);
+    });
+
+    searchWifi = new mdc.textField.MDCTextField(document.querySelector('#searchWifi'));
+    searchWifi.listen("input", function (event) {
+        if (searchWifi.value) searchWifiClear.root.show("inline");
+        else searchWifiClear.root.hide();
+
+        var disassemble = Hangul.disassemble(searchWifi.value).join("");  // ㄺ=>ㄹㄱ
+        drawWifiList(disassemble);
+    });
+
+    btnSelectBluetooth = new mdc.ripple.MDCRipple(document.querySelector("#btnSelectBluetooth"));
+    btnSelectBluetooth.listen("click", function (event) {
+        let eventListener = function (e) {
+            // alert("closed");
+            if (e.detail.action == "close") {
+
+            } else if (e.detail.action) {
+                var bt = bluetoothListItems.find(item=>item.address===e.detail.action);
+                fn_DeviceSaveData("_BLUETOOTH", bt);
+                $(".bluetooth_info").find(".bluetooth").text(bt.name);
+                $(".bluetooth_info").show();
+
+                $("#status_message").html(getStatusMessage());
+            }
+            console.info("closed action", e.detail.action);
+            bluetoothSelectDialog.unlisten("MDCDialog:closed", eventListener);
+
+            fn_DeviceSaveData("_OPEN_POPUP", false);
+        };
+        this.blur(); // force unfocus
+
+        window.getBluetoothsCallBack = function (data) {
+            hideLoading();
+            if ( bluetoothListItems === null ) {
+                if (isWeb) {
+                    bluetoothListItems = [{"bondState":12,"address":"D0:C6:37:72:E1:E1","name":"J2S132","type":3},{"bondState":12,"address":"00:0D:18:00:00:01","name":"OBDII","type":1},{"bondState":12,"address":"FC:58:FA:63:1C:A7","name":"MINISO D9","type":1},{"bondState":12,"address":"14:43:19:7E:01:85","name":"O-Air","type":3},{"bondState":12,"address":"70:CF:49:D6:D3:B3","name":"DESKTOP-ERK2C4K","type":1}];
+                } else {
+                    bluetoothListItems = JSON.parse(data);
+                }
+            }
+
+            // object 에 초성필드 추가 {name:"홍길동", diassembled:"ㅎㄱㄷ"}
+            bluetoothListItems.forEach(function (item) {
+                var dis = Hangul.disassemble(item.name, true);
+                var cho = dis.reduce(function (prev, elem) {
+                    elem = elem[0] ? elem[0] : elem;
+                    return prev + elem;
+                }, "");
+                item.diassembled = cho;
+            });
+            bluetoothListItems.sort((a, b) => a.name > b.name ? 1 : -1);
+            drawBluetoothList(Hangul.disassemble(searchBluetooth.value).join(""));
+
+            [].map.call(document.querySelectorAll(".bluetooth_select .list .mdc-list"), el => {
+                var rtnEl = new mdc.list.MDCList(el);
+                rtnEl.singleSelection = true;
+                rtnEl.listen("click", function (e) {
+                    var index = rtnEl.selectedIndex;
+                    // debugger;
+                });
+                return rtnEl;
+            });
+            hideLoading();
+
+        }
+
+        window.getSysInfo = function(data) {
+            var si = JSON.parse(data) || {sysInfoBluetoothEnable:true};
+            if ( si.sysInfoBluetoothEnable == "NA" ) {
+                snackbar(t("message.bluetooth_not_supported"));
+            } else {
+                if ( si.sysInfoBluetoothEnable) {
+                    showLoading();            
+                    fn_DeviceSaveData("_OPEN_POPUP", true);
+                    $('.bluetooth_select .list .mdc-list').empty();
+
+                    bluetoothSelectDialog.open();
+                    bluetoothSelectDialog.listen("MDCDialog:closed", eventListener);
+                    if (isWeb) {
+                        getBluetoothsCallBack();
+                    } else {
+                        // if ( appListItems === null ) fn_getInstallPackages("", "getBluetoothsCallBack");
+                        // fn_getInstallPackages("", "getBluetoothsCallBack");
+                        fn_getBluetooths("", "getBluetoothsCallBack");
+                    }
+
+                } else {
+                    material.confirm(
+                    t("message.confirm_enable_bluetooth"),
+                    function () {
+                        window.setSysInfo = function(data) {
+                            var si = JSON.parse(data);
+                            // if (si.sysInfoBluetoothEnable) {
+                                // debugger;
+                                setTimeout(function() {
+                                    fn_getSysInfo("_SYS_INFO_BLUETOOTH_ENABLE", "getSysInfo");
+                                },1000);
+                            // }
+                        }
+                        fn_setSysInfo("_SYS_INFO_BLUETOOTH_ENABLE",true,"setSysInfo");
+                    },
+                    function () {
+                    }
+                );
+                }
+            }
+        }
+
+        fn_getSysInfo("_SYS_INFO_BLUETOOTH_ENABLE", "getSysInfo");
+        
+
+    });
+
+    var btnSearchBluetooth = new mdc.ripple.MDCRipple(document.querySelector(".btnSearchBluetooth"));
+    btnSearchBluetooth.listen("click", function(event) {
+        showLoading();
+        fn_getBluetooths("", "getBluetoothsCallBack");
+    });
+
+    btnSelectWifi = new mdc.ripple.MDCRipple(document.querySelector("#btnSelectWifi"));
+    btnSelectWifi.listen("click", function (event) {
+        let eventListener = function (e) {
+            // alert("closed");
+            if (e.detail.action == "close") {
+
+            } else if (e.detail.action) {
+                var wifi = wifiListItems.find(item=>item.ssid===e.detail.action);
+                fn_DeviceSaveData("_WIFI", wifi);
+                $(".wifi_info").find(".wifi").text(wifi.ssid);
+                $(".wifi_info").show();
+
+                $("#status_message").html(getStatusMessage());
+            }
+            console.info("closed action", e.detail.action);
+            wifiSelectDialog.unlisten("MDCDialog:closed", eventListener);
+
+            fn_DeviceSaveData("_OPEN_POPUP", false);
+        };
+        this.blur(); // force unfocus
+
+        window.getWifisCallBack = function (data) {
+            if (isWeb) {
+                wifiListItems = [ { "connected": true, "bssid": "1c:ec:72:01:9f:86", "ssid": "SoftmWifi", "diassembled": "Main Street" }, { "connected": false, "bssid": "22:ec:72:01:9f:87", "ssid": "", "diassembled": "" }, { "connected": false, "bssid": "1c:ec:72:01:9f:87", "ssid": "Main Street 5G", "diassembled": "Main Street 5G" } ];
+            } else {
+                wifiListItems = JSON.parse(data);
+            }
+
+            // object 에 초성필드 추가 {name:"홍길동", diassembled:"ㅎㄱㄷ"}
+            wifiListItems.forEach(function (item) {
+                var dis = Hangul.disassemble(item.ssid, true);
+                var cho = dis.reduce(function (prev, elem) {
+                    elem = elem[0] ? elem[0] : elem;
+                    return prev + elem;
+                }, "");
+                item.diassembled = cho;
+            });
+            wifiListItems.sort((a, b) => b.connected || a.ssid > b.ssid ? 1 : -1);
+            drawWifiList(Hangul.disassemble(searchWifi.value).join(""));
+
+            [].map.call(document.querySelectorAll(".wifi_select .list .mdc-list"), el => {
+                var rtnEl = new mdc.list.MDCList(el);
+                rtnEl.singleSelection = true;
+                rtnEl.listen("click", function (e) {
+                    var index = rtnEl.selectedIndex;
+                    // debugger;
+                });
+                return rtnEl;
+            });
+            hideLoading();
+
+        }
+
+        showLoading();            
+        
+        fn_DeviceSaveData("_OPEN_POPUP", true);
+        $('.wifi_select .list .mdc-list').empty();
+
+        wifiSelectDialog.open();
+        wifiSelectDialog.listen("MDCDialog:closed", eventListener);
+
+        if (isWeb) {
+            getWifisCallBack();
+        } else {
+            // if ( appListItems === null ) fn_getInstallPackages("", "getBluetoothsCallBack");
+            // fn_getInstallPackages("", "getBluetoothsCallBack");
+            fn_getWifis("", "getWifisCallBack");
+        }
+
+    });
+
+    var btnSearchWifi = new mdc.ripple.MDCRipple(document.querySelector(".btnSearchWifi"));
+    btnSearchWifi.listen("click", function(event) {
+        fn_getWifis("", "getWifisCallBack");
+    });
+
+    bluetoothSelectDialog = new mdc.dialog.MDCDialog(document.querySelector(".bluetooth_select.mdc-dialog"));
+    var bluetoothList = new mdc.list.MDCList(document.querySelector('.bluetooth_select.mdc-dialog .list .mdc-list'));
+    bluetoothList.singleSelection = true;
+    // debugger;
+    bluetoothSelectDialog.listen("MDCDialog:opened", () => {
+        bluetoothList.layout();
+        console.info("opened");
+    });
+
+    $('.bluetooth_select .list .mdc-list').empty();
+    wifiSelectDialog = new mdc.dialog.MDCDialog(document.querySelector(".wifi_select.mdc-dialog"));
+    var wifiList = new mdc.list.MDCList(document.querySelector('.wifi_select.mdc-dialog .list .mdc-list'));
+    wifiList.singleSelection = true;
+    // debugger;
+    wifiSelectDialog.listen("MDCDialog:opened", () => {
+        wifiList.layout();
+        console.info("opened");
+    });
+
+    $('.wifi_select .list .mdc-list').empty();
+
+    btnSwitchIndependenceCondition = new mdc.switchControl.MDCSwitch(document.querySelector('.independence_condition.mdc-switch'));
+
+    btnSwitchStartPower = new mdc.switchControl.MDCSwitch(document.querySelector('.start_power.mdc-switch'));
+    btnSwitchStartBluetooth = new mdc.switchControl.MDCSwitch(document.querySelector('.start_bluetooth.mdc-switch'));
+    btnSwitchStartWifi = new mdc.switchControl.MDCSwitch(document.querySelector('.start_wifi.mdc-switch'));
+
+    btnSwitchIndependenceCondition.listen("mousedown", function (event) {
+        if (!btnSwitchIndependenceCondition.selected) { // true
+            material.confirm(
+                t("message.would_change"),
+                function () {
+                    fn_DeviceSaveData("_INDEPENDENCE_CONDITION", true,"fn_RunOptionOnCallback"); // 1 : 독립 조건, 0 : 복합 조건
+                    btnSwitchIndependenceCondition.selected = true;
+                    $("#status_message").html(getStatusMessage());
+                },
+                function () {
+                }
+            );
+        } else { // false
+            material.confirm(
+                t("message.would_change"),
+                function () {
+                    btnSwitchIndependenceCondition.selected = false;
+                    fn_DeviceSaveData("_INDEPENDENCE_CONDITION", false,"fn_RunOptionOffCallback"); // 1 : 독립 조건, 0 : 복합 조건
+                    $("#status_message").html(getStatusMessage());
+                },
+                function () {
+                }
+            );
+        }
+    });
+
+    btnSwitchStartPower.listen("mousedown", function (event) {
+        if (!btnSwitchStartPower.selected) { // true
+            material.confirm(
+                t("message.confirm_on"),
+                function () {
+                    fn_DeviceSaveData("_START_POWER", true,"fn_RunOptionOnCallback"); // 1 : 시작, 0 : 중지
+                    document.querySelector("#status").innerHTML = t("label.status_start");
+                    btnSwitchStartPower.selected = true;
+                },
+                function () {
+                }
+            );
+        } else { // false
+            material.confirm(
+                t("message.confirm_off"),
+                function () {
+                    fn_DeviceSaveData("_START_POWER", false, "fn_RunOptionOffCallback"); // 1 : 시작, 0 : 중지
+                    document.querySelector("#status").innerHTML = t("label.status_stop");
+                    btnSwitchStartPower.selected = false;
+                },
+                function () {
+                }
+            );
+        }
+    });
+
+    btnSwitchStartBluetooth.listen("mousedown", function (event) {
+        if ( !info.permissions.BLUETOOTH ) {
+            window.startSettingCallback = function(grant,ok) {
+                if ( ok === "not" ) {
+                    alert(t("message.must_enable_bluetooth"));
+                    btnSwitchStartBluetooth.selected = false;
+                } else {
+                    fn_Reload(true);
+                }
+                // windowReload();
+            }
+            
+            fn_StartSetting("bluetooth","startSettingCallback");
+            return;
+        }
+
+        if (!btnSwitchStartBluetooth.selected) { // true
+            material.confirm(
+                t("message.confirm_on"),
+                function () {
+                    // alert("startCallback");
+                    snackbar(t("toast.start"));
+                    fn_DeviceSaveData("_START_BLUETOOTH", true,"fn_RunOptionOnCallback"); // 1 : 시작, 0 : 중지
+                    document.querySelector("#status_bluetooth").innerHTML = t("label.status_bluetooth_start");
+                    $(btnSelectBluetooth.root).show()
+                    btnSwitchStartBluetooth.selected = true;
+
+                    if ( window.info.bluetooth && window.info.bluetooth.name ) {
+                        $(".bluetooth_info").show();
+                    }
+                },
+                function () {
+                }
+            );
+        } else { // false
+            material.confirm(
+                t("message.confirm_off"),
+                function () {
+                    // alert("startCallback");
+                    snackbar(t("toast.stop"));
+                    fn_DeviceSaveData("_START_BLUETOOTH", false,"fn_RunOptionOffCallback"); // 1 : 시작, 0 : 중지
+                    document.querySelector("#status_bluetooth").innerHTML = t("label.status_bluetooth_stop");
+                    $(btnSelectBluetooth.root).hide()
+                    $(".bluetooth_info").hide();
+                    btnSwitchStartBluetooth.selected = false;
+
+                    if ( window.info.bluetooth && window.info.bluetooth.name ) {
+                        $(".bluetooth_info").show();
+                    }
+
+                },
+                function () {
+                }
+            );
+        }
+    });
+
+    btnSwitchStartWifi.listen("mousedown", function (event) {
+        if (!btnSwitchStartWifi.selected) { // true
+            material.confirm(
+                t("message.confirm_on"),
+                function () {
+                    // alert("startCallback");
+                    snackbar(t("toast.start"));
+                    fn_DeviceSaveData("_START_WIFI", true,"fn_RunOptionOnCallback"); // 1 : 시작, 0 : 중지
+                    document.querySelector("#status_wifi").innerHTML = t("label.status_wifi_stop");
+                    $(btnSelectWifi.root).show()
+                    btnSwitchStartWifi.selected = true;
+
+                    if ( window.info.wifi && window.info.wifi.ssid ) {
+                        $(".wifi_info").show();
+                    }
+                },
+                function () {
+                }
+            );
+        } else { // false
+            material.confirm(
+                t("message.confirm_off"),
+                function () {
+                    // alert("startCallback");
+                    snackbar(t("toast.stop"));
+                    fn_DeviceSaveData("_START_WIFI", false,"fn_RunOptionOffCallback"); // 1 : 시작, 0 : 중지
+                    document.querySelector("#status_wifi").innerHTML = t("label.status_wifi_stop");
+                    $(btnSelectWifi.root).hide()
+                    $(".wifi_info").hide();
+                    btnSwitchStartWifi.selected = false;
+
+                    if ( window.info.wifi && window.info.wifi.ssid ) {
+                        $(".wifi_info").show();
+                    }
+
+                },
+                function () {
+                }
+            );
+        }
+
+    });
+
+    $("#work_goto_time_from").on("input", function () {
+        var v = this.value ? this.value : window.workGotoTimeFrom;
+        if (v > window.workGotoTimeTo) {
+            v = window.workGotoTimeFrom;
+        }
+        fn_DeviceSaveData("_WORK_GOTO_TIME_FROM", v); // 출근시작시간
+        window.workGotoTimeFrom = v;
+        this.value = v;
+    });
+    $("#work_goto_time_from").on("change", function () {
+        //		if (!this.value) this.blur();
+        console.info("change", this.value);
+    });
+
+    $("#work_goto_time_to").on("input", function () {
+        var v = this.value ? this.value : window.workGotoTimeTo;
+        if (v < window.workGotoTimeFrom) {
+            v = window.workGotoTimeTo;
+        }
+        fn_DeviceSaveData("_WORK_GOTO_TIME_TO", v); // 출근종료시간
+        window.workGotoTimeTo = v;
+        this.value = v;
+    });
+
+    $("#work_off_time_from").on("input", function () {
+        var v = this.value ? this.value : window.workOffTimeFrom;
+        if (v > window.workOffTimeTo) {
+            v = window.workOffTimeFrom;
+        }
+        fn_DeviceSaveData("_WORK_OFF_TIME_FROM", v); // 퇴근시작시간
+        window.workOffTimeFrom = v;
+        this.value = v;
+    });
+
+    $("#work_off_time_to").on("input", function () {
+        var v = this.value ? this.value : window.workOffTimeTo;
+        if (v < window.workOffTimeFrom) {
+            v = window.workOffTimeTo;
+        }
+        fn_DeviceSaveData("_WORK_OFF_TIME_TO", v); // 퇴근종료시간
+        window.workOffTimeTo = v;
+        this.value = v;
+    });
+
+    $(".version-name").text(v.versionName);
+    // $(".app_name").text(v.versionName);
+
+    console.info("window.info", v);
+    console.info("_START_POWER", v.startPower);
+    // v = v!="null"&&v?v:"1";
+    var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
+    event.onlySelect=true; // pass data custom 
+
+    // 충전시 실행
+    if (!v.startPower) { // stop
+        document.querySelector("#status").innerHTML = t("label.status_stop");
+        btnSwitchStartPower.selected = false;
+        // btnSwitchStartPower.foundation_.setChecked(false);
+    } else { // start
+        document.querySelector("#status").innerHTML = t("label.status_start");
+        btnSwitchStartPower.selected = true;
+        // btnSwitchStartPower.foundation_.setChecked(true);
+    }
+
+    if (!v.startBluetooth) { // stop
+        document.querySelector("#status_bluetooth").innerHTML = t("label.status_bluetooth_stop");
+        btnSwitchStartBluetooth.selected = false;
+    } else { // start
+        document.querySelector("#status_bluetooth").innerHTML = t("label.status_bluetooth_start");
+        btnSwitchStartBluetooth.selected = true;
+    }
+
+    if (!v.startWifi) { // stop
+        document.querySelector("#status_wifi").innerHTML = t("label.status_wifi_stop");
+        btnSwitchStartWifi.selected = false;
+    } else { // start
+        document.querySelector("#status_wifi").innerHTML = t("label.status_wifi_start");
+        btnSwitchStartWifi.selected = true;
+    }
+
+    if ( !v.startBluetooth ) {
+        $(btnSelectBluetooth.root).hide()
+        $(".bluetooth_info").hide();
+    }
+
+    if ( !v.startWifi ) {
+        $(btnSelectWifi.root).hide()
+        $(".wifi_info").hide();
+    }
+    if ( !v.bluetooth || !v.bluetooth.name ) {
+        $(".bluetooth_info").hide();
+    } else {
+        $(".bluetooth_info").find(".bluetooth").text(v.bluetooth.name);
+    }
+    
+    if ( !v.wifi || !v.wifi.ssid ) {
+        $(".wifi_info").hide();
+    } else {
+        $(".wifi_info").find(".wifi").text(v.wifi.ssid);
+    }
+
+    if (!v.independenceCondition) { // 독립 조건
+        btnSwitchIndependenceCondition.selected = false;
+    } else { // 복합 조건
+        btnSwitchIndependenceCondition.selected = true;
+    }
+
+    // 충전모드
+    var idx = parseInt(v.chargingMode, 10) - 1;
+    chipChargingModeSelectedIndex = idx;
+    var cb = $("#chip_charging_mode").find(".mdc-chip:eq(" + chipChargingModeSelectedIndex + ")")[0];
+    var cancelled = !cb.dispatchEvent(event);
+    cb.focus();
+
+    $("#status_message").html(getStatusMessage());
+}
+
+function bindPoiHome(v) {
+//	var tmaps = parsePoi(v);
+	var data = parsePoi(v);
+	var mapPoint = tmapToMapPoint(data&&v?data[0]:null);
+//	var mapPoint = objectToMapPoint(data&&v?data[0]:null);
+	if ( mapPoint && mapPoint.getName()) {
+//		maps.addHomeMarker(map,new MapPointForHome(mapPoint.getLat(),mapPoint.getLon(),mapPoint.getName()));
+		// maps.addHomeMarker(map,mapPoint);
+		// onChangeButton(true,false);
+		var infos = [
+			mapPoint.getName()
+//          item[0].frontLat,
+//          item[0].frontLon
+		];
+		// setGuideMessage("<B>\"" + infos.join(" ") + "\"</B>" + "으로 안내합니다.");
+        $("#address_home").text(infos.join(" "));
+	} else {
+		// onChangeButton(false,false);
+        $("#address_home").html(t("message.guide_not_home"));
+		// setGuideMessage(t("message.guide_not_home"));
+	}
+};
+
+window.fn_BackKeyPressedCallBack = function () {
+    // fn_DeviceSaveData("_OPEN_POPUP", false);
+    // wifiSelectDialog.close();
+    // window.fn_BackKeyPressedCallBack = null;
+    // material.alert("");
+    // self.close();
+    // debugger;
+    // windowClose();
+    if ( bluetoothSelectDialog.isOpen ) {
+        bluetoothSelectDialog.close();
+    } else if ( wifiSelectDialog.isOpen ) {
+        wifiSelectDialog.close();
+    } else {
+        btnBack.emit("click");
+    }
+}
+
+function bindPoiCompany(v) {
+//	var tmaps = parsePoi(v);
+	var data = parsePoi(v);
+	var mapPoint = tmapToMapPoint(data&&v?data[0]:null);
+//	var mapPoint = objectToMapPoint(data&&v?data[0]:null);
+	if ( mapPoint && mapPoint.getName()) {
+//		maps.addHomeMarker(map,new MapPointForHome(mapPoint.getLat(),mapPoint.getLon(),mapPoint.getName()));
+		// maps.addHomeMarker(map,mapPoint);
+		// onChangeButton(true,false);
+		var infos = [
+			mapPoint.getName()
+//          item[0].frontLat,
+//          item[0].frontLon
+		];
+		// setGuideMessage("<B>\"" + infos.join(" ") + "\"</B>" + "으로 안내합니다.");
+        $("#address_company").text(infos.join(" "));
+	} else {
+		// onChangeButton(false,false);
+        $("#address_company").html(t("message.guide_not_company"));
+		// setGuideMessage(t("message.guide_not_home"));
+	}
+};
+
+function fn_RunOptionOnCallback(ok) {
+    // alert("startCallback");
+    snackbar(t("toast.run_option_on"));
+    window.fn_StartServiceCallBack = function () {
+        window.getInfoOnlyCallBack = function (data) {
+            window.info = (JSON.parse(data));
+            $("#status_message").html(getStatusMessage());
+        }
+        fn_GetInfo("", "getInfoOnlyCallBack");
+    }
+    fn_StartService("fn_StartServiceCallBack");
+    
+}
+
+function fn_RunOptionOffCallback(ok) {
+    // alert("stopCallback");
+    snackbar(t("toast.run_option_off"));
+    window.fn_StopServiceCallBack = function () {
+        window.getInfoOnlyCallBack = function (data) {
+            window.info = (JSON.parse(data));
+            $("#status_message").html(getStatusMessage());
+        }
+        fn_GetInfo("", "getInfoOnlyCallBack");
+    }
+    fn_StopService("fn_StopServiceCallBack");
+}
+function getStatusMessage() {
+    var msg = "";
+    var sep = window.info.independenceCondition? "," :"+";
+    msg = window.info.startPower? t("label.charge") :"";
+    msg = window.info.startBluetooth? (msg?msg + sep:msg) + t("label.bluetooth"):msg;
+    msg = window.info.startWifi? (msg?msg + sep:msg) + t("label.wifi") :msg;
+    if ( msg ) {
+        msg = msg + " " + t("message.when_connected");
+    } else {
+        msg = t("message.not_exec");
+    }
+    return msg;
+}
+</script>
+</head>
+<body class="none">
+<div class="i18n drawer-frame-root">
+	<!--
+    !-->
+    <div class="mdc-drawer-app-content">
+        <header class="mdc-top-app-bar app-bar" id="app-bar">
+            <div class="mdc-top-app-bar__row">
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+<!--                     
+-->
+                    <button class="material-icons  mdc-top-app-bar__navigation-icon mdc-icon-button">menu</button>
+                    <button id="btnHome"
+                        class="none mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded">home</button> 
+                        <span class="mdc-top-app-bar__title" data-i18n="label.top_bar">티맵실행</span>
+                    </section>
+                    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+                        <button id="btnSearch" class="none mdc-icon-button material-icons mdc-top-app-bar__action-item--unbounded"
+                            aria-label="Print this page">search</button>  <!-- bookmark settings-->
+                    </section>
+            </div>
+        </header>
+<!--         
+-->
+        <main class="main-content" id="main-content">
+            <div class="mdc-top-app-bar--fixed-adjust">
+            </div>
+        </main>
+    </div>
+    <aside class="mdc-drawer mdc-drawer--modal">
+       
+        <div class="mdc-drawer__header app_info">
+            <img src="./images/logo_100.svg" width="50" style="margin-top: 10px;"/>
+            <!-- style="height:55px" -->
+            <h3 class="mdc-dramdc-drawer__contentwer__title" data-i18n="[html]label.app_name">티맵자동실행</h3>
+            <h6 class="mdc-drawer__subtitle" >Ver.<span class="version-name">00.00</span></h6>
+          </div>
+        <div class="mdc-drawer__content">
+            <a class="clone none mdc-deprecated-list-item mdc-deprecated-list-item--activated" href="#">
+                <span class="mdc-deprecated-list-item__ripple"></span>
+                <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home</i>
+                <span class="mdc-deprecated-list-item__text" data-i18n="label.home_page">Home</span>
+            </a>
+<!--- DRAWER_LIST_INFO -->
+            <div class="mdc-deprecated-list">
+                <a class="mdc-deprecated-list-item mdc-deprecated-list-item--activated" href="#" aria-current="page">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="label.home_page">Home</span>
+                </a>
+
+                <a class="none mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">settings</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_setting">설정</span>
+                </a>
+
+                <a class="none mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">toggle_on</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_start_stop">시작/종료</span>
+                </a>
+
+                <a class="mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">link</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="title.run_options">실행옵션</span>
+                </a>
+                <a class="mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home_work</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="title.home_company">집/회사</span>
+                </a>
+                <a class="mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">star</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="title.favorite">즐겨찾기</span>
+                </a>
+                <a class="mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">forum</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="title.contact_us">문의하기</span>
+                </a>
+
+                <a class="none mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">card_membership</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_membership">멤버쉽</span>
+                </a>
+
+                <a class="mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">thumb_up</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="label.rate_the_app">어플 평가하기</span>
+                </a>
+
+            </div>
+        </div>
+    </aside>
+    <div class="mdc-drawer-scrim"></div>
+    <div class="drawer-frame-app-content">
+
+        <div class="main drawer-main-content i18n margin_top_15">
+            <a name="move_point" id="move_point" />
+            <div class="margin_top_20">
+                <div class="row flex" style="border:0px solid red">
+                    <legend align="left" class="main title"><strong data-i18n="title.execution">실행</strong></legend>
+                    
+                    <span data-i18n="title.independence_condition" class="right flex-grow align-self-center basic_font_medium1">
+                        독립 조건
+                    </span>
+                    
+                    <button class="margin_left_5 independence_condition mdc-switch mdc-switch--unselected" type="button" role="switch" aria-checked="false">
+                        <div class="mdc-switch__track"></div>
+                        <div class="mdc-switch__handle-track"><div class="mdc-switch__handle"><div class="mdc-switch__shadow"><div class="mdc-elevation-overlay"></div></div><div class="mdc-switch__ripple"></div></div></div>
+                        <span class="mdc-switch__focus-ring-wrapper"><div class="mdc-switch__focus-ring"></div></span>
+                    </button>
+                </div>
+            </div>
+            <hr class="main"/>
+<!--상태-->
+                <div class="row sub flex left bold" style="height:40px">
+                    <label for="" class="title" style=""><strong data-i18n="label.status">동작</strong></label>
+                    <div class="flex-grow basic_font_medium2 align-self-center right" id="status_message">상태메시지</div>
+                </div>
+                <hr class="sub"/>
+<!-- 충전시실행 -->
+                <div class="row sub">
+                    <div class="flex">
+                    <label for="" class="title" style=""><strong data-i18n="label.run_on_charge">충전시</strong></label>
+                    <div id="chip_charging_mode" class="flex-grow right justify-content-right mdc-chip-set mdc-chip-set--choice">
+                        <div class="mdc-chip mdc-chip--selected mdc-ripple-upgraded" role="row" style="">
+                            <div class="mdc-chip__ripple"></div>
+                            <span role="gridcell">
+                            <span role="button" tabindex="1" class="mdc-chip__primary-action">
+                                <span class="mdc-chip__text" data-i18n="label.all_charging">모두</span>
+                            </span>
+                            </span>
+                        </div>
+                        <div class="mdc-chip mdc-chip--selected mdc-ripple-upgraded" role="row" style="">
+                            <div class="mdc-chip__ripple"></div>
+                            <span role="gridcell">
+                            <span role="button" tabindex="2" class="mdc-chip__primary-action">
+                                <span class="mdc-chip__text" data-i18n="label.wired_charging">유선</span>
+                            </span>
+                            </span>
+                        </div>
+                        <div class="mdc-chip" role="row" style="">
+                            <div class="mdc-chip__ripple"></div>
+                            <span role="gridcell">
+                            <span role="button" tabindex="3" class="mdc-chip__primary-action">
+                                <span class="mdc-chip__text" data-i18n="label.wireless_charging">무선</span>
+                            </span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <button class="start_power mdc-switch mdc-switch--unselected" type="button" role="switch" aria-checked="false">
+                        <div class="mdc-switch__track"></div>
+                        <div class="mdc-switch__handle-track"><div class="mdc-switch__handle"><div class="mdc-switch__shadow"><div class="mdc-elevation-overlay"></div></div><div class="mdc-switch__ripple"></div></div></div>
+                        <span class="mdc-switch__focus-ring-wrapper"><div class="mdc-switch__focus-ring"></div></span>
+                    </button>
+                </div>
+                <div class="row comment">
+                    <span id="status" style="opacity: 0.7;">충전시 티맵실행이 [<span id="spnState"><span style="color:var(--softm-stop);font-weight:bold">중지</span></span>]됨.</span>
+                </div>
+            </div>
+            <hr class="sub"/>
+<!-- 블루투스 연결시 실행 -->
+                <div class="margin_top_15 margin_bottom_15">
+                    <div class="row sub flex">
+                        <label for="" class="title left" style=""><strong data-i18n="label.run_on_bluetooth">블루투스 연결시</strong></label>
+                        <div class="flex-grow right">
+                            <button id="btnSelectBluetooth" type="button" class="mdc-button mdc-button--raised " data-mdc-dialog-action="close" style="height:25px;margin-top:0px !important;padding:0px !important;text-align:right !important">
+                                <div class="mdc-button__ripple"></div>
+                                <span class="mdc-button__label" data-i18n="label.select">선택</span>
+                            </button>
+                            
+                        </div>
+                        
+                        <button class="start_bluetooth mdc-switch mdc-switch--unselected margin_left_20" type="button" role="switch" aria-checked="false">
+                            <div class="mdc-switch__track"></div>
+                            <div class="mdc-switch__handle-track"><div class="mdc-switch__handle"><div class="mdc-switch__shadow"><div class="mdc-elevation-overlay"></div></div><div class="mdc-switch__ripple"></div></div></div>
+                            <span class="mdc-switch__focus-ring-wrapper"><div class="mdc-switch__focus-ring"></div></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row comment bluetooth_info">
+                    <span class=" basic_font_medium2 bold color_start">
+                        "<span class="bluetooth"></span>"
+                    </span>
+                    <span id="status_bluetooth" style="opacity: 0.7;">블루투스 연결시 [<span id="spnState"><span style="color:var(--softm-stop);font-weight:bold">중지</span></span>]됨.</span>
+                </div>
+                <hr class="sub"/>
+
+                        
+<!--블루투스.선택
+            <div class="row" style="margin-top:0px !important">
+                <div class="row bluetooth_info">
+                    <div style="margin:10px;display:flex">
+                        <div class="flex margin_left_10" style="flex-grow: 1;width:55%">
+                            
+                            <span class="bluetooth margin_left_10 middle" 
+                                style="width: calc(95%);
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                                display: inline;
+                                font-size:12pt;
+                                "
+                                title=""
+                            >-</span>
+                            <span class="package_namemargin_left_10 middle"></span>
+                        </div>
+                        <div style="padding-right:20px;flex-grow:1;text-align:right">
+                        <button id="btnSelectBluetooth" type="button" class="mdc-button mdc-button--raised " data-mdc-dialog-action="close" style="height:25px;margin-top:0px !important;padding:0px !important;text-align:right !important">
+                          <div class="mdc-button__ripple"></div>
+                          <span class="mdc-button__label" data-i18n="label.select">선택</span>
+                        </button>
+                        </div>
+                    </div>
+        
+                  <hr style="margin-left:4px;margin-right:15px"/>
+                </div>
+            </div>
+-->
+<!-- 와이파이연결시실행 -->
+                <div class="margin_top_15 margin_bottom_15">
+                <div class="row sub flex">
+                        <label for="" class="title flex-grow" style=""><strong data-i18n="label.run_on_wifi">와이파이 연결시</strong></label>
+                        <div>
+                            <button id="btnSelectWifi" type="button" class="mdc-button mdc-button--raised " data-mdc-dialog-action="close" style="height:25px;">
+                                <div class="mdc-button__ripple"></div>
+                                <span class="mdc-button__label" data-i18n="label.select">선택</span>
+                            </button>   
+                        </div>
+
+                        <button  class="start_wifi mdc-switch mdc-switch--unselected margin_left_20" type="button" role="switch" aria-checked="false">
+                            <div class="mdc-switch__track"></div>
+                            <div class="mdc-switch__handle-track"><div class="mdc-switch__handle"><div class="mdc-switch__shadow"><div class="mdc-elevation-overlay"></div></div><div class="mdc-switch__ripple"></div></div></div>
+                            <span class="mdc-switch__focus-ring-wrapper"><div class="mdc-switch__focus-ring"></div></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="row comment wifi_info">
+                    <span class="basic_font_medium2 bold color_start">
+                        "<span class="wifi"></span>"
+                    </span>
+                    <span id="status_wifi" style="opacity: 0.7;">와이파이 연결시 [<span id="spnState"><span style="color:var(--softm-stop);font-weight:bold">중지</span></span>]됨.</span>
+                </div>
+
+                <hr class="sub"/>
+
+<!--와이파이.선택
+            <div class="row" style="margin-top:0px !important">
+                <div class="row wifi_info">
+                    <div style="margin:10px;display:flex">
+                        <div class="flex margin_left_10" style="flex-grow: 1;width:55%">
+                            
+                            <span class="wifi margin_left_10 middle" 
+                                style="width: calc(95%);
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                                display: inline;
+                                font-size:12pt;
+                                "
+                                title=""
+                            >-</span>
+                            <span class="package_namemargin_left_10 middle"></span>
+                        </div>
+                        <div style="padding-right:20px;flex-grow:1;text-align:right">
+                        <button id="btnSelectWifi" type="button" class="mdc-button mdc-button--raised " data-mdc-dialog-action="close" style="height:25px;margin-top:0px !important;padding:0px !important;text-align:right !important">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label" data-i18n="label.select">선택</span>
+                        </button>
+                        </div>
+                    </div>
+
+                <hr style="margin-left:4px;margin-right:15px"/>
+                </div>
+            </div>
+-->
+            <!-- <div style="height: 56px;"></div> -->
+            
+            <div class="row" style="height:70px"></div>
+            <div class="mdc-snackbar">
+                <div class="mdc-snackbar__surface">
+                    <div class="mdc-snackbar__label" role="status" aria-live="polite">~~</div>
+                    <!--     <div class="mdc-snackbar__actions"><button_default type="button_default" class="mdc-button_default mdc-snackbar__action"><button_default
+                          class="mdc-icon-button_default mdc-snackbar__dismiss material-icons" title="Dismiss">close</button_default></div> -->
+                </div>
+            </div>
+    
+            <div class="basic mdc-dialog">
+                <div class="mdc-dialog__container">
+                    <div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" aria-labelledby="my-dialog-title"
+                        aria-describedby="my-dialog-content">
+                        <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+                        <h2 class="mdc-dialog__title" id="my-dialog-title">
+                            <!--
+                     -->Choose a Ringtone
+                            <!--
+                   -->
+                        </h2>
+                        <div class="mdc-dialog__content" id="my-dialog-content">
+                        </div>
+                        <footer class="mdc-dialog__actions">
+                            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+                                <div class="mdc-button__ripple"></div>
+                                <span class="mdc-button__label" data-i18n="label.cancel">Cancel</span>
+                            </button>
+                            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="accept"
+                                data-mdc-dialog-button-default>
+                                <div class="mdc-button__ripple"></div>
+                                <span class="mdc-button__label" data-i18n="label.ok">OK</span>
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+                <div class="mdc-dialog__scrim"></div>
+            </div>
+    
+        </div>
+
+<!-- 블루투스.선택.다이얼로그 -->
+        <div class="bluetooth_select mdc-dialog">
+            <div class="mdc-dialog__container">
+            <div class="mdc-dialog__surface"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="my-dialog-title"
+            aria-describedby="my-dialog-content">
+            <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+            <h2 class="mdc-dialog__title" id="my-dialog-title"><span data-i18n="label.bluetoothselect">블루투스 선택</span>
+                <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                style="position: fixed;right: 5%;" id="close_bluetooth_list">clear</i>
+            <div class="margin_top_20 left"><!--fieldset-->
+            <label id="searchBluetooth" class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon "
+                style="width:100%;">
+                <div class="mdc-text-field__ripple"></div>
+                <input class="mdc-text-field__input" type="text" aria-labelledby="my-label-id" aria-controls="my-helper-id"
+                aria-describedby="my-helper-id" style="ime-mode:active">
+                <span id="label" class="mdc-floating-label" data-i18n="label.search_placeholder_bluetoothselect">블루투스</span>
+                <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                style="right:80px;display:none" id="search_bluetooth_clear">clear</i>
+                <div class="mdc-line-ripple"></div>
+                <button class="btnSearchBluetooth mdc-button mdc-button--raised  material-icons " style="top:10px;"> <span
+                    class="mdc-button__ripple"></span>search</button>
+            </label>
+            </div>
+            </h2>
+            <div class="mdc-dialog__content" id="my-dialog-content" style="height: 100vh;">
+                <div class="list">
+                <li class="mdc-deprecated-list-item clone" tabindex="-1" data-mdc-dialog-action="none" style="display:none;padding-left:5px">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <!-- width="30" height="30"  -->
+                    <svg class="mdc-list-item__graphic"  xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#3498db" class="bi bi-bluetooth" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="m8.543 3.948 1.316 1.316L8.543 6.58V3.948Zm0 8.104 1.316-1.316L8.543 9.42v2.632Zm-1.41-4.043L4.275 5.133l.827-.827L7.377 6.58V1.128l4.137 4.136L8.787 8.01l2.745 2.745-4.136 4.137V9.42l-2.294 2.274-.827-.827L7.133 8.01ZM7.903 16c3.498 0 5.904-1.655 5.904-8.01 0-6.335-2.406-7.99-5.903-7.99C4.407 0 2 1.655 2 8.01 2 14.344 4.407 16 7.904 16Z"/> </svg>
+                    <!-- <span class="mdc-deprecated-list-item__text margin_left_5"></span> -->
+                    <div>
+                        <div class="mdc-deprecated-list-item__text margin_left_5 name">-</div>
+                        <div class="mdc-deprecated-list-item__text margin_left_5 address" style="font-size: 8pt;color:grey;    top: -4px;
+                        position: relative;
+                        height: 17px;">-</div>
+                    </div>
+                </li>
+                
+                <ul class="mdc-list mdc-deprecated-list">
+                    
+                </ul>
+                </div>
+            </div>
+            </div>
+            </div>
+            <div class="mdc-dialog__scrim"></div>
+        </div>
+
+<!-- 와이파이.선택.다이얼로그 -->
+        <div class="wifi_select mdc-dialog">
+            <div class="mdc-dialog__container">
+            <div class="mdc-dialog__surface"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="my-dialog-title"
+            aria-describedby="my-dialog-content">
+            <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+            <h2 class="mdc-dialog__title" id="my-dialog-title"><span data-i18n="label.wifiselect">와이파이 선택</span>
+                <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                style="position: fixed;right: 5%;" id="close_wifi_list">clear</i>
+            <div class="margin_top_20 left"><!--fieldset-->
+            <label id="searchWifi" class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon "
+                style="width:100%;">
+                <div class="mdc-text-field__ripple"></div>
+                <input class="mdc-text-field__input" type="text" aria-labelledby="my-label-id" aria-controls="my-helper-id"
+                aria-describedby="my-helper-id" style="ime-mode:active">
+                <span id="label" class="mdc-floating-label" data-i18n="label.search_placeholder_wifiselect">와이파이</span>
+                <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                style="right:80px;display:none" id="search_wifi_clear">clear</i>
+                <div class="mdc-line-ripple"></div>
+                <button class="btnSearchWifi mdc-button mdc-button--raised  material-icons " style="top:10px;"> <span
+                    class="mdc-button__ripple"></span>refresh</button>
+            </label>
+            </div>
+            </h2>
+            <div class="mdc-dialog__content" id="my-dialog-content" style="height: 100vh;">
+                <div class="list">
+                <li class="mdc-deprecated-list-item clone" tabindex="-1" data-mdc-dialog-action="none" style="display:none;padding-left:5px">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <!-- width="30" height="30"  -->
+                    <div>
+                        <div class="connected bold" style="font-size: 9pt;line-height: 3px;" data-i18n="label.wifi_connected">
+                            연결됨
+                        </div>
+                        <svg class="icon svg-icon" style="width: 30px; height: 30px;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M558.217341 861.441123C573.618346 845.725811 581.318733 826.708293 581.318733 804.387995 581.318733 782.067698 573.618346 763.050179 558.217341 747.334868 542.816336 731.619557 524.179167 723.762019 502.305276 723.762019 480.431385 723.762019 461.794216 731.619557 446.393211 747.334868 430.992206 763.050179 423.291819 782.067698 423.291819 804.387995 423.291819 826.708293 430.992206 845.725811 446.393211 861.441123 461.794216 877.156434 480.431385 885.013972 502.305276 885.013972 524.179167 885.013972 542.816336 877.156434 558.217341 861.441123ZM75.104593 348.782194C67.956984 357.039896 64.383234 367.103818 64.383234 378.974263 64.383234 390.844708 67.956984 400.90863 75.104593 409.166332 82.252202 417.424032 90.96322 421.552821 101.237907 421.552821 111.512595 421.552821 120.223613 417.424032 127.371222 409.166332 179.638112 348.781893 239.610118 302.978145 307.289039 271.753713 374.96796 240.529281 443.092585 224.917299 511.664958 224.917299 580.23733 224.917299 648.473635 240.529281 716.375919 271.753713 784.278203 302.978145 844.361888 348.781893 896.628778 409.166332 903.776387 417.424032 912.375725 421.552821 922.42705 421.552821 932.478375 421.552821 941.189393 417.424032 948.560365 409.166332 955.931336 400.90863 959.616766 390.844708 959.616766 378.974263 959.616766 367.103818 955.819656 357.039896 948.225321 348.782194 889.257549 280.140055 821.244603 228.0141 744.184446 192.402764 667.124287 156.791429 589.618566 138.986028 511.664958 138.986028 433.711348 138.986028 356.317308 156.791429 279.480512 192.402764 202.643717 228.0141 134.519092 280.140055 75.104593 348.782194ZM790.085266 482.711114C751.666869 438.325971 707.441703 404.521514 657.40844 381.29673 607.375179 358.071946 557.119308 346.459728 506.63932 346.459728 456.159332 346.459728 405.903462 358.071946 355.8702 381.29673 305.836937 404.521514 261.611771 438.325971 223.193374 482.711114 216.045765 490.968814 212.472014 501.032736 212.472014 512.903181 212.472014 524.773626 216.045765 534.837548 223.193374 543.09525 230.340983 551.352951 239.052 555.481739 249.326688 555.481739 259.601375 555.481739 268.312393 551.352951 275.460002 543.09525 306.730791 506.967807 342.803338 479.48556 383.678727 460.647678 424.554115 441.809798 465.540569 432.390999 506.63932 432.390999 547.738071 432.390999 588.724525 441.809798 629.599914 460.647678 670.475302 479.48556 706.547849 506.967807 737.818638 543.09525 744.966247 551.352951 753.677265 555.481739 763.951952 555.481739 774.22664 555.481739 782.937657 551.352951 790.085266 543.09525 797.232875 534.837548 800.806626 524.773626 800.806626 512.903181 800.806626 501.032736 797.232875 490.968814 790.085266 482.711114ZM658.74861 614.317565C637.752509 590.060569 613.629691 571.610045 586.379433 558.965439 559.129174 546.320835 531.655964 539.998627 503.958981 539.998627 476.261996 539.998627 448.788787 546.320835 421.538528 558.965439 394.288269 571.610045 370.165451 590.060569 349.16935 614.317565 341.575016 622.575265 337.777905 632.639188 337.777905 644.509633 337.777905 656.380079 341.463335 666.444001 348.834307 674.701701 356.205279 682.959402 364.916297 687.088191 374.967622 687.088191 385.018946 687.088191 393.841644 682.959402 401.435978 674.701701 429.579688 642.187003 463.75368 625.929899 503.958981 625.929899 544.16428 625.929899 578.338272 642.187003 606.481982 674.701701 613.629591 682.959402 622.340609 687.088191 632.615296 687.088191 642.889985 687.088191 651.601001 682.959402 658.74861 674.701701 665.896219 666.444001 669.46997 656.380079 669.46997 644.509633 669.46997 632.639188 665.896219 622.575265 658.74861 614.317565Z"  /></svg>
+                        <!-- <svg height="30px" width="30px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 424.264 424.264" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path style="fill:#2488FF;" d="M212.132,32.132C131.999,32.132,56.663,63.337,0,120l28.284,28.284 c49.107-49.107,114.399-76.152,183.848-76.152s134.74,27.045,183.848,76.152L424.264,120 C367.601,63.337,292.265,32.132,212.132,32.132z"></path> <path style="fill:#2488FF;" d="M56.568,176.568l28.284,28.284c33.998-33.998,79.2-52.721,127.279-52.721 s93.282,18.723,127.279,52.721l28.284-28.284c-41.553-41.553-96.799-64.437-155.563-64.437S98.121,135.016,56.568,176.568z"></path> <path style="fill:#2488FF;" d="M113.137,233.137l28.284,28.284c38.99-38.989,102.432-38.989,141.422,0l28.284-28.284 C256.541,178.551,167.723,178.551,113.137,233.137z"></path> <path style="fill:#2488FF;" d="M152.132,332.132c0,33.084,26.916,60,60,60v-120C179.048,272.132,152.132,299.048,152.132,332.132z"></path> <path style="fill:#005ECE;" d="M212.132,272.132v120c33.084,0,60-26.916,60-60S245.216,272.132,212.132,272.132z"></path> </g> </g></svg> -->
+                    </div>
+
+                    <!-- <svg class="mdc-list-item__graphic"  xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#3498db" class="bi bi-bluetooth" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="m8.543 3.948 1.316 1.316L8.543 6.58V3.948Zm0 8.104 1.316-1.316L8.543 9.42v2.632Zm-1.41-4.043L4.275 5.133l.827-.827L7.377 6.58V1.128l4.137 4.136L8.787 8.01l2.745 2.745-4.136 4.137V9.42l-2.294 2.274-.827-.827L7.133 8.01ZM7.903 16c3.498 0 5.904-1.655 5.904-8.01 0-6.335-2.406-7.99-5.903-7.99C4.407 0 2 1.655 2 8.01 2 14.344 4.407 16 7.904 16Z"/> </svg> -->
+                    <!-- <span class="mdc-deprecated-list-item__text margin_left_5"></span> -->
+                    <div>
+                        <div class="mdc-deprecated-list-item__text margin_left_5 ssid">-</div>
+                        <div class="mdc-deprecated-list-item__text margin_left_5 bssid" style="font-size: 8pt;color:grey;top: -4px;
+                        position: relative;
+                        height: 17px;">-</div>
+                    </div>
+                </li>
+                
+                <ul class="mdc-list mdc-deprecated-list">
+                </ul>
+                </div>
+            </div>
+            </div>
+            </div>
+            <div class="mdc-dialog__scrim"></div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="mdc-bottom-navigation">
+            <nav class="mdc-bottom-navigation__list">
+                <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">home</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_home">홈</span>
+                </span>
+
+                <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">settings</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_setting">설정</span>
+                </span>
+
+                <span
+                    class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">toggle_on</span>
+                    <!-- <span class="material-icons mdc-bottom-navigation__list-item__icon">directions_walk</span>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">directions_run</span> -->
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_start_stop">시작/종료</span>
+                </span>
+
+                <span style="display:none" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">card_membership</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_membership">멤버쉽</span>
+                </span>
+
+                <span style="display:none" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">forum</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.contact_us">문의하기</span>
+                </span>
+
+                <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">forum</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.run_options">실행옵션</span>
+                </span>
+
+                <!-- <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">lock</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_permission">권한</span>
+                </span> -->
+                
+            </nav>
+        </div>
+    </footer>
+  
+  
+
+</div>
+</body>
+
+
+</html>
