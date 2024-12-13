@@ -184,8 +184,8 @@ function initPage(v) {
       }
   }, false);
 
-  if ( checkMode  === "accessibility" &&  checkMode  === "accessibility_reset" && info?.permissions?.ACCESSIVILITY && info?.appUpdated ) {
-    alert("~~~~~~~~~~~~~~~~~~~~~~~")
+  if ( ( checkMode  === "accessibility" ||  checkMode  === "accessibility_reset" ) && info?.permissions?.ACCESSIVILITY && info?.appUpdated ) {
+    alert("~~~~~~~~~~~~~~~~~~~~~~~");
     fn_CheckPermission("accessibility","startSettingCallback");
   }
 }
