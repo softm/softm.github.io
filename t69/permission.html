@@ -185,6 +185,7 @@ function initPage(v) {
   }, false);
 
   if ( ( checkMode  === "accessibility" ||  checkMode  === "accessibility_reset" ) && info?.permissions?.ACCESSIVILITY && info?.appUpdated ) {
+    // 접근성 권한이 있으면서 이 페이지 접근한경우 권한체크해서 fn_GoMain : 메인 페이지로 이동
     fn_CheckPermission("accessibility","startSettingCallback");
   }
 }

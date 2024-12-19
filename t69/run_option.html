@@ -234,7 +234,8 @@ $( document ).ready(function() {
                 "stopMode": "1",
                 "workOffTimeTo": "19:00",
                 "applicationId": "net.softm.startnavi.poweron",
-                "notiIcon": true
+                "notiIcon": true, 
+                "excludeRunOnScreen": false, 
             }
         } else {
             window.info = (JSON.parse(data));
@@ -617,6 +618,8 @@ function initLoad(v){
     btnSwitchStartPower = new mdc.switchControl.MDCSwitch(document.querySelector('.start_power.mdc-switch'));
     btnSwitchStartBluetooth = new mdc.switchControl.MDCSwitch(document.querySelector('.start_bluetooth.mdc-switch'));
     btnSwitchStartWifi = new mdc.switchControl.MDCSwitch(document.querySelector('.start_wifi.mdc-switch'));
+    
+    btnSwitchExcludeRunOnScreen = new mdc.switchControl.MDCSwitch(document.querySelector('.exclude_run_on_screen.mdc-switch'));
 
     btnSwitchIndependenceCondition.listen("mousedown", function (event) {
         if (!btnSwitchIndependenceCondition.selected) { // true
@@ -644,14 +647,14 @@ function initLoad(v){
         }
     });
 
-    btnSwitchStartPower.listen("mousedown", function (event) {
-        if (!btnSwitchStartPower.selected) { // true
+    btnSwitchExcludeRunOnScreen.listen("mousedown", function (event) {
+        if (!btnSwitchExcludeRunOnScreen.selected) { // true
             material.confirm(
                 t("message.confirm_on"),
                 function () {
-                    fn_DeviceSaveData("_START_POWER", true,"fn_RunOptionOnCallback"); // 1 : 시작, 0 : 중지
-                    document.querySelector("#status").innerHTML = t("label.status_start");
-                    btnSwitchStartPower.selected = true;
+                    fn_DeviceSaveData("_EXCLUDE_RUN_ON_SCREEN", true,"fn_ExcludeRunOnScreenOnCallback"); // 1 : 시작, 0 : 중지
+                    document.querySelector("#statusExcludeRunOnScreen").innerHTML = t("label.status_exclude_run_on_screen_start");
+                    btnSwitchExcludeRunOnScreen.selected = true;
                 },
                 function () {
                 }
@@ -660,9 +663,10 @@ function initLoad(v){
             material.confirm(
                 t("message.confirm_off"),
                 function () {
-                    fn_DeviceSaveData("_START_POWER", false, "fn_RunOptionOffCallback"); // 1 : 시작, 0 : 중지
-                    document.querySelector("#status").innerHTML = t("label.status_stop");
-                    btnSwitchStartPower.selected = false;
+                    debugger;
+                    fn_DeviceSaveData("_EXCLUDE_RUN_ON_SCREEN", false, "fn_ExcludeRunOnScreenOnCallback"); // 1 : 시작, 0 : 중지
+                    document.querySelector("#statusExcludeRunOnScreen").innerHTML = t("label.status_exclude_run_on_screen_stop");
+                    btnSwitchExcludeRunOnScreen.selected = false;
                 },
                 function () {
                 }
@@ -871,6 +875,16 @@ function initLoad(v){
         $(".wifi_info").find(".wifi").text(v.wifi.ssid);
     }
 
+
+    if (!v.excludeRunOnScreen) { // stop
+        document.querySelector("#statusExcludeRunOnScreen").innerHTML = "<Strike>" + t("label.status_exclude_run_on_screen_stop") + "</Strike>";
+        btnSwitchIndependenceCondition.selected = false;
+    } else { // start
+        document.querySelector("#statusExcludeRunOnScreen").innerHTML = t("label.status_exclude_run_on_screen_start");
+        btnSwitchIndependenceCondition.selected = true;
+    }
+
+
     if (!v.independenceCondition) { // 독립 조건
         btnSwitchIndependenceCondition.selected = false;
     } else { // 복합 조건
@@ -976,6 +990,12 @@ function fn_RunOptionOffCallback(ok) {
     }
     fn_StopService("fn_StopServiceCallBack");
 }
+
+function fn_ExcludeRunOnScreenOnCallback(ok) {
+    // alert("stopCallback");
+    snackbar(t("message.save"));
+}
+
 function getStatusMessage() {
     var msg = "";
     var sep = window.info.independenceCondition? "," :"+";
@@ -1219,7 +1239,7 @@ function getStatusMessage() {
 -->
 <!-- 와이파이연결시실행 -->
                 <div class="margin_top_15 margin_bottom_15">
-                <div class="row sub flex">
+                     <div class="row sub flex">
                         <label for="" class="title flex-grow" style=""><strong data-i18n="label.run_on_wifi">와이파이 연결시</strong></label>
                         <div>
                             <button id="btnSelectWifi" type="button" class="mdc-button mdc-button--raised " data-mdc-dialog-action="close" style="height:25px;">
@@ -1244,6 +1264,28 @@ function getStatusMessage() {
 
                 <hr class="sub"/>
 
+<!-- 실행 제외 -->            
+                <div class="margin_top_20">
+                    <div class="row flex" style="border:0px solid red">
+                        <legend align="left" class="main title"><strong data-i18n="title.exclude_run">실행 제외</strong></legend>
+                    </div>
+                </div>
+                <hr class="main"/>
+<!-- 화면 켜진 상태 -->     
+                <div class="margin_top_15 margin_bottom_15">
+                    <div class="row sub flex">
+                       <label for="" class="title flex-grow" style=""><strong data-i18n="label.exclude_run_on_screen">화면 켜진 상태</strong></label>
+                       <button  class="exclude_run_on_screen mdc-switch mdc-switch--unselected margin_left_20" type="button" role="switch" aria-checked="false">
+                           <div class="mdc-switch__track"></div>
+                           <div class="mdc-switch__handle-track"><div class="mdc-switch__handle"><div class="mdc-switch__shadow"><div class="mdc-elevation-overlay"></div></div><div class="mdc-switch__ripple"></div></div></div>
+                           <span class="mdc-switch__focus-ring-wrapper"><div class="mdc-switch__focus-ring"></div></span>
+                       </button>
+                   </div>
+               </div>
+                <div class="row comment">
+                    <span id="statusExcludeRunOnScreen" style="opacity: 0.7;"><del>화면이 켜진 상태에서 실행 <span style="color:var(--softm-stop);font-weight:bold">안함</span> [<span style="color:var(--softm-stop);font-weight:bold">꺼짐</span>].</del></span>
+                </div>
+    
 <!--와이파이.선택
             <div class="row" style="margin-top:0px !important">
                 <div class="row wifi_info">
@@ -1275,6 +1317,8 @@ function getStatusMessage() {
             </div>
 -->
             <!-- <div style="height: 56px;"></div> -->
+            
+
             
             <div class="row" style="height:70px"></div>
             <div class="mdc-snackbar">

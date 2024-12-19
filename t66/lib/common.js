@@ -16,6 +16,8 @@ var messages  = {
             status_bluetooth_start:'Executed when connected to Bluetooth [<span id="spnState"><span style="color:var(--softm-start);font-weight:bold">started</span></span>]. ',
             status_wifi_stop:'Executed when connected to WIFI [<span id="spnState"><span style="color:var(--softm-stop);font-weight:bold">stopped</span></span>].',
             status_wifi_start:'Executed when connected to WIFI [<span id="spnState"><span style="color:var(--softm-start);font-weight:bold">started</span></span>]. ',
+            status_exclude_run_on_screen_start : 'Run on screen [<span id="spnState"><span style="color:var(--softm-stop);font-weight:bold">not</span></span>].',
+            status_exclude_run_on_screen_stop : '<strike>Run on screen [<span id="spnState"><span style="color:var(--softm-stop);font-weight:bold">not</span></span>].</strike>',
             noti_icon_status_on : '<span style="color:var(--softm-start);font-weight:bold">Show</span> top notification bar.',
             noti_icon_status_off : '<span style="color:var(--softm-stop);font-weight:bold">Hide</span> top notification bar.',
             test_status_on : '<span style="color:var(--softm-start);font-weight:bold">On</span> Test.',
@@ -73,6 +75,7 @@ var messages  = {
             run_on_charge: "Run on charge",
             run_on_bluetooth: "When connected to Bluetooth",
             run_on_wifi: "When connected to WIFI",
+            exclude_run_on_screen: "Screen on",
             notification_icon: "Notificaton Bar",
             improved_execution: "Improved execution",
             overlay_wait_time: "waiting time",
@@ -141,6 +144,7 @@ var messages  = {
           title: {
             main: "Basic Settings",
             execution: "Execution",
+            exclude_run: "Exclude Run Option",
             stop: "Stop",
             home_n_company: "Home/Company",
             setting: "Basic Setting",
@@ -323,6 +327,8 @@ var messages  = {
             status_bluetooth_start : '블루투스연결시 실행 [<span id="spnState"><span style="color:var(--softm-start);font-weight:bold">시작</span></span>]됨.',
             status_wifi_stop : '와이파이연결시 실행 [<span id="spnState"><span style="color:var(--softm-stop);font-weight:bold">중지</span></span>]됨.',
             status_wifi_start : '와이파이연결시 실행 [<span id="spnState"><span style="color:var(--softm-start);font-weight:bold">시작</span></span>]됨.',
+            status_exclude_run_on_screen_start : '<b>화면이 켜진 상태에서 실행 <span style="color:var(--softm-stop);font-weight:bold">안함</span> [<span style="color:var(--softm-start);font-weight:bold">켜짐</span>].</b>',
+            status_exclude_run_on_screen_stop : '<del>화면이 켜진 상태에서 실행 <span style="color:var(--softm-stop);font-weight:bold">안함</span> [<span style="color:var(--softm-stop);font-weight:bold">꺼짐</span>].</del>',
             noti_icon_status_on : '상단 알림바에 [<span style="color:var(--softm-start);font-weight:bold">표시</span>].',
             noti_icon_status_off : '상단 알림바에 [<span style="color:var(--softm-stop);font-weight:bold">숨김</span>].',
             test_status_on : '테스트 [<span style="color:var(--softm-start);font-weight:bold">켜짐</span>].',
@@ -380,6 +386,7 @@ var messages  = {
             run_on_charge: "충전시",
             run_on_bluetooth: "블루투스 연결시",
             run_on_wifi: "와이파이 연결시",
+            exclude_run_on_screen: "화면 켜진 상태",
             notification_icon: "알림바",
             improved_execution: "향상된 실행",
             overlay_wait_time: "대기시간",
@@ -448,6 +455,7 @@ var messages  = {
           title: {
             main: "기본",
             execution: "실행",
+            exclude_run: "실행 제외",
             stop: "종료",
             home_n_company: "집/회사",
             setting: "설정",
@@ -1277,4 +1285,12 @@ function reDrawDrawer() {
     $(".mdc-deprecated-list").i18n();
     // $(".mdc-drawer .clone").remove();
   }
+}
+
+Storage.prototype.setObject = function(key, value) {
+  this.setItem(key, JSON.stringify(value));
+}
+
+Storage.prototype.getObject = function(key) {
+  return JSON.parse(this.getItem(key));
 }
