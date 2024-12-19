@@ -810,9 +810,9 @@ function initLoad(v,cb){
         // && info.appUpdatedTime > (new Date()).getTime() ) {
         const diffInMillis = Math.abs((new Date()).getTime() - info.appUpdatedTime);
         const diffInDays = diffInMillis / (1000 * 60 * 60 * 24);
-        if (diffInDays <= 1 && !sessionStorage.getObject("appUpdated")) {
+        if (diffInDays <= 1 && !localStorage.getObject("appUpdated")) {
             notiDialog.open();
-            sessionStorage.setObject("appUpdated", true);
+            localStorage.setObject("appUpdated", true);
             // 1111
         }
     }
