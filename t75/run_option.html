@@ -875,15 +875,13 @@ function initLoad(v){
         $(".wifi_info").find(".wifi").text(v.wifi.ssid);
     }
 
-
     if (!v.excludeRunOnScreen) { // stop
         document.querySelector("#statusExcludeRunOnScreen").innerHTML = "<Strike>" + t("label.status_exclude_run_on_screen_stop") + "</Strike>";
-        btnSwitchIndependenceCondition.selected = false;
+        btnSwitchExcludeRunOnScreen.selected = false;
     } else { // start
         document.querySelector("#statusExcludeRunOnScreen").innerHTML = t("label.status_exclude_run_on_screen_start");
-        btnSwitchIndependenceCondition.selected = true;
+        btnSwitchExcludeRunOnScreen.selected = true;
     }
-
 
     if (!v.independenceCondition) { // 독립 조건
         btnSwitchIndependenceCondition.selected = false;
