@@ -144,6 +144,10 @@ function initPage(v) {
     btnGrantLocation.listen("click", function(event) {
           fn_StartSetting("location","startSettingCallback");
     });
+    const btnGrantBackgroundLocation = new mdc.ripple.MDCRipple(document.querySelector("#btnGrantBackgroundLocation"));
+    btnGrantBackgroundLocation.listen("click", function(event) {
+          fn_StartSetting("background_location","startSettingCallback");
+    });
     const btnGrantBluetooth = new mdc.ripple.MDCRipple(document.querySelector("#btnGrantBluetooth"));
     btnGrantBluetooth.listen("click", function(event) {
           fn_StartSetting("bluetooth","startSettingCallback");
@@ -187,6 +191,15 @@ function initPage(v) {
   if ( ( checkMode  === "accessibility" ||  checkMode  === "accessibility_reset" ) && info?.permissions?.ACCESSIVILITY && info?.appUpdated ) {
     // 접근성 권한이 있으면서 이 페이지 접근한경우 권한체크해서 fn_GoMain : 메인 페이지로 이동
     fn_CheckPermission("accessibility","startSettingCallback");
+  }
+
+  if ( checkMode  === "background_location" ) {
+    if ( info.versions?.androidID <= 10 ) {
+      $(".androidId.basic").show();
+    } else {
+    debugger
+      $(".androidId.11").show();
+    }
   }
 }
 
@@ -240,14 +253,14 @@ function startCheckGrant() {
     $(btnHome.root).show();
     $(".accessibility_basic").show();
     $(".accessibility_reset").hide();
-  } else if ( checkMode  === "accessibility" ) {
+  } else if ( checkMode === "accessibility" ) {
     initCheckGrant(["accessibility","ignore_battery"]);
     fn_CheckGrant("accessibility","checkGrantCallBack");
     fn_CheckGrant("ignore_battery","checkGrantCallBack");
     $(btnBack.root).show();
     $(".accessibility_basic").show();
     $(".accessibility_reset").hide();
-  } else if ( checkMode  === "accessibility_reset" ) {
+  } else if ( checkMode === "accessibility_reset" ) {
     initCheckGrant(["accessibility"]);
     fn_CheckGrant("accessibility","checkGrantCallBack");
     $(btnBack.root).show();
@@ -267,6 +280,12 @@ function startCheckGrant() {
       // }
       }
     }
+  } else if ( checkMode === "background_location" ) {
+    initCheckGrant(["background_location"]);
+    fn_CheckGrant("background_location","checkGrantCallBack");
+    $(btnHome.root).show();
+    // $(".accessibility_basic").show();
+    // $(".accessibility_reset").hide();
   }
   // checkGrant("gps");
 	// checkGrant("usagestats");
@@ -374,6 +393,15 @@ function checkGrantCallBack(grant,ok) {
 			if ( isTopGrant ) $("#permission_location").show();
 		}
 		go();
+	} else if (grant == "background_location") {
+		if( ok == "ok" ) {
+      if ( !granted.includes(grant) ) granted.push(grant);
+			$("#permission_background_location").hide();
+      completeGrant(grant);
+		} else {
+			if ( isTopGrant ) $("#permission_background_location").show();
+		}
+		go();
 	} else if (grant == "bluetooth") {
 		if( ok == "ok" ) {
       if ( !granted.includes(grant) ) granted.push(grant);
@@ -439,6 +467,13 @@ function startSettingCallback(grant,ok) {
         snackbar( t("toast.notgrant_gps") );
       }
     } else if (grant == "location") {
+      if (ok =="ok") {
+        fn_GoMain(true);
+        // fn_CheckGrant(grant,"checkGrantCallBack");
+      } else {
+        snackbar( t("toast.notgrant_location") );
+      }
+    } else if (grant == "background_location") {
       if (ok =="ok") {
         fn_GoMain(true);
         // fn_CheckGrant(grant,"checkGrantCallBack");
@@ -552,6 +587,35 @@ function startSettingCallback(grant,ok) {
         </div>
         <!-- todo 위치 서비스 활성화에대한 가이이드 작업 필요 -->
         <button id="btnGrantLocation" class="mdc-button mdc-button--raised margin_right_5" style="width:100%;font-size:16px">
+            <!-- <strong data-i18n="label.permission_location">위치 권한 허용</strong> -->
+            <strong data-i18n="label.permission_settings">권한 설정</strong>
+        </button>
+      </div>
+      <!-- 위치 정보 접근 허용 - 백그라운드 -->
+      <div class="row none" id="permission_background_location" style="margin-top: 20px !important;margin-bottom: 20px !important;">
+        <div>
+          <span style="font-size:20px"><h5  style="display:inline" data-i18n="[html]message.permission4">위치 정보 접근 허용</h5></span>
+        </div>
+        <div style="font-size:16px;margin-left:20px;margin-top:10px;margin-bottom:10px;margin-left:20px">
+          <div style="text-align:left;">
+            <span style=""><span data-i18n="[html]message.permission_grant_on_for_background_location_information_access">목적지 안내 실행시 <b>백그라운드</b>에서 <b>위치 데이터</b>를 활용합니다.</span></span>
+          </div>
+        </div>                  
+          <hr class="sub"/>
+        
+          <div style="font-size:16px;margin-left:10px;margin-top:10px;margin-bottom:10px;margin-left:20px">
+            <div style="text-align:left;">
+              <span style="">
+                <span data-i18n="[html]message.permission_grant_on_for_background_location_information_access_10 "><B>"[항상허용]"</B>을 선택하세요.</span>
+              </span>
+            </div>
+          </div>
+          <!-- <hr class="sub margin_top_10"/>  -->
+          <img class="android androidId basic none" src="images/grant_guide_background_location_10.gif" style="width:65%;margin-top:5px">
+          <img class="android androidId 11 none" src="images/grant_guide_background_location_11.gif" style="width:65%;margin-top:5px"  loop=infinite >
+          <!-- info.versions.androidId -->
+        <!-- todo 위치 서비스 활성화에대한 가이이드 작업 필요 -->
+        <button id="btnGrantBackgroundLocation" class="mdc-button mdc-button--raised margin_right_5" style="width:100%;font-size:16px">
             <!-- <strong data-i18n="label.permission_location">위치 권한 허용</strong> -->
             <strong data-i18n="label.permission_settings">권한 설정</strong>
         </button>

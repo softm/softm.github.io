@@ -124,14 +124,14 @@ $( document ).ready(function() {
 	  });
 
     $(fenceDistance.input).blur(function(event) {
-		var v = fenceDistance.input.value;
-		if ( !v ) {
-			fenceDistance.input.value = window.tmpFenceDistance;
-		}
-		  var event = new MouseEvent('keyup', {view: window,bubbles: true,cancelable: true});
-		  var cb =$("#fence_distance")[0];
-		  var cancelled = !cb.dispatchEvent(event);
-	});
+      var v = fenceDistance.input.value;
+      if ( !v ) {
+        fenceDistance.input.value = window.tmpFenceDistance;
+      }
+        var event = new MouseEvent('keyup', {view: window,bubbles: true,cancelable: true});
+        var cb =$("#fence_distance")[0];
+        var cancelled = !cb.dispatchEvent(event);
+	  });
 
     fenceDistance.listen("keydown", function(event) {
 		if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
@@ -156,11 +156,11 @@ console.info( v, (/^[0-9]+$/).test(""+v) );
 		}
     });
 
-    overlayWaitTime.listen("focus", function(event) {
+  overlayWaitTime.listen("focus", function(event) {
 		overlayWaitTime.input.select();
 	});
 
-    $(overlayWaitTime.input_).blur(function(event) {
+  $(overlayWaitTime.input_).blur(function(event) {
 		var v = overlayWaitTime.input.value;
 		if ( !v ) {
 			overlayWaitTime.input.value = window.tmpOverlayWaitTime;
@@ -170,14 +170,15 @@ console.info( v, (/^[0-9]+$/).test(""+v) );
 		  var cancelled = !cb.dispatchEvent(event);
 	});
 
-    overlayWaitTime.listen("keydown", function(event) {
+  overlayWaitTime.listen("keydown", function(event) {
 		if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
 			if ( overlayWaitTime.input.value ) {
 				window.tmpOverlayWaitTime = overlayWaitTime.input.value;
 			}
 		}
 	});
-    overlayWaitTime.listen("keyup", function(event) {
+  
+  overlayWaitTime.listen("keyup", function(event) {
 		if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
 			var v = overlayWaitTime.input.value;
 			var max = parseFloat(overlayWaitTime.input.max);
@@ -190,9 +191,9 @@ console.info( v, (/^[0-9]+$/).test(""+v) );
 			}
 			fn_DeviceSaveData("_NAVI_OVERLAY_WAIT_TIME", window.tmpOverlayWaitTime);
 		}
-    });
+  });
 
-    renaviPreventTime.listen("focus", function(event) {
+  renaviPreventTime.listen("focus", function(event) {
 		renaviPreventTime.input.select();
 	});
 

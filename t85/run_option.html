@@ -57,6 +57,7 @@ var btnSwitchIndependenceCondition = null;
 
 var btnSwitchStartBluetooth = null;
 var btnSwitchStartWifi = null;
+var btnSwitchExcludeRunOnScreen = null;
 
 var btnSwitchStartPower = null;
 var btnSettings = null;
@@ -73,6 +74,8 @@ var wifiSelectDialog = null;
 
 var granted =[];
 var btnSearchWifi = null;
+
+var excludeRunOnScreenTime = null;
 
 $( document ).ready(function() {
     window.getInfoCallBack = function (data) {
@@ -216,6 +219,7 @@ $( document ).ready(function() {
                 "versionCode": 48,
                 "serverHost": "http://www.softm.net",
                 "naviOverlayWaitTime": 3,
+                "excludeRunOnScreenTime": 15,
                 "naviPopupMode": true,
                 "bluetooth": {
                     "bondState": 12,
@@ -897,6 +901,54 @@ function initLoad(v){
     cb.focus();
 
     $("#status_message").html(getStatusMessage());
+    
+// 22222
+
+    excludeRunOnScreenTime = new mdc.textField.MDCTextField(document.querySelector('#exclude_run_on_screen_time'));
+
+    excludeRunOnScreenTime.listen("focus", function(event) {
+        excludeRunOnScreenTime.input.select();
+    });
+
+    excludeRunOnScreenTime.listen("focus", function(event) {
+        excludeRunOnScreenTime.input.select();
+    });
+
+    $(excludeRunOnScreenTime.input_).blur(function(event) {
+        var v = excludeRunOnScreenTime.input.value;
+        if ( !v ) {
+            excludeRunOnScreenTime.input.value = window.tmpExcludeRunOnScreenTime;
+        }
+        var event = new MouseEvent('keyup', {view: window,bubbles: true,cancelable: true});
+        var cb =$("#exclude_run_on_screen_time")[0];
+        var cancelled = !cb.dispatchEvent(event);
+    });
+
+    excludeRunOnScreenTime.listen("keydown", function(event) {
+        if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+            if ( excludeRunOnScreenTime.input.value ) {
+                window.tmpExcludeRunOnScreenTime = excludeRunOnScreenTime.input.value;
+            }
+        }
+    });
+
+    excludeRunOnScreenTime.listen("keyup", function(event) {
+        if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+            var v = excludeRunOnScreenTime.input.value;
+            var max = parseFloat(excludeRunOnScreenTime.input.max);
+            var min = parseFloat(excludeRunOnScreenTime.input.min);
+            if ( v > max || v < min ) v = "";
+            excludeRunOnScreenTime.input.value = 0;
+            excludeRunOnScreenTime.input.value = !v?"":parseFloat(v&&(/^[0-9]+$/).test(""+v)?v:window.tmpExcludeRunOnScreenTime);
+            if ( v ) {
+                window.tmpExcludeRunOnScreenTime = excludeRunOnScreenTime.input.value;
+            }
+            fn_DeviceSaveData("_EXCLUDE_RUN_ON_SCREEN_TIME", window.tmpExcludeRunOnScreenTime);
+        }
+    });
+
+    window.tmpExcludeRunOnScreenTime = parseInt(v.excludeRunOnScreenTime,10);
+    excludeRunOnScreenTime.input.value = window.tmpExcludeRunOnScreenTime;
 }
 
 function bindPoiHome(v) {
@@ -1273,6 +1325,31 @@ function getStatusMessage() {
                 <div class="margin_top_15 margin_bottom_15">
                     <div class="row sub flex">
                        <label for="" class="title flex-grow" style=""><strong data-i18n="label.exclude_run_on_screen">화면 켜진 상태</strong></label>
+                       
+                       <div class="flex flex-grow " style="justify-content: right;"><!--fieldset-->
+                        <label class="flex title right"><span
+                            class="mdc-chip__text basic_font_small3"><strong data-i18n="label.exclude_run_on_screen_time">체크시간</strong></span></label>
+                        <!-- <div class="right"> -->
+                          <!-- <div style="position: absolute;display: inline;margin-top: -15px;"> -->
+                          <label id="exclude_run_on_screen_time"
+                            class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon "
+                            style="width:50%;">
+                            <div class="mdc-text-field__ripple"></div>
+                            <input class="mdc-text-field__input" type="number" aria-labelledby="my-label-id" aria-controls="my-helper-id"
+                              aria-describedby="my-helper-id" value="10" style="padding: 10px 10px 10px 10px !important;" maxlength="2" min="0" max="999" pattern="[0-9]*">
+                            <!-- <span id="label" class="mdc-floating-label">대기시간</span> -->
+                            <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                              style="right:80px;display:none" id="search_clear">clear</i>
+                            <div class="mdc-line-ripple"></div>
+                            <!--                     <button class="btnSearch mdc-button mdc-button--raised  material-icons " style="top:10px;"> <span
+                                          class="mdc-button__ripple"></span>search</button> -->
+                            <div class="" style="top:5px;" data-i18n="label.sec">초</div>
+                  
+                          </label>
+                        <!-- </div> -->
+                      </div>                       
+
+
                        <button  class="exclude_run_on_screen mdc-switch mdc-switch--unselected margin_left_20" type="button" role="switch" aria-checked="false">
                            <div class="mdc-switch__track"></div>
                            <div class="mdc-switch__handle-track"><div class="mdc-switch__handle"><div class="mdc-switch__shadow"><div class="mdc-elevation-overlay"></div></div><div class="mdc-switch__ripple"></div></div></div>
@@ -1283,6 +1360,8 @@ function getStatusMessage() {
                 <div class="row comment">
                     <span id="statusExcludeRunOnScreen" style="opacity: 0.7;"><del>화면이 켜진 상태에서 실행 <span style="color:var(--softm-stop);font-weight:bold">안함</span> [<span style="color:var(--softm-stop);font-weight:bold">꺼짐</span>].</del></span>
                 </div>
+
+              <hr class="sub" />
     
 <!--와이파이.선택
             <div class="row" style="margin-top:0px !important">

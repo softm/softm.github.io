@@ -55,6 +55,12 @@ var btnSwitchNotiIcon = null;
 var btnSwitchTest = null;
 var btnSwitchEnhanced = null;
 
+var btnSwitchRunSpeed = null;
+var runSpeedLimitTime = null;
+var runSpeedLimit = null;
+var btnSwitchGeofence = null;
+var fenceDistance = null;
+
 var granted =[];
 
 $( document ).ready(function() {
@@ -112,6 +118,9 @@ $( document ).ready(function() {
                 pathName:location.pathname.split("/")[1],
                 versionCode:11,
                 versionName:"0.0.0.1",
+                "runSpeed":false,
+                "runSpeedLimitTime":5, //5분
+                "runSpeedLimit":5,
                 // + "http://www.softm.net/tdev"
             }
         } else {
@@ -251,8 +260,237 @@ function initLoad(v){
     //     debugger;
     // });
 
+    btnSwitchRunSpeed = new mdc.switchControl.MDCSwitch(document.querySelector('.run_speed.mdc-switch'));
+
+    btnSwitchRunSpeed.listen("mousedown", function (event) {
+        if (!btnSwitchRunSpeed.selected) { // true
+            material.confirm(
+                t("message.confirm_on"),
+                function () {
+                    window.fn_RunSpeedCallback = function (data) {
+                        snackbar(t("message.save"));
+                    }
+                    fn_DeviceSaveData("_RUN_SPEED", true,"fn_RunSpeedCallback"); // 1 : 시작, 0 : 중지
+                    var sMsg = t("label.status_run_speed_start",{runSpeedLimit:String(info.runSpeedLimit),runSpeedLimitTime:String(info.runSpeedLimitTime)});
+                    document.querySelector("#statusRunSpeed").innerHTML = sMsg;
+                    btnSwitchRunSpeed.selected = true;
+                },
+                function () {
+                }
+            );
+        } else { // false
+            material.confirm(
+                t("message.confirm_off"),
+                function () {
+                    window.fn_RunSpeedCallback = function (data) {
+                        snackbar(t("message.save"));
+                    }
+                    fn_DeviceSaveData("_RUN_SPEED", false, "fn_RunSpeedCallback"); // 1 : 시작, 0 : 중지
+                    var sMsg = t("label.status_run_speed_stop",{runSpeedLimit:String(info.runSpeedLimit),runSpeedLimitTime:String(info.runSpeedLimitTime)});
+                    document.querySelector("#statusRunSpeed").innerHTML = sMsg;
+                    btnSwitchRunSpeed.selected = false;
+                },
+                function () {
+                }
+            );
+        }
+    });
+
+    statusRunSpeedUpdate();
+
+    runSpeedLimitTime = new mdc.textField.MDCTextField(document.querySelector('#run_speed_limit_time'));
+
+    runSpeedLimitTime.listen("focus", function(event) {
+        runSpeedLimitTime.input.select();
+    });
+
+    runSpeedLimitTime.listen("focus", function(event) {
+        runSpeedLimitTime.input.select();
+    });
+
+    $(runSpeedLimitTime.input_).blur(function(event) {
+        var v = runSpeedLimitTime.input.value;
+        if ( !v ) {
+            runSpeedLimitTime.input.value = window.tmprunSpeedLimitTime;
+        }
+        var event = new MouseEvent('keyup', {view: window,bubbles: true,cancelable: true});
+        var cb =$("#run_speed_limit_time")[0];
+        var cancelled = !cb.dispatchEvent(event);
+    });
+
+    runSpeedLimitTime.listen("keydown", function(event) {
+        if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+            if ( runSpeedLimitTime.input.value ) {
+                window.tmprunSpeedLimitTime = runSpeedLimitTime.input.value;
+            }
+        }
+    });
+
+    runSpeedLimitTime.listen("keyup", function(event) {
+        if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+            var v = runSpeedLimitTime.input.value;
+            var max = parseFloat(runSpeedLimitTime.input.max);
+            var min = parseFloat(runSpeedLimitTime.input.min);
+            if ( v > max || v < min ) v = window.tmprunSpeedLimitTime;
+            runSpeedLimitTime.input.value = 0;
+            runSpeedLimitTime.input.value = !v?"":parseFloat(v&&(/^[0-9]+$/).test(""+v)?v:window.tmprunSpeedLimitTime);
+            if ( v ) {
+                window.tmprunSpeedLimitTime = runSpeedLimitTime.input.value;
+            }
+            fn_DeviceSaveData("_RUN_SPEED_LIMIT_TIME", window.tmprunSpeedLimitTime);
+            info.runSpeedLimitTime = window.tmprunSpeedLimitTime;
+            statusRunSpeedUpdate();
+        }
+    });
+
+    window.tmprunSpeedLimitTime = parseInt(v.runSpeedLimitTime,10);
+    runSpeedLimitTime.input.value = window.tmprunSpeedLimitTime;
+
+    runSpeedLimit = new mdc.textField.MDCTextField(document.querySelector('#run_speed_limit'));
+
+    runSpeedLimit.listen("focus", function(event) {
+        runSpeedLimit.input.select();
+    });
+
+    $(runSpeedLimit.input_).blur(function(event) {
+        var v = runSpeedLimit.input.value;
+        if ( !v ) {
+            runSpeedLimit.input.value = window.tmprunSpeedLimit;
+        }
+        var event = new MouseEvent('keyup', {view: window,bubbles: true,cancelable: true});
+        var cb =$("#run_speed_limit")[0];
+        var cancelled = !cb.dispatchEvent(event);
+    });
+
+    runSpeedLimit.listen("keydown", function(event) {
+        if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+            if ( runSpeedLimit.input.value ) {
+                window.tmprunSpeedLimit = runSpeedLimit.input.value;
+            }
+        }
+    });
+
+    runSpeedLimit.listen("keyup", function(event) {
+        if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+            var v = runSpeedLimit.input.value;
+            var max = parseFloat(runSpeedLimit.input.max);
+            var min = parseFloat(runSpeedLimit.input.min);
+            if ( v > max || v < min ) v = window.tmprunSpeedLimit;
+            runSpeedLimit.input.value = 0;
+            runSpeedLimit.input.value = !v?"":parseFloat(v&&(/^[0-9]+$/).test(""+v)?v:window.tmprunSpeedLimit);
+            if ( v ) {
+                window.tmprunSpeedLimit = runSpeedLimit.input.value;
+            }
+            fn_DeviceSaveData("_RUN_SPEED_LIMIT", window.tmprunSpeedLimit);
+            info.runSpeedLimit = window.tmprunSpeedLimit;
+            statusRunSpeedUpdate();
+        }
+    });
+
+    window.tmprunSpeedLimit = parseInt(v.runSpeedLimit,10);
+    runSpeedLimit.input.value = window.tmprunSpeedLimit;
+
+    fenceDistance = new mdc.textField.MDCTextField(document.querySelector('#fence_distance'));
+    fenceDistance.listen("focus", function(event) {
+		fenceDistance.input.select();
+	});
+
+    $(fenceDistance.input).blur(function(event) {
+      var v = fenceDistance.input.value;
+      if ( !v ) {
+        fenceDistance.input.value = window.tmpFenceDistance;
+      }
+        var event = new MouseEvent('keyup', {view: window,bubbles: true,cancelable: true});
+        var cb =$("#fence_distance")[0];
+        var cancelled = !cb.dispatchEvent(event);
+	  });
+
+    fenceDistance.listen("keydown", function(event) {
+		if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+			if ( fenceDistance.input.value ) {
+				window.tmpFenceDistance = fenceDistance.input.value;
+			}
+		}
+	});
+    fenceDistance.listen("keyup", function(event) {
+		if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+			var v = fenceDistance.input.value;
+			var max = parseFloat(fenceDistance.input.max);
+			var min = parseFloat(fenceDistance.input.min);
+			if ( v > max || v < min ) v = "";
+// console.info( v, (/^[0-9]+$/).test(""+v) );
+			fenceDistance.input.value = 0;
+			fenceDistance.input.value = !v?"":parseFloat(v&&(/^[0-9]+$/).test(""+v)?v:window.tmpFenceDistance);
+			if ( v ) {
+				window.tmpFenceDistance = fenceDistance.input.value;
+			}
+			fn_DeviceSaveData("_NAVI_GEOFENCE_RADIUS", window.tmpFenceDistance);
+		}
+    });
+
+    window.tmpFenceDistance = parseInt(v.naviGeofenceRadius,10);
+    fenceDistance.input.value = window.tmpFenceDistance;
+
+    btnSwitchGeofence = new mdc.switchControl.MDCSwitch(document.querySelector('.geofence.mdc-switch'));
+
+    btnSwitchGeofence.listen("mousedown", function (event) {
+        if (!btnSwitchGeofence.selected) { // true
+            material.confirm(
+                t("message.confirm_on"),
+                function () {
+                    window.fn_GeofenceCallback = function (data) {
+                        snackbar(t("message.save"));
+                    }
+                    fn_DeviceSaveData("_GEOFENCE", true,"fn_GeofenceCallback"); // 1 : 시작, 0 : 중지
+                    var sMsg = t("label.status_geofence_start",{radiusMeter:String(info.naviGeofenceRadius)});
+                    document.querySelector("#statusGeofence").innerHTML = sMsg;
+                    btnSwitchGeofence.selected = true;
+                },
+                function () {
+                }
+            );
+        } else { // false
+            material.confirm(
+                t("message.confirm_off"),
+                function () {
+                    window.fn_GeofenceCallback = function (data) {
+                        snackbar(t("message.save"));
+                    }
+                    fn_DeviceSaveData("_GEOFENCE", false, "fn_GeofenceCallback"); // 1 : 시작, 0 : 중지
+                    var sMsg = t("label.status_geofence_stop",{radiusMeter:String(info.naviGeofenceRadius)});
+                    document.querySelector("#statusGeofence").innerHTML = sMsg;
+                    btnSwitchGeofence.selected = false;
+                },
+                function () {
+                }
+            );
+        }
+    });
+    statusGeofence();
+}
+function statusRunSpeedUpdate() {
+    if (!info.runSpeed) { // stop
+        var sMsg = t("label.status_run_speed_stop",{runSpeedLimit:String(info.runSpeedLimit),runSpeedLimitTime:String(info.runSpeedLimitTime)});
+        document.querySelector("#statusRunSpeed").innerHTML = sMsg;
+        btnSwitchRunSpeed.selected = false;
+    } else { // start
+        var sMsg = t("label.status_run_speed_start",{runSpeedLimit:String(info.runSpeedLimit),runSpeedLimitTime:String(info.runSpeedLimitTime)});
+        document.querySelector("#statusRunSpeed").innerHTML = sMsg;
+        btnSwitchRunSpeed.selected = true;
+    }
 }
 
+function statusGeofence() {
+    if (!info.geofence) { // stop
+        var sMsg = t("label.status_geofence_stop",{radiusMeter:String(info.naviGeofenceRadius)});
+        document.querySelector("#statusGeofence").innerHTML = sMsg;
+        btnSwitchGeofence.selected = false;
+    } else { // start
+        var sMsg = t("label.status_geofence_start",{radiusMeter:String(info.naviGeofenceRadius)});
+        document.querySelector("#statusGeofence").innerHTML = sMsg;
+        btnSwitchGeofence.selected = true;
+    }
+}
 function changeNotiIconSettingCallback(grant, ok) {
     // if (grant == "notification_setting") {
     // debugger;
@@ -396,7 +634,7 @@ window.fn_BackKeyPressedCallBack = function () {
             </div>
             <hr class="sub"/>
 
-            <!--알림바-->
+            <!--Test-->
             <div class="row sub">
                 <div class="flex"><!--fieldset-->
                 <label for="" class="title" style=""><strong
@@ -434,6 +672,103 @@ window.fn_BackKeyPressedCallBack = function () {
                 </div>
             </div>
             <hr class="sub"/>
+
+            <!--Test-->
+
+            <!-- 출발후 속도 -->     
+            <div class="margin_top_15 margin_bottom_15">
+                <div class="row sub flex">
+                <label for="" class="title flex-grow" style="width: 50px;"><strong data-i18n="label.run_speed_conditions">실행 속력 조건</strong></label>
+                <!-- exclude_run_on_screen_time -->
+                <div class="flex flex-grow " style="justify-content: right;"><!--fieldset-->
+                    <label class="flex title right"><span 
+                        class="mdc-chip__text basic_font_small3"><strong data-i18n="label.run_speed_limit_time">제한시간</strong></span></label>
+                    <!-- <div class="right"> -->
+                    <!-- <div style="position: absolute;display: inline;margin-top: -15px;"> -->
+                    <label id="run_speed_limit_time"
+                        class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon padding_left_5"
+                        style="width:30%;">
+                        <div class="mdc-text-field__ripple"></div>
+                        <input class="mdc-text-field__input basic_font_small3" type="number" aria-labelledby="my-label-id" aria-controls="my-helper-id"
+                        aria-describedby="my-helper-id" value="10" style="padding:5px 0px 5px 5px !important;" maxlength="3" min="0" max="999" pattern="[0-9]*">
+                        <!-- <span id="label" class="mdc-floating-label">대기시간</span> -->
+                        <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                        style="right:80px;display:none" id="search_clear">clear</i>
+                        <div class="mdc-line-ripple"></div>
+                        <!--                     <button class="btnSearch mdc-button mdc-button--raised  material-icons " style="top:10px;"> <span
+                                    class="mdc-button__ripple"></span>search</button> -->
+                        <div class="basic_font_small1" style="top:5px;" data-i18n="label.min">분</div>
+                        <span class="margin_left_2 margin_right_2">/</span>
+                    </label>
+                    <label class="flex title right"><span
+                        class="mdc-chip__text basic_font_small3"><strong data-i18n="label.run_speed_limit">속력</strong></span></label>
+                    <!-- <div class="right"> -->
+                    <!-- <div style="position: absolute;display: inline;margin-top: -15px;"> -->
+                    <label id="run_speed_limit"
+                        class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon padding_left_5"
+                        style="width:30%;">
+                        <div class="mdc-text-field__ripple"></div>
+                        <input class="mdc-text-field__input basic_font_small3" type="number" aria-labelledby="my-label-id" aria-controls="my-helper-id"
+                        aria-describedby="my-helper-id" value="10" style="padding: 5px 0px 5px 5px !important;" maxlength="3" min="0" max="999" pattern="[0-9]*">
+                        <!-- <span id="label" class="mdc-floating-label">대기시간</span> -->
+                        <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                        style="right:80px;display:none" id="search_clear">clear</i>
+                        <div class="mdc-line-ripple"></div>
+                        <!--                     <button class="btnSearch mdc-button mdc-button--raised  material-icons " style="top:10px;"> <span
+                                    1class="mdc-button__ripple"></span>search</button> -->
+                        <div class="basic_font_small1" style="top:5px;" data-i18n="label.km_per_hour">km/h</div>
+            
+                    </label>
+                    <!-- </div> -->
+                </div>                       
+
+
+                <button  class="run_speed mdc-switch mdc-switch--unselected margin_left_20" type="button" role="switch" aria-checked="false">
+                    <div class="mdc-switch__track"></div>
+                    <div class="mdc-switch__handle-track"><div class="mdc-switch__handle"><div class="mdc-switch__shadow"><div class="mdc-elevation-overlay"></div></div><div class="mdc-switch__ripple"></div></div></div>
+                    <span class="mdc-switch__focus-ring-wrapper"><div class="mdc-switch__focus-ring"></div></span>
+                </button>
+            </div>
+            </div>
+            <div class="row comment">
+                <span id="statusRunSpeed" style="opacity: 0.7;">
+                    <del><span style="color:var(--softm-start);font-weight:bold">200</span>m 이내에 진입하면 <span style="color:var(--softm-start);font-weight:bold">동작</span>합니다. [<span style="color:var(--softm-start);font-weight:bold">꺼짐</span>].</del>
+            </div>
+            <hr class="sub"/>
+            
+            <div class="row sub">
+                <div class="flex"><!--fieldset-->
+                  <label class="title"><span
+                      class="mdc-chip__text"><strong data-i18n="label.navi_popupx">목적지 진입 반경</strong></span></label>
+                  <div class="flex-grow right">
+                    <label id="fence_distance" class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon "
+                      style="width:40%">
+                      <div class="mdc-text-field__ripple"></div>
+                      <input class="mdc-text-field__input" type="number" aria-labelledby="my-label-id" aria-controls="my-helper-id"
+                        aria-describedby="my-helper-id" value="200" style="padding: 10px 10px 10px 10px !important" maxlength="3"
+                        min="1" max="10000">
+                      <!-- <span id="label" class="mdc-floating-label">대기시간</span> -->
+                      <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                        style="right:80px;display:none" id="search_clear">clear</i>
+                      <div class="mdc-line-ripple"></div>
+                      <!--                     <button class="btnSearch mdc-button mdc-button--raised  material-icons " style="top:10px;"> <span
+                                    class="mdc-button__ripple"></span>search</button> -->
+                      <div class="" style="top:25px;">m</div>
+            
+                    </label>
+                  </div>
+
+                  <button  class="geofence mdc-switch mdc-switch--unselected margin_left_20" type="button" role="switch" aria-checked="false">
+                      <div class="mdc-switch__track"></div>
+                      <div class="mdc-switch__handle-track"><div class="mdc-switch__handle"><div class="mdc-switch__shadow"><div class="mdc-elevation-overlay"></div></div><div class="mdc-switch__ripple"></div></div></div>
+                      <span class="mdc-switch__focus-ring-wrapper"><div class="mdc-switch__focus-ring"></div></span>
+                  </button>
+              </div>
+            </div>
+            
+            <div class="row comment">
+                <span id="statusGeofence" style="opacity: 0.7;"><del><span style="color:var(--softm-start);font-weight:bold">120</span>초 이내에 <span style="color:var(--softm-start);font-weight:bold">5</span>km/h에 도달하면 <span style="color:var(--softm-start);font-weight:bold">실행</span>합니다. [<span style="color:var(--softm-stop);font-weight:bold">꺼짐</span>].</del></span>
+            </div>
             <div class="row" style="height:70px"></div>
             <div class="mdc-snackbar">
                 <div class="mdc-snackbar__surface">
