@@ -22,6 +22,11 @@ var messages  = {
             status_run_speed_stop : '<del><span style="color:var(--softm-start);font-weight:bold">Run</span> when reaching <span style="color:var(--softm-start);font-weight:bold">{runSpeedLimit}</span>km/h within <span style="color:var(--softm-start);font-weight:bold">{runSpeedLimitTime}</span> minutes. [<span style="color:var(--softm-stop);font-weight:bold">Off</span>].</del>',
             status_geofence_start : '<b><span style="color:var(--softm-start);font-weight:bold">When entering within {radiusMeter}</span>, <span style="color:var(--softm-start);font-weight:bold">It will operate</span>. [<span style="color:var(--softm-start);font-weight:bold">On</span>].</b>',
             status_geofence_stop : '<del><span style="color:var(--softm-start);font-weight:bold">When entering within {radiusMeter}</span>, <span style="color:var(--softm-start);font-weight:bold">It will operate</span>. [<span style="color:var(--softm-start);font-weight:bold">Off</span>].</del>',
+            status_run_status_on_screen_start : '<b>Run with the screen on <span style="color:var(--softm-start);font-weight:bold">on</span> [<span style="color:var(--softm-start);font-weight:bold">on</span>].</b>',
+            status_run_status_on_screen_stop : '<del>Run with the screen on <span style="color:var(--softm-start);font-weight:bold">on</span> [<span style="color:var(--softm-stop);font-weight:bold">off</span>].</del>',
+            status_run_status_off_screen_start : '<b>Run with the screen off <span style="color:var(--softm-start);font-weight:bold">on</span> [<span style="color:var(--softm-start);font-weight:bold">on</span>].</b>',
+            status_run_status_off_screen_stop : '<del>Run with screen off <span style="color:var(--softm-start);font-weight:bold">on</span> [<span style="color:var(--softm-stop);font-weight:bold">off</span>].</del>',
+
             noti_icon_status_on : '<span style="color:var(--softm-start);font-weight:bold">Show</span> top notification bar.',
             noti_icon_status_off : '<span style="color:var(--softm-stop);font-weight:bold">Hide</span> top notification bar.',
             test_status_on : '<span style="color:var(--softm-start);font-weight:bold">On</span> Test.',
@@ -81,6 +86,24 @@ var messages  = {
             run_on_wifi: "When connected to WIFI",
             exclude_run_on_screen: "Screen on",
             exclude_run_on_screen_time: "Check Time",
+
+            status_setting:"Status setting",
+            run_status_screen_start:"Start",
+            run_status_screen_stop:"Stop",
+            
+            run_status_on_screen_stopped:"Only run when the screen is <b style='color:var(--softm-start)'>on</b>. [<span style='color:var(--softm-stop);font-weight:bold'>off</span>]",
+            run_status_on_screen:"Only run when the screen is <b style='color:var(--softm-start)'>on</b>.",
+            run_status_off_screen_stopped:"Only run when the screen is <b style='color:var(--softm-stop)'>off</b>. [<span style='color:var(--softm-stop);font-weight:bold'>off</span>]",
+            run_status_off_screen:"Only run when the screen is <b style='color:var(--softm-stop)'>off</b>.",
+            run_status_lock_screen:"Run only when the screen is <b style='color:var(--softm-stop)'>locked</b>.",
+
+            run_status_screen_time_for_start:"Check",
+            run_status_screen_time_for_stop:"Check",
+            screen_mode_none:"Not",
+            screen_mode_on:"On",
+            screen_mode_off:"Off",
+            screen_mode_lock:"Lock",
+
             run_speed_conditions:"Speed",
             run_speed_limit_time:"limit time",
             run_speed_limit:"Speed",
@@ -153,7 +176,8 @@ var messages  = {
             all_app:"All"
           },
           title: {
-            main: "Basic Settings",
+            main: "Basic",
+            run_status_screen:"Screen",
             execution: "Execution",
             exclude_run: "Exclude Run Option",
             stop: "Stop",
@@ -233,6 +257,8 @@ var messages  = {
             permission4:'<span style="color:var(--softm-start);font-weight:bold">Allow "Location Information Access"</span>',
             permission5: 'Set <span style="color:var(--softm-start);font-weight:bold">"Accessibility" permission</span>',
             permission5_1 : '<span style="font-weight:bold">"Scope of use of “AccessibilityService API”</span>',
+            permission_post_notifications : '<span style="font-weight:bold">Notification runtime permission</span>',
+
             permission5_2_1 : 'Bluetooth On/Off',
             permission5_2_2 : 'WIFI On/Off',
             permission5_2_3 : 'Tethering On/Off',
@@ -254,6 +280,9 @@ var messages  = {
             permission_grant_on_for_location_information_access : '"<B>Navi Auto Start</B>" collects location data even when the app is closed or not in use, and provides a function to prevent duplicate execution when running Navigation.',
             permission_grant_on_for_background_location_information_access : 'When running destination guidance, <b>use <b>location data</b> in the <b>background</b>.',
             permission_grant_on_for_background_location_information_access_10 : '<B>Select [Always Allow]"</B>.',
+            permission_grant_on_for_post_notifications : '<b>Enable</b> the <b>top notification bar</b>. You can use the <Br/>function conveniently.',
+            permission_grant_on_for_post_notifications2 : '<B>Select "[Allow]"</B>.',
+
             permission_grant_on_for_accessibility : 'It is used to turn the function On/Off when running the app.<br/>It is used to terminate the function after running the app.',
             permission_grant_on_for_accessibility2 : 'When you get to your smartphone\'s accessibility menu, select "<B>Installed Apps</B>".',
             permission_grant_on_for_accessibility3 : 'Select "<B>Navi Auto Start</B>" from the list of installed apps".',
@@ -346,6 +375,11 @@ var messages  = {
             status_run_speed_stop : '<del><span style="color:var(--softm-start);font-weight:bold">{runSpeedLimitTime}</span>분 이내에 <span style="color:var(--softm-start);font-weight:bold">{runSpeedLimit}</span>km/h에 도달하면 <span style="color:var(--softm-start);font-weight:bold">실행</span>합니다. [<span style="color:var(--softm-stop);font-weight:bold">꺼짐</span>].</del>',
             status_geofence_start : '<b><span style="color:var(--softm-start);font-weight:bold">{radiusMeter}</span>m 이내에 진입하면 <span style="color:var(--softm-start);font-weight:bold">동작</span>합니다. [<span style="color:var(--softm-start);font-weight:bold">켜짐</span>].</b>',
             status_geofence_stop : '<del><span style="color:var(--softm-start);font-weight:bold">{radiusMeter}</span>m 이내에 진입하면 <span style="color:var(--softm-start);font-weight:bold">동작</span>합니다. [<span style="color:var(--softm-start);font-weight:bold">꺼짐</span>].</del>',
+            
+            status_run_status_on_screen_start : '<b>화면이 켜진 상태에서 실행 <span style="color:var(--softm-start);font-weight:bold">함</span> [<span style="color:var(--softm-start);font-weight:bold">켜짐</span>].</b>',
+            status_run_status_on_screen_stop : '<del>화면이 켜진 상태에서 실행 <span style="color:var(--softm-start);font-weight:bold">함</span> [<span style="color:var(--softm-stop);font-weight:bold">꺼짐</span>].</del>',
+            status_run_status_off_screen_start : '<b>화면이 꺼진 상태에서 실행 <span style="color:var(--softm-start);font-weight:bold">함</span> [<span style="color:var(--softm-start);font-weight:bold">켜짐</span>].</b>',
+            status_run_status_off_screen_stop : '<del>화면이 꺼진 상태에서 실행 <span style="color:var(--softm-start);font-weight:bold">함</span> [<span style="color:var(--softm-stop);font-weight:bold">꺼짐</span>].</del>',
 
             noti_icon_status_on : '상단 알림바에 [<span style="color:var(--softm-start);font-weight:bold">표시</span>].',
             noti_icon_status_off : '상단 알림바에 [<span style="color:var(--softm-stop);font-weight:bold">숨김</span>].',
@@ -406,6 +440,22 @@ var messages  = {
             run_on_wifi: "와이파이 연결시",
             exclude_run_on_screen: "화면 켜진 상태",
             exclude_run_on_screen_time: "체크 시간",
+            status_setting:"상태 설정",
+            run_status_screen_start:"시작",
+            run_status_screen_stop:"종료",
+
+            run_status_on_screen_stopped:"화면 <b style='color:var(--softm-start)'>켜진</b> 상태만 실행.[<span style='color:var(--softm-stop);font-weight:bold'>안함</span>]",
+            run_status_on_screen:"화면 <b style='color:var(--softm-start)'>켜진</b> 상태만 실행.",
+            run_status_off_screen_stopped:"화면 <b style='color:var(--softm-stop)'>꺼진</b> 상태만 실행.[<span style='color:var(--softm-stop);font-weight:bold'>안함</span>]",
+            run_status_off_screen:"화면 <b style='color:var(--softm-stop)'>꺼진</b> 상태만 실행.",
+            run_status_lock_screen:"화면 <b style='color:var(--softm-stop)'>잠김</b> 상태만 실행.",
+
+            run_status_screen_time_for_start:"체크",
+            run_status_screen_time_for_stop:"체크",
+            screen_mode_none:"안함",
+            screen_mode_on:"켜짐",
+            screen_mode_off:"꺼짐",
+            screen_mode_lock:"잠금",
             run_speed_conditions:"속력",
             run_speed_limit_time:"제한시간",
             run_speed_limit:"속력",
@@ -479,6 +529,7 @@ var messages  = {
           },
           title: {
             main: "기본",
+            run_status_screen:"화면",
             execution: "실행",
             exclude_run: "실행 제외",
             stop: "종료",
@@ -562,6 +613,7 @@ var messages  = {
             permission4 : '<span style="color:var(--softm-start);font-weight:bold">위치 정보 접근 허용</span> 설정',
             permission5 : '<span style="color:var(--softm-start);font-weight:bold">접근성 권한</span> 설정',
             permission5_1 : '<span style="font-weight:bold">"AccessibilityService API" 이용 범위</span>',
+            permission_post_notifications : '<span style="font-weight:bold">알림 런타임 권한</span>',
             
             permission5_2_1 : '블루투스 On/Off',
             permission5_2_2 : '와이파이 On/Off',
@@ -584,6 +636,9 @@ var messages  = {
             permission_grant_on_for_location_information_access : '"<B>티맵자동실행</B>"은 앱이 종료되었거나 사용 중이 아닐 때도 위치 데이터를 수집하여 티맵 실행시 중복 실행을 방지하는 기능을 제공합니다.',
             permission_grant_on_for_background_location_information_access : '목적지 안내 실행시 <b>백그라운드</b>에서 <b>위치 데이터</b>를 활용합니다.',
             permission_grant_on_for_background_location_information_access_10 : '<B>"[항상허용]"</B>을 선택하세요.',
+            permission_grant_on_for_post_notifications : '<b>상단 알림바</b>를 <b>활성화</b>하세요.<Br/>기능을 편리하게 이용할 수 있습니다.',
+            permission_grant_on_for_post_notifications2 : '<B>"[허용]"</B>을 선택하세요.',
+
             permission_grant_on_for_accessibility : '앱 실행시 기능을 On/Off를 위해 이용됩니다.<br/>앱 실행후, 종료기능을 위해 이용됩니다.',
             permission_grant_on_for_accessibility2 : '스마트폰의 접근성 메뉴로 이동되면 "<B>설치된 앱</B>"을 선택합니다.',
             permission_grant_on_for_accessibility3 : '설치된 앱 목록에서 "<B>티맵자동실행</B>"을 선택합니다.',

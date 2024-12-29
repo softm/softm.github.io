@@ -561,3 +561,15 @@ hr.sub {
 .mdc-drawer__title::before {
   height:auto !important;
 }
+.strike{
+  text-decoration: line-through;
+}
+
+.disabled {
+  /* text-decoration: line-through; */
+  opacity: 0.77;
+  color: lightgray;
+  /* background-color: lightgray; */
+}
+
+  

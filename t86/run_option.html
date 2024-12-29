@@ -57,7 +57,6 @@ var btnSwitchIndependenceCondition = null;
 
 var btnSwitchStartBluetooth = null;
 var btnSwitchStartWifi = null;
-var btnSwitchExcludeRunOnScreen = null;
 
 var btnSwitchStartPower = null;
 var btnSettings = null;
@@ -75,12 +74,20 @@ var wifiSelectDialog = null;
 var granted =[];
 var btnSearchWifi = null;
 
-var excludeRunOnScreenTime = null;
+var btnSwitchRunStatusScreen = null;
+
+var chipRunStatusScreenStart = null;
+var chipRunStatusScreenStop = null;
+var runStatusScreenTimeForStart = null;
+var runStatusScreenTimeForStop = null;
+
+var btnSwitchGotoOffWorkTime = null;
 
 $( document ).ready(function() {
     window.getInfoCallBack = function (data) {
         if (isWeb) {
             window.info = {
+                "pathName": "tdev",
                 "pathName": "tdev",
                 "appPackage": "com.locnall.KimGiSa",
                 "chargingMode": "1",
@@ -219,7 +226,6 @@ $( document ).ready(function() {
                 "versionCode": 48,
                 "serverHost": "http://www.softm.net",
                 "naviOverlayWaitTime": 3,
-                "excludeRunOnScreenTime": 15,
                 "naviPopupMode": true,
                 "bluetooth": {
                     "bondState": 12,
@@ -235,11 +241,13 @@ $( document ).ready(function() {
                     "target": 34
                 },
                 "startMode": "1",
-                "stopMode": "1",
                 "workOffTimeTo": "19:00",
                 "applicationId": "net.softm.startnavi.poweron",
                 "notiIcon": true, 
-                "excludeRunOnScreen": false, 
+                "runStatusScreenStartMode": "0",
+                "runStatusScreenStopMode": "0",
+                "runStatusScreenTimeForStart": 15,
+                "runStatusScreenTimeForStop": 15,
             }
         } else {
             window.info = (JSON.parse(data));
@@ -623,8 +631,6 @@ function initLoad(v){
     btnSwitchStartBluetooth = new mdc.switchControl.MDCSwitch(document.querySelector('.start_bluetooth.mdc-switch'));
     btnSwitchStartWifi = new mdc.switchControl.MDCSwitch(document.querySelector('.start_wifi.mdc-switch'));
     
-    btnSwitchExcludeRunOnScreen = new mdc.switchControl.MDCSwitch(document.querySelector('.exclude_run_on_screen.mdc-switch'));
-
     btnSwitchIndependenceCondition.listen("mousedown", function (event) {
         if (!btnSwitchIndependenceCondition.selected) { // true
             material.confirm(
@@ -644,33 +650,6 @@ function initLoad(v){
                     btnSwitchIndependenceCondition.selected = false;
                     fn_DeviceSaveData("_INDEPENDENCE_CONDITION", false,"fn_RunOptionOffCallback"); // 1 : 독립 조건, 0 : 복합 조건
                     $("#status_message").html(getStatusMessage());
-                },
-                function () {
-                }
-            );
-        }
-    });
-
-    btnSwitchExcludeRunOnScreen.listen("mousedown", function (event) {
-        if (!btnSwitchExcludeRunOnScreen.selected) { // true
-            material.confirm(
-                t("message.confirm_on"),
-                function () {
-                    fn_DeviceSaveData("_EXCLUDE_RUN_ON_SCREEN", true,"fn_ExcludeRunOnScreenOnCallback"); // 1 : 시작, 0 : 중지
-                    document.querySelector("#statusExcludeRunOnScreen").innerHTML = t("label.status_exclude_run_on_screen_start");
-                    btnSwitchExcludeRunOnScreen.selected = true;
-                },
-                function () {
-                }
-            );
-        } else { // false
-            material.confirm(
-                t("message.confirm_off"),
-                function () {
-                    debugger;
-                    fn_DeviceSaveData("_EXCLUDE_RUN_ON_SCREEN", false, "fn_ExcludeRunOnScreenOnCallback"); // 1 : 시작, 0 : 중지
-                    document.querySelector("#statusExcludeRunOnScreen").innerHTML = t("label.status_exclude_run_on_screen_stop");
-                    btnSwitchExcludeRunOnScreen.selected = false;
                 },
                 function () {
                 }
@@ -879,14 +858,6 @@ function initLoad(v){
         $(".wifi_info").find(".wifi").text(v.wifi.ssid);
     }
 
-    if (!v.excludeRunOnScreen) { // stop
-        document.querySelector("#statusExcludeRunOnScreen").innerHTML = "<Strike>" + t("label.status_exclude_run_on_screen_stop") + "</Strike>";
-        btnSwitchExcludeRunOnScreen.selected = false;
-    } else { // start
-        document.querySelector("#statusExcludeRunOnScreen").innerHTML = t("label.status_exclude_run_on_screen_start");
-        btnSwitchExcludeRunOnScreen.selected = true;
-    }
-
     if (!v.independenceCondition) { // 독립 조건
         btnSwitchIndependenceCondition.selected = false;
     } else { // 복합 조건
@@ -901,54 +872,321 @@ function initLoad(v){
     cb.focus();
 
     $("#status_message").html(getStatusMessage());
-    
-// 22222
+//////////////////
 
-    excludeRunOnScreenTime = new mdc.textField.MDCTextField(document.querySelector('#exclude_run_on_screen_time'));
-
-    excludeRunOnScreenTime.listen("focus", function(event) {
-        excludeRunOnScreenTime.input.select();
+btnSwitchGotoOffWorkTime = new mdc.switchControl.MDCSwitch(document.querySelector('.work_goto_off_time.mdc-switch'));
+    btnSwitchGotoOffWorkTime.listen("mousedown", function (event) {
+    snackbar(t("message.save"));
+    document.querySelector("#work_goto_off_time_status").innerHTML = t("label.work_goto_off_time_status");
+    if (!btnSwitchGotoOffWorkTime.selected) { // true
+        fn_DeviceSaveData("_WORK_GOTO_OFF_TIME", "1"); // 1 : 시작, 0 : 중지
+        //			btnSwitchGotoOffWorkTime.foundation_.setChecked(true);
+        $("input[type='time'].work_goto_off_time").removeAttr("disabled");
+    } else { // false
+        //			btnSwitchGotoOffWorkTime.foundation_.setChecked(false);
+        fn_DeviceSaveData("_WORK_GOTO_OFF_TIME", "0"); // 1 : 시작, 0 : 중지
+        //			btnSwitchGotoOffWorkTime.foundation_.setChecked(false);
+        $("input[type='time'].work_goto_off_time").attr("disabled", "disabled");
+    }
     });
 
-    excludeRunOnScreenTime.listen("focus", function(event) {
-        excludeRunOnScreenTime.input.select();
+    $("#work_goto_time_from").on("input", function () {
+        var v = this.value ? this.value : window.workGotoTimeFrom;
+        if (v > window.workGotoTimeTo) {
+            v = window.workGotoTimeFrom;
+        }
+        fn_DeviceSaveData("_WORK_GOTO_TIME_FROM", v); // 출근시작시간
+        window.workGotoTimeFrom = v;
+        this.value = v;
+    });
+    $("#work_goto_time_from").on("change", function () {
+        //		if (!this.value) this.blur();
+        console.info("change", this.value);
     });
 
-    $(excludeRunOnScreenTime.input_).blur(function(event) {
-        var v = excludeRunOnScreenTime.input.value;
+    $("#work_goto_time_to").on("input", function () {
+        var v = this.value ? this.value : window.workGotoTimeTo;
+        if (v < window.workGotoTimeFrom) {
+            v = window.workGotoTimeTo;
+        }
+        fn_DeviceSaveData("_WORK_GOTO_TIME_TO", v); // 출근종료시간
+        window.workGotoTimeTo = v;
+        this.value = v;
+    });
+
+    $("#work_off_time_from").on("input", function () {
+        var v = this.value ? this.value : window.workOffTimeFrom;
+        if (v > window.workOffTimeTo) {
+            v = window.workOffTimeFrom;
+        }
+        fn_DeviceSaveData("_WORK_OFF_TIME_FROM", v); // 퇴근시작시간
+        window.workOffTimeFrom = v;
+        this.value = v;
+    });
+
+    $("#work_off_time_to").on("input", function () {
+        var v = this.value ? this.value : window.workOffTimeTo;
+        if (v < window.workOffTimeFrom) {
+            v = window.workOffTimeTo;
+        }
+        fn_DeviceSaveData("_WORK_OFF_TIME_TO", v); // 퇴근종료시간
+        window.workOffTimeTo = v;
+        this.value = v;
+    });
+
+    console.info("_WORK_GOTO_TIME_FROM", v.workGotoTimeFrom);
+    // v = v!="null"&&v?v:"06:00";
+    // 출근시작시간
+    window.workGotoTimeFrom = v.workGotoTimeFrom;
+    $("#work_goto_time_from").val(v.workGotoTimeFrom);
+
+    console.info("_WORK_GOTO_TIME_TO", v.workGotoTimeFrom);
+    // v = v!="null"&&v?v:"08:50";
+    // 출근종료시간
+    window.workGotoTimeTo = v.workGotoTimeTo;
+    $("#work_goto_time_to").val(v.workGotoTimeTo);
+
+    console.info("_WORK_OFF_TIME_FROM", v.workGotoTimeTo);
+    // v = v!="null"&&v?v:"17:30";
+    // 퇴근시작시간
+    window.workOffTimeFrom = v.workOffTimeFrom;
+    $("#work_off_time_from").val(v.workOffTimeFrom);
+
+    console.info("_WORK_OFF_TIME_TO", v.workOffTimeFrom);
+    // v = v!="null"&&v?v:"19:00";
+    // 퇴근종료시간
+    window.workOffTimeTo = v.workOffTimeTo;
+    $("#work_off_time_to").val(v.workOffTimeTo);
+
+    console.info("_WORK_GOTO_OFF_TIME", v.workGotoOffTime);
+    // v = v!="null"&&v?v:"0";
+    // var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
+    // event.onlySelect=true; // pass data custom 
+    document.querySelector("#work_goto_off_time_status").innerHTML = t("label.work_goto_off_time_status");
+    // 출/퇴근 시간
+    if (!v.workGotoOffTime) { // stop
+        btnSwitchGotoOffWorkTime.selected = false;
+        // btnSwitchGotoOffWorkTime.foundation_.setChecked(false);
+        $("input[type='time'].work_goto_off_time").attr("disabled", "disabled");
+    } else { // start
+        btnSwitchGotoOffWorkTime.selected = true;
+        // btnSwitchGotoOffWorkTime.foundation_.setChecked(true);
+        $("input[type='time'].work_goto_off_time").removeAttr("disabled");
+    }
+
+//////////////////
+    runStatusScreenTimeForStart = new mdc.textField.MDCTextField(document.querySelector('#run_status_screen_time_for_start'));
+    runStatusScreenTimeForStart.listen("focus", function(event) {
+        runStatusScreenTimeForStart.input.select();
+    });
+
+    runStatusScreenTimeForStart.listen("focus", function(event) {
+        runStatusScreenTimeForStart.input.select();
+    });
+
+    $(runStatusScreenTimeForStart.input_).blur(function(event) {
+        var v = runStatusScreenTimeForStart.input.value;
         if ( !v ) {
-            excludeRunOnScreenTime.input.value = window.tmpExcludeRunOnScreenTime;
+            runStatusScreenTimeForStart.input.value = window.tmpRunStatusOnScreenTimeForStart;
         }
         var event = new MouseEvent('keyup', {view: window,bubbles: true,cancelable: true});
-        var cb =$("#exclude_run_on_screen_time")[0];
+        var cb =$("#run_status_screen_time_for_start")[0];
         var cancelled = !cb.dispatchEvent(event);
     });
 
-    excludeRunOnScreenTime.listen("keydown", function(event) {
+    runStatusScreenTimeForStart.listen("keydown", function(event) {
         if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
-            if ( excludeRunOnScreenTime.input.value ) {
-                window.tmpExcludeRunOnScreenTime = excludeRunOnScreenTime.input.value;
+            if ( runStatusScreenTimeForStart.input.value ) {
+                window.tmpRunStatusOnScreenTimeForStart = runStatusScreenTimeForStart.input.value;
             }
         }
     });
 
-    excludeRunOnScreenTime.listen("keyup", function(event) {
+    runStatusScreenTimeForStart.listen("keyup", function(event) {
         if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
-            var v = excludeRunOnScreenTime.input.value;
-            var max = parseFloat(excludeRunOnScreenTime.input.max);
-            var min = parseFloat(excludeRunOnScreenTime.input.min);
+            var v = runStatusScreenTimeForStart.input.value;
+            var max = parseFloat(runStatusScreenTimeForStart.input.max);
+            var min = parseFloat(runStatusScreenTimeForStart.input.min);
             if ( v > max || v < min ) v = "";
-            excludeRunOnScreenTime.input.value = 0;
-            excludeRunOnScreenTime.input.value = !v?"":parseFloat(v&&(/^[0-9]+$/).test(""+v)?v:window.tmpExcludeRunOnScreenTime);
+            runStatusScreenTimeForStart.input.value = 0;
+            runStatusScreenTimeForStart.input.value = !v?"":parseFloat(v&&(/^[0-9]+$/).test(""+v)?v:window.tmpRunStatusOnScreenTimeForStart);
             if ( v ) {
-                window.tmpExcludeRunOnScreenTime = excludeRunOnScreenTime.input.value;
+                window.tmpRunStatusOnScreenTimeForStart = runStatusScreenTimeForStart.input.value;
             }
-            fn_DeviceSaveData("_EXCLUDE_RUN_ON_SCREEN_TIME", window.tmpExcludeRunOnScreenTime);
+            fn_DeviceSaveData("_RUN_STATUS_ON_SCREEN_TIME_START", window.tmpRunStatusOnScreenTimeForStart);
         }
     });
 
-    window.tmpExcludeRunOnScreenTime = parseInt(v.excludeRunOnScreenTime,10);
-    excludeRunOnScreenTime.input.value = window.tmpExcludeRunOnScreenTime;
+    window.tmpRunStatusOnScreenTimeForStart = parseInt(v.runStatusScreenTimeForStart,10);
+    runStatusScreenTimeForStart.input.value = window.tmpRunStatusOnScreenTimeForStart;
+
+    chipRunStatusScreenStart = new mdc.chips.MDCChipSet(document.querySelector('#chip_run_status_screen_start_mode'));
+    chipRunStatusScreenStart.listen("click", function (e) {
+        var adapter = chipRunStatusScreenStart.getDefaultFoundation().adapter;
+        var selectId = chipRunStatusScreenStart.selectedChipIds[0];
+        var index = adapter.getIndexOfChipById(selectId);
+        if (selectId) {
+            // if ( index > 2 ) {
+            //     material.alert(t("message.comming_soon"),function () {                    
+            //         chipRunStatusScreenStart.chipsList[info.runStatusScreenStartMode].selected = true;
+            //     },function () {               
+            //         chipRunStatusScreenStart.chipsList[info.runStatusScreenStartMode].selected = true;
+            //     });
+            //} else {
+                chipRunStatusScreenStart.chips[index].selected = true;
+                window.info.runStatusScreenStartMode = index;
+                fn_DeviceSaveData("_RUN_STATUS_SCREEN_START_MODE", index);
+                if ( index > 0 ) {
+                    $(".run_status_screen_start_mode_sub").removeClass("disabled");
+                } else {
+                    $(".run_status_screen_start_mode_sub").addClass("disabled");
+                }
+                statusRunStatusScreenStart();
+            //}
+        } else { // error
+            // window.info.
+            if ( window.info.runStatusScreenStartMode == "0" ) {
+                chipRunStatusScreenStart.chips[0].selected = true;
+                chipRunStatusScreenStart.chips[1].selected = false;
+            } else {
+                chipRunStatusScreenStart.chips[0].selected = false;
+                chipRunStatusScreenStart.chips[1].selected = true;
+                fn_DeviceSaveData("_RUN_STATUS_SCREEN_START_MODE", 1);
+            }
+        }
+    });
+    chipRunStatusScreenStart.chips[parseInt(window.info.runStatusScreenStartMode, 10)].selected = true;
+    if ( parseInt(window.info.runStatusScreenStartMode, 10) > 0 ) {
+        $(".run_status_screen_start_mode_sub").removeClass("disabled");
+    } else {
+        $(".run_status_screen_start_mode_sub").addClass("disabled");
+    }
+
+    statusRunStatusScreenStart();
+
+    runStatusScreenTimeForStop = new mdc.textField.MDCTextField(document.querySelector('#run_status_screen_time_for_stop'));
+    runStatusScreenTimeForStop.listen("focus", function(event) {
+        runStatusScreenTimeForStop.input.select();
+    });
+
+    runStatusScreenTimeForStop.listen("focus", function(event) {
+        runStatusScreenTimeForStop.input.select();
+    });
+
+    $(runStatusScreenTimeForStop.input_).blur(function(event) {
+        var v = runStatusScreenTimeForStop.input.value;
+        if ( !v ) {
+            runStatusScreenTimeForStop.input.value = window.tmpRunStatusOnScreenTimeForStop;
+        }
+        var event = new MouseEvent('keyup', {view: window,bubbles: true,cancelable: true});
+        var cb =$("#run_status_screen_time_for_start")[0];
+        var cancelled = !cb.dispatchEvent(event);
+    });
+
+    runStatusScreenTimeForStop.listen("keydown", function(event) {
+        if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+            if ( runStatusScreenTimeForStop.input.value ) {
+                window.tmpRunStatusOnScreenTimeForStop = runStatusScreenTimeForStop.input.value;
+            }
+        }
+    });
+
+    runStatusScreenTimeForStop.listen("keyup", function(event) {
+        if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+            var v = runStatusScreenTimeForStop.input.value;
+            var max = parseFloat(runStatusScreenTimeForStop.input.max);
+            var min = parseFloat(runStatusScreenTimeForStop.input.min);
+            if ( v > max || v < min ) v = "";
+            runStatusScreenTimeForStop.input.value = 0;
+            runStatusScreenTimeForStop.input.value = !v?"":parseFloat(v&&(/^[0-9]+$/).test(""+v)?v:window.tmpRunStatusOnScreenTimeForStart);
+            if ( v ) {
+                window.tmpRunStatusOnScreenTimeForStop = runStatusScreenTimeForStop.input.value;
+            }
+            fn_DeviceSaveData("_RUN_STATUS_ON_SCREEN_TIME_STOP", window.tmpRunStatusOnScreenTimeForStop);
+        }
+    });
+
+    window.tmpRunStatusOnScreenTimeForStop = parseInt(v.runStatusScreenTimeForStop,10);
+    runStatusScreenTimeForStop.input.value = window.tmpRunStatusOnScreenTimeForStop;
+
+    chipRunStatusScreenStop = new mdc.chips.MDCChipSet(document.querySelector('#chip_run_status_screen_stop_mode'));
+    chipRunStatusScreenStop.listen("click", function (e) {
+        var adapter = chipRunStatusScreenStop.getDefaultFoundation().adapter;
+        var selectId = chipRunStatusScreenStop.selectedChipIds[0];
+        var index = adapter.getIndexOfChipById(selectId);
+        if (selectId) {
+            // if ( index > 2 ) {
+            //     material.alert(t("message.comming_soon"),function () {                    
+            //         chipRunStatusScreenStop.chipsList[info.runStatusScreenStopMode].selected = true;
+            //     },function () {               
+            //         chipRunStatusScreenStop.chipsList[info.runStatusScreenStopMode].selected = true;
+            //     });
+            //} else {
+                chipRunStatusScreenStop.chips[index].selected = true;
+                window.info.runStatusScreenStopMode = index;
+                fn_DeviceSaveData("_RUN_STATUS_SCREEN_STOP_MODE", index);
+                if ( index > 0 ) {
+                    $(".run_status_screen_stop_mode_sub").removeClass("disabled");
+                } else {
+                    $(".run_status_screen_stop_mode_sub").addClass("disabled");
+                }
+                statusRunStatusScreenStop();
+            //}
+        } else { // error
+            // window.info.
+            if ( window.info.runStatusScreenStopMode == "0" ) {
+                chipRunStatusScreenStop.chips[0].selected = true;
+                chipRunStatusScreenStop.chips[1].selected = false;
+            } else {
+                chipRunStatusScreenStop.chips[0].selected = false;
+                chipRunStatusScreenStop.chips[1].selected = true;
+                fn_DeviceSaveData("_RUN_STATUS_SCREEN_STOP_MODE", 1);
+            }
+        }
+    });
+    chipRunStatusScreenStop.chips[parseInt(window.info.runStatusScreenStopMode, 10)].selected = true;
+    if ( parseInt(window.info.runStatusScreenStopMode, 10) > 0 ) {
+        $(".run_status_screen_stop_mode_sub").removeClass("disabled");
+    } else {
+        $(".run_status_screen_stop_mode_sub").addClass("disabled");
+    }
+
+    statusRunStatusScreenStop();
+
+}
+
+function statusRunStatusScreenStart() {
+    if (info.runStatusScreenStartMode =='0') { // stop
+        var sMsg = t("label.run_status_on_screen_stopped");
+        $(".statusRunStatusScreenStart").html("<del>"+sMsg+"</del>");
+    } else { // start
+        var sMsg;
+        if (info.runStatusScreenStartMode =='1') {  
+            sMsg = t("label.run_status_on_screen");
+        } else if (info.runStatusScreenStartMode =='2') {  
+            sMsg = t("label.run_status_off_screen");
+        } else if (info.runStatusScreenStartMode =='3') {  
+            sMsg = t("label.run_status_lock_screen");
+        }
+        $(".statusRunStatusScreenStart").html(sMsg);
+    }
+}
+
+function statusRunStatusScreenStop() {
+    if (info.runStatusScreenStopMode =='0') { // stop
+        var sMsg = t("label.run_status_off_screen_stopped");
+        $(".statusRunStatusScreenStop").html("<del>"+sMsg+"</del>");
+    } else { // start
+        var sMsg;
+        if (info.runStatusScreenStopMode =='1') {  
+            sMsg = t("label.run_status_on_screen");
+        } else if (info.runStatusScreenStopMode =='2') {  
+            sMsg = t("label.run_status_off_screen");
+        } else if (info.runStatusScreenStopMode =='3') {  
+            sMsg = t("label.run_status_lock_screen");
+        }
+        $(".statusRunStatusScreenStop").html(sMsg);
+    }
 }
 
 function bindPoiHome(v) {
@@ -1041,7 +1279,11 @@ function fn_RunOptionOffCallback(ok) {
     fn_StopService("fn_StopServiceCallBack");
 }
 
-function fn_ExcludeRunOnScreenOnCallback(ok) {
+function fn_RunStatusOnScreenOnCallback(ok) {
+    // alert("stopCallback");
+    snackbar(t("message.save"));
+}
+function fn_RunStatusOffScreenOnCallback(ok) {
     // alert("stopCallback");
     snackbar(t("message.save"));
 }
@@ -1314,24 +1556,59 @@ function getStatusMessage() {
 
                 <hr class="sub"/>
 
-<!-- 실행 제외 -->            
-                <div class="margin_top_20">
-                    <div class="row flex" style="border:0px solid red">
-                        <legend align="left" class="main title"><strong data-i18n="title.exclude_run">실행 제외</strong></legend>
-                    </div>
-                </div>
-                <hr class="main"/>
-<!-- 화면 켜진 상태 -->     
+<!-- 화면 상태 시작시 -->
+            <div class="none">
                 <div class="margin_top_15 margin_bottom_15">
-                    <div class="row sub flex">
-                       <label for="" class="title flex-grow" style=""><strong data-i18n="label.exclude_run_on_screen">화면 켜진 상태</strong></label>
+                    <div class="row flex">
+                        <legend align="left" class="title"><strong data-i18n="label.run_status_screen_start">시작시 - 화면상태</strong></legend>
+                        <div id="chip_run_status_screen_start_mode" class="flex-grow justify-content-right right mdc-chip-set mdc-chip-set--choice"
+                        style="display:inline;"
+                        >
+                            <div class="mdc-chip mdc-ripple-upgraded" role="row" style="margin: 0px !important;">
+                                <div class="mdc-chip__ripple"></div>
+                                <span role="gridcell">
+                                  <span role="button" tabindex="1" class="mdc-chip__primary-action">
+                                    <span class="mdc-chip__text" data-i18n="label.screen_mode_none">체크안함</span>
+                                  </span>
+                                </span>
+                              </div>
+                            <div class="mdc-chip mdc-chip--selected mdc-ripple-upgraded" role="row" style="margin: 0px !important;">
+                              <div class="mdc-chip__ripple"></div>
+                              <span role="gridcell">
+                                <span role="button" tabindex="1" class="mdc-chip__primary-action">
+                                  <span class="mdc-chip__text" data-i18n="label.screen_mode_on">켜짐</span>
+                                </span>
+                              </span>
+                            </div>
+                            <div class="mdc-chip mdc-ripple-upgraded" role="row" style="margin: 0px !important;">
+                              <div class="mdc-chip__ripple"></div>
+                              <span role="gridcell">
+                                <span role="button" tabindex="2" class="mdc-chip__primary-action">
+                                  <span class="mdc-chip__text" data-i18n="label.screen_mode_off">꺼짐</span>
+                                </span>
+                              </span>
+                            </div>
+                            <div class="mdc-chip mdc-ripple-upgraded" role="row" style="margin: 0px !important;">
+                              <div class="mdc-chip__ripple"></div>
+                              <span role="gridcell">
+                                <span role="button" tabindex="2" class="mdc-chip__primary-action">
+                                  <span class="mdc-chip__text" data-i18n="label.screen_mode_lock">잠금</span>
+                                </span>
+                              </span>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="main"/>
+                    
+                    <div class="row sub flex run_status_screen_start_mode_sub">
+                       <label for="" class="title flex-grow" style=""><span class="statusRunStatusScreenStart basic_font_small3" data-i18n="label.run_status_on_screen">화면이 켜진 상태에서만 실행 합니다.</span></label>
                        
                        <div class="flex flex-grow " style="justify-content: right;"><!--fieldset-->
                         <label class="flex title right"><span
-                            class="mdc-chip__text basic_font_small3"><strong data-i18n="label.exclude_run_on_screen_time">체크시간</strong></span></label>
+                            class="mdc-chip__text basic_font_small3"><strong data-i18n="label.run_status_screen_time_for_start">체크시간</strong></span></label>
                         <!-- <div class="right"> -->
                           <!-- <div style="position: absolute;display: inline;margin-top: -15px;"> -->
-                          <label id="exclude_run_on_screen_time"
+                          <label id="run_status_screen_time_for_start"
                             class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon "
                             style="width:50%;">
                             <div class="mdc-text-field__ripple"></div>
@@ -1347,55 +1624,153 @@ function getStatusMessage() {
                   
                           </label>
                         <!-- </div> -->
-                      </div>                       
-
-
-                       <button  class="exclude_run_on_screen mdc-switch mdc-switch--unselected margin_left_20" type="button" role="switch" aria-checked="false">
-                           <div class="mdc-switch__track"></div>
-                           <div class="mdc-switch__handle-track"><div class="mdc-switch__handle"><div class="mdc-switch__shadow"><div class="mdc-elevation-overlay"></div></div><div class="mdc-switch__ripple"></div></div></div>
-                           <span class="mdc-switch__focus-ring-wrapper"><div class="mdc-switch__focus-ring"></div></span>
-                       </button>
+                      </div>    
                    </div>
                </div>
-                <div class="row comment">
-                    <span id="statusExcludeRunOnScreen" style="opacity: 0.7;"><del>화면이 켜진 상태에서 실행 <span style="color:var(--softm-stop);font-weight:bold">안함</span> [<span style="color:var(--softm-stop);font-weight:bold">꺼짐</span>].</del></span>
+                <div class="row comment run_status_screen_start_mode_sub none">
+                    <span class="statusRunStatusScreenStart" style="opacity: 0.7;">화면이 켜진 상태에서 실행 <span style="color:var(--softm-start);font-weight:bold">함</span> [<span style="color:var(--softm-stop);font-weight:bold">꺼짐</span>].</span>
                 </div>
 
-              <hr class="sub" />
-    
-<!--와이파이.선택
-            <div class="row" style="margin-top:0px !important">
-                <div class="row wifi_info">
-                    <div style="margin:10px;display:flex">
-                        <div class="flex margin_left_10" style="flex-grow: 1;width:55%">
-                            
-                            <span class="wifi margin_left_10 middle" 
-                                style="width: calc(95%);
-                                overflow: hidden;
-                                text-overflow: ellipsis;
-                                white-space: nowrap;
-                                display: inline;
-                                font-size:12pt;
-                                "
-                                title=""
-                            >-</span>
-                            <span class="package_namemargin_left_10 middle"></span>
+              <hr class="run_status_screen_start_mode_sub sub" />
+
+
+<!-- 화면 상태 종료시 -->     
+            <div class="margin_top_15 margin_bottom_15">
+                <div class="row flex">
+                    <legend align="left" class="title"><strong data-i18n="label.run_status_screen_stop">시작시 - 화면상태</strong></legend>
+                    <div id="chip_run_status_screen_stop_mode" class="flex-grow justify-content-right right mdc-chip-set mdc-chip-set--choice"
+                    style="display:inline;"
+                    >
+                    <div class="mdc-chip mdc-ripple-upgraded" role="row" style="margin: 0px !important;">
+                        <div class="mdc-chip__ripple"></div>
+                        <span role="gridcell">
+                          <span role="button" tabindex="1" class="mdc-chip__primary-action">
+                            <span class="mdc-chip__text" data-i18n="label.screen_mode_none">체크안함</span>
+                          </span>
+                        </span>
+                      </div>
+                    <div class="mdc-chip mdc-chip--selected mdc-ripple-upgraded" role="row" style="margin: 0px !important;">
+                      <div class="mdc-chip__ripple"></div>
+                      <span role="gridcell">
+                        <span role="button" tabindex="1" class="mdc-chip__primary-action">
+                          <span class="mdc-chip__text" data-i18n="label.screen_mode_on">켜짐</span>
+                        </span>
+                      </span>
+                    </div>
+                    <div class="mdc-chip mdc-ripple-upgraded" role="row" style="margin: 0px !important;">
+                      <div class="mdc-chip__ripple"></div>
+                      <span role="gridcell">
+                        <span role="button" tabindex="2" class="mdc-chip__primary-action">
+                          <span class="mdc-chip__text" data-i18n="label.screen_mode_off">꺼짐</span>
+                        </span>
+                      </span>
+                    </div>
+                    <div class="mdc-chip mdc-ripple-upgraded" role="row" style="margin: 0px !important;">
+                      <div class="mdc-chip__ripple"></div>
+                      <span role="gridcell">
+                        <span role="button" tabindex="2" class="mdc-chip__primary-action">
+                          <span class="mdc-chip__text" data-i18n="label.screen_mode_lock">잠금</span>
+                        </span>
+                      </span>
+                    </div>
+                    </div>
+                </div>
+                <hr class="main"/>
+                
+                <div class="row sub flex run_status_screen_stop_mode_sub">
+                <label for="" class="title flex-grow" style=""><span class="statusRunStatusScreenStop basic_font_small3" data-i18n="label.run_status_on_screen">화면이 켜진 상태에서만 실행 합니다.</span></label>
+                
+                <div class="flex flex-grow " style="justify-content: right;"><!--fieldset-->
+                    <label class="flex title right"><span
+                        class="mdc-chip__text basic_font_small3"><strong data-i18n="label.run_status_screen_time_for_stop">체크시간</strong></span></label>
+                    <!-- <div class="right"> -->
+                    <!-- <div style="position: absolute;display: inline;margin-top: -15px;"> -->
+                    <label id="run_status_screen_time_for_stop"
+                        class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon "
+                        style="width:50%;">
+                        <div class="mdc-text-field__ripple"></div>
+                        <input class="mdc-text-field__input" type="number" aria-labelledby="my-label-id" aria-controls="my-helper-id"
+                        aria-describedby="my-helper-id" value="10" style="padding: 10px 10px 10px 10px !important;" maxlength="2" min="0" max="999" pattern="[0-9]*">
+                        <!-- <span id="label" class="mdc-floating-label">대기시간</span> -->
+                        <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                        style="right:80px;display:none" id="search_clear">clear</i>
+                        <div class="mdc-line-ripple"></div>
+                        <!--                     <button class="btnSearch mdc-button mdc-button--raised  material-icons " style="top:10px;"> <span
+                                    class="mdc-button__ripple"></span>search</button> -->
+                        <div class="" style="top:5px;" data-i18n="label.sec">초</div>
+            
+                    </label>
+                    <!-- </div> -->
+                </div>    
+            </div>
+            </div>
+            <div class="row comment run_status_screen_stop_mode_sub none">
+                <span class="statusRunStatusScreenStop" style="opacity: 0.7;">화면이 켜진 상태에서 실행 <span style="color:var(--softm-start);font-weight:bold">함</span> [<span style="color:var(--softm-stop);font-weight:bold">꺼짐</span>].</span>
+            </div>
+
+            <hr class="run_status_screen_stop_mode_sub sub" />
+        </div>
+
+<!--출/퇴근 시간-->
+            <div class="row sub">
+                <div class="flex"><!--fieldset-->
+                <label for="" class="title" style=""><strong data-i18n="label.work_goto_off_time">출/퇴근 시간</strong></label>
+                <div class="flex-grow right">
+                    <button class="work_goto_off_time mdc-switch mdc-switch--unselected" type="button" role="switch"
+                    aria-checked="false">
+                    <div class="mdc-switch__track"></div>
+                    <div class="mdc-switch__handle-track">
+                        <div class="mdc-switch__handle">
+                        <div class="mdc-switch__shadow">
+                            <div class="mdc-elevation-overlay"></div>
                         </div>
-                        <div style="padding-right:20px;flex-grow:1;text-align:right">
-                        <button id="btnSelectWifi" type="button" class="mdc-button mdc-button--raised " data-mdc-dialog-action="close" style="height:25px;margin-top:0px !important;padding:0px !important;text-align:right !important">
-                        <div class="mdc-button__ripple"></div>
-                        <span class="mdc-button__label" data-i18n="label.select">선택</span>
-                        </button>
+                        <div class="mdc-switch__ripple"></div>
+                        <div class="mdc-switch__icons">
+                            <svg class="mdc-switch__icon mdc-switch__icon--on" viewBox="0 0 24 24">
+                            <path d="M19.69,5.23L8.96,15.96l-4.23-4.23L2.96,13.5l6,6L21.46,7L19.69,5.23z" />
+                            </svg>
+                            <svg class="mdc-switch__icon mdc-switch__icon--off" viewBox="0 0 24 24">
+                            <path d="M20 13H4v-2h16v2z" />
+                            </svg>
+                        </div>
                         </div>
                     </div>
+                    <span class="mdc-switch__focus-ring-wrapper">
+                        <div class="mdc-switch__focus-ring"></div>
+                    </span>
+                    </button>
+                </div>
+                </div><!--fieldset-->
 
-                <hr style="margin-left:4px;margin-right:15px"/>
+                <div class="row comment">
+                <span id="work_goto_off_time_status" style="opacity: 0.7;">설정된 시간에만 동작합니다.</span>
                 </div>
             </div>
--->
-            <!-- <div style="height: 56px;"></div> -->
-            
 
+            <div class="row ">
+                <div class="row sub flex"><!--fieldset-->
+                <label for="basic-switch" class="title"><strong
+                    data-i18n="label.work_goto_time">출근시간</strong></label>
+                <div class="flex-grow right">
+                    <input class="work_goto_off_time" id="work_goto_time_from" type="time" name="work_goto_time_from" min="12:00"
+                    max="18:00" value="06:00" style="width:95px"> ~
+                    <input class="work_goto_off_time" id="work_goto_time_to" type="time" name="work_goto_time_to" min="12:00"
+                    max="18:00" value="08:50" style="width:95px">
+                </div>
+                </div><!--fieldset-->
+                <div class="row sub flex"><!--fieldset-->
+                <label for="basic-switch" class="title" ><strong
+                    data-i18n="label.work_off_time">퇴근시간</strong></label>
+                <div class="flex-grow right">
+                    <input class="work_goto_off_time" id="work_off_time_from" type="time" name="work_off_time_from" min="12:00"
+                    max="18:00" value="17:30" style="width:95px"> ~
+                    <input class="work_goto_off_time" id="work_off_time_to" type="time" name="work_off_time_to" min="12:00"
+                    max="18:00" value="19:00" style="width:95px">
+                </div>
+                </div><!--fieldset-->
+            </div>
+            
+            <hr class="sub"/>
             
             <div class="row" style="height:70px"></div>
             <div class="mdc-snackbar">
