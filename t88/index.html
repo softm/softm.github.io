@@ -997,7 +997,7 @@ function initLoad(v,cb){
         // }
         // localStorage.setObject("updated_count",updatedCount);
 
-        if ( isTest ) {
+        if ( !isTest ) {
             if ( lng == "ko" ) {
                 $(".ko").show();
                 $(".en").hide();
@@ -1679,10 +1679,26 @@ function getStatusMessage() {
 <span class="basic_font_large4">★</span><b  class="basic_font_medium3"> 업데이트 되었습니다.(문제가 발생했다면) 
   - 핸드폰을 <b class="red">재시작</b> 하거나,
   - 앱삭제 후, <b class="red">재설치</b> 하세요.</b>
-  1. SDK 24버전 이하 설치 오류 수정
+1. 화면 조건 동작(켜짐,꺼짐,잠금) 
+- [실행옵션-실행제외-화면 켜진 상태]
+- 앱 실행 조건 상세화
+2. 앱 동작 활성/비활성.
+3. 알림바 아이콘 수정.
+4. 서비스 실행 로직 분리.
+5. 집/회사 화면 로딩 오류.
+6. ANR 오류 수정.
+7. SDK 24버전 이하 설치 오류 수정
 </pre>
 <pre class="row en black left padding_left_15" style="line-height: 1.9;">
-1. Fixed installation error for SDK version 24 or lower
+1. Screen condition operation (on, off, lock)
+- [Run option-Execute exception-Screen on state]
+- Detailed app execution conditions
+2. App operation activation/deactivation.
+3. Notification bar icon modification.
+4. Service execution logic separation.
+5. Home/work screen loading error.
+6. ANR error modification.
+7. Fixed installation error for SDK version 24 or lower
 </pre>
                         </div>
                     </div>
