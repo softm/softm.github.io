@@ -18,6 +18,12 @@ jobs:
           sudo apt-get install ruby-full
           ruby -v
 
+      - name: Set up GEM_HOME
+        run: |
+          echo "export GEM_HOME=$HOME/.gem" >> $GITHUB_ENV
+          echo "export GEM_PATH=$HOME/.gem" >> $GITHUB_ENV
+          mkdir -p $HOME/.gem
+
       - name: Install Bundler
         run: gem install bundler
 
