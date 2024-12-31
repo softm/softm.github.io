@@ -1,14 +1,184 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>티맵자동실행</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+    </head>
+    <body class="d-flex flex-column h-100">
+        <main class="flex-shrink-0">
+            <!-- Navigation-->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                <div class="container px-4">
+                    <a class="navbar-brand" href="index.html"><img src="./assets/logo_white.png" width="20" style="margin-right:5px;vertical-align: text-top;"/>티맵자동실행</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                            <li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li>
+                            <li class="nav-item"><a class="nav-link" href="faq.html">FAQ</a></li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Blog</a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
+                                    <li><a class="dropdown-item" href="blog-home.html">Blog Home</a></li>
+                                    <li><a class="dropdown-item" href="blog-post.html">Blog Post</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="navbarDropdownPortfolio" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Portfolio</a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
+                                    <li><a class="dropdown-item" href="portfolio-overview.html">Portfolio Overview</a></li>
+                                    <li><a class="dropdown-item" href="portfolio-item.html">Portfolio Item</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <!-- Header-->
+            <header class="bg-dark py-1">
+                <div class="container px-5">
+                    <div class="row gx-5 align-items-center justify-content-center">
+                        <div class="col-lg-8 col-xl-7 col-xxl-6">
+                            <div class="my-5 text-center text-xl-start">
+                                <div class="my-2">
+                                    <img src="data:image/png;base64,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"/>
+                                </div>
+                                <h1 class="display-5 fw-bolder text-white mb-2">티맵자동실행</h1>
+                                <hr style="color:white"/>
+                                <p class="lead fw-bold text-white-90 mb-4">충전, 블루투스 연결, '내비게이션 앱' 실행 & 루틴</p>
+                                <p class="lead fw-normal text-white-80 mb-4">전원(충전)을 연결, 등록된 "집","회사" 주소로 자동안내.- "내비게이션"을 보조합니다.</p>
+                               
+                                
+                                <div class="margin_top_20 d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
+                                    <a class="btn btn-primary btn-lg px-4 me-sm-3" href="#features">특징 살펴보기</a>
+                                    <!-- <img src="assets/content_01.jpg" width="100%"/> -->
+                                    <!-- <a class="btn btn-outline-light btn-lg px-4" href="#!">Learn More</a> -->
+                                </div>
+                        
+                            </div>
+                        </div>
+                        <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center">
+                            <img class="img-fluid rounded-3 my-5" src="assets/content_02.jpg"/>
+                            <!-- <img class="img-fluid rounded-3 my-5" src="https://dummyimage.com/600x400/343a40/6c757d" alt="..." /> -->
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- Features section-->
+<!--
+4. FAQ
+4. 동작 영상 재생
+3. 미출시 최신 버전 다운로드
+3. 앱 버전별 직접 다운로드 제공            
+-->
+            <section class="py-5" id="features">
+                <div class="container px-5 my-5">
+                    <div class="row gx-5">
+                        <div class="col-lg-4 mb-5 mb-lg-0"><h2 class="fw-bolder mb-0">시동을 걸면 내비게이션 실행</h2></div>
+                        <div class="col-lg-8">
+                            <div class="row gx-5 row-cols-1 row-cols-md-2">
+                                <div class="col mb-5 h-100">
+                                    <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-collection"></i></div>
+                                    <h2 class="h5">앱(내비게이션 App)을 자동 실행/종료</h2>
+                                    <p class="mb-0 margin_left_5">✇ 동작조건 : 전원(충전), 블루투스, 와이파이 연결/해제</p>
+                                    <p class="mb-0 margin_left_10">- 블루투스, 비행기모드 On/Off</p>
+                                    <p class="mb-0 margin_left_10">- 테더링, WIFI On/Off</p>
+                                    <p class="mb-0 margin_left_10">- 화면잠금 해제</p>
+                                </div>
+                                <div class="col mb-5 h-100">
+                                    <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-star-fill"></i></div>
+                                    <h2 class="h5">앱 선택 가능</h2>
+                                    <p class="mb-0 margin_left_0">✤ 지원 네비게이션 앱</p>
+                                    <p class="mb-0 margin_left_10">- 티맵, 카카오내비, 구글맵, 네이버지도</p>
+                                    <p class="mb-0 margin_left_10">- 맵피, 고덕지도, 백석지도</p>
+                                    <p class="mb-0 margin_left_10">- TMAP(SKT), Google Maps, Google Maps Go, Naver Map, Kakao Map ,Kakao Navi ,ONE NAVI(KT) ,Mappy ,Atlan ,WAZE ,OsmAnd ,SYGIC ,高德地图 ,百度地图 ,Maps.me</p>
+                                </div>
+                                <div class="col mb-5 mb-md-0 h-100">
+                                    <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-toggles2"></i></div>
+                                    <h2 class="h5">집, 회사, 즐겨찾기를 지정</h2>
+                                    <p class="mb-0">✤  출/퇴근시간 지정</p>
+                                    <p class="mb-0 margin_left_10">- 출근시간에 '회사'로 안내</p>
+                                    <p class="mb-0 margin_left_10">- 퇴근시간에 '집'로 안내</p>
+                                </div>
+                                <!-- <div class="col h-100">
+                                    <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-toggles2"></i></div>
+                                    <h2 class="h5">Featured title</h2>
+                                    <p class="mb-0">Paragraph of text beneath the heading to explain the heading. Here is just a bit more text.</p>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Testimonial section
+            <div class="py-5 bg-light">
+                <div class="container px-5 my-5">
+                    <div class="row gx-5 justify-content-center">
+                        <div class="col-lg-10 col-xl-7">
+                            <div class="text-center">
+                                <div class="fs-4 mb-4 fst-italic">"Working with 티맵자동실행s has saved me tons of development time when building new projects! Starting with a Bootstrap template just makes things easier!"</div>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d" alt="..." />
+                                    <div class="fw-bold">
+                                        Tom Ato
+                                        <span class="fw-bold text-primary mx-1">/</span>
+                                        CEO, Pomodoro
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            -->
+            <!-- Blog preview section-->
+            <div
+            class="flex center"
+            style="position:fixed;bottom:5vh;left:2vh; border:0px solid red"
+            >   
+                <span>
+                    <a href="https://pf.kakao.com/_FCaCn/chat"><img src="./assets/kakao02.png" width="70"></a>
+                    <!-- <a href="https://pf.kakao.com/_FCaCn"><img src="./assets/kakao02.png" width="70"></a> -->
+                </span>                                 
+                <span>
+                <a href="https://play.google.com/store/apps/details?id=net.softm.startnavi.poweron">
+                    <img src="./assets/GetItOnGooglePlay_Badge_Web_color_Korean.png" width="250"/> 
+                </a>
+                </span>
+            </div>
+        </main>
+        <!-- Footer-->
+        <footer class="bg-dark py-4 mt-auto">
+            <div class="container px-5">
+                <div class="row align-items-center justify-content-between flex-column flex-sm-row">
+                    <div class="col-auto"><div class="small m-0 text-white">Copyright &copy; Your Website 2023</div></div>
+                    <div class="col-auto">
+                        <a class="link-light small" href="#!">Privacy</a>
+                        <span class="text-white mx-1">&middot;</span>
+                        <a class="link-light small" href="#!">Terms</a>
+                        <span class="text-white mx-1">&middot;</span>
+                        <a class="link-light small" href="#!">Contact</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+        
+        <!-- class="flex" -->
 
-<head>
-    <title>My First HTML Page</title>
-</head>
-
-<body>
-
-    My text goes here.
-
-TEST~~~
-</body>
-
+    </body>
 </html>
