@@ -8101,6 +8101,51 @@ textarea.form-control-lg {
   color: rgba(0, 0, 0, 0.5) !important;
 }
 
+.text-black-40 {
+  --bs-text-opacity: 1;
+  color: rgba(0, 0, 0, 0.4) !important;
+}
+
+.text-black-30 {
+  --bs-text-opacity: 1;
+  color: rgba(0, 0, 0, 0.3) !important;
+}
+
+.text-black-20 {
+  --bs-text-opacity: 1;
+  color: rgba(0, 0, 0, 0.2) !important;
+}
+
+.text-black-10 {
+  --bs-text-opacity: 1;
+  color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.text-black-40 {
+  --bs-text-opacity: 1;
+  color: rgba(0, 0, 0, 0.4) !important;
+}
+
+.text-black-60 {
+  --bs-text-opacity: 1;
+  color: rgba(0, 0, 0, 0.6) !important;
+}
+
+.text-black-70 {
+  --bs-text-opacity: 1;
+  color: rgba(0, 0, 0, 0.7) !important;
+}
+
+.text-black-80 {
+  --bs-text-opacity: 1;
+  color: rgba(0, 0, 0, 0.8) !important;
+}
+
+.text-black-90 {
+  --bs-text-opacity: 1;
+  color: rgba(0, 0, 0, 0.9) !important;
+}
+
 .text-white-50 {
   --bs-text-opacity: 1;
   color: rgba(255, 255, 255, 0.5) !important;
