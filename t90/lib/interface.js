@@ -559,12 +559,7 @@ function fn_OutsideSite(url) {
 	if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
 	    fn_Js_Bridge(result);
 	}else{
-	    result = confirm(msg);
-	    if (result) {
-	        eval(callBackFunc + "()");
-	    }else{
-
-	    }
+		window.open(url,"_new");
 	}
 }
 
