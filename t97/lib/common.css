@@ -572,4 +572,7 @@ hr.sub {
   /* background-color: lightgray; */
 }
 
+.mdc-select__anchor {
+  height:45px !important;
+}
   

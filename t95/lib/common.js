@@ -74,6 +74,7 @@ var messages  = {
 
             navi_auto_start: "Navi auto-run",
             navi_popup: "Navi Popup",
+            app_update_delay_time: "App update delay time",
             search_placeholder: "place, address and phone number",
             search_placeholder_appselect: "App name",
             search_placeholder_bluetooth: "Bluetooth name",
@@ -117,6 +118,12 @@ var messages  = {
             navi:"Navi",
             sec:"Sec" ,
             min:"min",
+            day:"day",
+            check_day:"day",
+            check_hour:"hour",
+            check_min:"min",
+            check_sec:"sec",
+            none:"none",
             km_per_hour:"km/h" ,
             speed:"Speed" ,
             permission_settings:"Permission Settings",
@@ -381,6 +388,7 @@ var messages  = {
             status_run_status_on_screen_stop : '<del>화면이 켜진 상태에서 실행 <span style="color:var(--softm-start);font-weight:bold">함</span> [<span style="color:var(--softm-stop);font-weight:bold">꺼짐</span>].</del>',
             status_run_status_off_screen_start : '<b>화면이 꺼진 상태에서 실행 <span style="color:var(--softm-start);font-weight:bold">함</span> [<span style="color:var(--softm-start);font-weight:bold">켜짐</span>].</b>',
             status_run_status_off_screen_stop : '<del>화면이 꺼진 상태에서 실행 <span style="color:var(--softm-start);font-weight:bold">함</span> [<span style="color:var(--softm-stop);font-weight:bold">꺼짐</span>].</del>',
+            status_app_update_delay_time : '앱 업데이트를 지정한 시간 만큼 미룹니다.<br/>[{waitTime}]',
 
             noti_icon_status_on : '상단 알림바에 [<span style="color:var(--softm-start);font-weight:bold">표시</span>].',
             noti_icon_status_off : '상단 알림바에 [<span style="color:var(--softm-stop);font-weight:bold">숨김</span>].',
@@ -429,6 +437,7 @@ var messages  = {
 
             navi_auto_start: "내비 자동실행",
             navi_popup: "안내아이콘",
+            app_update_delay_time: "앱 업데이트 미룸 시간",
             search_placeholder: "장소, 주소, 전화번호 검색",
             search_placeholder_appselect: "초성:ㅌㅁ,티맵",
             search_placeholder_bluetooth: "블루투스",
@@ -470,6 +479,12 @@ var messages  = {
             navi:"내비",
             sec:"초",
             min:"분",
+            day:"일",
+            check_day:"일",
+            check_hour:"시간",
+            check_min:"분",
+            check_sec:"초",
+            none:"안함",
             km_per_hour:"km/h" ,
             speed:"속력" ,
             permission_settings:"권한 설정",
@@ -776,7 +791,7 @@ $.i18n.init(i18nInitForJquery, function(err, t) {
 var drawer = null;
 var topAppBar = null;
 var drawerListEl = null;
-  
+
 var DRAWER_LIST_INFO = {
   "index.html" : {page:"index.html",visible:true,icon:"home",label:"title.home"}, // 홈
   "setting.html" : {page:"setting.html",visible:true,icon:"settings",label:"title.setting",showOnlySelf:true}, // 설정
