@@ -61,6 +61,8 @@ var runSpeedLimit = null;
 var btnSwitchGeofence = null;
 var fenceDistance = null;
 
+var selectAppUpdateDelayTime = null;
+
 var granted =[];
 
 $( document ).ready(function() {
@@ -121,9 +123,13 @@ $( document ).ready(function() {
                 "runSpeed":false,
                 "runSpeedLimitTime":5, //5분
                 "runSpeedLimit":5,
+                // "appUpdateDelayTime":"60000",
+                "appUpdateDelayTime":"10800000", // 3시간
+                "appUpdateCheckTime":"1736131441271",
                 // + "http://www.softm.net/tdev"
             }
         } else {
+            // appUpdateDelayTime
             window.info = (JSON.parse(data));
         }
         initPage(window.info);
@@ -167,7 +173,6 @@ function initLoad(v){
 
     btnSwitchNotiIcon = new mdc.switchControl.MDCSwitch(document.querySelector('.noti_icon.mdc-switch'));
     btnSwitchNotiIcon.listen("mousedown", function (event) {
-
         snackbar(t("message.save"));
         event.preventDefault();
         event.stopPropagation();
@@ -467,7 +472,37 @@ function initLoad(v){
         }
     });
     statusGeofence();
+
+    selectAppUpdateDelayTime = new mdc.select.MDCSelect(document.querySelector('.app_update_delay_time.mdc-select'));
+
+    selectAppUpdateDelayTime.listen('MDCSelect:change', () => {
+        window.info.appUpdateDelayTime = String(selectAppUpdateDelayTime.value);
+        fn_DeviceSaveData("_APP_UPDATE_DELAY_TIME", selectAppUpdateDelayTime.value, "statusAppUpdateDelayTime"); 
+       // alert(`Selected option at index ${selectAppUpdateDelayTime.selectedIndex} with value "${selectAppUpdateDelayTime.value}"`);
+    });
+    statusAppUpdateDelayTime();
+    selectAppUpdateDelayTime.value = String(v.appUpdateDelayTime);
+
 }
+function millisecondsToTime(ms) {
+    const days = Math.trunc(ms / (24 * 60 * 60 * 1000)); // 1일 = 24시간 * 60분 * 60초 * 1000ms
+    ms %= (24 * 60 * 60 * 1000);
+    const hours = Math.trunc(ms / (60 * 60 * 1000)); // 1시간 = 60분 * 60초 * 1000ms
+    ms %= (60 * 60 * 1000);
+
+    const minutes = Math.trunc(ms / (60 * 1000)); // 1분 = 60초 * 1000ms
+    ms %= (60 * 1000);
+
+    const seconds = Math.trunc(ms / 1000); // 1초 = 1000ms
+
+    return {
+        days,
+        hours,
+        minutes,
+        seconds
+    };
+}
+
 function statusRunSpeedUpdate() {
     if (!info.runSpeed) { // stop
         var sMsg = t("label.status_run_speed_stop",{runSpeedLimit:String(info.runSpeedLimit),runSpeedLimitTime:String(info.runSpeedLimitTime)});
@@ -477,6 +512,17 @@ function statusRunSpeedUpdate() {
         var sMsg = t("label.status_run_speed_start",{runSpeedLimit:String(info.runSpeedLimit),runSpeedLimitTime:String(info.runSpeedLimitTime)});
         document.querySelector("#statusRunSpeed").innerHTML = sMsg;
         btnSwitchRunSpeed.selected = true;
+    }
+}
+function statusAppUpdateDelayTime() {
+    const result = millisecondsToTime( ( parseFloat(info.appUpdateCheckTime) + parseFloat(info.appUpdateDelayTime) ) - (new Date()).getTime());
+    var waitTime = `${result.days}일 ${result.hours}시간 ${result.minutes}분 ${result.seconds}초`;
+    // delayTime:selectAppUpdateDelayTime.selectedText.innerText,
+    var sMsg = t("label.status_app_update_delay_time",{ waitTime:waitTime});
+    if ( info.appUpdateCheckTime != "0" ) {
+        document.querySelector("#statusAppUpdateDelayTime").innerHTML = sMsg;
+    } else {
+        document.querySelector("#statusAppUpdateDelayTime").innerHTML = "";
     }
 }
 
@@ -739,7 +785,7 @@ window.fn_BackKeyPressedCallBack = function () {
             <div class="row sub">
                 <div class="flex"><!--fieldset-->
                   <label class="title"><span
-                      class="mdc-chip__text"><strong data-i18n="label.navi_popupx">목적지 진입 반경</strong></span></label>
+                      class="mdc-chip__text"><strong data-i18n="label.navi_popup">목적지 진입 반경</strong></span></label>
                   <div class="flex-grow right">
                     <label id="fence_distance" class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon "
                       style="width:40%">
@@ -769,6 +815,131 @@ window.fn_BackKeyPressedCallBack = function () {
             <div class="row comment">
                 <span id="statusGeofence" style="opacity: 0.7;"><del><span style="color:var(--softm-start);font-weight:bold">120</span>초 이내에 <span style="color:var(--softm-start);font-weight:bold">5</span>km/h에 도달하면 <span style="color:var(--softm-start);font-weight:bold">실행</span>합니다. [<span style="color:var(--softm-stop);font-weight:bold">꺼짐</span>].</del></span>
             </div>
+
+            <div class="row sub padding_top_15">
+                <div class="flex"><!--fieldset-->
+                  <label class="title"><span
+                      class="mdc-chip__text"><strong data-i18n="label.app_update_delay_time">앱 업데이트 미룸 시간</strong></span></label>
+                  <div class="flex-grow right">
+                   
+                      <div class="app_update_delay_time mdc-select mdc-select--outlined">
+                        <div class="mdc-select__anchor" aria-labelledby="outlined-select-label">
+                          <span class="mdc-notched-outline">
+                            <span class="mdc-notched-outline__leading"></span>
+                            <span class="mdc-notched-outline__notch">
+                              <span id="outlined-select-label" class="mdc-floating-label" data-i18n="label.app_update_delay_time">Pick a Food Group</span>
+                            </span>
+                            <span class="mdc-notched-outline__trailing"></span>
+                          </span>
+                          <span class="mdc-select__selected-text-container">
+                            <span id="demo-selected-text" class="mdc-select__selected-text"></span>
+                          </span>
+                          <span class="mdc-select__dropdown-icon">
+                            <svg
+                                class="mdc-select__dropdown-icon-graphic"
+                                viewBox="7 10 10 5" focusable="false">
+                              <polygon
+                                  class="mdc-select__dropdown-icon-inactive"
+                                  stroke="none"
+                                  fill-rule="evenodd"
+                                  points="7 10 12 15 17 10">
+                              </polygon>
+                              <polygon
+                                  class="mdc-select__dropdown-icon-active"
+                                  stroke="none"
+                                  fill-rule="evenodd"
+                                  points="7 15 12 10 17 15">
+                              </polygon>
+                            </svg>
+                          </span>
+                        </div>
+                      
+                        <!-- Other elements from the select remain. -->
+                        <div class="mdc-select__menu mdc-menu mdc-menu-surface mdc-menu-surface--fullwidth">
+                            <ul class="mdc-deprecated-list" role="listbox" aria-label="Food picker listbox">
+                              <li class="mdc-deprecated-list-item mdc-deprecated-list-item--selected" aria-selected="true" data-value="0" role="option">
+                                <span class="mdc-deprecated-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">
+                                    <span data-i18n="label.none">안함</span>
+                                </span>
+                              </li>
+                              <li class="mdc-deprecated-list-item" aria-selected="false" data-value="604800000" role="option">
+                                <span class="mdc-deprecated-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">
+                                    7 <span data-i18n="label.check_day">일</span>
+                                </span>
+                              </li>
+                              <!-- <li class="mdc-deprecated-list-item" aria-selected="false" data-value="259200000" aria-disabled="true" role="option">
+                                <span class="mdc-deprecated-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">
+                                    3 <span data-i18n="label.day">일</span>
+                                </span>
+                              </li> -->
+                              <li class="mdc-deprecated-list-item" aria-selected="false" data-value="86400000" role="option">
+                                <span class="mdc-deprecated-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">
+                                    1 <span data-i18n="label.check_day">일</span>
+                                </span>
+                              </li>
+                              <li class="mdc-deprecated-list-item" aria-selected="false" data-value="10800000" role="option">
+                                <span class="mdc-deprecated-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">
+                                    3 <span data-i18n="label.check_hour">시간</span>
+                                </span>
+                              </li>
+                              <li class="mdc-deprecated-list-item" aria-selected="false" data-value="7200000" role="option">
+                                <span class="mdc-deprecated-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">
+                                    2 <span data-i18n="label.check_hour">시간</span>
+                                </span>
+                              </li>
+                              <li class="mdc-deprecated-list-item" aria-selected="false" data-value="3600000" role="option">
+                                <span class="mdc-deprecated-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">
+                                    1 <span data-i18n="label.check_hour">시간</span>
+                                </span>
+                              </li>
+                              <li class="mdc-deprecated-list-item" aria-selected="false" data-value="1800000" role="option">
+                                <span class="mdc-deprecated-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">
+                                    30 <span data-i18n="label.check_min">분</span>
+                                </span>
+                              </li>
+                              <!-- <li class="mdc-deprecated-list-item" aria-selected="false" data-value="900000" role="option">
+                                <span class="mdc-deprecated-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">
+                                    15 <span data-i18n="label.min">분</span>
+                                </span>
+                              </li> -->
+                              <li class="mdc-deprecated-list-item" aria-selected="false" data-value="600000" role="option">
+                                <span class="mdc-deprecated-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">
+                                    10 <span data-i18n="label.min">분</span>
+                                </span>
+                              </li>
+                              <li class="mdc-deprecated-list-item" aria-selected="false" data-value="300000" role="option">
+                                <span class="mdc-deprecated-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">
+                                    5 <span data-i18n="label.min">분</span>
+                                </span>
+                              </li>
+                              <li class="mdc-deprecated-list-item" aria-selected="false" data-value="60000" role="option">
+                                <span class="mdc-deprecated-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">
+                                    1 <span data-i18n="label.min">분</span>
+                                </span>
+                              </li>
+                            </ul>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+            
+            <div class="row comment">
+                <span id="statusAppUpdateDelayTime" style="opacity: 0.7;"><del><span style="color:var(--softm-start);font-weight:bold">120</span>초 이내에 <span style="color:var(--softm-start);font-weight:bold">5</span>km/h에 도달하면 <span style="color:var(--softm-start);font-weight:bold">실행</span>합니다. [<span style="color:var(--softm-stop);font-weight:bold">꺼짐</span>].</del></span>
+            </div>
+            
             <div class="row" style="height:70px"></div>
             <div class="mdc-snackbar">
                 <div class="mdc-snackbar__surface">
