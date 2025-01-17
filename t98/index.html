@@ -701,7 +701,11 @@ function initLoad(v,cb){
             // toast("모든 권한 취득")
             // snackbar("모든 권한 취득")
             // t("label.status_stop")
-            $("#status_message").html(getStatusMessage());
+            if ( info?.isAccessbilityServiceRunning ) {
+                $("#status_message").html(getStatusMessage());
+            } else {
+                $("#status_message").html(t("message.permission_grant_on_for_accessibility_reset"));
+            }
             // $("#status_message").html("충전 + 블루투스 연결시 <span class='color_start'>동작</span>합니다.");
         } else {
             $("#status_message").html("");
@@ -1681,9 +1685,10 @@ function getStatusMessage() {
                         </div> -->
                         <div class="row center padding_left_0 black basic_font_medium2" style="line-height: 1.9;">
 <pre class="row ko black left padding_left_5" style="line-height: 1.9;">
-<span class="basic_font_large4">★</span><b  class="basic_font_medium3"> 업데이트 되었습니다.(문제가 발생했다면) 
-  - 핸드폰을 <b class="red">재시작</b> 하거나,
-  - 앱삭제 후, <b class="red">재설치</b> 하세요.</b>
+<span class="basic_font_large4">★</span><b  class="basic_font_medium3"> 업데이트 되었습니다.</b>
+<!-- (문제가 발생했다면)  -->
+<!-- - 핸드폰을 <b class="red">재시작</b> 하거나,
+- 앱삭제 후, <b class="red">재설치</b> 하세요.</b> -->
 1. 화면 조건 동작(켜짐,꺼짐,잠금) 
 - [실행옵션-실행제외-화면 켜진 상태]
 - 앱 실행 조건 상세화

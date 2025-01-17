@@ -130,7 +130,6 @@ $( document ).ready(function() {
             }
         } else {
             // appUpdateDelayTime
-            debugger;
             window.info = (JSON.parse(data));
         }
         initPage(window.info);
@@ -474,7 +473,6 @@ function initLoad(v){
     });
     statusGeofence();
 
-    // debugger;
     selectAppUpdateDelayTime = new mdc.select.MDCSelect(document.querySelector('.app_update_delay_time.mdc-select'));
 
     selectAppUpdateDelayTime.listen('MDCSelect:change', () => {
