@@ -701,7 +701,7 @@ function initLoad(v,cb){
             // toast("모든 권한 취득")
             // snackbar("모든 권한 취득")
             // t("label.status_stop")
-            if ( info?.isAccessbilityServiceRunning ) {
+            if ( info && info.isAccessbilityServiceRunning ) {
                 $("#status_message").html(getStatusMessage());
             } else {
                 $("#status_message").html(t("message.permission_grant_on_for_accessibility_reset"));
@@ -710,10 +710,10 @@ function initLoad(v,cb){
         } else {
             $("#status_message").html("");
             var pMsg = t("message.permissions_required");
-            if ( !info?.permissions?.ACCESSIVILITY ) {
+            if ( info && info.permissions && !info.permissions.ACCESSIVILITY ) {
                 pMsg = t("message.permission_grant_on_for_accessibility_reset5");
             } else {
-                if ( !info?.isAccessbilityServiceRunning ) {
+                if ( info && !info.isAccessbilityServiceRunning ) {
                     pMsg = t("message.permission_grant_on_for_accessibility_reset");
                 }
             }
