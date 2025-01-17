@@ -1,1 +1,1 @@
-device_id=
+device_id=R54W8010S4F
