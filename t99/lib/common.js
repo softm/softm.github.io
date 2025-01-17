@@ -296,9 +296,9 @@ var messages  = {
             permission_grant_on_for_accessibility3 : 'Select "<B>Navi Auto Start</B>" from the list of installed apps".',
             permission_grant_on_for_accessibility4 : 'Turn on "<b>Permissions</b>".',
 
-            permission_grant_on_for_accessibility_reset : '<b>Accessibility permission has been revoked</b>.<br/><br/>For normal operation, <B class="color_stop">turn off</B> the permission -> <B class="color_stop">turn it on</B>".',
+            permission_grant_on_for_accessibility_reset : '<b class="color_stop">Accessibility permission has been revoked.</b><br/><br/>To operate normally, <B>the permission</B> should be "<B class="color_stop">turned off</B>" -> "<B class="color_stop">turned on</B>".',
             permission_grant_on_for_accessibility_reset4 : '<b class="color_stop">Turn off"</b> the <b>permissions</b> -&gt; <b class="color_stop">"Turn on"</b>.',
-            permission_grant_on_for_accessibility_reset5 : '<b>Please "turn on" accessibility permissions</b>.',
+            permission_grant_on_for_accessibility_reset5 : '<b class="color_stop">Please "turn on" accessibility permissions</b>.',
 
             permission_grant_on_for_ignore_battery : 'For normal app use, you must "<B>Exclude</B>" the app from the "<B>Optimize Battery Usage</B>" list.\\n"<B>Notification Bar</B>" You will need it to remove it.',
             permission_grant_on_for_ignore_battery2 : 'After clicking the <B>[OK]</B> button, select <B>[Allow]</B> when the system notification dialog box appears.',
@@ -661,9 +661,9 @@ var messages  = {
             permission_grant_on_for_accessibility3 : '설치된 앱 목록에서 "<B>티맵자동실행</B>"을 선택합니다.',
             permission_grant_on_for_accessibility4 : '사용 권한을 "<b>켭</b>"니다.',
 
-            permission_grant_on_for_accessibility_reset : '<b>접근성 권한이 중단</b>되었습니다.<br/><br/>정상 동작을 위해 <B>권한</B>을 "<B class="color_stop">껏다</B>" -> "<B class="color_stop">켜세요</B>".',
+            permission_grant_on_for_accessibility_reset : '<b class="color_stop">접근성 권한이 중단 되었습니다.</b><br/><br/>정상 동작을 위해 <B>권한</B>을 "<B class="color_stop">껏다</B>" -> "<B class="color_stop">켜세요</B>".',
             permission_grant_on_for_accessibility_reset4 : '<b>사용 권한</b>을 <b class="color_stop">"껏다"</b> -&gt; <b class="color_stop">"켜세요"</b>.',
-            permission_grant_on_for_accessibility_reset5 : '<b>접근성 권한을 "켜주세요"</b>.',
+            permission_grant_on_for_accessibility_reset5 : '<b class="color_stop">접근성 권한을 "켜주세요"</b>.',
             
             permission_grant_on_for_ignore_battery : '정상적인 앱 사용을 위해 해당 어플을 "<B>배터리 사용량 최적화</B>" 목록에서 "<B>제외</B>"해야 합니다.<br/>"<B>알림바</B>"를 제거하기 위해 필요합니다.',
             permission_grant_on_for_ignore_battery2 : '<B>[확인]</B> 버튼을 누른 후 시스템 알림 대화 상자가 뜨면 <B>[허용]</B> 을 선택해 주세요.',

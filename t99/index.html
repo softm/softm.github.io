@@ -422,7 +422,6 @@ function initLoad(v,cb){
 
             } else if (e.detail.action) {
                 window.fn_ChangeAppPackageCallback = function () {
-                    debugger;
                     fn_ShowOverlay();
                 };
                 fn_DeviceSaveData("_APP_PACKAGE", e.detail.action,"fn_ChangeAppPackageCallback");
@@ -465,7 +464,6 @@ function initLoad(v,cb){
                 rtnEl.singleSelection = true;
                 rtnEl.listen("click", function (e) {
                     var index = rtnEl.selectedIndex;
-                    // debugger;
                 });
                 return rtnEl;
             });
@@ -509,7 +507,6 @@ function initLoad(v,cb){
     const naviSelectDialog = new mdc.dialog.MDCDialog(document.querySelector(".navi_select.mdc-dialog"));
     var appList = new mdc.list.MDCList(document.querySelector('.navi_select.mdc-dialog .list .mdc-list'));
     appList.singleSelection = true;
-    // debugger;
     naviSelectDialog.listen("MDCDialog:opened", () => {
         appList.layout();
         console.info("opened");
@@ -522,7 +519,7 @@ function initLoad(v,cb){
         // self.close();
         // alert("test");
         // AlertUtil.fn_Alert("test~");
-        if (allGranted) {
+        if (allGranted && info.isAccessbilityServiceRunning ) {
             snackbar(t("message.all_granted"));
             // toast("모든 권한이 정상입니다.");
         } else {
@@ -701,32 +698,38 @@ function initLoad(v,cb){
             // toast("모든 권한 취득")
             // snackbar("모든 권한 취득")
             // t("label.status_stop")
-            if ( info?.isAccessbilityServiceRunning ) {
+            if ( info && info.isAccessbilityServiceRunning ) {
                 $("#status_message").html(getStatusMessage());
             } else {
-                $("#status_message").html(t("message.permission_grant_on_for_accessibility_reset"));
+                pMsg = t("message.permission_grant_on_for_accessibility_reset");
+                // $("#status_message").html(pMsg);
+                $("#status_permission_message").html("<span class=''>"+pMsg+"</span>");
             }
-            // $("#status_message").html("충전 + 블루투스 연결시 <span class='color_start'>동작</span>합니다.");
         } else {
             $("#status_message").html("");
             var pMsg = t("message.permissions_required");
-            if ( !info?.permissions?.ACCESSIVILITY ) {
+            if ( info && info.permissions && !info.permissions.ACCESSIVILITY ) {
                 pMsg = t("message.permission_grant_on_for_accessibility_reset5");
             } else {
-                if ( !info?.isAccessbilityServiceRunning ) {
+                if ( info && !info.isAccessbilityServiceRunning ) {
                     pMsg = t("message.permission_grant_on_for_accessibility_reset");
                 }
             }
-            $("#status_permission_message").html("<span class='color_stop'>"+pMsg+"</span>");
+            $("#status_permission_message").html("<span class=''>"+pMsg+"</span>");
         }
 
         // $("#status_message").removeClass("color_start color_stop").addClass(allGranted?"color_start":"color_stop");
-        $("#btnStatus").removeClass("bgcolor_start bgcolor_stop").addClass(allGranted ? "bgcolor_start" : "blink bgcolor_stop")
-            .html(allGranted ? t("label.normal_operation") : t("label.permission_check"));
-        // .html(allGranted ? "정상동작" : "권한확인");
-        if (allGranted) $("#btnStatus").hide(); 
-        else $("#btnStatus").show(); 
 
+        $("#btnStatus").removeClass("bgcolor_start bgcolor_stop").addClass(allGranted && info.isAccessbilityServiceRunning ? "bgcolor_start" : "blink bgcolor_stop")
+            .html(allGranted && info.isAccessbilityServiceRunning ? t("label.normal_operation") : t("label.permission_check"));
+        // .html(allGranted ? "정상동작" : "권한확인");
+        
+        if ( info && !info.isAccessbilityServiceRunning ) {
+            $("#btnStatus").show(); 
+        } else {
+            if (allGranted) $("#btnStatus").hide(); 
+            else $("#btnStatus").show(); 
+        }
         if ( cb ) {
             cb();
         }
@@ -986,7 +989,6 @@ function initLoad(v,cb){
     statusRunStatusScreenStop();
 
     // notiDialog.open();
-    // // debugger;
     if ( info.appUpdated ) {
         
         // var updatedCount = localStorage.getObject("updated_count") || [];
@@ -1137,7 +1139,6 @@ function fn_AppEnableOnCallback(ok) {
     window.fn_StartServiceCallBack = function () {
         window.getInfoOnlyCallBack = function (data) {
             window.info = (JSON.parse(data));
-            debugger;
             $("#status_message").html(getStatusMessage());
         }
         fn_GetInfo("", "getInfoOnlyCallBack");
@@ -1151,7 +1152,6 @@ function fn_AppEnableOffCallback(ok) {
     window.fn_StopServiceCallBack = function () {
         window.getInfoOnlyCallBack = function (data) {
             window.info = (JSON.parse(data));
-            debugger;
             $("#status_message").html(getStatusMessage());
         }
         fn_GetInfo("", "getInfoOnlyCallBack");

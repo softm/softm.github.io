@@ -2,6 +2,8 @@
  "_msg_":{"_common_":{"error.code":"F0000","resCode":"00"},"_body_":{"status":"success","flag":"S"}},
  "msg":"성공",
  "msgCode":"200",
+
+ "appReleaseUpdtedTime":1737115191329,
  "licenseOPTypeName":"0:NONE,1:ADVIEW_STOP,2:ADVIEW,3:SUBSCRIBE",
  "licenseOPType":"2",
  "waitTimeForNotAdLicense":"10000",
@@ -22,6 +24,11 @@
  "adTypeForWaitRewardName":"REWARDED",
  "adTypeForWaitReward":"4",
  "cacheLimitDateTime":7952310000000,
- "reviewRequestTime_tmp":"1000 * 60 * 60 * 24 * 2 = 172800000",
- "reviewRequestTime":172800000
+
+ "reviewOPTypeName":"0:STOP,1:START",
+ "reviewOPType":"1",
+ "reviewRequestFirstIntervalTime_tmp":"1000 * 60 * 60 * 24 * 3 = 259200000",
+ "reviewRequestFirstIntervalTime":60000,
+ "reviewRequestIntervalTime_tmp":"1000 * 60 * 60 * 24 * 30 = 2592000000",
+ "reviewRequestIntervalTime":120000
  }
