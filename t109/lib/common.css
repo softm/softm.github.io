@@ -568,7 +568,7 @@ hr.sub {
 .disabled {
   /* text-decoration: line-through; */
   opacity: 0.77;
-  color: lightgray;
+  /* color: lightgray; */
   /* background-color: lightgray; */
 }
 
@@ -576,3 +576,49 @@ hr.sub {
   height:45px !important;
 }
   
+
+/* 여닫는 버튼 */
+
+.accordion {
+
+  background-color:#eee;
+  color: #444;
+  
+  /* 커서 모양 변경 */
+  
+  cursor: pointer;
+  
+  padding: 18px;
+  
+  width: 100%;
+  
+  text-align: left;
+  
+  border: none;
+  
+  outline: none;
+  
+  font-size: 15px;
+  
+  transition: 0.4s;
+}  
+
+/* 클릭됐을 때 배경색 추가(1S로 active 클래스 추가), 호버했을 때 */
+.active, .accordion:hover {
+   background-color: #ccc;
+  
+  /* 아코디언 패널(평소엔 숨겨져 있음) */
+}
+
+  .panel {
+  
+  padding: 0 18px;
+  
+  background-color: white;
+  
+  max-height: 0;
+  
+  overflow: hidden;
+  
+  transition: max-height 0.2s ease-out;
+  }

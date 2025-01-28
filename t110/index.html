@@ -87,6 +87,8 @@ var chipRunStatusScreenStop = null;
 var runStatusScreenTimeForStart = null;
 var runStatusScreenTimeForStop = null;
 
+var checkGrantInfo= ['accessibility','notification_access','ignore_battery','location'];// ,'ignore_battery'
+
 $( document ).ready(function() {
     window.getInfoCallBack = function (data) {
         if (isWeb) {
@@ -552,7 +554,6 @@ function initLoad(v,cb){
             // fn_CheckGrant("notification_access","checkGrantCallBack")
             // fn_CheckGrant("accessibility","checkGrantCallBack")
             // fn_CheckGrant("ignore_battery","checkGrantCallBack")
-
             granted.some(grant=>{
                 if ( !grant.value ) {
                     console.log(grant.name, grant.value)
@@ -692,8 +693,51 @@ function initLoad(v,cb){
     });
 
     window.getPermissionsCallBack = function (data) {
+        // data = '[{ "name": "overlay", "value": true }, { { "name": "location", "value": false }, { "name": "notification_access", "value": false }, { "name": "accessibility", "value": false }, { "ignore_battery": false, "name": "ignore_battery", "value": false } ]';
         allGranted = (JSON.parse(data) || []).every(item => item.value);
-        granted = (JSON.parse(data) || []);
+        granted = (JSON.parse(data) || []).sort(function(a, b) {
+            return checkGrantInfo.findIndex(item=>item==a.name) - checkGrantInfo.findIndex(item=>item==b.name);
+        });;
+// [
+//     {name: 'overlay', value: true},
+//     {name: 'location', value: true},
+//     {name: 'notification_access', value: true},
+//     {name: 'accessibility', value: false},
+//     {ignore_battery: false, name: 'ignore_battery', value: false}
+// ]
+
+
+        var grantName = "";
+        for(var i = 0; i < granted.length;i++) {
+            if ( !granted[i].value ) { 
+                grantName = granted[i].name;
+                break;
+            }
+        }
+        
+        $("#status_message").html(getStatusMessage());
+
+        // 여기
+        var pMsg = t("message.permission_grant_add_for_" + grantName);
+        // alert (grantName + " / "   + pMsg );
+        
+        if ( grantName ) {
+            $("#status_permission_name").html(t("label.permission_name_" + grantName));
+            $("#status_permission_message").html("<span class=''>"+pMsg+"</span>");
+        } else {
+            $("#status_permission").hide();
+            $(".status_permission").hide();
+        }
+
+        // if ( info && info.isAccessbilityServiceRunning ) {
+        //     $("#status_message").html(getStatusMessage());
+        // } else {
+        //     alert("test1")
+        //     pMsg = t("message.permission_grant_on_for_accessibility_reset");
+        //     $("#status_message").html(pMsg);
+        //     $("#status_permission_message").html("<span class=''>"+pMsg+"</span>");
+        // }
+        /*
         if (allGranted) {
             // toast("모든 권한 취득")
             // snackbar("모든 권한 취득")
@@ -706,7 +750,7 @@ function initLoad(v,cb){
                 $("#status_permission_message").html("<span class=''>"+pMsg+"</span>");
             }
         } else {
-            $("#status_message").html("");
+            $("#status_message").html(getStatusMessage());
             var pMsg = t("message.permissions_required");
             if ( info && info.permissions && !info.permissions.ACCESSIVILITY ) {
                 pMsg = t("message.permission_grant_on_for_accessibility_reset5");
@@ -717,10 +761,11 @@ function initLoad(v,cb){
             }
             $("#status_permission_message").html("<span class=''>"+pMsg+"</span>");
         }
+        */
 
         // $("#status_message").removeClass("color_start color_stop").addClass(allGranted?"color_start":"color_stop");
 
-        $("#btnStatus").removeClass("bgcolor_start bgcolor_stop").addClass(allGranted && info.isAccessbilityServiceRunning ? "bgcolor_start" : "blink bgcolor_stop")
+        $("#btnStatus").removeClass("bgcolor_start bgcolor_stop").addClass(allGranted && info.isAccessbilityServiceRunning ? "bgcolor_start" : "bgcolor_stop") // blink bgcolor_stop
             .html(allGranted && info.isAccessbilityServiceRunning ? t("label.normal_operation") : t("label.permission_check"));
         // .html(allGranted ? "정상동작" : "권한확인");
         
@@ -1051,7 +1096,7 @@ function statusRunStatusScreenStop() {
     } else { // start
         var sMsg;
         if (info.runStatusScreenStopMode =='1') {  
-            sMsg = t("label.run_status_on_screen");
+            sMsg = t("label.run_status_unlock_screen"); // screen_mode_unlock
         } else if (info.runStatusScreenStopMode =='2') {  
             sMsg = t("label.run_status_off_screen");
         } else if (info.runStatusScreenStopMode =='3') {  
@@ -1315,20 +1360,9 @@ function getStatusMessage() {
             </div>
 <!--상태-->
             <div class="row sub flex left bold" style="height:40px">
-                <label for="" class="title" style=""><strong data-i18n="label.status">동작</strong></label>
+                <label for="" class="title" style=""><strong data-i18n="label.status">상태</strong></label>
                 <div class="flex-grow basic_font_medium2 align-self-center right" id="status_message"><!--상태메시지--></div>
-                <button id="btnStatus" class="mdc-button mdc-button--raised  align-self-center" style="height:25px;">
-                    <strong data-i18n="label.permission_settings">정상</strong>
-                </button>
-
             </div>
-                            
-            <div class="row sub">
-                <div class="row right basic_font_small2">
-                  <span id="status_permission_message" style="opacity: 1;"></span>
-                </div>
-            </div>
-            <hr class="sub"/>
 
             <div class="margin_top_10"></div>
 <!--앱/내비-->
@@ -1408,8 +1442,36 @@ function getStatusMessage() {
                             style="color:var(--softm-stop);font-weight:bold">중지</span></span>]됨.</span>
                     </div>
                 </div>
-                <hr class="sub" />
-
+                
+                <hr class="main status_permission" />
+                <div id="status_permission" class="row main padding_5" style="background-color: wheat;border-radius: 10px 10px 10px 10px;">
+                    <!--
+                        -->
+                     <div class="row  flex left bold">
+                        <div class="flex-grow align-self-center left basic_font_medium2" style="opacity: 1;"
+                        data-i18n="message.permission_enable_enhanced_feature"
+                        >
+                        권한 활성화로 향상된 기능을 이용하세요.
+                        </div>
+                    </div>        
+                    <div class="row main flex left">
+                        <!-- <label for="" class="title" style=""><strong data-i18n="label.permission">권한</strong></label> -->
+                        <div class="flex-grow basic_font_medium1 align-self-center left bold" id="status_permission_message" style="opacity: 1;">
+                            <!--권한 상태메시지-->
+                        </div>
+                    </div>                   
+                    <div class="row sub flex right">
+                        <div class="flex-grow basic_font_medium1 align-self-center left" id="status_permission_name" style="opacity: 1;">
+                            위치 권한
+                        </div>
+                        <div class="flex-grow basic_font_medium2 align-self-center right" style="opacity: 1;">
+                            <button id="btnStatus" class="mdc-button mdc-button--raised  align-self-center">
+                                <strong data-i18n="label.permission_settings">권한 설정</strong>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <hr class="sub status_permission"/>
 <!--출/퇴근 시간-->
 <div class="none">
             <div class="row sub">
@@ -1489,7 +1551,7 @@ function getStatusMessage() {
                         <!-- <div style="position: absolute;display: inline;margin-top: -15px;"> -->
                         <label id="run_status_screen_time_for_start"
                             class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon "
-                            style="width:65px;height:40px;padding-left: 0px;">
+                            style="width:55px;height:40px;padding-left: 0px;">
                             <div class="mdc-text-field__ripple"></div>
                             <input class="mdc-text-field__input basic_font_small3 center" type="number" aria-labelledby="my-label-id" aria-controls="my-helper-id"
                             aria-describedby="my-helper-id" value="10" style="padding: 7px 8px 7px 10px !important;" maxlength="2" min="0" max="999" pattern="[0-9]*">
@@ -1507,7 +1569,7 @@ function getStatusMessage() {
                     <div id="chip_run_status_screen_start_mode" class="flex-grow justify-content-right right mdc-chip-set mdc-chip-set--choice"
                     style="display:inline;"
                     >
-                        <div class="mdc-chip mdc-ripple-upgraded padding_10" role="row" style="margin: 0px !important;">
+                        <div class="mdc-chip mdc-ripple-upgraded padding_5" role="row" style="margin: 0px !important;">
                             <div class="mdc-chip__ripple"></div>
                             <span role="gridcell">
                             <span role="button" tabindex="1" class="mdc-chip__primary-action">
@@ -1515,7 +1577,7 @@ function getStatusMessage() {
                             </span>
                             </span>
                         </div>
-                        <div class="mdc-chip mdc-chip--selected mdc-ripple-upgraded padding_10" role="row" style="margin: 0px !important;">
+                        <div class="mdc-chip mdc-chip--selected mdc-ripple-upgraded padding_5" role="row" style="margin: 0px !important;">
                         <div class="mdc-chip__ripple"></div>
                         <span role="gridcell">
                             <span role="button" tabindex="1" class="mdc-chip__primary-action">
@@ -1523,7 +1585,7 @@ function getStatusMessage() {
                             </span>
                         </span>
                         </div>
-                        <div class="mdc-chip mdc-ripple-upgraded padding_10" role="row" style="margin: 0px !important;">
+                        <div class="mdc-chip mdc-ripple-upgraded padding_5" role="row" style="margin: 0px !important;">
                         <div class="mdc-chip__ripple"></div>
                         <span role="gridcell">
                             <span role="button" tabindex="2" class="mdc-chip__primary-action">
@@ -1531,7 +1593,7 @@ function getStatusMessage() {
                             </span>
                         </span>
                         </div>
-                        <div class="mdc-chip mdc-ripple-upgraded padding_10" role="row" style="margin: 0px !important;">
+                        <div class="mdc-chip mdc-ripple-upgraded padding_5" role="row" style="margin: 0px !important;">
                         <div class="mdc-chip__ripple"></div>
                         <span role="gridcell">
                             <span role="button" tabindex="2" class="mdc-chip__primary-action">
@@ -1559,7 +1621,7 @@ function getStatusMessage() {
                     <!-- <div style="position: absolute;display: inline;margin-top: -15px;"> -->
                     <label id="run_status_screen_time_for_stop"
                         class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon "
-                        style="width:65px;height:40px;padding-left: 0px;">
+                        style="width:55px;height:40px;padding-left: 0px;">
                         <div class="mdc-text-field__ripple"></div>
                         <input class="mdc-text-field__input basic_font_small3 center" type="number" aria-labelledby="my-label-id" aria-controls="my-helper-id"
                         aria-describedby="my-helper-id" value="10" style="padding: 7px 8px 7px 10px !important;" maxlength="2" min="0" max="999" pattern="[0-9]*">
@@ -1577,7 +1639,7 @@ function getStatusMessage() {
                 <div id="chip_run_status_screen_stop_mode" class="flex-grow justify-content-right right mdc-chip-set mdc-chip-set--choice"
                 style="display:inline;"
                 >
-                <div class="mdc-chip mdc-ripple-upgraded padding_10" role="row" style="margin: 0px !important;">
+                <div class="mdc-chip mdc-ripple-upgraded padding_5" role="row" style="margin: 0px !important;">
                     <div class="mdc-chip__ripple"></div>
                     <span role="gridcell">
                     <span role="button" tabindex="1" class="mdc-chip__primary-action">
@@ -1585,15 +1647,15 @@ function getStatusMessage() {
                     </span>
                     </span>
                 </div>
-                <div class="mdc-chip mdc-chip--selected mdc-ripple-upgraded padding_10" role="row" style="margin: 0px !important;">
+                <div class="mdc-chip mdc-chip--selected mdc-ripple-upgraded padding_5" role="row" style="margin: 0px !important;">
                 <div class="mdc-chip__ripple"></div>
                 <span role="gridcell">
                     <span role="button" tabindex="1" class="mdc-chip__primary-action">
-                    <span class="mdc-chip__text" data-i18n="label.screen_mode_on">켜짐</span>
+                    <span class="mdc-chip__text" data-i18n="label.screen_mode_unlock">열림</span>
                     </span>
                 </span>
                 </div>
-                <div class="mdc-chip mdc-ripple-upgraded padding_10" role="row" style="margin: 0px !important;">
+                <div class="mdc-chip mdc-ripple-upgraded padding_5 none" role="row" style="margin: 0px !important;">
                 <div class="mdc-chip__ripple"></div>
                 <span role="gridcell">
                     <span role="button" tabindex="2" class="mdc-chip__primary-action">
@@ -1601,7 +1663,7 @@ function getStatusMessage() {
                     </span>
                 </span>
                 </div>
-                <div class="mdc-chip mdc-ripple-upgraded padding_10" role="row" style="margin: 0px !important;">
+                <div class="mdc-chip mdc-ripple-upgraded padding_5" role="row" style="margin: 0px !important;">
                 <div class="mdc-chip__ripple"></div>
                 <span role="gridcell">
                     <span role="button" tabindex="2" class="mdc-chip__primary-action">

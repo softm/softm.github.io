@@ -58,7 +58,6 @@ var btnSwitchIndependenceCondition = null;
 var btnSwitchStartBluetooth = null;
 var btnSwitchStartWifi = null;
 
-var btnSwitchStartPower = null;
 var btnSettings = null;
 var btnSearch = null;
 
@@ -657,6 +656,33 @@ function initLoad(v){
         }
     });
 
+    btnSwitchStartPower = new mdc.switchControl.MDCSwitch(document.querySelector('.start_power.mdc-switch'));
+    btnSwitchStartPower.listen("mousedown", function (event) {
+        if (!btnSwitchStartPower.selected) { // true
+            material.confirm(
+                t("message.confirm_start"),
+                function () {
+                    fn_DeviceSaveData("_START_POWER", true,"fn_RunOptionOnCallback"); // 1 : 시작, 0 : 중지
+                    document.querySelector("#status").innerHTML = t("label.status_start");
+                    btnSwitchStartPower.selected = true;
+                },
+                function () {
+                }
+            );
+        } else { // false
+            material.confirm(
+                t("message.confirm_stop"),
+                function () {
+                    fn_DeviceSaveData("_START_POWER", false, "fn_RunOptionOffCallback"); // 1 : 시작, 0 : 중지
+                    document.querySelector("#status").innerHTML = t("label.status_stop");
+                    btnSwitchStartPower.selected = false;
+                },
+                function () {
+                }
+            );
+        }
+    });
+
     btnSwitchStartBluetooth.listen("mousedown", function (event) {
         if ( !info.permissions.BLUETOOTH ) {
             window.startSettingCallback = function(grant,ok) {
@@ -722,7 +748,7 @@ function initLoad(v){
                     // alert("startCallback");
                     snackbar(t("toast.start"));
                     fn_DeviceSaveData("_START_WIFI", true,"fn_RunOptionOnCallback"); // 1 : 시작, 0 : 중지
-                    document.querySelector("#status_wifi").innerHTML = t("label.status_wifi_stop");
+                    document.querySelector("#status_wifi").innerHTML = t("label.status_wifi_start");
                     $(btnSelectWifi.root).show()
                     btnSwitchStartWifi.selected = true;
 
@@ -1304,7 +1330,7 @@ function getStatusMessage() {
 </script>
 </head>
 <body class="none">
-<div class="i18n drawer-frame-root">
+<div class="i18n drawer-frame-root" style="width: 100%;">
 	<!--
     !-->
     <div class="mdc-drawer-app-content">
@@ -1750,7 +1776,7 @@ function getStatusMessage() {
             <div class="row ">
                 <div class="row sub flex"><!--fieldset-->
                 <label for="basic-switch" class="title"><strong
-                    data-i18n="label.work_goto_time">출근시간</strong></label>
+                    data-i18n="label.work_goto_time" style="font-size: 12px;">출근!@</strong></label>
                 <div class="flex-grow right">
                     <input class="work_goto_off_time" id="work_goto_time_from" type="time" name="work_goto_time_from" min="12:00"
                     max="18:00" value="06:00" style="width:95px"> ~
@@ -1760,7 +1786,7 @@ function getStatusMessage() {
                 </div><!--fieldset-->
                 <div class="row sub flex"><!--fieldset-->
                 <label for="basic-switch" class="title" ><strong
-                    data-i18n="label.work_off_time">퇴근시간</strong></label>
+                    data-i18n="label.work_off_time" style="font-size: 12px;">퇴근시간</strong></label>
                 <div class="flex-grow right">
                     <input class="work_goto_off_time" id="work_off_time_from" type="time" name="work_off_time_from" min="12:00"
                     max="18:00" value="17:30" style="width:95px"> ~
