@@ -151,12 +151,12 @@ $( document ).ready(function() {
                 permsssions:{
                     "LOCATION": true,
                     "ACCESSIVILITY": false,
-                    "NOTIFICAION_ACCESS": true,
+                    "NOTIFICAION_ACCESS": false,
                     "WRITE_SETTING": true,
                     "BLUETOOTH": true,
-                    "IGNORE_BATTERY": true,
+                    "IGNORE_BATTERY": false,
                     "USAGESTATS": false,
-                    "OVERLAY": true
+                    "OVERLAY": false
                 },
                 appUpdated: true,
                 appUpdatedTime: 1734608780275,
@@ -698,13 +698,18 @@ function initLoad(v,cb){
         granted = (JSON.parse(data) || []).sort(function(a, b) {
             return checkGrantInfo.findIndex(item=>item==a.name) - checkGrantInfo.findIndex(item=>item==b.name);
         });;
-// [
-//     {name: 'overlay', value: true},
-//     {name: 'location', value: true},
-//     {name: 'notification_access', value: true},
-//     {name: 'accessibility', value: false},
-//     {ignore_battery: false, name: 'ignore_battery', value: false}
-// ]
+        if ( isTest ) {
+            // granted = info.permsssions.map(item=>{
+            //     return {"name":item,"value":false};
+            // });
+            granted = [
+                {name: 'overlay', value: true},
+                {name: 'location', value: true},
+                {name: 'notification_access', value: true},
+                {name: 'accessibility', value: false},
+                {ignore_battery: false, name: 'ignore_battery', value: false}
+            ];
+        }
 
 
         var grantName = "";

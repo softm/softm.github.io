@@ -203,7 +203,6 @@ function initPage(v) {
     if ( info && info.versions.androidID <= 10 ) {
       $(".androidId.basic").show();
     } else {
-    debugger
       $(".androidId.11").show();
     }
   }
@@ -244,15 +243,18 @@ function startCheckGrant() {
     // bluetooth는  
     //   시작/종료 : Bluetooth 켤때 설정
     //   실행/옵션 : 블루투스 연결시 활성화시 설정
-    initCheckGrant(["overlay","location","notification_access","ignore_battery","accessibility"]);
+    
+    // initCheckGrant(["overlay","location","notification_access","ignore_battery","accessibility"]);
+    initCheckGrant(["overlay"]);
 
     // initCheckGrant(["location","notification_access","accessibility"]);
     // checkGrant("gps");
     fn_CheckGrant("overlay","checkGrantCallBack");
-    fn_CheckGrant("location","checkGrantCallBack");
-    fn_CheckGrant("notification_access","checkGrantCallBack");
-    fn_CheckGrant("ignore_battery","checkGrantCallBack");
-    fn_CheckGrant("accessibility","checkGrantCallBack");
+    // fn_CheckGrant("location","checkGrantCallBack");
+    // fn_CheckGrant("notification_access","checkGrantCallBack");
+    // fn_CheckGrant("ignore_battery","checkGrantCallBack");
+    // fn_CheckGrant("accessibility","checkGrantCallBack");
+
     // fn_CheckGrant("bluetooth","checkGrantCallBack");
     // fn_CheckGrant("write_settings","checkGrantCallBack");
     // checkGrant("accessibility");
@@ -403,7 +405,10 @@ function checkGrantCallBack(grant,ok) {
 			$("#permission_location").hide();
       completeGrant(grant);
 		} else {
-			if ( isTopGrant ) $("#permission_location").show();
+			if ( isTopGrant ) {
+        $("#permission_location").show();
+        fn_StartSetting("location","startSettingCallback");
+      }
 		}
 		go();
 	} else if (grant == "background_location") {
@@ -450,7 +455,10 @@ function checkGrantCallBack(grant,ok) {
 			$("#permission_ignore_battery").hide();
       completeGrant(grant);
 		} else {
-			if ( isTopGrant ) $("#permission_ignore_battery").show();
+      if ( isTopGrant ) {
+        $("#permission_ignore_battery").show();
+        fn_StartSetting("ignore_battery","startSettingCallback");
+      }
 		}
 		go();
 	}

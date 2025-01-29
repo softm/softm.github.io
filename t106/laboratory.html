@@ -62,6 +62,8 @@ var btnSwitchGeofence = null;
 var fenceDistance = null;
 
 var selectAppUpdateDelayTime = null;
+var chipCheckServiceCheckNoti;
+var chipCheckServiceCheckLogSendNoti;
 
 var granted =[];
 
@@ -127,6 +129,8 @@ $( document ).ready(function() {
                 "appUpdateDelayTime":"10800000", // 3시간
                 "appUpdateCheckTime":"1736131441271",
                 // + "http://www.softm.net/tdev"
+                "checkServiceCheckNoti":0,
+                "checkserviceCheckLogSendNoti":0
             }
         } else {
             // appUpdateDelayTime
@@ -483,7 +487,55 @@ function initLoad(v){
     statusAppUpdateDelayTime();
     selectAppUpdateDelayTime.value = String(v.appUpdateDelayTime);
 
+    chipCheckServiceCheckNoti = new mdc.chips.MDCChipSet(document.querySelector('#chip_check_service_check_noti'));
+    chipCheckServiceCheckNoti.listen("click", function (e) {
+        var adapter = chipCheckServiceCheckNoti.getDefaultFoundation().adapter;
+        var selectId = chipCheckServiceCheckNoti.selectedChipIds[0];
+        var index = adapter.getIndexOfChipById(selectId);
+        if (selectId) {
+                chipCheckServiceCheckNoti.chips[index].selected = true;
+                window.info.checkServiceCheckNoti = index;
+                fn_DeviceSaveData("_CHECK_SERVICE_CHECK_NOTI", index);
+                // statusRunStatusScreenStart();
+        } else { // error
+            // window.info.
+            if ( window.info.checkServiceCheckNoti == "0" ) {
+                chipCheckServiceCheckNoti.chips[0].selected = true;
+                chipCheckServiceCheckNoti.chips[1].selected = false;
+            } else {
+                chipCheckServiceCheckNoti.chips[0].selected = false;
+                chipCheckServiceCheckNoti.chips[1].selected = true;
+                fn_DeviceSaveData("_CHECK_SERVICE_CHECK_NOTI", 1);
+            }
+        }
+    });
+    chipCheckServiceCheckNoti.chips[parseInt(window.info.checkServiceCheckNoti, 10)].selected = true;
+
+    chipCheckServiceCheckLogSendNoti = new mdc.chips.MDCChipSet(document.querySelector('#chip_check_service_check_log_send_noti'));
+    chipCheckServiceCheckLogSendNoti.listen("click", function (e) {
+        var adapter = chipCheckServiceCheckLogSendNoti.getDefaultFoundation().adapter;
+        var selectId = chipCheckServiceCheckLogSendNoti.selectedChipIds[0];
+        var index = adapter.getIndexOfChipById(selectId);
+        if (selectId) {
+            chipCheckServiceCheckLogSendNoti.chips[index].selected = true;
+                window.info.checkServiceCheckLogSendNoti = index;
+                fn_DeviceSaveData("_CHECK_SERVICE_CHECK_LOG_SEND_NOTI", index);
+                // statusRunStatusScreenStart();
+        } else { // error
+            // window.info.
+            if ( window.info.checkServiceCheckLogSendNoti == "0" ) {
+                chipCheckServiceCheckLogSendNoti.chips[0].selected = true;
+                chipCheckServiceCheckLogSendNoti.chips[1].selected = false;
+            } else {
+                chipCheckServiceCheckLogSendNoti.chips[0].selected = false;
+                chipCheckServiceCheckLogSendNoti.chips[1].selected = true;
+                fn_DeviceSaveData("_CHECK_SERVICE_CHECK_LOG_SEND_NOTI", 1);
+            }
+        }
+    });
+    chipCheckServiceCheckLogSendNoti.chips[parseInt(window.info.checkServiceCheckLogSendNoti, 10)].selected = true;
 }
+
 function millisecondsToTime(ms) {
     const days = Math.trunc(ms / (24 * 60 * 60 * 1000)); // 1일 = 24시간 * 60분 * 60초 * 1000ms
     ms %= (24 * 60 * 60 * 1000);
@@ -939,6 +991,78 @@ window.fn_BackKeyPressedCallBack = function () {
             <div class="row comment">
                 <span id="statusAppUpdateDelayTime" style="opacity: 0.7;"><del><span style="color:var(--softm-start);font-weight:bold">120</span>초 이내에 <span style="color:var(--softm-start);font-weight:bold">5</span>km/h에 도달하면 <span style="color:var(--softm-start);font-weight:bold">실행</span>합니다. [<span style="color:var(--softm-stop);font-weight:bold">꺼짐</span>].</del></span>
             </div>
+
+<!-- 화면 상태 시작시 -->     
+            <div class="margin_top_15 margin_bottom_5">
+                <div class="row flex sub">
+                    <legend align="left" class="title "><strong data-i18n="label.service_check_noti">체크노티</strong></legend>
+                    <div data-i18n="label.service_check_noti_basic" class="flex flex-grow basic_font_medium1" style="align-items: center; justify-content: right;"><!--fieldset-->
+                      기본
+                    </div>    
+                    <div id="chip_check_service_check_noti" class="flex-grow justify-content-right right mdc-chip-set mdc-chip-set--choice"
+                    style="display:inline;"
+                    >
+                        <div class="mdc-chip mdc-ripple-upgraded padding_5" role="row" style="margin: 0px !important;">
+                            <div class="mdc-chip__ripple"></div>
+                            <span role="gridcell">
+                            <span role="button" tabindex="1" class="mdc-chip__primary-action">
+                                <span class="mdc-chip__text" data-i18n="label.none">안함</span>
+                            </span>
+                            </span>
+                        </div>
+                        <div class="mdc-chip mdc-chip--selected mdc-ripple-upgraded padding_5" role="row" style="margin: 0px !important;">
+                        <div class="mdc-chip__ripple"></div>
+                        <span role="gridcell">
+                            <span role="button" tabindex="1" class="mdc-chip__primary-action">
+                            <span class="mdc-chip__text" >on</span>
+                            </span>
+                        </span>
+                        </div>
+                        <div class="mdc-chip mdc-ripple-upgraded padding_5" role="row" style="margin: 0px !important;">
+                        <div class="mdc-chip__ripple"></div>
+                        <span role="gridcell">
+                            <span role="button" tabindex="2" class="mdc-chip__primary-action">
+                            <span class="mdc-chip__text" >off</span>
+                            </span>
+                        </span>
+                        </div>
+                    </div>
+                    <div data-i18n="label.service_check_noti_log"  class="flex flex-grow basic_font_medium1" style="align-items: center; justify-content: right;"><!--fieldset-->
+                    로그
+                    </div>    
+                    <div id="chip_check_service_check_log_send_noti" class="flex-grow justify-content-right right mdc-chip-set mdc-chip-set--choice"
+                    style="display:inline;"
+                    >
+                        <div class="mdc-chip mdc-ripple-upgraded padding_5" role="row" style="margin: 0px !important;">
+                            <div class="mdc-chip__ripple"></div>
+                            <span role="gridcell">
+                            <span role="button" tabindex="1" class="mdc-chip__primary-action">
+                                <span class="mdc-chip__text" data-i18n="label.none">안함</span>
+                            </span>
+                            </span>
+                        </div>
+                        <div class="mdc-chip mdc-chip--selected mdc-ripple-upgraded padding_5" role="row" style="margin: 0px !important;">
+                        <div class="mdc-chip__ripple"></div>
+                        <span role="gridcell">
+                            <span role="button" tabindex="1" class="mdc-chip__primary-action">
+                            <span class="mdc-chip__text">on</span>
+                            </span>
+                        </span>
+                        </div>
+                        <div class="mdc-chip mdc-ripple-upgraded padding_5" role="row" style="margin: 0px !important;">
+                        <div class="mdc-chip__ripple"></div>
+                        <span role="gridcell">
+                            <span role="button" tabindex="2" class="mdc-chip__primary-action">
+                            <span class="mdc-chip__text">off</span>
+                            </span>
+                        </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class=" sub" />
+
             
             <div class="row" style="height:70px"></div>
             <div class="mdc-snackbar">
