@@ -413,6 +413,9 @@ footer {
 .mdc-button__label {    
   text-transform: initial !important;/*For Lower case use lowercase*/
 }
+.mdc-text-field--outlined {
+  height:45px
+}
 
 @keyframes blink-bg-effect {
   100% {
@@ -461,12 +464,52 @@ footer {
   color:black !important
 }
 
+
+.lightblack {
+  color:black !important;
+  opacity: 0.8;
+}
+.lightgray {
+  color:gray !important;
+  opacity: 0.8;
+}
+
 .red {
   color:red !important
 }
 
 .grey {
   color:grey !important
+}
+.gray {
+  color:grey !important
+}
+
+.lightgray {
+  color:gray !important;
+  opacity: 0.7;
+}
+
+.cream {
+  color:#F7CDB7 !important
+}
+.orange {
+  color:#f39c12 !important
+}
+.pink {
+  color:#D77976 !important
+}
+.green {
+  color:#1abc9c !important
+}
+.red {
+  color:#ff0000 !important
+}
+.skyblue {
+  color:#3498db !important
+}
+.yellowgreen {
+ color:#B6D38A !important
 }
 
 .white {
@@ -489,6 +532,39 @@ footer {
 }
 .bgcolor_stop {
   background-color:var(--softm-stop) !important
+}
+
+.bg_wheat {
+  background-color:wheat !important;
+}
+.bg_lightgray {
+  background-color:gray !important;
+  opacity: 0.7;
+}
+.bg_gray {
+  background-color:gray !important;
+}
+
+.bg_cream {
+  background-color:#F7CDB7 !important
+}
+.bg_orange {
+  background-color:#f39c12 !important
+}
+.bg_pink {
+  background-color:#D77976 !important
+}
+.bg_green {
+  background-color:#1abc9c !important
+}
+.bg_red {
+  background-color:#ff0000 !important
+}
+.bg_skyblue {
+  background-color:#3498db !important
+}
+.bg_yellowgreen {
+  background-color:#B6D38A !important
 }
 
 .flex {

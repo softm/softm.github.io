@@ -891,6 +891,22 @@ function fn_GetPackagesInfo(key, callBackFunc) {
 }
 
 /**
+ * API 334 : getMusicPackagesInfo
+ *
+ * @param key            불러올 데이터 키값
+ * @param callBackFunc   콜백 함수
+ *
+ */
+function fn_GetMusicPackagesInfo(key, callBackFunc) {
+	var result = { "header":{ "api":"334" }, "body":{ "key":key, "callBackFunc":callBackFunc } };
+	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
+		 fn_Js_Bridge(result);
+	 }else{
+		 eval(callBackFunc + "('" + localStorage.getItem(key) + "')");
+	 }
+}
+
+/**
  * API 300 : getInfo
  *
  * @param key            불러올 데이터 키값
@@ -1025,8 +1041,8 @@ function fn_setSysInfo(key, value, callBackFunc) {
  * @param callBackFunc   콜백 함수
  *
  */
-function fn_getInstallPackages(key, callBackFunc, category=null) {
-	var result = { "header":{ "api":"303" }, "body":{ "key":key, "callBackFunc":callBackFunc, "category":category?category:"" } };
+function fn_getInstallPackages(appType,key, callBackFunc, category=null) {
+	var result = { "header":{ "api":"303" }, "body":{ "appType":appType, "key":key, "callBackFunc":callBackFunc, "category":category?category:"" } };
 	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
 		 fn_Js_Bridge(result);
 	 }else{

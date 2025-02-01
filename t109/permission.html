@@ -33,6 +33,7 @@
 var checkMode = getParam("p_check_mode");
 var btnHome = null;
 var btnBack = null;
+var btnGrantAccessibilityLater = null;
 
 $( document ).ready(function() {
 
@@ -117,20 +118,25 @@ $( document ).ready(function() {
 });
 
 function initPage(v) {
-  btnHome    = new mdc.ripple.MDCRipple(document.querySelector("#btnHome"));
-	btnHome.listen("click", function(event) {
-		self.close();
-	});
+    btnHome    = new mdc.ripple.MDCRipple(document.querySelector("#btnHome"));
+    btnHome.listen("click", function(event) {
+      self.close();
+    });
 
-  btnBack    = new mdc.ripple.MDCRipple(document.querySelector("#btnBack"));
-	btnBack.listen("click", function(event) {
-    fn_BackKeyPressed();
-    //fn_OpenUrl("index.html?lng="+navigator.language.split("-")[0]);
-	});
+    btnBack    = new mdc.ripple.MDCRipple(document.querySelector("#btnBack"));
+    btnBack.listen("click", function(event) {
+      if ( checkMode === "accessibility" ) {
+        fn_GoMain(true);
+      } else {
+        fn_BackKeyPressed();
+      }
+      //fn_OpenUrl("index.html?lng="+navigator.language.split("-")[0]);
+    });
 
     const btnGrantOverlay = new mdc.ripple.MDCRipple(document.querySelector("#btnGrantOverlay"));
     btnGrantOverlay.listen("click", function(event) {
           fn_StartSetting("overlay","startSettingCallback");
+          event.preventDefault();
     });
     const btnGrantUsageStats = new mdc.ripple.MDCRipple(document.querySelector("#btnGrantUsageStats"));
     btnGrantUsageStats.listen("click", function(event) {
@@ -165,6 +171,15 @@ function initPage(v) {
     const btnGrantAccessibility= new mdc.ripple.MDCRipple(document.querySelector("#btnGrantAccessibility"));
     btnGrantAccessibility.listen("click", function(event) {
           fn_StartSetting("accessibility","startSettingCallback");
+    });
+
+    btnGrantAccessibilityLater= new mdc.ripple.MDCRipple(document.querySelector("#btnGrantAccessibilityLater"));
+    btnGrantAccessibilityLater.listen("click", function(event) {
+      material.confirm(t("message.permission_grant_on_for_accessibility_ignore"), function() {
+        fn_DeviceSaveData("_APP_INSTALLED", true);
+        fn_GoMain(true);
+        // snackbar(t("message.del_home"));
+      });
     });
     
     const btnGrantIgnoreBattery= new mdc.ripple.MDCRipple(document.querySelector("#btnGrantIgnoreBattery"));
@@ -214,6 +229,7 @@ var initCheckGrants = [];
 var checkGrants = [];
 
 function initCheckGrant(inits) {
+  initCheckGrants = [];
   for( var i=0;i<inits.length;i++) {
       initCheckGrants.push(inits[i]);
       checkGrants.push(inits[i]);
@@ -245,15 +261,16 @@ function startCheckGrant() {
     //   실행/옵션 : 블루투스 연결시 활성화시 설정
     
     // initCheckGrant(["overlay","location","notification_access","ignore_battery","accessibility"]);
-    initCheckGrant(["overlay"]);
+    // 여기
+    initCheckGrant(["overlay","notification_access","accessibility"]);
 
     // initCheckGrant(["location","notification_access","accessibility"]);
     // checkGrant("gps");
     fn_CheckGrant("overlay","checkGrantCallBack");
     // fn_CheckGrant("location","checkGrantCallBack");
-    // fn_CheckGrant("notification_access","checkGrantCallBack");
+    fn_CheckGrant("notification_access","checkGrantCallBack");
     // fn_CheckGrant("ignore_battery","checkGrantCallBack");
-    // fn_CheckGrant("accessibility","checkGrantCallBack");
+    fn_CheckGrant("accessibility","checkGrantCallBack");
 
     // fn_CheckGrant("bluetooth","checkGrantCallBack");
     // fn_CheckGrant("write_settings","checkGrantCallBack");
@@ -262,10 +279,12 @@ function startCheckGrant() {
     $(".accessibility_basic").show();
     $(".accessibility_reset").hide();
   } else if ( checkMode === "accessibility" ) {
-    initCheckGrant(["accessibility","ignore_battery"]);
+    initCheckGrant(["accessibility"]);
+    // initCheckGrant(["accessibility","ignore_battery"]);
     fn_CheckGrant("accessibility","checkGrantCallBack");
-    fn_CheckGrant("ignore_battery","checkGrantCallBack");
+    // fn_CheckGrant("ignore_battery","checkGrantCallBack");
     $(btnBack.root).show();
+    $(btnGrantAccessibilityLater.root).hide();
     $(".accessibility_basic").show();
     $(".accessibility_reset").hide();
   } else if ( checkMode === "accessibility_reset" ) {
@@ -348,6 +367,39 @@ function fReload(url) {
 
 function checkGrantCallBack(grant,ok) {
   var isTopGrant = checkGrants[0] === grant;
+  console.log("checkGrantCallBack" , grant,isTopGrant,checkGrants);
+  
+  var pageNavi = $("#page_navi");
+  var  cIdx = initCheckGrants.findIndex(item => item==grant);
+  /*
+  <b class="margin_left_5 margin_right_5 basic_font_large3" style="margin-bottom:-5px">1</b> 
+  <span class="basic_font_medium1">&gt;</span> <
+  span style="margin-bottom:-1px" class="margin_left_5">2</span>
+  */
+  if ( isTopGrant ) {
+    pageNavi.empty();
+    // var strSpan = $("<b>").css("marginBottom","-1px").html("Step");
+    // pageNavi.append(strSpan);
+    for ( idx in initCheckGrants ) {
+      // cIdx
+      if ( idx == cIdx ) {
+          var numB = $("<b>").addClass("margin_right_5 basic_font_large3").css("marginBottom","-5px")
+        .html((Number(idx)+1));
+          pageNavi.append(numB);
+        } else {
+          var numSpan = $("<span>").css("marginBottom","-1px").html((Number(idx)+1));
+          pageNavi.append(numSpan);
+        }
+        console.log(grant, idx,cIdx,pageNavi);
+        if ( idx < initCheckGrants.length - 1 ) {
+          var arrowSpan = $("<span>").addClass("basic_font_medium1 margin_left_5 margin_right_5").html("&gt;");
+          pageNavi.append(arrowSpan);
+        }
+      }
+      if ( initCheckGrants.length == 1 ) {
+        pageNavi.hide();
+      }
+  }
 	if (grant == "write_settings") {
 		if( ok == "ok" ) {
       if ( !granted.includes(grant) ) granted.push(grant);
@@ -563,7 +615,8 @@ function startSettingCallback(grant,ok) {
         class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded none">arrow_back_ios</button>
 
       <span class="mdc-top-app-bar__title" data-i18n="label.top_bar">티맵실행</span> </section>
-    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+    <section id="page_navi" class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end margin_right_10 basic_font_medium3 margin_top_10" style="align-items: baseline;">
+      <!-- <b class="margin_right_5 basic_font_large3" style="margin-bottom: -5px;">1</b><b class="basic_font_medium1 margin_left_5 margin_right_5">&gt;</b><b style="margin-bottom: -1px;">2</b> -->
       <!-- <button id="btnSettings" class="mdc-icon-button material-icons mdc-top-app-bar__action-item--unbounded"
         aria-label="Print this page">settings</button> -->
     </section>
@@ -593,12 +646,12 @@ function startSettingCallback(grant,ok) {
           <span style="font-size:20px"><h5  style="display:inline" data-i18n="[html]message.permission1"></h5></span>
         </div>
 
-        <div style="font-size:16px;margin-left:20px;margin-top:10px;margin-bottom:10px">
+        <div style="margin-left:20px;margin-top:10px;margin-bottom:10px">
           <div style="text-align:left;">
-            <span style=""><span>1. </span><span data-i18n="[html]message.permission_grant_on">"권한 허용"을 켜고, </span></span>
+            <span style=""><span>1. </span><span data-i18n="[html]message.permission_grant_on_for_overlay1">"<B>티맵자동실행</B>" 선택</span></span>
           </div>
           <div style="text-align:left;margin-top:10px">
-            <span style=""><span>2. </span><span data-i18n="[html]message.permission_grant_backkey_return">"권한 허용"을 켜고,</span></span>
+            <span style=""><span>2. </span><span data-i18n="[html]message.permission_grant_on_for_overlay2">사용 권한 "<b>켬</b>"</span></span>
           </div>
         </div>
               <button id="btnGrantOverlay" class="mdc-button mdc-button--raised margin_right_5" style="width:100%;font-size:16px">
@@ -714,7 +767,7 @@ function startSettingCallback(grant,ok) {
           <span style="font-size:20px"><h5  style="display:inline" data-i18n="[html]message.permission3">알람 접근 허용</h5></span>
         </div>
 
-        <div style="font-size:16px;margin-left:20px;margin-top:10px;margin-bottom:10px">
+        <div style="margin-left:20px;margin-top:10px;margin-bottom:10px">
           <div style="text-align:left;">
             <span style=""><span>1. </span><span data-i18n="[html]message.permission_grant_on_for_notification_access">"알림 접근" 권한을 켜세요.<span></span>
           </div>
@@ -743,26 +796,21 @@ function startSettingCallback(grant,ok) {
           </div> -->
 
           <!-- <hr class="main"/> -->
-          <div class="margin_top_20 margin_bottom_10" style="font-size:16px;margin-left:20px;">
-            <div style="text-align:left;">
-              <span style=""><span data-i18n="[html]message.permission_grant_on_for_accessibility">앱 실행시 기능을 On/Off를 위해 이용됩니다.<br/>앱 실행후, 종료기능을 위해 이용됩니다.</span></span>
-            </div>
-          </div>
-          <!-- <hr class="main"/> -->
           
-          <hr class="main"/>
+          <!-- <hr class="main"/> -->
 
-          <div style="font-size:16px;margin-left:10px;margin-top:10px;margin-bottom:10px">
+          <div style="margin-left:20px;margin-left:10px;margin-top:10px;margin-bottom:10px">
             <div style="text-align:left;">
-              <span style=""><span>1. </span><span data-i18n="[html]message.permission_grant_on_for_accessibility2">스마트폰의 접근성 메뉴로 이동되면 '설치된 앱'을 선택합니다.</span></span>
+              <span style=""><span>1. </span><span data-i18n="[html]message.permission_grant_on_for_accessibility2">"<B>설치된 앱</B>" 선택</span></span>
             </div>
             <div style="text-align:left;margin-top:10px">
-              <span style=""><span>2. </span><span data-i18n="[html]message.permission_grant_on_for_accessibility3">설치된 앱 목록에서 '티맵자동실행'를 선택합니다.</span></span>
+              <span style=""><span>2. </span><span data-i18n="[html]message.permission_grant_on_for_accessibility3">"<B>티맵자동실행</B>" 선택</span></span>
             </div>
             <div style="text-align:left;margin-top:10px">
-              <span style=""><span>3. </span><span data-i18n="[html]message.permission_grant_on_for_accessibility4">사용 권한을 '켭'니다.</span></span>
+              <span style=""><span>3. </span><span data-i18n="[html]message.permission_grant_on_for_accessibility4">사용 권한 "<b>켬</b>"</span></span>
             </div>
           </div>
+
 
         </div>
         <div class="accessibility_reset">
@@ -786,10 +834,10 @@ function startSettingCallback(grant,ok) {
 
           <div style="font-size:16px;margin-left:10px;margin-top:10px;margin-bottom:10px">
             <div style="text-align:left;">
-              <span style=""><span>1. </span><span data-i18n="[html]message.permission_grant_on_for_accessibility2">스마트폰의 접근성 메뉴로 이동되면 '설치된 앱'을 선택합니다.</span></span>
+              <span style=""><span>1. </span><span data-i18n="[html]message.permission_grant_on_for_accessibility2"><B>설치된 앱</B>" 선택'</span></span>
             </div>
             <div style="text-align:left;margin-top:10px">
-              <span style=""><span>2. </span><span data-i18n="[html]message.permission_grant_on_for_accessibility3">설치된 앱 목록에서 '티맵자동실행'를 선택합니다.</span></span>
+              <span style=""><span>2. </span><span data-i18n="[html]message.permission_grant_on_for_accessibility3">"<B>티맵자동실행</B>" 선택</span></span>
             </div>
             <div style="text-align:left;margin-top:10px">
               <span style=""><span>3. </span><span data-i18n="[html]message.permission_grant_on_for_accessibility_reset4">사용 권한을 <b>"껏다"</b> -&gt; <b>"켜세요".</b></span></span>
@@ -797,12 +845,27 @@ function startSettingCallback(grant,ok) {
           </div>
         </div>
 
-        <button id="btnGrantAccessibility" class="mdc-button mdc-button--raised margin_right_5" style="width:100%;font-size:16px">
+        <div class="flex">  
+          <button id="btnGrantAccessibilityLater" class="mdc-button mdc-button--raised margin_right_5 bg_pink" style="width:100%;font-size:16px" style="">
             <!-- <strong data-i18n="label.permission_accessibility">접근성 권한 허용</strong> -->
-            <strong data-i18n="label.permission_settings">권한 설정</strong>
-        </button>
-        <div id="accessibility_basic_scope_of_use" class="accessibility_basic basic_font_small2">
-          <hr class="sub margin_top_10"/> 
+            <strong data-i18n="label.permission_settings_no">권한 없이 이용</strong>
+                </button>
+
+            <button id="btnGrantAccessibility" class="mdc-button mdc-button--raised margin_right_5 " style="width:100%;font-size:16px">
+              <!-- <strong data-i18n="label.permission_accessibility">접근성 권한 허용</strong> -->
+              <strong data-i18n="label.permission_settings">권한 설정</strong>
+            </button>        
+        </div>
+
+        <div>
+          <div class="margin_top_20 margin_bottom_10" style="font-size:16px;margin-left:20px;">
+            <div style="text-align:left;">
+              <span style=""><span data-i18n="[html]message.permission_grant_on_for_accessibility" class="gray">앱 실행시 기능을 On/Off를 위해 이용됩니다.<br/>앱 실행후, 종료기능을 위해 이용됩니다.</span></span>
+            </div>
+          </div>
+          <hr class="main margin_top_10 margin_bottom_10"/> 
+        </div>
+        <div id="accessibility_basic_scope_of_use" class="accessibility_basic basic_font_small2 lightgray">
           <div class="basic_font_medium2" style="margin-left:20px;">
             <div  class="left">
               <span class="basic_font_medium1"><b style="display:inline" data-i18n="[html]message.permission5_1">접근성서비스 API 이용 범위</b></span>

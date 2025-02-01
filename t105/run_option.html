@@ -257,8 +257,8 @@ $( document ).ready(function() {
     //W
     // drawer.open = true;
 
-    footerNavigationIndex = footerNavigationUrl.indexOf(location.pathname.split("/")[2]);
-    // $(footerNavigation[0]).trigger("click");
+    var pathInfo = location.pathname.split("/");
+    footerNavigationIndex = footerNavigationUrl.indexOf(pathInfo[pathInfo.length-1]);
     footerNavigation[footerNavigationIndex].emit("click",footerNavigationIndex);
     
 });

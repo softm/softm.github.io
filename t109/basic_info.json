@@ -98,6 +98,6 @@
  "usingUserLogFormatName":"1:DEFAULT 2:SHORT",
  "usingUserLogFormat":"1",
 
- "checkGrantInfo":["accessibility","notification_access","ignore_battery","location"]
+ "checkGrantInfo":["notification_access","accessibility","ignore_battery","location"]
 
  }
