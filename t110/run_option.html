@@ -251,6 +251,7 @@ $( document ).ready(function() {
         } else {
             window.info = (JSON.parse(data));
         }
+        initBasicInfo();
         initPage(window.info);
     }
     fn_GetInfo("", "getInfoCallBack");
@@ -827,7 +828,7 @@ function initLoad(v){
         this.value = v;
     });
 
-    $(".version-name").text(v.versionName);
+    $(".version-name").text(v.versionName + " / " + v.versionCode);
     // $(".app_name").text(v.versionName);
 
     console.info("window.info", v);
@@ -1992,6 +1993,13 @@ function getStatusMessage() {
                     <span class="material-icons mdc-bottom-navigation__list-item__icon">forum</span>
                     <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.menu_run_options">실행옵션</span>
                 </span>
+              
+                <span id="footerMenuDeveloperSupport" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                  data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">favorite</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="[html]title.support_developers">개발자응원</span>
+                </span>
+  
 
                 <!-- <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
                     data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>

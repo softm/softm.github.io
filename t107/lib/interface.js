@@ -401,6 +401,21 @@ function fn_GoMain(restart) {
 	}
 }
 
+
+/**
+ * API 110 : goMain : onCreate
+ *
+ * @param restart 서비스 재시작
+ */
+function fn_GoTest() {
+	var result = { "header":{ "api":"111" } };
+	if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
+	    fn_Js_Bridge(result);
+	} else {
+		document.location.href="index.html";
+	}
+}
+
 /**
  * API 400 : 네이티브 url webview.loadUrl
  *
@@ -722,6 +737,60 @@ function fn_HideOverlay() {
 function fn_ShowOverlay() {
 	var result = { "header":{ "api":"502" } };
 
+	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
+		 fn_Js_Bridge(result);
+	 }else{
+		 //alert(JSON.stringify(result));
+	    // $('.mo-ui-layer.progress').hide();
+//		 loading('close');
+	 }
+
+}
+
+/**
+ * API 502 : show overlay
+ *
+ * @date 2016. 07. 06.
+ */
+function fn_OpenOverlayView(expandSub) {
+	var result = { "header":{ "api":"503" } };
+	var result = { "header":{ "api":"503" }, "body":{ "expandSub":expandSub} };
+
+	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
+		 fn_Js_Bridge(result);
+	 }else{
+		 //alert(JSON.stringify(result));
+	    // $('.mo-ui-layer.progress').hide();
+//		 loading('close');
+	 }
+
+}
+
+/**
+ * API 502 : show overlay
+ *
+ * @date 2016. 07. 06.
+ */
+function fn_OpenOverlayView(expandSub) {
+	var result = { "header":{ "api":"503" }, "body":{ "expandSub":expandSub} };
+
+	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
+		 fn_Js_Bridge(result);
+	 }else{
+		 //alert(JSON.stringify(result));
+	    // $('.mo-ui-layer.progress').hide();
+//		 loading('close');
+	 }
+
+}
+
+/**
+ * API 777 : api_777_AdView
+ *
+ * @date 2025. 02. 06.
+ */
+function fn_AdView(callBackFunc) {
+	var result = { "header":{ "api":"777" }, "body":{ "callBackFunc":callBackFunc } };
 	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
 		 fn_Js_Bridge(result);
 	 }else{

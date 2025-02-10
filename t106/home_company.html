@@ -80,7 +80,10 @@ var localStorageRecent = new InitLocalStorage("recent",['id', 'name', 'key']);
 
 var defaultListHeight = 60;
 var markerArr = [];
+var poiArrs = [];
 var poiArr = [];
+var mdcList = null;
+
 var recentArr = [];
 var naviDestination = null;
 
@@ -146,8 +149,9 @@ $( document ).ready(function() {
     btnMyLocation = [].map.call(document.querySelectorAll(".btnMyLocation"),el=>{
         var rtnEl = new mdc.ripple.MDCRipple(el);
           rtnEl.listen("click", function(event) {
-            onChangeButton(false,false);
-			fn_GetLocation("map["+tIdx+"]","moveMylocation");
+            fn_Reload(true);
+            // onChangeButton(false,false);
+			// fn_GetLocation("map["+tIdx+"]","moveMylocation");
           });
         return rtnEl;
     });
@@ -225,16 +229,19 @@ $( document ).ready(function() {
                 setTimeout(function() {
                     fn_DeviceLoadData("_POI_HOME","bindPoiHome");
                     fn_DeviceSaveData("_USING_REG_HOME", true);
+                    fn_Reload(true);
                     // btnBack.emit("click");
                 },500);
                 snackbar(t("message.reg_home"));
                 maps.current = null;
             } else {
                 material.confirm(t("message.confirm_home_delete"), function() {
+                    maps.removeMarker(maps.home.marker);
                     fn_DeviceSaveData("_POI_HOME", "");
                     fn_DeviceLoadData("_POI_HOME","bindPoiHome");
                     setTimeout(function() {
                         fn_DeviceSaveData("_USING_REG_HOME", !info.poiCompany?false:true);
+                        fn_Reload(true);
                     },500);
                     // btnBack.emit("click");
                     snackbar(t("message.del_home"));
@@ -256,6 +263,7 @@ $( document ).ready(function() {
                     fn_DeviceLoadData("_POI_COMPANY","bindPoiCompany");
                     fn_DeviceSaveData("_USING_REG_HOME", true);
                     // btnBack.emit("click");
+                    fn_Reload(true);
                 },500);
                 // btnBack.emit("click");
                 snackbar(t("message.reg_company"));
@@ -263,10 +271,12 @@ $( document ).ready(function() {
                 maps.current = null;
             } else {
                 material.confirm(t("message.confirm_company_delete"), function() {
+                    maps.removeMarker(maps.company.marker);
                     fn_DeviceSaveData("_POI_COMPANY", "");
                     fn_DeviceLoadData("_POI_COMPANY","bindPoiCompany");
                     setTimeout(function() {
                         fn_DeviceSaveData("_USING_REG_HOME", !info.poiHome?false:true);
+                        fn_Reload(true);
                     },500);
                     // btnBack.emit("click");
                     snackbar(t("message.del_company"));
@@ -274,27 +284,51 @@ $( document ).ready(function() {
             }
         } else if ( tIdx == 2 ) { // 즐겨찾기
             if ( maps.current ) {
-                var newFavorite = new MapPointForFavorite(maps.current.getLat(),maps.current.getLon(),maps.current.getName());
+                if ( list[tIdx].selectedIndex >= 0 ) {
+                    // material.confirm("즐겨찾기를 삭제 하시겠습니까?", function () {
+                    material.confirm(t("message.confirm_favorite_delete"), function () {
+                        maps.delFavorite(maps.current,function(){
+                            snackbar(t("message.del_favorites"));
+                            setTimeout(function(){
+                                fn_Reload(true);
+                            },500);
+                        });
+                    });
+                } else {
+                    maps.addFavorite(maps.current,function(){
+                        snackbar(t("message.reg_favorite"));
+                        setTimeout(function(){
+                            fn_Reload(true);
+                        },500);
+                    });
+                }
+/*    
+            var newFavorite = new MapPointForFavorite(maps.current.getLat(),maps.current.getLon(),maps.current.getName());
     //			var newFavorite = cloneObject(maps.current);
     //				newFavorite.setType(NaviDestination.FAVORITE);
                 newFavorite.setId(maps.current.id);
                 newFavorite.setItem(maps.current.item);
-                maps.addHomeMarker(map,newFavorite);
+                maps.addFavoriteMarker(map,newFavorite);
+                maps.removeMarker(maps.favorite.marker);
                 maps.removeMarker(maps.current.marker);
                 newFavorite.marker = null;
                 fn_DeviceSaveData("_POI_FAVORITE", JSON.stringify([mapPointToTmap(newFavorite)]));
                 setTimeout(function() {
                     fn_DeviceLoadData("_POI_FAVORITE","bindPoiFavorite");
+                    fn_Reload(true);
                 },500);
                 snackbar(t("message.reg_favorite"));
                 list[tIdx].selectedIndex = -1;
                 maps.current = null;
+ */               
             } else {
                 material.confirm(t("message.confirm_destination_delete"), function() {
+                    maps.removeMarker(maps.favorite.marker);
                     fn_DeviceSaveData("_POI_FAVORITE", "");
                     fn_DeviceLoadData("_POI_FAVORITE","bindPoiFavorite");
-                    snackbar(t("message.del_favorite"));
+                    fn_Reload(true);
                 });
+                snackbar(t("message.del_favorite"));
             }
         }
         scrollTopExec();
@@ -346,19 +380,12 @@ $( document ).ready(function() {
         }
     });
     chipSet.listen("MDCChip:selection",function(e){
+        //진입점 3
+        if ( !e.detail.selected ) return;
         var selectId = e.detail.chipId;
         var seq = e.srcElement.offsetParent.id.replace(/[^0-9]/g,"");
         var adapter =  chipSet.getDefaultFoundation().adapter;
         var index  = adapter.getIndexOfChipById(selectId);
-        if ( !e.detail.selected ) {
-            return;
-        } else {
-            if ( tIdx == index ){
-                // chipSet.chips[tIdx].selected = true;
-            }
-        }
-        // e.detail.selected
-
         if ( index == -1 ) {
             if ( selectId ) {
                 chipSet.chips[seq-1].selected = true;
@@ -369,10 +396,11 @@ $( document ).ready(function() {
         }  else {
             tIdx = index;
         }
+        console.log("POI Data Selected",tIdx);
 
 		maps.current = null;
         [].map.call(tabArea,el =>{
-            el .hide();
+            el.hide();
         });
         if (tIdx == 0) {
             window.search1 = search.value;
@@ -387,8 +415,47 @@ $( document ).ready(function() {
         setAddress(null);
 		$("#guide_message").show();
 
-// 내위치 로드는 처음 페이지 로드할떄 한뻔하꼐 로찎을 꾸현>
-// 최초 진입을 시작할떄 무쪼껀 마이 로켸이쎤을 태워서 그후 콜백으로 처리되게 해야한다.
+        // poiArr = poiArrs[tIdx];
+        //   mdcList = new mdc.list.MDCList(document.querySelectorAll('.poi_list')[tIdx]);
+        //   scrollTopOnSelectList(mdcList.root, mdcList.selectedIndex,false);
+
+        var h = 0;
+        if ( tIdx == 0 || tIdx == 1 || tIdx == 2 ) {
+          var listItemHeight = list[tIdx].root.offsetHeight / (poiArr!=null&&poiArr.length==0?1:poiArr.length)||45; 
+          var areaHeight = ( window.innerHeight - (document.querySelector(".mdc-top-app-bar").offsetHeight +
+                document.querySelector(".title").offsetHeight +
+                document.querySelector("#navi_wrapper").offsetHeight +
+                document.querySelector("#search_wrapper").offsetHeight +
+                // document.querySelector("footer").offsetHeight +
+                45 +
+                search.root.offsetHeight) );
+            //poiArr.length * areaHeight
+            if ( (areaHeight/2) < list[tIdx].root.offsetHeight ) {
+                h = (areaHeight / 2.3 );
+            } else {
+            //   if ( tIdx == 1 ) {
+                if (  tIdx == 0 || tIdx == 1) {
+                    h = areaHeight ;
+                } else if ( tIdx == 2 ) {
+                    h = areaHeight - ( listItemHeight*(poiArr.length) + 20 );
+                    // alert(listItemHeight)
+                }
+            //   } else {
+            //   }
+            }
+            console.log("height = " +h);
+            console.log('height = document.querySelector(".mdc-top-app-bar").offsetHeight ' +document.querySelector(".mdc-top-app-bar").offsetHeight );
+            console.log('height = document.querySelector(".title").offsetHeight  ' + document.querySelector(".title").offsetHeight );
+            console.log('height = document.querySelector("#navi_wrapper").offsetHeight ' + document.querySelector("#navi_wrapper").offsetHeight);
+            console.log('height = document.querySelector("#search_wrapper").offsetHeight ' + document.querySelector("#search_wrapper").offsetHeight);
+            console.log('height = document.querySelector("footer").offsetHeight ' + document.querySelector("footer").offsetHeight );
+            console.log('height = poiArr.length+ ' +(poiArr.length) );
+            console.log('height = listItemHeight*(poiArr.length+3) ' +(listItemHeight*(poiArr.length+3)) );
+            console.log('height = search.root.offsetHeight ' +search.root.offsetHeight );
+        }
+        
+        // 내위치 로드는 처음 페이지 로드할떄 한뻔하꼐 로찎을 꾸현>
+        // 최초 진입을 시작할떄 무쪼껀 마이 로켸이쎤을 태워서 그후 콜백으로 처리되게 해야한다.
         if ( tIdx == 0 ) { // 집
             search.root.show();
             search.input.readOnly  = false;
@@ -400,18 +467,31 @@ $( document ).ready(function() {
                 id:"map_div" +tIdx
     //          , height : (maps.option.height.replace(/[^0-9]/g,"") - (height) ) + "px"
     //          , height : (maps.option.height.replace(/[^0-9]/g,"") ) + "px"
-              , height : "300px"
+              // , height: "300px"
+              , height: (h) + "px"
               , callBack : function(map) {
               }
             });
             map = maps.items[tIdx];
+            onChangeButton(false,false);
 
-            window.bindPoiHomeAndSearchPOI = function(v) {
-				bindPoiHome(v);
-                searchPOI();
-            };
-
-            fn_DeviceLoadData("_POI_HOME","bindPoiHomeAndSearchPOI");
+            window.getMyLocation = function(mapId,lat,lon,address) {
+                moveMylocation(mapId,lat,lon,address);
+                window.bindPoiHomeAndSearchPOI = function(v) {
+                    bindPoiHome(v);
+	                if ( !v || v == "null") {
+                        setTimeout(function() {
+                            maps.addCurrentMarker(map, maps.my,function(evt){
+                                redrawCurrentMarker(evt);
+                            });
+                            onChangeButton(false, true);
+                        }, 500);
+                    }
+                    searchPOI();
+                };
+                fn_DeviceLoadData("_POI_HOME","bindPoiHomeAndSearchPOI");
+            }
+			fn_GetLocation("map["+tIdx+"]","getMyLocation");
 
             map.addListener(CommonUtil.fn_IS_APP() == "X"?"drag":"touchend", redrawCurrentMarker);
         } else if ( tIdx == 1 ) { // 회사
@@ -425,26 +505,39 @@ $( document ).ready(function() {
                 id:"map_div" +tIdx
     //          , height : (maps.option.height.replace(/[^0-9]/g,"") - (height) ) + "px"
     //          , height : (maps.option.height.replace(/[^0-9]/g,"") ) + "px"
-              , height : "300px"
+              // , height: "300px"
+              , height: (h) + "px"
               , callBack : function(map) {
               }
             });
             map = maps.items[tIdx];
+            onChangeButton(false,false);
 
-            window.bindPoiCompanyAndSearchPOI = function(v) {
-				bindPoiCompany(v);
-				var dbChecker = setInterval(function() {
-					if ( localStorageBasic.db != null ) {
-						console.info("db is not null");
-						clearInterval(dbChecker);
-						searchPOI();
-					} else {
-						console.info("db is null");
-					}
-				},1);
-            };
-
-            fn_DeviceLoadData("_POI_COMPANY","bindPoiCompanyAndSearchPOI");
+            window.getMyLocation = function(mapId,lat,lon,address) {
+                moveMylocation(mapId,lat,lon,address);
+                window.bindPoiCompanyAndSearchPOI = function(v) {
+				    bindPoiCompany(v);
+	                if ( !v || v == "null") {
+                        setTimeout(function() {
+                            maps.addCurrentMarker(map, maps.my,function(evt){
+                                redrawCurrentMarker(evt);
+                            });
+                            onChangeButton(false, true);
+                        }, 500);
+                    }
+				    var dbChecker = setInterval(function() {
+                        if ( localStorageBasic.db != null ) {
+                            console.info("db is not null");
+                            clearInterval(dbChecker);
+                            searchPOI();
+                        } else {
+                            console.info("db is null");
+                        }
+                    },1);
+                };
+                fn_DeviceLoadData("_POI_COMPANY","bindPoiCompanyAndSearchPOI");
+            }
+			fn_GetLocation("map["+tIdx+"]","getMyLocation");
 
             map.addListener(CommonUtil.fn_IS_APP() == "X"?"drag":"touchend", redrawCurrentMarker);
 
@@ -458,26 +551,65 @@ $( document ).ready(function() {
                 id:"map_div" +tIdx
     //          , height : (maps.option.height.replace(/[^0-9]/g,"") - (height) ) + "px"
     //          , height : (maps.option.height.replace(/[^0-9]/g,"") ) + "px"
-              , height : "300px"
+              // , height: "300px"
+              , height: (h) + "px"
               , callBack : function(map) {
               }
             });
             map = maps.items[tIdx];
+            onChangeButton(false,false);
+            onChangeButton(false, true);
+            window.getMyLocation = function(mapId,lat,lon,address) {
+                moveMylocation(mapId,lat,lon,address);
+                var dbChecker = setInterval(function() {
+                    if ( localStorageBasic.db != null ) {
+                        console.info("db is not null");
+                        clearInterval(dbChecker);
+                        searchFavoritePOI(function(){
+                        });
+                    } else {
+                        console.info("db is null");
+                    }
+                },1);
 
-            window.bindPoiFavoriteAndSearchPOI = function(v) {
-				bindPoiFavorite(v);
-				var dbChecker = setInterval(function() {
-					if ( localStorageBasic.db != null ) {
-						console.info("db is not null");
-						clearInterval(dbChecker);
-						searchFavoritePOI(function(){
-						});
-					} else {
-						console.info("db is null");
-					}
-				},1);
-            };
-            fn_DeviceLoadData("_POI_FAVORITE","bindPoiFavoriteAndSearchPOI");
+                setTimeout(function() {
+                    maps.addCurrentMarker(map, maps.my,function(evt){
+                        redrawCurrentMarker(evt);
+                    });
+                    onChangeButton(false, true);
+                }, 500);
+            }
+            $("#guide_message").hide();
+
+		    setGuideMessage(t("message.guide_not_home"));
+            /*
+            window.getMyLocation = function(mapId,lat,lon,address) {
+                moveMylocation(mapId,lat,lon,address);
+                window.bindPoiFavoriteAndSearchPOI = function(v) {
+                    bindPoiFavorite(v);
+                    if ( !v || v == "null") {
+                        setTimeout(function() {
+                            maps.addCurrentMarker(map, maps.my,function(evt){
+                                redrawCurrentMarker(evt);
+                            });
+                            onChangeButton(false, true);
+                        }, 500);
+                    }
+                    var dbChecker = setInterval(function() {
+                        if ( localStorageBasic.db != null ) {
+                            console.info("db is not null");
+                            clearInterval(dbChecker);
+                            searchFavoritePOI(function(){
+                            });
+                        } else {
+                            console.info("db is null");
+                        }
+                    },1);
+                };
+                fn_DeviceLoadData("_POI_FAVORITE","bindPoiFavoriteAndSearchPOI");
+            }
+            */
+			fn_GetLocation("map["+tIdx+"]","getMyLocation");
 
             map.addListener(CommonUtil.fn_IS_APP() == "X"?"drag":"touchend", redrawCurrentMarker);
 
@@ -709,16 +841,16 @@ $( document ).ready(function() {
 		}
     },function(){
 		if ( tIdx == 0 || tIdx == 1 || tIdx == 2 ) {
-			if (maps.current) {
+			// if (maps.current) {
 				maps.setPositionBottom({
 					mapId:"map_div" +tIdx
 				   ,marginElement:list[tIdx].root
 				});
 				btnMyLocation[0].root.show();
-			}
+			// }
 		}
     });
-
+    
 	fEndScroll();
 
     window.readNaviDestination = function(naviDest) {
@@ -727,10 +859,24 @@ $( document ).ready(function() {
         var idx = parseInt(naviDestination,10) - 1;
         if ( tIdx == null ) tIdx = idx;
     // chipSet.chips[chipSelectIndex].selected = true;
-
-        // 1. 진입점
+        
+    // chipSet
+        chipSet.chips[tIdx].selected = true;
+        // 진입점 1
         //	fn_GetLocation("getMyLocation");
-        fn_GetLocation("map["+tIdx+"]","getLocationInitTab");
+        // window.getLocationInitTab = function(mapId, lat, lon, address) {
+        //     if (!lat) {
+        //         // lat = 37.566481622437934;
+        //         // lon = 126.98502302169841;
+        //         lat = 36.9876599;
+        //         lon = 126.8487439;
+        //         address = "포승읍 모아미래도2차";
+        //     }
+        //     moveMylocation (mapId,lat,lon,address);
+        //     // moveMylocationCallback(mayId,lat, lon, address,cb);
+        // }
+
+        // fn_GetLocation("map["+tIdx+"]","getLocationInitTab");
 
         // Trigger Chip Changed :
         // var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
@@ -739,8 +885,6 @@ $( document ).ready(function() {
         // var cancelled = !cb.dispatchEvent(event);
         // cb.focus();
     }
-
-    fn_DeviceLoadData("_NAVI_DESTINATION", "readNaviDestination");
 
     window.getInfoCallBack = function (data) {
         if (isWeb) {
@@ -801,18 +945,23 @@ $( document ).ready(function() {
         // else $(".using_reg_home_info").hide();
             
         // btnSwitchUsingRegHome.selected = window.info.usingRegHome;
+    
+        fn_DeviceLoadData("_NAVI_DESTINATION", "readNaviDestination");
     }
-
     fn_GetInfo("", "getInfoCallBack");
-
+    
+    window.checkGrantCallBack = function(grant,ok) {
+        window.startSettingCallback = function(grant,ok) {
+            if ( ok ) { fn_Reload(true) }
+        }
+        if ( grant == "location") {
+            if( ok != "ok" ) {
+                fn_StartSetting("location","startSettingCallback");
+            }
+        }
+    }
+    fn_CheckGrant("location","checkGrantCallBack");
 });
-
-function getLocationInitTab(mayId, lat, lon, address) {
-    getMyLocation(mayId, lat, lon, address,function(){
-        // chipSet
-        chipSet.chips[tIdx].selected = true;
-    });
-}
 
 // function redrawCurrentMarker(evt) {
 //     
@@ -841,7 +990,7 @@ function redrawCurrentMarker(evt) {
         } else if ( tIdx==1 ) {
             onChangeButton(true,true);
         } else if ( tIdx==2 ) {
-            onChangeButton(true,true);
+            onChangeButton(false,true);
         }
     });
 
@@ -865,8 +1014,9 @@ function fEndScroll() {
     },200);
 }
 
+
 function setCurrentMarkerNscrollTop(list,index) {
-	var h = list.offsetTop + ( $(list).find("li:eq("+index+")").height() *(index-1) ) + 13;
+	var h = list.offsetTop + ( $(list).find("li:eq("+index+")").height() *(index-1) )- 40;
 	scrollTopExec(h,300,function() {
 		btnMyLocation[0].root.show();
 		maps.setPositionBottom({
@@ -904,7 +1054,8 @@ function setCurrentMarkerNscrollTop(list,index) {
         } else if( tIdx == 1 ) {
             document.querySelector('#btnConfirm .mdc-button__label').innerHTML = t("label.reg_company");
         } else if( tIdx == 2 ) {
-            document.querySelector('#btnConfirm .mdc-button__label').innerHTML = t("label.reg_destination");
+            document.querySelector('#btnConfirm .mdc-button__label').innerHTML = t("label.remove_favorite");
+            // document.querySelector('#btnConfirm .mdc-button__label').innerHTML = t("label.reg_destination");
     //		document.querySelector('#btnConfirm .mdc-button__label').innerHTML = t("label.favorite");
         }
     // }
@@ -924,26 +1075,13 @@ if (idx) {
     tIdx = parseInt(idx, 10);
 }
   
-
-function getMyLocation(mayId, lat, lon, address,cb) {
-    console.info("getMyLocation", lat, lon, address);
-    if (!lat) {
-      // lat = 37.566481622437934;
-      // lon = 126.98502302169841;
-      lat = 36.9876599;
-      lon = 126.8487439;
-      address = "포승읍 모아미래도2차";
-    }
-    moveMylocationCallback(mayId,lat, lon, address,cb);
-
-  }
-
-  window.moveMylocationCallback = function (mayId,lat, lon, address,cb) {
+window.moveMylocationCallback = function (mayId,lat, lon, address,cb) {
       if (tIdx == 3) {
         //			maps.addCurrentMarker(map,maps.my);
         //			maps.setCenter(map,maps.my.getLat(),maps.my.getLon());
         //			maps.removeMarker(maps.my);
       }
+      //진입점 2
       setAddress(null);
       maps.poiToAddress(lat, lon, function (data) {
         maps.setMy(new MapPoint(lat, lon, address,data));
@@ -952,12 +1090,14 @@ function getMyLocation(mayId, lat, lon, address,cb) {
         if ( window.map ) {
           maps.addMyMarker(map, maps.my);
           maps.setCenter(map,maps.my.getLat(),maps.my.getLon());
+          maps.poiCurrents[tIdx] = maps.my;
+        //   onChangeButton(true, false);
         }
 
         if ( cb ) cb();
 
       });
-    }
+}
 
 
 function onChangeButton(enableNavi,enableConfirm) {
@@ -974,10 +1114,8 @@ function onChangeButton(enableNavi,enableConfirm) {
             document.querySelector('#btnConfirm .mdc-button__label').innerHTML = t("label.reg_company");
         }
     } else if( tIdx == 2 ) {
-        if ( !maps.current ) {
-            document.querySelector('#btnConfirm .mdc-button__label').innerHTML = t("label.del_destination");
-        } else {
-            document.querySelector('#btnConfirm .mdc-button__label').innerHTML = t("label.reg_destination");
+        if ( maps.current ) {
+            document.querySelector('#btnConfirm .mdc-button__label').innerHTML = t("label.favorite");
         }
     }
 
@@ -1048,9 +1186,13 @@ function onChangeButton(enableNavi,enableConfirm) {
                         }
                     }
             }
+            
+            console.log("Favorite.POI data: ",v.searchPoiInfo.pois.poi);
+
             successCallbackForSearchPOI.apply({
                 _responseData:v,
-                callBack:callBack
+                callBack:callBack,
+                gubun:"Favorites"
             });
         });
     }
@@ -1106,6 +1248,7 @@ function onChangeButton(enableNavi,enableConfirm) {
         poiArr = [];
         var count = 0;
         $(list[tIdx].root).empty();
+        maps.clearBounds();
 
         maps.setPositionClear({
             mapId:"map_div" +tIdx
@@ -1155,6 +1298,7 @@ function onChangeButton(enableNavi,enableConfirm) {
 
 						setCurrentMarkerNscrollTop(list[tIdx].root,index);
 
+                        // scrollTopOnSelectList(list[tIdx].root, index);
 //                        if ( tIdx==0 ) {
 //                            onChangeButton(true,true);
 //                        } else if ( tIdx==1 ) {
@@ -1219,6 +1363,9 @@ function onChangeButton(enableNavi,enableConfirm) {
 //              list.listElements[6].focus();list.selectedIndex = 7; // 초기 Selection
             });
 
+            mdcList = new mdc.list.MDCList(document.querySelectorAll('.poi_list')[tIdx]);
+            poiArrs[tIdx] = poiArr;
+
             if(tIdx == 0) {
 //              snackbar(count + '건의 검색결과가 있습니다.');
 //              snackbar('검색 되었습니다.');
@@ -1239,30 +1386,46 @@ function onChangeButton(enableNavi,enableConfirm) {
 					});
 				});
 			}
-        } else {
-//          map.resize("","300px");
-            document.querySelectorAll(".poi_list")[tIdx].hide();
-//            snackbar('검색결과가 없습니다.');
-            var h = window.innerHeight -
-                    document.querySelector(".mdc-top-app-bar").offsetHeight -
-                    document.querySelector(".title").offsetHeight -
-                    document.querySelector("#navi_wrapper").offsetHeight -
-                    search.root.offsetHeight -
-                    60
-            ;
+            
+            var listItemHeight = list[tIdx].root.offsetHeight / (poiArr.length==0?1:poiArr.length)||45; 
+            var areaHeight = ( window.innerHeight - (document.querySelector(".mdc-top-app-bar").offsetHeight +
+                document.querySelector(".title").offsetHeight +
+                document.querySelector("#navi_wrapper").offsetHeight +
+                document.querySelector("#search_wrapper").offsetHeight +
+                (document.querySelector("footer").offsetHeight) + 
+                search.root.offsetHeight) ); // 
+                //poiArr.length * areaHeight
+                if ( (areaHeight/2) < list[tIdx].root.offsetHeight ) {
+                  h = (areaHeight / 1.3 )-40;
+                } else {
+                    if (  tIdx == 0 || tIdx == 1) {
+                        h = areaHeight ;
+                    } else if ( tIdx == 2 ) {
+                        h = areaHeight - ( listItemHeight*(poiArr.length) + 20 );
+                    }
+                }
+                console.log("resize.height = " +h);
 //            h -=-12;
 //            
 //            maps.items[tIdx] = maps.init({
 //                id:"map_div" +tIdx,
 //                height:(h)+"px"
 //            });
-            maps.items[tIdx].resize(window.innerWidth - 10,h);
+            try {
+                maps.items[tIdx].resize(window.innerWidth - 10, h);
+                $("#map_div"+tIdx).css("height",h+"px");
+            } catch (e) {
+            }
+        } else {
+//          map.resize("","300px");
+            document.querySelectorAll(".poi_list")[tIdx].hide();
+//            snackbar('검색결과가 없습니다.');
             btnMyLocation[0].root.show();
         }
 
-        maps.removeMarker(maps.current);
-        maps.addMyMarker(map, maps.my);
-
+        // maps.removeMarker(maps.current);
+        // maps.addMyMarker(map, maps.my);
+        
         if ( tIdx == 0 ) {
             if ( maps.home ) maps.addBound(maps.home);
         } else if ( tIdx == 1 ) {
@@ -1270,26 +1433,32 @@ function onChangeButton(enableNavi,enableConfirm) {
         } else if ( tIdx == 2 ) {
             if ( maps.favorite ) maps.addBound(maps.favorite);
         }
-        console.info("maps.boundMapPoints.length",maps.boundMapPoints.length);
-        if (maps.boundMapPoints.length > 0 ) {
+        var boundMapPoints = maps.getBounds();
+        console.info("maps.boundMapPoints.length",boundMapPoints.length);
+        if (maps.getBounds().length > 0 ) {
             maps.addBound(maps.my);
-            maps.panToBounds(map);
-            if ( maps.boundMapPoints.length == 1 ) {
-                maps.setCenter(map,maps.my.getLat(),maps.my.getLon());
-            } else if ( maps.boundMapPoints.length < 3 ) {
-                maps.zoomOut(map,1000);
-            } else {
-//                
+            // 여기 pantToBounds
+            console.log("Favorite.POI data[" + this.gubun+ "]: ", maps.getBounds());
+            setTimeout(function() {
+                maps.panToBounds(map); // panToBounds
+            },500);
+            // if ( boundMapPoints.length == 1 ) {
+                // maps.setCenter(map,maps.my.getLat(),maps.my.getLon());
+            // } else if ( boundMapPoints.length < 3 ) {
+                // maps.zoomOut(map,1000);
+            // } else {
 //                maps.setZoom(maps.items[tIdx],maps.defaultZoom,1000);
 //                map.zoomIn();
-                maps.setCenter(map,maps.my.getLat(),maps.my.getLon());
-            }
+                // maps.setCenter(map,maps.my.getLat(),maps.my.getLon());
+            // }
         } else {
             maps.setCenter(map,maps.my.getLat(),maps.my.getLon());
             maps.setZoom(map,maps.defaultZoom);
         }
-    } // end successCallbackForSearchPOI
+        // fn_GetLocation("maps.items[" + tIdx + "]", "moveMylocation");
 
+    } // end successCallbackForSearchPOI
+  
     function progressCallbackForSearchPOI (){
     }
 
@@ -1301,7 +1470,6 @@ function onChangeButton(enableNavi,enableConfirm) {
 
  
 function bindPoiHome(v) {
-    fn_GetInfo("", "getInfoCallBack");
 //	var tmaps = parsePoi(v);
 	var data = parsePoi(v);
 	var mapPoint = tmapToMapPoint(data&&v?data[0]:null);
@@ -1310,9 +1478,9 @@ function bindPoiHome(v) {
 //		maps.addHomeMarker(map,new MapPointForHome(mapPoint.getLat(),mapPoint.getLon(),mapPoint.getName()));
 		maps.addHomeMarker(map,mapPoint);
 
-        setTimeout(function() {
+        // setTimeout(function() {
             onChangeButton(true,mapPoint?true:false);
-        },300);
+        // },300);
 
         var infos = [
 			mapPoint.getName()
@@ -1321,13 +1489,12 @@ function bindPoiHome(v) {
 		];
 		setGuideMessage("<B>\"" + infos.join(" ") + "\"</B>" + "으로 안내합니다.");
 	} else {
-		onChangeButton(false,false);
+		// onChangeButton(false,false);
 		setGuideMessage(t("message.guide_not_home"));
 	}
 };
 
 function bindPoiCompany(v) {
-    fn_GetInfo("", "getInfoCallBack");
 //	var tmaps = parsePoi(v);
 	var data = parsePoi(v);
 	var mapPoint = tmapToMapPoint(data&&v?data[0]:null);
@@ -1347,13 +1514,12 @@ function bindPoiCompany(v) {
 		];
 		setGuideMessage("<B>\"" + infos.join(" ") + "\"</B>" + "으로 안내합니다.");
 	} else {
-		onChangeButton(false,false);
+		// onChangeButton(false,false);
 		setGuideMessage(t("message.guide_not_company"));
 	}
 };
 
 function bindPoiFavorite(v) {
-    fn_GetInfo("", "getInfoCallBack");
 //	var tmaps = parsePoi(v);
 	var data = parsePoi(v);
 	var mapPoint = tmapToMapPoint(data&&v?data[0]:null);
@@ -1372,7 +1538,7 @@ function bindPoiFavorite(v) {
 		];
 		setGuideMessage("<B>\"" + infos.join(" ") + "\"</B>" + "으로 안내합니다.");
 	} else {
-		onChangeButton(false,false);
+		// onChangeButton(false,false);
 		setGuideMessage(t("message.guide_not_destination"));
 	}
 };
@@ -1389,10 +1555,6 @@ window.createPoiFavoriteNBoundMyPinCallBack = function(v,bound) {
 	bindPoiFavoriteAndSearchPOI(v,bound);
 }
 
-window.reloadRecent = function() {
-	searchRecentPOI();
-}
-
 // alert("Please wait...");
 // fn_DeviceSaveData("_OPEN_POPUP", true);
 window.fn_BackKeyPressedCallBack = function () {
@@ -1401,7 +1563,6 @@ window.fn_BackKeyPressedCallBack = function () {
     // window.fn_BackKeyPressedCallBack = null;
     // material.alert("");
     // self.close();
-    // debugger;
     // windowClose();
     btnBack.emit("click");
 }  
@@ -1478,7 +1639,8 @@ window.fn_BackKeyPressedCallBack = function () {
                         </div>
                     </div>
                     <div style="margin-top:5px !important;padding-left:10px">
-                        <span id="guide_message" class="basic_font_medium1"><B>"집"</B>으로 안내 합니다.</span>
+                        <div id="guide_message" class="basic_font_medium1"><B>"집"</B>으로 안내 합니다.</div>
+                        <div id="guide_message_touch" class="basic_font_medium1 bold pink" data-i18n="guide_message_touch"><B>"지도"</B>를 클릭해 위치를 지정하세요.</div>
                     </div>
 
                     
@@ -1582,7 +1744,7 @@ window.fn_BackKeyPressedCallBack = function () {
         <div id="place_address" style="font-size:13px;width:100%;border:0px solid blue;background-color: rgba( 0, 0, 0, 0.5 );color:white;font-weight:bold;height:45px;padding-top:15px;margin-bottom:2px">
         </div>
     </div>
-
+    
     <footer>
         <div>
         <!-- style="position:fixed;bottom:0px;width:100%;border:0px solid red;width:100%;text-align:center;" -->

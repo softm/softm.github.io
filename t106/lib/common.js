@@ -131,6 +131,7 @@ var messages  = {
             work_goto_time:"Go to work",
             work_off_time:"Off work",
             navi:"Navi",
+            hour:"hour",
             sec:"Sec" ,
             min:"min",
             day:"day",
@@ -202,6 +203,14 @@ var messages  = {
             service_check_noti:"Check Notification",
             service_check_noti_basic:"Basic",
             service_check_noti_log:"Log",
+            license: "license",
+            license_user: "license user",
+            free_user: "free user",
+            period_of_use: "Period of use",
+            expiration: "expiration",
+            watch_the_ad_and_cheer: "Watch the ad and cheer",
+            ad_replay_time: "Ad replay time",
+            ad_view_available: "Available for viewing",
           },
           title: {
             main: "Basic",
@@ -214,6 +223,8 @@ var messages  = {
             navi: "Navi",
             start_stop_on_off: "On/Off",
             destination: "Destination",
+
+            support_the_developers: "Support the developers",
             
             home:"Home",
             setting:"Setting",
@@ -268,6 +279,8 @@ var messages  = {
             guide_not_home: "<B color='grey'>\"Please register your home address.\"</B>",
             guide_not_company: "<B color='grey'>\"Please register your company address.\"</B>",
             guide_not_destination: "<B color='grey'>\"Please register your destination address.\"</B>",
+            guide_message_touch : "<B>Click on the \"map\"</B> to specify a location.",
+            
 // popup_guide_10: "After displaying the guide icon, <B>\"10 seconds\" followed by <span style='color:var(--softm-start)'>Start</span></B>. ",
 // popup_guide_10stop: "After displaying the guide icon, <B>\"10 seconds\" followed by <span style='color:var(--softm-stop)'>Exit</span></B>. "
             popup_guide_10: "Keep the guide icon <span style='color:var(--softm-start)'>></span>.",
@@ -376,8 +389,13 @@ var messages  = {
             noti_msg2:"When the next version is updated, <span style='color:var(--softm-stop)'>uninstall</span> and <span span style='color:var(--softm-start)'>reinstall</span>.",
             noti_msg3:"An update is currently in progress.",
             noti_msg4:"Please wait a moment and the next version will be updated.",
-            noti_msg4:"Sorry for the inconvenience. TT",
-            noti_msg4:"thank you.",
+            noti_msg5:"Sorry for the inconvenience. TT",
+            noti_msg6:"thank you.",
+            drag_pin_adjust_position:"Drag the pin to adjust its position.",
+            please_support:"Please support us. ^^ :)",
+            next_ad_view : 'There are {waitTime} left until the next ad view time.',
+            ad_view_time_exceeded : 'Viewing has been restricted due to ad viewing time exceeded.<br/>Please wait a few days.',
+            ad_view_thanks:"Thank you for your support. ^^ :)"
           },
           toast:{
             run_option_on : "Turn <span style='color:var(--softm-start)'>on</span>.",
@@ -535,6 +553,7 @@ var messages  = {
             work_goto_time:"출근",
             work_off_time:"퇴근",
             navi:"내비",
+            hour:"시간",
             sec:"초",
             min:"분",
             day:"일",
@@ -606,6 +625,15 @@ var messages  = {
             service_check_noti:"체크알림",
             service_check_noti_basic:"기본",
             service_check_noti_log:"로그",
+            license: "라이센스",
+            license_user: "라이센스 사용자",
+            ad_view_license_user: "광고시청 사용자",
+            free_user: "무료 사용자",
+            period_of_use: "사용기간",
+            expiration: "만료",
+            watch_the_ad_and_cheer: "광고보고 응원하기",
+            ad_replay_time: "광고 보기 시간",
+            ad_view_available: "시청가능",
           },
           title: {
             main: "기본",
@@ -618,6 +646,10 @@ var messages  = {
             navi:"안내",
             start_stop_on_off: "On/Off",
             destination: "목적지",
+            
+            support_the_developers: "개발자 응원하기",
+            
+            support_developers: "응원하기",
             
             home:"홈",
             setting:"설정",
@@ -674,6 +706,7 @@ var messages  = {
             guide_not_home : "<B color='grey'>\"집 주소를 등록하세요.\"</B>",
             guide_not_company : "<B color='grey'>\"회사 주소를 등록하세요.\"</B>",
             guide_not_destination : "<B color='grey'>\"목적지 주소를 등록하세요.\"</B>",
+            guide_message_touch : "<B>\"지도\"</B>를 클릭해 위치를 지정하세요.",
 //            popup_guide_10 : "안내아이콘 표시후, <B>\"10초\" 뒤에 안내를 <span style='color:var(--softm-start)'>시작</span></B> 합니다.",
 //            popup_guide_10stop: "안내아이콘 표시후, <B>\"10초\" 뒤에 안내를 <span style='color:var(--softm-stop)'>종료</span></B> 합니다."
             popup_guide_10 : "안내아이콘을 <span style='color:var(--softm-start)'>유지</span>.",
@@ -786,6 +819,7 @@ var messages  = {
             reg_home :"\"집\"이 등록되었습니다.",
             reg_company :"\"회사\"가 등록되었습니다.",
             reg_favorite :"\"즐겨찾기\"가 등록되었습니다.",
+            del_favorites :"\"즐겨찾기\"가 삭제되었습니다.",
             del_home :"\"집\"이 삭제되었습니다.",
             del_company :"\"회사\"가 삭제되었습니다.",
             del_favorite :"\"기본목적지\"가 삭제되었습니다.",
@@ -797,6 +831,11 @@ var messages  = {
             noti_msg4:"조금만 기다리시면 다음 버전이 업데이트 됩니다.",
             noti_msg5:"사용에 불편을 드려 죄송합니다.TT",
             noti_msg6:"감사합니다.",
+            drag_pin_adjust_position:"핀을 드래그해서 위치를 조정하세요.",
+            please_support:"응원 부탁드려요. ^^ :)",
+            next_ad_view : '다음 광고 시청시간 까지 : {waitTime} 남았습니다.',
+            ad_view_time_exceeded : '광고 시청시간 초과로 2일 후에 부탁드려요.',
+            ad_view_thanks:"응원 감사합니다. ^^ :)",
           },
           toast:{
             run_option_on : "설정을 <span style='color:var(--softm-start)'켰</span>습니다.",
@@ -894,8 +933,9 @@ var DRAWER_LIST_INFO = {
   "setting.html" : {page:"setting.html",visible:true,icon:"settings",label:"title.setting",showOnlySelf:true}, // 설정
   "onoff.html" : {page:"onoff.html",visible:true,icon:"toggle_on",label:"title.start_stop",showOnlySelf:true}, // 시작/종료
   "run_option.html" : {page:"run_option.html",visible:true,icon:"link",label:"title.run_options",showOnlySelf:true,popup:true,reloadAtReturn:true}, // 실행옵션
+  "developer_support.html" : {page:"developer_support.html",visible:true,icon:"favorite",label:"title.support_developers",showOnlySelf:true}, // 개발자 응원하기
   "home_company.html" : {page:"home_company.html",visible:true,icon:"home_work",label:"title.home_company",popup:true}, // 집/회사
-  "search.html?idx=2" : {page:"search.html",visible:true,icon:"favorite",label:"title.favorite",pathSearchSame:true,popup:true}, // 즐겨찾기
+  "search.html?idx=2" : {page:"search.html",visible:true,icon:"bookmark",label:"title.favorite",pathSearchSame:true,popup:true}, // 즐겨찾기
   // "membership.html" : {icon:"card_membership",label:"title.membership"}, // 멤버쉽
   "laboratory.html" : {page:"laboratory.html",visible:true,icon:"emoji_objects",label:"title.laboratory",popup:true}, // 연구소
   "qna.html" : {page:"qna.html",icon:"forum",visible:true,label:"title.contact_us",popup:true}, // 문의하기
@@ -903,8 +943,9 @@ var DRAWER_LIST_INFO = {
   // "rate_the_app.html" : {page:"rate_the_app.html",visible:true,icon:"thumb_up",label:"title.rate_the_app"}, // 어플 평가하기
 }
 
-var drawerSelectedIndex = null;
 
+var drawerSelectedIndex = null;
+var testClick = 0;
 $( document ).ready(function() {
   footerNavigation = [].map.call(document.querySelectorAll(".mdc-bottom-navigation__list-item"),(el,idx)=>{
       var rtnEl = new mdc.ripple.MDCRipple(el);
@@ -919,6 +960,18 @@ $( document ).ready(function() {
       return rtnEl;
   });
 
+  $(".app-bar").click(function(e) {
+    if ( testClick == 0 ) {
+        setTimeout(function() {
+          testClick = 0;
+        },20000);
+    }
+    testClick++;
+    if ( testClick == 10 ) {
+      fn_GoTest();
+      testClick = 0;
+    }
+  });
 
   if ( document.querySelector('.mdc-drawer') ) {
     
@@ -1395,7 +1448,7 @@ var isWeb = !navigator.userAgent.includes("COMPANY=softm");
 var isTest = isWeb;
 
 // var footerNavigationUrl = ["index.html","setting.html","onoff.html","membership.html"];
-var footerNavigationUrl = ["index.html","setting.html","onoff.html","membership.html","qna.html","run_option.html"];
+var footerNavigationUrl = ["index.html","setting.html","onoff.html","membership.html","qna.html","run_option.html","developer_support.html"];
 var footerNavigation = [];
 
 function windowOpen(url) {
@@ -1467,6 +1520,7 @@ function reDrawDrawer() {
          if ( !drawerInfo.showOnlySelf ) {
            row.removeClass("none");
          }
+         console.info("reDrawDrawer: " , pathNameInfo, pathNameInfo[2], ( pageUrl + (drawerInfo.pathSearchSame?document.location.search:"")))
          if ( ( pathNameInfo[2] ) === ( pageUrl + (drawerInfo.pathSearchSame?document.location.search:"") ) ) {
             // row.addClass("mdc-deprecated-list-item--activated");
             row.removeClass("none");
@@ -1494,4 +1548,34 @@ Storage.prototype.setObject = function(key, value) {
 
 Storage.prototype.getObject = function(key) {
   return JSON.parse(this.getItem(key));
+}
+
+function millisecondsToTime(ms) {
+  const days = Math.trunc(ms / (24 * 60 * 60 * 1000)); // 1일 = 24시간 * 60분 * 60초 * 1000ms
+  ms %= (24 * 60 * 60 * 1000);
+  const hours = Math.trunc(ms / (60 * 60 * 1000)); // 1시간 = 60분 * 60초 * 1000ms
+  ms %= (60 * 60 * 1000);
+
+  const minutes = Math.trunc(ms / (60 * 1000)); // 1분 = 60초 * 1000ms
+  ms %= (60 * 1000);
+
+  const seconds = Math.trunc(ms / 1000); // 1초 = 1000ms
+
+  return {
+      days,
+      hours,
+      minutes,
+      seconds
+  };
+}
+
+function initBasicInfo() {
+  var v = window.info;
+  if ( v ) {
+    if ( v.isAding ) {
+      $("#footerMenuDeveloperSupport").show();
+    } else {
+      $("#footerMenuDeveloperSupport").hide();
+    }
+  } 
 }

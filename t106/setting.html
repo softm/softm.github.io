@@ -665,7 +665,7 @@ $( document ).ready(function() {
 
     var v = window.info;
     
-    $(".version-name").text(v.versionName);
+    $(".version-name").text(v.versionName + " / " + v.versionCode);
     $(".app_name").text(v.versionName);
 
     // snackbar(modeNames[v] + "으로 설정 되어 있습니다.");
@@ -812,6 +812,7 @@ $( document ).ready(function() {
         appInfo.find(".na_icon").show();
       // }
     }
+    initBasicInfo();
   } // getInfoCallBack end
   
   appListItems = JSON.parse(sessionStorage.getItem("appListItems")); // 여기 확인 필요
@@ -1385,6 +1386,12 @@ $( document ).ready(function() {
                   data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
                   <span class="material-icons mdc-bottom-navigation__list-item__icon">forum</span>
                   <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.menu_run_options">실행옵션</span>
+              </span>
+              
+              <span id="footerMenuDeveloperSupport" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                  data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                  <span class="material-icons mdc-bottom-navigation__list-item__icon">favorite</span>
+                  <span class="mdc-bottom-navigation__list-item__text" data-i18n="[html]title.support_developers">개발자응원</span>
               </span>
 
               <!-- <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"

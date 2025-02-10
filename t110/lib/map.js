@@ -247,6 +247,7 @@ http://tmapapi.sktelecom.com/main.html#webservice/guide/webserviceGuide.guide4
             maps.setZoom(map,maps.markerSelectZoom);
         }
         mk.addListener("touchend",zoomHome);
+        poi.marker = mk;
         this.setHome(poi);
         return mk;
     }
@@ -351,9 +352,12 @@ http://tmapapi.sktelecom.com/main.html#webservice/guide/webserviceGuide.guide4
                   this.favoritePois = data;
                   this.favorites = data;
                   fn_DeviceSaveData("_POIS_FAVORITE", JSON.stringify(data));
+                //   fn_OpenOverlayView(true);
                   if ( cb ) cb();
                 });
               });
+            } else {
+                if ( cb ) cb();
             }
         });
     }
@@ -373,6 +377,7 @@ http://tmapapi.sktelecom.com/main.html#webservice/guide/webserviceGuide.guide4
                     return b.created - a.created;
                   });
                   fn_DeviceSaveData("_POIS_FAVORITE", JSON.stringify(data));
+                //   fn_OpenOverlayView(false);
                   if ( cb ) cb();
                 });
               });
@@ -405,6 +410,15 @@ http://tmapapi.sktelecom.com/main.html#webservice/guide/webserviceGuide.guide4
         if (this.boundMapPoints.length == 0 )
             this.bounds = new Tmapv2.LatLngBounds();
         this.boundMapPoints.push(mapPoint);
+    }
+
+    function clearBounds() {
+        this.boundMapPoints = [];
+        this.endPanToBounds = true;
+    }
+
+    function getBounds(mapPoints) {
+        return this.boundMapPoints;
     }
 
     function addBounds(mapPoints) {
@@ -507,7 +521,10 @@ http://tmapapi.sktelecom.com/main.html#webservice/guide/webserviceGuide.guide4
         var mapElement = $("#"+o.mapId);
         $(o.marginElement).css("marginBottom",(mapElement.height()+o.marginOffset)+"px");
         mapElement.css("position","fixed");
-        mapElement.css("bottom","10%");
+        // mapElement.css("bottom","10%");
+        mapElement.css("bottom",document.querySelector("footer").offsetHeight+"px");
+        console.log("scroll","setPositionBottom");
+        $("#mapIndicator").show();
     }
 
     function setPositionClear (o) {
@@ -515,6 +532,8 @@ http://tmapapi.sktelecom.com/main.html#webservice/guide/webserviceGuide.guide4
         $(o.marginElement).css("marginBottom","0px");
         mapElement.css("position","");
         mapElement.css("bottom","");
+        console.log("scroll","setPositionClear");
+        $("#mapIndicator").hide();
     }
 
     var rtn = {};
@@ -550,7 +569,9 @@ http://tmapapi.sktelecom.com/main.html#webservice/guide/webserviceGuide.guide4
         rtn.delFavorite      = delFavorite;
     
         rtn.boundMapPoints  = boundMapPoints;
+        rtn.clearBounds        = clearBounds;
         rtn.addBound        = addBound;
+        rtn.getBounds       = getBounds;
         rtn.addBounds       = addBounds;
         rtn.panToBounds     = panToBounds;
 
@@ -583,4 +604,101 @@ http://tmapapi.sktelecom.com/main.html#webservice/guide/webserviceGuide.guide4
 //        ,poiToAddress       : poiToAddress
 //        ,my                 : {lat:myLat,lon:myLon,address:myAddress}
 //    };
+};
+
+
+
+function bindPoiHome(v) {
+    fn_GetInfo("", "getInfoCallBack");
+//	var tmaps = parsePoi(v);
+	var data = parsePoi(v);
+	var mapPoint = tmapToMapPoint(data&&v?data[0]:null);
+//	var mapPoint = objectToMapPoint(data&&v?data[0]:null);
+	if ( mapPoint && mapPoint.getName()) {
+//		maps.addHomeMarker(map,new MapPointForHome(mapPoint.getLat(),mapPoint.getLon(),mapPoint.getName()));
+		maps.addHomeMarker(map,mapPoint);
+
+        setTimeout(function() {
+            onChangeButton(true,mapPoint?true:false);
+        },300);
+
+        var infos = [
+			mapPoint.getName()
+//          item[0].frontLat,
+//          item[0].frontLon
+		];
+        try {
+		    setGuideMessage("<B>\"" + infos.join(" ") + "\"</B>" + "으로 안내합니다.");
+        } catch (e) {
+        }
+	} else {
+		onChangeButton(false,false);
+        try {
+            setGuideMessage(t("message.guide_not_home"));
+        } catch (e) {
+        }
+	}
+};
+
+function bindPoiCompany(v) {
+    fn_GetInfo("", "getInfoCallBack");
+//	var tmaps = parsePoi(v);
+	var data = parsePoi(v);
+	var mapPoint = tmapToMapPoint(data&&v?data[0]:null);
+//	var mapPoint = objectToMapPoint(data&&v?data[0]:null);
+
+	if ( mapPoint && mapPoint.getName()) {
+//		maps.addCompanyMarker(map,new MapPointForCompany(mapPoint.getLat(),mapPoint.getLon(),mapPoint.getName()));
+		maps.addCompanyMarker(map,mapPoint);
+        setTimeout(function() {
+            onChangeButton(true,mapPoint?true:false);
+        },300);
+
+		var infos = [
+			mapPoint.getName()
+//          item[0].frontLat,
+//          item[0].frontLon
+		];
+        try {
+            setGuideMessage("<B>\"" + infos.join(" ") + "\"</B>" + "으로 안내합니다.");
+        } catch (e) {
+        }
+	} else {
+		onChangeButton(false,false);	
+        try {
+            setGuideMessage(t("message.guide_not_company"));
+        } catch (e) {
+        }
+	}
+};
+
+function bindPoiFavorite(v) {
+    fn_GetInfo("", "getInfoCallBack");
+//	var tmaps = parsePoi(v);
+	var data = parsePoi(v);
+	var mapPoint = tmapToMapPoint(data&&v?data[0]:null);
+//	var mapPoint = objectToMapPoint(data&&v?data[0]:null);
+
+	if ( mapPoint && mapPoint.getName()) {
+//		maps.addFavoriteMarker(map,new MapPointForFavorite(mapPoint.getLat(),mapPoint.getLon(),mapPoint.getName()));
+		maps.addFavoriteMarker(map,mapPoint);
+        setTimeout(function() {
+            onChangeButton(true,mapPoint?true:false);
+        },300);
+		var infos = [
+			mapPoint.getName()
+//          item[0].frontLat,
+//          item[0].frontLon
+		];
+        try {
+            setGuideMessage("<B>\"" + infos.join(" ") + "\"</B>" + "으로 안내합니다.");
+        } catch (e) {
+        }
+	} else {
+		onChangeButton(false,false);
+        try {
+            setGuideMessage(t("message.guide_not_destination"));
+        } catch (e) {
+        }
+	}
 };

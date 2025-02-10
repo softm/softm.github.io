@@ -60,6 +60,7 @@ if ( location.protocol.startsWith("https:") ) {
   var tabBar = null;
   var search = null;
   var btnConfirm = null;
+  var btnTop = null;
   var btnNavi = null;
   var btnAddFavorite = null;
   var btnSearch = [];
@@ -97,6 +98,7 @@ if ( location.protocol.startsWith("https:") ) {
     } catch (e) {
     }
     btnConfirm = new mdc.ripple.MDCRipple(document.querySelector("#btnConfirm"));
+    btnTop = new mdc.ripple.MDCRipple(document.querySelector("#btnTop"));
     btnNavi = new mdc.ripple.MDCRipple(document.querySelector("#btnNavi"));
     btnConfirm2 = new mdc.ripple.MDCRipple(document.querySelector("#btnConfirm2"));
     btnBack = new mdc.ripple.MDCRipple(document.querySelector("#btnBack"));
@@ -129,13 +131,37 @@ if ( location.protocol.startsWith("https:") ) {
         map = maps.items[tIdx];
         isLoaded =  true;
       } else {
+      // var h = window.innerHeight -
+      //         document.querySelector(".mdc-top-app-bar").offsetHeight -
+      //         document.querySelector(".mdc-tab-bar").offsetHeight -
+      //         search.root.offsetHeight -
+      //         60
+      //         -200
+      //         ;
+        var h = 0;
+        if ( tIdx == 1 || tIdx == 2 ) {
+          var listItemHeight = list[tIdx].root.offsetHeight / (poiArr!=null&&poiArr.length==0?1:poiArr.length); 
+          var areaHeight = ( window.innerHeight - (document.querySelector(".mdc-top-app-bar").offsetHeight +
+                document.querySelector(".mdc-tab-bar").offsetHeight +
+                (tIdx == 1?document.querySelector("#search_wrapper").offsetHeight:0) +
+                document.querySelector("footer").offsetHeight +
+                search.root.offsetHeight) );
+            //poiArr.length * areaHeight
+            if ( (areaHeight/2) < list[tIdx].root.offsetHeight ) {
+              h = (areaHeight / 2.3 );
+            } else {
+              h = areaHeight - ( list[tIdx].root.offsetHeight )
+            }
+            console.log("height = " +h);
+        }
         if (tIdx == 1) { // 검색
           if ( !maps.items[tIdx] ) {
             maps.items[tIdx] = maps.init({
               id: "map_div" + tIdx
               //          , height : (maps.option.height.replace(/[^0-9]/g,"") - (height) ) + "px"
               //          , height : (maps.option.height.replace(/[^0-9]/g,"") ) + "px"
-              , height: "300px"
+              // , height: "300px"
+              , height: (h) + "px"
               , callBack: function (map) {
               }
             });
@@ -147,7 +173,7 @@ if ( location.protocol.startsWith("https:") ) {
               id: "map_div" + tIdx
               //          , height : (maps.option.height.replace(/[^0-9]/g,"") - (height) ) + "px"
               //          , height : (maps.option.height.replace(/[^0-9]/g,"") ) + "px"
-              , height: "300px"
+              , height: (h) + "px"
               , callBack: function (map) {
               }
             });
@@ -181,6 +207,7 @@ if ( location.protocol.startsWith("https:") ) {
       
       mdcList = null;
 
+      // btnTop.root.hide();
       if (tIdx == 0) { // 최근기록
         btnMyLocation[0].root.hide();
         onChangeButton(false, false);
@@ -222,6 +249,8 @@ if ( location.protocol.startsWith("https:") ) {
         
         map.addListener(CommonUtil.fn_IS_APP() == "X"?"drag":"touchend", redrawCurrentMarker);
 
+        btnMyLocation[0].root.show();
+        onChangeButton(true, true);
       } else if (tIdx == 2) { // 즐겨찾기
         search.value = window.search3;
         ///////////////////////////////////////////////////// 
@@ -250,9 +279,15 @@ if ( location.protocol.startsWith("https:") ) {
         }
         ///////////////////////////////////////////////////// 
         map.addListener(CommonUtil.fn_IS_APP() == "X"?"drag":"touchend", redrawCurrentMarker);
+        for ( idx in poiArr ) {
+          maps.addBound(poiArr[idx]);
+        }
+        maps.panToBounds(map);
 
+        btnMyLocation[0].root.show();
+        onChangeButton(true, true);
       } else if (tIdx == 3) { // 지도지정
-        snackbar("핀을 드래그해서 위치를 조정하세요.");
+        snackbar(t("message.drag_pin_adjust_position"));
         onChangeButton(true, true);
 
         btnMyLocation[0].root.show();
@@ -294,6 +329,10 @@ if ( location.protocol.startsWith("https:") ) {
   
     });
 
+    // btnTop.listen("click", function (event) {
+    //   scrollTopExec(0,0,null)
+    // });
+
     //    btnSearch = new mdc.ripple.MDCRipple(document.querySelector("#btnSearch"));
     btnSearch = [].map.call(document.querySelectorAll(".btnSearch"), el => {
       var rtnEl = new mdc.ripple.MDCRipple(el);
@@ -309,6 +348,14 @@ if ( location.protocol.startsWith("https:") ) {
         }
       });
       return rtnEl;
+    });
+
+    $(search.input).focus(function(e){
+      btnMyLocation[0].root.hide();
+    });
+
+    $(search.input).blur(function(e){
+      btnMyLocation[0].root.show();
     });
 
     search.listen("click", function (event) {
@@ -509,6 +556,8 @@ if ( location.protocol.startsWith("https:") ) {
             redrawCurrentMarker(evt);
           });
           maps.poiCurrents[tIdx] = maps.my;
+          
+          onChangeButton(true, true);
 
           maps.setCenter(map,maps.my.getLat(),maps.my.getLon());
         }
@@ -551,11 +600,14 @@ if ( location.protocol.startsWith("https:") ) {
         maps.addFavorite(maps.current,function(){
           maps.items[2] = null; // 즐겨찾기 탭 초기화
           
-          if ( tIdx == 2) {
+          // if ( tIdx == 2) {
+          //   tabBar.tabList[2].deactivate();
+          //   tabBar.activateTab(2);
+          // }
             tabBar.tabList[2].deactivate();
             tabBar.activateTab(2);
-          }
-          snackbar("즐겨찾기가 등록었습니다.");
+          isLoaded = false;
+          snackbar(t("message.reg_favorite"));
         
         });
         //			e.srcElement.innerText = "star";
@@ -584,10 +636,10 @@ if ( location.protocol.startsWith("https:") ) {
       material.confirm("즐겨찾기를 삭제 하시겠습니까?", function () {
         maps.delFavorite(maps.current,function(){
           maps.items[2] = null; // 즐겨찾기 탭 초기화
-          if ( tIdx == 2) {
+          // if ( tIdx == 2) {
             tabBar.tabList[2].deactivate();
             tabBar.activateTab(2);
-          }
+          // }
           snackbar("즐겨찾기가 삭제었습니다.");
         });
 
@@ -685,6 +737,17 @@ if ( location.protocol.startsWith("https:") ) {
     }
 
     fn_GetInfo("", "getInfoCallBack");
+    window.checkGrantCallBack = function(grant,ok) {
+        window.startSettingCallback = function(grant,ok) {
+            if ( ok ) { fn_Reload(true) }
+        }
+        if ( grant == "location") {
+            if( ok != "ok" ) {
+                fn_StartSetting("location","startSettingCallback");
+            }
+        }
+    }
+    fn_CheckGrant("location","checkGrantCallBack");
   });
 
   function redrawCurrentMarker(evt) {
@@ -714,14 +777,17 @@ if ( location.protocol.startsWith("https:") ) {
         btnMyLocation[0].root.hide();
       } else if (tIdx == 1 || tIdx == 2) {
         btnMyLocation[0].root.show();
+        // btnTop.root.show();
       }
+      // 여기
     }, function () {
+      // btnTop.root.hide();
       if (tIdx == 0) {
       } else if (tIdx == 1 || tIdx == 2) {
         if ($("#map_div" + tIdx).css("position") == "fixed") {
           btnMyLocation[0].root.show();
         } else {
-          btnMyLocation[0].root.hide();
+          // btnMyLocation[0].root.hide();
         }
       }
     }, 200);
@@ -786,7 +852,7 @@ if ( location.protocol.startsWith("https:") ) {
   }
 
   function scrollTopOnSelectList(list, index,redraw) {
-    var h = list.offsetTop + $(list).find("li:eq(" + index + ")").height() * (index - 1) - 40;
+    var h = list.offsetTop + $(list).find("li:eq(" + index + ")").height() * (index - 1) - 80;
     if ( h ) {
       scrollTopExec(h, 300, function () {
         btnMyLocation[0].root.show();
@@ -909,7 +975,8 @@ if ( location.protocol.startsWith("https:") ) {
         row.className = row.className.replace("poi_list_item", "");
         var icon = index < 9 ? "pin_b_m_" + (index + 1) + ".png" : "pin_b_s_simple.png";
         var widthHeight = "";
-        widthHeight = "width='30' height='40'";
+        // widthHeight = "width='30' height='40'";
+        widthHeight = "style='height:80%'";
         row.children[0].innerText = data.gubun.value == NaviGubun.SEARCH.value ? "search" : "place";
         row.children[1].innerText = mapPoint.getName();
         var detail = [
@@ -985,7 +1052,7 @@ if ( location.protocol.startsWith("https:") ) {
             list[tIdx].foundation.setSelectedIndex(index);
             list[tIdx].foundation.adapter.focusItemAtIndex(index);
 
-            scrollTopOnSelectList(list[tIdx].root, index);
+            // scrollTopOnSelectList(list[tIdx].root, index);
 
             //                        if ( tIdx==0 ) {
             //                            onChangeButton(true,true);
@@ -1030,7 +1097,8 @@ if ( location.protocol.startsWith("https:") ) {
         row.className = row.className.replace("poi_list_item", "");
         var icon = index < 9 ? "pin_b_m_" + (index + 1) + ".png" : "pin_b_s_simple.png";
         var widthHeight = "";
-        widthHeight = "width='30' height='40'";
+        // widthHeight = "width='30' height='40'";
+        widthHeight = "style='height:85%'";
         // row.children[0].innerHTML = "<img src='http://tmapapis.sktelecom.com/upload/tmap/marker/" + icon + "' " + widthHeight + " class='position_r' />";
         row.children[0].innerHTML = "<img src='./images/tmap/marker/" + icon + "' " + widthHeight + " class='position_r' />";
         row.children[1].children[0].innerText = poi.getName();
@@ -1076,9 +1144,34 @@ if ( location.protocol.startsWith("https:") ) {
         });
       }
       setAddress(null);
+      
+      var listItemHeight = list[tIdx].root.offsetHeight / (poiArr!=null&&poiArr.length==0?1:poiArr.length)||45; 
+      var areaHeight = ( window.innerHeight - (document.querySelector(".mdc-top-app-bar").offsetHeight +
+            document.querySelector(".mdc-tab-bar").offsetHeight +
+            (tIdx == 1?document.querySelector("#search_wrapper").offsetHeight:0) +
+            document.querySelector("footer").offsetHeight +
+            search.root.offsetHeight) );
+            //poiArr.length * areaHeight
 
+            if ( (areaHeight/2) < list[tIdx].root.offsetHeight ) {
+              h = (areaHeight / 1.5 )-40;
+              console.log("resize.height1 = " +h);
+            } else {
+            //   if ( tIdx == 1 ) {
+                // h = areaHeight - listItemHeight;
+                h = areaHeight - ( listItemHeight*(poiArr.length) + 20 );
+                console.log("resize.height2 = " +h);
+            //   } else {
+                // h = areaHeight - ( listItemHeight*(poiArr.length+3) );
+            //   }
+            }
+      try {
+        maps.items[tIdx].resize(window.innerWidth - 10, h);
+        $("#map_div"+tIdx).css("height",h+"px");
+      } catch (e) {
+      }
     } else {
-
+      btnMyLocation[0].root.show();
       //          map.resize("","300px");
       document.querySelectorAll(".poi_list")[tIdx].hide();
       //            snackbar('검색결과가 없습니다.');
@@ -1093,6 +1186,19 @@ if ( location.protocol.startsWith("https:") ) {
       //                id:"map_div" +tIdx,
       //                height:(h)+"px"
       //            });
+
+      // var listItemHeight = list[tIdx].root.offsetHeight / poiArr.length; 
+      //         var areaHeight = ( window.innerHeight - document.querySelector(".mdc-top-app-bar").offsetHeight +
+      //           document.querySelector(".mdc-tab-bar").offsetHeight +
+      //           search.root.offsetHeight );
+      //           //poiArr.length * areaHeight
+
+      //           if ( (areaHeight/2) < list[tIdx].root.offsetHeight ) {
+      //             h = areaHeight / 2;
+      //           } else {
+      //             h = areaHeight - ( list[tIdx].root.offsetHeight )
+      //           }
+      //           console.log("resize.height = " +h + "/" + poiArr.length);
       try {
         // maps.items[tIdx].resize(window.innerWidth - 10, h);
       } catch (e) {
@@ -1105,7 +1211,7 @@ if ( location.protocol.startsWith("https:") ) {
 
 
       window.getLocationPantobounds = function(mayId, lat, lon, address) {
-        getMyLocation(mayId, lat, lon, address,function(){
+        getMyLocation(mayId, lat, lon, address,function() {
 
           if (tIdx == 0) {
             if (maps.home) maps.addBound(maps.home);
@@ -1271,6 +1377,13 @@ if ( location.protocol.startsWith("https:") ) {
         </div>
       </div>
 
+      <div class="center bg_white skyblue" id="btnTop" style="display: none;height:25px;align-content: center;font-size: 18px;">
+        <!-- <div class="material-icons" style="font-size: 11px;"> <span
+          class="mdc-button__ripple"></span>keyboard_double_arrow_down</div> -->
+<!-- > -->
+            ▲
+            <!-- </span> -->
+      <!-- </div> -->
     </header>
 
   <div class="main mdc-top-app-bar--fixed-adjust i18n" style="padding-top:100px">
@@ -1303,6 +1416,7 @@ if ( location.protocol.startsWith("https:") ) {
 
             <ul class="poi_list mdc-list mdc-list--avatar-list padding_top_0 none" role="listbox"
               style="overflow-y:auto;"> <!-- height:140px; -->
+              
             </ul>
             <hr />
             <!--  -->
@@ -1313,7 +1427,7 @@ if ( location.protocol.startsWith("https:") ) {
     <span class="mdc-list-item__meta material-icons" aria-hidden="true">info</span>
     </li>
      -->
-            <div id="map_div0" style="width:500px;height:100%;border:0px solid red;"></div>
+            <div id="map_div0" class="map" style="width:500px;height:100%;border:0px solid red;"></div>
           </div>
         </div><!--fieldset-->
       </div>
@@ -1334,12 +1448,12 @@ if ( location.protocol.startsWith("https:") ) {
               style="overflow-y:auto;"> <!-- height:250px; -->
             </ul>
             <hr />
-            <div id="map_div1" style="width:500px;height:100%;border:0px solid red;"></div>
+            <div id="map_div1" class="map" style="width:500px;height:100%;border:0px solid red;"></div>
           </div>
         </div><!--fieldset-->
       </div>
 
-      <div class="row tab_area none">
+      <div class="row tab_area none ">
         <div class="margin_top_20 left"><!--fieldset-->
           <div style="margin-top:0px">
             <li class="poi_list_item mdc-list-item mdc-ripple-upgraded" tabindex="-1"
@@ -1356,7 +1470,7 @@ if ( location.protocol.startsWith("https:") ) {
               style="overflow-y:auto;"> <!-- height:250px; -->
             </ul>
             <hr />
-            <div id="map_div2" style="width:500px;height:100%;border:0px solid red;"></div>
+            <div id="map_div2" class="map" style="width:500px;height:100%;border:0px solid red;"></div>
           </div>
         </div><!--fieldset-->
       </div>
@@ -1364,12 +1478,12 @@ if ( location.protocol.startsWith("https:") ) {
       <div class="row tab_area none">
         <div class="margin_top_20 left"><!--fieldset-->
           <div style="margin-top:0px">
-            <div id="map_div3" style="width:500px;height:100%;border:0px solid red;"></div>
+            <div id="map_div3" class="map" style="width:500px;height:100%;border:0px solid red;"></div>
           </div>
         </div><!--fieldset-->
       </div>
 
-      <div style="position:fixed;bottom:50px;width:100%;border:0px solid red;width:100%;text-align:center;">
+      <div id="mapIndicator" style="position:fixed;bottom:50px;width:100%;border:0px solid red;width:100%;text-align:center;">
         <div class="mdc-chip-set mdc-chip-set--choice" style="border:0px;width:50px;position:relative;top:-0px;right:calc(-100% + 70px);">
             <div class="btnMyLocation mdc-chip mdc-ripple-upgraded " role="row" style="background-color:white;padding:15px;padding-bottom:20px;padding-right:12px">
                 <div class="mdc-chip__ripple"></div>

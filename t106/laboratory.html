@@ -536,25 +536,6 @@ function initLoad(v){
     chipCheckServiceCheckLogSendNoti.chips[parseInt(window.info.checkServiceCheckLogSendNoti, 10)].selected = true;
 }
 
-function millisecondsToTime(ms) {
-    const days = Math.trunc(ms / (24 * 60 * 60 * 1000)); // 1일 = 24시간 * 60분 * 60초 * 1000ms
-    ms %= (24 * 60 * 60 * 1000);
-    const hours = Math.trunc(ms / (60 * 60 * 1000)); // 1시간 = 60분 * 60초 * 1000ms
-    ms %= (60 * 60 * 1000);
-
-    const minutes = Math.trunc(ms / (60 * 1000)); // 1분 = 60초 * 1000ms
-    ms %= (60 * 1000);
-
-    const seconds = Math.trunc(ms / 1000); // 1초 = 1000ms
-
-    return {
-        days,
-        hours,
-        minutes,
-        seconds
-    };
-}
-
 function statusRunSpeedUpdate() {
     if (!info.runSpeed) { // stop
         var sMsg = t("label.status_run_speed_stop",{runSpeedLimit:String(info.runSpeedLimit),runSpeedLimitTime:String(info.runSpeedLimitTime)});

@@ -180,6 +180,8 @@ $( document ).ready(function() {
         } else {
             window.info = (JSON.parse(data));
         }
+
+        initBasicInfo();
         initPage(window.info);
     }
     fn_GetInfo("", "getInfoCallBack");
@@ -1583,7 +1585,7 @@ function saveStartStopOnOff() {
                         </button>
                     </div>
                     <div>
-                      <i class="padding_0 padding_left_5 material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                      <i class="padding_0 padding_left_10 material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
                     style="" id="btnDeleteNaviApp">cancel</i>
                     </div>
                 </div><!--fieldset-->
@@ -1623,7 +1625,7 @@ function saveStartStopOnOff() {
                       </button>
                   </div>
                   <div>
-                    <i class="padding_0 padding_left_5 material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                    <i class="padding_0 padding_left_10 material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
                     style="" id="btnDeleteMusicApp">cancel</i>
                   </div>
               </div><!--fieldset-->
@@ -2298,6 +2300,12 @@ function saveStartStopOnOff() {
                     data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
                     <span class="material-icons mdc-bottom-navigation__list-item__icon">forum</span>
                     <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.menu_run_options">실행옵션</span>
+                </span>
+
+                <span id="footerMenuDeveloperSupport" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary none"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">favorite</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="[html]title.support_developers">개발자응원</span>
                 </span>
 
                 <!-- <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
