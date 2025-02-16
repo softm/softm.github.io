@@ -190,8 +190,8 @@ var messages  = {
             home_n_company_reg: "Change Home/Company",
             stop_recent_all: "All",
             mail_qna: "E-mail",
-            qna_top_message: "If you experience any inconvenience while using the app or have any questions, please contact us and we will quickly check and respond. :)",
-            qna_comment_message: "Please send us the following information to help us identify the issue:",
+            qna_top_message: "Please let us know if you have any inconveniences or questions while using the app.<br/> We will check and respond quickly. :)",
+            qna_comment_message: "Please send us the contents below along with the symptoms.",
             qna_comment_detail_message1: "Related screenshots or videos",
             qna_comment_detail_message2: "Problem Symptom Path and Description",
             qna_comment_detail_message3: "Model name",
@@ -204,13 +204,33 @@ var messages  = {
             service_check_noti_basic:"Basic",
             service_check_noti_log:"Log",
             license: "license",
-            license_user: "license user",
-            free_user: "free user",
+            license_user: "license",
+            ad_view_user: "Ad Viewing",
+            beta_user: "Beta",
+            free_user: "Free",
+            subs_user: "Subscription",
+            lifetime_user: "Lifetime",
+            
             period_of_use: "Period of use",
             expiration: "expiration",
-            watch_the_ad_and_cheer: "Watch the ad and cheer",
-            ad_replay_time: "Ad replay time",
-            ad_view_available: "Available for viewing",
+            watch_the_ad_and_cheer: "Cheer",
+            ad_replay_time: "Ad replay",
+            ad_view_available: "Available",
+            order_id: "order number",
+            bill_monthly: "Monthly",
+            bill_monthly_price: "USD 0.49",
+            bill_monthly_oneday_price: "USD 0.015 per day",
+            bill_lifetime: "Lifetime",
+            bill_lifetime_price: "USD 4.9",
+            bill_lifetime_discount_price: "USD 0.15",
+            bill_lifetime_oneday_price: "Once",
+            bill_lifetime_50percent_discount: "50% discount",
+            subscription_management: "Subscription",
+            app_purchase: "Purchase [Buy a cup of coffee]",
+            app_purchase1: "Purchase",
+            app_purchase2: "[Buy ]",
+            app_purchase3: "[a cup of coffee]",
+            copy_order_id:"Copy order number",
           },
           title: {
             main: "Basic",
@@ -224,7 +244,7 @@ var messages  = {
             start_stop_on_off: "On/Off",
             destination: "Destination",
 
-            support_the_developers: "Support the developers",
+            support_the_developers: "Cheer up",
             
             home:"Home",
             setting:"Setting",
@@ -393,9 +413,14 @@ var messages  = {
             noti_msg6:"thank you.",
             drag_pin_adjust_position:"Drag the pin to adjust its position.",
             please_support:"Please support us. ^^ :)",
+            please_support_msg1:"- If you watch an ad, your subscription period will be extended.",
+            please_support_msg2:'- The waiting time is <span class="bold" style="color:#B40404">"10"</span> → <span class="bold" style="color:#B40404">"3"</span> seconds',
             next_ad_view : 'There are {waitTime} left until the next ad view time.',
-            ad_view_time_exceeded : 'Viewing has been restricted due to ad viewing time exceeded.<br/>Please wait a few days.',
-            ad_view_thanks:"Thank you for your support. ^^ :)"
+            ad_max_time_ad_view : 'Viewing has been restricted due to exceeding the ad viewing time.',
+            ad_view_time_exceeded : 'Viewing has been restricted due to exceeding the ad viewing time.',
+            ad_view_thanks:"Thank you for your support. ^^ :)",
+            pay_in_app_subs_thanks:"Thank you for using the subscription. ^^ :)",
+            pay_in_app_lifetime_thanks:"Thank you for using the lifetime pass. ^^ :)",
           },
           toast:{
             run_option_on : "Turn <span style='color:var(--softm-start)'>on</span>.",
@@ -612,8 +637,8 @@ var messages  = {
             home_n_company_reg: "집/회사 등록",
             stop_recent_all: "모두닫기",
             mail_qna: "메일 문의하기",
-            qna_top_message: "앱 사용중 불편하거나, 궁금한 점을 문의주시면 빠르게 확인 후 답변 드리도록 하겠습니다. :)",
-            qna_comment_message: "다음 내용을 보내주시면 문제 파악에 도움이 됩니다.",
+            qna_top_message: "앱 사용에 불편한점이나, 궁금한 점을 알려주세요.<br/> 빠르게 확인 후 답변 드리도록 하겠습니다. :)",
+            qna_comment_message: "아래 내용과 증상을 함께 보내주세요.",
             qna_comment_detail_message1: "관련 스크린샷 또는 비디오",
             qna_comment_detail_message2: "문제 증상 경로 및 설명",
             qna_comment_detail_message3: "기종 이름",
@@ -627,13 +652,32 @@ var messages  = {
             service_check_noti_log:"로그",
             license: "라이센스",
             license_user: "라이센스 사용자",
-            ad_view_license_user: "광고시청 사용자",
+            ad_view_user: "광고보기 사용자",
+            beta_user: "베타 사용자",
             free_user: "무료 사용자",
+            subs_user: "구독 사용자",
+            lifetime_user: "평생 사용자",
+
             period_of_use: "사용기간",
             expiration: "만료",
-            watch_the_ad_and_cheer: "광고보고 응원하기",
-            ad_replay_time: "광고 보기 시간",
+            watch_the_ad_and_cheer: "응원하기",
+            ad_replay_time: "광고보기",
             ad_view_available: "시청가능",
+            order_id: "주문번호",
+            bill_monthly: "월간",
+            bill_monthly_price: "₩500원",
+            bill_monthly_oneday_price: "하루에 16원",
+            bill_lifetime: "평생",
+            bill_lifetime_price: "₩5,000원",
+            bill_lifetime_discount_price: "₩10,000원",
+            bill_lifetime_oneday_price: "한번",
+            bill_lifetime_50percent_discount: "50% 할인",
+            subscription_management: "구독관리",
+            app_purchase: "구입 [커피한잔쏘기]",
+            app_purchase1: "구입",
+            app_purchase2: "[커피한잔",
+            app_purchase3: "쏘기]",
+            copy_order_id:"주문번호 복사",
           },
           title: {
             main: "기본",
@@ -647,7 +691,7 @@ var messages  = {
             start_stop_on_off: "On/Off",
             destination: "목적지",
             
-            support_the_developers: "개발자 응원하기",
+            support_the_developers: "응원하기",
             
             support_developers: "응원하기",
             
@@ -833,9 +877,14 @@ var messages  = {
             noti_msg6:"감사합니다.",
             drag_pin_adjust_position:"핀을 드래그해서 위치를 조정하세요.",
             please_support:"응원 부탁드려요. ^^ :)",
+            please_support_msg1:"- 광고를 시청하면 사용기간이 연장되요.", 
+            please_support_msg2:'- 대기시간이 <span class="bold" style="color:#B40404">"10"</span>초 → <span class="bold" style="color:#B40404">"3"</span>초', 
             next_ad_view : '다음 광고 시청시간 까지 : {waitTime} 남았습니다.',
-            ad_view_time_exceeded : '광고 시청시간 초과로 2일 후에 부탁드려요.',
+            ad_max_time_ad_view : '광고 시청시간 초과로 시청이 제한 되었습니다.',
+            ad_view_time_exceeded : '광고 시청시간 초과로 시청이 제한 되었습니다.',
             ad_view_thanks:"응원 감사합니다. ^^ :)",
+            pay_in_app_subs_thanks:"구독을 이용해주셔서 감사합니다. ^^ :)",
+            pay_in_app_lifetime_thanks:"평생이용권을 이용해주셔서 감사합니다. ^^ :)",
           },
           toast:{
             run_option_on : "설정을 <span style='color:var(--softm-start)'켰</span>습니다.",
@@ -1576,6 +1625,24 @@ function initBasicInfo() {
       $("#footerMenuDeveloperSupport").show();
     } else {
       $("#footerMenuDeveloperSupport").hide();
+    }
+
+    $(".version-name").text("Ver."+v.versionName + " / " + v.versionCode);
+    if ( v.userLevel ) {
+      var user_level = t("label." + v.userLevel.toLocaleLowerCase() + "_user"); 
+      $(".user_level").text(user_level);
+    }
+
+    if ( info.isPaidLicense ) {
+        $(".paidUser").show();
+    }
+
+    if ( info.isSubsLicense ) {
+        $(".subsUser").show();
+    }
+
+    if ( info.isLifeTimeLicense ) {
+        $(".lifeTimeUser").show();
     }
   } 
 }

@@ -828,9 +828,6 @@ function initLoad(v){
         this.value = v;
     });
 
-    $(".version-name").text(v.versionName + " / " + v.versionCode);
-    // $(".app_name").text(v.versionName);
-
     console.info("window.info", v);
     console.info("_START_POWER", v.startPower);
     // v = v!="null"&&v?v:"1";
@@ -1363,9 +1360,21 @@ function getStatusMessage() {
         <div class="mdc-drawer__header app_info">
             <img src="./images/logo_100.svg" width="50" style="margin-top: 10px;"/>
             <!-- style="height:55px" -->
-            <h3 class="mdc-dramdc-drawer__contentwer__title" data-i18n="[html]label.app_name">티맵자동실행</h3>
-            <h6 class="mdc-drawer__subtitle" >Ver.<span class="version-name">00.00</span></h6>
-          </div>
+            <div class="mdc-dramdc-drawer__contentwer__title" data-i18n="[html]label.app_name">티맵자동실행</div>
+
+        </div>
+        <hr class="sub"/>
+        <div class="row sub flex left bold " >
+            <label for="" class="flex-grow title" style="">
+                <h6 class="mdc-drawer__subtitle" ><span class="version-name">00.00</span></h6>    
+            </label>
+            <div class="flex-grow margin_right_7 middle right basic_font_medium2"  style="align-content: space-evenly;">
+                <span class="paidUser">
+                    <img src="images/vip.png" width="30" align="absmiddle"/>
+                </span>
+                <span class="user_level bold underline cursor_pointer"><span onClick="fn_OpenUrl('developer_support.html');">광고보기 사용자</span></span>
+            </div> 
+        </div>
         <div class="mdc-drawer__content">
             <a class="clone none mdc-deprecated-list-item mdc-deprecated-list-item--activated" href="#">
                 <span class="mdc-deprecated-list-item__ripple"></span>

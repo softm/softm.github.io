@@ -44,6 +44,8 @@ var btnSettings;
 var btnEmail;
 var btnCopyemail;
 var btnCopyEmailBody;
+var btnCopySubsOrderId;
+var btnCopyLifeTimeOrderId;
 
 var firstLoad = true;
 $( document ).ready(function() {
@@ -52,6 +54,8 @@ $( document ).ready(function() {
         btnEmail    = new mdc.ripple.MDCRipple(document.querySelector("#btnEmail"));
         btnCopyemail    = new mdc.ripple.MDCRipple(document.querySelector("#btnCopyemail"));
         btnCopyEmailBody    = new mdc.ripple.MDCRipple(document.querySelector("#btnCopyEmailBody"));
+        btnCopySubsOrderId    = new mdc.ripple.MDCRipple(document.querySelector("#btnCopySubsOrderId"));
+        btnCopyLifeTimeOrderId    = new mdc.ripple.MDCRipple(document.querySelector("#btnCopyLifeTimeOrderId"));
 
         btnHome.listen("click", function(event) {
 	        //	self.close();
@@ -79,6 +83,16 @@ $( document ).ready(function() {
 
         btnCopyEmailBody.listen("click", function (event) {
             fn_CopyClipboard($("#deviceInfo").text());
+            snackbar("Copied");
+        });
+
+        btnCopySubsOrderId.listen("click", function (event) {
+            fn_CopyClipboard(info.purchaseSubsOriginaljson.orderId);
+            snackbar("Copied");
+        });
+
+        btnCopyLifeTimeOrderId.listen("click", function (event) {
+            fn_CopyClipboard(info.purchaseLifetimeOriginaljson.orderId);
             snackbar("Copied");
         });
         
@@ -194,6 +208,17 @@ function pageInit() {
     $(".uuid").text(window.info.device.uuid);
     $(".brand").text(window.info.device.brand);
     $(".versionCode").text(window.info.device.versionCode);
+    $(".versionCode").text(window.info.device.versionCode);
+    
+    if (info.isSubsLicense ) {
+        var info1 = $('<div>8. ' + t("label.subs_user") + ' : <span>' + info.purchaseSubsOriginaljson.orderId + '</span></div>');
+        $("#deviceInfo").append(info1);
+    }
+
+    if (info.isLifeTimeLicense ) {
+        var info2 = $('<div>8. ' + t("label.lifetime_user") + ' : <span>' + info.purchaseLifetimeOriginaljson.orderId + '</span></div>');
+        $("#deviceInfo").append(info2);
+    }
 } 
 
 window.fn_BackKeyPressedCallBack = function () {
@@ -241,8 +266,19 @@ class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounde
       <div class="mdc-drawer__header app_info">
           <img src="./images/logo_100.svg" width="50" style="margin-top: 10px;"/>
           <!-- style="height:55px" -->
-          <h3 class="mdc-dramdc-drawer__contentwer__title" data-i18n="[html]label.app_name">티맵자동실행</h3>
-          <h6 class="mdc-drawer__subtitle" >Ver.<span class="version-name">00.00</span></h6>
+          <div class="mdc-dramdc-drawer__contentwer__title" data-i18n="[html]label.app_name">티맵자동실행</div>
+        </div>
+        <hr class="sub"/>
+        <div class="row sub flex left bold " >
+            <label for="" class="flex-grow title" style="">
+                <h6 class="mdc-drawer__subtitle" ><span class="version-name">00.00</span></h6>    
+            </label>
+            <div class="flex-grow margin_right_7 middle right basic_font_medium2"  style="align-content: space-evenly;">
+                <span class="paidUser">
+                    <img src="images/vip.png" width="30" align="absmiddle"/>
+                </span>
+                <span class="user_level bold underline cursor_pointer"><span onClick="fn_OpenUrl('developer_support.html');">광고보기 사용자</span></span>
+            </div> 
         </div>
       <div class="mdc-drawer__content">
           <a class="clone none mdc-deprecated-list-item mdc-deprecated-list-item--activated">
@@ -318,31 +354,73 @@ class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounde
             <hr class="main"/>
 
 <!-- 상단 메시지 -->
-            <div class="row padding_top_10 padding_bottom_3">
-                <div class="row sub flex bold basic_font_medium5" data-i18n="[html]label.qna_top_message" style="margin: 10px !important;">
-                    앱 사용중 불편하거나, 궁금한 점을 문의주시면 빠르게 확인 후 답변 드리도록 하겠습니다. :)
+            <div class="row padding_top_0 padding_bottom_3">
+                <div class="row sub flex bold basic_font_medium1" data-i18n="[html]label.qna_top_message" style="margin: 10px !important;">
+                    앱 사용에 불편한점이나, 궁금한 점을 알려주세요.<br/> 빠르게 확인 후 답변 드리도록 하겠습니다. :)
                 </div>
             </div>
             <!-- <hr class="main"/> -->
 
-            <div class="margin_top_10">
-                
+            <hr class="sub subsUser"/>
+            <!-- paidUser -->
+            <div class="row sub flex left bold subsUser">
+                <div class="margin_right_7 basic_font_medium2"  style="align-content: space-evenly;">
+                    <span class="">
+                        <img src="images/vip.png" width="25" align="absmiddle"/>
+                    </span>
+                </div>
+                <label for="" class="title" style=""><strong class="basic_font_small4" data-i18n="label.subs_user">구독 사용자</strong></label>
+                <div class="flex-grow  basic_font_medium2 align-self-center right ">
+                    <div class="">                                       <!-- bg_orange white -->
+                        <button id="btnCopySubsOrderId" type="button" class="mdc-button mdc-button--raised padding_10 bg_orange" data-mdc-dialog-action="close"
+                        style="height:30px;"
+                        >
+                            <i class="material-icons mdc-button__icon" style="top: 0px;" aria-hidden="true"
+                            >content_copy</i>
+                            <span class="mdc-button__label bold margin_right_5 basic_font_small2" data-i18n="label.watch_the_ad_and_cheer11">주문번호 복사</span>
+                            <div class="mdc-button__ripple "></div>
+                        </button>
+                    </div>
+                </div>
             </div>
+
+            <hr class="sub lifeTimeUser"/>
+            <div class="row sub flex left bold lifeTimeUser">
+                <div class="margin_right_7 basic_font_medium2"  style="align-content: space-evenly;">
+                    <span class="">
+                        <img src="images/vip.png" width="25" align="absmiddle"/>
+                    </span>
+                </div>
+                <label for="" class="basic_font_small1 title" style=""><strong class="basic_font_small4" data-i18n="label.lifetime_user">평생 사용자</strong></label>
+                <div class="flex-grow align-self-center right ">
+                    <div class="">                                       <!-- bg_orange white -->
+                        <button id="btnCopyLifeTimeOrderId" type="button" class="mdc-button mdc-button--raised padding_10 bg_orange" data-mdc-dialog-action="close"
+                        style="height:30px;"
+                        >
+                            <i class="material-icons mdc-button__icon" style="top: 0px;" aria-hidden="true"
+                            >content_copy</i>
+                            <span class="mdc-button__label bold margin_right_5 basic_font_small2" data-i18n="label.copy_order_id">주문번호 복사</span>
+                            <div class="mdc-button__ripple "></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <hr class="sub"/>
 <!-- 설명 메시지 -->
             <div class="row padding_top_10  padding_bottom_10 padding_left_10  padding_right_10" style="background-color: #DFECF8;">
-                <div class="row sub flex basic_font_medium4" style="color:#4181b8;margin: 0px !important;">
-                    <span data-i18n="[html]label.qna_comment_message" class="align-self-center">다음 내용을 보내주시면 문제 파악에 도움이 됩니다.</span>
+                <div class="row sub flex basic_font_medium2" style="color:#4181b8;margin: 0px !important;">
+                    <span data-i18n="[html]label.qna_comment_message" class="align-self-center">아래 내용과 증상을 함께 보내주세요.</span>
                     <button id="btnCopyEmailBody" type="button" class="mdc-button" style="align-items: normal;">
                         <div class="mdc-button__ripple"></div>
                         <span class="material-icons mdc-bottom-navigation__list-item__icon">content_copy</span>
                     </button>
                 </div>
-                <ol id="deviceInfo" class="left basic_font_medium4 padding_left_0" style="margin: 0px;padding-top: 10px;">
+                <ol id="deviceInfo" class="left basic_font_medium1 padding_left_0" style="margin: 0px;padding-top: 10px;">
 <div>1. <span class="" data-i18n="label.qna_comment_detail_message3">기종 이름</span> : <span class="brand bold">-</span> / <span class="bold model">-</span></d>
 <div>2. <span class="" data-i18n="label.qna_comment_detail_message4">기기 시스템(OS) 버전</span> : <span class="bold sdkInt">-</span> / Android <span class="bold versionId">-</span></div>
 <div>3. <span class="" data-i18n="label.qna_comment_detail_message5">앱 버전</span> : <span class="bold versionName">-</span> / <span class="bold versionCode">-</span></div>
 <div>4. <span class="">UUID</span> : <span class="uuid bold">-</span></div>
-<div>5. <span class="" data-i18n="label.qna_comment_detail_message7">국가/언어</span> : <span class="bold displayCountry">-</span> / <span class="country">-</span> /  <span class="language">-</span></div>
+<div>5. <span class="" data-i18n="label.qna_comment_detail_message6">국가/언어</span> : <span class="bold displayCountry">-</span> / <span class="country">-</span> /  <span class="language">-</span></div>
 <div>6. <span data-i18n="label.qna_comment_detail_message1">관련 스크린샷 또는 비디오.</span></div>
 <div>7. <span data-i18n="label.qna_comment_detail_message2">문제 증상 설명</span></div>
                 </ol>
@@ -354,7 +432,7 @@ class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounde
             </div>
 
 <!-- 메일 주소 -->
-            <div class="row padding_top_10  padding_bottom_10 padding_left_10  padding_right_10" style="background-color: #F1F1F1;">
+            <div class="row padding_top_0  padding_top_0 padding_left_10  padding_right_10" style="background-color: #F1F1F1;">
                 <div class="row basic_font_medium4 align-self-center bold black" data-i18n="[html]label.app_name!" style="color:#F1F1F1;margin: 0px !important;">
                     <a href="mailto:autorunnavi@gmail.com" class="black">autorunnavi@gmail.com</a>
                     <button id="btnCopyemail" type="button" class="mdc-button" style="align-items: normal;">

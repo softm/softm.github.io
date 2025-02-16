@@ -446,9 +446,17 @@ $( document ).ready(function() {
           musicPackagesInfo["com.miui.player"].seq = -2;
           // musicPackagesInfo["com.autonavi.minimap"].seq = -1;
         } else if ( lng.startsWith("en") ) { // 
-          // musicPackagesInfo["com.google.android.apps.maps"].seq = -2;
+          musicPackagesInfo["com.apple.android.music"].seq = -2;
+          musicPackagesInfo["com.google.android.apps.youtube.music"].seq = 0;
+          musicPackagesInfo["com.apple.android.music"].seq = 1;
           // musicPackagesInfo["com.google.android.apps.mapslite"].seq = -1;
           // musicPackagesInfo["com.google.android.apps.navlite"].seq = -1;
+        }
+
+        if ( info.device.isTablet ) {
+          musicPackagesInfo["com.google.android.youtube"].seq = 0;
+          // musicPackagesInfo["com.google.android.apps.youtube.music"].seq = 0;
+          // musicPackagesInfo["com.apple.android.music"].seq = 1;
         }
 
         // if ( lng === "ko") {

@@ -524,7 +524,7 @@ http://tmapapi.sktelecom.com/main.html#webservice/guide/webserviceGuide.guide4
         // mapElement.css("bottom","10%");
         mapElement.css("bottom",document.querySelector("footer").offsetHeight+"px");
         console.log("scroll","setPositionBottom");
-        $("#mapIndicator").show();
+        // $("#mapIndicator").show();
     }
 
     function setPositionClear (o) {
@@ -533,7 +533,7 @@ http://tmapapi.sktelecom.com/main.html#webservice/guide/webserviceGuide.guide4
         mapElement.css("position","");
         mapElement.css("bottom","");
         console.log("scroll","setPositionClear");
-        $("#mapIndicator").hide();
+        // $("#mapIndicator").hide();
     }
 
     var rtn = {};

@@ -5,7 +5,7 @@
 
  "appReleaseUpdtedTime":1737115191329,
  "licenseOPTypeName":"0:NONE,1:ADVIEW_STOP,2:ADVIEW,3:SUBSCRIBE",
- "licenseOPType":"1",
+ "licenseOPType":"2",
  "waitTimeForNotAdLicense":"10000",
  "adModeName":"0:NONE,1:GOOGLE,2:FACEBOOK",
  "adMode":"1",
@@ -13,18 +13,26 @@
  "adTypeForPopupBanner":"1",
  "adTypeForWaitBanner":"1",
  "adTypeForWaitBannerLoadTypeName":"1:DIRECT,2:INDIRECT",
- "adTypeForWaitBannerLoadType":"1", 
+ "adTypeForWaitBannerLoadType":"2   ", 
  "adTypeForWaitRewardName":"REWARDED",
  "adTypeForWaitReward":"4",
 
- "adViewLicensedUUIDs":[
-   "ecb6c1732c4b3f0f",
+ "betaLicensedUUIDs_Tmp":[
+   "ecb6c1732c4b3f0f : emul",
    "e575416df5cd7da3",
    "8c85d549a955dcc7",
    "e575416df5cd7da3",
    "5c4dcb156253716a",
    "8bd0007cac109bf7",
    "3af0f0b68f2ee61b"
+],
+"betaLicensedUUIDs":[
+  "e575416df5cd7da3",
+  "8c85d549a955dcc7",
+  "e575416df5cd7da3",
+  "5c4dcb156253716a",
+  "8bd0007cac109bf7",
+  "3af0f0b68f2ee61b"
 ],
 
  "adViewIntervalTime_tmp":"1000 * 60 * 60 * 24 * 1 = 86400000",

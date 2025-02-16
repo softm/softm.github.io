@@ -461,7 +461,7 @@ var messages  = {
             home_n_company_reg: "집/회사 등록",
             stop_recent_all: "모두닫기",
             mail_qna: "메일 문의하기",
-            qna_top_message: "앱 사용중 불편하거나, 궁금한 점을 문의주시면 빠르게 확인 후 답변 드리도록 하겠습니다. :)",
+            qna_top_message: "앱 사용중 불편하거나, 궁금한 점을 알려주세요.<br/> 빠르게 확인 후 답변 드리도록 하겠습니다. :)",
             qna_comment_message: "다음 내용을 보내주시면 문제 파악에 도움이 됩니다.",
             qna_comment_detail_message1: "관련 스크린샷 또는 비디오",
             qna_comment_detail_message2: "문제 증상 재현을 할 수 있는 자세한 경로/설명",

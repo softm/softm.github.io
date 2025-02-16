@@ -18,6 +18,62 @@
   <link rel="stylesheet" href="./lib/common.css?a=202309171923">
   <script src="./lib/hangul.js"></script>
 
+  <style>
+    .box {
+      border: 3px solid aliceblue;
+      padding: 0px;
+      border-radius: 10px;
+      width: 35%;      
+      height:120px;
+      cursor: pointer;
+      margin-right: 5px;
+      display: inline-block;
+      font-size: 11px;
+      font-weight: normal;
+      background-color: lightgray;
+      border:1px solid lightgray;
+      font-weight: bold;
+      color:gray;
+    }
+    
+    .box div.main {
+        bottom: 10px;
+        height: 70%;
+        align-content: center;
+        background-color: white;
+        border-radius: 10px;
+    }
+    .discount_price {
+     font-size:14px;
+    }
+    .box .main .main_title {
+        font-size: 20px;
+    }
+    .box.active {
+      border: 6px solid #FF6928;
+      background-color: #FF6928;
+      width:40%;
+      height:150px;
+      font-size: 15px;
+      font-weight: bold;
+      color: white;
+    }
+    .box.active span {
+      color: black;
+    }
+  
+    .box span.bottom_title {
+      position: relative;
+      /* bottom: -11px; */
+      top: 4px;
+    }
+    
+    .box.active span.bottom_title {
+      color: white;
+      top: 4px;
+    }
+
+  </style>
  </head>
 
 <!--  using - default i18next-->
@@ -49,6 +105,8 @@
 
 <script>
 var btnAvd = null;
+var btnPayInApp = null;
+var btnPayInAppMng = null;
 
 $( document ).ready(function() {
     footerNavigationIndex = 6;
@@ -56,6 +114,8 @@ $( document ).ready(function() {
     footerNavigation[footerNavigationIndex].emit("click", footerNavigationIndex);
 
     btnAvd = new mdc.ripple.MDCRipple(document.querySelector("#btnAvd"));
+    btnPayInApp = new mdc.ripple.MDCRipple(document.querySelector("#btnPayInApp"));
+    btnPayInAppMng = new mdc.ripple.MDCRipple(document.querySelector("#btnPayInAppMng"));
 
     window.getInfoCallBack = function (data) {
         if (isWeb) {
@@ -68,7 +128,7 @@ $( document ).ready(function() {
                             "workOffTimeFrom": "17:30",
                             "versionName": "1.3.1.0007",
                             "workGotoTimeTo": "08:50",
-                            "licenseExpireTime": 1738932905907,
+                            "licenseExpireTime": 1737115191329, // 1738932905907
                             "isInKorea": true,
                             "isAdLicense": false,
                             "permissions": {
@@ -331,7 +391,10 @@ $( document ).ready(function() {
                             "runStatusScreenTimeForStop": 15,
                             "notiIcon": true,
                             "appReleaseUpdtedTime": 1737115191329,
-                            "userType":"AD_VIEW_LICENSE_USER"
+                            "userType":"AD_VIEW_USER",
+                            "userLevel":"FREE", // AD_VIEW, SUBS, LIFETIME
+                            "isPaidLicense": false,
+                            "isSubsLicense": false
 
                             
                         }
@@ -341,26 +404,24 @@ $( document ).ready(function() {
         initBasicInfo();
         initPage(window.info);
     }
-    fn_GetInfo("", "getInfoCallBack");
+
+    window.startGetInfo = function(message) {
+        fn_GetInfo("", "getInfoCallBack");
+    }
+    fn_SyncUserLicense("startGetInfo");
     //W
     // drawer.open = true;
+    $(".bill_products .box").click(function(e) {
+        $(".bill_products .box").removeClass("active");
+        $(this).addClass("active");
+    });
 });
 
 function initPage(v) {
     // initLoad(v);
     // console.log("initLoad");
-    $(".version-name").text(v.versionName + " / " + v.versionCode);
     $("body").removeClass("none");
     // if ( _LICENSE_EXPIRE_TIME /  // info.isAdLicense)
-    
-    var license_user = "";
-    if ( v.userType == "1" || v.userType == "2" ) {
-        license_user = t("label.ad_view_license_user");
-    } else { // FREE_USER
-        license_user = t("label.free_user");
-    }
-    $("#license_user").text(license_user);
-    
     // info.licenseExpireTime - info.systemCurrentTimeMillis
 
     var licenseExpireTime = v.licenseExpireTime;
@@ -368,7 +429,7 @@ function initPage(v) {
         // licenseExpireTime -= 1000;
         var license_expire_time = "";
         if ( licenseExpireTime > info.systemCurrentTimeMillis ) {
-            license_expire_time = "<span class='skyblue'>" + new Date(licenseExpireTime).toLocaleString() +"</span>";
+            license_expire_time = "<span class='black'>" + new Date(licenseExpireTime).toLocaleString() +"</span>";
         } else {
             license_expire_time = "<span class='pink'>" + t("label.expiration")+"</span>";
         }
@@ -390,17 +451,39 @@ function initPage(v) {
         if ( nextAdviewTime >= 0 ) {
             $("#ad_replay_time").html(waitTime);        
         } else {
-            $("#ad_replay_time").html("시청가능");    
+            $("#ad_replay_time").html(t("label.ad_view_available")); // 시청가능
             // fn_Reload(true);    
         }
     },1000);
+
+    btnPayInAppMng.listen("click", function (event) {
+        // fn_OutsideSite(url) ("https://play.google.com/store/account/subscriptions");
+        fn_OutsideSite("https://play.google.com/store/account/subscriptions?sku=subs_01&package=net.softm.startnavi.poweron");
+    });
+
+    btnPayInApp.listen("click", function (event) {
+        var billingType = $(".box.active").attr("name");
+        window.payInAppComplete = function () {
+            // billingType
+            if ( billingType == "INAPP_LIFETIME" ) {
+                snackbar( t("message.pay_in_app_lifetime_thanks") );
+            } else if ( billingType == "SUBS" ) {
+                snackbar( t("message.pay_in_app_subs_thanks") );
+            }
+            setTimeout(function () {
+                fn_Reload(true);
+            },2000);
+        };
+        fn_PayInApp(billingType,"payInAppComplete");
+    });
+
     btnAvd.listen("click", function (event) {
         if ( !info.isAdViewAvailableForAdMaxTime ) {
             snackbar( t("message.ad_view_time_exceeded"));
             return;
         } info.adViewLicenseAddTime
 
-        if ( nextAdviewTime<0 || info.isAdingWaitReward && info.isAdViewAvailable ) {
+        if ( nextAdviewTime<0 || ( info.isAdingWaitReward && info.isAdViewAvailable ) ) {
             $(btnAvd.root).removeClass("bg_yellowgreen").addClass("bg_lightyellowgreen")[0].disabled = true;
             window.adViewComplete = function () {
                 // alert("ad_view_complete",function () {
@@ -424,8 +507,8 @@ function initPage(v) {
                     
                 // Utils.toastDebug(mContext, "다음 광고 시청시간 까지 :" );
                 snackbar( t("message.next_ad_view",{"waitTime":waitTime}));
-            } else {
-                snackbar("ㅁㄴㅇㄹㅇ" );
+            } else if ( !info.isAdViewAvailableForAdMaxTime ) {
+                snackbar( t("message.ad_max_time_ad_view"));
             }
         }
     });
@@ -466,9 +549,21 @@ function initPage(v) {
         <div class="mdc-drawer__header app_info">
             <img src="./images/logo_100.svg" width="50" style="margin-top: 10px;"/>
             <!-- style="height:55px" -->
-            <h3 class="mdc-dramdc-drawer__contentwer__title" data-i18n="[html]label.app_name">티맵자동실행</h3>
-            <h6 class="mdc-drawer__subtitle" >Ver.<span class="version-name">00.00</span></h6>
-          </div>
+            <div class="mdc-dramdc-drawer__contentwer__title" data-i18n="[html]label.app_name">티맵자동실행</div>
+            
+        </div>
+        <hr class="sub"/>
+        <div class="row sub flex left bold " >
+            <label for="" class="flex-grow title" style="">
+                <h6 class="mdc-drawer__subtitle" ><span class="version-name">00.00</span></h6>    
+            </label>
+            <div class="flex-grow margin_right_7 middle right basic_font_medium2"  style="align-content: space-evenly;">
+                <span class="paidUser">
+                    <img src="images/vip.png" width="30" align="absmiddle"/>
+                </span>
+                <span class="user_level bold underline cursor_pointer"><span onClick="fn_OpenUrl('developer_support.html');">광고보기 사용자</span></span>
+            </div> 
+        </div>
         <div class="mdc-drawer__content">
             <a class="clone none mdc-deprecated-list-item mdc-deprecated-list-item--activated" href="#">
                 <span class="mdc-deprecated-list-item__ripple"></span>
@@ -533,70 +628,109 @@ function initPage(v) {
     </aside>
     <div class="mdc-drawer-scrim"></div>
     <div class="drawer-frame-app-content">
-
         <div class="main drawer-main-content i18n margin_top_15">
             <a name="move_point" id="move_point" />
             <div class="margin_top_20">
                 <div class="row flex" style="border:0px solid red">
-                    <legend align="left" class="main title"><strong data-i18n="title.support_the_developers">개발자 응원하기</strong></legend>
+                    <legend align="left" class="main title"><strong data-i18n="message.please_support">응원 부탁드려요. ^^ :)</strong></legend>
                 </div>
             </div>
             <hr class="main"/>
-            
-            <div class="row padding_top_10 padding_bottom_3">
-                <div class="row sub flex bold basic_font_medium5" data-i18n="[html]message.please_support" style="margin: 10px !important;">
-                응원 부탁드려요. ^^ :)
-                </div>
+      
+            <div class="row padding_top_0 padding_bottom_3 ">
 
-                <div class="row sub flex basic_font_medium3" data-i18n="[html]message.please_support___" style="margin: 10px !important;">
+                <div class="row sub flex basic_font_medium3" data-i18n="[html]message.please_support_msg1">
                     - 광고를 시청하면 사용기간이 연장되요.
                 </div>
 
-                <div class="row sub flex basic_font_medium3" data-i18n="[html]message.please_support___" style="margin: 10px !important;">
-                    - 대기시간이 <span style="color:#B40404">"10"</span>초 → <span style="color:#B40404">"3"</span>초
+                <div class="row sub flex basic_font_medium3 margin_bottom_0" data-i18n="[html]message.please_support_msg2">
+                    - 대기시간이 <span class="bold" style="color:#B40404">"10"</span>초 → <span class="bold" style="color:#B40404">"3"</span>초
                 </div>
             </div>
         
+        
             <hr class="sub"/>
-                <div class="row sub flex left bold" style="height:40px">
-                    <label for="" class="title" style=""><strong data-i18n="label.license">라이센스</strong></label>
-                    <div class="flex-grow basic_font_medium2 align-self-center right" id="license_user">~ 2025년 01월 31일</div>
+            <div class="row sub flex left bold ">
+                <label for="" class="flex-grow title" style=""><strong data-i18n="label.license">라이센스</strong></label>
+                <div class="flex-grow margin_right_7 middle right basic_font_medium2"  style="align-content: space-evenly;">
+                    <span class="paidUser">
+                        <img src="images/vip.png" width="30" align="absmiddle"/>
+                    </span>
+                    <span class="user_level">광고 보기 사용자</span>
                 </div>
-
-                <div class="row sub flex left bold" style="height:40px">
-                    <label for="" class="title" style=""><strong data-i18n="label.period_of_use">사용기간</strong></label>
-                    <div class="flex-grow basic_font_medium2 align-self-center right" id="license_expire_time">~ 2025년 01월 31일</div>
+                <div class="basic_font_medium2 align-self-center right ">
+                    <div class="flex-grow subsUser ">                                       <!-- bg_orange white -->
+                        <button id="btnPayInAppMng" type="button" class="mdc-button mdc-button--raised padding_10 " data-mdc-dialog-action="close"
+                        style="height:30px;"
+                        >
+                            <i class="material-icons mdc-button__icon" style="top: 0px;" aria-hidden="true"
+                            >subscriptions</i>
+                            <span class="mdc-button__label bold margin_right_5" data-i18n="label.subscription_management">구독관리</span>
+                            <div class="mdc-button__ripple "></div>
+                        </button>
+                    </div>
                 </div>
-                <hr class="sub"/>
-
-
-            <div class="row right">
-                <button id="btnAvd" type="button" class="mdc-button mdc-button--raised w_full bg_yellowgreen" data-mdc-dialog-action="close"
-                    style="height:50px"
-                >
-                    <!-- <div class="mdc-button__ripple"></div>
-                    <i class="material-icons mdc-button__icon" aria-hidden="true"
-                    >bookmark</i> -->
-                    <span class="mdc-button__label bold black basic_font_medium4" data-i18n="label.watch_the_ad_and_cheer">광고보고 응원하기</span>
-                </button>
             </div>
 
             <div class="row sub flex left bold" style="height:40px">
-                <label for="" class="title" style=""><strong data-i18n="label.ad_replay_time">광고 재시청 가능 시간</strong></label>
-                <div class="flex-grow basic_font_medium2 align-self-center right" id="ad_replay_time">-</div>
+                <label for="" class="title" style=""><strong data-i18n="label.period_of_use">사용기간</strong></label>
+                <div class="flex-grow basic_font_medium2 align-self-center margin_right_7 right" id="license_expire_time">~ 2025년 01월 31일</div>
             </div>
-            <!-- getNextAdviewTime -->
-            <!-- isAdViewAvailableForAdMaxTime -->
-            <!-- millisecondsToTime -->
 
-<!--
-            <div class="row right">
-                <button id="btnEmail" type="button" class="mdc-button mdc-button--raised w_full bg_green" data-mdc-dialog-action="close">
-                    <div class="mdc-button__ripple"></div>
-                    <span class="mdc-button__label bold black basic_font_medium2" data-i18n="label.mail_qna___">구독</span>
+            <div class="row sub flex left bold ">
+                <label for="" class="flex-grow title" style=""><strong data-i18n="label.ad_replay_time">광고보기</strong></label>
+                <div class="flex-grow margin_right_10 middle right basic_font_medium2" id="ad_replay_time" style="align-content: space-evenly;">-</div>
+                <div class="basic_font_medium2 align-self-center right ">
+                    <div class="flex-grow ">
+                        <button id="btnAvd" type="button" class="black mdc-button mdc-button--raised bg_yellowgreen padding_10" data-mdc-dialog-action="close"
+                        style="height:40px; "
+                        >
+                            <i class="material-icons mdc-button__icon margin_right_2" style="" aria-hidden="true"
+                                >favorite</i>
+                            <span class="mdc-button__label bold black margin_right_5" data-i18n="label.watch_the_ad_and_cheer">응원하기</span>
+                            <div class="mdc-button__ripple "></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="sub"/>
+            <!-- <hr class="main"/> -->
+            <div class="row bill_products flex">
+                <div class="margin_left_10 margin_top_10" style="flex-grow: 1;width:55%;overlow:scroll">
+                    <div class="box monthly" name="SUBS">
+                        <div>&nbsp;</div>
+                        <div class="main" >
+                            <div class="main_title" data-i18n="label.bill_monthly">월간</div>
+                            <div class="main_title" data-i18n="label.bill_monthly_price">₩500원</div>
+                        </div>
+                        <span class="bottom_title" data-i18n="label.bill_monthly_oneday_price">하루에 16원</span>
+                    </div>
+
+                    <div class="box lifetime active " name="INAPP_LIFETIME">
+                        <div data-i18n="label.bill_lifetime_50percent_discount">50% 할인</div>
+                        <div class="main">
+                            <div class="main_title" data-i18n="label.bill_lifetime">평생</div>
+                            <div class="main_title" data-i18n="label.bill_lifetime_price">₩5,000원</div>
+                            <span class="sub_price lightgray basic_font_small1" ><s class="discount_price" data-i18n="label.bill_lifetime_discount_price">₩10,000원</s></span>
+                        </div>
+                        <span class="bottom_title" data-i18n="label.bill_lifetime_oneday_price"> 한번</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row padding_left_5 padding_right_5">
+                <button id="btnPayInApp" type="button" class="mdc-button mdc-button--raised w_full bg_orange white" data-mdc-dialog-action="close"
+                    style="height:40px"
+                >
+                <span class="mdc-button__label bold basic_font_medium2 margin_right_5" data-i18n="label.app_purchase1">구입</span>
+                <span class="mdc-button__label bold basic_font_medium1 margin_right_5" data-i18n="label.app_purchase2">[커피한잔</span>
+                <div class="mdc-button__ripple "></div>
+                <i class="material-icons mdc-button__icon" style="font-size: 25px;top: -7px;" aria-hidden="true"
+                >local_cafe</i>
+                <span class="mdc-button__label bold basic_font_medium1" data-i18n="label.app_purchase3">쏘기]</span>
                 </button>
             </div>
--->
 
             <div class="row" style="height:70px"></div>
             <div class="mdc-snackbar">

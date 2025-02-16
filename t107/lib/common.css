@@ -61,6 +61,7 @@ body {
 .basic_font_small1 { font-size: 12px }
 .basic_font_small2 { font-size: 13px }
 .basic_font_small3 { font-size: 14px }
+.basic_font_small4 { font-size: 15px }
 
 .basic_font_medium1 { font-size: 15px }
 .basic_font_medium2 { font-size: 16px }
@@ -356,7 +357,7 @@ footer {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 0 12px;
+  padding: 0 11px;
   min-width: 60px;
   max-width: 168px;
   box-sizing: border-box;
@@ -570,9 +571,16 @@ footer {
 .bg_wheat {
   background-color:wheat !important;
 }
+.bg_lightwheat {
+  background-color:#FFEFDA !important;
+}
 .bg_lightgray {
   background-color:gray !important;
   opacity: 0.7;
+}
+
+.bg_yellow {
+  background-color:#F5E14B !important;
 }
 .bg_gray {
   background-color:gray !important;
@@ -582,7 +590,7 @@ footer {
   background-color:#F7CDB7 !important
 }
 .bg_orange {
-  background-color:#f39c12 !important
+  background-color:#FF6928 !important
 }
 .bg_pink {
   background-color:#D77976 !important
@@ -643,12 +651,52 @@ footer {
   font-weight: bold;
 }
 
+.bolder {
+  font-weight: bolder;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.cursor_pointer {
+  cursor: pointer;
+}
+
 .lighter {
   font-weight: lighter;
 }
 
 .normal {
   font-weight: normal;
+}
+
+.bold_100 {
+  font-weight: 100;
+}
+.bold_200 {
+  font-weight: 200;
+}
+.bold_300 {
+  font-weight: 300;
+}
+.bold_400 {
+  font-weight: 400;
+}
+.bold_500 {
+  font-weight: 500;
+}
+.bold_600 {
+  font-weight: 600;
+}
+.bold_700 {
+  font-weight: 700;
+}
+.bold_800 {
+  font-weight: 800;
+}
+.bold_900 {
+  font-weight: 900;
 }
 
 hr.main {
@@ -749,3 +797,31 @@ hr.sub {
   
   transition: max-height 0.2s ease-out;
   }
+
+.paidUser, .subsUser, .lifetimeUser {
+    display: none;
+}
+.paidUser img {
+  width: 25px;
+}
+
+.mdc-drawer .version-name {
+  font-size: 13px;
+}
+
+.mdc-drawer .user_level {
+  font-size: 13px;
+}
+
+
+.pkg_not  {
+  z-index: 0;
+  /* position: absolute; */
+  font-weight: bolder;
+  opacity: 0.9;
+  font-size: 10px;
+  text-align: center;
+  /* width: 100%; */
+  /* bottom: 29px; */
+  color: darkred;
+}

@@ -785,6 +785,30 @@ function fn_OpenOverlayView(expandSub) {
 }
 
 /**
+ * API 700 : SyncUserLicense
+ */
+function fn_SyncUserLicense(callBackFunc) {
+	var result = { "header":{ "api":"700" }, "body":{ "callBackFunc":callBackFunc } };
+	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
+		 fn_Js_Bridge(result);
+	 }else{
+		 eval(callBackFunc + "('')");
+	 }
+}
+
+/**
+ * API 701 : PayInApp
+ */
+function fn_PayInApp(billingType,callBackFunc) {
+	var result = { "header":{ "api":"701" }, "body":{ "billingType":billingType, "callBackFunc":callBackFunc } };
+	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
+		 fn_Js_Bridge(result);
+	 }else{
+		 eval(callBackFunc + "('')");
+	 }
+}
+
+/**
  * API 777 : api_777_AdView
  *
  * @date 2025. 02. 06.
