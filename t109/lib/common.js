@@ -378,8 +378,8 @@ var messages  = {
             permission_grant_add_for_accessibility : 'Activate "Start/Stop" routine (On/Off)',
             permission_grant_add_for_overlay : '"Show app launch icon',
 
-            permission_enable_enhanced_feature : 'Enjoy enhanced features by enabling permissions.',
-            
+            permission_enable_enhanced_feature : 'If you have trouble running the app, try enabling the permission.',
+
             permission_grant_on_for_accessibility_reset : '<b class="color_stop">Accessibility permission has been revoked.</b><br/><br/>To operate normally, <B>the permission</B> should be "<B class="color_stop">turned off</B>" -> "<B class="color_stop">turned on</B>".',
             permission_grant_on_for_accessibility_reset4 : '<b class="color_stop">Turn off"</b> the <b>permissions</b> -&gt; <b class="color_stop">"Turn on"</b>.',
             permission_grant_on_for_accessibility_reset5 : '<b class="color_stop">Please "turn on" accessibility permissions</b>.',
@@ -846,7 +846,7 @@ var messages  = {
             permission_grant_add_for_accessibility : '"시작/종료" 루틴(On/Off) 활성화',
             permission_grant_add_for_overlay : '"앱 실행 아이콘 표시',
 
-            permission_enable_enhanced_feature : '권한 설정이 필요합니다.',                        
+            permission_enable_enhanced_feature : '앱 실행에 문제가 있다면 권한을 활성화 해보세요.',                        
 
             permission_name_notification_access : "알람 접근",
             permission_name_overlay : "오버레이 권한",

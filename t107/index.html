@@ -1524,35 +1524,6 @@ function saveStartStopOnOff() {
             </div>
             <!-- <hr class="main status_permission"/> -->
 
-            <div id="status_permission" class="row main padding_5" style="background-color: wheat;border-radius: 10px 10px 10px 10px;">
-                <!--
-                    -->
-                    <div class="row  flex left bold">
-                    <div class="flex-grow align-self-center left basic_font_medium2" style="opacity: 1;"
-                    data-i18n="message.permission_enable_enhanced_feature"
-                    >
-                    권한 활성화로 향상된 기능을 이용하세요.
-                    </div>
-                </div>        
-                <div class="row main flex left">
-                    <!-- <label for="" class="title" style=""><strong data-i18n="label.permission">권한</strong></label> -->
-                    <div class="flex-grow basic_font_medium1 align-self-center left bold" id="status_permission_message" style="opacity: 1;">
-                        <!--권한 상태메시지-->
-                    </div>
-                </div>                   
-                <div class="row sub flex right">
-                    <div class="flex-grow basic_font_medium1 align-self-center left" id="status_permission_name" style="opacity: 1;">
-                        위치 권한
-                    </div>
-                    <div class="flex-grow basic_font_medium2 align-self-center right" style="opacity: 1;">
-                        <button id="btnStatus" class="mdc-button mdc-button--raised  align-self-center">
-                            <strong data-i18n="label.permission_settings">권한 설정</strong>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <hr class="sub status_permission"/>
-
             <!--상태-->
             <div class="row sub flex left bold padding_top_5" style="" >
                 <label for="" class="main title" style=""><strong data-i18n="label.status">상태</strong></label>
@@ -1586,7 +1557,7 @@ function saveStartStopOnOff() {
 
             <hr class="sub"/>
 
-                        <!--안내모드-->
+            <!--안내모드-->
             <div class="row sub flex"><!--fieldset-->
               <label class="title" style="display:inline;"> <strong data-i18n="label.navi_mode">안내모드</strong></label>
               <div id="chip_navi_mode" class="flex-grow justify-content-right right mdc-chip-set mdc-chip-set--choice"
@@ -1633,9 +1604,38 @@ function saveStartStopOnOff() {
                 </div>
             </div>
 
-            <!-- <hr class="sub"/> -->
+            <hr class="sub status_permission"/>
 
+            <div id="status_permission" class="row main padding_5 bg_lightwheat" style="background-color: wheat;border-radius: 10px 10px 10px 10px;">
+                <!--
+                    -->
+                    <div class="row  flex left bold">
+                    <div class="flex-grow align-self-center left basic_font_medium2" style="opacity: 1;"
+                    data-i18n="message.permission_enable_enhanced_feature"
+                    >
+                    앱 실행에 문제가 있다면 권한을 활성화 해보세요.
+                    </div>
+                </div>        
+                <div class="row main flex left">
+                    <!-- <label for="" class="title" style=""><strong data-i18n="label.permission">권한</strong></label> -->
+                    <div class="flex-grow basic_font_medium1 align-self-center left bold" id="status_permission_message" style="opacity: 1;">
+                        <!--권한 상태메시지-->
+                    </div>
+                </div>                   
+                <div class="row sub flex right">
+                    <div class="flex-grow basic_font_medium1 align-self-center left" id="status_permission_name" style="opacity: 1;">
+                        위치 권한
+                    </div>
+                    <div class="flex-grow basic_font_medium2 align-self-center right" style="opacity: 0.90;">
+                        <button id="btnStatus" class="mdc-button mdc-button--raised  align-self-center">
+                            <strong data-i18n="label.permission_settings" class="bolder">권한 설정</strong>
+                        </button>
+                    </div>
+                </div>
+            </div>
             <hr class="sub"/>
+
+            <!-- <hr class="sub"/> -->
             <div class="margin_top_20">
                 <div class="row flex" style="border:0px solid red">
                     <legend align="left" class="main title"><strong data-i18n="title.execution">실행</strong></legend>

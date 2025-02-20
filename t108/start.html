@@ -590,6 +590,19 @@ window.getInfoCallBack = function (data) {
                 versionCode:11,
                 versionName:"0.0.0.1",
                 // + "http://www.softm.net/tdev"
+                device:{
+                    "country": "KR",
+                    "versionId": 15,
+                    "isTablet": false,
+                    "sdkInt": 35,
+                    "displayCountry": "대한민국",
+                    "model": "SM-S938N",
+                    "language": "ko",
+                    "versionName": "1.3.2.0000",
+                    "uuid": "29285b2e6ce94ee4",
+                    "brand": "samsung",
+                    "versionCode": 106
+                }
             }
         } else {
             window.info = (JSON.parse(data));
@@ -604,9 +617,11 @@ window.getInfoCallBack = function (data) {
             if (btnSwitchMusicPlayer.selected) { // true
               $("#label_music_player").text(t("label.use_enable"));
               $(".music").addClass("flex");
+              fn_DeviceSaveData("_MUSIC_APP_PACKAGE", $(".music_packages .pkg_icon.active").attr("name"));
             } else { // false
               $("#label_music_player").text(t("label.use_disable"));
               $(".music").removeClass("flex").addClass("none");
+              fn_DeviceSaveData("_MUSIC_APP_PACKAGE", "");
             }
         });
         
