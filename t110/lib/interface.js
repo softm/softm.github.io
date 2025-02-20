@@ -432,7 +432,8 @@ function fn_OpenUrl(url, callBackFunc) {
 //	remaining = timeIni;
 
 	if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
-	    fn_Js_Bridge(result);
+	    // fn_Js_Bridge(result);
+		location.href = url
 	}else{
 		window.open(url,'소프트엠');
 	}

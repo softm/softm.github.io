@@ -561,7 +561,7 @@ function initPage(v) {
                 <span class="paidUser">
                     <img src="images/vip.png" width="30" align="absmiddle"/>
                 </span>
-                <span class="user_level bold underline cursor_pointer"><span onClick="fn_OpenUrl('developer_support.html');">광고보기 사용자</span></span>
+                <span class=" bold underline cursor_pointer"><span class="user_level link_dev_support">광고보기 사용자</span></span>
             </div> 
         </div>
         <div class="mdc-drawer__content">
@@ -896,17 +896,17 @@ function initPage(v) {
 
                 <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
                     data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
-                    <span class="material-icons mdc-bottom-navigation__list-item__icon">settings</span>
-                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.menu_setting">설정</span>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">navigation</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.menu_navi_setting">내비설정</span>
                 </span>
 
                 <span
                     class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
                     data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
-                    <span class="material-icons mdc-bottom-navigation__list-item__icon">toggle_on</span>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">settings</span>
                     <!-- <span class="material-icons mdc-bottom-navigation__list-item__icon">directions_walk</span>
                     <span class="material-icons mdc-bottom-navigation__list-item__icon">directions_run</span> -->
-                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.menu_start_stop">시작/종료</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.menu_detail_setting">세부설정</span>
                 </span>
 
                 <span style="display:none" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
@@ -921,17 +921,17 @@ function initPage(v) {
                     <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.contact_us">문의하기</span>
                 </span>
 
-                <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                <span style="display:none" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
                     data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
                     <span class="material-icons mdc-bottom-navigation__list-item__icon">forum</span>
                     <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.menu_run_options">실행옵션</span>
                 </span>
-              
-                <span id="footerMenuDeveloperSupport" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
-                  data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+
+                <span id="footerMenuDeveloperSupport" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary none"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
                     <span class="material-icons mdc-bottom-navigation__list-item__icon">favorite</span>
                     <span class="mdc-bottom-navigation__list-item__text" data-i18n="[html]title.support_developers">개발자응원</span>
-                </span>  
+                </span>
 
                 <!-- <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
                     data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>

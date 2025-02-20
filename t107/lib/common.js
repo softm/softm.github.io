@@ -3,6 +3,7 @@ var messages  = {
         translation: {
           label: {
             app: "App",
+            run: "Run",
             app_name: "Navi Auto Start",
             top_bar: "Navi Auto Start",
             first_start : "Select Navi",
@@ -36,6 +37,7 @@ var messages  = {
             work_goto_off_time_status : 'It operates only at the set time.',
 
             not_installed : "not installed",
+            not_set : "Not set",
 
             ok: "yes",
             cancel: "No",
@@ -77,6 +79,7 @@ var messages  = {
             permission_name_ignore_battery : "Power saving mode permission",
 
             navi_auto_start_enable: "Run",
+            navi_auto_start_wait: "Wait",
             navi_auto_start_disable: "Never",
             popup_enable: "Keep",
             popup_disable: "Close",
@@ -93,6 +96,7 @@ var messages  = {
             search_placeholder_wifi: "WIFI name",
             search: "Search",
             map: "Map",
+            full_features: "Full features",
             use_enable: "Used",
             use_disable: "Unused",
             run_on_charge: "When charging",
@@ -126,8 +130,8 @@ var messages  = {
             notification_icon: "Notificaton Bar",
             improved_execution: "Improved execution",
             overlay_wait_time: "waiting time",
-            renavi_prevent_time: "replay prevention time",
-            work_goto_off_time:"Go to work/Off work Time",
+            renavi_prevent_time: "replay prevention",
+            work_goto_off_time:"Go to work/Off work",
             work_goto_time:"Go to work",
             work_off_time:"Off work",
             navi:"Navi",
@@ -185,7 +189,9 @@ var messages  = {
             off: "Off",
             finish: "Stop",
             function: "Function",
-            app_start: "Run App",
+            app_start: "Run",
+            app_stop: "Stop",
+            mode: "Mode",
             set_whether_run_app :"Set whether to run the app.",
             home_n_company_reg: "Change Home/Company",
             stop_recent_all: "All",
@@ -258,9 +264,12 @@ var messages  = {
             permission:"Permission",
             membership:"Membership",
             laboratory:"Laboratory",
+            time:"Time",
 
             menu_home:"Home",
             menu_setting:"Setting",
+            menu_navi_setting:"Navi Setting",
+            menu_detail_setting:"Detail Setting",
             menu_start_stop:"Start/Stop",
             menu_run_options: "Run Opt",
           },
@@ -310,8 +319,10 @@ var messages  = {
             popup_enable: "guide icon <span style='color:var(--softm-start)'>Display</span>.",
             popup_disable: "guide icon <span style='color:var(--softm-stop)'>Close</span>.",
 
-            navi_auto_start_enable: "Start navigating automatically <span style='color:var(--softm-start)'>Run</span>.",
-            navi_auto_start_disable: "Start navigating automatically <span style='color:var(--softm-stop)'>Never</span>.",
+            navi_auto_start_enable: "<span style='color:var(--softm-start)'>Run</span> the app.",
+            navi_auto_start_wait: "<span style='color:var(--softm-stop)'>Wait</span> for the app to start.",
+            navi_auto_start_disable: "<span style='color:var(--softm-stop)'>Do not</span> start the app.",
+
             overlay_wait_time: "Wait pop-up display time before running app",
 
             mode_guide_1: "<B>\"Company\"</B> to <<B><span style='color:var(--softm-start)'>\"AM\"</span></B>, <B><span style='color:var(--softm-stop)'>\"Afternoon\"</span></B> to <B>\"Home\"</B>." ,
@@ -450,6 +461,7 @@ var messages  = {
         translation: {
           label: {
             app: "앱",
+            run: "실행",
             app_name : "티맵자동실행",
             top_bar : "티맵자동실행",
             first_start : "내비 선택",
@@ -485,6 +497,7 @@ var messages  = {
             work_goto_off_time_status : '설정된 시간에만 동작합니다.',
 
             not_installed : "미설치",
+            not_set : "설정안함",
             
             ok : "예",
             cancel : "아니오",
@@ -526,7 +539,9 @@ var messages  = {
             permission_name_ignore_battery : "절전모드 권한",
             
             navi_auto_start_enable: "실행",
+            navi_auto_start_wait: "대기",
             navi_auto_start_disable: "안함",
+
             popup_enable: "유지",
             popup_disable: "닫기",
             navi_mode: "안내모드",
@@ -542,6 +557,7 @@ var messages  = {
             search_placeholder_wifi: "와이파이",
             search: "검색",
             map: "지도",
+            full_features: "전체기능",
             use_enable: "사용",
             use_disable: "미사용",
             run_on_charge: "충전시",
@@ -573,8 +589,8 @@ var messages  = {
             notification_icon: "알림바",
             improved_execution: "향상된 실행",
             overlay_wait_time: "대기시간",
-            renavi_prevent_time: "재실행 방지시간",
-            work_goto_off_time:"출/퇴근 시간",
+            renavi_prevent_time: "재실행 방지",
+            work_goto_off_time:"출/퇴근",
             work_goto_time:"출근",
             work_off_time:"퇴근",
             navi:"내비",
@@ -632,7 +648,9 @@ var messages  = {
             off: "끄기",
             finish: "종료",
             function: "기능",
-            app_start: "앱 실행",
+            app_start: "시작",
+            app_stop: "종료",
+            mode: "모드",
             set_whether_run_app :"앱 실행 여부를 설정합니다.",
             home_n_company_reg: "집/회사 등록",
             stop_recent_all: "모두닫기",
@@ -686,6 +704,7 @@ var messages  = {
             exclude_run: "실행 제외",
             stop: "종료",
             home_n_company: "집/회사",
+            navi_setting: "내비설정",
             setting: "설정",
             navi:"안내",
             start_stop_on_off: "On/Off",
@@ -708,8 +727,12 @@ var messages  = {
             membership:"멤버쉽",
             laboratory:"연구소",
 
+            time:"시간",
+
             menu_home:"홈",
             menu_setting:"설정",
+            menu_navi_setting:"내비설정",
+            menu_detail_setting:"세부설정",
             menu_start_stop:"시작/종료",
             menu_run_options: "실행옵션",
 
@@ -760,8 +783,9 @@ var messages  = {
             popup_enable : "안내아이콘 <span style='color:var(--softm-start)'>유지</span>.",
             popup_disable: "안내아이콘 <span style='color:var(--softm-stop)'>닫기</span>.",
 
-            navi_auto_start_enable: "자동으로 내비 시작 <span style='color:var(--softm-start)'>실행</span>.",
-            navi_auto_start_disable: "자동으로 내비 시작 <span style='color:var(--softm-stop)'>안함</span>.",
+            navi_auto_start_enable: "앱 시작 <span style='color:var(--softm-start)'>실행</span>.",
+            navi_auto_start_wait: "앱 시작 <span style='color:var(--softm-start)'>대기</span>.",
+            navi_auto_start_disable: "앱 시작 <span style='color:var(--softm-stop)'>안함</span>.",
             overlay_wait_time: "앱 실행전 대기 팝업 표시시간",
             
             mode_guide_1 : "<B><span style='color:var(--softm-start)'>\"오전\"</span></B>에 <B>\"회사\"</B>,  <B><span style='color:var(--softm-stop)'>\"오후\"</span></B>에 <B>\"집\"</B> 안내 합니다.",
@@ -887,7 +911,7 @@ var messages  = {
             pay_in_app_lifetime_thanks:"평생이용권을 이용해주셔서 감사합니다. ^^ :)",
           },
           toast:{
-            run_option_on : "설정을 <span style='color:var(--softm-start)'켰</span>습니다.",
+            run_option_on : "설정을 <span style='color:var(--softm-start)'>켰</span>습니다.",
             run_option_off : "설정을 <span style='color:var(--softm-stop)'>껐</span>습니다.",
             enable : "<span style='color:var(--softm-start)'>활성화</span>되었습니다.",
             disable : "<span style='color:var(--softm-stop)'>비활성화</span>되었습니다.",
@@ -1129,7 +1153,7 @@ $( document ).ready(function() {
       snackbarMDC.close();
     })
     window.material.confirm = function (v, f, felse) {
-      document.querySelector("#my-dialog-title").innerHTML = v;
+      if ( document.querySelector("#my-dialog-title") != null ) document.querySelector("#my-dialog-title").innerHTML = v;
       document.querySelector(".mdc-dialog .mdc-dialog__actions button:nth-child(1)").style.visibility = "visible";    
       let eventListener = function(e) {
         // alert("closed");
@@ -1622,6 +1646,10 @@ function initBasicInfo() {
   var v = window.info;
   if ( v ) {
     if ( v.isAding ) {
+      $(".user_level.link_dev_support").click(function(e) {
+        fn_OpenUrl('developer_support.html');
+      });
+
       $("#footerMenuDeveloperSupport").show();
     } else {
       $("#footerMenuDeveloperSupport").hide();
@@ -1632,7 +1660,7 @@ function initBasicInfo() {
       var user_level = t("label." + v.userLevel.toLocaleLowerCase() + "_user"); 
       $(".user_level").text(user_level);
     }
-
+    
     if ( info.isPaidLicense ) {
         $(".paidUser").show();
     }

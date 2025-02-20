@@ -219,6 +219,8 @@ function pageInit() {
         var info2 = $('<div>8. ' + t("label.lifetime_user") + ' : <span>' + info.purchaseLifetimeOriginaljson.orderId + '</span></div>');
         $("#deviceInfo").append(info2);
     }
+
+    initBasicInfo();
 } 
 
 window.fn_BackKeyPressedCallBack = function () {
@@ -277,7 +279,7 @@ class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounde
                 <span class="paidUser">
                     <img src="images/vip.png" width="30" align="absmiddle"/>
                 </span>
-                <span class="user_level bold underline cursor_pointer"><span onClick="fn_OpenUrl('developer_support.html');">광고보기 사용자</span></span>
+                <span class=" bold underline cursor_pointer"><span class="user_level link_dev_support">광고보기 사용자</span></span>
             </div> 
         </div>
       <div class="mdc-drawer__content">
@@ -363,7 +365,8 @@ class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounde
 
             <hr class="sub subsUser"/>
             <!-- paidUser -->
-            <div class="row sub flex left bold subsUser">
+            <span class="subsUser">
+            <div class="row sub flex left bold ">
                 <div class="margin_right_7 basic_font_medium2"  style="align-content: space-evenly;">
                     <span class="">
                         <img src="images/vip.png" width="25" align="absmiddle"/>
@@ -383,9 +386,11 @@ class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounde
                     </div>
                 </div>
             </div>
-
+            </span>
+            
             <hr class="sub lifeTimeUser"/>
-            <div class="row sub flex left bold lifeTimeUser">
+            <span class="lifeTimeUser">
+            <div class="row sub flex left bold ">
                 <div class="margin_right_7 basic_font_medium2"  style="align-content: space-evenly;">
                     <span class="">
                         <img src="images/vip.png" width="25" align="absmiddle"/>
@@ -405,6 +410,7 @@ class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounde
                     </div>
                 </div>
             </div>
+            </span>
             <hr class="sub"/>
 <!-- 설명 메시지 -->
             <div class="row padding_top_10  padding_bottom_10 padding_left_10  padding_right_10" style="background-color: #DFECF8;">

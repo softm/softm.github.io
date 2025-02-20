@@ -5,10 +5,29 @@
 
  "appReleaseUpdtedTime":1737115191329,
  "licenseOPTypeName":"0:NONE,1:ADVIEW_STOP,2:ADVIEW,3:SUBSCRIBE",
- "licenseOPType":"2",
+ "licenseOPType":"0",
+ "forceLicenseAdViewUUIDs":[
+   "e083abff41564fd2_",
+   "ecb6c1732c4b3f0f",
+   "3bWR1YWHDxSC5OyoAebg",
+   "0072e96789523959 : s25"
+ ],
+ "forceLicenseAdViewStopUUIDs":[
+   "ecb6c1732c4b3f0f",
+   "3bWR1YWHDxSC5OyoAebg"
+ ],
  "waitTimeForNotAdLicense":"10000",
+ "delayMusicEnable":3000,
  "adModeName":"0:NONE,1:GOOGLE,2:FACEBOOK",
- "adMode":"1",
+ "adMode":"0",
+ "defaultAdMode":"1",
+ "forceAdModeUUIDs":[
+   "0072e96789523959",
+   "e083abff41564fd2",
+   "ecb6c1732c4b3f0f",
+   "3bWR1YWHDxSC5OyoAebg",
+   "0072e96789523959 : s25"
+ ],
  "adTypeForMainBanner":"1",
  "adTypeForPopupBanner":"1",
  "adTypeForWaitBanner":"1",
@@ -18,6 +37,7 @@
  "adTypeForWaitReward":"4",
 
  "betaLicensedUUIDs_Tmp":[
+   "e083abff41564fd2 : 노트4-6.0.1",
    "ecb6c1732c4b3f0f : emul",
    "e575416df5cd7da3",
    "8c85d549a955dcc7",
@@ -37,7 +57,7 @@
 
  "adViewIntervalTime_tmp":"1000 * 60 * 60 * 24 * 1 = 86400000",
  "adViewIntervalTime_tmp2":"1000 * 60 * 60 * 3 = 10800000",
- "adViewIntervalTime":10800000,
+ "adViewIntervalTime":10800,
  "adViewLicenseAddTime_tmp":"1000 * 60 * 60 * 24 * 2 = 172800000",
  "adViewLicenseAddTime":172800000,
  "adViewLicenseAddMaxTime_tmp":"1000 * 60 * 60 * 24 * 30 = 2592000000",
@@ -45,10 +65,12 @@
 
  "reviewOPTypeName":"0:STOP,1:START",
  "reviewOPType":"1",
- "reviewRequestFirstIntervalTime_tmp":"1000 * 60 * 60 * 24 * 3 = 259200000",
- "reviewRequestFirstIntervalTime":259200000,
- "reviewRequestIntervalTime_tmp":"1000 * 60 * 60 * 24 * 7 = 604800000",
- "reviewRequestIntervalTime":604800000,
+ "reviewRequestFirstIntervalTime_tmp1":"1000 * 60 * 60 * 24 * 3 = 259200000",
+ "reviewRequestFirstIntervalTime_tmp":"1000 * 60 * 60 * 24 * 1 = 86400000",
+ "reviewRequestFirstIntervalTime":86400000,
+ "reviewRequestIntervalTime_tmp1":"1000 * 60 * 60 * 24 * 7 = 604800000",
+ "reviewRequestIntervalTime_tmp":"1000 * 60 * 60 * 24 * 3 = 259200000",
+ "reviewRequestIntervalTime":259200000,
 
  "crashLog":true,
  "crashLogFormatName":"1:DEFAULT 2:SHORT",
