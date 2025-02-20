@@ -598,7 +598,17 @@ function genAppStatusMessage() {
         window.getInstallPackagesKeyCallBack = function (data) {
             var appListItem = (JSON.parse(data) || [{}])[0];
             var appInfo = $(".app_info");
-            appInfo.find(".app_name").text(appListItem.name);
+
+            if (!appListItem.installed) {
+                // 티맵을 설치하세요.
+                // fn_GotoMarket(appListItem.package);
+                appInfo.find(".app_name").html("<a class='color_start' style='font-weight:bold' href='javascript:fn_GotoMarket(\""+appListItem.package+"\")'>"+t("label.not_installed")+"</a>");
+                if ( info.appPackageIcon ) appInfo.find(".icon")[0].setAttribute("src", info.appPackageIcon);
+
+            } else {
+                appInfo.find(".app_name").text(appListItem.name);
+            }
+            
             appInfo.find(".package_name").text(appListItem.package);
             if ( appListItem.icon ) {
             appInfo.find(".icon")[0].setAttribute("src", appListItem.icon);
