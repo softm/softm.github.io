@@ -2,38 +2,49 @@
  "_msg_":{"_common_":{"error.code":"F0000","resCode":"00"},"_body_":{"status":"success","flag":"S"}},
  "msg":"성공",
  "msgCode":"200",
+ "checkLiveUser":true,
+ "checkLiveUserLogIntervalTime_tmp":"1000 * 60 * 60 * 24 * 1 = 86400000",
+ "checkLiveUserLogIntervalTime_tmp2":"1000 * 60 * 60 * 24 * 1 = 86400000",
+ "checkLiveUserLogIntervalTime":86400000,
+ "liveUserLogFormatName":"1:DEFAULT 2:SHORT",
+ "liveUserLogFormat":"1",
 
  "appReleaseUpdtedTime":1737115191329,
- "licenseOPTypeName":"0:NONE,1:ADVIEW_STOP,2:ADVIEW,3:SUBSCRIBE",
- "licenseOPType":"0",
- "forceLicenseAdViewUUIDs":[
-   "e083abff41564fd2_",
-   "ecb6c1732c4b3f0f",
-   "3bWR1YWHDxSC5OyoAebg",
-   "0072e96789523959 : s25"
+ "paidOPTypeName":"0:NONE,1:PAID",
+ "paidOPType":"1",
+ "forcePaidOPTypeUUIDs":[
+],
+ "adViewOPTypeName":"0:NONE,1:ADVIEW_STOP,2:ADVIEW",
+ "adViewOPType":"2",
+ "forceAdViewOPTypeAdViewUUIDs":[
  ],
- "forceLicenseAdViewStopUUIDs":[
-   "ecb6c1732c4b3f0f",
-   "3bWR1YWHDxSC5OyoAebg"
+ "forceAdViewOPTypeAdViewStopUUIDs":[
  ],
  "waitTimeForNotAdLicense":"10000",
  "delayMusicEnable":3000,
  "adModeName":"0:NONE,1:GOOGLE,2:FACEBOOK",
- "adMode":"0",
+ "adMode":"1",
  "defaultAdMode":"1",
  "forceAdModeUUIDs":[
-   "29285b2e6ce94ee4 s25 release",
-   "0072e96789523959",
-   "e083abff41564fd2",
-   "ecb6c1732c4b3f0f",
-   "3bWR1YWHDxSC5OyoAebg",
-   "0072e96789523959 : s25"
  ],
+ "testUuids" :[
+  "ecb6c1732c4b3f0f : emul",
+  "29285b2e6ce94ee4 : s25 release",
+  "0072e96789523959 : s25 debug",
+  "e083abff41564fd2",
+  "3bWR1YWHDxSC5OyoAebg",
+  "e083abff41564fd2 : 노트4-6.0.1",
+  "e575416df5cd7da3",
+  "8c85d549a955dcc7",
+  "5c4dcb156253716a",
+  "8bd0007cac109bf7",
+  "3af0f0b68f2ee61b"
+],
  "adTypeForMainBanner":"1",
  "adTypeForPopupBanner":"1",
  "adTypeForWaitBanner":"1",
  "adTypeForWaitBannerLoadTypeName":"1:DIRECT,2:INDIRECT",
- "adTypeForWaitBannerLoadType":"2   ", 
+ "adTypeForWaitBannerLoadType":"1", 
  "adTypeForWaitRewardName":"REWARDED",
  "adTypeForWaitReward":"4",
 
@@ -42,12 +53,14 @@
    "ecb6c1732c4b3f0f : emul",
    "e575416df5cd7da3",
    "8c85d549a955dcc7",
-   "e575416df5cd7da3",
    "5c4dcb156253716a",
    "8bd0007cac109bf7",
-   "3af0f0b68f2ee61b"
+   "3af0f0b68f2ee61b",
+   "0072e96789523959"
 ],
+
 "betaLicensedUUIDs":[
+  "0072e96789523959_",
   "e575416df5cd7da3",
   "8c85d549a955dcc7",
   "e575416df5cd7da3",
@@ -58,11 +71,12 @@
 
  "adViewIntervalTime_tmp":"1000 * 60 * 60 * 24 * 1 = 86400000",
  "adViewIntervalTime_tmp2":"1000 * 60 * 60 * 3 = 10800000",
- "adViewIntervalTime":10800,
+ "adViewIntervalTime":10800000,
  "adViewLicenseAddTime_tmp":"1000 * 60 * 60 * 24 * 2 = 172800000",
  "adViewLicenseAddTime":172800000,
- "adViewLicenseAddMaxTime_tmp":"1000 * 60 * 60 * 24 * 30 = 2592000000",
- "adViewLicenseAddMaxTime":2592000000,
+ "adViewLicenseAddMaxTime_tmp":"1000 * 60 * 60 * 24 * 365 = 31536000000",
+ "adViewLicenseAddMaxTime_tmp2":"1000 * 60 * 60 * 24 * 30 = 2592000000",
+ "adViewLicenseAddMaxTime":31536000000,
 
  "reviewOPTypeName":"0:STOP,1:START",
  "reviewOPType":"1",
@@ -70,14 +84,17 @@
  "reviewRequestFirstIntervalTime_tmp":"1000 * 60 * 60 * 24 * 1 = 86400000",
  "reviewRequestFirstIntervalTime":86400000,
  "reviewRequestIntervalTime_tmp1":"1000 * 60 * 60 * 24 * 7 = 604800000",
- "reviewRequestIntervalTime_tmp":"1000 * 60 * 60 * 24 * 3 = 259200000",
+ "reviewRequestIntervalTime_tmp2":"1000 * 60 * 60 * 24 * 3 = 259200000",
  "reviewRequestIntervalTime":259200000,
 
  "crashLog":true,
  "crashLogFormatName":"1:DEFAULT 2:SHORT",
  "crashLogFormat":"1",
 
- "checkService":true,
+ "checkService":false,
+ "checkServiceUUIDs":[
+   "0072e96789523959"
+],
  "checkServiceTimeUnitName":"0:NANOSECONDS,1:MICROSECONDS,2:MILLISECONDS,3:SECONDS,4:MINUTES,5:HOURS,6:DAYS;",
  "checkServiceRepeatInterval":15,
  "checkServiceRepeatIntervalTimeUnit":"MINUTES",
@@ -99,6 +116,7 @@
  "checkServiceLogIntervalTime":86400000,
 
  "checkServiceLogUUIDs":[
+   "0072e96789523959"
  ],
  "checkServiceLogUUIDsTmp":[
    "ecb6c1732c4b3f0f",
@@ -107,14 +125,15 @@
    "e575416df5cd7da3"
 ],
 
-"checkServiceImmediateDelaySec":10,
-"checkServiceImmediate":true,
-"checkServiceImmediateLog":true,
-"checkServiceImmediateLogFormatName":"1:DEFAULT 2:SHORT",
-"checkServiceImmediateLogFormat":"1",
+"checkServiceDelaySecForCrash":10,
+"checkServiceForCrash":true,
+"checkServiceLogForCrash":true,
+"checkServiceLogFormatNameForCrash":"1:DEFAULT 2:SHORT",
+"checkServiceLogFormatForCrash":"1",
 
 "checkServiceCheckNoti":true,
 "checkServiceCheckNotiUUIDs":[
+   "0072e96789523959",
    "ecb6c1732c4b3f0f",
    "e575416df5cd7da3",
    "8c85d549a955dcc7",
@@ -126,6 +145,7 @@
 ],
 "checkServiceCheckLogSendNoti":true,
 "checkServiceCheckLogSendNotiUUIDs":[
+   "0072e96789523959",
    "ecb6c1732c4b3f0f",
    "e575416df5cd7da3",
    "8c85d549a955dcc7",
@@ -136,9 +156,9 @@
    "899267272d9b16f9"
 ],
 
- "usingUserReg":true,
- "usingUserLogFormatName":"1:DEFAULT 2:SHORT",
- "usingUserLogFormat":"1",
+ "doUserInfoReg":true,
+ "userInfoLogFormatName":"1:DEFAULT 2:SHORT",
+ "userInfoLogFormat":"1",
 
  "checkGrantInfo":["notification_access","accessibility","ignore_battery","location"]
 

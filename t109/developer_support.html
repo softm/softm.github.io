@@ -362,7 +362,7 @@ $( document ).ready(function() {
                                 "checkServiceRepeatIntervalTimeUnit": "MINUTES",
                                 "crashLog": true,
                                 "crashLogFormat": "1",
-                                "licenseOPType": "2",
+                                "adViewOPType": "2",
                                 "reviewOPType": "1",
                                 "reviewRequestFirstIntervalTime": 259200000,
                                 "reviewRequestIntervalTime": 604800000,
@@ -513,13 +513,20 @@ function initPage(v) {
         }
     });
 
+    $(".ading").hide();
+    $(".paid").hide();
+    if ( v.isAding ) {
+        $(".ading").show();
+    }
+    if ( v.isPaid ) {
+        $(".paid").show();
+    }
+
 }
 </script>
 </head>
 <body class="none">
 <div class="i18n drawer-frame-root" style="width: 100%;">
-	<!--
-    !-->
     <div class="mdc-drawer-app-content">
         <header class="mdc-top-app-bar app-bar" id="app-bar">
             <div class="mdc-top-app-bar__row">
@@ -637,8 +644,7 @@ function initPage(v) {
             </div>
             <hr class="main"/>
       
-            <div class="row padding_top_0 padding_bottom_3 ">
-
+            <div class="row padding_top_0 padding_bottom_3 ading">
                 <div class="row sub flex basic_font_medium3" data-i18n="[html]message.please_support_msg1">
                     - 광고를 시청하면 사용기간이 연장되요.
                 </div>
@@ -648,8 +654,7 @@ function initPage(v) {
                 </div>
             </div>
         
-        
-            <hr class="sub"/>
+            <hr class="sub ading"/>
             <div class="row sub flex left bold ">
                 <label for="" class="flex-grow title" style=""><strong data-i18n="label.license">라이센스</strong></label>
                 <div class="flex-grow margin_right_7 middle right basic_font_medium2"  style="align-content: space-evenly;">
@@ -658,7 +663,7 @@ function initPage(v) {
                     </span>
                     <span class="user_level">광고 보기 사용자</span>
                 </div>
-                <div class="basic_font_medium2 align-self-center right ">
+                <div class="basic_font_medium2 align-self-center right">
                     <div class="flex-grow subsUser ">                                       <!-- bg_orange white -->
                         <button id="btnPayInAppMng" type="button" class="mdc-button mdc-button--raised padding_10 " data-mdc-dialog-action="close"
                         style="height:30px;"
@@ -677,7 +682,7 @@ function initPage(v) {
                 <div class="flex-grow basic_font_medium2 align-self-center margin_right_7 right" id="license_expire_time">~ 2025년 01월 31일</div>
             </div>
 
-            <div class="row sub flex left bold ">
+            <div class="row sub flex left bold ading">
                 <label for="" class="flex-grow title" style=""><strong data-i18n="label.ad_replay_time">광고보기</strong></label>
                 <div class="flex-grow margin_right_10 middle right basic_font_medium2" id="ad_replay_time" style="align-content: space-evenly;">-</div>
                 <div class="basic_font_medium2 align-self-center right ">
@@ -694,9 +699,9 @@ function initPage(v) {
                 </div>
             </div>
 
-            <hr class="sub"/>
+            <hr class="sub paid"/>
             <!-- <hr class="main"/> -->
-            <div class="row bill_products flex">
+            <div class="row bill_products flex paid">
                 <div class="margin_left_10 margin_top_10" style="flex-grow: 1;width:55%;overlow:scroll">
                     <div class="box monthly" name="SUBS">
                         <div>&nbsp;</div>
@@ -719,7 +724,7 @@ function initPage(v) {
                 </div>
             </div>
 
-            <div class="row padding_left_5 padding_right_5">
+            <div class="row padding_left_5 padding_right_5 paid">
                 <button id="btnPayInApp" type="button" class="mdc-button mdc-button--raised w_full bg_orange white" data-mdc-dialog-action="close"
                     style="height:40px"
                 >

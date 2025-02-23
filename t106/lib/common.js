@@ -1645,7 +1645,7 @@ function millisecondsToTime(ms) {
 function initBasicInfo() {
   var v = window.info;
   if ( v ) {
-    if ( v.isAding ) {
+    if ( v.isAding || v.isPaid ) {
       $(".user_level.link_dev_support").click(function(e) {
         fn_OpenUrl('developer_support.html');
       });
