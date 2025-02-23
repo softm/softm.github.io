@@ -9,13 +9,13 @@
  "liveUserLogFormatName":"1:DEFAULT 2:SHORT",
  "liveUserLogFormat":"1",
 
- "appReleaseUpdtedTime":1737115191329,
+ "appReleaseUpdtedTime":1740416299090,
  "paidOPTypeName":"0:NONE,1:PAID",
  "paidOPType":"1",
  "forcePaidOPTypeUUIDs":[
 ],
  "adViewOPTypeName":"0:NONE,1:ADVIEW_STOP,2:ADVIEW",
- "adViewOPType":"2",
+ "adViewOPType":"0",
  "forceAdViewOPTypeAdViewUUIDs":[
  ],
  "forceAdViewOPTypeAdViewStopUUIDs":[
