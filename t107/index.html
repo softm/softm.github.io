@@ -171,6 +171,7 @@ $( document ).ready(function() {
                 "runStatusScreenStopMode": "0",
                 "runStatusScreenTimeForStart": 15,
                 "runStatusScreenTimeForStop": 15,
+                appReleaseUpdtedTime:1740416299090,
             }
         } else {
             window.info = (JSON.parse(data));
@@ -418,9 +419,10 @@ function initPermission(v,cb) {
     
     fn_GetPermissions("", "getPermissionsCallBack");
 }
+var notiDialog; 
 function initAppUpdateNoti(v) {
     
-    const notiDialog = new mdc.dialog.MDCDialog(document.querySelector(".noti.mdc-dialog"));
+    notiDialog = new mdc.dialog.MDCDialog(document.querySelector(".noti.mdc-dialog"));
     notiDialog.listen("MDCDialog:closed", function (e) {
         // alert("closed");
         if (e.detail.action == "close") {
@@ -441,6 +443,7 @@ function initAppUpdateNoti(v) {
 
     // notiDialog.open();
     if ( info.appUpdated ) {
+        
         
         // var updatedCount = localStorage.getObject("updated_count") || [];
         // updatedCount.push((new Date()).getTime());
@@ -464,7 +467,7 @@ function initAppUpdateNoti(v) {
             }
 
             $(".noti .version").html(info.versionName);
-            // $(".noti .appUpdateDate").html("info.appUpdateDate");
+            $(".noti .appUpdateDate").html((new Date(info.appReleaseUpdtedTime)).toLocaleDateString());
 
             // && info.appUpdatedTime > (new Date()).getTime() ) {
             const diffInMillis = Math.abs((new Date()).getTime() - info.appUpdatedTime);
