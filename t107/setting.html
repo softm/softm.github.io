@@ -554,9 +554,16 @@ function initAppPackage(v) {
             // fn_GotoMarket(appListItem.package);
             appInfo.find(".app_name").html("<a class='color_start' style='font-weight:bold' href='javascript:fn_GotoMarket(\""+appListItem.package+"\")'>"+t("message.install_app")+"</a>");
             if ( info.musicAppPackageIcon ) appInfo.find(".icon")[0].setAttribute("src", info.musicAppPackageIcon);
-
-        } else {
+          } else {
             appInfo.find(".app_name").text(appListItem.name);
+            if ( window.info.startStopOnOff 
+                && window.info.startStopOnOff.play_music 
+                && window.info.startStopOnOff.play_music.start
+                && !window.info.startStopOnOff.play_music.start.use_yn
+            ) {
+                appInfo.find(".music_play_setting").show();
+                appInfo.find(".music_play_setting").html("<a class='color_stop' style='font-weight:bold' href='javascript:fn_OpenUrl(\"onoff.html\")'>"+t("message.music_play_setting")+"</a>");
+            }
         }
 
         appInfo.find(".package_name").text(appListItem.package);
@@ -1120,6 +1127,7 @@ function initPopupMode(v) {
               </div><!--fieldset-->
   
               <div class="row comment">
+                <span class="music_play_setting" style="display:none"></span>
                 <span class="package_name"></span>
               </div>
             </div>

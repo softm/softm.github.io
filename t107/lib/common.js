@@ -400,6 +400,7 @@ var messages  = {
             all_granted: "All permissions are <span class='color_start'>normal</span>.",
             install_app: "Install App.",
             select_app: "Select App.",
+            music_play_setting: "Music playback is turned off.",
             install_tmap: "Install Tmap.",
             confirm_enable_bluetooth : "To query the Bluetooth list, you must use Bluetooth.\n Do you want to \"<span style='color:var(--softm-start)'>turn on</span>\"Bluetooth?",
             when_connected :"When connected, <span class='color_start'>runs</span>.",
@@ -876,6 +877,8 @@ var messages  = {
             all_granted: "모든 권한이 <span class='color_start'>정상</span>입니다.",
             install_app: "앱을 설치하세요.",
             select_app: "앱을 선택하세요.",
+            music_play_setting: "음악 재생이 꺼져있습니다.",
+
             install_tmap: "티맵을 설치하세요.",
             confirm_enable_bluetooth : "블루투스 목록을 조회하려면, 블루투스를 사용해야합니다.\n 블루투스를 \"<span style='color:var(--softm-start)'>켜</span>\"시겠습니까?",
             when_connected :"연결시 <span class='color_start'>동작</span>.",
