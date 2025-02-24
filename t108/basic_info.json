@@ -9,7 +9,7 @@
  "liveUserLogFormatName":"1:DEFAULT 2:SHORT",
  "liveUserLogFormat":"1",
 
- "appReleaseUpdtedTime":1740416299090,
+ "appReleaseUpdtedTime":1740456823617,
  "paidOPTypeName":"0:NONE,1:PAID",
  "paidOPType":"1",
  "forcePaidOPTypeUUIDs":[
@@ -31,11 +31,13 @@
   "ecb6c1732c4b3f0f : emul",
   "29285b2e6ce94ee4 : s25 release",
   "0072e96789523959 : s25 debug",
+  "3e274dcae5ebf21c : SM-A326K (아버지)",
   "e083abff41564fd2",
   "3bWR1YWHDxSC5OyoAebg",
   "e083abff41564fd2 : 노트4-6.0.1",
   "e575416df5cd7da3",
   "8c85d549a955dcc7 : SM-A710L",
+  "79d88306dfb5f059 : SM-G930S",
   "5c4dcb156253716a",
   "8bd0007cac109bf7",
   "3af0f0b68f2ee61b"
@@ -91,7 +93,9 @@
 
  "checkService":false,
  "checkServiceUUIDs":[
-   "0072e96789523959"
+   "0072e96789523959",
+   "3e274dcae5ebf21c",
+   "79d88306dfb5f059"
 ],
  "checkServiceTimeUnitName":"0:NANOSECONDS,1:MICROSECONDS,2:MILLISECONDS,3:SECONDS,4:MINUTES,5:HOURS,6:DAYS;",
  "checkServiceRepeatInterval":15,
@@ -114,7 +118,9 @@
  "checkServiceLogIntervalTime":86400000,
 
  "checkServiceLogUUIDs":[
-   "0072e96789523959"
+   "0072e96789523959",
+   "3e274dcae5ebf21c",
+   "79d88306dfb5f059"
  ],
  "checkServiceLogUUIDsTmp":[
    "ecb6c1732c4b3f0f",
