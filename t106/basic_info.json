@@ -8,6 +8,8 @@
  "checkLiveUserLogIntervalTime":86400000,
  "liveUserLogFormatName":"1:DEFAULT 2:SHORT",
  "liveUserLogFormat":"1",
+ "licenseOPTypeName":"0:NONE,1:ADVIEW_STOP,2:ADVIEW,3:SUBSCRIBE",
+ "licenseOPType":"2",
 
  "appReleaseUpdtedTime":1737115191329,
  "paidOPTypeName":"0:NONE,1:PAID",
