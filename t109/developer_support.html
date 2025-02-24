@@ -431,7 +431,11 @@ function initPage(v) {
         if ( licenseExpireTime > info.systemCurrentTimeMillis ) {
             license_expire_time = "<span class='black'>" + new Date(licenseExpireTime).toLocaleString() +"</span>";
         } else {
-            license_expire_time = "<span class='pink'>" + t("label.expiration")+"</span>";
+            // if ( !v.isAding && v.isPaid ) {
+            //     license_expire_time = "<span class='pink'>" + t("label.expiration")+"</span>";
+            // } else {
+                license_expire_time = "<span class='pink'>" + t("label.expiration")+"</span>";
+            // }                
         }
         $("#license_expire_time").html(license_expire_time);
     // },1000);
@@ -677,7 +681,7 @@ function initPage(v) {
                 </div>
             </div>
 
-            <div class="row sub flex left bold" style="height:40px">
+            <div class="row sub flex left bold ading" style="height:40px">
                 <label for="" class="title" style=""><strong data-i18n="label.period_of_use">사용기간</strong></label>
                 <div class="flex-grow basic_font_medium2 align-self-center margin_right_7 right" id="license_expire_time">~ 2025년 01월 31일</div>
             </div>
