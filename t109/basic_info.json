@@ -90,8 +90,12 @@
  "crashLog":true,
  "crashLogFormatName":"1:DEFAULT 2:SHORT",
  "crashLogFormat":"1",
+ 
+ "purchaseLogFormatName":"1:DEFAULT 2:SHORT",
+ "purchaseLogFormat":"1",
 
- "checkService":false,
+ "checkServiceAllEnable":false,
+ "checkService":true,
  "checkServiceUUIDs":[
    "0072e96789523959",
    "3e274dcae5ebf21c",
@@ -137,6 +141,7 @@
 
 "checkServiceCheckNoti":true,
 "checkServiceCheckNotiUUIDs":[
+   "3e274dcae5ebf21c",
    "0072e96789523959",
    "ecb6c1732c4b3f0f",
    "e575416df5cd7da3",

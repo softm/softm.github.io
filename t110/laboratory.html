@@ -62,6 +62,8 @@ var btnSwitchGeofence = null;
 var fenceDistance = null;
 
 var selectAppUpdateDelayTime = null;
+
+var btnSwitchCheckService = null;
 var chipCheckServiceCheckNoti;
 var chipCheckServiceCheckLogSendNoti;
 
@@ -129,8 +131,9 @@ $( document ).ready(function() {
                 "appUpdateDelayTime":"10800000", // 3시간
                 "appUpdateCheckTime":"1736131441271",
                 // + "http://www.softm.net/tdev"
+                "checkService":true,
                 "checkServiceCheckNoti":0,
-                "checkserviceCheckLogSendNoti":0
+                "checkServiceCheckLogSendNoti":0
             }
         } else {
             // appUpdateDelayTime
@@ -157,23 +160,6 @@ function initLoad(v){
         if ( !document.referrer ) windowClose();
         else history.back();
     });
-
-    // window.readNotiIcon = function (v) {
-	// 	console.info("_NOTI_ICON",v);
-	// 	v = v!="null"&&v?v:"1";
-	// 	var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
-	// 	event.onlySelect=true; // pass data custom 
-	// 	if ( v  == "0") { // off
-	// 		document.querySelector(".noti_icon #status").innerHTML = t("label.noti_icon_status_off");
-    //         btnSwitchNotiIcon.selected = false;
-    //         // btnSwitchNotiIcon.foundation_.setChecked(false);
-	// 	} else { // on
-	// 		document.querySelector(".noti_icon #status").innerHTML = t("label.noti_icon_status_on");
-    //         btnSwitchNotiIcon.selected = true;
-    //         // btnSwitchNotiIcon.foundation_.setChecked(true);
-	// 	}
-	// }
-	// fn_DeviceLoadData("_NOTI_ICON"    , "readNotiIcon"   ); // 알림바 아이콘
 
     btnSwitchNotiIcon = new mdc.switchControl.MDCSwitch(document.querySelector('.noti_icon.mdc-switch'));
     btnSwitchNotiIcon.listen("mousedown", function (event) {
@@ -205,6 +191,18 @@ function initLoad(v){
         }
     });
 
+    btnSwitchCheckService = new mdc.switchControl.MDCSwitch(document.querySelector('.check_service.mdc-switch'));
+    btnSwitchCheckService.listen("mousedown", function (event) {
+        snackbar(t("message.save"));
+        event.preventDefault();
+        event.stopPropagation();
+        if (!btnSwitchCheckService.selected) { // true
+            fn_DeviceSaveData("_CHECK_SERVICE", true);
+        } else { // false
+            fn_DeviceSaveData("_CHECK_SERVICE", false);
+        }
+        fn_Reload(true);
+    });
 
     btnSwitchTest = new mdc.switchControl.MDCSwitch(document.querySelector('.test.mdc-switch'));
     btnSwitchTest.listen("mousedown", function (event) {
@@ -213,11 +211,9 @@ function initLoad(v){
         event.stopPropagation();
         if (!btnSwitchTest.selected) { // true
             document.querySelector(".test #status").innerHTML = t("label.test_status_on");
-            // btnSwitchNotiIcon.selected = true;
             fn_DeviceSaveData("_TEST", true);
         } else { // false
             document.querySelector(".test #status").innerHTML = t("label.test_status_off");
-            // btnSwitchNotiIcon.selected = false;
             fn_DeviceSaveData("_TEST", false);
         }
     });
@@ -248,6 +244,21 @@ function initLoad(v){
         btnSwitchNotiIcon.selected = true;
         // btnSwitchNotiIcon.foundation_.setChecked(true);
     }
+
+    // 체크서비스(라이브체크)
+    btnSwitchCheckService.selected = v.checkService;
+    
+    // 체크서비스(라이브체크) 상태
+    var checkServiceStateName; 
+    if ( v.checkServiceWorkState == "ENQUEUED" ) {
+        checkServiceStateName  = t("label.check_service_running");
+       $("#check_service_work_state").addClass("color_start");
+    } else {
+        checkServiceStateName  = t("label.check_service_stopped");
+        $("#check_service_work_state").addClass("color_stop");
+    }
+    $("#check_service_work_state").html(checkServiceStateName);
+
 
     if (!v.test) { // off
         document.querySelector(".test #status").innerHTML = t("label.test_status_off");
@@ -973,10 +984,45 @@ window.fn_BackKeyPressedCallBack = function () {
                 <span id="statusAppUpdateDelayTime" style="opacity: 0.7;"><del><span style="color:var(--softm-start);font-weight:bold">120</span>초 이내에 <span style="color:var(--softm-start);font-weight:bold">5</span>km/h에 도달하면 <span style="color:var(--softm-start);font-weight:bold">실행</span>합니다. [<span style="color:var(--softm-stop);font-weight:bold">꺼짐</span>].</del></span>
             </div>
 
-<!-- 화면 상태 시작시 -->     
+            <hr class="sub"/>
+            <!--체크-->
+            <div class="row sub">
+                <div class="flex"><!--fieldset-->
+                    <label for="" class="title" style=""><strong
+                        data-i18n="label.service_check">체크서비스</strong></label>
+                    <div class="flex-grow left margin_left_5 margin_right_5" id="check_service_work_state">
+                        
+                    </div>    
+                    <div class="right">
+                        <button class="check_service mdc-switch mdc-switch--unselected" type="button" role="switch" aria-checked="false">
+                        <div class="mdc-switch__track"></div>
+                        <div class="mdc-switch__handle-track">
+                            <div class="mdc-switch__handle">
+                            <div class="mdc-switch__shadow">
+                                <div class="mdc-elevation-overlay"></div>
+                            </div>
+                            <div class="mdc-switch__ripple"></div>
+                            <div class="mdc-switch__icons">
+                                <svg class="mdc-switch__icon mdc-switch__icon--on" viewBox="0 0 24 24">
+                                <path d="M19.69,5.23L8.96,15.96l-4.23-4.23L2.96,13.5l6,6L21.46,7L19.69,5.23z" />
+                                </svg>
+                                <svg class="mdc-switch__icon mdc-switch__icon--off" viewBox="0 0 24 24">
+                                <path d="M20 13H4v-2h16v2z" />
+                                </svg>
+                            </div>
+                            </div>
+                        </div>
+                        <span class="mdc-switch__focus-ring-wrapper">
+                            <div class="mdc-switch__focus-ring"></div>
+                        </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- 체크알림 -->     
             <div class="margin_top_15 margin_bottom_5">
                 <div class="row flex sub">
-                    <legend align="left" class="title "><strong data-i18n="label.service_check_noti">체크노티</strong></legend>
+                    <legend align="left" class="title "><strong data-i18n="label.service_check_noti">체크알림</strong></legend>
                     <div data-i18n="label.service_check_noti_basic" class="flex flex-grow basic_font_medium1" style="align-items: center; justify-content: right;"><!--fieldset-->
                       기본
                     </div>    
