@@ -11,7 +11,7 @@
 
  "appReleaseUpdtedTime":1740456823617,
  "paidOPTypeName":"0:NONE,1:PAID",
- "paidOPType":"1",
+ "paidOPType":"0",
  "forcePaidOPTypeUUIDs":[
 ],
  "adViewOPTypeName":"0:NONE,1:ADVIEW_STOP,2:ADVIEW",
