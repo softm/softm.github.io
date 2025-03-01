@@ -811,13 +811,16 @@ function initPower(v) {
 function initBluetooth(v) {
     btnSwitchStartBluetooth = new mdc.switchControl.MDCSwitch(document.querySelector('.start_bluetooth.mdc-switch'));
     btnSwitchStartBluetooth.listen("mousedown", function (event) {
-        if ( !info.permissions.BLUETOOTH ) {
+        if ( !info.permissions.BLUETOOTH && !btnSwitchStartBluetooth.selected ) {
             window.startSettingCallback = function(grant,ok) {
                 if ( ok === "not" ) {
                     alert(t("message.must_enable_bluetooth"));
                     btnSwitchStartBluetooth.selected = false;
                 } else {
-                    fn_Reload(true);
+                    window.blueToothOnCallback = function() {
+                        fn_Reload(true);
+                    }
+                    fn_DeviceSaveData("_START_BLUETOOTH", true,"blueToothOnCallback"); // 1 : 시작, 0 : 중지
                 }
                 // windowReload();
             }

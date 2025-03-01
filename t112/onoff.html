@@ -159,8 +159,8 @@ $( document ).ready(function() {
 function getInfo() {
     fn_GetInfo("", "getInfoCallBack");
 }
-function saveStartStopOnOff() {
-    fn_DeviceSaveData("_START_STOP_ON_OFF", window.info.startStopOnOff,"getInfo");
+function saveStartStopOnOff(callBack) {
+    fn_DeviceSaveData("_START_STOP_ON_OFF", window.info.startStopOnOff,callBack?callBack:"getInfo");
 }
 
 function pageInit(v) {
@@ -318,15 +318,18 @@ function initOnOff(v) {
             // var sub2 = $(this).attr("class").split(" ")[1];
 
             if( gubun === "bluetooth" ) {
-                if ( !info.permissions.BLUETOOTH ) {
+                if ( !info.permissions.BLUETOOTH && rtnEl.selected ) {
                     window.startSettingCallback = function(grant,ok) {
                         if ( ok === "not" ) {
                             alert(t("message.must_enable_bluetooth"));
                             rtnEl.selected = false;
                         } else {
                             // if ( rtnEl.selected ) {
+                                window.blueToothOnCallback = function() {
+                                   fn_Reload(true);
+                                }
                                 window.info.startStopOnOff[gubun][sub].use_yn = rtnEl.selected;
-                                saveStartStopOnOff();
+                                saveStartStopOnOff("blueToothOnCallback");
                             // } else {
                             //     fn_Reload(true);
                             // }
