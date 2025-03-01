@@ -26,9 +26,11 @@
  "adMode":"0",
  "defaultAdMode":"1",
  "forceAdModeUUIDs":[
+  "3e6b779dfe737a19"
  ],
  "testUuids" :[
   "ecb6c1732c4b3f0f : emul",
+  "3e6b779dfe737a19 : s25 운영",
   "29285b2e6ce94ee4 : s25 release",
   "0072e96789523959 : s25 debug",
   "3e274dcae5ebf21c : SM-A326K (아버지)",
