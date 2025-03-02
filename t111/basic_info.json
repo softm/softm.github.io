@@ -13,6 +13,12 @@
  "paidOPTypeName":"0:NONE,1:PAID",
  "paidOPType":"0",
  "forcePaidOPTypeUUIDs":[
+  "3e6b779dfe737a19",
+  "3495626928bbd5fd",
+  "fb8e48f2a656600d",
+  "30429dfd604a06b9",
+  "d3a156c93432c972",
+  "b21a46b923c77d48"
 ],
  "adViewOPTypeName":"0:NONE,1:ADVIEW_STOP,2:ADVIEW",
  "adViewOPType":"0",
