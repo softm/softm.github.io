@@ -85,6 +85,7 @@ $( document ).ready(function() {
     window.getInfoCallBack = function (data) {
         if (isWeb) {
             window.info = {
+                "isDebug": true,
                 "isInKorea": true,
                 "appPackage": "com.skt.tmap.ku",
                 // "appPackage": "",
@@ -172,6 +173,8 @@ $( document ).ready(function() {
                 "runStatusScreenTimeForStart": 15,
                 "runStatusScreenTimeForStop": 15,
                 appReleaseUpdtedTime:1740787200000,
+                userLevel:'FREE',
+                userType:'FREE_USER',
             }
         } else {
             window.info = (JSON.parse(data));
