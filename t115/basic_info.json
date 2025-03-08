@@ -83,6 +83,12 @@
  "defaultAdMode":"1",
  "forceAdModeUUIDs":[
  ],
+ "exceptAdModeUUIDs":[
+  "8c85d549a955dcc7"
+ ],
+ "exceptPaidUUIDs":[
+  "8c85d549a955dcc7"
+ ],
  "testUuids" :[
   "ecb6c1732c4b3f0f : emul",
   "3e6b779dfe737a19 : s25 운영",
@@ -146,7 +152,7 @@
  "crashLog":true,
  "crashLogFormatName":"1:DEFAULT 2:SHORT",
  "crashLogFormat":"1",
- "checkCrashIntervalTime_tmp":"1000 * 60 * 1 = 60000",
+ "checkCrashIntervalTime_tmp":"1000 * 60 * 2 = 120000",
  "checkCrashIntervalTime":120000,
 
  "purchaseLogFormatName":"1:DEFAULT 2:SHORT",
