@@ -444,6 +444,9 @@ function initPage(v) {
         nextAdviewTime = info.basicInfo.adViewLicenseAddTime - ( info.systemCurrentTimeMillis - info.adViewCheckTime );
     }
 
+    var waitTimeForNotAdLicenseSec = Math.trunc( info.basicInfo.waitTimeForNotAdLicense/1000 * 10,3)/10;
+    $("#please_support_msg2").html(t("message.please_support_msg2",{fromSec:waitTimeForNotAdLicenseSec}));
+
     setInterval(function() {
         nextAdviewTime -= 1000;
         var result = millisecondsToTime(nextAdviewTime);
@@ -653,7 +656,7 @@ function initPage(v) {
                     - 광고를 시청하면 사용기간이 연장되요.
                 </div>
 
-                <div class="row sub flex basic_font_medium3 margin_bottom_0" data-i18n="[html]message.please_support_msg2">
+                <div class="row sub flex basic_font_medium3 margin_bottom_0" data-i18n="[html]message.please_support_msg2" id="please_support_msg2">
                     - 대기시간이 <span class="bold" style="color:#B40404">"10"</span>초 → <span class="bold" style="color:#B40404">"3"</span>초
                 </div>
             </div>

@@ -85,6 +85,7 @@ $( document ).ready(function() {
     window.getInfoCallBack = function (data) {
         if (isWeb) {
             window.info = {
+                "isDebug": true,
                 "isInKorea": true,
                 "appPackage": "com.skt.tmap.ku",
                 // "appPackage": "",
@@ -172,6 +173,8 @@ $( document ).ready(function() {
                 "runStatusScreenTimeForStart": 15,
                 "runStatusScreenTimeForStop": 15,
                 appReleaseUpdtedTime:1740787200000,
+                userLevel:'FREE',
+                userType:'FREE_USER',
             }
         } else {
             window.info = (JSON.parse(data));
@@ -1039,6 +1042,18 @@ function initBluetooth(v) {
         bluetoothList.layout();
         console.info("opened");
     });
+    if ( 
+        !v.permissions.BLUETOOTH &&
+        ( v.startBluetooth ||
+          v.startStopOnOff.bluetooth.start || 
+          v.startStopOnOff.bluetooth.stop
+        )
+    ) {
+        // window.startSettingCallback = function(grant,ok) {
+        //     fn_GoMain(true);
+        // }
+        fn_StartSetting("bluetooth"); // ,"startSettingCallback");
+    }
 
     if (!v.startBluetooth) { // stop
         document.querySelector("#status_bluetooth").innerHTML = t("label.status_bluetooth_stop");

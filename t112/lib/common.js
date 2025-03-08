@@ -911,7 +911,7 @@ var messages  = {
             drag_pin_adjust_position:"핀을 드래그해서 위치를 조정하세요.",
             please_support:"응원 부탁드려요. ^^ :)",
             please_support_msg1:"- 광고를 시청하면 사용기간이 연장되요.", 
-            please_support_msg2:'- 대기시간이 <span class="bold" style="color:#B40404">"10"</span>초 → <span class="bold" style="color:#B40404">"3"</span>초', 
+            please_support_msg2:'- 대기시간이 <span class="bold" style="color:#B40404">"{fromSec}"</span>초 → <span class="bold" style="color:#B40404">"3"</span>초', 
             next_ad_view : '다음 광고 시청시간 까지 : {waitTime} 남았습니다.',
             ad_max_time_ad_view : '광고 시청시간 초과로 시청이 제한 되었습니다.',
             ad_view_time_exceeded : '광고 시청시간 초과로 시청이 제한 되었습니다.',
@@ -1664,12 +1664,19 @@ function initBasicInfo() {
       $("#footerMenuDeveloperSupport").hide();
     }
 
+    var debugBadge = false;
+    if ( typeof info.isDebug !== "undefined" ) {
+      if ( info.isDebug ) {
+        debugBadge = true;
+      }
+    }
+    
     $(".version-name").text("Ver."+v.versionName + " / " + v.versionCode);
     if ( v.userLevel ) {
       var user_level = t("label." + v.userLevel.toLocaleLowerCase() + "_user"); 
-      $(".user_level").text(user_level);
+      $(".user_level").text(user_level + (debugBadge?"D":""));
     }
-    
+
     if ( info.isPaidLicense ) {
         $(".paidUser").show();
     }

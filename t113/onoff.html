@@ -171,7 +171,20 @@ function pageInit(v) {
     initOnOff(v);
     initScreenOnOff(v);
     // initStartMode_unused();
-} 
+
+    if ( 
+        !v.permissions.BLUETOOTH &&
+        ( v.startBluetooth ||
+          v.startStopOnOff.bluetooth.start || 
+          v.startStopOnOff.bluetooth.stop
+        )
+    ) {
+        // window.startSettingCallback = function(grant,ok) {
+        //     fn_GoMain(true);
+        // }
+        fn_StartSetting("bluetooth"); // ,"startSettingCallback");
+    }
+}
 
 function initFenceDistance_unused(v) {
     fenceDistance = new mdc.textField.MDCTextField(document.querySelector('#fence_distance'));
