@@ -84,10 +84,8 @@
  "forceAdModeUUIDs":[
  ],
  "exceptAdModeUUIDs":[
-  "8c85d549a955dcc7"
  ],
  "exceptPaidUUIDs":[
-  "8c85d549a955dcc7"
  ],
  "testUuids" :[
   "ecb6c1732c4b3f0f : emul",
@@ -95,17 +93,23 @@
   "29285b2e6ce94ee4 : s25 release",
   "0072e96789523959 : s25 debug",
   "3e274dcae5ebf21c : SM-A326K (아버지)",
+  "e083abff41564fd2 : 노트4-6.0.1",
   "e083abff41564fd2",
   "3bWR1YWHDxSC5OyoAebg",
-  "e083abff41564fd2 : 노트4-6.0.1",
   "e575416df5cd7da3 : 노트10+ debug",
-  "8c85d549a955dcc7",
   "8c85d549a955dcc7 : SM-A710L",
+  "8c85d549a955dcc7",
   "79d88306dfb5f059 : SM-G930S",
   "5c4dcb156253716a",
   "8bd0007cac109bf7",
+  "3af0f0b68f2ee61b : Galaxy Wide",
   "3af0f0b68f2ee61b",
-  "ca97d88158666d59 : SM-N915S 노트4-6.0.1"
+  "ca97d88158666d59 : SM-N915S 노트4-6.0.1",
+  "ca97d88158666d59",
+  "ecfaf508b8b0dd63 : Galaxy S7",
+  "ecfaf508b8b0dd63",
+  "1c5968229b5328ed : Galaxy S8",
+  "1c5968229b5328ed"
 ],
  "adTypeForMainBanner":"1",
  "adTypeForPopupBanner":"1",
