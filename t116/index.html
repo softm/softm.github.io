@@ -1073,6 +1073,15 @@ function initBluetooth(v) {
     } else {
         $(".bluetooth_info").find(".bluetooth").text(v.bluetooth.name);
     }
+
+    /** 알림권한 */
+    if ( !v.permissions.POST_NOTIFICATIONS ) {
+        // function checkGrantCallBack(grant,ok) {
+        //     console.log("checkGrantCallBack" , grant,ok);
+        // }
+        // fn_CheckGrant("post_notifications","checkGrantCallBack");
+        fn_StartSetting("post_notifications");
+    }
 }
 
 function initWifi(v) {
@@ -1852,10 +1861,12 @@ function saveStartStopOnOff() {
 <pre class="row ko black left padding_left_5" style="line-height: 1.9;">
 <span class="basic_font_large4">★</span><b  class="basic_font_medium3"> 업데이트 되었습니다.</b>
 1. 광고 비정상 동작 수정중
+2. 즐겨찾기 수정 후 오버레이 갱신
 </pre>
 <pre class="row en black left padding_left_15" style="line-height: 1.9;">
 <span class="basic_font_large4">★</span><b  class="basic_font_medium3">It has been updated.</b>
-1. Advertising abnormal motion modification
+1. Fixing abnormal advertisement behavior
+2. Refreshing overlay after modifying favorites
 </pre>
                         </div>
                     </div>

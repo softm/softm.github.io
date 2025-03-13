@@ -352,7 +352,7 @@ http://tmapapi.sktelecom.com/main.html#webservice/guide/webserviceGuide.guide4
                   this.favoritePois = data;
                   this.favorites = data;
                   fn_DeviceSaveData("_POIS_FAVORITE", JSON.stringify(data));
-                //   fn_OpenOverlayView(true);
+                  fn_OpenOverlayView(true);
                   if ( cb ) cb();
                 });
               });
@@ -377,7 +377,7 @@ http://tmapapi.sktelecom.com/main.html#webservice/guide/webserviceGuide.guide4
                     return b.created - a.created;
                   });
                   fn_DeviceSaveData("_POIS_FAVORITE", JSON.stringify(data));
-                //   fn_OpenOverlayView(false);
+                  fn_OpenOverlayView(false);
                   if ( cb ) cb();
                 });
               });

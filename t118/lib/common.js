@@ -86,6 +86,7 @@ var messages  = {
             popup_enable: "Keep",
             popup_disable: "Close",
             navi_mode: "Mode",
+            map_mode: "Map",
             home_to_co: "home↔co",
             home_to_fave: "home↔fave",
 
@@ -240,6 +241,8 @@ var messages  = {
             app_purchase2: "[Buy ]",
             app_purchase3: "[a cup of coffee]",
             copy_order_id:"Copy order number",
+            tmap_map:"TMap Map",
+            google_map:"Google Map",
           },
           title: {
             main: "Basic",
@@ -327,6 +330,8 @@ var messages  = {
             navi_auto_start_disable: "<span style='color:var(--softm-stop)'>Do not</span> start the app.",
 
             overlay_wait_time: "Wait pop-up display time before running app",
+            
+            map_mode_guide: "<B><span style='color:var(--softm-start)'>\"{mapName}\"</span></B> is displayed.",
 
             mode_guide_1: "<B>\"Company\"</B> to <<B><span style='color:var(--softm-start)'>\"AM\"</span></B>, <B><span style='color:var(--softm-stop)'>\"Afternoon\"</span></B> to <B>\"Home\"</B>." ,
             mode_guide_2: "<B>\"Destination\"</B> in <<B><span style='color:var(--softm-start)'>\"AM\"</span></B>, <B><span style='color:var(--softm-stop)'>\"Afternoon\"</span></B> to <B>\"Home\"</B>." ,
@@ -551,6 +556,7 @@ var messages  = {
             popup_enable: "유지",
             popup_disable: "닫기",
             navi_mode: "안내모드",
+            map_mode: "지도",
             home_to_co: "집↔회사",
             home_to_fave: "집↔즐겨찾기",
 
@@ -703,6 +709,8 @@ var messages  = {
             app_purchase2: "[커피한잔",
             app_purchase3: "쏘기]",
             copy_order_id:"주문번호 복사",
+            tmap_map:"티맵지도",
+            google_map:"구글지도",
           },
           title: {
             main: "기본",
@@ -795,6 +803,8 @@ var messages  = {
             navi_auto_start_disable: "앱 시작 <span style='color:var(--softm-stop)'>안함</span>.",
             overlay_wait_time: "앱 실행전 대기 팝업 표시시간",
             
+            map_mode_guide: "<B><span style='color:var(--softm-start)'>\"{mapName}\"</span></B>를 표시합니다.",
+
             mode_guide_1 : "<B><span style='color:var(--softm-start)'>\"오전\"</span></B>에 <B>\"회사\"</B>,  <B><span style='color:var(--softm-stop)'>\"오후\"</span></B>에 <B>\"집\"</B> 안내 합니다.",
             mode_guide_2 : "<B><span style='color:var(--softm-start)'>\"오전\"</span></B>에 <B>\"목적지\"</B>, <B><span style='color:var(--softm-stop)'>\"오후\"</span></B>에 <B>\"집\"</B> 안내 합니다.",
             mode_guide_3 : "<B>\"내비\"</B>만 실행합니다.",

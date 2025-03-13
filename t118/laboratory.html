@@ -67,6 +67,9 @@ var btnSwitchCheckService = null;
 var chipCheckServiceCheckNoti;
 var chipCheckServiceCheckLogSendNoti;
 
+var chipMapModeSelectedIndex = -1;
+var chipSetMapMode;
+
 var granted =[];
 
 $( document ).ready(function() {
@@ -133,7 +136,8 @@ $( document ).ready(function() {
                 // + "http://www.softm.net/tdev"
                 "checkService":true,
                 "checkServiceCheckNoti":0,
-                "checkServiceCheckLogSendNoti":0
+                "checkServiceCheckLogSendNoti":0,
+                "mapMode":"1"
             }
         } else {
             // appUpdateDelayTime
@@ -150,6 +154,56 @@ $( document ).ready(function() {
 
 function initPage(v) {
     initLoad(v);
+    initMapMode(v);
+}
+
+function initMapMode(v) {
+    chipSetMapMode = new mdc.chips.MDCChipSet(document.querySelector('#chip_map_mode'));
+    chipSetMapMode.listen("click", function (e) {
+        var seq = e.srcElement.offsetParent.id.replace(/[^0-9]/g, "");
+        var adapter = chipSetMapMode.getDefaultFoundation().adapter;
+        var selectId = chipSetMapMode.selectedChipIds[0];
+        var index = adapter.getIndexOfChipById(selectId);
+        if (index == -1) {
+            if (selectId) {
+                chipSetMapMode.chips[seq - 1].selected = true;
+            } else { // error
+                chipSetMapMode.chips[chipMapModeSelectedIndex].selected = true;
+                index = chipMapModeSelectedIndex;
+            }
+        } else {
+            chipMapModeSelectedIndex = index;
+        }
+
+        if (index == 0) { // 티맵지도
+            var mapName = t("label.tmap_map");
+            document.querySelector('#map_mode_guide').innerHTML = t("message.map_mode_guide",{"mapName":mapName});
+            if (!e.onlySelect) {
+                fn_DeviceSaveData("_MAP_MODE", "1");
+                window.info.mapMode = "1";
+                snackbar(t("message.save"));
+            }
+        } else if (index == 1) { // 구글지도
+            var mapName = t("label.google_map");
+            document.querySelector('#map_mode_guide').innerHTML = t("message.map_mode_guide",{"mapName":mapName});
+            if (!e.onlySelect) {
+                fn_DeviceSaveData("_MAP_MODE", "2");
+                window.info.mapMode = "2";
+                snackbar(t("message.save"));
+            }
+        }
+    });
+
+    // 맵모드
+    var idx = parseInt(v.mapMode, 10) - 1;
+    chipMapModeSelectedIndex = idx;
+    // chipSetPopup.chips[chipSelectIndex].selected = true;
+    var event = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
+    event.onlySelect = true; // pass data custom 
+    // var cb =document.querySelector("#mdc-chip-" + (chipMapModeSelectedIndex+1));
+    var cb = $("#chip_map_mode").find(".mdc-chip:eq(" + chipMapModeSelectedIndex + ")")[0];
+    var cancelled = !cb.dispatchEvent(event);
+    cb.focus();
 }
 
 function initLoad(v){
@@ -723,7 +777,39 @@ window.fn_BackKeyPressedCallBack = function () {
                 </div>
             </div>
             <hr class="sub"/>
+            <!--지도모드-->
+            <div class="row sub flex"><!--fieldset-->
+                <label class="title" style="display:inline;"> <strong data-i18n="label.map_mode">지도</strong></label>
+                <div id="chip_map_mode" class="flex-grow justify-content-right right mdc-chip-set mdc-chip-set--choice"
+                style="display: inline"
+                >
+                    <div class="mdc-chip mdc-chip--selected mdc-ripple-upgraded" role="row" style="">
+                        <div class="mdc-chip__ripple"></div>
+                        <span role="gridcell">
+                        <span role="button" tabindex="0" class="mdc-chip__primary-action">
+                            <span class="mdc-chip__text" data-i18n="label.tmap_map">티맵지도</span>
+                        </span>
+                        </span>
+                    </div>
+                    <div class="mdc-chip" role="row" style="">
+                        <div class="mdc-chip__ripple"></div>
+                        <span role="gridcell">
+                        <span role="button" tabindex="-1" class="mdc-chip__primary-action">
+                            <span class="mdc-chip__text" data-i18n="label.google_map">구글지도</span>
+                        </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
 
+            <div class="row comment">
+                <div class="flex">
+                    <span class="flex-grow" id="map_mode_guide" style="opacity: 0.7;">
+                        <B><span style='color:var(--softm-start)'>"티맵지도"</span></B>를 표시합니다.
+                    </span>
+                </div>
+            </div>
+            <hr class="sub"/>
             <!--Test-->
             <div class="row sub">
                 <div class="flex"><!--fieldset-->
