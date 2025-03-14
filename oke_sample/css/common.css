@@ -1,0 +1,233 @@
+﻿/* Style the navigation menu */
+
+.topnav {
+    overflow: hidden;
+    background-color: #333;
+    position: relative;
+}
+/* Hide the links inside the navigation menu (except for logo/home) */
+
+.topnav #myLinks {
+    display: none;
+}
+/* Style navigation menu links */
+
+.topnav a {
+    color: white;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+    display: block;
+}
+/* Style the hamburger menu */
+
+.topnav a.icon {
+    background: black;
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+/* Add a grey background color on mouse-over */
+
+.topnav a:hover {
+    background-color: #ddd;
+    color: black;
+}
+/* Style the active link (or home/logo) */
+
+.active {
+    background-color: #2e6da4;
+    color: white;
+}
+
+td {
+   font-size:11pt;
+   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif !important;
+}
+
+div.w2ui-col-header {
+    text-align:center;
+    font-size:10pt;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif !important;
+}
+/*
+.w2ui-grid .w2ui-grid-body div.w2ui-col-header {
+  height: auto !important;
+  width: 100%;
+  overflow: hidden;
+  padding-right: 10px !important;
+
+}
+*/
+.w2ui-grid .w2ui-grid-data div  {
+   font-size:10pt !important;
+   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif !important;
+}
+
+
+///////////////
+
+
+/*
+.todate::before {
+  content: "~";
+}
+*/
+        .container {
+            margin: 0px;
+        }
+
+        .row {
+            margin-top: 5px;
+        }
+
+        .datepick input {
+            padding:4px
+        }
+        .form_el {
+            padding:2px;
+            padding-right:15px;
+        }
+
+
+
+////////
+
+
+.app {
+  top:0px;
+  bottom:0px;
+  left:0px;
+  bottom:0px;
+  z-index:100;
+  position:absolute;
+  width:100%;
+}
+
+////////
+
+.main {
+	overflow:none;position:absolute;left:0px;top:0px;right:0px;bottom:0px;border:0px solid red;background-color:#FFF;
+}
+.show {	display:block; }
+.hide {	display:none; }
+
+.invisible { visibility:hidden; }
+.visible   { visibility:visible; }
+
+.mo-ui-snackbar {
+    position: fixed;
+    left:0px;
+    bottom: 0px;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: rgba(77,77,77,0.98);
+    color: #fff;
+    padding: 15px;
+}
+
+.snackbar {
+/*  position: fixed;
+    width: auto;
+    height: 45px;
+    background:  #323232;
+    line-height: 45px;
+    padding-left: 16px;
+    padding-right: 16px;
+    text-align: center;
+    border-radius: 2px;
+    bottom: 15px;
+    left: 15px;
+    display: none;
+    white-space: nowrap; */
+}
+
+.mo-ui-snackbar .message {
+	color: #FFFFFF;
+	font-weight: 300;
+	font-size: 18px;
+	user-select: none;
+}
+
+.mo-ui-layer {
+    background: rgba(0,0,0,0.6);
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: -1px;
+    z-index: 9999;
+    height:100%;
+}
+
+.mo-icon-loading {
+    width:60px;height:60px; 
+    position:absolute;
+	left:50%;
+	top:50%;
+}
+/*
+.mo-icon-loading img{width:100%;}
+*/
+
+.mo-icon-loading {
+	/*
+    position: relative;
+	animation: example 2s linear infinite;
+	*/
+	-webkit-animation-name: example;
+	-moz-animation-name: example;
+	-o-animation-name: example;
+	-ms-animation-name: example;
+	animation-name: example;
+
+	-webkit-animation-duration: 2s;
+	-moz-animation-duration: 2s;
+	-o-animation-duration: 2s;
+	-ms-animation-duration: 2s;
+	animation-duration: 2s;
+
+	-webkit-animation-timing-function: linear;
+	-moz-animation-timing-function: linear;
+	-o-animation-timing-function: linear;
+	-ms-animation-timing-function: linear;
+	animation-timing-function: linear;
+
+	-webkit-animation-iteration-count: infinite;
+	-moz-animation-iteration-count: infinite;
+	-o-animation-iteration-count: infinite;
+	-ms-animation-iteration-count: infinite;
+	animation-iteration-count: infinite;
+
+}
+
+.amount {
+	text-align:right;
+}
+
+.floatRight2 { float: right !important;position:relative;top:-17px; }
+/*
+.navi_action { left: 310px !important; }
+ */
+
+.bktop {
+     border-radius: 100%;
+/*background-color:#3370BC; */
+/*background-color:#27316d; */
+  background-color:#2e6da4;
+  bottom:10px;
+  color:#000;
+  display:none;
+  /* padding:10px 14px 5px; */
+  /* padding:10px 14px 5px; */
+  /* padding:5px; */
+  position:fixed;
+  right:20px;
+  text-decoration:none;
+  z-index:99999;
+}
+
+.bktop2 {
+  display:none; background:none; position:fixed; bottom:1px; right:1px; cursor:pointer; text-decoration:none; border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; padding:5px
+}

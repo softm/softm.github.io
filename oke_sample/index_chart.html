@@ -1,0 +1,165 @@
+<!DOCTYPE HTML>
+<html lang="ko">
+
+<head>
+    <title> OTKE </title>
+    <meta charset="utf-8">
+<!--
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
+-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="Author" content="">
+    <meta name="Keywords" content="OTKE">
+    <meta name="Description" content="OTKE">
+
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-multiselect.css"/>
+    <link rel="stylesheet" type="text/css" href="css/w2ui.min.css" />
+
+    <script language="javascript" src="js/jquery.min.js"></script>
+    <script language="javascript" src="js/jquery-ui.min.js"></script>
+    <script language="javascript" src="js/bootstrap.min.js"></script>
+
+    <script language="javascript" src="js/moment.js"></script>
+    <script language="javascript" src="js/bootstrap-datetimepicker.min.js"></script>
+    <script language="javascript" src="js/bootstrap-multiselect.min.js"></script>
+    <script language="javascript" type="text/javascript" src="js/w2ui.min.js"></script>
+    <script language="javascript" src="js/sweetalert.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <script language="javascript" src="js/common.js"></script>
+    <script language="javascript" src="js/ko.js"></script>
+
+<style>
+canvas{
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+</style>
+<script src="https://www.chartjs.org/dist/2.8.0/Chart.min.js"></script>
+<script src="https://www.chartjs.org/samples/latest/utils.js"></script>
+
+    <script language="javascript">
+        $(document).ready(function() {
+        });
+
+    	window.onload = function() {
+    		var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    		var config = {
+    			type: 'line',
+    			data: {
+    				labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    				datasets: [{
+    					label: 'My First dataset',
+    					backgroundColor: window.chartColors.red,
+    					borderColor: window.chartColors.red,
+    					data: [
+    						randomScalingFactor(),
+    						randomScalingFactor(),
+    						randomScalingFactor(),
+    						randomScalingFactor(),
+    						randomScalingFactor(),
+    						randomScalingFactor(),
+    						randomScalingFactor()
+    					],
+    					fill: false,
+    				}, {
+    					label: 'My Second dataset',
+    					fill: false,
+    					backgroundColor: window.chartColors.blue,
+    					borderColor: window.chartColors.blue,
+    					data: [
+    						randomScalingFactor(),
+    						randomScalingFactor(),
+    						randomScalingFactor(),
+    						randomScalingFactor(),
+    						randomScalingFactor(),
+    						randomScalingFactor(),
+    						randomScalingFactor()
+    					],
+    				}]
+    			},
+    			options: {
+    				responsive: true,
+    				title: {
+    					display: true,
+    					text: 'Chart.js Line Chart'
+    				},
+    				tooltips: {
+    					mode: 'index',
+    					intersect: false,
+    				},
+    				hover: {
+    					mode: 'nearest',
+    					intersect: true
+    				},
+    				scales: {
+    					xAxes: [{
+    						display: true,
+    						scaleLabel: {
+    							display: true,
+    							labelString: 'Month'
+    						}
+    					}],
+    					yAxes: [{
+    						display: true,
+    						scaleLabel: {
+    							display: true,
+    							labelString: 'Value'
+    						}
+    					}]
+    				}
+    			}
+    		};
+    		var ctx = document.getElementById('canvas').getContext('2d');
+    		window.myLine = new Chart(ctx, config);
+    	};
+
+    </script>
+</head>
+
+<body>
+    <!-- Top Navigation Menu -->
+    <div class="topnav">
+        <a href="#home" class="active">테스트 - <span id="subTitle">Chart</span></a>
+        <!-- Navigation links (hidden by default) -->
+        <div id="myLinks">
+          <a href="index.html">리스트_W2UI_GRID</a>
+          <a href="index_table_grid.html">리스트_TABLE</a>
+          <a href="index_chart.html">Chart</a>
+          <a href="login.html">로그인</a>
+        </div>
+        <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div>
+
+<!--
+ xs (phones), sm (tablets), md (desktops), and lg (larger desktops)
+-->
+
+<div class="container">
+    <div class="row" style="overflow:scroll">
+      <div style="width:200%;overflow:scroll">
+    <canvas id="canvas"></canvas>
+  </div>
+    </div>
+</div>
+
+        <!--- 맨위로 버튼 ---->
+        <a href="#top" class="bktop" href="#"><img src="./images/up-arrow-icon.png" width="45" height="45" alt="맨 위로" /></a>
+<!--
+        <a href="#top" class="bktop">^</a>
+ -->
+
+</body>
+
+
+
+
+</html>
