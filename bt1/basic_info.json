@@ -93,8 +93,8 @@
  "waitTimeForNotAdLicense":"10000",
  "delayMusicEnable":3000,
  "adModeName":"0:NONE,1:GOOGLE,2:FACEBOOK",
- "adMode":"0",
- "defaultAdMode":"0",
+ "adMode":"1",
+ "defaultAdMode":"1",
  "forceAdModeUUIDs":[
  ],
  "exceptAdModeUUIDs":[
