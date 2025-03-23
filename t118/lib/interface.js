@@ -199,7 +199,7 @@ function fn_StartSetting(grant,callBackFunc) {
 	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
 		 fn_Js_Bridge(result);
 	 }else{
-		 eval(callBackFunc + "('')");
+		if( callBackFunc ) eval(callBackFunc + "('')");
 	 }
 }
 
