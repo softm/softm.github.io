@@ -1100,11 +1100,11 @@ $( document ).ready(function() {
             var url = urls[idx];
             var drawerInfo = drawerInfos[idx];
             if ( url  === "goto_map_store.html" ) {
-              fn_GotoMarket("net.softm.startnavi.poweron");
+              fn_GotoMarket("net.softm.startbluetooth.music");
               drawer.innerList.selectedIndex = window.drawerSelectedIndex;
               event.preventDefault();
             } else if ( url  === "rate_the_app.html" ) {
-                fn_GotoMarket("net.softm.startnavi.poweron");
+                fn_GotoMarket("net.softm.startbluetooth.music");
                 drawer.innerList.selectedIndex = window.drawerSelectedIndex;
                 event.preventDefault();
             } else {
