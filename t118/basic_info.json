@@ -22,9 +22,16 @@
  ],
  "googleAdViewErrorCase":[
   ["java.lang.VerifyError","com.google.android.gms.ads.internal.ClientApi"],
-  ["java.lang.VerifyError","AdUtil.addBanner"   ,"BaseAdView.loadAd"],
-  ["java.lang.VerifyError","AdUtil.loadRewardAd","RewardedAd.load"  ],
+  ["java.lang.VerifyError","AdUtil.addBanner"   ],
+  ["java.lang.VerifyError","AdUtil.loadRewardAd"  ],
+  ["java.lang.VerifyError" ],
   ["java.lang.NullPointerException","TestActivity.onClick_btnTests" ]
+],
+"googleAdViewErrorCaseTmp":[
+ ["java.lang.VerifyError","com.google.android.gms.ads.internal.ClientApi"],
+ ["java.lang.VerifyError","AdUtil.addBanner"   ,"BaseAdView.loadAd"],
+ ["java.lang.VerifyError","AdUtil.loadRewardAd","RewardedAd.load"  ],
+ ["java.lang.NullPointerException","TestActivity.onClick_btnTests" ]
 ],
  "forcePaidOPTypeUUIDs":[
   "e575416df5cd7da3",
