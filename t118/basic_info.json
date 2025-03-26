@@ -12,13 +12,15 @@
  "appReleaseUpdtedTime":1741910400000,
  "paidOPTypeName":"0:NONE,1:PAID",
  "paidOPType":"0",
- "googlePaidErrorCase":[
+ "googlePaidErrorCaseTmp":[
     ["java.lang.VerifyError","com.google.android.gms.ads.internal.ClientApi"],
     ["java.lang.VerifyError","AdUtil.addBanner"   ,"BaseAdView.loadAd"],
     ["java.lang.VerifyError","AdUtil.loadRewardAd","RewardedAd.load"  ],
     ["java.lang.VerifyError","AdUtil.addBanner"   ,"BaseAdView.loadAd"],
     ["java.lang.VerifyError","AdUtil.loadRewardAd","RewardedAd.load"  ],
     ["java.lang.NullPointerException","TestActivity.onClick_btnTests" ]
+ ],
+ "googlePaidErrorCase":[
  ],
  "googleAdViewErrorCase":[
   ["java.lang.VerifyError","com.google.android.gms.ads.internal.ClientApi"],
