@@ -78,6 +78,7 @@ var appCategory;
 var appType;
 var closeAppList = null;
 
+var destinationExecutionHoldTime;
 $( document ).ready(function() {
 
     btnHome    = new mdc.ripple.MDCRipple(document.querySelector("#btnHome"));
@@ -146,6 +147,7 @@ $( document ).ready(function() {
             "startBluetooth": false,
             "workGotoTimeFrom": "06:00",
             "naviRenaviPreventTime": 3,
+            "naviDestinationExecutionHoldTime": 180,
             "naviAutoStart": true,
             "workOffTimeTo": "19:00",
             "notiIcon": true,
@@ -182,7 +184,8 @@ $( document ).ready(function() {
     initNaviAutoStart(v);
     
     initPopupMode(v);
-
+    initDestinationExecutionHoldTime(v);
+    
     initStopMode(v);
     initOnlyStopAfterNaving(v);
 
@@ -926,6 +929,47 @@ function initPopupMode(v) {
 		  cb.focus();
 }
 
+function initDestinationExecutionHoldTime(v) {
+  destinationExecutionHoldTime = new mdc.textField.MDCTextField(document.querySelector('#destination_execution_hold_time'));
+  destinationExecutionHoldTime.listen("focus", function(event) {
+    destinationExecutionHoldTime.input.select();
+  });
+
+  $(destinationExecutionHoldTime.input_).blur(function(event) {
+    var v = destinationExecutionHoldTime.input.value;
+    if ( !v ) {
+      destinationExecutionHoldTime.input.value = window.tmpdestinationExecutionHoldTime;
+    }
+    var event = new MouseEvent('keyup', {view: window,bubbles: true,cancelable: true});
+    var cb =$("#destination_execution_hold_time")[0];
+    var cancelled = !cb.dispatchEvent(event);
+  });
+
+  destinationExecutionHoldTime.listen("keydown", function(event) {
+    if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+      if ( destinationExecutionHoldTime.input.value ) {
+        window.tmpdestinationExecutionHoldTime = destinationExecutionHoldTime.input.value;
+      }
+    }
+  });
+  destinationExecutionHoldTime.listen("keyup", function(event) {
+    if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+      var v = destinationExecutionHoldTime.input.value;
+      var max = parseFloat(destinationExecutionHoldTime.input.max);
+      var min = parseFloat(destinationExecutionHoldTime.input.min);
+      if ( v > max || v < min ) v = "";
+      destinationExecutionHoldTime.input.value = 0;
+      destinationExecutionHoldTime.input.value = !v?"":parseFloat(v&&(/^[0-9]+$/).test(""+v)?v:window.tmpdestinationExecutionHoldTime);
+      if ( v ) {
+        window.tmpdestinationExecutionHoldTime = v;
+      }
+      fn_DeviceSaveData("_NAVI_destination_execution_hold_time", window.tmpdestinationExecutionHoldTime);
+    }
+  });
+
+  window.tmpdestinationExecutionHoldTime = parseInt(v.naviDestinationExecutionHoldTime,10);
+  destinationExecutionHoldTime.input.value = window.tmpdestinationExecutionHoldTime;
+}
 </script>
 </head>
 <body>
@@ -964,7 +1008,7 @@ function initPopupMode(v) {
       <div class="mdc-drawer__header app_info">
           <img src="./images/logo_100.svg" width="50" style="margin-top: 10px;"/>
           <!-- style="height:55px" -->
-          <div class="mdc-dramdc-drawer__contentwer__title" data-i18n="[html]label.app_name">블루투스 내비뮤직</div>
+          <div class="mdc-dramdc-drawer__contentwer__title" data-i18n="[html]label.app_name">블루투스 연결 & 음악</div>
       </div>
         <hr class="sub"/>
         <div class="row sub flex left bold " >
@@ -1133,7 +1177,7 @@ function initPopupMode(v) {
             </div>
             
             <hr class="sub"/>
-                        <!--안내아이콘-->
+            <!--안내아이콘-->
             <div class="row sub" id="divPopupMode">
               <div class="flex"><!--fieldset-->
                 <label class="title" style="display:inline;"><span class="mdc-chip__text"><strong
@@ -1165,6 +1209,35 @@ function initPopupMode(v) {
             </div>
             <hr class="sub"/>
             
+             <!--내비 목적지 실행 유지 시간-->
+             <div class="row sub">
+              <div class="flex"><!--fieldset-->
+                <label class="title"
+                style="overflow: hidden;
+                text-overflow: ellipsis;
+                width: calc(60%);"><span class="mdc-chip__text"><strong data-i18n="label.destination_execution_hold_time"
+                >내비 목적지 실행 유지 시간</strong></span></label>
+                <!-- <div style="position: absolute;display: inline;margin-top: -15px;"> -->
+                <div class="flex-grow right">
+                  <label id="destination_execution_hold_time"
+                  class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon "
+                  style="width:60%;">
+                  <div class="mdc-text-field__ripple"></div>
+                  <input class="mdc-text-field__input" type="number" aria-labelledby="my-label-id" aria-controls="my-helper-id"
+                  aria-describedby="my-helper-id" value="10" style="padding: 10px 10px 10px 10px !important;" maxlength="2" min="0" max="999" pattern="[0-9]*">
+                    <!-- <span id="label" class="mdc-floating-label">대기시간</span> -->
+                    <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                    style="right:80px;display:none" id="search_clear">clear</i>
+                    <div class="mdc-line-ripple"></div>
+                    <!-- <button class="btnSearch mdc-button mdc-button--raised  material-icons " style="top:10px;"> <span
+                      class="mdc-button__ripple"></span>search</button> -->
+                      <div class="" data-i18n="label.sec">초</div>
+                    </label>
+                  </div>
+                </div>
+            </div>
+            <hr class="sub" />
+
             <div class="padding_top_10"></div>
             <div class="row">
                 <legend align="left" class="main title"><strong data-i18n="label.execution">실행</strong></legend>
@@ -1368,7 +1441,7 @@ function initPopupMode(v) {
                   <div class="mdc-text-field__ripple"></div>
                   <input class="mdc-text-field__input" type="text" aria-labelledby="my-label-id" aria-controls="my-helper-id"
                     aria-describedby="my-helper-id" style="ime-mode:active">
-                  <span id="label" class="mdc-floating-label" data-i18n="label.search_placeholder_appselect">앱이름(초성 : ㅌㅁㅈㄷ,블루투스 내비뮤직)</span>
+                  <span id="label" class="mdc-floating-label" data-i18n="label.search_placeholder_appselect">앱이름(초성 : ㅌㅁㅈㄷ,블루투스 연결 & 음악)</span>
                   <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
                     style="right:80px;display:none" id="search_clear">clear</i>
                   <div class="mdc-line-ripple"></div>

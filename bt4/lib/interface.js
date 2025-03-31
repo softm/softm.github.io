@@ -754,25 +754,6 @@ function fn_ShowOverlay() {
  * @date 2016. 07. 06.
  */
 function fn_OpenOverlayView(expandSub) {
-	var result = { "header":{ "api":"503" } };
-	var result = { "header":{ "api":"503" }, "body":{ "expandSub":expandSub} };
-
-	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
-		 fn_Js_Bridge(result);
-	 }else{
-		 //alert(JSON.stringify(result));
-	    // $('.mo-ui-layer.progress').hide();
-//		 loading('close');
-	 }
-
-}
-
-/**
- * API 502 : show overlay
- *
- * @date 2016. 07. 06.
- */
-function fn_OpenOverlayView(expandSub) {
 	var result = { "header":{ "api":"503" }, "body":{ "expandSub":expandSub} };
 
 	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
@@ -1073,6 +1054,22 @@ function fn_GetPermissions(key, callBackFunc) {
  */
 function fn_getBluetooths(key, callBackFunc) {
 	var result = { "header":{ "api":"305" }, "body":{ "key":key, "callBackFunc":callBackFunc } };
+	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
+		 fn_Js_Bridge(result);
+	 }else{
+		 eval(callBackFunc + "('" + localStorage.getItem(key) + "')");
+	 }
+}
+
+/**
+ * API 305 : getBluetooths
+ *
+ * @param key            불러올 데이터 키값
+ * @param callBackFunc   콜백 함수
+ *
+ */
+function fn_enableBluetooth(key, callBackFunc) {
+	var result = { "header":{ "api":"315" }, "body":{ "key":key, "callBackFunc":callBackFunc } };
 	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
 		 fn_Js_Bridge(result);
 	 }else{

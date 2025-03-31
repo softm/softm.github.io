@@ -583,8 +583,20 @@ if ( location.protocol.startsWith("https:") ) {
         console.info("fn_StartNavi", poi.getName(), poi.getLat(), poi.getLon());
         localStorageRecent.delPoi("key", poi.id + "_" + poi.getName(), function () {
           var mapPoint = objectToMapPoint(poi);
-          localStorageRecent.addPoi(mapPoint, function () {
-          });
+            localStorageRecent.addPoi(mapPoint, function () {
+              localStorageRecent.allPoi(function (data) {
+                  var d  = data.sort(function (a, b) {
+                    return b.created - a.created;
+                  });
+                  // .filter(function (item) {
+                  //   return item.lat != null;
+                  // });
+                  console.log(d);
+                  fn_DeviceSaveData("_POI_RECENT", JSON.stringify([new MapPoint(poi.getLat(), poi.getLon(),poi.getName())]));
+                  fn_DeviceSaveData("_POIS_RECENT", JSON.stringify(d));
+                  // fn_DeviceSaveData("_POIS_FAVORITE", JSON.stringify(data));
+              });
+            });
         });
         fn_StartNavi(poi.getName(), poi.getLat(), poi.getLon());
       } else {
