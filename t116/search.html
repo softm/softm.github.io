@@ -352,6 +352,7 @@ if ( location.protocol.startsWith("https:") ) {
 
     $(search.input).focus(function(e){
       btnMyLocation[0].root.hide();
+      btnSearch[0].emit("click");
     });
 
     $(search.input).blur(function(e){
