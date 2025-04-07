@@ -4,9 +4,9 @@ var messages  = {
           label: {
             app: "App",
             run: "Run",
-            app_name: "Bluetooth Navi Music",
-            top_bar: "Bluetooth Navi Music",
-            first_start : "Select Navi",
+            app_name: "Bluetooth Connect & Music",
+            top_bar: "Bluetooth Connect & Music",
+            first_start : "Start",
             refresh_start : "Refresh",
             after_second: "executed after seconds",
             status_app_enable : 'The action is [<span id="spnState"><span style="color:var(--softm-start);font-weight:bold">enabled</span></span>].',
@@ -79,6 +79,7 @@ var messages  = {
             permission_name_location : "Location permission",
             permission_name_accessibility : "Accessibility permission",
             permission_name_ignore_battery : "Power saving mode permission",
+            permission_name_post_notifications : "Notification permission",
 
             navi_auto_start_enable: "Run",
             navi_auto_start_wait: "Wait",
@@ -157,6 +158,7 @@ var messages  = {
             wifiselect:"Select WIFI",
             normal_operation:"Normal",
             permission_check:"Permission check",
+            permission_enable:"enable",
             status:"Status",
             navi_app:"App/Navi",
             music_app:"App/Music",
@@ -243,6 +245,8 @@ var messages  = {
             copy_order_id:"Copy order number",
             tmap_map:"TMap Map",
             google_map:"Google Map",
+            destination_execution_hold_time:"Navi destination hold time",
+            destination_execution_hold_time2:"hold time"
           },
           title: {
             main: "Basic",
@@ -283,7 +287,7 @@ var messages  = {
             save: "Saved.",
             would_save : "Would you like to save?",
             would_change : "Would you like to change it?",
-            first_start : "Bluetooth Navi Music",
+            first_start : "Bluetooth Connect & Music",
             first_start1 : "🚙 Navigation app",
             // first_start2 : "When charging, connecting to Bluetooth, or Wi-Fi,<br/>you can start or end the navigation app.",
             first_start2 : "When Bluetooth is connected",
@@ -299,7 +303,7 @@ var messages  = {
             confirm_destination_delete : "Are you sure you want to delete basic destination?",
             confirm_favorite_delete: "Are you sure you want to delete favorite?",
             confirm_app_pacakge_delete : "Do you want to delete the set app information?",
-            select_music_playback_device : 'Select the music [<span class="bold color_start">playback device</span>]. [<span class="bold color_start">Click</span>]',
+            select_music_playback_device : 'Select music [<span class="bold color_start">playback device</span>]. [<span class="bold color_start">Click</span>]',
 
             confirm_on : "Would you like to turn it <span style='color:var(--softm-start)'>on</span>?",
             confirm_off : "Would you like to turn it <span style='color:var(--softm-stop)'>off</span>?",
@@ -363,14 +367,14 @@ var messages  = {
             permission6: 'Set <span style="color:var(--softm-start);font-weight:bold">Disabled "Power Saving Mode"</span>',
             permission7: 'Set <span style="color:var(--softm-start);font-weight:bold">"Bluetooth" permission</span>',
             permission8: 'Set <span style="color:var(--softm-start);font-weight:bold">"Change system settings" permission</span>',
-            permission_grant_app_select:'Please select the app "<B>Bluetooth Navi Music</B>".',
-            permission_grant_on_for_overlay1 : 'Select "<B>Bluetooth Navi Music</B>"',
+            permission_grant_app_select:'Please select the app "<B>Bluetooth Connect & Music</B>".',
+            permission_grant_on_for_overlay1 : 'Select "<B>Bluetooth Connect & Music</B>"',
             permission_grant_on_for_overlay2 : 'Permission "<b>On</b>"',
             permission_grant_on:'Turn on "<B>Permit permission</B>",',
             permission_grant_backkey_return:'Press <B>Back</B> to return to the screen.',
             permission_grant_on_for_notification_access : '"Notification access"to turn on the right.',
             permission_grant_on_for_notification_access_2 : 'The accuracy of program operation can be improved.',
-            permission_grant_on_for_location_information_access : '"<B>Bluetooth Navi Music</B>" collects location data even when the app is closed or not in use, and provides a function to prevent duplicate execution when running Navigation.',
+            permission_grant_on_for_location_information_access : '"<B>Bluetooth Connect & Music</B>" collects location data even when the app is closed or not in use, and provides a function to prevent duplicate execution when running Navigation.',
             permission_grant_on_for_background_location_information_access : 'When running destination guidance, <b>use <b>location data</b> in the <b>background</b>.',
             permission_grant_on_for_background_location_information_access_10 : '<B>Select [Always Allow]"</B>.',
             permission_grant_on_for_post_notifications : '<b>Enable</b> the <b>top notification bar</b>. You can use the <Br/>function conveniently.',
@@ -378,7 +382,7 @@ var messages  = {
 
             permission_grant_on_for_accessibility : 'It is used to turn the function On/Off when running the app.<br/>It is used to terminate the function after running the app.',
             permission_grant_on_for_accessibility2 : 'Select "<B>Installed Apps</B>"',
-            permission_grant_on_for_accessibility3 : 'Select "<B>Bluetooth Navi Music</B>"',
+            permission_grant_on_for_accessibility3 : 'Select "<B>Bluetooth Connect & Music</B>"',
             permission_grant_on_for_accessibility4 : 'Permission "<b>On</b>"',
 
             permission_grant_add_for_location : 'Improved execution performance',
@@ -386,8 +390,11 @@ var messages  = {
             permission_grant_add_for_notification_access : 'Prevent duplicate app execution',
             permission_grant_add_for_accessibility : 'Activate "Start/Stop" routine (On/Off)',
             permission_grant_add_for_overlay : '"Show app launch icon',
+            permission_grant_add_for_post_notifications : 'Allow to send notifications',
 
             permission_enable_enhanced_feature : 'If you have trouble running the app, try enabling the permission.',
+            
+            permission_accessibility_enable : "Enable permission and use all features.",
 
             permission_grant_on_for_accessibility_reset : '<b class="color_stop">Accessibility permission has been revoked.</b><br/><br/>To operate normally, <B>the permission</B> should be "<B class="color_stop">turned off</B>" -> "<B class="color_stop">turned on</B>".',
             permission_grant_on_for_accessibility_reset4 : '<b class="color_stop">Turn off"</b> the <b>permissions</b> -&gt; <b class="color_stop">"Turn on"</b>.',
@@ -425,6 +432,7 @@ var messages  = {
             del_company :"\"Company\" has been deleted.",
             del_favorite :"\"Basic Destination\" has been deleted.",
             must_enable_bluetooth : "This feature requires Bluetooth permission to be enabled.",
+            must_enable_accessbility : "This feature requires accessibility permission to be enabled.",
             noti_title:"[Urgent] Background service update error occurred.",
             noti_msg1:"There is an error in the current version and the app is not working properly.",
             noti_msg2:"When the next version is updated, <span style='color:var(--softm-stop)'>uninstall</span> and <span span style='color:var(--softm-start)'>reinstall</span>.",
@@ -442,6 +450,7 @@ var messages  = {
             ad_view_thanks:"Thank you for your support. ^^ :)",
             pay_in_app_subs_thanks:"Thank you for using the subscription. ^^ :)",
             pay_in_app_lifetime_thanks:"Thank you for using the lifetime pass. ^^ :)",
+            destination_execution_hold_time:"After searching for the destination, <span style='color:var(--softm-start)' class='bold'>the original destination is guided</span>.",
           },
           toast:{
             run_option_on : "Turn <span style='color:var(--softm-start)'>on</span>.",
@@ -472,9 +481,9 @@ var messages  = {
           label: {
             app: "앱",
             run: "실행",
-            app_name : "블루투스 내비뮤직",
-            top_bar : "블루투스 내비뮤직",
-            first_start : "내비 선택",
+            app_name : "블루투스 연결 & 음악",
+            top_bar : "블루투스 연결 & 음악",
+            first_start : "시작",
             refresh_start : "새로고침",
             after_second : "초 후 실행됨",
             status_app_enable : '동작이 [<span id="spnState"><span style="color:var(--softm-start);font-weight:bold">활성화</span></span>]됨.',
@@ -549,7 +558,8 @@ var messages  = {
             permission_name_location : "위치 권한",
             permission_name_accessibility : "접근성 권한",
             permission_name_ignore_battery : "절전모드 권한",
-            
+            permission_name_post_notifications : "알림 권한",
+
             navi_auto_start_enable: "실행",
             navi_auto_start_wait: "대기",
             navi_auto_start_disable: "안함",
@@ -626,6 +636,7 @@ var messages  = {
             wifiselect:"와이파이 선택",
             normal_operation:"정상",
             permission_check:"권한확인",
+            permission_enable:"활성화",
             status:"상태",
             navi_app:"앱/내비",
             music_app:"음악/앱",
@@ -712,6 +723,8 @@ var messages  = {
             copy_order_id:"주문번호 복사",
             tmap_map:"티맵지도",
             google_map:"구글지도",
+            destination_execution_hold_time:"내비 목적지 안내 유지 시간",
+            destination_execution_hold_time2:"유지 시간"
           },
           title: {
             main: "기본",
@@ -757,7 +770,7 @@ var messages  = {
             save : "저장 되었습니다.",
             would_save : "저장 하시겠습니까?",
             would_change : "변경 하시겠습니까?",
-            first_start : "블루투스 내비뮤직",
+            first_start : "블루투스 연결 & 음악",
             first_start1 : "🚙 내비 앱",
             // first_start2 : "충전, 블루투스, 와이파이 연결하면,<br/>내비게이션 앱을 시작, 종료할 수 있습니다.",
             first_start2 : "블루투스 연결 되면",
@@ -774,7 +787,7 @@ var messages  = {
             confirm_destination_delete : "기본목적지를 삭제 하시겠습니까?",
             confirm_favorite_delete : "즐겨찾기를 삭제 하시겠습니까?",
             confirm_app_pacakge_delete : "설정된 앱 정보를 삭제하시겠습니까?",
-            select_music_playback_device : '음악 [<span class="bold color_start">재생장치</span>]를 선택하세요.[<span class="bold color_start">클릭</span>]',
+            select_music_playback_device : '음악 [<span class="bold color_start">재생장치</span>] 선택 가능.[<span class="bold color_start">클릭</span>]',
 
             confirm_on : "<span style='color:var(--softm-start)'>켜(on)</span>시겠습니까?",
             confirm_off : "<span style='color:var(--softm-stop)'>끄(off)</span>시겠습니까?",
@@ -837,18 +850,18 @@ var messages  = {
             permission6 : '<span style="color:var(--softm-start);font-weight:bold">절전모드 해제</span> 설정',
             permission7 : '<span style="color:var(--softm-start);font-weight:bold">블루투스 권한</span> 설정',
             permission8 : '<span style="color:var(--softm-start);font-weight:bold">시스템설정 변경 권한</span> 설정',
-            permission_grant_app_select : '"<B>블루투스 내비뮤직</B>" 앱을 선택하세요.',
+            permission_grant_app_select : '"<B>블루투스 연결 & 음악</B>" 앱을 선택하세요.',
 
-            permission_grant_on_for_overlay1 : '"<B>블루투스 내비뮤직</B>" 선택',
+            permission_grant_on_for_overlay1 : '"<B>블루투스 연결 & 음악</B>" 선택',
             permission_grant_on_for_overlay2 : '사용 권한 "<b>켬</b>"',
 
             permission_grant_on : '"<B>권한 허용</B>"을 켜고,',
             permission_grant_backkey_return : '<B>뒤로가기</B> 눌러, 화면으로 돌아오세요.',
             
-            permission_grant_on_for_notification_access : '"<B>블루투스 내비뮤직</B>" 선택',
+            permission_grant_on_for_notification_access : '"<B>블루투스 연결 & 음악</B>" 선택',
             permission_grant_on_for_notification_access_2 : '사용 권한 "<b>켬</b>"',
 
-            permission_grant_on_for_location_information_access : '"<B>블루투스 내비뮤직</B>"은 앱이 종료되었거나 사용 중이 아닐 때도 위치 데이터를 수집하여 티맵 실행시 중복 실행을 방지하는 기능을 제공합니다.',
+            permission_grant_on_for_location_information_access : '"<B>블루투스 연결 & 음악</B>"은 앱이 종료되었거나 사용 중이 아닐 때도 위치 데이터를 수집하여 티맵 실행시 중복 실행을 방지하는 기능을 제공합니다.',
             permission_grant_on_for_background_location_information_access : '목적지 안내 실행시 <b>백그라운드</b>에서 <b>위치 데이터</b>를 활용합니다.',
             permission_grant_on_for_background_location_information_access_10 : '<B>"[항상허용]"</B>을 선택하세요.',
             permission_grant_on_for_post_notifications : '<b>상단 알림바</b>를 <b>활성화</b>하세요.<Br/>기능을 편리하게 이용할 수 있습니다.',
@@ -856,16 +869,19 @@ var messages  = {
 
             permission_grant_on_for_accessibility : '앱 실행시 기능을 On/Off를 위해 이용됩니다.<br/>앱 실행후, 종료기능을 위해 이용됩니다.',
             permission_grant_on_for_accessibility2 : '"<B>설치된 앱</B>" 선택',
-            permission_grant_on_for_accessibility3 : '"<B>블루투스 내비뮤직</B>" 선택',
+            permission_grant_on_for_accessibility3 : '"<B>블루투스 연결 & 음악</B>" 선택',
             permission_grant_on_for_accessibility4 : '사용 권한 "<b>켬</b>"',
             
             permission_grant_add_for_location : '실행성능 향상',
             permission_grant_add_for_ignore_battery : '시스템에의한 앱 중지 방지',
             permission_grant_add_for_notification_access : '앱 중복실행 방지',
             permission_grant_add_for_accessibility : '"시작/종료" 루틴(On/Off) 활성화',
-            permission_grant_add_for_overlay : '"앱 실행 아이콘 표시',
+            permission_grant_add_for_overlay : '앱 실행 아이콘 표시',
+            permission_grant_add_for_post_notifications : '알림을 보내도록 허용',
 
             permission_enable_enhanced_feature : '앱 실행에 문제가 있다면 권한을 활성화 해보세요.',                        
+
+            permission_accessibility_enable : "권한을 활성화하고 모든기능을 사용하세요.",
 
             permission_name_notification_access : "알람 접근",
             permission_name_overlay : "오버레이 권한",
@@ -913,6 +929,7 @@ var messages  = {
             del_company :"\"회사\"가 삭제되었습니다.",
             del_favorite :"\"기본목적지\"가 삭제되었습니다.",
             must_enable_bluetooth : "블루투스 권한을 활성화해야 사용할 수 있는 기능입니다.",
+            must_enable_accessbility : "접근성 권한을 활성화해야 사용할 수 있는 기능입니다.",
             noti_title:"[긴급] 백그라운드 서비스 업데이트 오류 발생.",
             noti_msg1:"현재 버전에 오류가 있어 앱이 정상적으로 동작하지 않습니다.",
             noti_msg2:"다음 버전이 업데이트 되면 <span style='color:var(--softm-stop)'>삭제후</span> <span span style='color:var(--softm-start)'>재설치</span>하세요.",
@@ -930,6 +947,7 @@ var messages  = {
             ad_view_thanks:"응원 감사합니다. ^^ :)",
             pay_in_app_subs_thanks:"구독을 이용해주셔서 감사합니다. ^^ :)",
             pay_in_app_lifetime_thanks:"평생이용권을 이용해주셔서 감사합니다. ^^ :)",
+            destination_execution_hold_time:"목적지를 검색으로 탐색 후 <span style='color:var(--softm-start)' class='bold'>기존 목적지를 안내</span> 합니다.",
           },
           toast:{
             run_option_on : "설정을 <span style='color:var(--softm-start)'>켰</span>습니다.",

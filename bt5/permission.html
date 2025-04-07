@@ -126,7 +126,9 @@ function initPage(v) {
     btnBack    = new mdc.ripple.MDCRipple(document.querySelector("#btnBack"));
     btnBack.listen("click", function(event) {
       if ( checkMode === "accessibility" ) {
-        fn_GoMain(true);
+        // fn_GoMain(true);
+        // history.back();
+        fn_GoFoward("WEB_ONOFF");
       } else {
         fn_BackKeyPressed();
       }
@@ -221,6 +223,13 @@ function initPage(v) {
       $(".androidId.11").show();
     }
   }
+
+  if ( checkMode === "accessibility" ) {
+    window.fn_BackKeyPressedCallBack = function () {
+        history.back();
+    }
+  }
+
 }
 
 window.overlayCheckReload = false;
@@ -416,7 +425,6 @@ function checkGrantCallBack(grant,ok) {
 			$("#permission_write_settings").hide();
       completeGrant(grant);
 		} else {
-    debugger;
       if ( isTopGrant ) $("#permission_write_settings").show();
 		}
 		go();
@@ -592,7 +600,15 @@ function startSettingCallback(grant,ok) {
       }
     } else if (grant == "accessibility") {
       if (ok =="ok") {
-        fn_GoMain(true);
+        if ( checkMode == "accessibility" ) {
+            // location.href="index.html?p_foward_page=ONOFF";
+            // setTimeout(function() {
+              fn_GoFoward("WEB_ONOFF");
+            // }, 1000);
+            
+        } else {
+          fn_GoMain(true);
+        }
         // fn_CheckGrant(grant,"checkGrantCallBack");
       } else {
         snackbar( t("toast.notgrant_accessibility") );

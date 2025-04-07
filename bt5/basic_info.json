@@ -9,10 +9,10 @@
  "liveUserLogFormatName":"1:DEFAULT 2:SHORT",
  "liveUserLogFormat":"1",
 
- "appReleaseUpdtedTime":1742688000000,
+ "appReleaseUpdtedTime":1741910400000,
  "paidOPTypeName":"0:NONE,1:PAID",
- "paidOPType":"0",
- "googlePaidErrorCase":[
+ "paidOPType":"1",
+ "googlePaidErrorCaseTmp":[
     ["java.lang.VerifyError","com.google.android.gms.ads.internal.ClientApi"],
     ["java.lang.VerifyError","AdUtil.addBanner"   ,"BaseAdView.loadAd"],
     ["java.lang.VerifyError","AdUtil.loadRewardAd","RewardedAd.load"  ],
@@ -20,11 +20,20 @@
     ["java.lang.VerifyError","AdUtil.loadRewardAd","RewardedAd.load"  ],
     ["java.lang.NullPointerException","TestActivity.onClick_btnTests" ]
  ],
+ "googlePaidErrorCase":[
+ ],
  "googleAdViewErrorCase":[
   ["java.lang.VerifyError","com.google.android.gms.ads.internal.ClientApi"],
-  ["java.lang.VerifyError","AdUtil.addBanner"   ,"BaseAdView.loadAd"],
-  ["java.lang.VerifyError","AdUtil.loadRewardAd","RewardedAd.load"  ],
+  ["java.lang.VerifyError","AdUtil.addBanner"   ],
+  ["java.lang.VerifyError","AdUtil.loadRewardAd"  ],
+  ["java.lang.VerifyError" ],
   ["java.lang.NullPointerException","TestActivity.onClick_btnTests" ]
+],
+"googleAdViewErrorCaseTmp":[
+ ["java.lang.VerifyError","com.google.android.gms.ads.internal.ClientApi"],
+ ["java.lang.VerifyError","AdUtil.addBanner"   ,"BaseAdView.loadAd"],
+ ["java.lang.VerifyError","AdUtil.loadRewardAd","RewardedAd.load"  ],
+ ["java.lang.NullPointerException","TestActivity.onClick_btnTests" ]
 ],
  "forcePaidOPTypeUUIDs":[
   "e575416df5cd7da3",

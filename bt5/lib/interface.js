@@ -401,6 +401,29 @@ function fn_GoMain(restart) {
 	}
 }
 
+/**
+ * API 112 : GoPermission : onCreate
+ */
+function fn_GoPermission(P_CHECK_MODE,P_PARAMS) {
+	var result = { "header":{ "api":"112" }, "body":{ "P_CHECK_MODE":P_CHECK_MODE,"P_PARAMS":P_PARAMS } };
+	if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
+	    fn_Js_Bridge(result);
+	} else {
+		document.location.href="index.html";
+	}
+}
+
+/**
+ * API 113 : GoFoward : onCreate
+ */
+function fn_GoFoward(P_FOWARD_PAGE,P_TIDX,P_PARAMS) {
+	var result = { "header":{ "api":"113" }, "body":{ "P_FOWARD_PAGE":P_FOWARD_PAGE,"P_TIDX":P_TIDX,"P_PARAMS":P_PARAMS } };
+	if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
+	    fn_Js_Bridge(result);
+	} else {
+		document.location.href="index.html";
+	}
+}
 
 /**
  * API 110 : goMain : onCreate
@@ -1071,8 +1094,24 @@ function fn_GetPermissions(key, callBackFunc) {
  * @param callBackFunc   콜백 함수
  *
  */
-function fn_getBluetooths(key, callBackFunc) {
+function fn_GetBluetooths(key, callBackFunc) {
 	var result = { "header":{ "api":"305" }, "body":{ "key":key, "callBackFunc":callBackFunc } };
+	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
+		 fn_Js_Bridge(result);
+	 }else{
+		 eval(callBackFunc + "('" + localStorage.getItem(key) + "')");
+	 }
+}
+
+/**
+ * API 305 : getBluetooths
+ *
+ * @param key            불러올 데이터 키값
+ * @param callBackFunc   콜백 함수
+ *
+ */
+function fn_enableBluetooth(key, callBackFunc) {
+	var result = { "header":{ "api":"315" }, "body":{ "key":key, "callBackFunc":callBackFunc } };
 	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
 		 fn_Js_Bridge(result);
 	 }else{

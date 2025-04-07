@@ -9,7 +9,7 @@
  
   <!-- <link href="./lib/material-components-web.min.css" rel="stylesheet"> -->
   <link href="./lib/material-components-web.min.new.css" rel="stylesheet">
-  <!-- <link rel="stylesheet" href="https:/unpkg.com/material-components-web@latest/dist/material-components-web.min.css"> -->
+  <!-- <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"> -->
 
   <!-- <script src="./lib/material-components-web.min.js"></script> -->
   <script src="./lib/material-components-web.min.new.js"></script>
@@ -79,7 +79,8 @@ var granted =[];
 var allGranted = false;
 
 // var checkGrantInfo= ['accessibility','notification_access','ignore_battery','location'];// ,'ignore_battery'
-var checkGrantInfo= ['notification_access'];// ,'ignore_battery'
+// 권한 메시지 출력 순서
+var checkGrantInfo= ['notification_access','post_notifications','ignore_battery' ];// ,'ignore_battery'
 
 var appPackageGubun = "Navi";
 $( document ).ready(function() {
@@ -127,7 +128,7 @@ $( document ).ready(function() {
                     "type": 1,
                     "diassembled": "OBDII"
                 },
-                "startBluetooth": true,
+                "startBluetooth": false,
                 "workGotoTimeFrom": "06:00",
                 "naviRenaviPreventTime": 3,
                 "naviAutoStart": "START",
@@ -374,14 +375,14 @@ function initPermission(v,cb) {
             //     return {"name":item,"value":false};
             // });
             granted = [
+                {name: 'post_notifications', value: true},
                 {name: 'overlay', value: true},
-                {name: 'location', value: true},
+                // {name: 'location', value: true},
                 {name: 'notification_access', value: true},
-                {name: 'accessibility', value: false},
+                // {name: 'accessibility', value: false},
                 {ignore_battery: false, name: 'ignore_battery', value: false}
             ];
         }
-
 
         var grantName = "";
         for(var i = 0; i < granted.length;i++) {
@@ -404,9 +405,10 @@ function initPermission(v,cb) {
             $("#status_permission").hide();
             $(".status_permission").hide();
         }
-        
+
         $("#btnStatus").removeClass("bgcolor_start bgcolor_stop").addClass(allGranted && info.isAccessbilityServiceRunning ? "bgcolor_start" : "bgcolor_stop") // blink bgcolor_stop
-            .html(allGranted && info.isAccessbilityServiceRunning ? t("label.normal_operation") : t("label.permission_check"));
+            .html(t("label.permission_enable"));
+        // .html(allGranted && info.isAccessbilityServiceRunning ? t("label.normal_operation") : t("label.permission_check"));
         // .html(allGranted ? "정상동작" : "권한확인");
         
         if ( info && !info.isAccessbilityServiceRunning ) {
@@ -818,7 +820,10 @@ function initBluetoothList(v) {
 
     btnRefresh    = new mdc.ripple.MDCRipple(document.querySelector("#btnRefresh"));
 	btnRefresh.listen("click", function(event) {
-		fn_Reload(true);
+        window.enableBlueToothOnCallback = function() {
+            fn_Reload(true);
+        }
+        fn_enableBluetooth("", "enableBlueToothOnCallback");
     });
 
     /** restore bluetooth -> bluetooths */
@@ -978,9 +983,10 @@ function initBluetoothList(v) {
     if (isWeb) {
         getBluetoothsCallBack();
     } else {
+        debugger;
         // if ( appListItems === null ) fn_getInstallPackages("", "getBluetoothsCallBack");
         // fn_getInstallPackages("", "getBluetoothsCallBack");
-        fn_getBluetooths("", "getBluetoothsCallBack");
+        fn_GetBluetooths("", "getBluetoothsCallBack");
     }           
 }
 
@@ -1218,8 +1224,8 @@ function initBluetooth(v) {
     if ( 
         !v.permissions.BLUETOOTH &&
         ( v.startBluetooth ||
-          v.startStopOnOff.bluetooth.start || 
-          v.startStopOnOff.bluetooth.stop
+          v.startStopOnOff.bluetooth.start.use_yn || 
+          v.startStopOnOff.bluetooth.stop.use_yn
         )
     ) {
         // window.startSettingCallback = function(grant,ok) {
@@ -1248,13 +1254,13 @@ function initBluetooth(v) {
     }
 
     /** 알림권한 */
-    if ( !v.permissions.POST_NOTIFICATIONS ) {
-        // function checkGrantCallBack(grant,ok) {
-        //     console.log("checkGrantCallBack" , grant,ok);
-        // }
-        // fn_CheckGrant("post_notifications","checkGrantCallBack");
-        fn_StartSetting("post_notifications");
-    }
+    // if ( !v.permissions.POST_NOTIFICATIONS ) {
+    //     // function checkGrantCallBack(grant,ok) {
+    //     //     console.log("checkGrantCallBack" , grant,ok);
+    //     // }
+    //     // fn_CheckGrant("post_notifications","checkGrantCallBack");
+    //     fn_StartSetting("post_notifications");
+    // }
 }
 
 function initWifi(v) {
@@ -1624,7 +1630,7 @@ function saveStartStopOnOff() {
         <div class="mdc-drawer__header app_info">
             <img src="./images/logo_100.svg" width="50" style="margin-top: 10px;"/>
             <!-- style="height:55px" -->
-            <div class="mdc-dramdc-drawer__contentwer__title" data-i18n="[html]label.app_name">블루투스 내비뮤직</div>
+            <div class="mdc-dramdc-drawer__contentwer__title" data-i18n="[html]label.app_name">블루투스 연결 & 음악</div>
             
         </div>
         <hr class="sub"/>
@@ -1823,26 +1829,26 @@ function saveStartStopOnOff() {
             <div id="status_permission" class="row main padding_5 bg_lightwheat" style="background-color: wheat;border-radius: 10px 10px 10px 10px;">
                 <!--
                     -->
-                    <div class="row  flex left bold">
+                <div class="row left bold none">
                     <div class="flex-grow align-self-center left basic_font_medium2" style="opacity: 1;"
                     data-i18n="message.permission_enable_enhanced_feature"
                     >
                     앱 실행에 문제가 있다면 권한을 활성화 해보세요.
                     </div>
-                </div>        
-                <div class="row main flex left">
+                </div>
+                <div class="row main left flex">
                     <!-- <label for="" class="title" style=""><strong data-i18n="label.permission">권한</strong></label> -->
                     <div class="flex-grow basic_font_medium1 align-self-center left bold" id="status_permission_message" style="opacity: 1;">
                         <!--권한 상태메시지-->
                     </div>
-                </div>                   
+                </div>
                 <div class="row sub flex right">
                     <div class="flex-grow basic_font_medium1 align-self-center left" id="status_permission_name" style="opacity: 1;">
                         위치 권한
                     </div>
                     <div class="flex-grow basic_font_medium2 align-self-center right" style="opacity: 0.90;">
                         <button id="btnStatus" class="mdc-button mdc-button--raised  align-self-center">
-                            <strong data-i18n="label.permission_settings" class="bolder">권한 설정</strong>
+                            <strong data-i18n="label.permission_settings" class="bolder">활성화</strong>
                         </button>
                     </div>
                 </div>
