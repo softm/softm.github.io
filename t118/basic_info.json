@@ -265,6 +265,6 @@
  "userInfoLogFormatName":"1:DEFAULT 2:SHORT",
  "userInfoLogFormat":"1",
 
- "checkGrantInfo":["notification_access","accessibility","ignore_battery","location"]
+ "checkGrantInfo":["notification_access","ignore_battery","accessibility"]
 
  }

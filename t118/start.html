@@ -625,7 +625,7 @@ window.getInfoCallBack = function (data) {
               fn_DeviceSaveData("_MUSIC_APP_PACKAGE", "");
             }
         });
-        
+        btnSwitchMusicPlayer.emit("click"); // 기본을 false로 적용
     }
     fn_GetInfo("", "getInfoCallBack");
 
@@ -819,7 +819,7 @@ function go() {
 
 
         <button id="btnFirstStart" class="mdc-button mdc-button--raised margin_right_5" style="width:100%;font-size:16px">
-          <strong data-i18n="label.first_start">설정 시작</strong>
+          <strong data-i18n="label.first_start">시작</strong>
             <!-- <strong data-i18n="label.permission_overlay">Show over other apps</strong> -->
             <!-- <strong>시작</strong> -->
         </button>

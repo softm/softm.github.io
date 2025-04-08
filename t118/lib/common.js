@@ -6,7 +6,7 @@ var messages  = {
             run: "Run",
             app_name: "Drive Auto Nav",
             top_bar: "Drive Auto Nav",
-            first_start : "Select Navi",
+            first_start : "Start",
             refresh_start : "Refresh",
             after_second: "executed after seconds",
             status_app_enable : 'The action is [<span id="spnState"><span style="color:var(--softm-start);font-weight:bold">enabled</span></span>].',
@@ -79,6 +79,7 @@ var messages  = {
             permission_name_location : "Location permission",
             permission_name_accessibility : "Accessibility permission",
             permission_name_ignore_battery : "Power saving mode permission",
+            permission_name_post_notifications : "Notification permission",
 
             navi_auto_start_enable: "Run",
             navi_auto_start_wait: "Wait",
@@ -157,6 +158,7 @@ var messages  = {
             wifiselect:"Select WIFI",
             normal_operation:"Normal",
             permission_check:"Permission check",
+            permission_enable:"enable",
             status:"Status",
             navi_app:"App/Navi",
             music_app:"App/Music",
@@ -243,6 +245,8 @@ var messages  = {
             copy_order_id:"Copy order number",
             tmap_map:"TMap Map",
             google_map:"Google Map",
+            destination_execution_hold_time:"Navi destination hold time",
+            destination_execution_hold_time2:"hold time"
           },
           title: {
             main: "Basic",
@@ -299,6 +303,7 @@ var messages  = {
             confirm_destination_delete : "Are you sure you want to delete basic destination?",
             confirm_favorite_delete: "Are you sure you want to delete favorite?",
             confirm_app_pacakge_delete : "Do you want to delete the set app information?",
+            select_music_playback_device : 'Select the music [<span class="bold color_start">playback device</span>]. [<span class="bold color_start">Click</span>]',
 
             confirm_on : "Would you like to turn it <span style='color:var(--softm-start)'>on</span>?",
             confirm_off : "Would you like to turn it <span style='color:var(--softm-stop)'>off</span>?",
@@ -385,8 +390,11 @@ var messages  = {
             permission_grant_add_for_notification_access : 'Prevent duplicate app execution',
             permission_grant_add_for_accessibility : 'Activate "Start/Stop" routine (On/Off)',
             permission_grant_add_for_overlay : '"Show app launch icon',
+            permission_grant_add_for_post_notifications : 'Allow to send notifications',
 
             permission_enable_enhanced_feature : 'If you have trouble running the app, try enabling the permission.',
+            
+            permission_accessibility_enable : "Enable permission and use all features.",
 
             permission_grant_on_for_accessibility_reset : '<b class="color_stop">Accessibility permission has been revoked.</b><br/><br/>To operate normally, <B>the permission</B> should be "<B class="color_stop">turned off</B>" -> "<B class="color_stop">turned on</B>".',
             permission_grant_on_for_accessibility_reset4 : '<b class="color_stop">Turn off"</b> the <b>permissions</b> -&gt; <b class="color_stop">"Turn on"</b>.',
@@ -424,6 +432,7 @@ var messages  = {
             del_company :"\"Company\" has been deleted.",
             del_favorite :"\"Basic Destination\" has been deleted.",
             must_enable_bluetooth : "This feature requires Bluetooth permission to be enabled.",
+            must_enable_accessbility : "This feature requires accessibility permission to be enabled.",
             noti_title:"[Urgent] Background service update error occurred.",
             noti_msg1:"There is an error in the current version and the app is not working properly.",
             noti_msg2:"When the next version is updated, <span style='color:var(--softm-stop)'>uninstall</span> and <span span style='color:var(--softm-start)'>reinstall</span>.",
@@ -441,6 +450,7 @@ var messages  = {
             ad_view_thanks:"Thank you for your support. ^^ :)",
             pay_in_app_subs_thanks:"Thank you for using the subscription. ^^ :)",
             pay_in_app_lifetime_thanks:"Thank you for using the lifetime pass. ^^ :)",
+            destination_execution_hold_time:"After searching for the destination, <span style='color:var(--softm-start)' class='bold'>the original destination is guided</span>.",
           },
           toast:{
             run_option_on : "Turn <span style='color:var(--softm-start)'>on</span>.",
@@ -473,7 +483,7 @@ var messages  = {
             run: "실행",
             app_name : "티맵자동실행",
             top_bar : "티맵자동실행",
-            first_start : "내비 선택",
+            first_start : "시작",
             refresh_start : "새로고침",
             after_second : "초 후 실행됨",
             status_app_enable : '동작이 [<span id="spnState"><span style="color:var(--softm-start);font-weight:bold">활성화</span></span>]됨.',
@@ -548,7 +558,8 @@ var messages  = {
             permission_name_location : "위치 권한",
             permission_name_accessibility : "접근성 권한",
             permission_name_ignore_battery : "절전모드 권한",
-            
+            permission_name_post_notifications : "알림 권한",
+
             navi_auto_start_enable: "실행",
             navi_auto_start_wait: "대기",
             navi_auto_start_disable: "안함",
@@ -625,6 +636,7 @@ var messages  = {
             wifiselect:"와이파이 선택",
             normal_operation:"정상",
             permission_check:"권한확인",
+            permission_enable:"활성화",
             status:"상태",
             navi_app:"앱/내비",
             music_app:"음악/앱",
@@ -711,6 +723,8 @@ var messages  = {
             copy_order_id:"주문번호 복사",
             tmap_map:"티맵지도",
             google_map:"구글지도",
+            destination_execution_hold_time:"내비 목적지 안내 유지 시간",
+            destination_execution_hold_time2:"유지 시간"
           },
           title: {
             main: "기본",
@@ -773,6 +787,7 @@ var messages  = {
             confirm_destination_delete : "기본목적지를 삭제 하시겠습니까?",
             confirm_favorite_delete : "즐겨찾기를 삭제 하시겠습니까?",
             confirm_app_pacakge_delete : "설정된 앱 정보를 삭제하시겠습니까?",
+            select_music_playback_device : '음악 [<span class="bold color_start">재생장치</span>]를 선택하세요.[<span class="bold color_start">클릭</span>]',
 
             confirm_on : "<span style='color:var(--softm-start)'>켜(on)</span>시겠습니까?",
             confirm_off : "<span style='color:var(--softm-stop)'>끄(off)</span>시겠습니까?",
@@ -861,9 +876,12 @@ var messages  = {
             permission_grant_add_for_ignore_battery : '시스템에의한 앱 중지 방지',
             permission_grant_add_for_notification_access : '앱 중복실행 방지',
             permission_grant_add_for_accessibility : '"시작/종료" 루틴(On/Off) 활성화',
-            permission_grant_add_for_overlay : '"앱 실행 아이콘 표시',
+            permission_grant_add_for_overlay : '앱 실행 아이콘 표시',
+            permission_grant_add_for_post_notifications : '알림을 보내도록 허용',
 
             permission_enable_enhanced_feature : '앱 실행에 문제가 있다면 권한을 활성화 해보세요.',                        
+
+            permission_accessibility_enable : "권한을 활성화하고 모든기능을 사용하세요.",
 
             permission_name_notification_access : "알람 접근",
             permission_name_overlay : "오버레이 권한",
@@ -911,6 +929,7 @@ var messages  = {
             del_company :"\"회사\"가 삭제되었습니다.",
             del_favorite :"\"기본목적지\"가 삭제되었습니다.",
             must_enable_bluetooth : "블루투스 권한을 활성화해야 사용할 수 있는 기능입니다.",
+            must_enable_accessbility : "접근성 권한을 활성화해야 사용할 수 있는 기능입니다.",
             noti_title:"[긴급] 백그라운드 서비스 업데이트 오류 발생.",
             noti_msg1:"현재 버전에 오류가 있어 앱이 정상적으로 동작하지 않습니다.",
             noti_msg2:"다음 버전이 업데이트 되면 <span style='color:var(--softm-stop)'>삭제후</span> <span span style='color:var(--softm-start)'>재설치</span>하세요.",
@@ -928,6 +947,7 @@ var messages  = {
             ad_view_thanks:"응원 감사합니다. ^^ :)",
             pay_in_app_subs_thanks:"구독을 이용해주셔서 감사합니다. ^^ :)",
             pay_in_app_lifetime_thanks:"평생이용권을 이용해주셔서 감사합니다. ^^ :)",
+            destination_execution_hold_time:"목적지를 검색으로 탐색 후 <span style='color:var(--softm-start)' class='bold'>기존 목적지를 안내</span> 합니다.",
           },
           toast:{
             run_option_on : "설정을 <span style='color:var(--softm-start)'>켰</span>습니다.",
