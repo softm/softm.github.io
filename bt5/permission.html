@@ -31,6 +31,7 @@
   <script src="./lib/interface.js"></script>
 <script>
 var checkMode = getParam("p_check_mode");
+var params = getParam("p_params");
 var btnHome = null;
 var btnBack = null;
 var btnGrantAccessibilityLater = null;
@@ -128,7 +129,11 @@ function initPage(v) {
       if ( checkMode === "accessibility" ) {
         // fn_GoMain(true);
         // history.back();
-        fn_GoFoward("WEB_ONOFF");
+        if ( !params ) { 
+          fn_GoFoward("WEB_ONOFF");
+        } else {
+          fn_GoFoward("WEB_" + params);
+        }
       } else {
         fn_BackKeyPressed();
       }
@@ -603,7 +608,11 @@ function startSettingCallback(grant,ok) {
         if ( checkMode == "accessibility" ) {
             // location.href="index.html?p_foward_page=ONOFF";
             // setTimeout(function() {
-              fn_GoFoward("WEB_ONOFF");
+              if ( !params ) { 
+                fn_GoFoward("WEB_ONOFF");
+              } else {
+                fn_GoFoward("WEB_" + params);
+              }
             // }, 1000);
             
         } else {

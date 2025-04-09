@@ -192,6 +192,8 @@ $( document ).ready(function() {
     initOnlyStopAfterNaving(v);
 
     initWorkGoTo(v);
+    
+  // initGrantAccessibility(v);
 
     initBasicInfo();
   } // getInfoCallBack end
@@ -631,6 +633,17 @@ function initAppPackage(v) {
 function initStopMode(v) {
     chipStopMode = new mdc.chips.MDCChipSet(document.querySelector('#chip_stop_mode'));
     chipStopMode.listen("click", function (e) {
+        if ( !v.isAccessbilityServiceRunning ) {
+          $(chipStopMode.chips[0].root).removeClass("grey").addClass("grey");
+          $(chipStopMode.chips[1].root).removeClass("grey").addClass("grey");
+          $(chipStopMode.chips[2].root).removeClass("grey").addClass("grey");
+          $(chipStopMode.chips[3].root).removeClass("grey").addClass("grey");
+          chipStopMode.chips[0].selected = false;
+          chipStopMode.chips[1].selected = false;
+          chipStopMode.chips[2].selected = false;
+          chipStopMode.chips[3].selected = false;
+          return;
+        }
         var adapter = chipStopMode.getDefaultFoundation().adapter;
         var selectId = chipStopMode.selectedChipIds[0];
         var index = adapter.getIndexOfChipById(selectId);
@@ -982,6 +995,37 @@ function initDestinationExecutionHoldTime(v) {
   // window.tmpdestinationExecutionHoldTime = parseInt(v.naviDestinationExecutionHoldTime,10);
   // destinationExecutionHoldTime.input.value = window.tmpdestinationExecutionHoldTime;
 }
+
+function initGrantAccessibility(v) {
+    btnGrantAccessibility = new mdc.ripple.MDCRipple(document.querySelector("#btnGrantAccessibility"));
+    btnGrantAccessibility.listen("click", function (event) {
+        // fn_OpenPop("permission.html?p_check_mode=accessibility");
+        // fn_OpenUrl("permission.html?p_check_mode=accessibility");
+        fn_GoPermission("accessibility","SETTING");
+    });
+
+    if ( v.isAccessbilityServiceRunning ) {
+      $("#permission_accessibility_for_stop").removeClass("bg_lightwheat border-round");
+      $(".permission_accessibility").hide();
+    } else {
+      $(chipStopMode.chips[0].root).removeClass("grey").addClass("grey");
+      $(chipStopMode.chips[1].root).removeClass("grey").addClass("grey");
+      $(chipStopMode.chips[2].root).removeClass("grey").addClass("grey");
+      $(chipStopMode.chips[3].root).removeClass("grey").addClass("grey");
+      chipStopMode.chips[0].selected = false;
+      chipStopMode.chips[1].selected = false;
+      chipStopMode.chips[2].selected = false;
+      chipStopMode.chips[3].selected = false;
+    }
+}
+
+function getInfo() {
+    fn_GetInfo("", "getInfoCallBack");
+}
+function saveStartStopOnOff(callBack) {
+    fn_DeviceSaveData("_START_STOP_ON_OFF", window.info.startStopOnOff,callBack?callBack:"getInfo");
+}
+
 </script>
 </head>
 <body>
@@ -1411,6 +1455,17 @@ function initDestinationExecutionHoldTime(v) {
               style="color:var(--softm-stop);font-weight:bold">중지</span></span>]됨.</span>
             </div>
             <hr class="sub"/>
+            <div class="row bg_lightwheat border-round none" id="permission_accessibility_for_stop">
+              <div class="row flex right padding_left_10 padding_right_10 padding_5 bg_lightwheat permission_accessibility">
+                <div class="flex-grow basic_font_medium1 align-self-center left bold" style="opacity: 1;" data-i18n="message.permission_accessibility_enable_for_stop">
+                  권한을 활성화하고 종료기능을 이용하세요.
+                </div>
+                <div class="flex-grow basic_font_medium2 align-self-center right" style="opacity: 0.90;">
+                    <button id="btnGrantAccessibility" class="mdc-button mdc-button--raised  align-self-center bgcolor_stop padding_left_5 padding_right_5">
+                        <strong data-i18n="label.permission_enable" class="bolder">활성화</strong>
+                    </button>
+                </div>
+              </div>
 
             <!-- 종료 -->
             <div class="row sub none"><!--fieldset-->
@@ -1454,6 +1509,7 @@ function initDestinationExecutionHoldTime(v) {
                    </div>
                 </div>
               </div>
+            </div>
             </div>
 
             <hr class="sub none"/>

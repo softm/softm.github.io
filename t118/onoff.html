@@ -1140,7 +1140,7 @@ function initGrantAccessibility(v) {
     btnGrantAccessibility.listen("click", function (event) {
         // fn_OpenPop("permission.html?p_check_mode=accessibility");
         // fn_OpenUrl("permission.html?p_check_mode=accessibility");
-        fn_GoPermission("accessibility");
+        fn_GoPermission("accessibility","ONOFF");
     });
     if ( v.isAccessbilityServiceRunning ) {
         $(".permission_accessibility").hide();

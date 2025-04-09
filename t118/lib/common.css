@@ -842,3 +842,7 @@ hr.sub {
   background-color:lightgray !important;
   opacity: 0.7;
 }
+
+.border-round {
+  border-radius: 10px 10px 10px 10px;
+}

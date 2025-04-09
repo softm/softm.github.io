@@ -1004,7 +1004,7 @@ function initBluetooth(v) {
                     } else {
                         // if ( appListItems === null ) fn_getInstallPackages("", "getBluetoothsCallBack");
                         // fn_getInstallPackages("", "getBluetoothsCallBack");
-                        fn_getBluetooths("", "getBluetoothsCallBack");
+                        fn_GetBluetooths("", "getBluetoothsCallBack");
                     }
 
                 } else {
@@ -1037,7 +1037,7 @@ function initBluetooth(v) {
     var btnSearchBluetooth = new mdc.ripple.MDCRipple(document.querySelector(".btnSearchBluetooth"));
     btnSearchBluetooth.listen("click", function(event) {
         showLoading();
-        fn_getBluetooths("", "getBluetoothsCallBack");
+        fn_GetBluetooths("", "getBluetoothsCallBack");
     });
 
     bluetoothSelectDialog = new mdc.dialog.MDCDialog(document.querySelector(".bluetooth_select.mdc-dialog"));

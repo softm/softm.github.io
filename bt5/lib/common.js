@@ -395,6 +395,7 @@ var messages  = {
             permission_enable_enhanced_feature : 'If you have trouble running the app, try enabling the permission.',
             
             permission_accessibility_enable : "Enable permission and use all features.",
+            permission_accessibility_enable_for_stop : "Enable the permission and use the stop function.",
 
             permission_grant_on_for_accessibility_reset : '<b class="color_stop">Accessibility permission has been revoked.</b><br/><br/>To operate normally, <B>the permission</B> should be "<B class="color_stop">turned off</B>" -> "<B class="color_stop">turned on</B>".',
             permission_grant_on_for_accessibility_reset4 : '<b class="color_stop">Turn off"</b> the <b>permissions</b> -&gt; <b class="color_stop">"Turn on"</b>.',
@@ -882,6 +883,7 @@ var messages  = {
             permission_enable_enhanced_feature : '앱 실행에 문제가 있다면 권한을 활성화 해보세요.',                        
 
             permission_accessibility_enable : "권한을 활성화하고 모든기능을 사용하세요.",
+            permission_accessibility_enable_for_stop : "권한을 활성화하고 종료기능을 이용하세요.",
 
             permission_name_notification_access : "알람 접근",
             permission_name_overlay : "오버레이 권한",

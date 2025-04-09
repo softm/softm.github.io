@@ -1094,7 +1094,7 @@ function fn_GetPermissions(key, callBackFunc) {
  * @param callBackFunc   콜백 함수
  *
  */
-function fn_getBluetooths(key, callBackFunc) {
+function fn_GetBluetooths(key, callBackFunc) {
 	var result = { "header":{ "api":"305" }, "body":{ "key":key, "callBackFunc":callBackFunc } };
 	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
 		 fn_Js_Bridge(result);
