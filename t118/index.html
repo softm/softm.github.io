@@ -682,13 +682,14 @@ function initNaviMode(v) {
     var idx = parseInt(v.naviMode, 10) - 1;
     chipNaviModeSelectedIndex = idx;
     // chipSetPopup.chips[chipSelectIndex].selected = true;
-    var event = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
-    event.onlySelect = true; // pass data custom 
-    //		  var cb =document.querySelector("#mdc-chip-" + (chipNaviModeSelectedIndex+1));
-    var cb = $("#chip_navi_mode").find(".mdc-chip:eq(" + chipNaviModeSelectedIndex + ")")[0];
-    var cancelled = !cb.dispatchEvent(event);
-    cb.focus();
-    
+    // var event = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
+    // event.onlySelect = true; // pass data custom 
+    // //		  var cb =document.querySelector("#mdc-chip-" + (chipNaviModeSelectedIndex+1));
+    // var cb = $("#chip_navi_mode").find(".mdc-chip:eq(" + chipNaviModeSelectedIndex + ")")[0];
+    // var cancelled = !cb.dispatchEvent(event);
+    // cb.focus();
+
+    chipSetNaviMode.chips[chipNaviModeSelectedIndex].selected = true;
 }
 
 function initIndependence(v) {
@@ -809,9 +810,11 @@ function initPower(v) {
     // 충전모드
     var idx = parseInt(v.chargingMode, 10) - 1;
     chipChargingModeSelectedIndex = idx;
-    var cb = $("#chip_charging_mode").find(".mdc-chip:eq(" + chipChargingModeSelectedIndex + ")")[0];
-    var cancelled = !cb.dispatchEvent(event);
-    cb.focus();
+    // var cb = $("#chip_charging_mode").find(".mdc-chip:eq(" + chipChargingModeSelectedIndex + ")")[0];
+    // var cancelled = !cb.dispatchEvent(event);
+    // cb.focus();
+
+    chipSetChargingMode.chips[chipChargingModeSelectedIndex].selected = true;
 }
 
 function initBluetooth(v) {
