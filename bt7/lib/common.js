@@ -452,6 +452,9 @@ var messages  = {
             pay_in_app_subs_thanks:"Thank you for using the subscription. ^^ :)",
             pay_in_app_lifetime_thanks:"Thank you for using the lifetime pass. ^^ :)",
             destination_execution_hold_time:"After searching for the destination, <span style='color:var(--softm-start)' class='bold'>the original destination is guided</span>.",
+            install_completed: "Installation <span style='color:var(--softm-start)' class='bold'>complete</span>.<br/>Thank you for using it.",
+            install_completed1: "Installation <span style='color:var(--softm-start)' class='bold'>complete</span>.",
+            install_completed2: "Thank you for using it.",
           },
           toast:{
             run_option_on : "Turn <span style='color:var(--softm-start)'>on</span>.",
@@ -950,6 +953,9 @@ var messages  = {
             pay_in_app_subs_thanks:"구독을 이용해주셔서 감사합니다. ^^ :)",
             pay_in_app_lifetime_thanks:"평생이용권을 이용해주셔서 감사합니다. ^^ :)",
             destination_execution_hold_time:"목적지를 검색으로 탐색 후 <span style='color:var(--softm-start)' class='bold'>기존 목적지를 안내</span> 합니다.",
+            install_completed: "설치가 <span style='color:var(--softm-start)' class='bold'>완료</span> 되었습니다.<br/>이용해 주셔서 감사합니다.",
+            install_completed1: "설치가 <span style='color:var(--softm-start)' class='bold'>완료</span> 되었습니다.",
+            install_completed2: "이용해 주셔서 감사합니다.",
           },
           toast:{
             run_option_on : "설정을 <span style='color:var(--softm-start)'>켰</span>습니다.",

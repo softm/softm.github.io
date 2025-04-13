@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>티</title>
+  <link rel="shortcut icon" href="#">
+  
+  <!-- <link href="./lib/material-components-web.min.css" rel="stylesheet"> -->
+  <link href="./lib/material-components-web.min.new.css" rel="stylesheet">
+  <!-- <script src="./lib/material-components-web.min.js"></script> -->
+  <script src="./lib/material-components-web.min.new.js"></script>
+  <link rel="stylesheet" href="./lib/icon.css">
+  <link rel="stylesheet" href="./lib/common.css?a=">
+  <link href='https://fonts.googleapis.com/css?family=Audiowide|Iceland|Monoton|Pacifico|Press+Start+2P|Vampiro+One' rel='stylesheet' type='text/css'>
+
+ </head>
+
+<!--  using - default i18next-->
+<!--
+<script src="https://unpkg.com/i18next/i18next.js"></script>
+<script src="https://unpkg.com/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+<script src="https://unpkg.com/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.js"></script>
+-->
+
+<!-- using - jquery i18next -->
+<!-- -->
+  <script src="./lib/jquery-3.6.4.min.js"></script>
+  <script src="./lib/i18next.min.js"></script>
+  <script src="./lib/common.js?a=2"></script>
+  <script src="./lib/interface.js"></script>
+<script>
+var checkMode = getParam("p_check_mode");
+var params = getParam("p_params");
+var btnHome = null;
+var btnBack = null;
+
+$( document ).ready(function() {
+  window.getInfoCallBack = function (data) {
+        if (isWeb) {
+            window.info = {
+                "isInKorea": true,
+                "appPackage": "com.skt.tmap.ku",
+                "chargingMode": "1",
+                "startWifi": true,
+                "usingRegHome": true,
+                "wifi": {
+                    "bssid": "00:0D:18:00:00:01",
+                    "ssid": "SoftmWifi",
+                    "connected": true
+                },
+                "workGotoOffTime": false,
+                "startPower": true,
+                "naviGeofenceRadius": 200,
+                "naviDestination": "1",
+                "workOffTimeFrom": "17:30",
+                "naviMode": "1",
+                "workGotoTimeTo": "08:50",
+                "naviOverlayWaitTime": 3,
+                "naviPopupMode": true,
+                "bluetooth": {
+                    "bondState": 12,
+                    "address": "00:0D:18:00:00:01",
+                    "name": "OBDII",
+                    "type": 1,
+                    "diassembled": "OBDII"
+                },
+                "startBluetooth": false,
+                "workGotoTimeFrom": "06:00",
+                "naviRenaviPreventTime": 3,
+                "naviAutoStart": true,
+                "workOffTimeTo": "19:00",
+                "notiIcon": true,
+                "independenceCondition": true,
+                "startStopOnOff":{
+                    bluetooth:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    wifi:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    tethering:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    airplane_mode:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    screen_on:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    lock:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    completed_lock:{start:{use_yn:true,onoff:"off"},stop:{use_yn:true,onoff:"on"}},
+                    play_music:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    home_screen:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    power_off:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                },
+                "startMode":"1",
+                "stopMode":"1",
+                "appEnable":"0",
+                "onlyStopAfterNaving":true,
+                serverHost:location.origin,
+                pathName:location.pathname.split("/")[1],
+                versionCode:11,
+                versionName:"0.0.0.1",
+                // + "http://www.softm.net/tdev"
+                isAccessbilityServiceRunning:false,
+                permissions:{
+                    "LOCATION": true,
+                    "ACCESSIVILITY": false,
+                    "NOTIFICAION_ACCESS": true,
+                    "WRITE_SETTING": true,
+                    "BLUETOOTH": true,
+                    "IGNORE_BATTERY": true,
+                    "USAGESTATS": false,
+                    "OVERLAY": true
+                },
+                appInstalled:true,
+                appUpdated:true,
+            }
+        } else {
+            window.info = (JSON.parse(data));
+        }
+        initPage(window.info);
+    }
+    fn_GetInfo("", "getInfoCallBack");
+});
+
+function initPage(v) {
+  btnHome    = new mdc.ripple.MDCRipple(document.querySelector("#btnHome"));
+  btnHome.listen("click", function(event) {
+    self.close();
+  });
+
+  btnBack    = new mdc.ripple.MDCRipple(document.querySelector("#btnBack"));
+  btnBack.listen("click", function(event) {
+    if ( checkMode === "accessibility" ) {
+      // fn_GoMain(true);
+      // history.back();
+      if ( !params ) { 
+        fn_GoFoward("WEB_ONOFF");
+      } else {
+        fn_GoFoward("WEB_" + params);
+      }
+    } else {
+      fn_BackKeyPressed();
+    }
+    //fn_OpenUrl("index.html?lng="+navigator.language.split("-")[0]);
+  });
+
+  const btnInstallEnd = new mdc.ripple.MDCRipple(document.querySelector("#btnInstallEnd"));
+  var installEndTimer;
+  btnInstallEnd.listen("click", function(event) {
+        clearTimeout(installEndTimer);
+        fn_GoMain(true);
+        event.preventDefault();
+  });
+
+  window.fn_BackKeyPressedCallBack = function () {
+      history.back();
+  }
+
+  snackbar(t("message.install_completed"));
+  $("#install_end").show();
+  installEndTimer = setTimeout(function(){
+    fn_GoMain(true);
+  },7000);
+}
+</script>
+</head>
+<body>
+<div class="i18n">
+<header class="mdc-top-app-bar mdc-top-app-bar--fixed">
+  <div class="mdc-top-app-bar__row">
+    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+      <button id="btnHome"
+        class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded none">accessibility_new</button>
+
+        
+      <button id="btnBack"
+        class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded none">arrow_back_ios</button>
+
+      <span class="mdc-top-app-bar__title" data-i18n="label.top_bar">티맵실행</span> </section>
+    <section id="page_navi" class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end margin_right_10 basic_font_medium3 margin_top_10" style="align-items: baseline;">
+      <!-- <b class="margin_right_5 basic_font_large3" style="margin-bottom: -5px;">1</b><b class="basic_font_medium1 margin_left_5 margin_right_5">&gt;</b><b style="margin-bottom: -1px;">2</b> -->
+      <!-- <button id="btnSettings" class="mdc-icon-button material-icons mdc-top-app-bar__action-item--unbounded"
+        aria-label="Print this page">settings</button> -->
+    </section>
+  </div>
+</header>
+
+
+<div class="main mdc-top-app-bar--fixed-adjust i18n">
+  <div class="row">
+      <!--<div class="my_icon" style="">-->
+          <!--<i class="material-icons md-dark logo_image logo_image_car" style="">directions_car</i>-->
+          <!--<i class="material-icons md-dark logo_image" style="z-index:1">credit_card</i>-->
+          <!--<i class="material-icons md-dark logo_image logo_image_key" style="z-index:1">vpn_key</i>-->
+      <!--</div>--> 
+      <div class="row" style="height:80px">
+          <img src="./images/logo_100.svg"/>
+      </div>
+
+      <div class="row"></div>
+      <div class="row"></div>
+      <div class="row">
+      </div>
+
+      <!-- 설치완료 -->
+      <div class="row" id="install_end" style="margin-top: 20px !important;margin-bottom: 20px !important;">
+        <div class="margin_top_30 center">
+          <span data-i18n="[html]message.install_completed1">설치가 <span style='color:var(--softm-start)' class='bold'>완료</span> 되었습니다.</span>
+        </div>
+        <div class="margin_top_0 center">
+          <span data-i18n="[html]message.install_completed2">이용해 주셔서 감사합니다.</span>
+        </div> 
+        <div class="center">
+          <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                        style="right:80px;color:var(--softm-start);font-size: 100pt;" id="search_clear">check_circle</i>
+        </div>
+        <button id="btnInstallEnd" class="mdc-button mdc-button--raised margin_right_5" style="width:100%;font-size:16px">
+          <strong data-i18n="label.confirm">확인</strong>
+        </button>
+      </div>
+  </div>
+
+  <div class="mdc-snackbar">
+    <div class="mdc-snackbar__surface">
+      <div class="mdc-snackbar__label" role="status" aria-live="polite">~~</div>
+      <div class="mdc-snackbar__actions"><button type="button" class="mdc-button mdc-snackbar__action"><button
+            class="mdc-icon-button mdc-snackbar__dismiss material-icons" title="Dismiss">close</button></div>
+    </div>
+  </div>
+
+  <div class="basic mdc-dialog">
+    <div class="mdc-dialog__container">
+      <div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" aria-labelledby="my-dialog-title"
+        aria-describedby="my-dialog-content">
+        <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+        <h2 class="mdc-dialog__title" id="my-dialog-title">
+          <!--
+      -->Choose a Ringtone
+          <!--
+    -->
+        </h2>
+        <div class="mdc-dialog__content" id="my-dialog-content">
+        </div>
+        <footer class="mdc-dialog__actions">
+          <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+            <div class="mdc-button__ripple"></div>
+            <span class="mdc-button__label" data-i18n="label.cancel">Cancel</span>
+          </button>
+          <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="accept" data-mdc-dialog-button-default>
+            <div class="mdc-button__ripple"></div>
+            <span class="mdc-button__label" data-i18n="label.ok">OK</span>
+          </button>
+        </footer>
+      </div>
+    </div>
+    <div class="mdc-dialog__scrim"></div>
+  </div>
+</div>
+ </body>
+
+
+</html>

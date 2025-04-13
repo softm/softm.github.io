@@ -37,8 +37,6 @@ var btnBack = null;
 var btnGrantAccessibilityLater = null;
 
 $( document ).ready(function() {
-
-
   window.getInfoCallBack = function (data) {
         if (isWeb) {
             window.info = {
@@ -272,33 +270,24 @@ function startCheckGrant() {
     // write_settings은 안쓰고 있음 음량조절에서 사용예정이었으나 사용안함.
     // bluetooth는  
     //   시작/종료 : Bluetooth 켤때 설정
-    //   실행/옵션 : 블루투스 연결시 활성화시 설정
-    
+    //   실행/옵션 : 블루투스 연결시 활성화시 설정    
     // initCheckGrant(["overlay","location","notification_access","ignore_battery","accessibility"]);
-    // 여기
-    // initCheckGrant(["overlay","notification_access","accessibility"]);
-    initCheckGrant(["bluetooth","post_notifications","overlay"]);
-/**
- * 블루투스
- * 알림 발송
- * 오버레이
- * 
- */
     // initCheckGrant(["location","notification_access","accessibility"]);
-    // checkGrant("gps");
-    fn_CheckGrant("bluetooth","checkGrantCallBack");
-    fn_CheckGrant("post_notifications","checkGrantCallBack");
-    // fn_CheckGrant("write_settings","checkGrantCallBack");
-    fn_CheckGrant("overlay","checkGrantCallBack");
-    // fn_CheckGrant("location","checkGrantCallBack");
-    // fn_CheckGrant("notification_access","checkGrantCallBack");
+    
+    initCheckGrant(["overlay","bluetooth","notification_access","post_notifications"]);
 
+    fn_CheckGrant("overlay","checkGrantCallBack");
+    fn_CheckGrant("bluetooth","checkGrantCallBack");
+    fn_CheckGrant("notification_access","checkGrantCallBack");
+    fn_CheckGrant("post_notifications","checkGrantCallBack");
+    // fn_CheckGrant("location","checkGrantCallBack");
     // fn_CheckGrant("ignore_battery","checkGrantCallBack");
     // fn_CheckGrant("accessibility","checkGrantCallBack");
-
-    // fn_CheckGrant("bluetooth","checkGrantCallBack");
     // fn_CheckGrant("write_settings","checkGrantCallBack");
+
     // checkGrant("accessibility");
+    // checkGrant("gps");
+
     $(btnHome.root).show();
     $(".accessibility_basic").show();
     $(".accessibility_reset").hide();
@@ -377,7 +366,8 @@ function go() {
 	// if ( granted.length == 4 ) {
 	// if ( granted.includes("notification_access") && granted.includes("overlay") ) {
     
-  if ( initCheckGrants.every((item,idx)=> granted.includes(item)) ) {    
+  if ( initCheckGrants.every((item,idx)=> granted.includes(item)) ) { 
+
 		snackbar( t("toast.grant") );
     //alert("index.html")
     fn_GetURL("WEB_MAIN","fReload");
@@ -439,7 +429,10 @@ function checkGrantCallBack(grant,ok) {
 			$("#permission_notification_access").hide();
       completeGrant(grant);
 		} else {
-      if ( isTopGrant ) $("#permission_notification_access").show();
+			if ( isTopGrant ) {
+        $("#permission_notification_access").show();
+        // fn_StartSetting("notification_access","startSettingCallback");
+      }
 		}
 		go();
 	} else if (grant == "overlay") {
@@ -503,8 +496,8 @@ function checkGrantCallBack(grant,ok) {
       completeGrant(grant);
 		} else {
 			if ( isTopGrant ) {
-        fn_StartSetting("post_notifications","startSettingCallback");
         $("#permission_post_notifications").show();
+        fn_StartSetting("post_notifications","startSettingCallback");
       }
 		}
 		go();
@@ -514,7 +507,10 @@ function checkGrantCallBack(grant,ok) {
 			$("#permission_bluetooth").hide();
       completeGrant(grant);
 		} else {
-			if ( isTopGrant ) $("#permission_bluetooth").show();
+			if ( isTopGrant ) {
+        $("#permission_bluetooth").show();
+        fn_StartSetting("bluetooth","startSettingCallback");
+      }
 		}
 		go();
 	} else if (grant == "accessibility") {
@@ -545,61 +541,54 @@ function checkGrantCallBack(grant,ok) {
 }
 
 var granted =[];
+var installEndTimer;
 function startSettingCallback(grant,ok) {
     if (grant == "notification_access") {
       //alert("test");
       if (ok =="ok") {
         fn_GoMain(true);
-        // fn_CheckGrant(grant,"checkGrantCallBack");
       } else {
         snackbar( t("toast.notgrant_notification_access") );
       }
     } else if (grant == "overlay") {
       if (ok =="ok") {
         fn_GoMain(true);
-        // fn_CheckGrant(grant,"checkGrantCallBack");
       } else {
         snackbar( t("toast.notgrant_overlay") );
       }
     } else if (grant == "usagestats") {
       if (ok =="ok") {
         fn_GoMain(true);
-        // fn_CheckGrant(grant,"checkGrantCallBack");
       } else {
         snackbar( t("toast.notgrant_usagestats") );
       }
     } else if (grant == "gps") {
       if (ok =="ok") {
         fn_GoMain(true);
-        // fn_CheckGrant(grant,"checkGrantCallBack");
       } else {
         snackbar( t("toast.notgrant_gps") );
       }
     } else if (grant == "location") {
       if (ok =="ok") {
         fn_GoMain(true);
-        // fn_CheckGrant(grant,"checkGrantCallBack");
       } else {
         snackbar( t("toast.notgrant_location") );
       }
     } else if (grant == "background_location") {
       if (ok =="ok") {
         fn_GoMain(true);
-        // fn_CheckGrant(grant,"checkGrantCallBack");
       } else {
         snackbar( t("toast.notgrant_location") );
       }
     } else if (grant == "post_notifications") {
       if (ok =="ok") {
         fn_GoMain(true);
-        // fn_CheckGrant(grant,"checkGrantCallBack");
       } else {
         snackbar( t("toast.notgrant_location") );
       }
     } else if (grant == "bluetooth") {
       if (ok =="ok") {
         fn_GoMain(true);
-        // fn_CheckGrant(grant,"checkGrantCallBack");
       } else {
         snackbar( t("toast.notgrant_bluetooth") );
       }
@@ -618,21 +607,18 @@ function startSettingCallback(grant,ok) {
         } else {
           fn_GoMain(true);
         }
-        // fn_CheckGrant(grant,"checkGrantCallBack");
       } else {
         snackbar( t("toast.notgrant_accessibility") );
       }
     } else if (grant == "ignore_battery") {
       if (ok =="ok") {
         fn_GoMain(true);
-        // fn_CheckGrant(grant,"checkGrantCallBack");
       } else {
         snackbar( t("toast.notgrant_ignore_battery") );
       }
     } else if (grant == "write_settings") {
       if (ok =="ok") {
         fn_GoMain(true);
-        // fn_CheckGrant(grant,"checkGrantCallBack");
       } else {
         snackbar( t("toast.notgrant_write_settings") );
       }
