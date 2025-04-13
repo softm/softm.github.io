@@ -69,7 +69,7 @@ $( document ).ready(function() {
 
         btnEmail.listen("click", function (event) { //     
             var dateStr = (new Date()).toLocaleDateString() + (new Date()).toLocaleTimeString();
-            var sub = encodeURIComponent("블루투스 내비뮤직 문의[" + dateStr + "]");
+            var sub = encodeURIComponent("블루투스 연결 & 음악 문의[" + dateStr + "]");
             var mailBody = encodeURIComponent($("#deviceInfo").text().trim());
             var link = "mailto:autorunnavi@gmail.com?subject="+ sub
                                                  + "&body="+ mailBody;
@@ -268,7 +268,7 @@ class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounde
       <div class="mdc-drawer__header app_info">
           <img src="./images/logo_100.svg" width="50" style="margin-top: 10px;"/>
           <!-- style="height:55px" -->
-          <div class="mdc-dramdc-drawer__contentwer__title" data-i18n="[html]label.app_name">블루투스 내비뮤직</div>
+          <div class="mdc-dramdc-drawer__contentwer__title" data-i18n="[html]label.app_name">블루투스 연결 & 음악</div>
         </div>
         <hr class="sub"/>
         <div class="row sub flex left bold " >

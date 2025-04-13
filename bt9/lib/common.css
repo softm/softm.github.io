@@ -837,3 +837,12 @@ hr.sub {
   /* bottom: 29px; */
   color: darkred;
 }
+
+.bg_gray.mdc-switch__track::before, .bg_gray.mdc-switch__track::after {
+  background-color:lightgray !important;
+  opacity: 0.7;
+}
+
+.border-round {
+  border-radius: 10px 10px 10px 10px;
+}
