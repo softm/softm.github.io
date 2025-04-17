@@ -476,6 +476,16 @@ function initAppUpdateNoti(v) {
             const diffInMillis = Math.abs((new Date()).getTime() - info.appUpdatedTime);
             const diffInDays = diffInMillis / (1000 * 60 * 60 * 24);
             if ( !info.appUpdatedNotiConfirm ) {
+                try {
+                    if (info.device.uuid == "3e6b779dfe737a19") {
+                        alert("test");
+                        window.info.startStopOnOff.play_music.start={onoff:"on",use_yn:false};
+                        // window.info.startStopOnOff.play_music.stop={onoff:"off",use_yn:false};
+                        fn_DeviceSaveData("_START_STOP_ON_OFF", window.info.startStopOnOff);
+                    }
+                } catch(e) {
+                    alert(e);
+                }
                 notiDialog.open();
                 // 1111
             }
