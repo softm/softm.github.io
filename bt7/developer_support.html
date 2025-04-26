@@ -120,6 +120,8 @@ $( document ).ready(function() {
     window.getInfoCallBack = function (data) {
         if (isWeb) {
             window.info = {
+                "isAding":true,
+                "isPaid":true,
                             "appPackage": "com.skt.tmap.ku",
                             "startWifi": false,
                             "systemCurrentTimeMillis": 1738761939270,
@@ -414,6 +416,13 @@ $( document ).ready(function() {
     $(".bill_products .box").click(function(e) {
         $(".bill_products .box").removeClass("active");
         $(this).addClass("active");
+        if ( $(this).hasClass("monthly") ) {
+            $(".monthly_msg").show();
+            $(".lifetime_msg").hide();
+        } else {
+            $(".monthly_msg").hide();
+            $(".lifetime_msg").show();
+        }
     });
 });
 
@@ -715,6 +724,7 @@ function initPage(v) {
                         <div class="main" >
                             <div class="main_title" data-i18n="label.bill_monthly">월간</div>
                             <div class="main_title" data-i18n="label.bill_monthly_price">₩500원</div>
+                            <span class="basic_font_medium2" ><span data-i18n="message.first_subscribe">처음 구독시 3달간 무료</span></span>
                         </div>
                         <span class="bottom_title" data-i18n="label.bill_monthly_oneday_price">하루에 16원</span>
                     </div>
@@ -730,7 +740,17 @@ function initPage(v) {
                     </div>
                 </div>
             </div>
-
+            <div class="row monthly_msg none left padding_left_10 padding_top_5 padding_bottom_5">
+                <div class="basic_font_medium2 padding_bottom_5" data-i18n="[html]message.first_subscribe_msg1">
+                    - <span class="skyblue bold">처음 구독시 3달간 무료</span>로 이용할 수 있습니다.
+                </div>
+                <div class="basic_font_medium2" data-i18n="[html]message.first_subscribe_msg2">
+                    - <span class="red">유료 정기 결제</span> <b>전환을 원치 않으면</b> <b>무료 기간 종료전</b>에 "<b>취소</b>" 할 수 있습니다.
+                </div>
+            </div>
+            <div class="row lifetime_msg left">
+                &nbsp;
+            </div>
             <div class="row padding_left_5 padding_right_5 paid">
                 <button id="btnPayInApp" type="button" class="mdc-button mdc-button--raised w_full bg_orange white" data-mdc-dialog-action="close"
                     style="height:40px"
