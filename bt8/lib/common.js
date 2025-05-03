@@ -394,7 +394,7 @@ var messages  = {
 
             permission_enable_enhanced_feature : 'If you have trouble running the app, try enabling the permission.',
             
-            permission_accessibility_enable : "Enable permission and use all features.",
+            permission_accessibility_enable : "Enable accessibility permission and use all features.",
             permission_accessibility_enable_for_stop : "Enable the permission and use the stop function.",
 
             permission_grant_on_for_accessibility_reset : '<b class="color_stop">Accessibility permission has been revoked.</b><br/><br/>To operate normally, <B>the permission</B> should be "<B class="color_stop">turned off</B>" -> "<B class="color_stop">turned on</B>".',
@@ -455,6 +455,9 @@ var messages  = {
             install_completed: "Installation <span style='color:var(--softm-start)' class='bold'>complete</span>.<br/>Thank you for using it.",
             install_completed1: "Installation <span style='color:var(--softm-start)' class='bold'>complete</span>.",
             install_completed2: "Thank you for using it.",
+            first_subscribe: "2 months free subscribe.",
+            first_subscribe_msg1: '<span class="skyblue bold">You can use it for free for 3 months when you first subscribe.',
+            first_subscribe_msg2: '<span class="red">If you do not want to switch to a paid subscription</span>, you can "<b>cancel</b>" <b>before the free period ends</b>.',
           },
           toast:{
             run_option_on : "Turn <span style='color:var(--softm-start)'>on</span>.",
@@ -885,7 +888,7 @@ var messages  = {
 
             permission_enable_enhanced_feature : '앱 실행에 문제가 있다면 권한을 활성화 해보세요.',                        
 
-            permission_accessibility_enable : "권한을 활성화하고 모든기능을 사용하세요.",
+            permission_accessibility_enable : "접근성 권한을 활성화하고 모든기능을 사용하세요.",
             permission_accessibility_enable_for_stop : "권한을 활성화하고 종료기능을 이용하세요.",
 
             permission_name_notification_access : "알람 접근",
@@ -956,6 +959,9 @@ var messages  = {
             install_completed: "설치가 <span style='color:var(--softm-start)' class='bold'>완료</span> 되었습니다.<br/>이용해 주셔서 감사합니다.",
             install_completed1: "설치가 <span style='color:var(--softm-start)' class='bold'>완료</span> 되었습니다.",
             install_completed2: "이용해 주셔서 감사합니다.",
+            first_subscribe: "처음 구독시 3달간 무료",
+            first_subscribe_msg1: '<span class="skyblue bold">처음 구독시 3달간 무료</span>로 이용할 수 있습니다.',
+            first_subscribe_msg2: '<span class="red">유료 정기 결제</span> <b>전환을 원치 않으면</b> <b>무료 기간 종료전</b>에 "<b>취소</b>" 할 수 있습니다.',
           },
           toast:{
             run_option_on : "설정을 <span style='color:var(--softm-start)'>켰</span>습니다.",

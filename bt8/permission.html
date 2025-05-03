@@ -181,7 +181,7 @@ function initPage(v) {
     btnGrantAccessibilityLater= new mdc.ripple.MDCRipple(document.querySelector("#btnGrantAccessibilityLater"));
     btnGrantAccessibilityLater.listen("click", function(event) {
       material.confirm(t("message.permission_grant_on_for_accessibility_ignore"), function() {
-        fn_DeviceSaveData("_APP_INSTALLED", true);
+        fn_DeviceSaveData("_SKIP_ACS_PERMISSION", true);
         fn_GoMain(true);
         // snackbar(t("message.del_home"));
       });
@@ -274,12 +274,13 @@ function startCheckGrant() {
     // initCheckGrant(["overlay","location","notification_access","ignore_battery","accessibility"]);
     // initCheckGrant(["location","notification_access","accessibility"]);
     
-    initCheckGrant(["overlay","bluetooth","notification_access","post_notifications"]);
+    initCheckGrant(["overlay","bluetooth","notification_access","post_notifications","accessibility"]);
 
     fn_CheckGrant("overlay","checkGrantCallBack");
     fn_CheckGrant("bluetooth","checkGrantCallBack");
     fn_CheckGrant("notification_access","checkGrantCallBack");
     fn_CheckGrant("post_notifications","checkGrantCallBack");
+    fn_CheckGrant("accessibility","checkGrantCallBack");
     // fn_CheckGrant("location","checkGrantCallBack");
     // fn_CheckGrant("ignore_battery","checkGrantCallBack");
     // fn_CheckGrant("accessibility","checkGrantCallBack");
