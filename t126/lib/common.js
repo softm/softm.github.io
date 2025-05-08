@@ -794,7 +794,7 @@ var messages  = {
             confirm_destination_delete : "기본목적지를 삭제 하시겠습니까?",
             confirm_favorite_delete : "즐겨찾기를 삭제 하시겠습니까?",
             confirm_app_pacakge_delete : "설정된 앱 정보를 삭제하시겠습니까?",
-            select_music_playback_device : '음악 [<span class="bold color_start">재생장치</span>]를 선택하세요.[<span class="bold color_start">클릭</span>]',
+            select_music_playback_device : '음악 [<span class="bold color_start">재생장치</span>] 선택 가능.[<span class="bold color_start">클릭</span>]',
 
             confirm_on : "<span style='color:var(--softm-start)'>켜(on)</span>시겠습니까?",
             confirm_off : "<span style='color:var(--softm-stop)'>끄(off)</span>시겠습니까?",
