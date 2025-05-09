@@ -248,6 +248,9 @@ if ( location.protocol.startsWith("https:") ) {
         }
         
         map.addListener(CommonUtil.fn_IS_APP() == "X"?"drag":"touchend", redrawCurrentMarker);
+        map.addListener("touchstart", function(){
+          search.input.blur();
+        });
 
         btnMyLocation[0].root.show();
         onChangeButton(true, true);
@@ -289,6 +292,7 @@ if ( location.protocol.startsWith("https:") ) {
         }
         ///////////////////////////////////////////////////// 
         map.addListener(CommonUtil.fn_IS_APP() == "X"?"drag":"touchend", redrawCurrentMarker);
+
         for ( idx in poiArr ) {
           maps.addBound(poiArr[idx]);
         }
