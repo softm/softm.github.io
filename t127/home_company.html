@@ -504,6 +504,10 @@ $( document ).ready(function() {
 			fn_GetLocation("map["+tIdx+"]","getMyLocation");
 
             map.addListener(CommonUtil.fn_IS_APP() == "X"?"drag":"touchend", redrawCurrentMarker);
+            map.addListener("touchstart", function(){
+                search.input.blur();
+            });
+            
         } else if ( tIdx == 1 ) { // 회사
             search.root.show();
             search.input.readOnly  = false;
@@ -550,7 +554,10 @@ $( document ).ready(function() {
 			fn_GetLocation("map["+tIdx+"]","getMyLocation");
 
             map.addListener(CommonUtil.fn_IS_APP() == "X"?"drag":"touchend", redrawCurrentMarker);
-
+            map.addListener("touchstart", function(){
+                search.input.blur();
+            });
+            
        } else if ( tIdx == 2 ) { // 즐겨찾기
             search.root.show();
             search.input.readOnly  = true;
@@ -1095,11 +1102,11 @@ function setCurrentMarkerNscrollTop(list,index) {
 
 var fowardPage = getParam("p_foward_page");
 
-var idx = getParam("p_tidx");
+var idx = getParam("idx");
 if (idx) {
     tIdx = parseInt(idx, 10);
 }
-  
+
 window.moveMylocationCallback = function (mayId,lat, lon, address,cb) {
       if (tIdx == 3) {
         //			maps.addCurrentMarker(map,maps.my);
