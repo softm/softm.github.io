@@ -1102,11 +1102,11 @@ function setCurrentMarkerNscrollTop(list,index) {
 
 var fowardPage = getParam("p_foward_page");
 
-var idx = getParam("p_tidx");
+var idx = getParam("idx");
 if (idx) {
     tIdx = parseInt(idx, 10);
 }
-  
+
 window.moveMylocationCallback = function (mayId,lat, lon, address,cb) {
       if (tIdx == 3) {
         //			maps.addCurrentMarker(map,maps.my);
