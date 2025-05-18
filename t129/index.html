@@ -203,6 +203,8 @@ function initPage(v) {
                 $("body").removeClass("none");  
                 if (fowardPage == "SEARCH" || fowardPage == "HOME_COMPANY") {
                     var p_tidx = getParam("p_tidx");
+                    var p_params = getParam("p_params");
+                    var p_poi_index = getParam("p_poi_index");
                     // windowOpen("search.html?idx="+(p_tidx?p_tidx:1));
                     // fn_OpenUrl("search.html?idx="+(p_tidx?p_tidx:0));
 
@@ -213,7 +215,7 @@ function initPage(v) {
                     var drawerInfo = drawerInfos[idx];
                     if ( drawerInfo.popup ) {
                         drawer.innerList.selectedIndex = window.drawerSelectedIndex;
-                        fn_OpenPop(url+"?idx="+(p_tidx?p_tidx:1));
+                        fn_OpenPop(url+"?idx="+(p_tidx?p_tidx:1)+"&p_params="+p_params+"&p_poi_index="+p_poi_index);
                     } else {
                         fn_OpenUrl(url+"?idx="+(p_tidx?p_tidx:1));
                     }
