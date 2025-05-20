@@ -2,9 +2,10 @@
  "_msg_":{"_common_":{"error.code":"F0000","resCode":"00"},"_body_":{"status":"success","flag":"S"}},
  "msg":"성공",
  "msgCode":"200",
- "useServer":true,
+ "useServer":false,
  "useRewardForWaitOverlay":true,
- 
+ "useRewardButtonForWaitOverlay":false,
+
  "checkLiveUser":true,
  "checkLiveUserLogIntervalTime_tmp":"1000 * 60 * 60 * 24 * 1 = 86400000",
  "checkLiveUserLogIntervalTime_tmp2":"1000 * 60 * 60 * 24 * 1 = 86400000",

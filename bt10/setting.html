@@ -949,10 +949,10 @@ function initDestinationExecutionHoldTime(v) {
 
   selectDestinationExecutionHoldTime.listen('MDCSelect:change', () => {
       window.info.DestinationExecutionHoldTime = String(selectDestinationExecutionHoldTime.value);
-      fn_DeviceSaveData("_NAVI_DESTINATION_EXECUTION_HOLD_TIME", selectDestinationExecutionHoldTime.value);
+      fn_DeviceSaveData("_NAVI_DESTINATION_EXECUTION_HOLD_TIME", selectDestinationExecutionHoldTime.value); 
     // alert(`Selected option at index ${selectDestinationExecutionHoldTime.selectedIndex} with value "${selectDestinationExecutionHoldTime.value}"`);
   });
-
+  
   selectDestinationExecutionHoldTime.value = String(v.naviDestinationExecutionHoldTime);
   // destinationExecutionHoldTime = new mdc.textField.MDCTextField(document.querySelector('#destination_execution_hold_time'));
   // destinationExecutionHoldTime.listen("focus", function(event) {

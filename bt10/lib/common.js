@@ -1083,7 +1083,20 @@ $( document ).ready(function() {
           $(this).closest("div").find(".mdc-bottom-navigation__list-item").removeClass("mdc-bottom-navigation__list-item--activated");
           $(this).addClass("mdc-bottom-navigation__list-item--activated");
           if ( footerNavigationIndex != idx ) {
-            fn_OpenUrl(footerNavigationUrl[idx]);
+            if ( isTest ) {
+              fn_OpenUrl(footerNavigationUrl[idx]);
+            } else {
+              var reqId = footerNavigationUrl[idx].split(".")[0].toLocaleUpperCase();
+              window.GetURLCallback = function(url) {
+                if ( location.protocol.startsWith("http") && url.startsWith("file") ) {
+                  if ( reqId == "index") fn_GoMain(true);
+                  else fn_GoFoward("WEB_"+reqId);
+                } else {
+                  fn_OpenUrl(url);
+                }
+              }
+              fn_GetURL("WEB_" + reqId,"GetURLCallback");
+            }
             // windowOpen(footerNavigationUrl[idx]);
           }
       });

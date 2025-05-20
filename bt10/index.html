@@ -108,16 +108,6 @@ $( document ).ready(function() {
                 "workOffTimeFrom": "17:30",
                 "naviMode": "1",
                 "workGotoTimeTo": "08:50",
-                "permissions": {
-                    "LOCATION": true,
-                    "ACCESSIVILITY": true,
-                    "NOTIFICAION_ACCESS": true,
-                    "WRITE_SETTING": false,
-                    "BLUETOOTH": true,
-                    "IGNORE_BATTERY": true,
-                    "USAGESTATS": false,
-                    "OVERLAY": true
-                },
                 "startBluetooth": true,
                 "naviOverlayWaitTime": 3,
                 "naviPopupMode": true,
@@ -157,9 +147,10 @@ $( document ).ready(function() {
                 versionName:"0.0.0.1",
                 // + "http://www.softm.net/tdev"
                 isAccessbilityServiceRunning:false,
-                permsssions:{
+                permissions:{
                     "LOCATION": true,
-                    "ACCESSIVILITY": false,
+                    "ACCESSIBILITY": false,
+                    "POST_NOTIFICATIONS": true,
                     "NOTIFICAION_ACCESS": false,
                     "WRITE_SETTING": true,
                     "BLUETOOTH": true,
@@ -317,6 +308,14 @@ function initSearch_unused(v) {
 }
 
 function initPermission(v,cb) {
+    granted = [
+        // {name: 'post_notifications', value: info.permissions.POST_NOTIFICATIONS},
+        // {name: 'overlay', value: info.permissions.POST_NOTIFICATIONS},
+        // {name: 'location', value: true},
+        // {name: 'notification_access', value: info.permissions.POST_NOTIFICATIONS},
+        {name: 'accessibility', value: info.isAccessbilityServiceRunning},
+        {name: 'ignore_battery', value: info.permissions.IGNORE_BATTERY}
+    ];
     btnStatus = new mdc.ripple.MDCRipple(document.querySelector("#btnStatus"));
     btnStatus.listen("click", function (event) {
         // self.close();
@@ -326,38 +325,14 @@ function initPermission(v,cb) {
             snackbar(t("message.all_granted"));
             // toast("모든 권한이 정상입니다.");
         } else {
-            // alert("tes");
-            window.getPermissionsCallBackLoop = function (data) {
-                allGranted = (JSON.parse(data) || []).every(item => item.value);
-                granted = (JSON.parse(data) || []);
-                getPermissionsCallBack(data);
-                if (!allGranted) {
-                    granted.some(grant=>{
-                        if ( !grant.value ) {
-                            console.log(grant.name, grant.value)
-                            fn_StartSetting(grant.name,"startSettingCallback")
-                            // fn_CheckGrant(grant.name,"checkGrantCallBack")
-                        }
-                        return !grant.value ;
-                    });
-                } else {
-                    
-                }
-            }
-            
             window.startSettingCallback = function(grant,ok) {
                 fn_GoMain(true);
                 // fn_GetPermissions("", "getPermissionsCallBackLoop");
             }
-
-            // fn_CheckGrant("overlay","checkGrantCallBack")
-            // fn_CheckGrant("location","checkGrantCallBack")
-            // fn_CheckGrant("notification_access","checkGrantCallBack")
-            // fn_CheckGrant("accessibility","checkGrantCallBack")
-            // fn_CheckGrant("ignore_battery","checkGrantCallBack")
             granted.some(grant=>{
                 if ( !grant.value ) {
-                    console.log(grant.name, grant.value)
+                    console.log(grant.name, grant.value);
+                    debugger;
                     fn_StartSetting(grant.name,"startSettingCallback")
                     // fn_CheckGrant(grant.name,"checkGrantCallBack")
                 }
@@ -366,66 +341,43 @@ function initPermission(v,cb) {
         }
     });
 
-    window.getPermissionsCallBack = function (data) {
-        // data = '[{ "name": "overlay", "value": true }, { { "name": "location", "value": false }, { "name": "notification_access", "value": false }, { "name": "accessibility", "value": false }, { "ignore_battery": false, "name": "ignore_battery", "value": false } ]';
-        allGranted = (JSON.parse(data) || []).every(item => item.value);
-        granted = (JSON.parse(data) || []).sort(function(a, b) {
-            return checkGrantInfo.findIndex(item=>item==a.name) - checkGrantInfo.findIndex(item=>item==b.name);
-        });
-        if ( isTest ) {
-            // granted = info.permsssions.map(item=>{
-            //     return {"name":item,"value":false};
-            // });
-            granted = [
-                {name: 'post_notifications', value: true},
-                {name: 'overlay', value: true},
-                // {name: 'location', value: true},
-                {name: 'notification_access', value: true},
-                // {name: 'accessibility', value: false},
-                {ignore_battery: false, name: 'ignore_battery', value: false}
-            ];
+    // {name: 'accessibility', value: false},
+    var grantName = "";
+    for(var i = 0; i < granted.length;i++) {
+        if ( !granted[i].value ) { 
+            grantName = granted[i].name;
+            break;
         }
-
-        var grantName = "";
-        for(var i = 0; i < granted.length;i++) {
-            if ( !granted[i].value ) { 
-                grantName = granted[i].name;
-                break;
-            }
-        }
-        
-        $("#status_message").html(getStatusMessage());
-
-        // 여기
-        var pMsg = t("message.permission_grant_add_for_" + grantName);
-        // alert (grantName + " / "   + pMsg );
-        
-        if ( grantName ) {
-            $("#status_permission_name").html(t("label.permission_name_" + grantName));
-            $("#status_permission_message").html("<span class=''>"+pMsg+"</span>");
-        } else {
-            $("#status_permission").hide();
-            $(".status_permission").hide();
-        }
-
-        $("#btnStatus").removeClass("bgcolor_start bgcolor_stop").addClass(allGranted && info.isAccessbilityServiceRunning ? "bgcolor_start" : "bgcolor_stop") // blink bgcolor_stop
-            .html(t("label.permission_enable"));
-        // .html(allGranted && info.isAccessbilityServiceRunning ? t("label.normal_operation") : t("label.permission_check"));
-        // .html(allGranted ? "정상동작" : "권한확인");
-        
-        if ( info && !info.isAccessbilityServiceRunning ) {
-            $("#btnStatus").show(); 
-        } else {
-            if (allGranted) $("#btnStatus").hide(); 
-            else $("#btnStatus").show(); 
-        }
-        if ( cb ) {
-            cb();
-        }
-
     }
     
-    fn_GetPermissions("", "getPermissionsCallBack");
+    $("#status_message").html(getStatusMessage());
+
+    // 여기
+    var pMsg = t("message.permission_grant_add_for_" + grantName);
+    // alert (grantName + " / "   + pMsg );
+    
+    if ( grantName ) {
+        $("#status_permission_name").html(t("label.permission_name_" + grantName));
+        $("#status_permission_message").html("<span class=''>"+pMsg+"</span>");
+    } else {
+        $("#status_permission").hide();
+        $(".status_permission").hide();
+    }
+
+    $("#btnStatus").removeClass("bgcolor_start bgcolor_stop").addClass(allGranted && info.isAccessbilityServiceRunning ? "bgcolor_start" : "bgcolor_stop") // blink bgcolor_stop
+        .html(t("label.permission_enable"));
+    // .html(allGranted && info.isAccessbilityServiceRunning ? t("label.normal_operation") : t("label.permission_check"));
+    // .html(allGranted ? "정상동작" : "권한확인");
+    
+    if ( info && !info.isAccessbilityServiceRunning ) {
+        $("#btnStatus").show(); 
+    } else {
+        if (allGranted) $("#btnStatus").hide(); 
+        else $("#btnStatus").show(); 
+    }
+    if ( cb ) {
+        cb();
+    }
 }
 var notiDialog; 
 function initAppUpdateNoti(v) {
@@ -1196,7 +1148,18 @@ function initBluetooth(v) {
                                 },1000);
                             // }
                         }
-                        fn_setSysInfo("_SYS_INFO_BLUETOOTH_ENABLE",true,"setSysInfo");
+                        window.enableBlueToothOnCallback = function() {
+                            var si = JSON.parse(data);
+                            // if (si.sysInfoBluetoothEnable) {
+                                // debugger;
+                                setTimeout(function() {
+                                    fn_getSysInfo("_SYS_INFO_BLUETOOTH_ENABLE", "getSysInfo");
+                                },1000);
+                            // }
+                        }
+                        fn_enableBluetooth("", "enableBlueToothOnCallback");
+                        
+                        // fn_setSysInfo("_SYS_INFO_BLUETOOTH_ENABLE",true,"setSysInfo");
                     },
                     function () {
                     }
