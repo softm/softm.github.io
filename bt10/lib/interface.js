@@ -1195,3 +1195,7 @@ function fn_BackKeyPressed(v) {
 		}
 	}
 }
+
+function goPermissionForBackgroundLocation() {
+    fn_OpenUrl("permission.html?p_check_mode=background_location");
+}

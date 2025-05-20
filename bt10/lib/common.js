@@ -225,9 +225,10 @@ var messages  = {
             
             period_of_use: "Period of use",
             expiration: "expiration",
-            watch_the_ad_and_cheer: "Cheer",
-            ad_replay_time: "Ad replay",
-            ad_view_available: "Available",
+            watch_the_ad_and_cheer: "Cheer", 
+            ad_view: "View ad",
+            ad_replay_time: "Get Rewarded",
+            ad_view_available: "",
             order_id: "order number",
             bill_monthly: "Monthly",
             bill_monthly_price: "USD 0.49",
@@ -261,7 +262,9 @@ var messages  = {
             destination: "Destination",
 
             support_the_developers: "Cheer up",
-            
+            support_developers: "Cheer up",
+            ad_ticket: "AD/Tickets",
+
             home:"Home",
             setting:"Setting",
             run_options: "Run Options",
@@ -394,7 +397,7 @@ var messages  = {
 
             permission_enable_enhanced_feature : 'If you have trouble running the app, try enabling the permission.',
             
-            permission_accessibility_enable : "Enable permission and use all features.",
+            permission_accessibility_enable : "Enable accessibility permission and use all features.",
             permission_accessibility_enable_for_stop : "Enable the permission and use the stop function.",
 
             permission_grant_on_for_accessibility_reset : '<b class="color_stop">Accessibility permission has been revoked.</b><br/><br/>To operate normally, <B>the permission</B> should be "<B class="color_stop">turned off</B>" -> "<B class="color_stop">turned on</B>".',
@@ -455,6 +458,9 @@ var messages  = {
             install_completed: "Installation <span style='color:var(--softm-start)' class='bold'>complete</span>.<br/>Thank you for using it.",
             install_completed1: "Installation <span style='color:var(--softm-start)' class='bold'>complete</span>.",
             install_completed2: "Thank you for using it.",
+            first_subscribe: "3 months free subscribe.",
+            first_subscribe_msg1: '<span class="skyblue bold">You can use it for free for 3 months when you first subscribe.',
+            first_subscribe_msg2: '<span class="red">If you do not want to switch to a paid subscription</span>, you can "<b>cancel</b>" <b>before the free period ends</b>.',
           },
           toast:{
             run_option_on : "Turn <span style='color:var(--softm-start)'>on</span>.",
@@ -708,8 +714,9 @@ var messages  = {
             period_of_use: "사용기간",
             expiration: "만료",
             watch_the_ad_and_cheer: "응원하기",
-            ad_replay_time: "광고보기",
-            ad_view_available: "시청가능",
+            ad_view: "광고보기",
+            ad_replay_time: "보상받기",
+            ad_view_available: "",
             order_id: "주문번호",
             bill_monthly: "월간",
             bill_monthly_price: "₩500원",
@@ -744,9 +751,9 @@ var messages  = {
             destination: "목적지",
             
             support_the_developers: "응원하기",
-            
             support_developers: "응원하기",
-            
+            ad_ticket: "광고/이용권",
+
             home:"홈",
             setting:"설정",
             run_options: "실행옵션",
@@ -885,7 +892,7 @@ var messages  = {
 
             permission_enable_enhanced_feature : '앱 실행에 문제가 있다면 권한을 활성화 해보세요.',                        
 
-            permission_accessibility_enable : "권한을 활성화하고 모든기능을 사용하세요.",
+            permission_accessibility_enable : "접근성 권한을 활성화하고 모든기능을 사용하세요.",
             permission_accessibility_enable_for_stop : "권한을 활성화하고 종료기능을 이용하세요.",
 
             permission_name_notification_access : "알람 접근",
@@ -956,6 +963,9 @@ var messages  = {
             install_completed: "설치가 <span style='color:var(--softm-start)' class='bold'>완료</span> 되었습니다.<br/>이용해 주셔서 감사합니다.",
             install_completed1: "설치가 <span style='color:var(--softm-start)' class='bold'>완료</span> 되었습니다.",
             install_completed2: "이용해 주셔서 감사합니다.",
+            first_subscribe: "처음 구독시<br/>3달 무료",
+            first_subscribe_msg1: '<span class="skyblue bold">처음 구독시 3달간 무료</span>로 이용할 수 있습니다.',
+            first_subscribe_msg2: '<span class="red">유료 정기 결제</span> <b>전환을 원치 않으면</b> <b>무료 기간 종료전</b>에 "<b>취소</b>" 할 수 있습니다.',
           },
           toast:{
             run_option_on : "설정을 <span style='color:var(--softm-start)'>켰</span>습니다.",

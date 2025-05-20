@@ -2,6 +2,9 @@
  "_msg_":{"_common_":{"error.code":"F0000","resCode":"00"},"_body_":{"status":"success","flag":"S"}},
  "msg":"성공",
  "msgCode":"200",
+ "useServer":true,
+ "useRewardForWaitOverlay":true,
+ 
  "checkLiveUser":true,
  "checkLiveUserLogIntervalTime_tmp":"1000 * 60 * 60 * 24 * 1 = 86400000",
  "checkLiveUserLogIntervalTime_tmp2":"1000 * 60 * 60 * 24 * 1 = 86400000",
@@ -9,9 +12,9 @@
  "liveUserLogFormatName":"1:DEFAULT 2:SHORT",
  "liveUserLogFormat":"1",
 
- "appReleaseUpdtedTime":1744675200000,
+ "appReleaseUpdtedTime":1745107200000,
  "paidOPTypeName":"0:NONE,1:PAID",
- "paidOPType":"1",
+ "paidOPType":"0",
  "googlePaidErrorCaseTmp":[
     ["java.lang.VerifyError","com.google.android.gms.ads.internal.ClientApi"],
     ["java.lang.VerifyError","AdUtil.addBanner"   ,"BaseAdView.loadAd"],
@@ -99,7 +102,7 @@
  ],
  "forceAdViewOPTypeAdViewStopUUIDs":[
  ],
- "waitTimeForNotAdLicense":"10000",
+ "waitTimeForNotAdLicense":"3000",
  "delayMusicEnable":3000,
  "adModeName":"0:NONE,1:GOOGLE,2:FACEBOOK",
  "adMode":"1",
@@ -149,16 +152,14 @@
    "e575416df5cd7da3",
    "5c4dcb156253716a",
    "8bd0007cac109bf7",
-   "3af0f0b68f2ee61b",
-   "0072e96789523959"
+   "3af0f0b68f2ee61b"
 ],
 
 "betaLicensedUUIDs":[
-  "0072e96789523959",
+  "0072e96789523959 : s25 debug",
   "5c4dcb156253716a",
   "8bd0007cac109bf7",
-  "3af0f0b68f2ee61b",
-  "e7ef46c871812d64"
+  "3af0f0b68f2ee61b"
 ],
 
  "adViewIntervalTime_tmp":"1000 * 60 * 60 * 24 * 1 = 86400000",
@@ -266,6 +267,11 @@
  "userInfoLogFormatName":"1:DEFAULT 2:SHORT",
  "userInfoLogFormat":"1",
 
- "checkGrantInfo":["notification_access"]
+ "checkGrantInfo":["notification_access","ignore_battery","accessibility"],
+
+ "naviDestinationExecutionHoldTime_tmp":"1000 * 60 * 60 * 24 * 1 = 86400000",
+ "naviDestinationExecutionHoldTime_tmp":"1000 * 60 * 1",
+ "naviDestinationExecutionHoldTime":60000
+
 
  }

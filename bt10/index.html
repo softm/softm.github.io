@@ -201,8 +201,10 @@ function initPage(v) {
         //  // $(document.body).show();
             initLoad(v,function () {  
                 $("body").removeClass("none");  
-                if (fowardPage == "SEARCH") {
+                if (fowardPage == "SEARCH" || fowardPage == "HOME_COMPANY") {
                     var p_tidx = getParam("p_tidx");
+                    var p_params = getParam("p_params");
+                    var p_poi_index = getParam("p_poi_index");
                     // windowOpen("search.html?idx="+(p_tidx?p_tidx:1));
                     // fn_OpenUrl("search.html?idx="+(p_tidx?p_tidx:0));
 
@@ -213,7 +215,7 @@ function initPage(v) {
                     var drawerInfo = drawerInfos[idx];
                     if ( drawerInfo.popup ) {
                         drawer.innerList.selectedIndex = window.drawerSelectedIndex;
-                        fn_OpenPop(url+"?idx="+(p_tidx?p_tidx:1));
+                        fn_OpenPop(url+"?idx="+(p_tidx?p_tidx:1)+"&p_params="+p_params+"&p_poi_index="+p_poi_index);
                     } else {
                         fn_OpenUrl(url+"?idx="+(p_tidx?p_tidx:1));
                     }
@@ -2338,7 +2340,7 @@ Navigation app and music player launch when connected via Bluetooth
                 <span id="footerMenuDeveloperSupport" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary none"
                     data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
                     <span class="material-icons mdc-bottom-navigation__list-item__icon">favorite</span>
-                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="[html]title.support_developers">개발자응원</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="[html]title.ad_ticket">광고/이용권</span>
                 </span>
 
                 <!-- <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"

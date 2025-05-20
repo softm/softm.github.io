@@ -248,6 +248,9 @@ if ( location.protocol.startsWith("https:") ) {
         }
         
         map.addListener(CommonUtil.fn_IS_APP() == "X"?"drag":"touchend", redrawCurrentMarker);
+        map.addListener("touchstart", function(){
+          search.input.blur();
+        });
 
         btnMyLocation[0].root.show();
         onChangeButton(true, true);
@@ -261,9 +264,19 @@ if ( location.protocol.startsWith("https:") ) {
 
         if ( !isLoaded ) {
           var dbChecker = setInterval(function () {
+            var p_params = getParam("p_params");
+            var p_poi_index = getParam("p_poi_index");
             if (localStorageBasic.db != null) {
                 console.info("db is not null");
                 clearInterval(dbChecker);
+                if ( p_params == "REMOVE_FAVORITE" ) {
+                  var mp = info.poisFavorite[p_poi_index]
+                  var poi = new MapPoint(mp.lat, mp.lon, mp.name);
+                  poi.id = mp.id;
+                  maps.delFavorite(poi);
+                  // alert(poi.id + "_" + poi.getName());
+                } else {
+                }
                 searchFavoritePOI(function () {
                 });
               } else {
@@ -756,7 +769,22 @@ if ( location.protocol.startsWith("https:") ) {
         }
         if ( grant == "location") {
             if( ok != "ok" ) {
-                fn_StartSetting("location","startSettingCallback");
+                fn_StartSetting("location","startSettingCallback"); 
+            } else {
+/** 20250421. 121 버전 업데이트시 권한 거부 당해 테스트 위해 구현만 하고 제거
+              window.checkGrantCallBack = function(grant,ok) {
+                    window.startSettingCallback = function(grant,ok) {
+                        if ( ok ) { fn_Reload(true) }
+                    }
+                    if ( grant == "background_location") {
+                        if( ok != "ok" ) {
+                            fn_ClosePopData("","goPermissionForBackgroundLocation");
+                        }
+                    }
+                }
+                // https://softm.github.io/t121/permission.html?p_check_mode=background_location
+                fn_CheckGrant("background_location","checkGrantCallBack");
+*/
             }
         }
     }
