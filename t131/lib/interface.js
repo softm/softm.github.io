@@ -457,6 +457,11 @@ function fn_OpenUrl(url, callBackFunc) {
 	if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
 	    // fn_Js_Bridge(result);
 		location.href = url
+		// if ( 
+		// 	url.startsWith("http") == location.protocol.startsWith("http") ||
+		// 	url.startsWith("file") == location.protocol.startsWith("file")
+		// ) location.href = url;
+		// else fn_Js_Bridge(result);
 	}else{
 		window.open(url,'소프트엠');
 	}

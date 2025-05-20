@@ -886,7 +886,7 @@ var messages  = {
             permission_grant_add_for_location : '실행성능 향상',
             permission_grant_add_for_ignore_battery : '시스템에의한 앱 중지 방지',
             permission_grant_add_for_notification_access : '앱 중복실행 방지',
-            permission_grant_add_for_accessibility : '"시작/종료" 루틴(On/Off) 활성화',
+            permission_grant_add_for_accessibility : '"안전운전 실행 및 시작/종료" 루틴(On/Off) 활성화',
             permission_grant_add_for_overlay : '앱 실행 아이콘 표시',
             permission_grant_add_for_post_notifications : '알림을 보내도록 허용',
 
@@ -1083,7 +1083,20 @@ $( document ).ready(function() {
           $(this).closest("div").find(".mdc-bottom-navigation__list-item").removeClass("mdc-bottom-navigation__list-item--activated");
           $(this).addClass("mdc-bottom-navigation__list-item--activated");
           if ( footerNavigationIndex != idx ) {
-            fn_OpenUrl(footerNavigationUrl[idx]);
+            if ( isTest ) {
+              fn_OpenUrl(footerNavigationUrl[idx]);
+            } else {
+              var reqId = footerNavigationUrl[idx].split(".")[0].toLocaleUpperCase();
+              window.GetURLCallback = function(url) {
+                if ( location.protocol.startsWith("http") && url.startsWith("file") ) {
+                  if ( reqId == "index") fn_GoMain(true);
+                  else fn_GoFoward("WEB_"+reqId);
+                } else {
+                  fn_OpenUrl(url);
+                }
+              }
+              fn_GetURL("WEB_" + reqId,"GetURLCallback");
+            }
             // windowOpen(footerNavigationUrl[idx]);
           }
       });

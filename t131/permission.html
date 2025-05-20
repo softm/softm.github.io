@@ -97,7 +97,7 @@ $( document ).ready(function() {
                 isAccessbilityServiceRunning:false,
                 permissions:{
                     "LOCATION": true,
-                    "ACCESSIVILITY": false,
+                    "ACCESSIBILITY": false,
                     "NOTIFICAION_ACCESS": true,
                     "WRITE_SETTING": true,
                     "BLUETOOTH": true,
@@ -220,7 +220,7 @@ function initPage(v) {
   }, false);
 
   if ( ( checkMode  === "accessibility" ||  checkMode  === "accessibility_reset" )  && 
-       ( info.permissions && info.permissions.ACCESSIVILITY && ( info.appUpdated ) )
+       ( info.permissions && info.permissions.ACCESSIBILITY && ( info.appUpdated ) )
   ) {
     // 접근성 권한이 있으면서 이 페이지 접근한경우 권한체크해서 fn_GoMain : 메인 페이지로 이동
     fn_CheckPermission("accessibility","startSettingCallback");
@@ -315,7 +315,7 @@ function startCheckGrant() {
     $(".accessibility_reset").hide();
     $(".accessibility_basic").hide();
     $("#accessibility_basic_scope_of_use").hide();
-    if ( info && info.permissions && !info.permissions.ACCESSIVILITY ) {
+    if ( info && info.permissions && !info.permissions.ACCESSIBILITY ) {
       if ( !info.appInstalled ) {
         $(".accessibility_reset").hide();
         $(".accessibility_basic").show();
