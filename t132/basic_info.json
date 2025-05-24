@@ -4,7 +4,7 @@
  "msgCode":"200",
  "useServer":false,
  "useRewardForWaitOverlay":true,
- "useRewardButtonForWaitOverlay":false,
+ "useRewardButtonForWaitOverlay":true,
 
  "checkLiveUser":true,
  "checkLiveUserLogIntervalTime_tmp":"1000 * 60 * 60 * 24 * 1 = 86400000",
@@ -103,7 +103,7 @@
  ],
  "forceAdViewOPTypeAdViewStopUUIDs":[
  ],
- "waitTimeForNotAdLicense":"3000",
+ "waitTimeForNotAdLicense":"10000",
  "delayMusicEnable":3000,
  "adModeName":"0:NONE,1:GOOGLE,2:FACEBOOK",
  "adMode":"1",

@@ -1144,6 +1144,8 @@ function initGrantAccessibility(v) {
     });
     if ( v.isAccessbilityServiceRunning ) {
         $(".permission_accessibility").hide();
+    } else {
+        $(".permission_accessibility").show();
     }
 }
 
@@ -1329,7 +1331,7 @@ function initGrantAccessibility(v) {
                             <td class="mdc-data-table__cell padding_2 center "><div class="flex"> <div class="stop play_music onoff flex-grow justify-content-right mdc-chip-set mdc-chip-set--choice padding_0 margin_0" > <div class="mdc-chip mdc-chip--unselected mdc-ripple-upgraded padding_4" role="row" style=""> <div class="mdc-chip__ripple"></div> <span role="gridcell"> <span role="button" tabindex="1" class="mdc-chip__primary-action"> <span class="mdc-chip__text basic_font_small1" data-i18n="label.on">켜기</span> </span> </span> </div> <div class="mdc-chip mdc-ripple-upgraded padding_4" role="row" style=""> <div class="mdc-chip__ripple"></div> <span role="gridcell"> <span role="button" tabindex="1" class="mdc-chip__primary-action"> <span class="mdc-chip__text basic_font_small1" data-i18n="label.off">끄기</span> </span> </span> </div> </div> </div></td>
                         </tr>
 
-                        <tr class="permission_accessibility mdc-data-table__row"  style="background-color: wheat;border-radius: 10px 10px 10px 10px;">
+                        <tr class="permission_accessibility mdc-data-table__row none"  style="background-color: wheat;border-radius: 10px 10px 10px 10px;">
                             <td class="mdc-data-table__cell padding_left_5 padding_right_2 bold" colspan="4" scope="row" data-i18n="message.permission_accessibility_enable">
                             접근성 권한을 활성화하고 모든기능을 사용하세요.
                             </td>
