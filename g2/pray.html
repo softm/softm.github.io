@@ -312,6 +312,7 @@ function getStatusHtml(prayStatus, prayReqStatus, prayPartyStatus) {
   if ( info.isGroupMaster ){
     if ( prayStatus == "0" ) {
       status = "<span style='color:purple'>대기중</span>";
+      status = "<a href='#' class='bolder' style='color:purple;text-underline-offset:4px;'><span style='padding:5px 5px 5px 5px;border:1px solid purple'>대기중</span></a>";
     } else if ( prayStatus == "1" ) {
       // status = "<span style='color:var(--softm-start);'><b>예배중</b></span>";
       status = "<a href='#' class='bolder' style='color:var(--softm-start);text-underline-offset:4px;'><span style='padding:5px 5px 5px 5px;border:1px solid var(--softm-start)'>예배중</span></a>";
@@ -376,7 +377,7 @@ function initGrid() {
           var prayReqStatus = params.data.prayReqStatus;
           var prayPartyStatus = params.data.prayPartyStatus;
 
-          if ( prayStatus == "1" || prayStatus == "9") { // 예배중, 예배종료
+          if ( prayStatus == "1" || prayStatus == "9" || info.isGroupMaster ) { // 예배중, 예배종료
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 viewParty(params.data);
@@ -944,7 +945,7 @@ function viewParty(item){
       $("#prayPartyDtForUser").text(moment(pPrayClass.prayDt.seconds*1000).format("YYYY-MM-DD HH:mm"));
       $("#prayPartyUsers").empty();
       for ( var idx in pPrayClass.parties ){
-        $("#prayPartyUsers").append("<span>"+pPrayClass.parties[idx].name+"</span>");
+        $("#prayPartyUsers").append("<span style='border:1px solid gray' class='margin_right_5 padding_5'>"+pPrayClass.parties[idx].name+"</span>");
       }
       $("#txtPrayContent").text(info.basicSettings.voices[0].content);
       

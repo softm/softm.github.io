@@ -572,16 +572,16 @@ function initLoad(v,cb){
 
     initList(v);
 
-    window.startSettingCallback = function(grant,ok) {
-        if ( ok === "not" ) {
-            alert("알람권한을 활성화하세요.");
-            // fn_Reload(true);
-        } else {
-        }
-        // windowReload();
-    }
+    // window.startSettingCallback = function(grant,ok) {
+    //     if ( ok === "not" ) {
+    //         alert("알람권한을 활성화하세요.");
+    //         // fn_Reload(true);
+    //     } else {
+    //     }
+    //     // windowReload();
+    // }
     
-    fn_StartSetting("alarm","startSettingCallback");
+    // fn_StartSetting("alarm","startSettingCallback");
 
     if ( cb ) {
         cb();
