@@ -307,7 +307,7 @@ function searchPrayClassList(cb) {
   fn_SelectPrayClass($("#fromDt").val(),$("#toDt").val(),txtSearch.value.trim(),[],"selectPayClassCallBack");
 }
 
-function getStatusHtml(prayStatus,prayReqStatus) {
+function getStatusHtml(prayStatus, prayReqStatus, prayPartyStatus) {
   var status;
   if ( info.isGroupMaster ){
     if ( prayStatus == "0" ) {
@@ -369,7 +369,6 @@ function initGrid() {
       width: 90,
       minWidth: 90,
       cellRenderer: (params) => {
-        // debugger;
           var link = document.createElement('div');
           link.href = '#';
           console.log("row",params.data);
@@ -383,7 +382,7 @@ function initGrid() {
                 viewParty(params.data);
             });
           }
-          status = getStatusHtml(prayStatus,prayReqStatus);
+          status = getStatusHtml(prayStatus,prayReqStatus, prayPartyStatus);
           // params.data.prayDt.seconds
           link.innerHTML = status;
           // link.addEventListener('click', (e) => {
@@ -499,7 +498,6 @@ function initPrayClassDialog() {
           snackbar("삭제됨.");
 
           window.deletePrayClassCallBack = function (ok) {
-            debugger;
             if ( ok == "error" ) {
               alert("삭제중 오류가 발생했습니다.");
             } else {
@@ -703,7 +701,7 @@ function initPrayClassDialog() {
             snackbar("불참으로 변경되었습니다.");
             searchPrayClassList();
         }
-        fn_NotPartyPrayClass(uDocId,"notPartyPrayClassCallBack");
+        fn_NotPartyPrayClass(pDocId,"notPartyPrayClassCallBack");
         prayClassWriteDialog.close();
        }
      );
@@ -731,7 +729,7 @@ function initPrayClassDialog() {
           snackbar("참가로 변경되었습니다.");
             searchPrayClassList();
         }
-        fn_DonePartyPrayClass(uDocId,"donePartyPrayClassCallBack");
+        fn_DonePartyPrayClass(pDocId,"donePartyPrayClassCallBack");
         prayClassWriteDialog.close();
        }
      );
@@ -940,7 +938,7 @@ function viewParty(item){
       var prayStatus = pPrayClass.prayStatus;
       var prayReqStatus = pPrayClass.prayReqStatus;
       var prayPartyStatus = pPrayClass.prayPartyStatus;
-      status = getStatusHtml(prayStatus,prayReqStatus);
+      status = getStatusHtml(prayStatus,prayReqStatus, prayPartyStatus);
       $(".pray_party_view .mdc-dialog__title").html( '"<span class="bolder">' + pPrayClass.title + '</span>"' + " - " + status );
       $("#txtPartyMaster").text(pPrayClass.profileName?pPrayClass.profileName:"익명");
       $("#prayPartyDtForUser").text(moment(pPrayClass.prayDt.seconds*1000).format("YYYY-MM-DD HH:mm"));
@@ -1147,20 +1145,17 @@ function base64ToBlob(base64, fileType) {
 	}
 
 var audioFile;
-
 function audioPlay() {
-  audioFile = new Audio();
-  let audioBlob = base64ToBlob($("#txtPrayContentToMP3").text(), "mp3");
-  audioFile.src = window.URL.createObjectURL(audioBlob);
-  audioFile.playbackRate = 1; //재생속도
   audioFile.play();
 }
 
 function speak(v){
   if ( audioFile ) {
-    alert("있음. 재생만")
+    audioFile.currentTime = 0;
     audioPlay();
     return;
+  } else {
+
   }
 
   var data = {
@@ -1184,6 +1179,10 @@ function speak(v){
         success: function(res) {
           // $('#textVal').val(res.audioContent)
           $("#txtPrayContentToMP3").text(res.audioContent)
+            audioFile = new Audio();
+            let audioBlob = base64ToBlob($("#txtPrayContentToMP3").text(), "mp3");
+            audioFile.src = window.URL.createObjectURL(audioBlob);
+            audioFile.playbackRate = 1; //재생속도
           audioPlay();
         },
         error : function(request, status, error ) {
@@ -1683,22 +1682,21 @@ function speak(v){
             </div>
           </div>
         </div>
-  <div class="mdc-card__primary-action demo-card__primary-action" tabindex="0">
+  <div class="mdc-card__primary-action demo-card__primary-action margin_top_5" tabindex="0">
     <div class="mdc-card__media mdc-card__media--16-9 demo-card__media" style="background-image: url(&quot;https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/2.jpg&quot;);"></div>
 
     <div class="demo-card__secondary mdc-typography mdc-typography--body2">
       <textarea id="txtPrayContentToMP3" style="display: none;"></textarea>
       <span id="txtPrayContent"></span>
-            <button id="btnPartyTTS" class="mdc-button mdc-button--raised margin_right_5 padding_2 right" 
-            style="
-            /* position:fixed;right:10px */
-            "
+            <button id="btnPartyTTS" class="mdc-button mdc-ripple-upgraded margin_right_5 padding_2 right" 
+style="border:1px solid var(--softm-start);height: 23px;"
             >
               <div class="mdc-button__ripple"></div>
-              <span class="label" data-i18n="label.confirm_">기도듣기</span>
+              <span class="label basic_font_small1" data-i18n="label.confirm_">기도듣기</span>
             </button>
+            
           <button id="btnPartyTTSStop" class="mdc-button mdc-button--raised  material-icons "
-          style="    padding: 0px;
+          style="    padding: 0px;height: 23px;
                 /* width: 26px; */
                 min-width: 40px !important;
                 /* height:30px; */
