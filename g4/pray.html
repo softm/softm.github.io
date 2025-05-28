@@ -944,9 +944,12 @@ function viewParty(item){
       $("#txtPartyMaster").text(pPrayClass.profileName?pPrayClass.profileName:"익명");
       $("#prayPartyDtForUser").text(moment(pPrayClass.prayDt.seconds*1000).format("YYYY-MM-DD HH:mm"));
       $("#prayPartyUsers").empty();
+      var partiesStr = "";
       for ( var idx in pPrayClass.parties ){
-        $("#prayPartyUsers").append("<span style='border:1px solid gray' class='margin_right_5 padding_5'>"+pPrayClass.parties[idx].name+"</span>");
+        // $("#prayPartyUsers").append("<span style='border:1px solid gray' class='margin_right_5 padding_5'>"+pPrayClass.parties[idx].name+"</span>");
+        partiesStr += pPrayClass.parties[idx].name + (idx < pPrayClass.parties.length-1?",":"")
       }
+      $("#prayPartyUsers").text(partiesStr);
       $("#txtPrayContent").text(info.basicSettings.voices[0].content);
       
       function addChip(chipInfo) {
@@ -957,19 +960,21 @@ function viewParty(item){
         chipEl.attr("id",chipInfo.id); /* 아이디를 교체 */
         $("#chipsPartyGroup").append(chipEl[0]);
         chipsetPartyGroup.addChip(chipEl[0]);
-        
         if ( info.groups.findIndex(id=>id==chipInfo.id) > -1 ) {
           // chipEl.addClass("mdc-chip--selected")
           chipsetPartyGroup.chipsList[chipsetPartyGroup.chipsList.length-1].selected = true;
         }
       }    
+      var groupStr = "";
       // $(chipsetGroup.root).remove();
       chipsetPartyGroup.root.innerHTML = "";
       for( idx in pPrayClass.groups ) {
         var gId = pPrayClass.groups[idx];
         var chipInfo = info.basicSettings.groups.find(item=>item.id==gId);
-        addChip(chipInfo);
+          groupStr += chipInfo.name + (idx < pPrayClass.groups.length-1?",":"")
+        // addChip(chipInfo);
       }
+      chipsetPartyGroup.root.innerHTML = groupStr;
     }
 
     fn_SelectOnePrayClass(pDocId,"selectOnePayClassCallBack");
@@ -1574,7 +1579,7 @@ function speak(v){
       /* top: -117px; */
       ">
       <div class="flex">
-        <div class="row flex-grow">
+        <div class="row flex-grow left">
           <h2 id="mdc-dialog-with-list-label" class="mdc-dialog__title" style="padding:0px;word-break: break-all;width:90%;border:0px solid red">예배중</h2>
         </div>
         <div class="row flex-grow vmiddle padding_top_10 right padding_right_5">
@@ -1584,7 +1589,7 @@ function speak(v){
               <i class="material-icons mdc-button__icon">refresh</i>
               <span class="mdc-button__label" data-i18n="label.home_">새로고침</span>
           </button> -->
-          <button id="btnRefeshParty" class="mdc-button mdc-button--raised  material-icons "
+          <button id="btnRefeshParty" class="mdc-button mdc-button--raised  material-icons none"
           style="    padding: 0px;
                 /* width: 26px; */
                 min-width: 40px !important;
@@ -1596,7 +1601,7 @@ function speak(v){
             class="mdc-button__ripple"></span>refresh</button>
         </div>
 
-        <div id="close_class_dialog_x" class="mdc-dialog__close-tooltip-wrapper none">
+        <div id="close_class_dialog_x" class="mdc-dialog__close-tooltip-wrapper">
           <button class="mdc-icon-button material-icons mdc-dialog__close" data-mdc-dialog-action="close"
             style="position: fixed;right: 5%;z-index:10">
             close
@@ -1665,12 +1670,12 @@ function speak(v){
         </div>
         <div class="group_master">
           <div class="flex"><!--fieldset-->
-            <label class="title" style="overflow: hidden;
+            <label class="title vmiddle" style="overflow: hidden;
                           text-overflow: ellipsis;
-                          width: calc(30%);    align-self: start;"><span class="mdc-chip__text"><strong
+                          width: calc(20%);"><span class="mdc-chip__text"><strong
                   data-i18n="label.renavi_prevent_time_">소속</strong></span></label>
-            <div class="row packages_ flex">
-              <div class="left  margin_left_0 margin_top_5" style="flex-grow: 1;width:55%;overflow:scroll;height:100px">
+            <div class="flex">
+              <div class="left  margin_left_0 margin_top_5" style="flex-grow: 1;width:55%;overflow:scroll;">
                 <span id="chipsPartyGroup"
                   class="flex-grow justify-content-right right mdc-chip-set mdc-chip-set--input mdc-chip--deletable mdc-chip-set--filter mdc-chip-set--choice_no "
                   style="display: inline">
@@ -1686,14 +1691,14 @@ function speak(v){
   <div class="mdc-card__primary-action demo-card__primary-action margin_top_5" tabindex="0">
     <div class="mdc-card__media mdc-card__media--16-9 demo-card__media" style="background-image: url(&quot;https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/2.jpg&quot;);"></div>
 
-    <div class="demo-card__secondary mdc-typography mdc-typography--body2">
+    <div class="demo-card__secondary mdc-typography mdc-typography--body2 margin_top_5">
       <textarea id="txtPrayContentToMP3" style="display: none;"></textarea>
-      <span id="txtPrayContent"></span>
+      <span id="txtPrayContent" class="basic_font_small3"></span>
             <button id="btnPartyTTS" class="mdc-button mdc-ripple-upgraded margin_right_5 padding_2 right" 
 style="border:1px solid var(--softm-start);height: 23px;"
             >
               <div class="mdc-button__ripple"></div>
-              <span class="label basic_font_small1" data-i18n="label.confirm_">기도듣기</span>
+              <span class="label basic_font_small2" data-i18n="label.confirm_">기도듣기</span>
             </button>
             
           <button id="btnPartyTTSStop" class="mdc-button mdc-button--raised  material-icons "
@@ -1753,7 +1758,7 @@ style="border:1px solid var(--softm-start);height: 23px;"
         </div>
         <div class="flex w_full">
           <div class="flex-grow left">
-            <button class="mdc-button mdc-ripple-upgraded margin_left_5"
+            <button class="mdc-button mdc-ripple-upgraded margin_left_5 none"
             data-mdc-dialog-action="close"
             style="border:1px solid var(--softm-start);--mdc-ripple-fg-size: 48px; --mdc-ripple-fg-scale: 2.041914951967159; --mdc-ripple-fg-translate-start: 20px, -16.37890625px; --mdc-ripple-fg-translate-end: 16.15625px, -6px;">
             <div class="mdc-button__ripple"></div>
