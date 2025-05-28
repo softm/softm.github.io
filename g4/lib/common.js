@@ -503,8 +503,8 @@ var messages  = {
           label: {
             app: "앱",
             run: "실행",
-            app_name : "신의속삭임",
-            top_bar : "신의속삭임",
+            app_name : "함께기도",
+            top_bar : "함께기도",
             first_start : "시작",
             refresh_start : "새로고침",
             after_second : "초 후 실행됨",
@@ -796,7 +796,7 @@ var messages  = {
             save : "저장 되었습니다.",
             would_save : "저장 하시겠습니까?",
             would_change : "변경 하시겠습니까?",
-            first_start : "신의속삭임",
+            first_start : "함께기도",
             first_start1 : "🚙 내비 앱",
             // first_start2 : "충전, 블루투스, 와이파이 연결하면,<br/>내비게이션 앱을 시작, 종료할 수 있습니다.",
             first_start2 : "전원 꽂으면 내비 실행",
@@ -882,22 +882,22 @@ var messages  = {
             permission6 : '<span style="color:var(--softm-start);font-weight:bold">절전모드 해제</span> 설정',
             permission7 : '<span style="color:var(--softm-start);font-weight:bold">블루투스 권한</span> 설정',
             permission8 : '<span style="color:var(--softm-start);font-weight:bold">시스템설정 변경 권한</span> 설정',
-            permission_grant_app_select : '"<B>신의속삭임</B>" 앱을 선택하세요.',
+            permission_grant_app_select : '"<B>함께기도</B>" 앱을 선택하세요.',
 
-            permission_grant_on_for_overlay1 : '"<B>신의속삭임</B>" 선택',
+            permission_grant_on_for_overlay1 : '"<B>함께기도</B>" 선택',
             permission_grant_on_for_overlay2 : '사용 권한 "<b>켬</b>"',
 
-            permission_grant_on_app_select : '"<B>신의속삭임</B>" 선택',
+            permission_grant_on_app_select : '"<B>함께기도</B>" 선택',
             permission_grant_on_for_alarm1 : '권한 허용 "<b>켬</b>"',
             permission_grant_on_for_alarm2 : '"<b>뒤로가기</b>"로 돌아오세요.',
 
             permission_grant_on : '"<B>권한 허용</B>"을 켜고,',
             permission_grant_backkey_return : '<B>뒤로가기</B> 눌러, 화면으로 돌아오세요.',
             
-            permission_grant_on_for_notification_access : '"<B>신의속삭임</B>" 선택',
+            permission_grant_on_for_notification_access : '"<B>함께기도</B>" 선택',
             permission_grant_on_for_notification_access_2 : '사용 권한 "<b>켬</b>"',
 
-            permission_grant_on_for_location_information_access : '"<B>신의속삭임</B>"은 앱이 종료되었거나 사용 중이 아닐 때도 위치 데이터를 수집하여 티맵 실행시 중복 실행을 방지하는 기능을 제공합니다.',
+            permission_grant_on_for_location_information_access : '"<B>함께기도</B>"은 앱이 종료되었거나 사용 중이 아닐 때도 위치 데이터를 수집하여 티맵 실행시 중복 실행을 방지하는 기능을 제공합니다.',
             permission_grant_on_for_background_location_information_access : '목적지 안내 실행시 <b>백그라운드</b>에서 <b>위치 데이터</b>를 활용합니다.',
             permission_grant_on_for_background_location_information_access_10 : '<B>"[항상허용]"</B>을 선택하세요.',
             permission_grant_on_for_post_notifications : '<b>상단 알림바</b>를 <b>활성화</b>하세요.<Br/>기능을 편리하게 이용할 수 있습니다.',
@@ -905,7 +905,7 @@ var messages  = {
 
             permission_grant_on_for_accessibility : '앱 실행시 기능을 On/Off를 위해 이용됩니다.<br/>앱 실행후, 종료기능을 위해 이용됩니다.',
             permission_grant_on_for_accessibility2 : '"<B>설치된 앱</B>" 선택',
-            permission_grant_on_for_accessibility3 : '"<B>신의속삭임</B>" 선택',
+            permission_grant_on_for_accessibility3 : '"<B>함께기도</B>" 선택',
             permission_grant_on_for_accessibility4 : '사용 권한 "<b>켬</b>"',
             
             permission_grant_add_for_location : '실행성능 향상',
