@@ -3,7 +3,7 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>티</title>
+  <title>함께기도</title>
   <link rel="shortcut icon" href="#">
   
   <!-- <link href="./lib/material-components-web.min.css" rel="stylesheet"> -->
@@ -1095,6 +1095,9 @@ window.getInfoCallBack = function (data) {
         // 승인되면 _ORG 생성
         // fn_DeviceSaveData("_ORG_REG", "softmch");
         // fn_DeviceSaveData("_ORG", "softmch");
+        //if ( info.isGroupMaster ) $(".group").show();
+        //else $(".group").hide();
+        $(".group").hide();
         initChipsetGroup(window.info);
 
     }
@@ -1241,9 +1244,9 @@ function go() {
           </span>
         </div>
 
-      </div>  
-            <!-- 소속 -->
-      <div class="row" style="margin-top: 10px !important;margin-bottom: 5px !important;">
+      </div>
+      <!-- 소속 -->
+      <div class="row group none" style="margin-top: 10px !important;margin-bottom: 5px !important;">
         <div class="margin_top_20 margin_left_18 left">
           <span class="bold basic_font_medium4">
             <span data-i18n="[html]message.first_group1" class="black">소속</span>
@@ -1287,7 +1290,7 @@ function go() {
         </div>
       
         <hr class="sub"/>
-        <div class="row packages_ flex">
+        <div class="row packages_ flex group">
           <div class="left  margin_left_0 margin_top_5" style="flex-grow: 1;width:55%;overflow:scroll">
             <span id="chipsGroup" class="flex-grow justify-content-right right mdc-chip-set mdc-chip-set--input mdc-chip--deletable mdc-chip-set--filter mdc-chip-set--choice_no "
                           style="display: inline"

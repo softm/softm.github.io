@@ -1208,8 +1208,8 @@ function goPermissionForBackgroundLocation() {
 /**
  * API 800 : CreatePayClass
  */
-function fn_CreatePrayClass(title,prayDt,groups,callBackFunc) {
-	var result = { "header":{ "api":"800" }, "body":{ "title":title,"prayDt":prayDt,"groups":groups, "callBackFunc":callBackFunc } };
+function fn_CreatePrayClass(title,content,prayDt,groups,callBackFunc) {
+	var result = { "header":{ "api":"800" }, "body":{ "title":title,"content":content,"prayDt":prayDt,"groups":groups, "callBackFunc":callBackFunc } };
 	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
 		 fn_Js_Bridge(result);
 	 }else{
@@ -1244,8 +1244,8 @@ function fn_SelectOnePrayClass(docId,callBackFunc) {
 /**
  * API 803 : UpdatePrayClass
  */
-function fn_UpdatePrayClass(docId,title,prayDt,groups,callBackFunc) {
-	var result = { "header":{ "api":"803" }, "body":{ "docId":docId, "title":title,"prayDt":prayDt,"groups":groups, "callBackFunc":callBackFunc } };
+function fn_UpdatePrayClass(docId,title,content,prayDt,groups,callBackFunc) {
+	var result = { "header":{ "api":"803" }, "body":{ "docId":docId, "title":title,"content":content,"prayDt":prayDt,"groups":groups, "callBackFunc":callBackFunc } };
 	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
 		 fn_Js_Bridge(result);
 	 }else{
@@ -1313,6 +1313,43 @@ function fn_NotPartyPrayClass(docId,callBackFunc) {
 	 }
 }
 
+
+/**
+ * API 810 : AddPrayComment
+ */
+function fn_AddPrayComment(docId,comment,callBackFunc) {
+	var result = { "header":{ "api":"810" }, "body":{ "docId":docId, "comment":comment, "callBackFunc":callBackFunc } };
+	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
+		 fn_Js_Bridge(result);
+	 }else{
+		 eval(callBackFunc + "('')");
+	 }
+}
+
+/**
+ * API 811 : SelectPrayComment
+ */
+function fn_SelectPrayComment(docId,callBackFunc) {
+	var result = { "header":{ "api":"811" }, "body":{ "docId":docId, "callBackFunc":callBackFunc } };
+	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
+		 fn_Js_Bridge(result);
+	 }else{
+		 eval(callBackFunc + "('')");
+	 }
+}
+
+/**
+ * API 812 : DeletePrayComment
+ */
+function fn_DeletePrayComment(docId,classDocId,callBackFunc) {
+	var result = { "header":{ "api":"812" }, "body":{ "docId":docId, "classDocId":classDocId, "callBackFunc":callBackFunc } };
+	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
+		 fn_Js_Bridge(result);
+	 }else{
+		 eval(callBackFunc + "('')");
+	 }
+}
+
 /**
  * API 900 : BindAlarm
  */
@@ -1341,6 +1378,18 @@ function fn_AddAlarm(prayClass, callBackFunc) {
  */
 function fn_CancelAlarm(prayClass, callBackFunc) {
 	var result = { "header":{ "api":"902" }, "body":{ "prayClass":JSON.stringify(prayClass), "callBackFunc":callBackFunc } };
+	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
+		 fn_Js_Bridge(result);
+	 }else{
+		 eval(callBackFunc + "('')");
+	 }
+}
+
+/**
+ * API 910 : ShareLink
+ */
+function fn_ShareLink(title,data, callBackFunc) {
+	var result = { "header":{ "api":"910" }, "body":{ "data":data,"title":title, "callBackFunc":callBackFunc } };
 	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
 		 fn_Js_Bridge(result);
 	 }else{

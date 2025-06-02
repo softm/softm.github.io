@@ -3,7 +3,7 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
-  <title>티</title>
+  <title>함께기도</title>
   <link rel="shortcut icon" href="#">
   
   <!-- <link href="./lib/material-components-web.min.css" rel="stylesheet"> -->
@@ -186,7 +186,8 @@ $( document ).ready(function() {
     }
 
     var v = window.info;
-    
+    if ( info.isGroupMaster ) $(".group").show();
+    else $(".group").hide();
     initChipsetGroup();
     initBasicInfo();
     initWrite();
@@ -218,7 +219,7 @@ function initWrite() {
             // alert(t("message.first_select_group"));
             return;
         }
-        if ( chipsetGroup.selectedChipIds.length == 0 ) {
+        if ( info.isGroupMaster && chipsetGroup.selectedChipIds.length == 0 ) {
             // alert("소속을 하나 이상 선택하세요.");
             alert(t("message.first_select_group"));
             return;
@@ -320,9 +321,9 @@ function getInfo() {
         <header class="mdc-top-app-bar app-bar" id="app-bar">
             <div class="mdc-top-app-bar__row">
                 <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-<!--                     
+                    
   <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button">menu</button>
--->
+
                     <button class="none material-icons  mdc-top-app-bar__navigation-icon mdc-icon-button">menu</button>
                     <button id="btnHome"
                         class="none mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded">home</button>
@@ -494,7 +495,7 @@ function getInfo() {
 
       </div>  
         <div class="row sub">
-          <div class="flex"><!--fieldset-->
+          <div class="flex group"><!--fieldset-->
                 <label class="title"
                   style="
                   text-overflow: ellipsis;

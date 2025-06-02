@@ -4,8 +4,8 @@ var messages  = {
           label: {
             app: "App",
             run: "Run",
-            app_name: "Drive Auto Nav",
-            top_bar: "Drive Auto Nav",
+            app_name: "Pray together",
+            top_bar: "Pray together",
             first_start : "Start",
             refresh_start : "Refresh",
             after_second: "executed after seconds",
@@ -377,7 +377,7 @@ var messages  = {
             permission6: 'Set <span style="color:var(--softm-start);font-weight:bold">Disabled "Power Saving Mode"</span>',
             permission7: 'Set <span style="color:var(--softm-start);font-weight:bold">"Bluetooth" permission</span>',
             permission8: 'Set <span style="color:var(--softm-start);font-weight:bold">"Change system settings" permission</span>',
-            permission_grant_app_select:'Please select the app "<B>Drive Auto Nav</B>".',
+            permission_grant_app_select:'Please select the app "<B>Pray together</B>".',
             permission_grant_on_for_overlay1 : 'Select "<B>God\'s Whisper</B>"',
             permission_grant_on_for_overlay2 : 'Permission "<b>On</b>"',
 
@@ -389,7 +389,7 @@ var messages  = {
             permission_grant_backkey_return:'Press <B>Back</B> to return to the screen.',
             permission_grant_on_for_notification_access : '"Notification access"to turn on the right.',
             permission_grant_on_for_notification_access_2 : 'The accuracy of program operation can be improved.',
-            permission_grant_on_for_location_information_access : '"<B>Drive Auto Nav</B>" collects location data even when the app is closed or not in use, and provides a function to prevent duplicate execution when running Navigation.',
+            permission_grant_on_for_location_information_access : '"<B>Pray together</B>" collects location data even when the app is closed or not in use, and provides a function to prevent duplicate execution when running Navigation.',
             permission_grant_on_for_background_location_information_access : 'When running destination guidance, <b>use <b>location data</b> in the <b>background</b>.',
             permission_grant_on_for_background_location_information_access_10 : '<B>Select [Always Allow]"</B>.',
             permission_grant_on_for_post_notifications : '<b>Enable</b> the <b>top notification bar</b>. You can use the <Br/>function conveniently.',
@@ -1090,10 +1090,10 @@ var DRAWER_LIST_INFO = {
   "onoff.html" : {page:"onoff.html",visible:true,icon:"toggle_on",label:"title.start_stop",showOnlySelf:true}, // 시작/종료
   "run_option.html" : {page:"run_option.html",visible:true,icon:"link",label:"title.run_options",showOnlySelf:true,popup:true,reloadAtReturn:true}, // 실행옵션
   "developer_support.html" : {page:"developer_support.html",visible:true,icon:"favorite",label:"title.support_developers",showOnlySelf:true}, // 개발자 응원하기
-  "home_company.html" : {page:"home_company.html",visible:true,icon:"home_work",label:"title.home_company",popup:true}, // 집/회사
-  "search.html?idx=2" : {page:"search.html",visible:true,icon:"bookmark",label:"title.favorite",pathSearchSame:true,popup:true}, // 즐겨찾기
+  // "home_company.html" : {page:"home_company.html",visible:true,icon:"home_work",label:"title.home_company",popup:true}, // 집/회사
+  // "search.html?idx=2" : {page:"search.html",visible:true,icon:"bookmark",label:"title.favorite",pathSearchSame:true,popup:true}, // 즐겨찾기
   // "membership.html" : {icon:"card_membership",label:"title.membership"}, // 멤버쉽
-  "laboratory.html" : {page:"laboratory.html",visible:true,icon:"emoji_objects",label:"title.laboratory",popup:true}, // 연구소
+  // "laboratory.html" : {page:"laboratory.html",visible:true,icon:"emoji_objects",label:"title.laboratory",popup:true}, // 연구소
   "qna.html" : {page:"qna.html",icon:"forum",visible:true,label:"title.contact_us",popup:true}, // 문의하기
   "goto_map_store.html" : {page:"goto_map_store.html",visible:true,icon:"storefront",label:"title.goto_map_store"}, // 어플 평가하기
   // "rate_the_app.html" : {page:"rate_the_app.html",visible:true,icon:"thumb_up",label:"title.rate_the_app"}, // 어플 평가하기
@@ -1776,4 +1776,38 @@ function initBasicInfo() {
         $(".lifeTimeUser").show();
     }
   } 
+}
+function escapeAllControlCharacters(jsonString) {
+    // 모든 이스케이프 문자를 \\ 형태로 변환
+    const escapedString = jsonString
+        .replace(/\\/g, '\\\\')  // 백슬래시를 \\로 변환
+        .replace(/\n/g, '\\n')   // 줄바꿈을 \\n으로 변환
+        .replace(/\t/g, '\\t')   // 탭을 \\t으로 변환
+        .replace(/\r/g, '\\r')   // 캐리지 리턴을 \\r으로 변환
+        // .replace(/\b/g, '\\b')   // 백스페이스를 \\b으로 변환
+        // .replace(/\f/g, '\\f')   // 폼피드를 \\f으로 변환
+        // .replace(/\"/g, '\\"')   // 큰따옴표를 \\\"으로 변환
+        // .replace(/'/g, "\\'");   // 작은따옴표를 \\'으로 변환
+
+    return escapedString;
+}
+
+function safeParseJson(jsonString) {
+    // JSON 문자열에서 예상치 못한 제어 문자가 있는지 검사하고 제거합니다.
+    // 제어 문자가 있는 경우 이를 \\n, \\t 등으로 변환하거나 삭제합니다.
+
+    // 제어 문자 제거 정규 표현식 (새로운 줄, 탭 등)
+  var sanitizedString = (jsonString);
+  // var sanitizedString = escapeAllControlCharacters(jsonString);
+  //  var sanitizedString = jsonString.replace(/[\x00-\x1F\x7F]/g, '');
+    
+    try {
+        // 파싱 시도
+        const parsedObject = JSON.parse(sanitizedString);
+        return parsedObject;
+    } catch (error) {
+        // 오류 발생 시, 오류 메시지 출력
+        console.error("JSON 파싱 오류:", error);
+        return null;
+    }
 }

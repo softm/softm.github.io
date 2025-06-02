@@ -216,8 +216,8 @@ $( document ).ready(function() {
       searchPrayClassList(function() {
         var oItem = prayClassList.find((item)=>item.docId==pDocIdForInvite );
         window.selectOnePayClassCallBack = function (data) {
-          var pPrayClass = safeParseJson(data)||{};
-          if ( pPrayClass ) viewParty(pPrayClass);
+          var pPrayClass = JSON.parse(data)||{};
+          if ( pPrayClass ) viewDetail(pPrayClass);
           else alert("초대된 모임이 삭제되었거나, 올바르지 않습니다.")
         };
         fn_SelectOnePrayClass(pDocIdForInvite,"selectOnePayClassCallBack");
@@ -296,10 +296,10 @@ function initSearch() {
     viewParty(pPrayClass);
   });
 
-  btnShareForWrite    = new mdc.ripple.MDCRipple(document.querySelector("#btnShareForWrite"));
-  btnShareForWrite.listen("click", function (event) {
+  btnShare    = new mdc.ripple.MDCRipple(document.querySelector("#btnShare"));
+  btnShare.listen("click", function (event) {
     // alert("http://softm.net/go.html?docId="+pPrayClass.docId);
-      fn_ShareLink( decodeURIComponent(uPrayClass.title),"기도초대 - "  + uPrayClass.title + " : " + info.serverHost + "/go.html?docId="+uPrayClass.docId);
+      fn_ShareLink(pPrayClass.title,"기도초대 - "  + pPrayClass.title + " : " + info.serverHost + "/go.html?docId="+pPrayClass.docId);
 
       // window.GetURLCallback = function(url) {
       //   if ( location.protocol.startsWith("http") && url.startsWith("file") ) {
@@ -312,26 +312,6 @@ function initSearch() {
       // fn_GetURL("WEB_GO" + reqId,"GetURLCallback");
   });
 
-  btnShareForParty    = new mdc.ripple.MDCRipple(document.querySelector("#btnShareForParty"));
-  btnShareForParty.listen("click", function (event) {
-    // alert("http://softm.net/go.html?docId="+pPrayClass.docId);
-      fn_ShareLink(decodeURIComponent(pPrayClass.title),"기도초대 - "  + pPrayClass.title + " : " + info.serverHost + "/go.html?docId="+pPrayClass.docId);
-  });
-}
-function calcHeightBottomAreaForComment() {
-
-    // setTimeout(function(){
-      // visibility: hidden
-      //  $(".comment-container").css("visibility","hidden");
-      // var rec = $(".comment-container")[0].getBoundingClientRect() ;
-      // alert((prayCommentList.length*30) +  rec.height )
-      
-      // },500)
-      var cListHeight = $(".comment-container").is(':visible') ? prayCommentList.length*4: 0;
-      var addHeight = $(".comment-container").is(':visible') ? $(".comment-container")[0].offsetHeight + 60 : 0;
-      
-      $("#bottomAreaForComment").css("height",cListHeight + addHeight);
-
 
 }
 var prayClassList;
@@ -339,7 +319,7 @@ function searchPrayClassList(cb) {
   fn_Progress_Show();
   window.selectPayClassCallBack = function (data) {
     fn_Progress_Hide();
-    prayClassList = safeParseJson(data||null)||[];
+    prayClassList = JSON.parse(data||null)||[];
     gridApi.setGridOption("rowData", prayClassList);
     if ( cb ) cb();
   }
@@ -356,112 +336,38 @@ function searchPrayClassList(cb) {
   fn_SelectPrayClass($("#fromDt").val(),$("#toDt").val(),txtSearch.value.trim(),[],"selectPayClassCallBack");
 }
 
-var prayCommentList 
-function selectPrayCommentList(cb) {
-  fn_Progress_Show();
-  window.selectPrayCommentCallBack = function (data) {
-    fn_Progress_Hide();
-    prayCommentList = safeParseJson(data||null)||[];
-    if ( prayCommentList.length == 0 ) {
-      $(".comment-section").hide();
-    } else {
-      $(".comment-section").show();
-    }
-
-    if ( prayCommentList.length <= 4 ) {
-      $("#bottomCommentBar").hide();
-    } else {
-      $("#bottomCommentBar").show();
-    }
-
-    calcHeightBottomAreaForComment();
-
-    $(".commentCount").text(prayCommentList.length);
-    // gridApi.setGridOption("rowData", prayClassList);
-      $(".comment-section").empty();
-      for ( var idx in prayCommentList ){
-        var cDiv = $(".comment.clone").clone();
-            cDiv.removeClass("none clone");
-        var item = prayCommentList[idx];
-        cDiv.find(".comment-content").text(decodeURIComponent(item.comment));
-        cDiv.find(".timestamp").text(moment(item.wDate.seconds*1000).format("MM-DD HH:mm"));
-        if ( !item.isOwn ) {
-          cDiv.find(".delete-btn").hide();
-        }
-        cDiv.find(".delete-btn").click(function(e) {
-          confirm(
-            t("댓글을 삭제하시겠습니까?"),
-            function() {
-              window.deletePrayCommentCallBack = function (ok) {
-                if ( ok == "error" ) {
-                  alert("삭제중 오류가 발생했습니다.");
-                } else {
-                    snackbar("댓글이 삭제되었습니다.");
-                    selectPrayCommentList();
-                }
-              }
-              fn_DeletePrayComment(item.docId,item.classDocId,"deletePrayCommentCallBack");
-            }
-          );
-        });
-        $(".comment-section").append(cDiv);
-      }
-    if ( cb ) cb();
-  }
-  setTimeout(function(){
-    fn_Progress_Hide();
-  },10000);
-  // var groups = [];
-  // for ( idx in chipsetGroup.selectedChipIds ) {
-  //     var chipId = chipsetGroup.selectedChipIds[idx];
-  //     var chipIdx = chipsetGroup.findChipIndex(chipId);
-  //     console.log("chipId",chipId,chipsetGroup.findChipIndex(chipId),$(chipsetGroup.chipsList[chipIdx].root).data("value"));  
-  //     groups.push($(chipsetGroup.chipsList[chipIdx].root).data("value"));
-  // }
-  fn_SelectPrayComment(pPrayClass.docId,"selectPrayCommentCallBack");
-}
-
-
-
-function getStatusHtml(prayClass,pageGubun) {
+function getStatusHtml(prayStatus, prayReqStatus, prayPartyStatus) {
   var status;
-  var prayStatus = prayClass.prayStatus;
-  var prayReqStatus = prayClass.prayReqStatus;
-  var prayPartyStatus = prayClass.prayPartyStatus;
-  var ownStr = prayClass.isOwn?"<a href='#' class='bolder " + pageGubun + " status-box ' style='background:var(--softm-start);text-decoration:none;vertical-align:super;'><span class='bold' style='padding:5px;border:1px solid white;font-size:7pt;color:white'>나</span></a>":"";
-  pageGubun = !pageGubun?"list":pageGubun;
   if ( info.isGroupMaster ){
     if ( prayStatus == "0" ) {
       status = "<span style='color:purple'>대기중</span>";
-      status = "<a href='#' class='bolder_ " + pageGubun + " status-box' style='color:purple;text-underline-offset:4px;'><span style='padding:5px 5px 5px 5px;border:1px solid purple'>대기중</span></a>" + ownStr;
+      status = "<a href='#' class='bolder' style='color:purple;text-underline-offset:4px;'><span style='padding:5px 5px 5px 5px;border:1px solid purple'>대기중</span></a>";
     } else if ( prayStatus == "1" ) {
       // status = "<span style='color:var(--softm-start);'><b>예배중</b></span>";
-      status = "<a href='#' class='bolder_ " + pageGubun + " status-box' style='color:var(--softm-start);text-underline-offset:4px;'><span style='padding:5px 5px 5px 5px;border:1px solid var(--softm-start)'>예배중</span></a>" + ownStr;
+      status = "<a href='#' class='bolder' style='color:var(--softm-start);text-underline-offset:4px;'><span style='padding:5px 5px 5px 5px;border:1px solid var(--softm-start)'>예배중</span></a>";
     } else if ( prayStatus == "9" ) {
       // status = "<span style='color:red;border:1px solid red'>예배종료</span>";
-      status = "<a href='#' class='bolder_ " + pageGubun + " status-box ' style='color:red;text-underline-offset:4px;'><span style='padding:5px 5px 5px 5px;border:1px solid red'>예배종료</span></a>" + ownStr;
+      status = "<a href='#' class='bolder' style='color:red;text-underline-offset:4px;'><span style='padding:5px 5px 5px 5px;border:1px solid red'>예배종료</span></a>";
     }
   } else {
     if ( prayStatus == "0" ) {
       if ( prayReqStatus == "0") { // 기도신청 상태 : 미신청
-     // status = "<span style='color:purple' class=' " + pageGubun + " status-box'>대기중</span>";
-        status = "<a href='#' class='bolder_ " + pageGubun + " status-box' style='color:purple;text-underline-offset:4px;'><span style='padding:5px 5px 5px 5px;border:1px solid purple'>대기중</span></a>" + ownStr;
-    
+        status = "<span style='color:purple'>대기중</span>";
       } else { // 기도신청 상태 :  신청
-        status = "<span style='color:green' class=' " + pageGubun + " status-box'>신청중</span>" + ownStr;
+        status = "<span style='color:green'>신청중</span>";
       }
     } else if ( prayStatus == "1" ) {
-      status = "<a href='#' class='bolder_ " + pageGubun + " status-box' style='color:var(--softm-start);text-underline-offset:4px;'><span style='padding:5px 5px 5px 5px;border:1px solid var(--softm-start)'>예배중</span></a>" + ownStr;
+      status = "<a href='#' class='bolder' style='color:var(--softm-start);text-underline-offset:4px;'><span style='padding:5px 5px 5px 5px;border:1px solid var(--softm-start)'>예배중</span></a>";
     } else if ( prayStatus == "9" ) {
       if ( prayPartyStatus == "0" ) {
-        status = "<a href='#' class='bolder_ " + pageGubun + " status-box  status-box ' style='color:red;text-underline-offset:4px;'><span style='padding:5px 5px 5px 5px;border:1px solid red'>예배종료</span></a>" + ownStr;
+        status = "<a href='#' class='bolder' style='color:red;text-underline-offset:4px;'><span style='padding:5px 5px 5px 5px;border:1px solid red'>예배종료</span></a>";
       } else {
         if ( prayPartyStatus == "-1" ) {
           // status = "<span style='color:red'>불참</span>";
-          status = "<a href='#' class='bolder_ " + pageGubun + " status-box' style='color:red;text-underline-offset:4px;'><span style='padding:5px 5px 5px 5px;border:1px solid red'>불참</span></a>" + ownStr;
+          status = "<a href='#' class='bolder' style='color:red;text-underline-offset:4px;'><span style='padding:5px 5px 5px 5px;border:1px solid red'>불참</span></a>";
         } else {
           // status = "<span style='color:blue'>참가</span>";
-          status = "<a href='#' class='bolder_ " + pageGubun + " status-box' style='color:blue;text-underline-offset:4px;'><span style='padding:5px 5px 5px 5px;border:1px solid blue'>참가</span></a>" + ownStr;
+          status = "<a href='#' class='bolder' style='color:blue;text-underline-offset:4px;'><span style='padding:5px 5px 5px 5px;border:1px solid blue'>참가</span></a>";
         }
       }
     }
@@ -500,18 +406,18 @@ function initGrid() {
           var prayReqStatus = params.data.prayReqStatus;
           var prayPartyStatus = params.data.prayPartyStatus;
 
-          // if ( prayStatus == "1" || prayStatus == "9" || info.isGroupMaster ) { // 예배중, 예배종료
+          if ( prayStatus == "1" || prayStatus == "9" || info.isGroupMaster ) { // 예배중, 예배종료
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 viewParty(params.data);
             });
-          // }
-          status = getStatusHtml(params.data,"list");
+          }
+          status = getStatusHtml(prayStatus,prayReqStatus, prayPartyStatus);
           // params.data.prayDt.seconds
           link.innerHTML = status;
           // link.addEventListener('click', (e) => {
           //     e.preventDefault();
-          //     viewWrite(params.data.docId);
+          //     viewDetail(params.data.docId);
           // });
           return link;
       }
@@ -533,25 +439,14 @@ function initGrid() {
         cellStyle: {textAlign: "left"},
         tooltipField: "title",
         cellRenderer: (params) => {
-            var div = document.createElement('div');
             var link = document.createElement('a');
             link.href = '#';
-            link.innerText = params.value?decodeURIComponent(params.value):"제목 없음";
+            link.innerText = params.value?params.value:"제목 없음";
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                if ( params.data.isOwn ) {
-                  viewWrite(params.data);
-                } else {
-                  viewParty(params.data);
-                }
+                viewDetail(params.data);
             });
-            div.append(link);
-            var span = document.createElement('span');
-            span.innerText = "(" + (params.data.commentDocIds||[]).length + ")";
-            span.style.color="gray";
-            span.style.marginLeft="3px";
-            div.append(span);
-            return div;
+            return link;
         }
       },
     
@@ -596,18 +491,9 @@ var txtTitle = null;
 var uDocId;
 var uPrayClass;
 
-var btnShowCommentList;
-var btnGoTop;
-var btnCommentSave;
 var btnWrite;
 var btnSave;
 var btnDelete;
-var btnDeleteForView;
-var btnGoUpdate;
-var btnComment;
-var btnCommentRefesh1;
-var btnCommentRefesh2;
-
 var btnParty;
 var btnPartyCancel;
 var btnPartyCompletedNot;
@@ -624,75 +510,14 @@ var closeClassDialogX;
 var prayPartyDialog;
 var closePartyDialogX;
 
-function scrollTopForViewParty() { // 스크롤 최상단으로 편법
-    $(".pray_party_view #txtPartyMaster").focus();
-}
-
-function scrollTopForWriteCommentTop() { // 답글 목록 시작 위치
-     location.href='#writeCommentTop';
-}
-function scrollTopForWriteComment() { // 답글 입력창 시작 우치
-     location.href='#writeComment';
-}
-
 function initPrayClassDialog() {
   txtTitle = new mdc.textField.MDCTextField(document.querySelector('#txtTitle'));
 
-  btnShowCommentList    = new mdc.ripple.MDCRipple(document.querySelector("#btnShowCommentList"));
-  btnShowCommentList.listen("click", function (event) {
-     $('.comment-container').hide();
-     scrollTopForWriteCommentTop();
-  });
-
-  btnGoTop    = new mdc.ripple.MDCRipple(document.querySelector("#btnGoTop"));
-  btnGoTop.listen("click", function (event) {
-    scrollTopForViewParty();
-  });
-
-  btnCommentRefesh1    = new mdc.ripple.MDCRipple(document.querySelector("#btnCommentRefesh1"));
-  btnCommentRefesh1.listen("click", function (event) {
-    // refresh
-    selectPrayCommentList();
-  });
-  btnCommentRefesh2    = new mdc.ripple.MDCRipple(document.querySelector("#btnCommentRefesh2"));
-  btnCommentRefesh2.listen("click", function (event) {
-    // refresh
-    selectPrayCommentList();
-  });
-
-  btnComment    = new mdc.ripple.MDCRipple(document.querySelector("#btnComment"));
-  btnComment.listen("click", function (event) {
-    $('.comment-container').show();
-    calcHeightBottomAreaForComment();
-    // if ($("#bottomCommentBar").is(':visible')) {
-      scrollTopForWriteComment();
-    // } else {
-      // scrollTopForWriteCommentTop();
-    // }
-    
-    $("#commentText").focus();
-  });
-
-  btnGoUpdate    = new mdc.ripple.MDCRipple(document.querySelector("#btnGoUpdate"));
-  btnGoUpdate.listen("click", function (event) {
-    fn_Progress_Show();  
-    prayPartyDialog.close();
-    setTimeout(function() {
-      fn_Progress_Hide();  
-      viewWrite(pPrayClass);
-    },200);
-  });
-
-  btnDeleteForView    = new mdc.ripple.MDCRipple(document.querySelector("#btnDeleteForView"));
-  btnDeleteForView.listen("click", function (event) {
-      uPrayClass = pPrayClass;
-      btnDelete.emit("click");  
-  });
   btnDelete    = new mdc.ripple.MDCRipple(document.querySelector("#btnDelete"));
   btnDelete.listen("click", function (event) {
     var prayStatus = uPrayClass.prayStatus;
     if ( prayStatus != "0" ) {
-      alert("예배가 진행되어, 삭제할 수 없습니다.");
+      alert("예배가 시작되어, 삭제할 수 없습니다.")
     } else {
       confirm(
         t("기도 모임을 삭제하시겠습니까?"),
@@ -707,7 +532,7 @@ function initPrayClassDialog() {
               alert("삭제중 오류가 발생했습니다.");
             } else {
                 window.cancelAlarmCallBack = function (result) {
-                  var item = safeParseJson(result)||[];
+                  var item = JSON.parse(result)||[];
                   snackbar("기도 모임이 삭제되었습니다.")
                   // fn_Reload(true);
                   searchPrayClassList();
@@ -723,53 +548,10 @@ function initPrayClassDialog() {
 
   });
 
-  btnCommentSave    = new mdc.ripple.MDCRipple(document.querySelector("#btnCommentSave"));
-  btnCommentSave.listen("click", function (event) {
-      if ( !$("#commentText").val().trim() ){
-        // setTimeout(function(){
-          alert("댓글을 입력하세요.",function(){
-            $("#commentText").focus();
-          });
-          // snackbar("제목을 입력하세요.");
-        // },1000)
-        return;
-      }
-
-      if ( !pDocId ) {
-            alert("저장중 오류가 발생했습니다.");
-      } else {
-        window.addPrayCommentCallBack = function (newPrayClass) {
-          if ( newPrayClass == null ) {
-            alert("저장중 오류가 발생했습니다.");
-          } else {
-            snackbar("댓글이 등록되었습니다.");
-            $('.comment-container').hide();
-            $("#commentText").val("");
-            changeCommentCharCount();
-            selectPrayCommentList();
-            scrollTopForViewParty();
-            // searchPrayClassList();
-          }
-        }
-        fn_AddPrayComment(pDocId,encodeURIComponent(commentText.value.trim()),"addPrayCommentCallBack");
-      }
-  });
-  const commentText = document.getElementById("commentText");
-  const charCount = document.getElementById("charCount");
-
-  function changeCommentCharCount() {
-      const currentLength = commentText.value.length;
-      charCount.textContent = `${currentLength} / 300 자`;
-  }
-  commentText.addEventListener("input", function() {
-    changeCommentCharCount();
-  });
-
-
   btnSave    = new mdc.ripple.MDCRipple(document.querySelector("#btnSave"));
   btnSave.listen("click", function (event) {
-    if ( uDocId && uPrayClass.isEnd ) {
-        alert("예배가 종료 되어, 수정할 수 없습니다.")
+    if ( uDocId && uPrayClass.prayStatus != "0" ) {
+      alert("예배가 시작되어, 수정할 수 없습니다.")
     } else {
       if ( !txtTitle.value.trim() ){
         // setTimeout(function(){
@@ -789,8 +571,8 @@ function initPrayClassDialog() {
         // },1000)
         return;
       }
-      
-      if ( info.isGroupMaster && chipsetGroup.selectedChipIds.length == 0 ) {
+
+      if ( chipsetGroup.selectedChipIds.length == 0 ) {
         // alert("소속을 하나 이상 선택하세요.");
         alert(t("message.first_select_group"));
         return;
@@ -818,7 +600,7 @@ function initPrayClassDialog() {
               } else {
                 if ( !uDocId ) {
                   window.addAlarmCallBack = function (result) {
-                    var item = safeParseJson(result)||[];
+                    var item = JSON.parse(result)||[];
                     snackbar("모임이 생성되었습니다.")
                   }
                   fn_AddAlarm((newPrayClassStr),"addAlarmCallBack");
@@ -827,7 +609,7 @@ function initPrayClassDialog() {
                 searchPrayClassList();
               }
             }
-            fn_CreatePrayClass(encodeURIComponent(txtTitle.value.trim()),encodeURIComponent($("#txtContent").val()),prayDt.value,groups,"createPrayClassCallBack");
+            fn_CreatePrayClass(txtTitle.value.trim(),prayDt.value,groups,"createPrayClassCallBack");
           } else {
             window.updatePrayClassCallBack = function (newPrayClass) {
               if ( newPrayClass == null ) {
@@ -840,7 +622,7 @@ function initPrayClassDialog() {
                 searchPrayClassList();
               }
             }
-            fn_UpdatePrayClass(uDocId,encodeURIComponent(txtTitle.value.trim()),encodeURIComponent($("#txtContent").val()),prayDt.value,groups,"updatePrayClassCallBack");
+            fn_UpdatePrayClass(uDocId,txtTitle.value.trim(),prayDt.value,groups,"updatePrayClassCallBack");
           }
           prayClassWriteDialog.close();
         }
@@ -851,11 +633,6 @@ function initPrayClassDialog() {
   
   btnWrite    = new mdc.ripple.MDCRipple(document.querySelector("#btnWrite"));
   btnWrite.listen("click", function (event) {
-    if ( info.isGroupMaster ) {
-        $(".pray_class_write .group").show();
-    } else {
-        $(".pray_class_write .group").hide();
-    }
     $(btnDelete.root).hide();
     $(btnSave.root).removeClass("disabled");
     uDocId = "";
@@ -863,7 +640,6 @@ function initPrayClassDialog() {
     $("#btnSave").find(".label").text("만들기");
     $(".pray_class_write .mdc-dialog__title").text("기도 모임 만들기");
     txtTitle.value = "";
-    $("#txtContent").val("");
     $("#prayDt").removeAttr("disabled");
     // TODO SOFTM : 복구 필요
     // $("#prayDt").val(moment().add(3, 'h').format("YYYY-MM-DD HH:mm"));
@@ -871,8 +647,6 @@ function initPrayClassDialog() {
     $("#prayDt").val(moment().add(2, 'minutes').format("YYYY-MM-DD HH:mm"));
     $("#prayDt").attr("min", moment().add(2, 'minutes').format("YYYY-MM-DD HH:mm"));
 
-    $(".party_completed_message").hide();
-    
     var popupEventListener = function (e) {
         console.log("test.close");
         if (e.detail.action == "close") {
@@ -889,11 +663,9 @@ function initPrayClassDialog() {
       window.fn_BackKeyPressedCallBack = null;
     }
     // txtTitle.focus();
-    // $("#btnDelete").hide();
-    // btnDelete.root.style.visibility = "hidden";
-    // btnDelete.root.style.display = "none";
-
-    $(btnShareForWrite.root).hide();
+        // $("#btnDelete").hide();
+      // btnDelete.root.style.visibility = "hidden";
+      // btnDelete.root.style.display = "none";
   });
 
 
@@ -909,16 +681,16 @@ function initPrayClassDialog() {
             alert("저장중 오류가 발생했습니다.");
           } else {
             window.addAlarmCallBack = function (result) {
-              var item = safeParseJson(result)||[];
+              var item = JSON.parse(result)||[];
               snackbar("기도 모임에 참가되었습니다.")
             }
-            fn_AddAlarm(JSON.stringify(pPrayClass),"addAlarmCallBack");
+            fn_AddAlarm(JSON.stringify(uPrayClass),"addAlarmCallBack");
             // fn_Reload(true);
             searchPrayClassList();
           }
         }
-        fn_AddPartyPrayClass(pDocId,"addPartyPrayClassCallBack");
-        prayPartyDialog.close();
+        fn_AddPartyPrayClass(uDocId,"addPartyPrayClassCallBack");
+        prayClassWriteDialog.close();
        }
      );
   });
@@ -935,16 +707,16 @@ function initPrayClassDialog() {
             alert("저장중 오류가 발생했습니다.");
           } else {
             window.cancelAlarmCallback = function (result) {
-              var item = safeParseJson(result)||[];
+              var item = JSON.parse(result)||[];
               snackbar("모임이 취소되었습니다.")
             }
-            fn_CancelAlarm(JSON.stringify(pPrayClass),"cancelAlarmCallback");
+            fn_CancelAlarm(JSON.stringify(uPrayClass),"cancelAlarmCallback");
             // fn_Reload(true);
             searchPrayClassList();
           }
         }
-        fn_RemovePartyPrayClass(pDocId,"removePartyPrayClassCallBack");
-        prayPartyDialog.close();
+        fn_RemovePartyPrayClass(uDocId,"removePartyPrayClassCallBack");
+        prayClassWriteDialog.close();
        }
      );
   });
@@ -960,7 +732,7 @@ function initPrayClassDialog() {
             searchPrayClassList();
         }
         fn_NotPartyPrayClass(pDocId,"notPartyPrayClassCallBack");
-        prayPartyDialog.close();
+        prayClassWriteDialog.close();
        }
      );
     } else { // 
@@ -988,7 +760,7 @@ function initPrayClassDialog() {
             searchPrayClassList();
         }
         fn_DonePartyPrayClass(pDocId,"donePartyPrayClassCallBack");
-        prayPartyDialog.close();
+        prayClassWriteDialog.close();
        }
      );
     } else { // 
@@ -1057,9 +829,7 @@ function initPrayClassDialog() {
 
     // const field = mdc.textField.MDCTextField.attachTo(document.querySelector('#txtTitle'));
     // field.focus();
-    if (!uDocId)
-      txtTitle.focus();
-
+    txtTitle.focus();
     // fn_ShowKeyboard();
   });
   closeClassDialogX = new mdc.ripple.MDCRipple(document.querySelector("#close_class_dialog_x"));
@@ -1071,7 +841,6 @@ function initPrayClassDialog() {
   prayPartyDialog = new mdc.dialog.MDCDialog(document.querySelector(".pray_party_view.mdc-dialog"));
   prayPartyDialog.listen("MDCDialog:opened", () => {
       console.info("opened");
-      scrollTopForViewParty();
   });
   closePartyDialogX = new mdc.ripple.MDCRipple(document.querySelector("#close_class_dialog_x"));
   closePartyDialogX.listen("click", function (event) {
@@ -1186,7 +955,7 @@ function resetChipGroup() {
 var pDocId;
 var pPrayClass;
 
-function viewParty(item) {
+function viewParty(item){
     audioFile = null;
     $(btnPartyTTSStop.root).hide();
     $(btnPartyTTSRepeat.root).hide();
@@ -1195,92 +964,12 @@ function viewParty(item) {
 
     window.selectOnePayClassCallBack = function (data) {
       fn_Progress_Hide();
-      pPrayClass = safeParseJson(data)||{};
+      pPrayClass = JSON.parse(data)||{};
       var prayStatus = pPrayClass.prayStatus;
       var prayReqStatus = pPrayClass.prayReqStatus;
       var prayPartyStatus = pPrayClass.prayPartyStatus;
-
-    // alert(item.isParty + " / " + prayStatus)
-      if ( prayStatus == "0" ||  prayStatus == "1" ) { // 대기중 & 예배중
-        // $(btnDelete.root).show();
-        // $(btnSave.root).show();
-        $(btnPartyCompletedNotForParty.root).hide();
-        $(btnPartyCompletedDoneForParty.root).hide();
-        // $(btnPartyCompletedDone.root).addClass("disabled");
-        // $(btnPartyCompletedNot.root).addClass("disabled");
-    } else if ( prayStatus == "9" ) { // 예배종료
-      $(btnParty.root).hide();
-      $(btnPartyCancel.root).hide();
-    // if ( item.prayReqStatus == "1" ) { // 신청상태의 예배
-    // }
-
-      // if ( prayPartyStatus == "0" ) { // 기도상태 : NONE
-      // } else if ( prayPartyStatus == "-1" ) { // 기도 불참
-      // }
-      
-    }
-
-    if( !item.isOwn ) {
-      if ( item.isParty && item.isWait ) { /* 대기중면서 신청상태일때만 취소 가능 */
-          $(btnParty.root).hide();
-          $(btnPartyCancel.root).show();
-      } else {
-        if ( !item.isEnd && !item.isParty ) {
-          $(btnParty.root).show();
-          $(btnPartyCancel.root).hide();
-        } else {
-          $(btnParty.root).hide();
-          $(btnPartyCancel.root).hide();
-        }
-      }
-    } else {
-      $(btnParty.root).hide();
-      $(btnPartyCancel.root).hide();
-    }
-        
-    if ( item.isParty && item.isEnd ) {
-      $(".party_completed_message").show();
-      $(btnPartyCompletedNotForParty.root).show();
-      $(btnPartyCompletedDoneForParty.root).show();
-    } else {
-      $(".party_completed_message").hide();
-      $(btnPartyCompletedNotForParty.root).hide();
-      $(btnPartyCompletedDoneForParty.root).hide();
-    }
-
-    $(btnDeleteForView.root).addClass("disabled");
-    $(btnGoUpdate.root).addClass("disabled");
-
-    if ( item.isOwn ) {
-      if ( item.isWait ) {
-        $(btnDeleteForView.root).removeClass("disabled");
-        $(btnGoUpdate.root).removeClass("disabled");
-        // $(btnDeleteForView.root).show();
-        // $(btnGoUpdate.root).show();
-      } else if ( item.isIng ) {
-        $(btnGoUpdate.root).removeClass("disabled");
-        // $(btnGoUpdate.root).show();
-        // $(btnDeleteForView.root).hide();
-      } else {
-        // $(btnDeleteForView.root).hide();
-        // $(btnGoUpdate.root).hide();
-      }
-    } else {
-      $(btnDeleteForView.root).hide();
-      $(btnGoUpdate.root).hide();
-    }
-
-    if ( !pPrayClass.isEnd ) {
-      $(btnShareForParty.root).show();
-    } else {
-      $(btnShareForParty.root).hide();
-    }
-
-// btnPartyCompletedNotForParty
-      status = getStatusHtml(pPrayClass,"view");
-      $(".pray_party_view .pray_title").html( '<span>' + decodeURIComponent(pPrayClass.title) + '</span>' );
-      $(".pray_party_view .pray_status").html( status );
-
+      status = getStatusHtml(prayStatus,prayReqStatus, prayPartyStatus);
+      $(".pray_party_view .mdc-dialog__title").html( '"<span class="bolder">' + pPrayClass.title + '</span>"' + " - " + status );
       $("#txtPartyMaster").html((pPrayClass.profileName?pPrayClass.profileName:"익명"));
       $("#prayPartyDtForUser").text(moment(pPrayClass.prayDt.seconds*1000).format("YYYY-MM-DD HH:mm"));
       $("#prayPartyUsers").empty();
@@ -1291,8 +980,7 @@ function viewParty(item) {
         // partiesStr += pPrayClass.parties[idx].name + (idx < pPrayClass.parties.length-1?",":"")
       }
       // $("#prayPartyUsers").text(partiesStr);
-      // $("#txtPrayContent").text(info.basicSettings.voices[0].content);
-      $("#txtPrayContent").text(decodeURIComponent(pPrayClass.content));
+      $("#txtPrayContent").text(info.basicSettings.voices[0].content);
       
       function addChip(chipInfo) {
         var chipEl = $(".pray_party_view .mdc-chip__ripple.clone").clone();
@@ -1317,9 +1005,6 @@ function viewParty(item) {
         // addChip(chipInfo);
       }
       chipsetPartyGroup.root.innerHTML = groupStr;
-
-      selectPrayCommentList();
-
     }
 
     fn_SelectOnePrayClass(pDocId,"selectOnePayClassCallBack");
@@ -1343,17 +1028,15 @@ function viewParty(item) {
       prayPartyDialog.close();
       window.fn_BackKeyPressedCallBack = null;
     }
- 
 }
 
-function viewWrite(item){
+function viewDetail(item){
   uPrayClass = item;
-  if ( info.isGroupMaster ) {
-      $(".pray_class_write .group").show();
-  } else {
-      $(".pray_class_write .group").hide();
-  }
-
+  $(btnDelete.root).show();
+  $(btnSave.root).show();
+  $(btnParty.root).hide();
+  $(btnPartyCancel.root).hide();
+  
   // btnDelete.root.style.display = "";
   $("#btnSave").find(".label").text("수정");
   if ( info.isGroupMaster ) {
@@ -1363,53 +1046,93 @@ function viewWrite(item){
   }
   $("#prayDt").attr("disabled","disabled");
   txtTitle.value = "";
+  $("#txtTitleForUser").text("");
+  $("#prayDtForUser").text("");
   $("#prayDt").val(moment().add(3, 'h').format("YYYY-MM-DD HH:mm"));
   $("#prayDt").attr("min", moment().add(3, 'h').format("YYYY-MM-DD HH:mm"));
 
-window.selectOnePayClassCallBack = function (data) {
-    var item = JSON.parse(data)||{};
-    uPrayClass = item;
-    txtTitle.value = decodeURIComponent(item.title);
-    $("#txtContent").val(decodeURIComponent( item.content));
+// window.selectOnePayClassCallBack = function (data) {
+  // var item = JSON.parse(data)||{};
+    txtTitle.value = item.title;
+
     var prayStatus = item.prayStatus;
     var prayReqStatus = item.prayReqStatus;
     var prayPartyStatus = item.prayPartyStatus;
     
+    $("#txtTitleForUser").text(item.title);
     uDocId = item.docId;
-    
+    // (item.parties||{})
+    //$(btnPartyCompletedNot.root).hide();
+    //$(btnPartyCompletedDone.root).hide();
+
+    $(btnDelete.root).removeClass("disabled");
+    $(btnSave.root).removeClass("disabled");
+
     $(btnPartyCompletedNot.root).removeClass("disabled");
-    // $(btnPartyCompletedNot.root).removeClass("disabled");
-    $(btnDelete.root).show();
-    $(btnSave.root).show();
+    $(btnPartyCompletedNot.root).removeClass("disabled");
     
-    $(btnDelete.root).addClass("disabled");
-    $(btnSave.root).addClass("disabled");
-    if ( item.isOwn ) {
-      if ( item.isWait ) {
-        $(btnDelete.root).removeClass("disabled");
-        $(btnSave.root).removeClass("disabled");
-        // $(btnDelete.root).show();
-        // $(btnSave.root).show();
-      } else if ( item.isIng ) {
-        $(btnSave.root).removeClass("disabled");
-        // $(btnDelete.root).hide();
-        // $(btnSave.root).show();
-      } else {
-        // $(btnDelete.root).hide();
-        // $(btnSave.root).hide();
-      }
-    } else {
-      $(btnDelete.root).hide();
-      $(btnSave.root).hide();
+    if ( prayStatus != "0" ) {
+      $(btnDelete.root).addClass("disabled");
+      $(btnSave.root).addClass("disabled");
     }
 
-    if ( !uPrayClass.isEnd ) {
-      $(btnShareForWrite.root).show();
-    } else {
-      $(btnShareForWrite.root).hide();
+    $(".party_completed_message").hide();
+    if ( prayStatus == "0" ) { // 대기중
+      if ( prayReqStatus == "1" ) {
+          $(btnParty.root).hide();
+          $(btnPartyCancel.root).show();
+      } else {
+          $(btnParty.root).show();
+          $(btnPartyCancel.root).hide();
+      }
+      // $(btnDelete.root).show();
+      // $(btnSave.root).show();
+      $(btnPartyCompletedNot.root).hide();
+      $(btnPartyCompletedDone.root).hide();
+      // $(btnPartyCompletedDone.root).addClass("disabled");
+      // $(btnPartyCompletedNot.root).addClass("disabled");
+    } else if ( prayStatus == "9" ) { // 예배종료
+      $(btnParty.root).hide();
+      $(btnPartyCancel.root).hide();
+    // if ( item.prayReqStatus == "1" ) { // 신청상태의 예배
+      
+    // }
+      if ( item.isParty ) {
+        $(btnPartyCompletedNot.root).show();
+        $(btnPartyCompletedDone.root).show();
+      } else {
+        $(btnPartyCompletedNot.root).hide();
+        $(btnPartyCompletedDone.root).hide();        
+      }
+      // if ( prayPartyStatus == "0" ) { // 기도상태 : NONE
+      // } else if ( prayPartyStatus == "-1" ) { // 기도 불참
+      // }
+
+      $(".party_completed_message").show();
+    }
+
+    if ( prayStatus == "0" ) {
+      if ( prayReqStatus == "0") { // 기도신청 상태 : 미신청
+        $("#prayPartyStatusName").html("<span style='color:purple'>대기중</span>");
+      } else { // 기도신청 상태 :  신청
+        $("#prayPartyStatusName").html("<span style='color:green'>신청중</span>");
+      }
+    } else if ( prayStatus == "1" ) {
+      $("#prayPartyStatusName").html("<span style='color:var(--softm-start)'><b>예배중</b></span>");
+    } else if ( prayStatus == "9" ) {
+      if ( prayPartyStatus == "0" ) {
+        $("#prayPartyStatusName").html("<span style='color:red'>예배종료</span>");
+      } else {
+        if ( prayPartyStatus == "-1" ) {
+          $("#prayPartyStatusName").html("<span style='color:red'>불참</span>");
+        } else {
+          $("#prayPartyStatusName").html("<span style='color:blue'>참가</span>");
+        }
+      }
     }
 
     $("#prayDt").val(moment(item.prayDt.seconds*1000).format("YYYY-MM-DD HH:mm"));
+    $("#prayDtForUser").text(moment(item.prayDt.seconds*1000).format("YYYY-MM-DD HH:mm"));
 
     resetChipGroup();
     for( idx in chipsetGroup.chipsList ) {
@@ -1418,8 +1141,8 @@ window.selectOnePayClassCallBack = function (data) {
         chipsetGroup.chipsList[idx].selected = true;
       }
     }
-  }
-  fn_SelectOnePrayClass(uPrayClass.docId,"selectOnePayClassCallBack");
+// }
+// fn_SelectOnePrayClass(docId,"selectOnePayClassCallBack");
 
   var popupEventListener = function (e) {
       console.log("test.close");
@@ -1694,51 +1417,43 @@ function speak(v){
           
             <div style="height: 56px;"></div>
 
-<a name="top"></a>
 <div id="mdc-dialog-with-list" class=" pray_class_write mdc-dialog mdc-dialog--scrollable" aria-modal="true"
   aria-labelledby="mdc-dialog-with-list-label" aria-describedby="mdc-dialog-with-list-description">
   <div class="mdc-dialog__scrim"></div>
   <div class="mdc-dialog__container" style="width:99%">
-    <div class="mdc-dialog__surface w_full"
-     style="top: -117px;"
-    >
+    <div class="mdc-dialog__surface w_full" style="top: -117px;">
       <div class="flex">
 
         <h2 id="mdc-dialog-with-list-label" class="mdc-dialog__title">기도 모임 만들기</h2>
-        <div class="left vmiddle flex-grow">
-          <button id="btnShareForWrite" class="mdc-button mdc-button--raised  material-icons margin_left_5 margin_right_10 margin_top_10"
-          style="    padding: 0px;
-            width: 70px;
-            min-width: 45px !important;
-            min-height: 30px !important;
-            height:30px;
-            font-size:12pt
-            "
-            >
-                <span class="mdc-button__ripple"></span>
-              <span class="mdc-button__focus-ring"></span>
-              <span class="mdc-button__label"data-i18n="label.confirm_">초대</span>
-              <i class="material-icons mdc-button__icon margin_left_0" aria-hidden="true">share</i>
-        </div>
+
         <div id="close_class_dialog_x" class="mdc-dialog__close-tooltip-wrapper">
           <button class="mdc-icon-button material-icons mdc-dialog__close" data-mdc-dialog-action="close"
             style="position: fixed;right: 5%;z-index:10">
             close
           </button>
         </div>
-
       </div>
-      <section id="mdc-dialog-with-list-description" class="mdc-dialog__content padding_bottom_0">
+
+      <section id="mdc-dialog-with-list-description" class="mdc-dialog__content">
         <div class="flex">
           <label class="title vmiddle" style="width: calc(20%); "><span class="mdc-chip__text"><strong
                 data-i18n="label.navi_popup_">제목</strong></span></label>
-          <div class="flex-grow">
+                
+          <div class="flex-grow left group_user">
+            <label id="txtTitleForUser"
+              class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon padding_left_0"
+              style="width:80%">
+              타이틀
+            </label>
+          </div>
+
+          <div class="flex-grow group_master">
             <label id="txtTitle"
               class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon padding_left_0"
-              style="width:100%">
+              style="width:80%">
               <div class="mdc-text-field__ripple"></div>
-              <input class="mdc-text-field__input " type="text" aria-labelledby="my-label-id"
-                aria-controls="my-helper-id" aria-describedby="my-helper-id" placeholder="기도 제목을 입력하세요"  value="" style="padding: 3px !important" />
+              <input class="mdc-text-field__input mdc-text-field--focused" type="text" aria-labelledby="my-label-id"
+                aria-controls="my-helper-id" aria-describedby="my-helper-id" value="" style="padding: 3px !important" />
               <!-- <span id="label" class="mdc-floating-label">대기시간</span> -->
               <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
                 style="right:80px;display:none" id="search_clear">clear</i>
@@ -1751,25 +1466,37 @@ function speak(v){
           </div>
         </div>
 
-        <div class="flex padding_top_5" style="height:125px">
-          <label class="title vmiddle" style="width: calc(20%); "><span class="mdc-chip__text"><strong
-                data-i18n="label.navi_popup_">내용</strong></span></label>
-          <div class="flex-grow comment-box">
-              <textarea id="txtContent" rows="4" placeholder="기도 내용을 입력하세요..." class="" type="text" aria-labelledby="my-label-id"
-                value="" style="padding: 3px !important; width:100%;height:120px;border: 1px solid var(--sub-text-color);" 
-                onmousedown="location.href='#writePray';"
-              ></textarea>
-          </div>
-        </div>
-
         <div class="flex "><!--fieldset-->
           <label class="title vmiddle" style="width: calc(20%); "><span class="mdc-chip__text"><strong
                 data-i18n="label.navi_popup_">일시</strong></span></label>
-          <div class="flex-grow left">
+
+          <div class="flex-grow left group_user">
+            <label id="prayDtForUser"
+              class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon padding_left_0"
+              style="width:80%">
+              일시
+            </label>
+          </div>
+
+          <div class="flex-grow left group_master">
             <label class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon padding_left_0"
-              style="width:100%;align-items: center;">
+              style="width:80%;align-items: center;">
               <div class="mdc-text-field__ripple"></div>
-              <input id="prayDt" type="datetime-local" style="width:100%;height: 28px;" class="vmiddle" />
+              <input id="prayDt" type="datetime-local" style="width:220px;height: 28px;" class="vmiddle" />
+            </label>
+          </div>
+        </div>
+
+
+        <div class="flex group_user"><!--fieldset-->
+          <label class="title vmiddle" style="width: calc(20%); "><span class="mdc-chip__text"><strong
+                data-i18n="label.navi_popup_">예배</strong></span></label>
+
+          <div class="flex-grow left group_user">
+            <label id="prayPartyStatusName"
+              class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon padding_left_0"
+              style="width:80%">
+              
             </label>
           </div>
         </div>
@@ -1787,7 +1514,7 @@ function speak(v){
             </span>
           </div>
         </div>
-        <div class="group">
+        <div class="group_master">
           <div class="flex"><!--fieldset-->
             <label class="title" style="overflow: hidden;
                           text-overflow: ellipsis;
@@ -1807,12 +1534,13 @@ function speak(v){
             </div>
           </div>
         </div>
-        <!-- <a name="writePray"></a> -->
-        <!-- <div style="height:230px"></div> -->
       </section>
-      <footer class="mdc-dialog__actions padding_top_0">
+      <footer class="mdc-dialog__actions">
+        <div class="row basic_font_medium2 padding_bottom_10 w_full group_user party_completed_message">
+          예배 후, 참가 상태를 아래 버튼으로 반영하세요.
+        </div>
         <div class="flex w_full">
-          <div class="flex-grow left">
+          <div class="flex-grow left group_master">
             <button class="mdc-button mdc-ripple-upgraded margin_left_5"
             data-mdc-dialog-action="close"
             style="border:1px solid var(--softm-start);--mdc-ripple-fg-size: 48px; --mdc-ripple-fg-scale: 2.041914951967159; --mdc-ripple-fg-translate-start: 20px, -16.37890625px; --mdc-ripple-fg-translate-end: 16.15625px, -6px;">
@@ -1820,8 +1548,16 @@ function speak(v){
             <span class="" data-i18n="label.confirm_">취소</span>
           </button>
           </div>
+          <div class="flex-grow left group_user">
+            <button class="mdc-button mdc-ripple-upgraded margin_left_5"
+            data-mdc-dialog-action="close"
+            style="border:1px solid var(--softm-start);--mdc-ripple-fg-size: 48px; --mdc-ripple-fg-scale: 2.041914951967159; --mdc-ripple-fg-translate-start: 20px, -16.37890625px; --mdc-ripple-fg-translate-end: 16.15625px, -6px;">
+            <div class="mdc-button__ripple"></div>
+            <span class="" data-i18n="label.confirm_">닫기</span>
+            </button>
+          </div>
 
-          <div class="flex-grow right">
+          <div class="flex-grow right group_master">
             <button id="btnDelete"
               class="mdc-button mdc-button--upgraded margin_right_2"
             style="border:1px solid var(--softm-stop);--mdc-ripple-fg-size: 48px; --mdc-ripple-fg-scale: 2.041914951967159; --mdc-ripple-fg-translate-start: 20px, -16.37890625px; --mdc-ripple-fg-translate-end: 16.15625px, -6px;"
@@ -1836,7 +1572,20 @@ function speak(v){
               <span class="label" data-i18n="label.confirm_">만들기</span>
             </button>
           </div>
-          <div class="flex-grow right none">
+          <div class="flex-grow right group_user">
+            <button id="btnPartyCancel"
+              class="mdc-button mdc-button--upgraded margin_right_2"
+            style="border:1px solid var(--softm-stop);--mdc-ripple-fg-size: 48px; --mdc-ripple-fg-scale: 2.041914951967159; --mdc-ripple-fg-translate-start: 20px, -16.37890625px; --mdc-ripple-fg-translate-end: 16.15625px, -6px;"
+              >
+              <div class="mdc-button__ripple"></div>
+              <span class="label" data-i18n="label.confirm_" style="color:var(--softm-stop)">신청취소</span>
+            </button>
+
+            <button id="btnParty" class="mdc-button mdc-button--raised margin_right_5">
+              <div class="mdc-button__ripple"></div>
+              <span class="label" data-i18n="label.confirm_">신청하기</span>
+            </button>
+
             <button id="btnPartyCompletedNot"
               class="mdc-button mdc-button--upgraded margin_right_2"
             style="border:1px solid var(--softm-stop);--mdc-ripple-fg-size: 48px; --mdc-ripple-fg-scale: 2.041914951967159; --mdc-ripple-fg-translate-start: 20px, -16.37890625px; --mdc-ripple-fg-translate-end: 16.15625px, -6px;"
@@ -1856,7 +1605,7 @@ function speak(v){
     </div>
   </div>
 </div>
-<!--보기화면-->
+
 <div id="mdc-dialog-with-list" class="pray_party_view mdc-dialog mdc-dialog--scrollable" aria-modal="true"
   aria-labelledby="mdc-dialog-with-list-label" aria-describedby="mdc-dialog-with-list-description">
   <div class="mdc-dialog__scrim"></div>
@@ -1864,12 +1613,11 @@ function speak(v){
     <div class="mdc-dialog__surface w_full" style="
       /* top: -117px; */
       ">
-      <div class="flex mdc-dialog__title padding_bottom_0 padding_left_10 padding_top_10  padding_bottom_5">
-        <h2 id="mdc-dialog-with-list-label" class="pray_title padding_right_0 line1-ellipsis margin_0 vmiddle" style="width:calc(70%);vertical-align:middle">예배제목</h2>
-        <div class="flex-shrink pray_status vmiddle padding_top_0 right padding_right_5">
-          상태
+      <div class="flex">
+        <div class="row flex-grow left">
+          <h2 id="mdc-dialog-with-list-label" class="mdc-dialog__title" style="padding:0px;word-break: break-all;width:90%;border:0px solid red">예배중</h2>
         </div>
-        <div class="flex-grow vmiddle padding_top_0 right padding_right_5 none">
+        <div class="row flex-grow vmiddle padding_top_10 right padding_right_5">
           <!-- <button id="btnRefesh" class="mdc-button mdc-button--outlined mdc-ripple-upgraded w_150"> -->
           <!-- <button id="btnRefesh" class="mdc-button mdc-button--raised mdc-ripple-upgraded ">
               <span class="mdc-button__ripple"></span>
@@ -1882,13 +1630,10 @@ function speak(v){
               <i class="material-icons mdc-button__icon">share</i> 
               <span class="mdc-button__label" data-i18n="label.home_">공유</span>
           </button> -->
-        </div>
-
-        <div class="flex-grow vmiddle padding_top_10 right padding_right_5 none">
           <button id="btnRefeshParty" class="mdc-button mdc-button--raised  material-icons none"
           style="    padding: 0px;
                 /* width: 26px; */
-                /* min-width: 40px !important; */
+                min-width: 40px !important;
                 /* height:30px; */
                 /* font-size:12pt */
                 "
@@ -1896,8 +1641,8 @@ function speak(v){
           > <span
             class="mdc-button__ripple"></span>refresh</button>
         </div>
-        
-        <div id="close_class_dialog_x" class="flex-shrink mdc-dialog__close-tooltip-wrapper" style="">
+
+        <div id="close_class_dialog_x" class="mdc-dialog__close-tooltip-wrapper">
           <button class="mdc-icon-button material-icons mdc-dialog__close" data-mdc-dialog-action="close"
             style="position: fixed;right: 5%;z-index:10">
             close
@@ -1908,42 +1653,39 @@ function speak(v){
       <section id="mdc-dialog-with-list-description" class="mdc-dialog__content padding_5 ">
 
 <div class="mdc-card demo-card demo-basic-with-header padding_10 padding_top_0">
-        <!-- <div class="demo-card__primary">
-          <h2 class="demo-card__title mdc-typography mdc-typography--headline6 margin_0">함께 기도해요</h2>
-          <h3 class="demo-card__subtitle mdc-typography mdc-typography--subtitle2  margin_0">with <span id="txtPartyMaster">Kurt Wagner</span></h3>
-        </div> -->
+  <!-- <div class="demo-card__primary">
+    <h2 class="demo-card__title mdc-typography mdc-typography--headline6 margin_0">함께 기도해요</h2>
+    <h3 class="demo-card__subtitle mdc-typography mdc-typography--subtitle2  margin_0">with <span id="txtPartyMaster">Kurt Wagner</span></h3>
+  </div> -->
           <div class="flex"  style="height:35px">
-            <label class="title vmiddle " style="width: calc(20%); " ><span class="mdc-chip__text"><strong
-                  data-i18n="label.navi_popup_">주최자</strong></span></label>
-                  <!-- <input id="topfocus" /> -->
-            <div class="flex flex-grow left vmiddle">
-              <div class="flex-shrink left vmiddle w_full" style="height:35px;" >
-                  <!-- <span> -->
-                  <span id="txtPartyMaster"
-                    class="padding_left_5 line1-ellipsis padding_top_0 vmiddle"
-                    style="width:calc(80%);align-items: center; ;" tabindex="1">
-                    주최자
-                  </span>
-                  <!-- </span> -->
-              </div>
+          <label class="title vmiddle" style="width: calc(20%); "><span class="mdc-chip__text"><strong
+                data-i18n="label.navi_popup_">주최자</strong></span></label>
+                
+          <div class="flex" style="height:35px" >
+            <div class="flex-grow left vmiddle">
+              <span id="txtPartyMaster"
+                class="padding_left_5 line1-ellipsis padding_top_5"
+                style="width:calc(60%);align-items: center;">
+                주최자
+              </span>
+<button id="btnShare" class="mdc-button mdc-button--raised  material-icons margin_left_5"
+          style="    padding: 0px;
+                /* width: 26px; */
+                min-width: 40px !important;
+                /* height:30px; */
+                /* font-size:12pt */
+                
+                "
+    
+          > <span
+            class="mdc-button__ripple"></span>share</button>
 
-              <div class="left vmiddle flex-shrink">
-                <button id="btnShareForParty" class="mdc-button mdc-button--raised  material-icons margin_left_5 margin_right_10"
-                style="    padding: 0px;
-                  width: 70px;
-                  min-width: 45px !important;
-                  min-height: 30px !important;
-                  height:30px;
-                  font-size:12pt
-                  "
-                  >
-                      <span class="mdc-button__ripple"></span>
-                    <span class="mdc-button__focus-ring"></span>
-                    <span class="mdc-button__label"data-i18n="label.confirm_">초대</span>
-                    <i class="material-icons mdc-button__icon margin_left_0" aria-hidden="true">share</i>
-              </div>
             </div>
+                      
+
           </div>
+        </div>
+
 
         <div class="flex " style="height:35px"><!--fieldset-->
           <label class="title vmiddle" style="width: calc(20%); "><span class="mdc-chip__text"><strong
@@ -2004,35 +1746,20 @@ function speak(v){
           </div>
         </div>
   <div class="mdc-card__primary-action demo-card__primary-action margin_top_5" tabindex="0">
-    
-    <!-- <div class="mdc-card__media mdc-card__media--16-9 demo-card__media" style="background-image: url(&quot;https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/2.jpg&quot;);"></div> -->
-          <div class="flex"><!--fieldset-->
-            <label class="title vmiddle top" style="overflow: hidden;
-                          text-overflow: ellipsis;
-                          width: calc(20%);"><span class="mdc-chip__text"><strong
-                  data-i18n="label.renavi_prevent_time_">기도</strong></span></label>
-            <div class="flex">
-              <div class="left  margin_left_0 margin_top_5" style="flex-grow: 1;width:55%;overflow:scroll;">
-                <span id="chipsPartyGroup"
-                  class="flex-grow justify-content-right right mdc-chip-set mdc-chip-set--input mdc-chip--deletable mdc-chip-set--filter mdc-chip-set--choice_no "
-                  style="display: inline">
+    <div class="mdc-card__media mdc-card__media--16-9 demo-card__media" style="background-image: url(&quot;https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/2.jpg&quot;);"></div>
 
-
-                </span>
-              </div>
-            </div>
-    <div class="demo-card__secondary mdc-typography mdc-typography--body2 margin_top_5 margin_bottom_5">
+    <div class="demo-card__secondary mdc-typography mdc-typography--body2 margin_top_5">
       <textarea id="txtPrayContentToMP3" style="display: none;"></textarea>
-      <textarea rows="5" id="txtPrayContent" class="basic_font_small3 w_full" readonly style="overflow:initial !important;overflow-y:scroll!important;"></textarea>
+      <span id="txtPrayContent" class="basic_font_small3"></span>
             <button id="btnPartyTTS" class="mdc-button mdc-ripple-upgraded margin_right_5 padding_2 right" 
-              style="border:1px solid var(--softm-start);height: 23px;"
+style="border:1px solid var(--softm-start);height: 23px;"
             >
               <div class="mdc-button__ripple"></div>
               <span class="label basic_font_small2" data-i18n="label.confirm_">기도듣기</span>
             </button>
             
           <button id="btnPartyTTSStop" class="mdc-button mdc-button--raised  material-icons "
-          style="    padding: 0px;height: 28px;
+          style="    padding: 0px;height: 23px;
                 /* width: 26px; */
                 min-width: 40px !important;
                 /* height:30px; */
@@ -2064,107 +1791,8 @@ function speak(v){
           > <span
             class="mdc-button__ripple"></span>repeat_one</button>
     </div>
-    
 
   </div>
-  <a name="writeCommentTop"></a>
-
-  
-  <div class="flex margin_bottom_5 margin_top_5 right">
-    <div class="flex flex-grow left">
-      <div class="flex-shrink ">
-        댓글 <span class="red">[<span class="commentCount">-</span>]</span>
-      </div>
-      <div class="flex-shrink left vmiddle">
-        <span id="btnCommentRefesh1" class="mdc-button" style="height:20px;min-width:20px">
-          <span class="mdc-button__ripple"></span>
-          <i class="material-icons mdc-button__icon">refresh</i>
-        </span>
-      </div>
-    </div>
-
-    
-      <button id="btnComment" class="mdc-button mdc-ripple-upgraded margin_right_5 padding_2 right" 
-        style="border:1px solid #3E488B;height: 23px;"
-      >
-        <div class="mdc-button__ripple"></div>
-        <span class="label basic_font_small2 bolder" data-i18n="label.confirm_" style="color:#3E488B">댓글등록</span>
-      </button>
-  </div>
-
-  <div class="comment clone left none">
-      <div class="flex">
-        <div class="comment-content">
-          -
-        </div>
-        <button class="delete-btn">X</button>
-      </div>
-      <div class="timestamp">06.02 01:56:23</div>
-  </div>
-
-  <div class="demo-card__secondary comment-section row w_full padding_top_5  margin_0">
-      <div class="comment left">
-          <div class="flex">
-            <div class="comment-content">
-              -
-            </div>
-            <button class="delete-btn">X</button>
-          </div>
-          <div class="timestamp">06.02 01:56:23</div>
-      </div>
-  </div>
-
-  <a name="writeComment"></a>
-  <div id="bottomCommentBar" class="flex margin_bottom_5 margin_top_5 right">
-    <div class="flex flex-grow left">
-      <div class="flex-shrink ">
-        댓글 <span class="red">[<span class="commentCount">-</span>]</span>
-      </div>
-      <div class="flex-shrink left vmiddle">
-        <span id="btnCommentRefesh2" class="mdc-button" style="height:20px;min-width:20px">
-          <span class="mdc-button__ripple"></span>
-          <i class="material-icons mdc-button__icon">refresh</i>
-        </span>
-      </div>
-    </div>
-    <button id="btnGoTop" class="mdc-button mdc-ripple-upgraded margin_right_5 padding_2 right"
-      style="border:0px solid #3E488B;height: 23px;min-width:20px">
-      <div class="mdc-button__ripple"></div>
-      <span class="label basic_font_small2 bolder" data-i18n="label.confirm_" style="color:#3E488B">기도보기</span>
-    </button>
-    <span style='content: "";
-      display: inline-block;
-      width: 1px;
-      height: 12px;
-      margin: 0 10px 0 9px;
-      background: #ccc;
-      vertical-align: -1px;'></span>
-  
-    <button id="btnShowCommentList" class="mdc-button mdc-ripple-upgraded margin_right_5 padding_2 right"
-      style="border:0px solid #3E488B;height: 23px;">
-      <div class="mdc-button__ripple"></div>
-      <span class="label basic_font_small2 bolder" data-i18n="label.confirm_" style="color:#3E488B">댓글위로 ▲</span>
-    </button>
-  </div>
-
-  <div class="demo-card__secondary comment-container row w_full padding_top_5 none">
-    <div class="comment-title w_full">댓글쓰기</div>
-      <textarea id="commentText" class="comment-input" rows="4" placeholder="댓글을 작성해주세요." maxlength="300"
-       onmousedown="scrollTopForWriteComment();"
-       ></textarea>
-      <div class="flex right padding_bottom_8">
-        <div class="character-count" id="charCount">0 / 300 자</div>
-        <div class="flex-grow ">
-    <button id="btnCommentSave" class=" basic_font_medium1 margin_top_10 mdc-button mdc-button--raised margin_right_0">
-    <div class="mdc-button__ripple"></div>
-    <strong class="" data-i18n="label.confirm">확인</strong>
-    </button>
-        </div>
-      </div>
-  </div>
-    <div id="bottomAreaForComment" style="border:0px solid gray">
-      <!-- 광고 영역 -->
-    </div>
   <div class="mdc-card__actions none">
     <div class="mdc-card__action-buttons">
       <button class="mdc-button mdc-card__action mdc-card__action--button">  <span class="mdc-button__ripple"></span> Read</button>
@@ -2182,13 +1810,12 @@ function speak(v){
 </div>
       </section>
       <footer class="mdc-dialog__actions">
-           
-        <div class="row basic_font_medium1 padding_bottom_10 w_full party_completed_message">
+        <div class="row basic_font_medium2 padding_bottom_10 w_full party_completed_message">
           예배 후, 참가 상태를 아래 버튼으로 반영하세요.
         </div>
         <div class="flex w_full">
           <div class="flex-grow left">
-            <button class="mdc-button mdc-ripple-upgraded margin_left_5"
+            <button class="mdc-button mdc-ripple-upgraded margin_left_5 none"
             data-mdc-dialog-action="close"
             style="border:1px solid var(--softm-start);--mdc-ripple-fg-size: 48px; --mdc-ripple-fg-scale: 2.041914951967159; --mdc-ripple-fg-translate-start: 20px, -16.37890625px; --mdc-ripple-fg-translate-end: 16.15625px, -6px;">
             <div class="mdc-button__ripple"></div>
@@ -2196,39 +1823,7 @@ function speak(v){
             </button>
           </div>
 
-          <div class="flex-grow right ">
-
-
-            <button id="btnGoUpdate"
-              class="mdc-button mdc-button--upgraded margin_right_2"
-            style="border:1px solid var(--softm-start);--mdc-ripple-fg-size: 48px; --mdc-ripple-fg-scale: 2.041914951967159; --mdc-ripple-fg-translate-start: 20px, -16.37890625px; --mdc-ripple-fg-translate-end: 16.15625px, -6px;"
-              >
-              <div class="mdc-button__ripple"></div>
-              <span class="label" data-i18n="label.confirm_" style="color:var(--softm-start)">수정화면</span>
-            </button>
-
-            <button id="btnDeleteForView"
-              class="mdc-button mdc-button--upgraded margin_right_2"
-            style="border:1px solid var(--softm-stop);--mdc-ripple-fg-size: 48px; --mdc-ripple-fg-scale: 2.041914951967159; --mdc-ripple-fg-translate-start: 20px, -16.37890625px; --mdc-ripple-fg-translate-end: 16.15625px, -6px;"
-
-              >
-              <div class="mdc-button__ripple"></div>
-              <span class="label" data-i18n="label.confirm_" style="color:var(--softm-stop)">삭제</span>
-            </button>
-
-            <button id="btnPartyCancel"
-              class="mdc-button mdc-button--upgraded margin_right_2"
-            style="border:1px solid var(--softm-stop);--mdc-ripple-fg-size: 48px; --mdc-ripple-fg-scale: 2.041914951967159; --mdc-ripple-fg-translate-start: 20px, -16.37890625px; --mdc-ripple-fg-translate-end: 16.15625px, -6px;"
-              >
-              <div class="mdc-button__ripple"></div>
-              <span class="label" data-i18n="label.confirm_" style="color:var(--softm-stop)">참가취소</span>
-            </button>
-
-            <button id="btnParty" class="mdc-button mdc-button--raised margin_right_5">
-              <div class="mdc-button__ripple"></div>
-              <span class="label" data-i18n="label.confirm_">참가하기</span>
-            </button>
-
+          <div class="flex-grow right group_user_tmp">
             <button id="btnPartyCompletedNotForParty"
               class="mdc-button mdc-button--upgraded margin_right_2"
             style="border:1px solid var(--softm-stop);--mdc-ripple-fg-size: 48px; --mdc-ripple-fg-scale: 2.041914951967159; --mdc-ripple-fg-translate-start: 20px, -16.37890625px; --mdc-ripple-fg-translate-end: 16.15625px, -6px;"
