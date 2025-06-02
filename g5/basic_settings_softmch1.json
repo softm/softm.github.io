@@ -1,0 +1,188 @@
+ {
+ "_msg_":{"_common_":{"error.code":"F0000","resCode":"00"},"_body_":{"status":"success","flag":"S"}},
+ "msg":"성공",
+ "msgCode":"200",
+ "prayEndIntervalTimeSecTmp": "7200 : 60 * 60 * 2 : 2시간",
+ "prayEndIntervalTimeSecTmp2": "60 : 60 * 1 : 1분",
+ "prayEndIntervalTimeSecTmp3": "예배시작하고 얼마후에 종료로 판단할 것 인지 : 600 : 60 * 10 : 10분",
+ "prayEndIntervalTimeSec": 3600,
+ "prayClassSelectTimeSecTmp": "24 * 60 * 60 + ( 12 * 60 * 60 ) : 1일 + 12시간",
+ "prayClassSelectTimeSec": 129600,
+  "groups":[
+        { "id":"1","name":"여전도연합회"}, 
+        { "id":"2","name":"소망회", "selected":true},
+        { "id":"3","name":"한나회"},
+        { "id":"4","name":"제1여전도회"},
+        { "id":"5","name":"제2여전도회"},
+        { "id":"6","name":"제3여전도회"},
+        { "id":"7","name":"제4여전도회"},
+        { "id":"8","name":"남선교연랍회"},
+        { "id":"9","name":"1남선교연합회"},
+        { "id":"10","name":"1선교연합회"},
+        { "id":"11","name":"3선교연합회"},
+        { "id":"12","name":"1조"}, 
+        { "id":"13","name":"2조"}, 
+        { "id":"14","name":"3조"}, 
+        { "id":"15","name":"4조"},
+        { "id":"16","name":"5조"},
+        { "id":"17","name":"6조"},
+        { "id":"18","name":"7조"},
+        { "id":"19","name":"8조"},
+        { "id":"20","name":"9조"},
+        { "id":"21","name":"10조"},
+        { "id":"22","name":"청년부"}, 
+        { "id":"23","name":"유아부"},
+        { "id":"24","name":"성가대"}
+  ],
+  "videos":[
+                        {
+                        "url":"https://www.youtube.com/watch?v=BAL4k5w4lkU&list=PLExxll1KfCDMlCQ2JamgS0qKzpV321nEa&index=1&fs=1",
+                        "videoId":"BAL4k5w4lkU",
+                        "title":"마태복음 1~28장",
+                        "wDate":"2025-05-11"
+                        },
+                        {
+                        "url":"https://www.youtube.com/Rm9f0U7Dy0Q?list=PLExxll1KfCDMlCQ2JamgS0qKzpV321nEa",
+                        "videoId":"Rm9f0U7Dy0Q",
+                        "title":"요한계시록",
+                        "wDate":"2025-05-10"
+                        },
+                        {
+                        "url":"https://www.youtube.com/watch?v=kg6hzKfBXLY&list=RDLVmJePIgd2E&index=27",
+                        "videoId":"kg6hzKfBXLY",
+                        "title":"제목3",
+                        "wDate":"2025-05-09"
+                        },
+                        {
+                        "url":"https://www.youtube.com/watch?v=42Ndh5vBbLk&list=RDLVmJePIgd2E&index=27",
+                        "videoId":"42Ndh5vBbLk",
+                        "title":"제목4",
+                        "wDate":"2025-05-08"
+                        }
+                    ],
+  "voices":[
+     {
+      "title": "하나님의 사랑",
+      "verse": "요한일서 4:8",
+      "content": "하나님은 사랑이시라. 사랑 안에 거하는 자는 하나님 안에 거하고 하나님도 그 안에 거하느니라.",
+      "wDate":"2025-05-11"
+    },
+    {
+      "title": "믿음의 힘",
+      "verse": "마가복음 9:23",
+      "content": "예수께서 이르시되 할 수 있거든이 무슨 말이냐? 믿는 자에게는 능치 못할 일이 없느니라.",
+      "wDate":"2025-05-10"
+    },
+    {
+      "title": "소망을 품다",
+      "verse": "로마서 15:13",
+      "content": "소망의 하나님이 모든 기쁨과 평강을 믿음 안에서 너희에게 넘치게 하사 성령의 능력으로 소망이 넘치게 하시기를 원하노라.",
+      "wDate":"2025-05-09"
+    },
+    {
+      "title": "평화의 왕",
+      "verse": "이사야 9:6",
+      "content": "이는 한 아기가 우리에게 낳고 한 아들이 우리에게 주어졌고 그 어깨에는 정사가 있으며 그 이름은 기묘자라, 모사라, 전능하신 하나님이라, 영존하시는 아버지라, 평강의 왕이라 할 것임이라.",
+      "wDate":"2025-05-08"
+    },
+    {
+      "title": "주의 길을 따르라",
+      "verse": "시편 119:105",
+      "content": "주의 말씀은 내 발의 등이요 내 길의 빛이니이다.",
+      "wDate":"2025-05-07"
+    },
+    {
+      "title": "주의 보호하심",
+      "verse": "시편 23:1-2",
+      "content": "여호와는 나의 목자시니 내게 부족함이 없으리로다. 그가 나를 푸른 풀밭에 누이시며, 쉴만한 물가로 인도하시는도다.",
+      "wDate":"2025-05-06"
+    },
+    {
+      "title": "주님과의 동행",
+      "verse": "마태복음 28:20",
+      "content": "내가 세상 끝날까지 너희와 항상 함께 있으리라 하시니라.",
+      "wDate":"2025-05-05"
+    },
+    {
+      "title": "하나님의 구속 계획",
+      "verse": "요한복음 3:16",
+      "content": "하나님이 세상을 이처럼 사랑하사 독생자를 주셨으니, 이는 그를 믿는 자마다 멸망치 않고 영생을 얻게 하려 하심이라.",
+      "wDate":"2025-05-04"
+    },
+    {
+      "title": "하나님의 은혜",
+      "verse": "에베소서 2:8",
+      "content": "너희가 그 은혜를 인하여 믿음으로 구원을 얻었나니 이것은 너희에게서 난 것이 아니요 하나님의 선물이라.",
+      "wDate":"2025-05-03"
+    },
+    {
+      "title": "힘을 주시는 하나님",
+      "verse": "이사야 40:29",
+      "content": "피곤한 자에게는 능력을 주시며, 무력한 자에게는 힘을 더하시나니.",
+      "wDate":"2025-05-02"
+    }
+  ],
+  
+ "groupMasterUUIDsTmp":[
+  "e489a0db8971b0f5 : 황차장님"
+ ],
+ "groupMasterUUIDs":[
+  "e489a0db8971b0f5",
+  "0072e96789523959",
+  "e575416df5cd7da3_",
+  "3e6b779dfe737a19",
+  "3495626928bbd5fd",
+  "fb8e48f2a656600d",
+  "30429dfd604a06b9",
+  "d3a156c93432c972",
+  "b21a46b923c77d48",
+
+  "09e9134ce512fdd1",
+  "5e5cee7b11d9a726",
+  "53ffa1535e4a44b1",
+  "abde278f9c83c51a",
+  "ada7e23af4f1a77f",
+  "7f17a59ea901bc02",
+  "8d762561cecadefd",
+  "476af8c655cf4aa2",
+  "043f0bdd2bd83d5c",
+  "d861891c0f76392e",
+  "af7b9c5abf4c8e41",
+  "3379929cfa4be256",
+  "279e8c08fa95652f",
+  "d5e5c1671c0afbb8",
+  "5e7dda4f2da0a235",
+  "0901ef81fdc8d453",
+  "883e9071d7268e59",
+  "311276866a5cacbe",
+  "017ffedc3365fbee",
+  "8ef0fd098e4cbdcc",
+  "f698071d376b574f",
+  "72435a0ac916f5d2",
+  "a5c44cb23705be06",
+  "f36f26a29353e6fc",
+  "a0985b77f5054765",
+  "e638d2ce9a1c66ee",
+  "5e6ef42aa7fe264f",
+  "2055f2832da5a9c9",
+  "1398498058303e3a",
+  "26c33be2c1973762",
+  "413913e1eea10975",
+  "0269324cfd198acd",
+  "97592f54672da15b",
+  "123b6960c69b83cb",
+  "50a310b0c70c0383",
+  "31571d0e4035b3ea",
+  "458ba2ef8a880ab6",
+  "1cae7f8e637abbe9",
+  "9d9f17fa0152a2c8",
+  "1d5ec7590ecec2d3",
+  "82ae07326f3f0ad8",
+  "50923c2685d7e9b5",
+  "c6f931e5f4da0849",
+  "253f4d4d236ed022",
+  "4dd530dcd0adb18e",
+  "54c37eed5741c925",
+  "ecb6c1732c4b3f0f_"
+]
+}

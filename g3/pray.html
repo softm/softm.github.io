@@ -299,7 +299,7 @@ function initSearch() {
   btnShareForWrite    = new mdc.ripple.MDCRipple(document.querySelector("#btnShareForWrite"));
   btnShareForWrite.listen("click", function (event) {
     // alert("http://softm.net/go.html?docId="+pPrayClass.docId);
-      fn_ShareLink( decodeURIComponent(uPrayClass.title),"기도초대 - "  + uPrayClass.title + " : " + info.serverHost + "/go.html?docId="+uPrayClass.docId);
+      fn_ShareLink( decodeURIComponent(uPrayClass.title),"기도초대 - "  + uPrayClass.title + " : " + info.serverHost + (info.pathName?"/"+info.pathName:"") + "/go.html?docId="+uPrayClass.docId);
 
       // window.GetURLCallback = function(url) {
       //   if ( location.protocol.startsWith("http") && url.startsWith("file") ) {
@@ -315,7 +315,7 @@ function initSearch() {
   btnShareForParty    = new mdc.ripple.MDCRipple(document.querySelector("#btnShareForParty"));
   btnShareForParty.listen("click", function (event) {
     // alert("http://softm.net/go.html?docId="+pPrayClass.docId);
-      fn_ShareLink(decodeURIComponent(pPrayClass.title),"기도초대 - "  + pPrayClass.title + " : " + info.serverHost + "/go.html?docId="+pPrayClass.docId);
+      fn_ShareLink(decodeURIComponent(pPrayClass.title),"기도초대 - "  + pPrayClass.title + " : "  +  info.serverHost + (info.pathName?"/"+info.pathName:"")  + "/go.html?docId="+pPrayClass.docId);
   });
 }
 function calcHeightBottomAreaForComment() {

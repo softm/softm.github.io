@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+  <title>함께기도</title>
+  <link rel="shortcut icon" href="#">
+  
+  <!-- <link href="./lib/material-components-web.min.css" rel="stylesheet"> -->
+  <link href="./lib/material-components-web.min.new.css" rel="stylesheet">
+  <!-- <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"> -->
+
+  <!-- <script src="./lib/material-components-web.min.js"></script> -->
+  <script src="./lib/material-components-web.min.new.js"></script>
+  <!-- <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script> -->
+  
+  <link rel="stylesheet" href="./lib/icon.css">
+  <link rel="stylesheet" href="./lib/common.css?a=4">
+  <script src="./lib/hangul.js"></script>
+
+ </head>
+
+<!--  using - default i18next-->
+<!--
+<script src="https://unpkg.com/i18next/i18next.js"></script>
+<script src="https://unpkg.com/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+<script src="https://unpkg.com/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.js"></script>
+-->
+
+<!-- using - jquery i18next -->
+<!-- -->
+   <script src="./lib/jquery-3.6.4.min.js"></script>
+<!--<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>-->
+  <script src="./lib/i18next.min.js"></script>
+  <script src="./lib/common.js?a=1"></script>
+  <script src="./lib/interface.js"></script>
+  <script src="./lib/db.js"></script>
+  <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xx2c3bc6b282ed46c9805c99db13f56149"></script>
+
+<script>
+var drawer = null;
+var topAppBar = null;
+var drawerListEl = null;
+
+var btnHome = null;
+var btnBack = null;
+var btnSettings = null;
+
+var profileName = null;
+var profileNickName = null;
+var chipsetGroup;
+var btnSave = null;
+
+$( document ).ready(function() {
+
+    btnHome    = new mdc.ripple.MDCRipple(document.querySelector("#btnHome"));
+    btnBack    = new mdc.ripple.MDCRipple(document.querySelector("#btnBack"));
+    btnSettings    = new mdc.ripple.MDCRipple(document.querySelector("#btnSettings"));
+
+    // btnSwitch = new mdc.switchControl.MDCSwitch(document.querySelector('.mdc-switch'));
+
+    btnSettings.listen("click", function (event) {
+          //        window.open("setting.html","_blank","");
+          // window.open("search.html?idx=2","_blank","");
+          windowOpen("search.html?idx=1");
+          // fn_OpenPop("search.html");
+          // fn_OpenPop("setting.html");
+    });
+
+  var pathInfo = location.pathname.split("/");
+  footerNavigationIndex = footerNavigationUrl.indexOf(pathInfo[pathInfo.length-1]);
+    // $(footerNavigation[0]).trigger("click");
+  footerNavigation[footerNavigationIndex].emit("click",footerNavigationIndex);
+
+    btnHome.listen("click", function(event) {
+    //	self.close();
+      // fn_ClosePopData();
+      fn_OpenUrl("index.html");
+    });
+
+    btnBack.listen("click", function(event) {
+    //	self.close();
+      // fn_ClosePopData();
+      // fn_OpenUrl("search.html");
+      fn_OpenPop("search.html");
+    });
+
+  window.getInfoCallBack = function (data) {
+    if (isWeb) {
+      window.info = {
+            // "appPackage": "com.skt.tmap.ku",
+            "appPackage": "",
+            // "musicAppPackage": "com.sec.android.app.music", // 
+            "musicAppPackage": "", // 
+            "chargingMode": "1",
+            "startWifi": true,
+            "usingRegHome": true,
+            "wifi": {
+                "bssid": "00:0D:18:00:00:01",
+                "ssid": "SoftmWifi",
+                "connected": true
+            },
+            "workGotoOffTime": false,
+            "startPower": true,
+            "naviGeofenceRadius": 200,
+            "naviDestination": "1",
+            "workOffTimeFrom": "17:30",
+            "naviMode": "1",
+            "workGotoTimeTo": "08:50",
+            "naviOverlayWaitTime": 3,
+            "naviPopupMode": true,
+            "bluetooth": {
+                "bondState": 12,
+                "address": "00:0D:18:00:00:01",
+                "name": "OBDII",
+                "type": 1,
+                "diassembled": "OBDII"
+            },
+            "startBluetooth": false,
+            "workGotoTimeFrom": "06:00",
+            "naviRenaviPreventTime": 3,
+            "naviDestinationExecutionHoldTime": 300000,
+            "naviAutoStart": true,
+            "workOffTimeTo": "19:00",
+            "notiIcon": true,
+            "independenceCondition": true,
+            "startStopOnOff":{
+              bluetooth:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              wifi:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              tethering:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              airplane_mode:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              screen_on:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              lock:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              completed_lock:{start:{use_yn:true,onoff:"off"},stop:{use_yn:true,onoff:"on"}},
+              play_music:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              home_screen:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              power_off:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+            },
+            "startMode":"1",
+            "stopMode":"1",
+            "onlyStopAfterNaving":true,
+            serverHost:location.origin,
+            pathName:location.pathname.split("/")[1],
+            versionCode:11,
+            versionName:"0.0.0.1",
+            // + "http://www.softm.net/gdev"
+                orgId:"softmch",
+                basicSettings:{
+                    "groups":[
+                      {
+                        "id":1,
+                        "name":"쳥년부"
+                      },
+                      {
+                        "id":2,
+                        "name":"아동부",
+                        "selected":false
+                      },
+                      {
+                        "id":3,
+                        "name":"부녀자회"
+                      },
+                      {
+                        "id":4,
+                        "name":"성년회"
+                      },
+                      {
+                        "id":5,
+                        "name":"임원회"
+                      },
+                      {
+                        "id":6,
+                        "name":"아무나모두회",
+                        "selected":true
+                      }
+                    ],
+                  
+                    "msg": "성공",
+                    "msgCode": "200"
+                },
+            groups:[2,6],
+            profileName:"test이름"
+        }
+    } else {
+      window.info = (JSON.parse(data));
+    }
+
+    var v = window.info;
+    if ( info.isGroupMaster ) $(".group").show();
+    else $(".group").hide();
+    initChipsetGroup();
+    initBasicInfo();
+    initWrite();
+    
+    if ( v.isGroupMaster ) {
+      $(".group_master").show();
+      $(".orgUserLevel").text("관리자");
+    } else {
+      $(".group_master").hide();
+      $(".orgUserLevel").text("일반");
+    }
+
+  } // getInfoCallBack end
+        
+  fn_GetInfo("", "getInfoCallBack");
+
+});
+
+function initWrite() {
+    profileName = new mdc.textField.MDCTextField(document.querySelector('#profile_name'));
+    // profileNickName = new mdc.textField.MDCTextField(document.querySelector('#profile_nick_name'));
+
+    btnSave    = new mdc.ripple.MDCRipple(document.querySelector("#btnSave"));
+    btnSave.listen("click", function(event) {
+        if ( !profileName.value.trim() ){
+            // document.testForm.profile_name_input_2.focus();
+            profileName.input.focus();
+            alert("이름을 입력하세요.");
+            // alert(t("message.first_select_group"));
+            return;
+        }
+        if ( info.isGroupMaster && chipsetGroup.selectedChipIds.length == 0 ) {
+            // alert("소속을 하나 이상 선택하세요.");
+            alert(t("message.first_select_group"));
+            return;
+        } else {
+            var groups = [];
+            for ( idx in chipsetGroup.selectedChipIds ) {
+                var chipId = chipsetGroup.selectedChipIds[idx];
+                var chipIdx = chipsetGroup.findChipIndex(chipId);
+                console.log("chipId",chipId,chipsetGroup.findChipIndex(chipId),$(chipsetGroup.chipsList[chipIdx].root).data("value"));  
+                groups.push($(chipsetGroup.chipsList[chipIdx].root).data("value"));
+            }
+            fn_DeviceSaveData("_GROUPS", JSON.stringify(groups));
+            fn_DeviceSaveData("_PROFILE_NAME", profileName.value.trim());
+    //         		JSONObject body = json.getJSONObject("body");
+		// String title = body.optString("title");
+		// String prayDt = body.optString("prayDt");
+		// String strGroups = body.optString("groups");
+		// Type listType = new TypeToken<List<String>>() {}.getType();
+            snackbar(t("message.save"));
+            console.log("groups",groups);
+        }
+    });
+    profileName.value = info.profileName;
+  
+}
+function initChipsetGroup() {
+    chipsetGroup = new mdc.chips.MDCChipSet(document.querySelector('#chipsGroup'));
+    chipsetGroup.listen('MDCChip:removal', function(event) {
+      $("#chipsGroup").removeChild(event.detail.root);
+    });
+
+    // chipsetGroup.listen("click",function(e){
+    //     var seq = e.srcElement.offsetParent.id.replace(/[^0-9]/g, "");
+    //     var adapter = chipsetGroup.getDefaultFoundation().adapter;
+    //     var selectId = chipsetGroup.selectedChipIds[0];
+    //     var index = adapter.getIndexOfChipById(selectId);
+    //     if (index == -1) {
+    //         if (selectId) {
+    //             chipsetGroup.chips[seq - 1].selected = true;
+    //         } else { // error
+    //             chipsetGroup.chips[chipsetGroupSelectedIndex].selected = true;
+    //             index = chipsetGroupSelectedIndex;
+    //         }
+    //     } else {
+    //         window.chipsetGroupSelectedIndex = index;
+    //     }
+    // });
+    
+    chipsetGroup.listen("MDCChip:selection",function(e){
+      // debugger;
+    
+    });
+
+    $(document.body).on('click',"#chipsGroup .del",function(e) {
+        e.preventDefault();
+        // debugger;
+        var idx = chipsetGroup.findChipIndex(e.currentTarget.offsetParent.id);
+          confirm(
+            t("message.confirm_delete"),
+            function() {
+                      chipsetGroup.chips[idx].remove()
+            },
+            function(){
+            }
+          );
+
+      //  $("#chipsGroup").remove(event.currentTarget.offsetParent);
+    });
+    function addChip(chipInfo) {
+      var chipEl = $(".mdc-chip__ripple.clone").clone();
+      chipEl.removeClass("none clone") 
+      chipEl.find(".chip_name").text(chipInfo.name);
+      chipEl.data("value",chipInfo.id);
+      // chipEl.attr("id",chipInfo.id);
+      $("#chipsGroup").append(chipEl[0]);
+      chipsetGroup.addChip(chipEl[0]);
+      
+      if ( info.groups.findIndex(id=>id==chipInfo.id) > -1 ) {
+        // chipEl.addClass("mdc-chip--selected")
+        chipsetGroup.chipsList[chipsetGroup.chipsList.length-1].selected = true;
+      }
+    }    
+    // $(chipsetGroup.root).remove();
+    chipsetGroup.root.innerHTML = "";
+    for( idx in info.basicSettings.groups ) {
+      addChip(info.basicSettings.groups[idx]);
+    }
+}
+
+function getInfo() {
+    fn_GetInfo("", "getInfoCallBack");
+}
+
+</script>
+</head>
+<body>
+<div class="i18n drawer-frame-root">
+    <div class="mdc-drawer-app-content">
+        <header class="mdc-top-app-bar app-bar" id="app-bar">
+            <div class="mdc-top-app-bar__row">
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+                    
+  <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button">menu</button>
+
+                    <button class="none material-icons  mdc-top-app-bar__navigation-icon mdc-icon-button">menu</button>
+                    <button id="btnHome"
+                        class="none mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded">home</button>
+                        <button id="btnBack"
+                        class="none mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded">arrow_back_ios</button>
+               
+                        <span class="mdc-top-app-bar__title" data-i18n="label.top_bar">티맵실행</span>
+                    </section>
+                    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+                        <button id="btnSettings" class="none mdc-icon-button material-icons mdc-top-app-bar__action-item--unbounded"
+                            aria-label="Print this page">search</button> <!---->
+                    </section>
+            </div>
+        </header>
+<!--         
+-->
+        <main class="main-content" id="main-content">
+            <div class="mdc-top-app-bar--fixed-adjust">
+            </div>
+        </main>
+    </div>
+
+    <aside class="mdc-drawer mdc-drawer--modal">
+       
+      <div class="mdc-drawer__header app_info">
+          <img src="./images/logo_100.svg" width="50" style="margin-top: 10px;"/>
+          <!-- style="height:55px" -->
+          <div class="mdc-dramdc-drawer__contentwer__title" data-i18n="[html]label.app_name">함께기도</div>
+      </div>
+        <hr class="sub"/>
+        <div class="row sub flex left bold " >
+            <label for="" class="flex-grow title" style="">
+                <h6 class="mdc-drawer__subtitle" ><span class="version-name">00.00</span></h6>    
+            </label>
+            <div class="flex-grow margin_right_7 middle right basic_font_medium2"  style="align-content: space-evenly;">
+                <span class="paidUser">
+                    <img src="images/vip.png" width="30" align="absmiddle"/>
+                </span>
+                <span class=" bold underline cursor_pointer"><span class="user_level link_dev_support">광고보기 사용자</span></span>
+            </div> 
+        </div>
+        <div class="mdc-drawer__content">
+          <a class="clone none mdc-deprecated-list-item mdc-deprecated-list-item--activated" href="#">
+              <span class="mdc-deprecated-list-item__ripple"></span>
+              <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home</i>
+              <span class="mdc-deprecated-list-item__text" data-i18n="label.home_page">Home</span>
+          </a>
+
+          <div class="mdc-deprecated-list">
+              <a class="mdc-deprecated-list-item mdc-deprecated-list-item--activated" href="#" aria-current="page">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="label.home_page">Home</span>
+              </a>
+
+              <a class="none mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">settings</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_setting">설정</span>
+              </a>
+
+              <a class="none mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">toggle_on</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_start_stop">시작/종료</span>
+              </a>
+
+              <a class="mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">link</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="title.run_options">실행옵션</span>
+              </a>
+              <a class="mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home_work</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="title.home_company">집/회사</span>
+              </a>
+              <a class="mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">star</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="title.favorite">즐겨찾기</span>
+              </a>
+              <a class="mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">forum</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="title.contact_us">문의하기</span>
+              </a>
+
+              <a class="none mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">card_membership</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_membership">멤버쉽</span>
+              </a>
+
+              <a class="mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">thumb_up</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="label.rate_the_app">어플 평가하기</span>
+              </a>
+
+          </div>
+      </div>
+  </aside>
+    <div class="mdc-drawer-scrim"></div>
+    <div class="drawer-frame-app-content">
+
+        <div class="main drawer-main-content i18n margin_top_15">
+            <a name="move_point" id="move_point" />
+            <!-- <hr class="main"/> -->
+
+            <!-- <hr class="main"/> -->
+            <div class="row">
+                <legend align="left" class="main title"><strong data-i18n="label.app_">내정보</strong></legend>
+            </div>
+            <hr class="main"/>
+<!-- <form name="testForm"> -->
+
+            <!--이름-->
+            <div class="row sub">
+              <div class="flex"><!--fieldset-->
+                <label class="title"
+                style="overflow: hidden;
+                text-overflow: ellipsis;
+                width: calc(30%);"><span class="mdc-chip__text"><strong data-i18n="label.renavi_prevent_time_"
+                >회원등급</strong></span></label>
+                <!-- <div style="position: absolute;display: inline;margin-top: -15px;"> -->
+                <div class="flex-grow left margin_left_15"  id="search_wrapper">
+                    <span class="basic_font_medium2 orgUserLevel"></span>
+                  </div>
+                </div>
+            </div>
+
+            <!--이름-->
+            <div class="row sub">
+              <div class="flex"><!--fieldset-->
+                <label class="title"
+                style="overflow: hidden;
+                text-overflow: ellipsis;
+                width: calc(30%);"><span class="mdc-chip__text"><strong data-i18n="label.renavi_prevent_time_"
+                >이름</strong></span></label>
+                <!-- <div style="position: absolute;display: inline;margin-top: -15px;"> -->
+                <div class="flex-grow right"  id="search_wrapper">
+   
+                    <label id="profile_name" class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon "
+            style="width:100%;">
+                        <div class="mdc-text-field__ripple"></div>
+                        <input class="mdc-text-field__input" id="profile_name_input" type="text"/>
+                        <span id="label" class="mdc-floating-label none" data-i18n="label.search_placeholder_">이름</span>
+                        <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                        style="right:80px;display:none" id="search_clear">clear</i>
+                        <div class="mdc-line-ripple"></div>
+                    </label>
+                  </div>
+                </div>
+            </div>
+            <hr class="sub" />
+<!-- </form> -->
+      <div class="row">
+        <div class="clone mdc-chip mdc-chip--selected__ mdc-chip__ripple none">
+          <span role="gridcell">
+          <span role="button" tabindex="0" class="mdc-chip__primary-action">
+              <span class="mdc-chip__text chip_name" data-i18n="label.home_to_co">집↔회사</span>
+          </span>
+          </span>
+          <span role="gridcell" class="none">
+            <i class="material-icons mdc-chip__icon mdc-chip__icon--trailing del" tabindex="2" role="button">cancel</i>
+          </span>
+        </div>
+
+      </div>  
+        <div class="row sub">
+          <div class="flex group"><!--fieldset-->
+                <label class="title"
+                  style="
+                  text-overflow: ellipsis;
+                  width: calc(30%);    align-self: start;"><span class="mdc-chip__text"><strong data-i18n="label.renavi_prevent_time_"
+                >소속</strong></span></label>
+                <div class="row packages_ flex">
+                  <div class="left  margin_left_0 margin_top_5" style="flex-grow: 1;width:55%;overflow:scroll">
+                    <span id="chipsGroup" class="flex-grow justify-content-right right mdc-chip-set mdc-chip-set--input mdc-chip--deletable mdc-chip-set--filter mdc-chip-set--choice_no "
+                                  style="display: inline"
+                                  >
+
+                      <script>
+                      </script>
+
+                      <div class="mdc-chip mdc-chip--deletable" role="row">
+                          <div class="mdc-chip__ripple"></div>
+                          <span role="gridcell">
+                          <span role="button" tabindex="2" class="mdc-chip__primary-action">
+                              <span class="mdc-chip__text">-</span>
+                          </span>
+                          </span>
+                          <span role="gridcell">
+                          <i class="material-icons mdc-chip__icon mdc-chip__icon--trailing del" tabindex="2" role="button">cancel</i>
+                          </span>
+                      </div>
+                      <div class="mdc-chip mdc-chip--selected__ mdc-ripple-upgraded mdc-chip--deletable" role="row" style="">
+                          <div class="mdc-chip__ripple"></div>
+                              <span role="gridcell">
+                              <span role="button" tabindex="0" class="mdc-chip__primary-action">
+                                  <span class="mdc-chip__text">-</span>
+                              </span>
+                              </span>
+                                                  
+                              <span role="gridcell">
+                              <i class="material-icons mdc-chip__icon mdc-chip__icon--trailing  del" tabindex="-1" role="button">cancel</i>
+                              </span>
+                      </div>
+                      <div class="mdc-chip" role="row" style="">
+                              <div class="mdc-chip__ripple"></div>
+                              <span role="gridcell">
+                              <span role="button" tabindex="1" class="mdc-chip__primary-action">
+                                  <span class="mdc-chip__text">-</span>
+                              </span>
+                              </span>
+                              <span role="gridcell">
+                              <i class="material-icons mdc-chip__icon mdc-chip__icon--trailing  del" tabindex="-1" role="button">cancel</i>
+                              </span>
+                        </div>
+                    </span>
+                  </div>
+                </div>
+          </div>
+          <div class="margin_top_10">
+            <button id="btnSave" class="mdc-button mdc-button--raised margin_right_5" style="width:100%;font-size:16px">
+            <div class="mdc-button__ripple"></div>
+            <strong data-i18n="label.save">저장</strong>
+            </button>
+          </div>
+            <div style="height: 56px;"></div>
+            
+            <!-- 앱/내비.선택.다이얼로그 -->
+            <div class="navi_select mdc-dialog">
+              <div class="mdc-dialog__container">
+              <div class="mdc-dialog__surface"
+                role="alertdialog"
+                aria-modal="true"
+                aria-labelledby="my-dialog-title"
+                aria-describedby="my-dialog-content">
+                <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+                <h2 class="mdc-dialog__title my-dialog-title"><span data-i18n="label.appselect">앱 선택</span>
+                  <span class="">
+                      <span class="right" style="width: 60%;display: inline-block;padding-right: 10px;">
+                          <label for="" class="title" style=""><span class="basic_font_medium2" data-i18n="label.all_app">전체</span></label>
+                          <!-- <div class="flex-grow basic_font_medium2 align-self-center right" id="status_message">상태메시지</div> -->
+                          <span class="flex-grow right  align-self-center">
+                              <button class="all_app mdc-switch mdc-switch--unselected" type="button" role="switch" aria-checked="false">
+                                  <div class="mdc-switch__track"></div>
+                                  <div class="mdc-switch__handle-track"><div class="mdc-switch__handle"><div class="mdc-switch__shadow"><div class="mdc-elevation-overlay"></div></div><div class="mdc-switch__ripple"></div></div></div>
+                                  <span class="mdc-switch__focus-ring-wrapper"><div class="mdc-switch__focus-ring"></div></span>
+                              </button>
+                          </span>
+                      </span>
+                  </span>
+                  
+                  <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                    style="position: fixed;right: 5%;" id="close_app_list">clear</i>
+              <div class="margin_top_20 left"><!--fieldset-->
+                <label id="search" class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon "
+                  style="width:100%;">
+                  <div class="mdc-text-field__ripple"></div>
+                  <input class="mdc-text-field__input" type="text" aria-labelledby="my-label-id" aria-controls="my-helper-id"
+                    aria-describedby="my-helper-id" style="ime-mode:active">
+                  <span id="label" class="mdc-floating-label" data-i18n="label.search_placeholder_appselect">앱이름(초성 : ㅌㅁㅈㄷ,함께기도)</span>
+                  <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                    style="right:80px;display:none" id="search_clear">clear</i>
+                  <div class="mdc-line-ripple"></div>
+                  <button class="btnSearch mdc-button mdc-button--raised  material-icons " style="top:10px;"> <span
+                      class="mdc-button__ripple"></span>search</button>
+                </label>
+              </div>
+                </h2>
+                <div class="mdc-dialog__content" id="my-dialog-content" style="height: 100vh;">
+                  <div class="list">
+                    <li class="mdc-deprecated-list-item clone padding_right_2" tabindex="-1" data-mdc-dialog-action="none" style="display:none;padding-left:5px">
+                      <span class="mdc-deprecated-list-item__ripple"></span>
+                      <img class="mdc-list-item__graphic" src="data:image/png;base64,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" width="30" height="30" alt="">
+                      <span class="flex-grow mdc-deprecated-list-item__text margin_left_5"></span>
+                      <span class="pkg_not mdc-deprecated-list-item__text margin_left_5"></span>
+
+                    </li>
+                    
+                    <ul class="mdc-list mdc-deprecated-list">
+                      <li class="mdc-list-item mdc-deprecated-list-item--selected " tabindex="0" data-mdc-dialog-action="none">
+                        <img class="mdc-list-item__graphic" src="data:image/png;base64,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" width="56" height="56" alt="Panda">
+                        <span class="mdc-list-item__text">None</span>
+                      </li>
+                      <li class="mdc-list-item" data-mdc-dialog-action="callisto">
+                        <img class="mdc-list-item__graphic" src="" width="56" height="56" alt="Panda">
+                        <span class="mdc-list-item__text">Callisto</span>
+                      </li>
+                      <li class="mdc-deprecated-list-item" data-mdc-dialog-action="v2" tabindex="0">
+                        <span class="mdc-deprecated-list-item__ripple"></span>
+                        <img class="mdc-list-item__graphic" width="56" height="56" alt="Panda">
+                        <span class="mdc-deprecated-list-item__text">Single-line item</span>
+                      </li>
+                      <li class="mdc-deprecated-list-item">
+                        <span class="mdc-deprecated-list-item__ripple"></span>
+                        <img class="mdc-list-item__graphic" src="https://blog.kakaocdn.net/dn/YsYS3/btqCUcjAZ7r/m5X0e1aFeQfijCZ6ybLQE1/img.jpg" width="56" height="56" alt="Panda">
+                        <span class="mdc-deprecated-list-item__text">Single-line item</span>
+                      </li>
+                      <li class="mdc-deprecated-list-item">
+                        <span class="mdc-deprecated-list-item__ripple"></span>
+                        <span class="mdc-deprecated-list-item__text">Single-line item</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <div class="mdc-dialog__scrim"></div>
+            </div>
+
+            <div class="mdc-snackbar">
+                <div class="mdc-snackbar__surface">
+                    <div class="mdc-snackbar__label" role="status" aria-live="polite">~~</div>
+                    <!--     <div class="mdc-snackbar__actions"><button_default type="button_default" class="mdc-button_default mdc-snackbar__action"><button_default
+                          class="mdc-icon-button_default mdc-snackbar__dismiss material-icons" title="Dismiss">close</button_default></div> -->
+                </div>
+            </div>
+    
+            <div class="basic mdc-dialog">
+                <div class="mdc-dialog__container">
+                    <div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" aria-labelledby="my-dialog-title"
+                        aria-describedby="my-dialog-content">
+                        <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+                        <h2 class="mdc-dialog__title" id="my-dialog-title" data-i18n="message.would_change">
+                          
+                        </h2>
+                        <div class="mdc-dialog__content" id="my-dialog-content">
+                        </div>
+                        <footer class="mdc-dialog__actions">
+                            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+                                <div class="mdc-button__ripple"></div>
+                                <span class="mdc-button__label" data-i18n="label.cancel">Cancel</span>
+                            </button>
+                            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="accept"
+                                data-mdc-dialog-button-default>
+                                <div class="mdc-button__ripple"></div>
+                                <span class="mdc-button__label" data-i18n="label.ok">OK</span>
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+                <div class="mdc-dialog__scrim"></div>
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+    <footer>
+      <div class="mdc-bottom-navigation">
+          <nav class="mdc-bottom-navigation__list">
+              <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                  data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                  <span class="material-icons mdc-bottom-navigation__list-item__icon">home</span>
+                  <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.menu_home">홈</span>
+              </span>
+
+                <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <!-- <span class="material-icons mdc-bottom-navigation__list-item__icon">navigation</span> -->
+                     
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">
+
+</span>
+<svg version="1.1" id="Layer_1"
+	 viewBox="0 0 512 512" xml:space="preserve" class="padding_top_3 padding_bottom_3">
+<rect x="142.884" y="129.039" style="fill:#ffffff;" width="59.535" height="166.698"/>
+<path style="fill:#757575;" d="M229.209,175.179c-13.407,0-24.594,9.984-26.5,22.882l-0.291,0.23v81.968h-35.721v-79.38
+	c0-16.92,3.969-27.386,20.175-48.198l61.601-85.046c12.092-15.486,9.314-38.048-6.173-50.138
+	c-15.485-12.092-38.048-9.314-50.138,6.171l-77.125,105.505c-8.986,12.293-13.829,27.124-13.829,42.351v195.655l71.442,71.442
+	l58.55-50.186c15.74-13.492,24.799-33.188,24.799-53.92V201.969C256,187.235,243.944,175.179,229.209,175.179z"/>
+<rect x="55.503" y="306.589" transform="matrix(-0.7071 0.7071 -0.7071 -0.7071 468.2601 603.7747)" style="fill:#757575;" width="107.162" height="184.556"/>
+<rect x="65.968" y="331.851" transform="matrix(-0.7071 0.7071 -0.7071 -0.7071 443.0089 664.7574)" style="fill:#757575;" width="35.721" height="184.556"/>
+<rect x="309.581" y="129.039" style="fill:#ffffff;" width="59.535" height="166.698"/>
+<path style="fill:#757575;" d="M282.791,175.179c13.407,0,24.593,9.984,26.5,22.882l0.291,0.23v81.968h35.721v-79.38
+	c0-16.92-3.969-27.386-20.175-48.198l-61.601-85.044c-12.092-15.486-9.314-38.048,6.171-50.138
+	c15.486-12.092,38.048-9.314,50.139,6.171l77.124,105.505c8.987,12.292,13.83,27.123,13.83,42.35v195.655l-71.442,71.442
+	l-58.55-50.186C265.058,374.943,256,355.247,256,334.516V201.969C256,187.235,268.056,175.179,282.791,175.179z"/>
+<rect x="349.327" y="306.601" transform="matrix(0.7071 0.7071 -0.7071 0.7071 400.059 -168.0703)" style="fill:#757575;" width="107.162" height="184.556"/>
+<rect x="410.303" y="331.873" transform="matrix(0.7071 0.7071 -0.7071 0.7071 425.3262 -178.526)" style="fill:#757575;" width="35.721" height="184.556"/>
+<g>
+	<rect y="107.214" style="fill:#757575;" width="59.535" height="35.721"/>
+	
+		<rect x="13.961" y="25.843" transform="matrix(-0.9428 -0.3333 0.3333 -0.9428 70.3896 99.4825)" style="fill:#757575;" width="59.534" height="35.72"/>
+	<rect x="452.465" y="107.214" style="fill:#757575;" width="59.535" height="35.721"/>
+	
+		<rect x="450.402" y="13.937" transform="matrix(-0.3333 -0.9428 0.9428 -0.3333 583.1323 499.7556)" style="fill:#757575;" width="35.72" height="59.533"/>
+</g>
+</svg>
+                    <span style="padding-bottom: 6px;" class="mdc-bottom-navigation__list-item__text" data-i18n="title.menu_pray">기도</span>
+                </span>
+
+                <span
+                    class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">account_circle</span>
+                    <!-- <span class="material-icons mdc-bottom-navigation__list-item__icon">directions_walk</span>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">directions_run</span> -->
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.menu_profile">profile</span>
+                </span>
+
+              <span style="display:none" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                  data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                  <span class="material-icons mdc-bottom-navigation__list-item__icon">card_membership</span>
+                  <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_membership">멤버쉽</span>
+              </span>
+
+              <span style="display:none" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                  data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                  <span class="material-icons mdc-bottom-navigation__list-item__icon">forum</span>
+                  <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.contact_us">문의하기</span>
+              </span>
+
+              <span style="display:none" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                  data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                  <span class="material-icons mdc-bottom-navigation__list-item__icon">forum</span>
+                  <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.menu_run_options">실행옵션</span>
+              </span>
+
+              <span style="display:none" id="footerMenuDeveloperSupport" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary none"
+                  data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                  <span class="material-icons mdc-bottom-navigation__list-item__icon">favorite</span>
+                  <span class="mdc-bottom-navigation__list-item__text" data-i18n="[html]title.support_developers">개발자응원</span>
+              </span>
+
+              <!-- <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                  data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                  <span class="material-icons mdc-bottom-navigation__list-item__icon">lock</span>
+                  <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_permission">권한</span>
+              </span> -->
+              
+          </nav>
+      </div>
+  </footer>
+  
+
+</div>
+</body>
+
+
+</html>
