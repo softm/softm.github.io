@@ -411,11 +411,11 @@ $( document ).ready(function() {
   // info?.permissions?.ACCESSIBILITY;
   btnFirstStart    = new mdc.ripple.MDCRipple(document.querySelector("#btnFirstStart"));
 	btnFirstStart.listen("click", function(event) {
-    if ( chipsetGroup.selectedChipIds.length == 0 ) {
-        // alert("소속을 하나 이상 선택하세요.");
-        alert(t("message.first_select_group"));
-        return;
-    } else {
+    // if ( chipsetGroup.selectedChipIds.length == 0 ) {
+    //     // alert("소속을 하나 이상 선택하세요.");
+    //     alert(t("message.first_select_group"));
+    //     return;
+    // } else {
       var groups = [];
       for ( idx in chipsetGroup.selectedChipIds ) {
         var chipId = chipsetGroup.selectedChipIds[idx];
@@ -425,7 +425,7 @@ $( document ).ready(function() {
       }
       fn_DeviceSaveData("_GROUPS", JSON.stringify(groups));
       console.log("groups",groups);
-    }
+    // }
 
 		// self.close();
     fn_DeviceSaveData("_FIRST_START", "1");
