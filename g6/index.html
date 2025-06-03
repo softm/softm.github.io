@@ -439,7 +439,7 @@ function initList(v) {
         '</div>'
       );
             
-        item.find("#txtMemo").val(prayMemo.memo);
+        item.find("#txtMemo").val(decodeURIComponent(prayMemo.memo));
         item.find("#txtMemo").css("color",memoColor);
         item.find("#txtMemo").css("borderColor",memoColor);
         item.find("#txtMemo").addClass(doneMemo?"done-memo":"not-memo");
