@@ -208,6 +208,7 @@ $( document ).ready(function() {
 
 function initWrite() {
     profileName = new mdc.textField.MDCTextField(document.querySelector('#profile_name'));
+    nickName = new mdc.textField.MDCTextField(document.querySelector('#nick_name'));
     // profileNickName = new mdc.textField.MDCTextField(document.querySelector('#profile_nick_name'));
 
     btnSave    = new mdc.ripple.MDCRipple(document.querySelector("#btnSave"));
@@ -233,6 +234,7 @@ function initWrite() {
             }
             fn_DeviceSaveData("_GROUPS", JSON.stringify(groups));
             fn_DeviceSaveData("_PROFILE_NAME", profileName.value.trim());
+            fn_DeviceSaveData("_NICK_NAME", nickName.value.trim());
     //         		JSONObject body = json.getJSONObject("body");
 		// String title = body.optString("title");
 		// String prayDt = body.optString("prayDt");
@@ -494,6 +496,32 @@ function getInfo() {
                         <div class="mdc-text-field__ripple"></div>
                         <input class="mdc-text-field__input" id="profile_name_input" type="text"/>
                         <span id="label" class="mdc-floating-label none" data-i18n="label.search_placeholder_">이름</span>
+                        <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                        style="right:80px;display:none" id="search_clear">clear</i>
+                        <div class="mdc-line-ripple"></div>
+                    </label>
+                  </div>
+                </div>
+            </div>
+            <hr class="sub" />
+
+
+            <!--닉네임-->
+            <div class="row sub">
+              <div class="flex"><!--fieldset-->
+                <label class="title"
+                style="overflow: hidden;
+                text-overflow: ellipsis;
+                width: calc(30%);"><span class="mdc-chip__text"><strong data-i18n="label.renavi_prevent_time_"
+                >닉네임</strong></span></label>
+                <!-- <div style="position: absolute;display: inline;margin-top: -15px;"> -->
+                <div class="flex-grow right"  id="search_wrapper">
+   
+                    <label id="nick_name" class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon "
+            style="width:100%;">
+                        <div class="mdc-text-field__ripple"></div>
+                        <input class="mdc-text-field__input" id="profile_name_input" type="text"/>
+                        <span id="label" class="mdc-floating-label none" data-i18n="label.search_placeholder_">닉네임</span>
                         <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
                         style="right:80px;display:none" id="search_clear">clear</i>
                         <div class="mdc-line-ripple"></div>
