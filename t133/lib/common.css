@@ -18,6 +18,7 @@
   --main-text-color:#353C49;
   --sub-text-color:#5e5f5e;
   --deep-text-color:#010101;
+  /* --mdc-theme-on-primary:var(--softm-stop) */
   
   /* --sub-color:#17232b92; */ 
 }
@@ -26,7 +27,7 @@
 /* 007f7f : 푸르덩 */
 /* 4c4c4c : 회르덩 */
 .mdc-snackbar__surface {
-  /*   background-color: var(--mdc-theme-primary); */
+    /* background-color: var(--mdc-theme-primary); */
 }
 
 body {
@@ -57,7 +58,24 @@ body {
   margin-top: 1px;
   margin-bottom: 1px;
 }
+/* .mdc-top-app-bar {
+    background-color: #6200ee;
+    background-color: var(--mdc-theme-primary, #6200ee);
+    color: white;
+    display: flex
+;
+    position: fixed;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    width: 100%;
+    z-index: 4;
+}
 
+.mdc-top-app-bar__action-item, .mdc-top-app-bar .mdc-top-app-bar__navigation-icon {
+    color: #fff;
+    color: var(--mdc-theme-on-primary, #fff);
+} */
 .basic_font_small1 { font-size: 12px }
 .basic_font_small2 { font-size: 13px }
 .basic_font_small3 { font-size: 14px }
