@@ -1,0 +1,984 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+  <title>티</title>
+  <link rel="shortcut icon" href="#">
+
+  <!-- <link href="./lib/material-components-web.min.css" rel="stylesheet"> -->
+  <link href="./lib/material-components-web.min.new.css" rel="stylesheet">
+  <!-- <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"> -->
+
+  <!-- <script src="./lib/material-components-web.min.js"></script> -->
+  <script src="./lib/material-components-web.min.new.js"></script>
+  <!-- <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script> -->
+  
+  <link rel="stylesheet" href="./lib/icon.css">
+  <link rel="stylesheet" href="./lib/common.css?a=202309171923">
+  <script src="./lib/hangul.js"></script>
+
+  <style>
+    .box {
+      border: 3px solid aliceblue;
+      padding: 0px;
+      border-radius: 10px;
+      width: 35%;      
+      height:140px;
+      cursor: pointer;
+      margin-right: 5px;
+      display: inline-block;
+      font-size: 11px;
+      font-weight: normal;
+      background-color: lightgray;
+      border:1px solid lightgray;
+      font-weight: bold;
+      color:gray;
+    }
+    
+    .box div.main {
+        bottom: 10px;
+        height: 70%;
+        align-content: center;
+        background-color: white;
+        border-radius: 10px;
+    }
+    .discount_price {
+     font-size:14px;
+    }
+    .box .main .main_title {
+        font-size: 20px;
+    }
+    .box.active {
+      border: 6px solid #FF6928;
+      background-color: #FF6928;
+      width:40%;
+      height:170px;
+      font-size: 15px;
+      font-weight: bold;
+      color: white;
+    }
+    .box.active span {
+      color: black;
+    }
+  
+    .box span.bottom_title {
+      position: relative;
+      /* bottom: -11px; */
+      top: 4px;
+    }
+    
+    .box.active span.bottom_title {
+      color: white;
+      top: 4px;
+    }
+
+  </style>
+ </head>
+
+<!--  using - default i18next-->
+<!--
+<script src="https://unpkg.com/i18next/i18next.js"></script>
+<script src="https://unpkg.com/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+<script src="https://unpkg.com/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.js"></script>
+-->
+
+<!-- using - jquery i18next -->
+<!-- -->
+   <script src="./lib/jquery-3.6.4.min.js"></script>
+<!--<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>-->
+  <script src="./lib/i18next.min.js"></script>
+  <script src="./lib/common.js?a=1"></script>
+  <script src="./lib/interface.js"></script>
+  <script src="./lib/db.js"></script>
+    <script src="./lib/tmapjs2.min.js"></script>
+
+<script src="./lib/db.js"></script>
+<script src="./lib/map.js"></script>
+<script src="./lib/map_point.js"></script>
+
+<!--
+  <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xx2c3bc6b282ed46c9805c99db13f56149"></script>
+-->
+<script src="https://unpkg.com/hangul-js" type="text/javascript"></script>
+
+
+<script>
+var btnAvd = null;
+var btnPayInApp = null;
+var btnPayInAppMng = null;
+
+$( document ).ready(function() {
+    footerNavigationIndex = 6;
+    // $(footerNavigation[0]).trigger("click");
+    footerNavigation[footerNavigationIndex].emit("click", footerNavigationIndex);
+
+    btnAvd = new mdc.ripple.MDCRipple(document.querySelector("#btnAvd"));
+    btnPayInApp = new mdc.ripple.MDCRipple(document.querySelector("#btnPayInApp"));
+    btnPayInAppMng = new mdc.ripple.MDCRipple(document.querySelector("#btnPayInAppMng"));
+
+    window.getInfoCallBack = function (data) {
+        if (isWeb) {
+            window.info = {
+                "isAding":true,
+                "isPaid":true,
+                            "appPackage": "com.skt.tmap.ku",
+                            "startWifi": false,
+                            "systemCurrentTimeMillis": 1738761939270,
+                            "nextAdviewTime": -1832363,
+                            "runSpeed": false,
+                            "workOffTimeFrom": "17:30",
+                            "versionName": "1.3.1.0007",
+                            "workGotoTimeTo": "08:50",
+                            "licenseExpireTime": 1737115191329, // 1738932905907
+                            "isInKorea": true,
+                            "isAdLicense": false,
+                            "permissions": {
+                                "LOCATION": true,
+                                "ACCESSIBILITY": false,
+                                "NOTIFICAION_ACCESS": true,
+                                "BACKGROUND_LOCATION": false,
+                                "POST_NOTIFICATIONS": false,
+                                "WRITE_SETTING": false,
+                                "BLUETOOTH": false,
+                                "IGNORE_BATTERY": true,
+                                "USAGESTATS": false,
+                                "OVERLAY": true
+                            },
+                            "checkServiceCheckNoti": "0",
+                            "workGotoTimeFrom": "06:00",
+                            "naviAutoStart": true,
+                            "usingRegHome": false,
+                            "poisFavorite": [],
+                            "onlyStopAfterNaving": false,
+                            "runSpeedLimit": 5,
+                            "musicAppPackageIcon": "data:image/webp;base64,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",
+                            "appEnable": "1",
+                            "wifi": {},
+                            "workGotoOffTime": false,
+                            "test": false,
+                            "startPower": true,
+                            "geofence": false,
+                            "appUpdateDelayTime": 604800000,
+                            "naviGeofenceRadius": 200,
+                            "naviMode": "1",
+                            "serverHost": "http://127.0.0.1:5500",
+                            "naviOverlayWaitTime": 3,
+                            "runSpeedLimitTime": 5,
+                            "naviPopupMode": true,
+                            "versions": {
+                                "min": 23,
+                                "compile": 34,
+                                "sdk": 35,
+                                "androidId": 15,
+                                "target": 34
+                            },
+                            "startMode": "1",
+                            "workOffTimeTo": "19:00",
+                            "applicationId": "net.softm.startnavi.poweron",
+                            "device": {
+                                "country": "KR",
+                                "versionId": 15,
+                                "sdkInt": 35,
+                                "displayCountry": "대한민국",
+                                "model": "SM-S938N",
+                                "language": "ko",
+                                "versionName": "1.3.1.0007",
+                                "uuid": "0072e96789523959",
+                                "brand": "samsung",
+                                "versionCode": 104
+                            },
+                            "appUpdatedNotiConfirm": false,
+                            "pathName": "",
+                            "musicAppPackage": "com.sec.android.app.music",
+                            "chargingMode": "1",
+                            "isAdViewAvailableForAdMaxTime": true,
+                            "runStatusScreenTimeForStart": 15,
+                            "startStopOnOff": {
+                                "airplane_mode": {
+                                    "start": {
+                                        "onoff": "off",
+                                        "use_yn": false
+                                    },
+                                    "stop": {
+                                        "onoff": "on",
+                                        "use_yn": false
+                                    }
+                                },
+                                "bluetooth": {
+                                    "start": {
+                                        "onoff": "on",
+                                        "use_yn": false
+                                    },
+                                    "stop": {
+                                        "onoff": "off",
+                                        "use_yn": false
+                                    }
+                                },
+                                "completed_lock": {
+                                    "start": {
+                                        "onoff": "off",
+                                        "use_yn": false
+                                    },
+                                    "stop": {
+                                        "onoff": "on",
+                                        "use_yn": true
+                                    }
+                                },
+                                "home_screen": {
+                                    "start": {
+                                        "onoff": "on",
+                                        "use_yn": false
+                                    },
+                                    "stop": {
+                                        "onoff": "on",
+                                        "use_yn": false
+                                    }
+                                },
+                                "lock": {
+                                    "start": {
+                                        "onoff": "off",
+                                        "use_yn": true
+                                    },
+                                    "stop": {
+                                        "onoff": "off",
+                                        "use_yn": true
+                                    }
+                                },
+                                "play_music": {
+                                    "start": {
+                                        "onoff": "on",
+                                        "use_yn": true
+                                    },
+                                    "stop": {
+                                        "onoff": "off",
+                                        "use_yn": true
+                                    }
+                                },
+                                "power_off": {
+                                    "start": {
+                                        "onoff": "off",
+                                        "use_yn": false
+                                    },
+                                    "stop": {
+                                        "onoff": "on",
+                                        "use_yn": false
+                                    }
+                                },
+                                "screen_on": {
+                                    "start": {
+                                        "onoff": "on",
+                                        "use_yn": true
+                                    },
+                                    "stop": {
+                                        "onoff": "on",
+                                        "use_yn": true
+                                    }
+                                },
+                                "tethering": {
+                                    "start": {
+                                        "onoff": "on",
+                                        "use_yn": false
+                                    },
+                                    "stop": {
+                                        "onoff": "off",
+                                        "use_yn": false
+                                    }
+                                },
+                                "wifi": {
+                                    "start": {
+                                        "onoff": "on",
+                                        "use_yn": true
+                                    },
+                                    "stop": {
+                                        "onoff": "off",
+                                        "use_yn": true
+                                    }
+                                }
+                            },
+                            "naviDestination": "1",
+                            "runStatusScreenStartMode": "0",
+                            "appUpdatedTime": 1738761937897,
+                            "basicInfo": {
+                                "adMode": "1",
+                                "adTypeForMainBanner": "1",
+                                "adTypeForPopupBanner": "1",
+                                "adTypeForWaitBanner": "1",
+                                "adTypeForWaitBannerLoadType": "1",
+                                "adTypeForWaitReward": "4",
+                                "adViewIntervalTime": 1000,
+                                "adViewLicenseAddMaxTime": 2592000000,
+                                "adViewLicenseAddTime": 172800000,
+                                "adViewLicensedUUIDs": [
+                                    "ecb6c1732c4b3f0f",
+                                    "e575416df5cd7da3",
+                                    "8c85d549a955dcc7",
+                                    "e575416df5cd7da3",
+                                    "5c4dcb156253716a",
+                                    "8bd0007cac109bf7",
+                                    "3af0f0b68f2ee61b"
+                                ],
+                                "appReleaseUpdtedTime": 1737115191329,
+                                "checkGrantInfo": [
+                                    "notification_access",
+                                    "accessibility",
+                                    "ignore_battery",
+                                    "location"
+                                ],
+                                "checkService": true,
+                                "checkServiceCheckLogSendNoti": true,
+                                "checkServiceCheckLogSendNotiUUIDs": [
+                                    "ecb6c1732c4b3f0f",
+                                    "e575416df5cd7da3",
+                                    "8c85d549a955dcc7",
+                                    "e575416df5cd7da3",
+                                    "8bd0007cac109bf7",
+                                    "7843b94347d59c65",
+                                    "dd4ab31c121bad2a",
+                                    "899267272d9b16f9"
+                                ],
+                                "checkServiceCheckNoti": true,
+                                "checkServiceCheckNotiUUIDs": [
+                                    "ecb6c1732c4b3f0f",
+                                    "e575416df5cd7da3",
+                                    "8c85d549a955dcc7",
+                                    "e575416df5cd7da3",
+                                    "8bd0007cac109bf7",
+                                    "7843b94347d59c65",
+                                    "dd4ab31c121bad2a",
+                                    "899267272d9b16f9"
+                                ],
+                                "checkServiceFlexInterval": 5,
+                                "checkServiceFlexIntervalTimeUnit": "MINUTES",
+                                "checkServiceImmediate": true,
+                                "checkServiceImmediateDelaySec": 10,
+                                "checkServiceImmediateLog": true,
+                                "checkServiceImmediateLogFormat": "1",
+                                "checkServiceInitialDelay": 0,
+                                "checkServiceInitialDelayTimeUnit": "SECONDS",
+                                "checkServiceLog": true,
+                                "checkServiceLogFormat": "1",
+                                "checkServiceLogIntervalTime": 86400000,
+                                "checkServiceLogUUIDs": [],
+                                "checkServiceRepeatInterval": 15,
+                                "checkServiceRepeatIntervalTimeUnit": "MINUTES",
+                                "crashLog": true,
+                                "crashLogFormat": "1",
+                                "adViewOPType": "2",
+                                "reviewOPType": "1",
+                                "reviewRequestFirstIntervalTime": 259200000,
+                                "reviewRequestIntervalTime": 604800000,
+                                "serverConnected": true,
+                                "usingUserLogFormat": "1",
+                                "usingUserReg": true,
+                                "uuid": "0072e96789523959",
+                                "waitTimeForNotAdLicense": 10000,
+                                "msg": "성공",
+                                "msgCode": "200"
+                            },
+                            "appUpdateCheckTime": 0,
+                            "adViewCheckTime": 1738728380837, // 1738760105907 / 1738728380837
+                            "startBluetooth": false,
+                            "appPackageIcon": "data:image/webp;base64,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",
+                            "naviRenaviPreventTime": 3,
+                            "appUpdated": false,
+                            "runStatusScreenStopMode": "1",
+                            "isAccessbilityServiceRunning": false,
+                            "independenceCondition": true,
+                            "checkServiceCheckLogSendNoti": "0",
+                            "versionCode": 104,
+                            "appInstalled": true,
+                            "enhancedExecution": false,
+                            "stopMode": "1",
+                            "runStatusScreenTimeForStop": 15,
+                            "notiIcon": true,
+                            "appReleaseUpdtedTime": 1737115191329,
+                            "userType":"AD_VIEW_USER",
+                            "userLevel":"FREE", // AD_VIEW, SUBS, LIFETIME
+                            "isPaidLicense": false,
+                            "isSubsLicense": false
+
+                            
+                        }
+        } else {
+            window.info = (JSON.parse(data));
+        }
+        initBasicInfo();
+        initPage(window.info);
+    }
+
+    window.startGetInfo = function(message) {
+        fn_GetInfo("", "getInfoCallBack");
+    }
+    fn_SyncUserLicense("startGetInfo");
+    //W
+    // drawer.open = true;
+    $(".bill_products .box").click(function(e) {
+        $(".bill_products .box").removeClass("active");
+        $(this).addClass("active");
+        if ( $(this).hasClass("monthly") ) {
+            $(".monthly_msg").show();
+            $(".lifetime_msg").hide();
+        } else {
+            $(".monthly_msg").hide();
+            $(".lifetime_msg").show();
+        }
+    });
+});
+
+function initPage(v) {
+    // initLoad(v);
+    // console.log("initLoad");
+    $("body").removeClass("none");
+    // if ( _LICENSE_EXPIRE_TIME /  // info.isAdLicense)
+    // info.licenseExpireTime - info.systemCurrentTimeMillis
+
+    var licenseExpireTime = v.licenseExpireTime;
+    // setInterval(function() {
+        // licenseExpireTime -= 1000;
+        var license_expire_time = "";
+        if ( licenseExpireTime > info.systemCurrentTimeMillis ) {
+            license_expire_time = "<span class='black'>" + new Date(licenseExpireTime).toLocaleString() +"</span>";
+        } else {
+            // if ( !v.isAding && v.isPaid ) {
+            //     license_expire_time = "<span class='pink'>" + t("label.expiration")+"</span>";
+            // } else {
+                license_expire_time = "<span class='pink'>" + t("label.expiration")+"</span>";
+            // }                
+        }
+        $("#license_expire_time").html(license_expire_time);
+    // },1000);
+    var nextAdviewTime = info.nextAdviewTime;
+    if ( !info.isAdViewAvailableForAdMaxTime ) {
+        nextAdviewTime = info.basicInfo.adViewLicenseAddTime - ( info.systemCurrentTimeMillis - info.adViewCheckTime );
+    }
+
+    var waitTimeForNotAdLicenseSec = Math.trunc( info.basicInfo.waitTimeForNotAdLicense/1000 * 10,3)/10;
+    $("#please_support_msg2").html(t("message.please_support_msg2",{fromSec:waitTimeForNotAdLicenseSec}));
+
+    setInterval(function() {
+        nextAdviewTime -= 1000;
+        var result = millisecondsToTime(nextAdviewTime);
+        var waitTime="";
+        waitTime += result.days>0?result.days+t("label.day")+" ":"";
+        waitTime += result.hours>0?result.hours+t("label.hour")+" ":"";
+        waitTime += result.minutes+t("label.min")+" ";
+        waitTime += result.seconds+t("label.sec")+"";
+        if ( nextAdviewTime >= 0 ) {
+            $("#ad_replay_time").html(waitTime);        
+        } else {
+            $("#ad_replay_time").html(t("label.ad_view_available")); // 시청가능
+            // fn_Reload(true);    
+        }
+    },1000);
+
+    btnPayInAppMng.listen("click", function (event) {
+        // fn_OutsideSite(url) ("https://play.google.com/store/account/subscriptions");
+        fn_OutsideSite("https://play.google.com/store/account/subscriptions?sku=subs_01&package=net.softm.startnavi.poweron");
+    });
+
+    btnPayInApp.listen("click", function (event) {
+        var billingType = $(".box.active").attr("name");
+        window.payInAppComplete = function () {
+            // billingType
+            if ( billingType == "INAPP_LIFETIME" ) {
+                snackbar( t("message.pay_in_app_lifetime_thanks") );
+            } else if ( billingType == "SUBS" ) {
+                snackbar( t("message.pay_in_app_subs_thanks") );
+            }
+            setTimeout(function () {
+                fn_Reload(true);
+            },2000);
+        };
+        fn_PayInApp(billingType,"payInAppComplete");
+    });
+
+    btnAvd.listen("click", function (event) {
+        if ( !info.isAdViewAvailableForAdMaxTime ) {
+            snackbar( t("message.ad_view_time_exceeded"));
+            return;
+        } info.adViewLicenseAddTime
+
+        if ( nextAdviewTime<0 || ( info.isAdingWaitReward && info.isAdViewAvailable ) ) {
+            $(btnAvd.root).removeClass("bg_yellowgreen").addClass("bg_lightyellowgreen")[0].disabled = true;
+            window.adViewComplete = function () {
+                // alert("ad_view_complete",function () {
+                // fn_Reload(true);
+                // });
+                snackbar( t("message.ad_view_thanks") );
+                setTimeout(function () {
+                    fn_Reload(true);
+                },2000);
+            };
+            fn_AdView("adViewComplete");
+            snackbar( t("message.noti_msg6") );
+        } else {
+            if ( !info.isAdViewAvailableForIntervalTime ) {
+                var result = millisecondsToTime(nextAdviewTime);
+                var waitTime="";
+                    waitTime += result.days>0?result.days+t("label.day")+" ":"";
+                    waitTime += result.hours>0?result.hours+t("label.hour")+" ":"";
+                    waitTime += result.minutes+t("label.min")+" ";
+                    waitTime += result.seconds+t("label.sec")+"";
+                    
+                // Utils.toastDebug(mContext, "다음 광고 시청시간 까지 :" );
+                snackbar( t("message.next_ad_view",{"waitTime":waitTime}));
+            } else if ( !info.isAdViewAvailableForAdMaxTime ) {
+                snackbar( t("message.ad_max_time_ad_view"));
+            }
+        }
+    });
+
+    $(".ading").hide();
+    $(".paid").hide();
+    if ( v.isAding ) {
+        $(".ading").show();
+    }
+    if ( v.isPaid ) {
+        $(".paid").show();
+    }
+
+}
+</script>
+</head>
+<body class="none">
+<div class="i18n drawer-frame-root" style="width: 100%;">
+    <div class="mdc-drawer-app-content">
+        <header class="mdc-top-app-bar app-bar" id="app-bar">
+            <div class="mdc-top-app-bar__row">
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+<!--                     
+-->
+                    <button class="material-icons  mdc-top-app-bar__navigation-icon mdc-icon-button">menu</button>
+                    <button id="btnHome"
+                        class="none mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded">home</button> 
+                        <span class="mdc-top-app-bar__title" data-i18n="label.top_bar">티맵실행</span>
+                    </section>
+                    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+                        <button id="btnSearch" class="none mdc-icon-button material-icons mdc-top-app-bar__action-item--unbounded"
+                            aria-label="Print this page">search</button>  <!-- bookmark settings-->
+                    </section>
+            </div>
+        </header>
+<!--         
+-->
+        <main class="main-content" id="main-content">
+            <div class="mdc-top-app-bar--fixed-adjust">
+            </div>
+        </main>
+    </div>
+    <aside class="mdc-drawer mdc-drawer--modal">
+       
+        <div class="mdc-drawer__header app_info">
+            <img src="./images/logo_100.svg" width="50" style="margin-top: 10px;"/>
+            <!-- style="height:55px" -->
+            <div class="mdc-dramdc-drawer__contentwer__title" data-i18n="[html]label.app_name">티맵자동실행</div>
+            
+        </div>
+        <hr class="sub"/>
+        <div class="row sub flex left bold " >
+            <label for="" class="flex-grow title" style="">
+                <h6 class="mdc-drawer__subtitle" ><span class="version-name">00.00</span></h6>    
+            </label>
+            <div class="flex-grow margin_right_7 middle right basic_font_medium2"  style="align-content: space-evenly;">
+                <span class="paidUser">
+                    <img src="images/vip.png" width="30" align="absmiddle"/>
+                </span>
+                <span class=" bold underline cursor_pointer"><span class="user_level link_dev_support">광고보기 사용자</span></span>
+            </div> 
+        </div>
+        <div class="mdc-drawer__content">
+            <a class="clone none mdc-deprecated-list-item mdc-deprecated-list-item--activated" href="#">
+                <span class="mdc-deprecated-list-item__ripple"></span>
+                <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home</i>
+                <span class="mdc-deprecated-list-item__text" data-i18n="label.home_page">Home</span>
+            </a>
+<!--- DRAWER_LIST_INFO -->
+            <div class="mdc-deprecated-list">
+                <a class="mdc-deprecated-list-item mdc-deprecated-list-item--activated" href="#" aria-current="page">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="label.home_page">Home</span>
+                </a>
+
+                <a class="none mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">settings</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_setting">설정</span>
+                </a>
+
+                <a class="none mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">toggle_on</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_start_stop">시작/종료</span>
+                </a>
+
+                <a class="mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">link</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="title.run_options">실행옵션</span>
+                </a>
+                <a class="mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home_work</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="title.home_company">집/회사</span>
+                </a>
+                <a class="mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">star</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="title.favorite">즐겨찾기</span>
+                </a>
+                <a class="mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">forum</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="title.contact_us">문의하기</span>
+                </a>
+
+                <a class="none mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">card_membership</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_membership">멤버쉽</span>
+                </a>
+
+                <a class="mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">thumb_up</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="label.rate_the_app">어플 평가하기</span>
+                </a>
+
+            </div>
+        </div>
+    </aside>
+    <div class="mdc-drawer-scrim"></div>
+    <div class="drawer-frame-app-content">
+        <div class="main drawer-main-content i18n margin_top_15">
+            <a name="move_point" id="move_point" />
+            <div class="margin_top_20">
+                <div class="row flex" style="border:0px solid red">
+                    <legend align="left" class="main title"><strong data-i18n="title.ad_ticket">응원 부탁드려요. ^^ :)</strong></legend>
+                </div>
+            </div>
+            <hr class="main"/>
+      
+            <div class="row padding_top_0 padding_bottom_3 ading">
+                <div class="row sub flex basic_font_medium3" data-i18n="[html]message.please_support_msg1">
+                    - 광고를 시청하면 사용기간이 연장되요.
+                </div>
+
+                <div class="row sub flex basic_font_medium3 margin_bottom_0" data-i18n="[html]message.please_support_msg2" id="please_support_msg2">
+                    - 대기시간이 <span class="bold" style="color:#B40404">"10"</span>초 → <span class="bold" style="color:#B40404">"3"</span>초
+                </div>
+            </div>
+        
+            <hr class="sub ading"/>
+            <div class="row sub flex left bold ">
+                <label for="" class="flex-grow title" style=""><strong data-i18n="label.license">라이센스</strong></label>
+                <div class="flex-grow margin_right_7 middle right basic_font_medium2"  style="align-content: space-evenly;">
+                    <span class="paidUser">
+                        <img src="images/vip.png" width="30" align="absmiddle"/>
+                    </span>
+                    <span class="user_level">광고 보기 사용자</span>
+                </div>
+                <div class="basic_font_medium2 align-self-center right">
+                    <div class="flex-grow subsUser ">                                       <!-- bg_orange white -->
+                        <button id="btnPayInAppMng" type="button" class="mdc-button mdc-button--raised padding_10 " data-mdc-dialog-action="close"
+                        style="height:30px;"
+                        >
+                            <i class="material-icons mdc-button__icon" style="top: 0px;" aria-hidden="true"
+                            >subscriptions</i>
+                            <span class="mdc-button__label bold margin_right_5" data-i18n="label.subscription_management">구독관리</span>
+                            <div class="mdc-button__ripple "></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row sub flex left bold ading" style="height:40px">
+                <label for="" class="title" style=""><strong data-i18n="label.period_of_use">사용기간</strong></label>
+                <div class="flex-grow basic_font_medium2 align-self-center margin_right_7 right" id="license_expire_time">~ 2025년 01월 31일</div>
+            </div>
+
+            <div class="row sub flex left bold ading">
+                <label for="" class="flex-grow title" style=""><strong data-i18n="label.ad_replay_time">광고보기</strong></label>
+                <div class="flex-grow margin_right_10 middle right basic_font_medium2" id="ad_replay_time" style="align-content: space-evenly;">-</div>
+                <div class="basic_font_medium2 align-self-center right ">
+                    <div class="flex-grow ">
+                        <button id="btnAvd" type="button" class="black mdc-button mdc-button--raised bg_yellowgreen padding_10" data-mdc-dialog-action="close"
+                        style="height:40px; "
+                        >
+                            <i class="material-icons mdc-button__icon margin_right_2" style="" aria-hidden="true"
+                                >favorite</i>
+                            <span class="mdc-button__label bold black margin_right_5" data-i18n="label.ad_view">광고보기</span>
+                            <div class="mdc-button__ripple "></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="sub paid"/>
+            <!-- <hr class="main"/> -->
+            <div class="row bill_products flex paid">
+                <div class="margin_left_10 margin_top_10" style="flex-grow: 1;width:55%;overlow:scroll">
+                    <div class="box monthly" name="SUBS">
+                        <div>&nbsp;</div>
+                        <div class="main" >
+                            <div class="main_title" data-i18n="label.bill_monthly">월간</div>
+                            <div class="main_title" data-i18n="label.bill_monthly_price">₩500원</div>
+                            <span class="basic_font_medium1" ><span data-i18n="[html]message.first_subscribe">처음 구독시 3달 무료</span></span>
+                        </div>
+                        <span class="bottom_title" data-i18n="label.bill_monthly_oneday_price">하루에 16원</span>
+                    </div>
+
+                    <div class="box lifetime active " name="INAPP_LIFETIME">
+                        <div data-i18n="label.bill_lifetime_50percent_discount">50% 할인</div>
+                        <div class="main">
+                            <div class="main_title" data-i18n="label.bill_lifetime">평생</div>
+                            <div class="main_title" data-i18n="label.bill_lifetime_price">₩5,000원</div>
+                            <span class="sub_price lightgray basic_font_small1" ><s class="discount_price" data-i18n="label.bill_lifetime_discount_price">₩10,000원</s></span>
+                        </div>
+                        <span class="bottom_title" data-i18n="label.bill_lifetime_oneday_price"> 한번</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row monthly_msg none left padding_left_10 padding_top_5 padding_bottom_5">
+                <div class="basic_font_medium2 padding_bottom_5" data-i18n="[html]message.first_subscribe_msg1">
+                    - <span class="skyblue bold">처음 구독시 3달간 무료</span>로 이용할 수 있습니다.
+                </div>
+                <div class="basic_font_medium2" data-i18n="[html]message.first_subscribe_msg2">
+                    - <span class="red">유료 정기 결제</span> <b>전환을 원치 않으면</b> <b>무료 기간 종료전</b>에 "<b>취소</b>" 할 수 있습니다.
+                </div>
+            </div>
+            <div class="row lifetime_msg left">
+                &nbsp;
+            </div>
+            <div class="row padding_left_5 padding_right_5 paid">
+                <button id="btnPayInApp" type="button" class="mdc-button mdc-button--raised w_full bg_orange white" data-mdc-dialog-action="close"
+                    style="height:40px"
+                >
+                <span class="mdc-button__label bold basic_font_medium2 margin_right_5" data-i18n="label.app_purchase1">구입</span>
+                <span class="mdc-button__label bold basic_font_medium1 margin_right_5" data-i18n="label.app_purchase2">[커피한잔</span>
+                <div class="mdc-button__ripple "></div>
+                <i class="material-icons mdc-button__icon" style="font-size: 25px;top: -7px;" aria-hidden="true"
+                >local_cafe</i>
+                <span class="mdc-button__label bold basic_font_medium1" data-i18n="label.app_purchase3">쏘기]</span>
+                </button>
+            </div>
+
+            <div class="row" style="height:70px"></div>
+            <div class="mdc-snackbar">
+                <div class="mdc-snackbar__surface">
+                    <div class="mdc-snackbar__label" role="status" aria-live="polite">~~</div>
+                    <!--     <div class="mdc-snackbar__actions"><button_default type="button_default" class="mdc-button_default mdc-snackbar__action"><button_default
+                          class="mdc-icon-button_default mdc-snackbar__dismiss material-icons" title="Dismiss">close</button_default></div> -->
+                </div>
+            </div>
+    
+            <div class="basic mdc-dialog">
+                <div class="mdc-dialog__container">
+                    <div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" aria-labelledby="my-dialog-title"
+                        aria-describedby="my-dialog-content">
+                        <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+                        <h2 class="mdc-dialog__title" id="my-dialog-title">
+                            <!--
+                     -->Choose a Ringtone
+                            <!--
+                   -->
+                        </h2>
+                        <div class="mdc-dialog__content" id="my-dialog-content">
+                        </div>
+                        <footer class="mdc-dialog__actions">
+                            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+                                <div class="mdc-button__ripple"></div>
+                                <span class="mdc-button__label" data-i18n="label.cancel">Cancel</span>
+                            </button>
+                            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="accept"
+                                data-mdc-dialog-button-default>
+                                <div class="mdc-button__ripple"></div>
+                                <span class="mdc-button__label" data-i18n="label.ok">OK</span>
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+                <div class="mdc-dialog__scrim"></div>
+            </div>
+    
+        </div>
+
+<!-- 블루투스.선택.다이얼로그 -->
+        <div class="bluetooth_select mdc-dialog">
+            <div class="mdc-dialog__container">
+            <div class="mdc-dialog__surface"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="my-dialog-title"
+            aria-describedby="my-dialog-content">
+            <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+            <h2 class="mdc-dialog__title" id="my-dialog-title"><span data-i18n="label.bluetoothselect">블루투스 선택</span>
+                <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                style="position: fixed;right: 5%;" id="close_bluetooth_list">clear</i>
+            <div class="margin_top_20 left"><!--fieldset-->
+            <label id="searchBluetooth" class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon "
+                style="width:100%;">
+                <div class="mdc-text-field__ripple"></div>
+                <input class="mdc-text-field__input" type="text" aria-labelledby="my-label-id" aria-controls="my-helper-id"
+                aria-describedby="my-helper-id" style="ime-mode:active">
+                <span id="label" class="mdc-floating-label" data-i18n="label.search_placeholder_bluetoothselect">블루투스</span>
+                <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                style="right:80px;display:none" id="search_bluetooth_clear">clear</i>
+                <div class="mdc-line-ripple"></div>
+                <button class="btnSearchBluetooth mdc-button mdc-button--raised  material-icons " style="top:10px;"> <span
+                    class="mdc-button__ripple"></span>search</button>
+            </label>
+            </div>
+            </h2>
+            <div class="mdc-dialog__content" id="my-dialog-content" style="height: 100vh;">
+                <div class="list">
+                <li class="mdc-deprecated-list-item clone" tabindex="-1" data-mdc-dialog-action="none" style="display:none;padding-left:5px">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <!-- width="30" height="30"  -->
+                    <svg class="mdc-list-item__graphic"  xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#3498db" class="bi bi-bluetooth" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="m8.543 3.948 1.316 1.316L8.543 6.58V3.948Zm0 8.104 1.316-1.316L8.543 9.42v2.632Zm-1.41-4.043L4.275 5.133l.827-.827L7.377 6.58V1.128l4.137 4.136L8.787 8.01l2.745 2.745-4.136 4.137V9.42l-2.294 2.274-.827-.827L7.133 8.01ZM7.903 16c3.498 0 5.904-1.655 5.904-8.01 0-6.335-2.406-7.99-5.903-7.99C4.407 0 2 1.655 2 8.01 2 14.344 4.407 16 7.904 16Z"/> </svg>
+                    <!-- <span class="mdc-deprecated-list-item__text margin_left_5"></span> -->
+                    <div>
+                        <div class="mdc-deprecated-list-item__text margin_left_5 name">-</div>
+                        <div class="mdc-deprecated-list-item__text margin_left_5 address" style="font-size: 8pt;color:grey;    top: -4px;
+                        position: relative;
+                        height: 17px;">-</div>
+                    </div>
+                </li>
+                
+                <ul class="mdc-list mdc-deprecated-list">
+                    
+                </ul>
+                </div>
+            </div>
+            </div>
+            </div>
+            <div class="mdc-dialog__scrim"></div>
+        </div>
+
+<!-- 와이파이.선택.다이얼로그 -->
+        <div class="wifi_select mdc-dialog">
+            <div class="mdc-dialog__container">
+            <div class="mdc-dialog__surface"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="my-dialog-title"
+            aria-describedby="my-dialog-content">
+            <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+            <h2 class="mdc-dialog__title" id="my-dialog-title"><span data-i18n="label.wifiselect">와이파이 선택</span>
+                <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                style="position: fixed;right: 5%;" id="close_wifi_list">clear</i>
+            <div class="margin_top_20 left"><!--fieldset-->
+            <label id="searchWifi" class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon "
+                style="width:100%;">
+                <div class="mdc-text-field__ripple"></div>
+                <input class="mdc-text-field__input" type="text" aria-labelledby="my-label-id" aria-controls="my-helper-id"
+                aria-describedby="my-helper-id" style="ime-mode:active">
+                <span id="label" class="mdc-floating-label" data-i18n="label.search_placeholder_wifiselect">와이파이</span>
+                <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                style="right:80px;display:none" id="search_wifi_clear">clear</i>
+                <div class="mdc-line-ripple"></div>
+                <button class="btnSearchWifi mdc-button mdc-button--raised  material-icons " style="top:10px;"> <span
+                    class="mdc-button__ripple"></span>refresh</button>
+            </label>
+            </div>
+            </h2>
+            <div class="mdc-dialog__content" id="my-dialog-content" style="height: 100vh;">
+                <div class="list">
+                <li class="mdc-deprecated-list-item clone" tabindex="-1" data-mdc-dialog-action="none" style="display:none;padding-left:5px">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <!-- width="30" height="30"  -->
+                    <div>
+                        <div class="connected bold" style="font-size: 9pt;line-height: 3px;" data-i18n="label.wifi_connected">
+                            연결됨
+                        </div>
+                        <svg class="icon svg-icon" style="width: 30px; height: 30px;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M558.217341 861.441123C573.618346 845.725811 581.318733 826.708293 581.318733 804.387995 581.318733 782.067698 573.618346 763.050179 558.217341 747.334868 542.816336 731.619557 524.179167 723.762019 502.305276 723.762019 480.431385 723.762019 461.794216 731.619557 446.393211 747.334868 430.992206 763.050179 423.291819 782.067698 423.291819 804.387995 423.291819 826.708293 430.992206 845.725811 446.393211 861.441123 461.794216 877.156434 480.431385 885.013972 502.305276 885.013972 524.179167 885.013972 542.816336 877.156434 558.217341 861.441123ZM75.104593 348.782194C67.956984 357.039896 64.383234 367.103818 64.383234 378.974263 64.383234 390.844708 67.956984 400.90863 75.104593 409.166332 82.252202 417.424032 90.96322 421.552821 101.237907 421.552821 111.512595 421.552821 120.223613 417.424032 127.371222 409.166332 179.638112 348.781893 239.610118 302.978145 307.289039 271.753713 374.96796 240.529281 443.092585 224.917299 511.664958 224.917299 580.23733 224.917299 648.473635 240.529281 716.375919 271.753713 784.278203 302.978145 844.361888 348.781893 896.628778 409.166332 903.776387 417.424032 912.375725 421.552821 922.42705 421.552821 932.478375 421.552821 941.189393 417.424032 948.560365 409.166332 955.931336 400.90863 959.616766 390.844708 959.616766 378.974263 959.616766 367.103818 955.819656 357.039896 948.225321 348.782194 889.257549 280.140055 821.244603 228.0141 744.184446 192.402764 667.124287 156.791429 589.618566 138.986028 511.664958 138.986028 433.711348 138.986028 356.317308 156.791429 279.480512 192.402764 202.643717 228.0141 134.519092 280.140055 75.104593 348.782194ZM790.085266 482.711114C751.666869 438.325971 707.441703 404.521514 657.40844 381.29673 607.375179 358.071946 557.119308 346.459728 506.63932 346.459728 456.159332 346.459728 405.903462 358.071946 355.8702 381.29673 305.836937 404.521514 261.611771 438.325971 223.193374 482.711114 216.045765 490.968814 212.472014 501.032736 212.472014 512.903181 212.472014 524.773626 216.045765 534.837548 223.193374 543.09525 230.340983 551.352951 239.052 555.481739 249.326688 555.481739 259.601375 555.481739 268.312393 551.352951 275.460002 543.09525 306.730791 506.967807 342.803338 479.48556 383.678727 460.647678 424.554115 441.809798 465.540569 432.390999 506.63932 432.390999 547.738071 432.390999 588.724525 441.809798 629.599914 460.647678 670.475302 479.48556 706.547849 506.967807 737.818638 543.09525 744.966247 551.352951 753.677265 555.481739 763.951952 555.481739 774.22664 555.481739 782.937657 551.352951 790.085266 543.09525 797.232875 534.837548 800.806626 524.773626 800.806626 512.903181 800.806626 501.032736 797.232875 490.968814 790.085266 482.711114ZM658.74861 614.317565C637.752509 590.060569 613.629691 571.610045 586.379433 558.965439 559.129174 546.320835 531.655964 539.998627 503.958981 539.998627 476.261996 539.998627 448.788787 546.320835 421.538528 558.965439 394.288269 571.610045 370.165451 590.060569 349.16935 614.317565 341.575016 622.575265 337.777905 632.639188 337.777905 644.509633 337.777905 656.380079 341.463335 666.444001 348.834307 674.701701 356.205279 682.959402 364.916297 687.088191 374.967622 687.088191 385.018946 687.088191 393.841644 682.959402 401.435978 674.701701 429.579688 642.187003 463.75368 625.929899 503.958981 625.929899 544.16428 625.929899 578.338272 642.187003 606.481982 674.701701 613.629591 682.959402 622.340609 687.088191 632.615296 687.088191 642.889985 687.088191 651.601001 682.959402 658.74861 674.701701 665.896219 666.444001 669.46997 656.380079 669.46997 644.509633 669.46997 632.639188 665.896219 622.575265 658.74861 614.317565Z"  /></svg>
+                        <!-- <svg height="30px" width="30px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 424.264 424.264" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path style="fill:#2488FF;" d="M212.132,32.132C131.999,32.132,56.663,63.337,0,120l28.284,28.284 c49.107-49.107,114.399-76.152,183.848-76.152s134.74,27.045,183.848,76.152L424.264,120 C367.601,63.337,292.265,32.132,212.132,32.132z"></path> <path style="fill:#2488FF;" d="M56.568,176.568l28.284,28.284c33.998-33.998,79.2-52.721,127.279-52.721 s93.282,18.723,127.279,52.721l28.284-28.284c-41.553-41.553-96.799-64.437-155.563-64.437S98.121,135.016,56.568,176.568z"></path> <path style="fill:#2488FF;" d="M113.137,233.137l28.284,28.284c38.99-38.989,102.432-38.989,141.422,0l28.284-28.284 C256.541,178.551,167.723,178.551,113.137,233.137z"></path> <path style="fill:#2488FF;" d="M152.132,332.132c0,33.084,26.916,60,60,60v-120C179.048,272.132,152.132,299.048,152.132,332.132z"></path> <path style="fill:#005ECE;" d="M212.132,272.132v120c33.084,0,60-26.916,60-60S245.216,272.132,212.132,272.132z"></path> </g> </g></svg> -->
+                    </div>
+
+                    <!-- <svg class="mdc-list-item__graphic"  xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#3498db" class="bi bi-bluetooth" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="m8.543 3.948 1.316 1.316L8.543 6.58V3.948Zm0 8.104 1.316-1.316L8.543 9.42v2.632Zm-1.41-4.043L4.275 5.133l.827-.827L7.377 6.58V1.128l4.137 4.136L8.787 8.01l2.745 2.745-4.136 4.137V9.42l-2.294 2.274-.827-.827L7.133 8.01ZM7.903 16c3.498 0 5.904-1.655 5.904-8.01 0-6.335-2.406-7.99-5.903-7.99C4.407 0 2 1.655 2 8.01 2 14.344 4.407 16 7.904 16Z"/> </svg> -->
+                    <!-- <span class="mdc-deprecated-list-item__text margin_left_5"></span> -->
+                    <div>
+                        <div class="mdc-deprecated-list-item__text margin_left_5 ssid">-</div>
+                        <div class="mdc-deprecated-list-item__text margin_left_5 bssid" style="font-size: 8pt;color:grey;top: -4px;
+                        position: relative;
+                        height: 17px;">-</div>
+                    </div>
+                </li>
+                
+                <ul class="mdc-list mdc-deprecated-list">
+                </ul>
+                </div>
+            </div>
+            </div>
+            </div>
+            <div class="mdc-dialog__scrim"></div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="mdc-bottom-navigation">
+            <nav class="mdc-bottom-navigation__list">
+                <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">home</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.menu_home">홈</span>
+                </span>
+
+                <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">navigation</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.menu_navi_setting">내비설정</span>
+                </span>
+
+                <span
+                    class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">settings</span>
+                    <!-- <span class="material-icons mdc-bottom-navigation__list-item__icon">directions_walk</span>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">directions_run</span> -->
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.menu_detail_setting">세부설정</span>
+                </span>
+
+                <span style="display:none" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">card_membership</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_membership">멤버쉽</span>
+                </span>
+
+                <span style="display:none" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">forum</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.contact_us">문의하기</span>
+                </span>
+
+                <span style="display:none" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">forum</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.menu_run_options">실행옵션</span>
+                </span>
+
+                <span id="footerMenuDeveloperSupport" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary none"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">favorite</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="[html]title.ad_ticket">광고/이용권</span>
+                </span>
+
+                <!-- <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">lock</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_permission">권한</span>
+                </span> -->
+                
+            </nav>
+        </div>
+    </footer>
+  
+  
+
+</div>
+</body>
+
+
+</html>
