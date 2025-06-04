@@ -1,0 +1,1277 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+  <title>함께기도</title>
+  <link rel="shortcut icon" href="#">
+
+ 
+  <!-- <link href="./lib/material-components-web.min.css" rel="stylesheet"> -->
+  <link href="./lib/material-components-web.min.new.css" rel="stylesheet">
+  <!-- <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"> -->
+
+  <!-- <script src="./lib/material-components-web.min.js"></script> -->
+  <script src="./lib/material-components-web.min.new.js"></script>
+  <!-- <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script> -->
+  
+  <link rel="stylesheet" href="./lib/icon.css">
+  <link rel="stylesheet" href="./lib/common.css?a=4">
+  <script src="./lib/hangul.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
+ </head>
+
+<!--  using - default i18next-->
+<!--
+<script src="https://unpkg.com/i18next/i18next.js"></script>
+<script src="https://unpkg.com/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+<script src="https://unpkg.com/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.js"></script>
+-->
+<!-- using - jquery i18next -->
+<!-- -->
+   <script src="./lib/jquery-3.6.4.min.js"></script>
+<!--<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>-->
+  <script src="./lib/i18next.min.js"></script>
+  <script src="./lib/common.js?a=202309171921"></script>
+  <script src="./lib/interface.js"></script>
+  <!-- <script src="./lib/reloaderror.js"></script> -->
+
+  <script src="./lib/db.js"></script>
+    <script src="./lib/tmapjs2.min.js"></script>
+
+<script src="./lib/db.js"></script>
+<script src="./lib/map.js"></script>
+<script src="./lib/map_point.js"></script>
+
+<!--
+  <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xx2c3bc6b282ed46c9805c99db13f56149"></script>
+-->
+<script src="https://unpkg.com/hangul-js" type="text/javascript"></script>
+<style>
+textarea.not-memo::placeholder {
+  color: red;
+  font-size: 1.2em;
+  font-style: italic;
+  opacity: 0.5;
+}
+textarea.done-memo::placeholder {
+  color: green;
+  font-size: 1.2em;
+  font-style: italic;
+  opacity: 0.5;
+}
+
+</style>
+<script>
+var btnStatus = null;
+var btnSelectNavi = null;
+var btnHome = null;
+
+var btnSwitchAppEnable = null;
+
+var btnSettings = null;
+var btnSearch = null;
+var btnStartNaviHome     = null;
+var btnStartNaviCompany  = null;
+var btnStartNaviDrive    = null;
+
+var btnCloseNoti = null;
+
+var fowardPage = getParam("p_foward_page");
+
+var btnSwitchStartPower = null;
+var chipChargingModeSelectedIndex = -1;
+
+var btnSwitchStartBluetooth = null;
+var btnSelectBluetooth = null;
+var searchBluetooth = null;
+var bluetoothListItems = null;
+var bluetoothSelectDialog = null;
+
+var granted =[];
+var allGranted = false;
+
+// var checkGrantInfo= ['accessibility','notification_access','ignore_battery','location'];// ,'ignore_battery'
+// 권한 메시지 출력 순서
+var checkGrantInfo= ['notification_access','post_notifications','ignore_battery' ];// ,'ignore_battery'
+
+var appPackageGubun = "Navi";
+$( document ).ready(function() {
+    window.getInfoCallBack = function (data) {
+        try {
+            window.nativeInfo = (JSON.parse(data));
+        } catch(e) {}
+        if (isWeb) {
+            window.info = {
+                "isDebug": true,
+                "isInKorea": true,
+                "appPackage": "com.skt.tmap.ku",
+                // "appPackage": "",
+                "musicAppPackage": "com.sec.android.app.music", // 
+                // "musicAppPackage": "", // 
+                "chargingMode": "1",
+                "startWifi": true,
+                "usingRegHome": true,
+                "wifi": {
+                    "bssid": "00:0D:18:00:00:01",
+                    "ssid": "SoftmWifi",
+                    "connected": true
+                },
+                "workGotoOffTime": false,
+                "startPower": true,
+                "naviGeofenceRadius": 200,
+                "naviDestination": "1",
+                "workOffTimeFrom": "17:30",
+                "naviMode": "1",
+                "workGotoTimeTo": "08:50",
+                "permissions": {
+                    "LOCATION": true,
+                    "ACCESSIBILITY": true,
+                    "NOTIFICAION_ACCESS": true,
+                    "WRITE_SETTING": false,
+                    "BLUETOOTH": true,
+                    "IGNORE_BATTERY": true,
+                    "USAGESTATS": false,
+                    "OVERLAY": true
+                },
+                "startBluetooth": true,
+                "naviOverlayWaitTime": 3,
+                "naviPopupMode": true,
+                "bluetooth": {
+                    "bondState": 12,
+                    "address": "00:0D:18:00:00:01",
+                    "name": "OBDII",
+                    "type": 1,
+                    "diassembled": "OBDII"
+                },
+                "startBluetooth": false,
+                "workGotoTimeFrom": "06:00",
+                "naviRenaviPreventTime": 3,
+                "naviAutoStart": "START",
+                "workOffTimeTo": "19:00",
+                "notiIcon": true,
+                "independenceCondition": true,
+                "startStopOnOff":{
+                    bluetooth:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    wifi:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    tethering:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    airplane_mode:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    screen_on:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    lock:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    completed_lock:{start:{use_yn:true,onoff:"off"},stop:{use_yn:true,onoff:"on"}},
+                    play_music:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    home_screen:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    power_off:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                },
+                "startMode":"1",
+                "stopMode":"1",
+                "appEnable":"0",
+                "onlyStopAfterNaving":true,
+                serverHost:location.origin,
+                pathName:location.pathname.split("/")[1],
+                versionCode:11,
+                versionName:"0.0.0.1",
+                // + "http://www.softm.net/gdev"
+                isAccessbilityServiceRunning:false,
+                permsssions:{
+                    "LOCATION": true,
+                    "ACCESSIBILITY": false,
+                    "NOTIFICAION_ACCESS": false,
+                    "WRITE_SETTING": true,
+                    "BLUETOOTH": true,
+                    "IGNORE_BATTERY": false,
+                    "USAGESTATS": false,
+                    "OVERLAY": false
+                },
+                appUpdated: true,
+                appUpdatedTime: 1734608780275,
+                appUpdatedNotiConfirm:false,
+                "runStatusScreenStartMode": "0",
+                "runStatusScreenStopMode": "0",
+                "runStatusScreenTimeForStart": 15,
+                "runStatusScreenTimeForStop": 15,
+                appReleaseUpdtedTime:1740787200000,
+                userLevel:'FREE',
+                userType:'FREE_USER',
+                basicSettings:{
+                    "groups": [
+                        {
+                            "gno": "1",
+                            "name": "쳥년부"
+                        },
+                        {
+                            "gno": "2",
+                            "name": "아동부"
+                        },
+                        {
+                            "gno": "3",
+                            "name": "부녀자회"
+                        },
+                        {
+                            "gno": "4",
+                            "name": "성년회"
+                        },
+                        {
+                            "gno": "5",
+                            "name": "임원회"
+                        },
+                        {
+                            "gno": "6",
+                            "name": "아무나모두회"
+                        }
+                    ],
+                    "videos":[
+                        {
+                        "url":"https://www.y1outube.com/watch?v=BAL4k5w4lkU&list=PLExxll1KfCDMlCQ2JamgS0qKzpV321nEa&index=1&fs=0",
+                        "videoId":"BAL4k5w4lkU",
+                        "title":"제목1",
+                        "wDate":"2025-05-11"
+                        },
+                        {
+                        "url":"https://youtu.be/Rm9f0U7Dy0Q?list=PLExxll1KfCDMlCQ2JamgS0qKzpV321nEa",
+                        "videoId":"Rm9f0U7Dy0Q",
+                        "title":"제목2",
+                        "wDate":"2025-05-10"
+                        },
+                        {
+                        "url":"https://www.youtube.com/watch?v=kg6hzKfBXLY&list=RDLVmJePIgd2E&index=27",
+                        "videoId":"kg6hzKfBXLY",
+                        "title":"제목3",
+                        "wDate":"2025-05-09"
+                        },
+                        {
+                        "url":"https://www.youtube.com/watch?v=42Ndh5vBbLk&list=RDLVmJePIgd2E&index=27",
+                        "videoId":"42Ndh5vBbLk",
+                        "title":"제목4",
+                        "wDate":"2025-05-08"
+                        }
+                    ],
+                    "voices":[
+                        {
+                        "title": "하나님의 사랑",
+                        "verse": "요한일서 4:8",
+                        "content": "하나님은 사랑이시라. 사랑 안에 거하는 자는 하나님 안에 거하고 하나님도 그 안에 거하느니라.",
+                        "wDate":"2025-05-11"
+                        },
+                        {
+                        "title": "믿음의 힘",
+                        "verse": "마가복음 9:23",
+                        "content": "예수께서 이르시되 할 수 있거든이 무슨 말이냐? 믿는 자에게는 능치 못할 일이 없느니라.",
+                        "wDate":"2025-05-10"
+                        },
+                        {
+                        "title": "소망을 품다",
+                        "verse": "로마서 15:13",
+                        "content": "소망의 하나님이 모든 기쁨과 평강을 믿음 안에서 너희에게 넘치게 하사 성령의 능력으로 소망이 넘치게 하시기를 원하노라.",
+                        "wDate":"2025-05-09"
+                        },
+                        {
+                        "title": "평화의 왕",
+                        "verse": "이사야 9:6",
+                        "content": "이는 한 아기가 우리에게 낳고 한 아들이 우리에게 주어졌고 그 어깨에는 정사가 있으며 그 이름은 기묘자라, 모사라, 전능하신 하나님이라, 영존하시는 아버지라, 평강의 왕이라 할 것임이라.",
+                        "wDate":"2025-05-08"
+                        },
+                        {
+                        "title": "주의 길을 따르라",
+                        "verse": "시편 119:105",
+                        "content": "주의 말씀은 내 발의 등이요 내 길의 빛이니이다.",
+                        "wDate":"2025-05-07"
+                        },
+                        {
+                        "title": "주의 보호하심",
+                        "verse": "시편 23:1-2",
+                        "content": "여호와는 나의 목자시니 내게 부족함이 없으리로다. 그가 나를 푸른 풀밭에 누이시며, 쉴만한 물가로 인도하시는도다.",
+                        "wDate":"2025-05-06"
+                        },
+                        {
+                        "title": "주님과의 동행",
+                        "verse": "마태복음 28:20",
+                        "content": "내가 세상 끝날까지 너희와 항상 함께 있으리라 하시니라.",
+                        "wDate":"2025-05-05"
+                        },
+                        {
+                        "title": "하나님의 구속 계획",
+                        "verse": "요한복음 3:16",
+                        "content": "하나님이 세상을 이처럼 사랑하사 독생자를 주셨으니, 이는 그를 믿는 자마다 멸망치 않고 영생을 얻게 하려 하심이라.",
+                        "wDate":"2025-05-04"
+                        },
+                        {
+                        "title": "하나님의 은혜",
+                        "verse": "에베소서 2:8",
+                        "content": "너희가 그 은혜를 인하여 믿음으로 구원을 얻었나니 이것은 너희에게서 난 것이 아니요 하나님의 선물이라.",
+                        "wDate":"2025-05-03"
+                        },
+                        {
+                        "title": "힘을 주시는 하나님",
+                        "verse": "이사야 40:29",
+                        "content": "피곤한 자에게는 능력을 주시며, 무력한 자에게는 힘을 더하시나니.",
+                        "wDate":"2025-05-02"
+                        }
+                    ],
+                    "msg": "성공",
+                    "msgCode": "200"
+                }
+            }
+        } else {
+            window.info = (JSON.parse(data));
+        }
+
+        initBasicInfo();
+        initPage(window.info);
+
+        // TODO Remove this
+        // setTimeout(function() {
+        //     btnSelectNavi[0].emit("click");
+        // },1000);
+    }
+    fn_GetInfo("", "getInfoCallBack");
+    //W
+    // drawer.open = true;
+});
+
+function initPage(v) {
+    if ( fowardPage ) {
+            // setTimeout(function () { 
+        //  // $(document.body).show();
+            initLoad(v,function () {  
+                $("body").removeClass("none");  
+                if (fowardPage == "SEARCH" || fowardPage == "HOME_COMPANY") {
+                    var p_tidx = getParam("p_tidx");
+                    var p_params = getParam("p_params");
+                    var p_poi_index = getParam("p_poi_index");
+                    // windowOpen("search.html?idx="+(p_tidx?p_tidx:1));
+                    // fn_OpenUrl("search.html?idx="+(p_tidx?p_tidx:0));
+
+                    var idx = Object.keys(DRAWER_LIST_INFO).findIndex(item=>item.indexOf(fowardPage.toLowerCase() + ".html")>-1);
+                    var drawerInfos = Object.values(DRAWER_LIST_INFO);
+                    var urls = Object.keys(DRAWER_LIST_INFO);
+                    var url = urls[idx].split("?")[0];
+                    var drawerInfo = drawerInfos[idx];
+                    if ( drawerInfo.popup ) {
+                        drawer.innerList.selectedIndex = window.drawerSelectedIndex;
+                        fn_OpenPop(url+"?idx="+(p_tidx?p_tidx:1)+"&p_params="+p_params+"&p_poi_index="+p_poi_index);
+                    } else {
+                        fn_OpenUrl(url+"?idx="+(p_tidx?p_tidx:1));
+                    }
+
+
+                } else {
+                    var url = fowardPage.toLowerCase() + ".html?1=1"
+                    //getParam("p_check");
+                    //fn_OpenPop(url) ;
+
+                    var p_check_mode = getParam("p_check_mode");
+                    var p_params = getParam("p_params");
+                    var p_tidx = getParam("p_tidx");
+
+                    url +=  "&p_check_mode=" + p_check_mode;
+                    url +=  "&p_params=" + p_params;
+                    url +=  "&p_tidx=" + p_tidx;
+                    if ( fowardPage == "PERMISSION" ) {
+                        fn_OpenUrl(url);
+                    } else {
+                        windowOpen(url);
+                    }
+                    // fn_OpenUrl(url);
+                    //			window.open("setting.html","_blank","");
+                    //			document.body.show();
+                }
+
+            });
+        //  }, 2000);
+    } else {
+        initLoad(v);
+    } // end else
+}
+var players = [];
+function initList(v) {
+    // 2. This code loads the IFrame Player API code asynchronously.
+    // var tag = document.createElement('script');
+
+    // tag.src = "https://www.youtube.com/iframe_api";
+    // var firstScriptTag = document.getElementsByTagName('script')[0];
+    // firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    function fullScreenYT(videoPlayer) {
+        // const videoPlayer = document.getElementById('videoPlayer'); // 유튜브 플레이어 요소 (예시)
+        if (videoPlayer.requestFullscreen) {
+            videoPlayer.requestFullscreen();
+        } else if (videoPlayer.mozRequestFullscreen) {
+            videoPlayer.mozRequestFullscreen();
+        } else if (videoPlayer.webkitRequestFullscreen) {
+            videoPlayer.webkitRequestFullscreen();
+        } else if (videoPlayer.msRequestFullscreen) {
+            videoPlayer.msRequestFullscreen();
+        } else {
+            console.log('전체 화면 요청이 지원되지 않습니다.');
+        }
+    }
+    function addListItem(voice,video,idx) {
+      var item = $(".list.clone").clone();
+      item.removeClass("none clone") 
+
+      item.find(".wDate").text(voice.wDate);
+      item.find(".voice .title").text(voice.title);
+      item.find(".voice .verse").text(voice.verse);
+      
+      var videoTimestamp = new Date(video.wDate).getTime() / 1000;
+      var memoWriteAnchorId = 'memoWrite' + videoTimestamp ;
+      var prayMemo = prayMemoList.find(item=>item.timestampId.seconds == videoTimestamp ) || [];
+      
+      item.find(".itemAnchor").html('<a name="' + memoWriteAnchorId + '"/>');
+      
+      var doneMemo = prayMemo.memo?true:false; // item 데이터에 값이 있으면 true 없으면 false
+      var memoColor = doneMemo?"gree":"red";
+      item.find(".voice .content").html(
+           voice.content+'<div class="w_full right">'+
+            '<button style="max-height:29px;color:'+memoColor+';border:1px solid '+memoColor+'"'+
+            'id="btnAddMemo" class="margin_left_5 basic_font_small1 mdc-button mdc-button--outlined mdc-button--icon-leading"  hspace="5" vspace="5">'+
+                '<span class="mdc-button__ripple"></span>'+
+                '<i class="material-icons mdc-button__icon" aria-hidden="true">note</i>'+
+                '<span class="mdc-button__label vmiddle" style="vertical-align:sub">메모</span>'+
+                (doneMemo ?'<i class="material-icons mdc-button__icon vmiddle" aria-hidden="true">done</i>':'')+
+            '</button>'+
+            '<button style="max-height:29px;color:'+memoColor+';border:1px solid '+memoColor+'"'+
+            'id="btnSaveMemo" class="none margin_left_5 basic_font_small1 mdc-button mdc-button--outlined mdc-button--icon-leading"  hspace="5" vspace="5">'+
+                '<span class="mdc-button__ripple"></span>'+
+                '<i class="material-icons mdc-button__icon" aria-hidden="true">done</i>'+
+                '<span class="mdc-button__label vmiddle" style="vertical-align:sub">저장</span>'+
+            '</button>'+
+        '</div>'
+      );
+            
+        item.find("#txtMemo").val(decodeURIComponent(prayMemo.memo));
+        item.find("#txtMemo").css("color",memoColor);
+        item.find("#txtMemo").css("borderColor",memoColor);
+        item.find("#txtMemo").addClass(doneMemo?"done-memo":"not-memo");
+
+        item.find("#txtMemo").mousedown(function(){
+            location.href = "#" + memoWriteAnchorId;
+        });
+
+        item.find(".voice #btnAddMemo").click(function(){
+                    // alert("test");
+            if ( item.find("#divMemo").is(":visible") ) {
+                item.find("#divMemo").hide();
+                item.find("#btnSaveMemo").hide();
+                item.find("#btnAddMemo").show();
+            } else {
+                location.href = "#" + memoWriteAnchorId;
+                setTimeout(function(){
+                    item.find("#txtMemo").focus();
+                },200);
+
+                item.find("#divMemo").show();
+                item.find("#btnSaveMemo").show();
+                item.find("#btnAddMemo").hide();
+            }
+        });
+        item.find(".voice #btnSaveMemo").click(function(){
+            confirm(
+                t(true?"메모를 저장하시겠습니까?":"메모를 저장하시겠습니까"),
+                function() {
+                console.log("memo",item.find("#txtMemo").val());
+                    window.savePrayMemoCallBack = function (newPrayMemoStr) {
+                        if ( newPrayMemoStr == null ) {
+                            alert("저장중 오류가 발생했습니다.");
+                        } else {
+                            snackbar("메모가 저장되었습니다.")
+                            // fn_Reload(true);
+                            initPrayMemo();
+                        }
+                    }
+                    fn_SavePrayMemo(videoTimestamp, encodeURIComponent(item.find("#txtMemo").val().trim()), "savePrayMemoCallBack");
+                }
+            );
+            // alert("test");
+            if ( item.find("#divMemo").is(":visible") ) {
+                item.find("#divMemo").hide();
+                item.find("#btnSaveMemo").hide();
+                item.find("#btnAddMemo").show();
+            } else {
+                item.find("#divMemo").show();
+                item.find("#btnSaveMemo").show();
+                item.find("#btnAddMemo").hide();
+            }
+        });
+        
+        item.find("#txtMemo")[0].addEventListener("input", function() {
+            // const currentLength = ;
+            if ( $(this).val().length > 0 ) {
+                // $(this).removeClass("not-memo done-memo");
+                $(this).css("color","");
+                $(this).css("borderColor","");
+            } else {
+                // var memoColor = doneMemo?"gree":"red";
+                $(this).css("color","red");
+                $(this).css("borderColor","red");
+            }
+        });
+  
+      item.find(".video .title").text(video.title);
+      item.find(".video .fullscreen").click(function(e) {
+        // fn_OutsideSite(video.url);
+        fn_OpenPop(video.url);
+        // alert("test");
+        // fullScreenYT(players[idx]);
+      });
+    //   item.find(".video iframe")[0].src = video.url;
+      item.find(".video .player").attr("id","player"+idx);
+
+    //   console.log(video, voice);
+      console.log("video.url",video.url);
+      $("#homeList").append(item[0]);
+
+        setTimeout(function(){
+            // return;
+                // alert('player'+idx)
+            players.push( new YT.Player('player'+idx, {
+                    height: '250px',
+                    width: '100%',
+                    // videoId: 'M7lc1UVf-VE',
+                    videoId: video.videoId,
+                    playerVars: {
+                        'autoplay':0,
+                        'controls':0,
+                        'rel': 0,
+                        'fs': 0,
+                        'loop':0,
+                        'playsinline': 1,
+                        'enablejsapi' : 1,
+                        'listType' : 'playlist',
+                        // 'wmode':'transparent'
+                    },
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange
+                    }
+                })
+                );
+                // players[players.length-1].stop();
+        },1000);
+
+    }    
+    // $(chipsetGroup.root).remove();
+    $("#homeList").empty();
+
+    for( idx in info.basicSettings.videos ) {
+      var video = info.basicSettings.videos[idx];
+      var voice = info.basicSettings.voices.find(item=>item.wDate==video.wDate);
+      if ( video ) {
+        addListItem(voice,video,idx);
+      }
+    }
+
+
+
+    // setTimeout(function(){
+    //     $(".video .player").each(function(index,ele) {
+    //         // debugger;
+    //         alert('player'+index)
+    //         var player = new YT.Player('player'+index, {
+    //             height: '390',
+    //             width: '640',
+    //             videoId: 'M7lc1UVf-VE',
+    //             playerVars: {
+    //             'playsinline': 1
+    //             },
+    //             events: {
+    //             'onReady': onPlayerReady,
+    //             'onStateChange': onPlayerStateChange
+    //             }
+    //         });
+    //     });
+    // },1000);
+
+}
+
+      // 4. The API will call this function when the video player is ready.
+      function onPlayerReady(event) {
+        // event.target.playVideo();
+      }
+
+      // 5. The API calls this function when the player's state changes.
+      //    The function indicates that when playing a video (state=1),
+      //    the player should play for six seconds and then stop.
+      var done = false;
+      function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING && !done) {
+          setTimeout(stopVideo, 6000);
+          done = true;
+        }
+      }
+      function stopVideo() {
+        player.stopVideo();
+      }
+
+var notiDialog; 
+function initAppUpdateNoti(v) {
+    
+    notiDialog = new mdc.dialog.MDCDialog(document.querySelector(".noti.mdc-dialog"));
+    notiDialog.listen("MDCDialog:closed", function (e) {
+        // alert("closed");
+        if (e.detail.action == "close") {
+
+        } else if (e.detail.action) {
+        }
+    });
+
+    const btnCloseNoti = new mdc.ripple.MDCRipple(document.querySelector("#btnCloseNoti"));
+    btnCloseNoti.listen("click", function (event) {
+        notiDialog.root.hide();
+        window.fn_AppUpdateNotiConfirmCallback = function () {
+            fn_GoMain(true);
+        };
+        fn_DeviceSaveData("_APP_UPDATED_NOTI_CONFIRM", true,"fn_AppUpdateNotiConfirmCallback");
+    });
+
+
+    // notiDialog.open();
+    if ( info.appUpdated ) {
+        
+        
+        // var updatedCount = localStorage.getObject("updated_count") || [];
+        // updatedCount.push((new Date()).getTime());
+        // var reloadLimit = 2;
+        // if ( updatedCount.length >= reloadLimit ) {
+        //     if ( lng == "ko" ) {
+        //         AlertUtil.fn_Alert("핸드폰을 재시작하거나, 앱을 삭제 후 재설치 하세요.\n(이전 버전의 문제를 해결하기 위한 조치 입니다.)");
+        //     } else {
+        //         AlertUtil.fn_Alert("Please restart your phone or delete and reinstall the app.\n(This is to resolve issues with previous versions.)");
+        //     }
+        // }
+        // localStorage.setObject("updated_count",updatedCount);
+
+        if ( !isTest ) {
+            if ( lng == "ko" ) {
+                $(".ko").show();
+                $(".en").hide();
+            } else {
+                $(".ko").hide();
+                $(".en").show();
+            }
+
+            $(".noti .version").html(info.versionName);
+            $(".noti .appUpdateDate").html((new Date(info.appReleaseUpdtedTime)).toLocaleDateString());
+
+            // && info.appUpdatedTime > (new Date()).getTime() ) {
+            const diffInMillis = Math.abs((new Date()).getTime() - info.appUpdatedTime);
+            const diffInDays = diffInMillis / (1000 * 60 * 60 * 24);
+            if ( !info.appUpdatedNotiConfirm ) {
+                notiDialog.open();
+                // 1111
+            }
+        }
+    }
+}
+var prayMemoList;
+function initLoad(v,cb){
+    console.log("initLoad");
+    console.info("window.info", v);
+    if ( !cb ) $("body").removeClass("none");
+
+    footerNavigationIndex = 0;
+    // $(footerNavigation[0]).trigger("click");
+    footerNavigation[footerNavigationIndex].emit("click", footerNavigationIndex);
+    /**
+     * Drawer List 권한별 메뉴 재생성
+     if ( !window.info.isInKorea ) {
+        getPageInfo("search").visible = false;
+        getPageInfo("home_company").visible = false;
+        reDrawDrawer();
+     }
+    */
+
+    appListItems = JSON.parse(sessionStorage.getItem("appListItems")); // 여기 확인 필요
+    
+    timestampIds = [];
+    for( idx in info.basicSettings.videos ) {
+      var video = info.basicSettings.videos[idx];
+      if ( video ) {
+        timestampIds.push(new Date(video.wDate).getTime() / 1000);
+      }
+    }
+
+    initPrayMemo();
+    // window.startSettingCallback = function(grant,ok) {
+    //     if ( ok === "not" ) {
+    //         alert("알람권한을 활성화하세요.");
+    //         // fn_Reload(true);
+    //     } else {
+    //     }
+    //     // windowReload();
+    // }
+    
+    // fn_StartSetting("alarm","startSettingCallback");
+
+    if ( cb ) {
+        cb();
+    }
+}
+
+var timestampIds = [];
+function initPrayMemo() {
+    fn_Progress_Show();
+    window.selectPrayMemoCallBack = function (data) {
+        fn_Progress_Hide();
+        prayMemoList = safeParseJson(data||null)||[];
+        initList(window.info);
+    }
+    setTimeout(function(){
+        fn_Progress_Hide();
+    },10000);
+    prayMemoList = [];
+    fn_SelectPrayMemo(timestampIds,"selectPrayMemoCallBack");
+}
+
+function getInfo() {
+    fn_GetInfo("", "getInfoCallBack");
+}
+</script>
+</head>
+<body class="none">
+<div class="i18n drawer-frame-root">
+    <div class="mdc-drawer-app-content">
+        <header class="mdc-top-app-bar app-bar" id="app-bar">
+            <div class="mdc-top-app-bar__row">
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start  flex ">
+<!--                     
+-->
+                    <button class="none1 material-icons mdc-top-app-bar__navigation-icon mdc-icon-button">menu</button>
+                    <button id="btnHome"
+                        class="none mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded">home</button> 
+                        <div class="mdc-top-app-bar__title bolder basic_font_large2 w_full right padding_right_60" data-i18n="menu.home" style="">홈</div>
+                </section>
+                    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+                        <button id="btnSearch" class="none mdc-icon-button material-icons mdc-top-app-bar__action-item--unbounded"
+                            aria-label="Print this page">search</button>  <!-- bookmark settings-->
+                    </section>
+            </div>
+        </header>
+<!--         
+-->
+        <main class="main-content" id="main-content">
+            <div class="mdc-top-app-bar--fixed-adjust">
+            </div>
+        </main>
+    </div>
+    <aside class="mdc-drawer mdc-drawer--modal">
+       
+        <div class="mdc-drawer__header app_info">
+            <img src="./images/logo_100.svg" width="50" style="margin-top: 10px;"/>
+            <!-- style="height:55px" -->
+            <div class="mdc-dramdc-drawer__contentwer__title" data-i18n="[html]label.app_name">함께기도</div>
+            
+        </div>
+        <hr class="sub"/>
+        <div class="row sub flex left bold " >
+            <label for="" class="flex-grow title" style="">
+                <h6 class="mdc-drawer__subtitle" ><span class="version-name">00.00</span></h6>    
+            </label>
+            <div class="flex-grow margin_right_7 middle right basic_font_medium2"  style="align-content: space-evenly;">
+                <span class="paidUser">
+                    <img src="images/vip.png" width="30" align="absmiddle"/>
+                </span>
+                <span class=" bold underline cursor_pointer"><span class="user_level link_dev_support">광고보기 사용자</span></span>
+            </div> 
+        </div>
+        <div class="mdc-drawer__content">
+            <a class="clone none mdc-deprecated-list-item mdc-deprecated-list-item--activated" href="#">
+                <span class="mdc-deprecated-list-item__ripple"></span>
+                <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home</i>
+                <span class="mdc-deprecated-list-item__text" data-i18n="label.home_page">Home</span>
+            </a>
+<!--- DRAWER_LIST_INFO -->
+            <div class="mdc-deprecated-list">
+                <a class="mdc-deprecated-list-item mdc-deprecated-list-item--activated" href="#" aria-current="page">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="label.home_page">Home</span>
+                </a>
+
+                <a class="none mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">settings</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_setting">설정</span>
+                </a>
+
+                <a class="none mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">toggle_on</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_start_stop">시작/종료</span>
+                </a>
+
+                <a class="mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">link</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="title.run_options">실행옵션</span>
+                </a>
+                <a class="mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home_work</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="title.home_company">집/회사</span>
+                </a>
+                <a class="mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">star</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="title.favorite">즐겨찾기</span>
+                </a>
+                <a class="mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">forum</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="title.contact_us">문의하기</span>
+                </a>
+
+                <a class="none mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">card_membership</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_membership">멤버쉽</span>
+                </a>
+
+                <a class="mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">thumb_up</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="label.rate_the_app">어플 평가하기</span>
+                </a>
+                <a class="mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">thumb_up</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="label.goto_map_store">앱스토어 방문</span>
+                </a>
+
+            </div>
+        </div>
+    </aside>
+    <div class="mdc-drawer-scrim"></div>
+    <div class="drawer-frame-app-content">
+
+        <div class="main drawer-main-content i18n margin_top_15">
+            <a name="move_point" id="move_point" />
+            <!-- <hr class="main"/> -->
+            <div class="row none">
+                <legend align="left" class="main title"><strong data-i18n="title.main">기본</strong></legend>
+            </div>
+            <hr class="main none"/>
+            <div class="row none">
+                <button id="btnStartNaviHome" class="demo-button mdc-button mdc-button--outlined mdc-ripple-upgraded">
+                    <span class="mdc-button__ripple"></span>
+                    <i class="material-icons mdc-button__icon">home</i>
+                    <span class="mdc-button__label" data-i18n="label.home">집</span>
+                </button>
+                <button id="btnStartNaviCompany" class="demo-button mdc-button mdc-button--outlined mdc-ripple-upgraded"
+                    style="margin-left:10px">
+                    <span class="mdc-button__ripple"></span>
+                    <i class="material-icons mdc-button__icon">business</i>
+                    <span class="mdc-button__label" data-i18n="label.company">회사</span>
+                </button>
+                <button id="btnStartNaviDrive" class="demo-button mdc-button mdc-button--outlined mdc-ripple-upgraded"
+                    style="margin-left:10px">
+                    <span class="mdc-button__ripple"></span>
+                    <i class="material-icons mdc-button__icon">drive_eta</i>
+                    <span class="mdc-button__label" data-i18n="label.navi">내비</span>
+                </button>
+                <hr class="sub"/>
+            </div>
+            <!-- <hr class="main status_permission"/> -->
+
+            <!--상태-->
+            <!-- <div class="row sub flex left bold padding_top_5" style="" >
+                <label for="" class="main title" style=""><strong data-i18n="title.menu_home">Home</strong></label>
+            </div> -->
+            <!-- <hr class="main" /> -->
+            <span id="homeList" class="flex-grow justify-content-right right"
+                style="display: inline"
+                >
+            </span>
+    <div id="bottomAreaForComment" style="height:260px; border:0px solid gray">
+      <!-- 광고 영역 -->
+    </div>
+
+            <div class="list clone none margin_top_5 margin_left_10 padding_bottom_10 padding_right_20" style="border:0px solid wheat; border-radius: 10px" >
+                <span class="video">
+                    <div class="row main flex left bold">
+                        <label for="" class="wDate" style=""><strong>2025-05-11</strong></label>
+                         / <div class="flex-grow padding_left_5 title">제목4</div>
+                    </div>
+                    <hr class="sub margin_left_10 margin_right_10" />
+                    <div class="player row center padding_10" style="align-content: center;border:2px solid wheat;background-color: white;border-radius: 10px;height: 250px;">
+                    
+
+                    <span class="">
+                        오늘의 영상
+                    </span>
+    <!-- <iframe width="100%" height="250" src="https://www.youtube.com/embed/LROZRKrTs9k?si=AfeSl_el9JNL_T2N" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> -->
+                    </div>
+                        <button class="none fullscreen mdc-button mdc-icon-button margin_bottom_15 mdc-button--raised margin_right_5" style="width:100%;font-size:16px">
+                            <div class="mdc-button__ripple"></div>
+                            <strong class="" data-i18n="label.confirm_">전체화면</strong>
+                        </button>
+
+                </span> 
+
+                <span class="itemAnchor"></span>
+                <span class="voice">
+                    <div class="row flex" style="border:0px solid red">
+                        <legend align="left" class="main "><strong data-i18n="title.execution_">Verse of the Day</strong></legend>
+                    </div>
+                    <div class="row title left padding_left_10"><span class="title">하나님의 사랑</span> - <span class="verse">요한일서 4:8</span></div>
+                    <div class="row sub left flex padding_top_5">
+    <pre class="margin_0 content" style="  white-space: pre-wrap;">하나님은 사랑이시라. 사랑 안에 거하는 자는 하나님 안에 거하고 하나님도 그 안에 거하느니라. </pre>
+    
+                <!-- <button id="btnAddMemo" class="center material-icons red border-none" 
+                > note
+                메모
+                </button> -->
+                    </div>
+                </span>
+                <div id="divMemo" class="none padding_top_5 margin_left_0 " style="height:125px">
+                    <hr class="sub"/>
+                    <div class="flex-grow comment-box">
+                        <textarea id="txtMemo" rows="4" placeholder="메모를 입력하세요." class="" type="text" aria-labelledby="my-label-id"
+                            value="" style="padding: 3px !important; width:100%;height:120px;border: 1px solid var(--sub-text-color);" 
+                            onmousedown="location.href='#writePray';"
+                        ></textarea>
+                    </div>
+                </div>
+            </div>
+
+  <!--공지사항-->
+              <!-- <div style="border:1px solid grey"></div> -->
+              
+              <!-- <hr class="main" />
+              <div class="row red basic_font_medium4 left padding_left_10">
+                <BR/>
+                자동 업데이트 오류 발생!!!!!<BR/><BR/>
+              </div>
+              <div class="row basic_font_medium4 left padding_left_15">
+                # 업데이트 방법.<BR/><BR/>
+                1. 상단 퀵메뉴에서 모바일데이터,와이파이를 차단한다.( 비행기모드를 켠다. )<BR/>
+                2. 앱을 제거한다.<BR/>
+                3. 최신버전을 새로 설치한다.<BR/><BR/>
+              </div>
+              <div class="row red basic_font_medium4 left padding_left_10">
+                불편을 드려 죄송합니다.<BR/><BR/>
+              </div> 
+              -->
+<!--
+    <h3 class="red margin_left_20">자동 업데이트 오류</h3>
+    <div class="row black basic_font_medium4 left padding_left_15" style="line-height: 1.9;">
+        <b># 업데이트 방법.</b><BR/>
+        1. 상단 퀵메뉴에서 모바일데이터,와이파이를 차단한다.( 비행기모드를 켠다. )<BR/>
+        2. 앱을 제거한다.<BR/>
+        3. 최신버전을 새로 설치한다.<BR/><BR/>        
+    </div>      
+    -->
+<!--
+    <h3 class="black margin_left_20 basic_font_large3"><span class="material-icons basic_font_large4 " style="vertical-align: middle;">update</span> 업데이트 - 1.1000.1 -[2024-12-19]</h3>
+    <hr class="sub" />
+<pre class="row black left padding_left_15" style="line-height: 1.9;">
+1. 화면 조건 동작(켜짐,꺼짐,잠금) 
+- [실행옵션-실행제외-화면 켜진 상태]
+- 앱 실행 조건 상세화
+2. 앱 동작 활성/비활성.
+3. 알림바 아이콘 수정.
+4. 서비스 실행 로직 분리.
+5. 집/회사 화면 로딩 오류.
+6. ANR 오류 수정.
+</pre>
+-->
+<!--에러공지-->
+<!--  -->
+            <div class="noti mdc-dialog mdc-dialog--close test-dialog mdc-dialog--sheet mdc-dialog--no-content-padding"
+                aria-modal="true"
+                aria-labelledby="test-dialog__title--with-close-icon-button"
+                aria-describedby="test-dialog__content--with-close-icon-button"
+                id="test-dialog">
+                <div class="mdc-dialog__scrim" data-mdc-dialog-action="cancel"></div>
+                <div class="mdc-dialog__container">
+                    <div class="mdc-dialog__surface" tabindex="-1">
+                    <!-- <button class="mdc-icon-button material-icons mdc-dialog__close" data-mdc-dialog-action="close">
+                        close
+                    </button> -->
+                    <div class="mdc-dialog__content test-dialog__content">
+                        <div class="test-sheet__content">
+                        <!-- <h3 class="red margin_left_20">
+                            <span data-i18n="message.noti_title" class="basic_font_large2">[긴급] 백그라운드 서비스 업데이트 오류 발생.</span><BR/>
+                        </h3> -->
+    <h3 class="black margin_left_15 margin_right_15 basic_font_large3 margin_bottom_0"><span class="material-icons basic_font_large4 " style="vertical-align: middle;">update</span> <span class="ko">업데이트</span> <span class="en">Update</span>- <b class="version">1.3.2.001</b> - [<b class="appUpdateDate">2025-02-25</b>]</h3>
+                        <!-- <div class="row left padding_left_15 black basic_font_medium3" style="line-height: 1.9;">
+                            <li data-i18n="[html]message.noti_msg1" class="bold">현재 버전에 오류가 있어 앱이 정상적으로 동작하지 않습니다.</ㅣ><br/>
+                            <li data-i18n="[html]message.noti_msg2" class="bold">다음 버전이 업데이트 되면 <span style='color:var(--softm-stop)'>삭제후</span> <span span style='color:var(--softm-start)'>재설치</span>하세요.</li>
+                            <hr/>
+                        </div> -->
+                        <!-- (문제가 발생했다면)  -->
+                        <!-- - 핸드폰을 <b class="red">재시작</b> 하거나,
+                        - 앱삭제 후, <b class="red">재설치</b> 하세요.</b> -->
+                        <div class="row center padding_left_0 black basic_font_medium2" style="line-height: 1.9;">
+<pre class="row ko black left padding_left_5" style="line-height: 1.9;">
+<span class="basic_font_large4">★</span><b  class="basic_font_medium3"> 업데이트 되었습니다.</b>
+1. 광고 비정상 동작 수정중
+2. 즐겨찾기 수정 후 오버레이 갱신
+</pre>
+<pre class="row en black left padding_left_15" style="line-height: 1.9;">
+<span class="basic_font_large4">★</span><b  class="basic_font_medium3">It has been updated.</b>
+1. Fixing abnormal advertisement behavior
+2. Refreshing overlay after modifying favorites
+</pre>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <button id="btnCloseNoti" class="mdc-button mdc-icon-button margin_bottom_15 mdc-button--raised margin_right_5" style="width:100%;font-size:16px">
+                            <strong data-i18n="label.confirm">확인</strong>
+                            
+                              <!-- <strong data-i18n="label.permission_overlay">Show over other apps</strong> -->
+                              <!-- <strong>시작</strong> -->
+                          </button>
+                    </div>
+
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="height:70px"></div>
+            <div class="mdc-snackbar">
+                <div class="mdc-snackbar__surface">
+                    <div class="mdc-snackbar__label" role="status" aria-live="polite">~~</div>
+                    <!--     <div class="mdc-snackbar__actions"><button_default type="button_default" class="mdc-button_default mdc-snackbar__action"><button_default
+                          class="mdc-icon-button_default mdc-snackbar__dismiss material-icons" title="Dismiss">close</button_default></div> -->
+                </div>
+            </div>
+    
+            <div class="basic mdc-dialog">
+                <div class="mdc-dialog__container">
+                    <div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" aria-labelledby="my-dialog-title"
+                        aria-describedby="my-dialog-content">
+                        <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+                        <h2 class="mdc-dialog__title" id="my-dialog-title">
+                            <!--
+                     -->Choose a Ringtone
+                            <!--
+                   -->
+                        </h2>
+                        <div class="mdc-dialog__content" id="my-dialog-content">
+                        </div>
+                        <footer class="mdc-dialog__actions">
+                            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+                                <div class="mdc-button__ripple"></div>
+                                <span class="mdc-button__label" data-i18n="label.cancel">Cancel</span>
+                            </button>
+                            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="accept"
+                                data-mdc-dialog-button-default>
+                                <div class="mdc-button__ripple"></div>
+                                <span class="mdc-button__label" data-i18n="label.ok">OK</span>
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+                <div class="mdc-dialog__scrim"></div>
+            </div>
+    
+        </div>
+
+<!-- 블루투스.선택.다이얼로그 -->
+        <div class="bluetooth_select mdc-dialog">
+            <div class="mdc-dialog__container">
+            <div class="mdc-dialog__surface"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="my-dialog-title"
+            aria-describedby="my-dialog-content">
+            <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+            <h2 class="mdc-dialog__title my-dialog-title"><span data-i18n="label.bluetoothselect">블루투스 선택</span>
+                <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                style="position: fixed;right: 5%;" id="close_bluetooth_list">clear</i>
+            <div class="margin_top_20 left"><!--fieldset-->
+            <label id="searchBluetooth" class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon "
+                style="width:100%;">
+                <div class="mdc-text-field__ripple"></div>
+                <input class="mdc-text-field__input" type="text" aria-labelledby="my-label-id" aria-controls="my-helper-id"
+                aria-describedby="my-helper-id" style="ime-mode:active">
+                <span id="label" class="mdc-floating-label" data-i18n="label.search_placeholder_bluetoothselect">블루투스</span>
+                <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                style="right:80px;display:none" id="search_bluetooth_clear">clear</i>
+                <div class="mdc-line-ripple"></div>
+                <button class="btnSearchBluetooth mdc-button mdc-button--raised  material-icons " style="top:10px;"> <span
+                    class="mdc-button__ripple"></span>search</button>
+            </label>
+            </div>
+            </h2>
+            <div class="mdc-dialog__content" id="my-dialog-content" style="height: 100vh;">
+                <div class="list">
+                <li class="mdc-deprecated-list-item clone" tabindex="-1" data-mdc-dialog-action="none" style="display:none;padding-left:5px">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <!-- width="30" height="30"  -->
+                    <svg class="mdc-list-item__graphic"  xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#3498db" class="bi bi-bluetooth" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="m8.543 3.948 1.316 1.316L8.543 6.58V3.948Zm0 8.104 1.316-1.316L8.543 9.42v2.632Zm-1.41-4.043L4.275 5.133l.827-.827L7.377 6.58V1.128l4.137 4.136L8.787 8.01l2.745 2.745-4.136 4.137V9.42l-2.294 2.274-.827-.827L7.133 8.01ZM7.903 16c3.498 0 5.904-1.655 5.904-8.01 0-6.335-2.406-7.99-5.903-7.99C4.407 0 2 1.655 2 8.01 2 14.344 4.407 16 7.904 16Z"/> </svg>
+                    <!-- <span class="mdc-deprecated-list-item__text margin_left_5"></span> -->
+                    <div>
+                        <div class="mdc-deprecated-list-item__text margin_left_5 name">-</div>
+                        <div class="mdc-deprecated-list-item__text margin_left_5 address" style="font-size: 8pt;color:grey;    top: -4px;
+                        position: relative;
+                        height: 17px;">-</div>
+                    </div>
+                </li>
+                
+                <ul class="mdc-list mdc-deprecated-list">
+                    
+                </ul>
+                </div>
+            </div>
+            </div>
+            </div>
+            <div class="mdc-dialog__scrim"></div>
+        </div>
+
+<!-- 와이파이.선택.다이얼로그 -->
+        <div class="wifi_select mdc-dialog">
+            <div class="mdc-dialog__container">
+            <div class="mdc-dialog__surface"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="my-dialog-title"
+            aria-describedby="my-dialog-content">
+            <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+            <h2 class="mdc-dialog__title my-dialog-title"><span data-i18n="label.wifiselect">와이파이 선택</span>
+                <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                style="position: fixed;right: 5%;" id="close_wifi_list">clear</i>
+            <div class="margin_top_20 left"><!--fieldset-->
+            <label id="searchWifi" class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon "
+                style="width:100%;">
+                <div class="mdc-text-field__ripple"></div>
+                <input class="mdc-text-field__input" type="text" aria-labelledby="my-label-id" aria-controls="my-helper-id"
+                aria-describedby="my-helper-id" style="ime-mode:active">
+                <span id="label" class="mdc-floating-label" data-i18n="label.search_placeholder_wifiselect">와이파이</span>
+                <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                style="right:80px;display:none" id="search_wifi_clear">clear</i>
+                <div class="mdc-line-ripple"></div>
+                <button class="btnSearchWifi mdc-button mdc-button--raised  material-icons " style="top:10px;"> <span
+                    class="mdc-button__ripple"></span>refresh</button>
+            </label>
+            </div>
+            </h2>
+            <div class="mdc-dialog__content" id="my-dialog-content" style="height: 100vh;">
+                <div class="list">
+                <li class="mdc-deprecated-list-item clone" tabindex="-1" data-mdc-dialog-action="none" style="display:none;padding-left:5px">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <!-- width="30" height="30"  -->
+                    <div>
+                        <div class="connected bold" style="font-size: 9pt;line-height: 3px;" data-i18n="label.wifi_connected">
+                            연결됨
+                        </div>
+                        <svg class="icon svg-icon" style="width: 30px; height: 30px;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M558.217341 861.441123C573.618346 845.725811 581.318733 826.708293 581.318733 804.387995 581.318733 782.067698 573.618346 763.050179 558.217341 747.334868 542.816336 731.619557 524.179167 723.762019 502.305276 723.762019 480.431385 723.762019 461.794216 731.619557 446.393211 747.334868 430.992206 763.050179 423.291819 782.067698 423.291819 804.387995 423.291819 826.708293 430.992206 845.725811 446.393211 861.441123 461.794216 877.156434 480.431385 885.013972 502.305276 885.013972 524.179167 885.013972 542.816336 877.156434 558.217341 861.441123ZM75.104593 348.782194C67.956984 357.039896 64.383234 367.103818 64.383234 378.974263 64.383234 390.844708 67.956984 400.90863 75.104593 409.166332 82.252202 417.424032 90.96322 421.552821 101.237907 421.552821 111.512595 421.552821 120.223613 417.424032 127.371222 409.166332 179.638112 348.781893 239.610118 302.978145 307.289039 271.753713 374.96796 240.529281 443.092585 224.917299 511.664958 224.917299 580.23733 224.917299 648.473635 240.529281 716.375919 271.753713 784.278203 302.978145 844.361888 348.781893 896.628778 409.166332 903.776387 417.424032 912.375725 421.552821 922.42705 421.552821 932.478375 421.552821 941.189393 417.424032 948.560365 409.166332 955.931336 400.90863 959.616766 390.844708 959.616766 378.974263 959.616766 367.103818 955.819656 357.039896 948.225321 348.782194 889.257549 280.140055 821.244603 228.0141 744.184446 192.402764 667.124287 156.791429 589.618566 138.986028 511.664958 138.986028 433.711348 138.986028 356.317308 156.791429 279.480512 192.402764 202.643717 228.0141 134.519092 280.140055 75.104593 348.782194ZM790.085266 482.711114C751.666869 438.325971 707.441703 404.521514 657.40844 381.29673 607.375179 358.071946 557.119308 346.459728 506.63932 346.459728 456.159332 346.459728 405.903462 358.071946 355.8702 381.29673 305.836937 404.521514 261.611771 438.325971 223.193374 482.711114 216.045765 490.968814 212.472014 501.032736 212.472014 512.903181 212.472014 524.773626 216.045765 534.837548 223.193374 543.09525 230.340983 551.352951 239.052 555.481739 249.326688 555.481739 259.601375 555.481739 268.312393 551.352951 275.460002 543.09525 306.730791 506.967807 342.803338 479.48556 383.678727 460.647678 424.554115 441.809798 465.540569 432.390999 506.63932 432.390999 547.738071 432.390999 588.724525 441.809798 629.599914 460.647678 670.475302 479.48556 706.547849 506.967807 737.818638 543.09525 744.966247 551.352951 753.677265 555.481739 763.951952 555.481739 774.22664 555.481739 782.937657 551.352951 790.085266 543.09525 797.232875 534.837548 800.806626 524.773626 800.806626 512.903181 800.806626 501.032736 797.232875 490.968814 790.085266 482.711114ZM658.74861 614.317565C637.752509 590.060569 613.629691 571.610045 586.379433 558.965439 559.129174 546.320835 531.655964 539.998627 503.958981 539.998627 476.261996 539.998627 448.788787 546.320835 421.538528 558.965439 394.288269 571.610045 370.165451 590.060569 349.16935 614.317565 341.575016 622.575265 337.777905 632.639188 337.777905 644.509633 337.777905 656.380079 341.463335 666.444001 348.834307 674.701701 356.205279 682.959402 364.916297 687.088191 374.967622 687.088191 385.018946 687.088191 393.841644 682.959402 401.435978 674.701701 429.579688 642.187003 463.75368 625.929899 503.958981 625.929899 544.16428 625.929899 578.338272 642.187003 606.481982 674.701701 613.629591 682.959402 622.340609 687.088191 632.615296 687.088191 642.889985 687.088191 651.601001 682.959402 658.74861 674.701701 665.896219 666.444001 669.46997 656.380079 669.46997 644.509633 669.46997 632.639188 665.896219 622.575265 658.74861 614.317565Z"  /></svg>
+                        <!-- <svg height="30px" width="30px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 424.264 424.264" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path style="fill:#2488FF;" d="M212.132,32.132C131.999,32.132,56.663,63.337,0,120l28.284,28.284 c49.107-49.107,114.399-76.152,183.848-76.152s134.74,27.045,183.848,76.152L424.264,120 C367.601,63.337,292.265,32.132,212.132,32.132z"></path> <path style="fill:#2488FF;" d="M56.568,176.568l28.284,28.284c33.998-33.998,79.2-52.721,127.279-52.721 s93.282,18.723,127.279,52.721l28.284-28.284c-41.553-41.553-96.799-64.437-155.563-64.437S98.121,135.016,56.568,176.568z"></path> <path style="fill:#2488FF;" d="M113.137,233.137l28.284,28.284c38.99-38.989,102.432-38.989,141.422,0l28.284-28.284 C256.541,178.551,167.723,178.551,113.137,233.137z"></path> <path style="fill:#2488FF;" d="M152.132,332.132c0,33.084,26.916,60,60,60v-120C179.048,272.132,152.132,299.048,152.132,332.132z"></path> <path style="fill:#005ECE;" d="M212.132,272.132v120c33.084,0,60-26.916,60-60S245.216,272.132,212.132,272.132z"></path> </g> </g></svg> -->
+                    </div>
+
+                    <!-- <svg class="mdc-list-item__graphic"  xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#3498db" class="bi bi-bluetooth" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="m8.543 3.948 1.316 1.316L8.543 6.58V3.948Zm0 8.104 1.316-1.316L8.543 9.42v2.632Zm-1.41-4.043L4.275 5.133l.827-.827L7.377 6.58V1.128l4.137 4.136L8.787 8.01l2.745 2.745-4.136 4.137V9.42l-2.294 2.274-.827-.827L7.133 8.01ZM7.903 16c3.498 0 5.904-1.655 5.904-8.01 0-6.335-2.406-7.99-5.903-7.99C4.407 0 2 1.655 2 8.01 2 14.344 4.407 16 7.904 16Z"/> </svg> -->
+                    <!-- <span class="mdc-deprecated-list-item__text margin_left_5"></span> -->
+                    <div>
+                        <div class="mdc-deprecated-list-item__text margin_left_5 ssid">-</div>
+                        <div class="mdc-deprecated-list-item__text margin_left_5 bssid" style="font-size: 8pt;color:grey;top: -4px;
+                        position: relative;
+                        height: 17px;">-</div>
+                    </div>
+                </li>
+                
+                <ul class="mdc-list mdc-deprecated-list">
+                </ul>
+                </div>
+            </div>
+            </div>
+            </div>
+            <div class="mdc-dialog__scrim"></div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="mdc-bottom-navigation">
+            <nav class="mdc-bottom-navigation__list">
+                <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">home</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.menu_home">홈</span>
+                </span>
+
+                <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <!-- <span class="material-icons mdc-bottom-navigation__list-item__icon">navigation</span> -->
+                     
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">
+
+</span>
+<svg version="1.1" id="Layer_1"
+	 viewBox="0 0 512 512" xml:space="preserve" class="padding_top_3 padding_bottom_3">
+<rect x="142.884" y="129.039" style="fill:#ffffff;" width="59.535" height="166.698"/>
+<path style="fill:#757575;" d="M229.209,175.179c-13.407,0-24.594,9.984-26.5,22.882l-0.291,0.23v81.968h-35.721v-79.38
+	c0-16.92,3.969-27.386,20.175-48.198l61.601-85.046c12.092-15.486,9.314-38.048-6.173-50.138
+	c-15.485-12.092-38.048-9.314-50.138,6.171l-77.125,105.505c-8.986,12.293-13.829,27.124-13.829,42.351v195.655l71.442,71.442
+	l58.55-50.186c15.74-13.492,24.799-33.188,24.799-53.92V201.969C256,187.235,243.944,175.179,229.209,175.179z"/>
+<rect x="55.503" y="306.589" transform="matrix(-0.7071 0.7071 -0.7071 -0.7071 468.2601 603.7747)" style="fill:#757575;" width="107.162" height="184.556"/>
+<rect x="65.968" y="331.851" transform="matrix(-0.7071 0.7071 -0.7071 -0.7071 443.0089 664.7574)" style="fill:#757575;" width="35.721" height="184.556"/>
+<rect x="309.581" y="129.039" style="fill:#ffffff;" width="59.535" height="166.698"/>
+<path style="fill:#757575;" d="M282.791,175.179c13.407,0,24.593,9.984,26.5,22.882l0.291,0.23v81.968h35.721v-79.38
+	c0-16.92-3.969-27.386-20.175-48.198l-61.601-85.044c-12.092-15.486-9.314-38.048,6.171-50.138
+	c15.486-12.092,38.048-9.314,50.139,6.171l77.124,105.505c8.987,12.292,13.83,27.123,13.83,42.35v195.655l-71.442,71.442
+	l-58.55-50.186C265.058,374.943,256,355.247,256,334.516V201.969C256,187.235,268.056,175.179,282.791,175.179z"/>
+<rect x="349.327" y="306.601" transform="matrix(0.7071 0.7071 -0.7071 0.7071 400.059 -168.0703)" style="fill:#757575;" width="107.162" height="184.556"/>
+<rect x="410.303" y="331.873" transform="matrix(0.7071 0.7071 -0.7071 0.7071 425.3262 -178.526)" style="fill:#757575;" width="35.721" height="184.556"/>
+<g>
+	<rect y="107.214" style="fill:#757575;" width="59.535" height="35.721"/>
+	
+		<rect x="13.961" y="25.843" transform="matrix(-0.9428 -0.3333 0.3333 -0.9428 70.3896 99.4825)" style="fill:#757575;" width="59.534" height="35.72"/>
+	<rect x="452.465" y="107.214" style="fill:#757575;" width="59.535" height="35.721"/>
+	
+		<rect x="450.402" y="13.937" transform="matrix(-0.3333 -0.9428 0.9428 -0.3333 583.1323 499.7556)" style="fill:#757575;" width="35.72" height="59.533"/>
+</g>
+</svg>
+                    <span style="padding-bottom: 6px;" class="mdc-bottom-navigation__list-item__text" data-i18n="title.menu_pray">기도</span>
+                </span>
+
+                <span
+                    class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">account_circle</span>
+                    <!-- <span class="material-icons mdc-bottom-navigation__list-item__icon">directions_walk</span>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">directions_run</span> -->
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.menu_profile">profile</span>
+                </span>
+
+                <span style="display:none" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">card_membership</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_membership">멤버쉽</span>
+                </span>
+
+                <span style="display:none" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">forum</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.contact_us">문의하기</span>
+                </span>
+
+                <span style="display:none" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">forum</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.menu_run_options">실행옵션</span>
+                </span>
+
+                <span style="display:none" id="footerMenuDeveloperSupport" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary none"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">favorite</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="[html]title.ad_ticket">광고/이용권</span>
+                </span>
+
+                <!-- <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                    data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                    <span class="material-icons mdc-bottom-navigation__list-item__icon">lock</span>
+                    <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_permission">권한</span>
+                </span> -->
+                
+            </nav>
+        </div>
+    </footer>
+  
+
+</div>
+</body>
+
+
+</html>
