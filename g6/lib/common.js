@@ -473,6 +473,7 @@ var messages  = {
             first_subscribe: "3 months free subscribe.",
             first_subscribe_msg1: '<span class="skyblue bold">You can use it for free for 3 months when you first subscribe.',
             first_subscribe_msg2: '<span class="red">If you do not want to switch to a paid subscription</span>, you can "<b>cancel</b>" <b>before the free period ends</b>.',
+            overlay_opened : "Guide icon displayed"
           },
           toast:{
             run_option_on : "Turn <span style='color:var(--softm-start)'>on</span>.",
@@ -991,6 +992,8 @@ var messages  = {
             first_subscribe: "처음 구독시<br/>3달 무료",
             first_subscribe_msg1: '<span class="skyblue bold">처음 구독시 3달간 무료</span>로 이용할 수 있습니다.',
             first_subscribe_msg2: '<span class="red">유료 정기 결제</span> <b>전환을 원치 않으면</b> <b>무료 기간 종료전</b>에 "<b>취소</b>" 할 수 있습니다.',
+            overlay_opened : "안내아이콘 표시됨"
+
           },
           toast:{
             run_option_on : "설정을 <span style='color:var(--softm-start)'>켰</span>습니다.",
@@ -1761,7 +1764,10 @@ function initBasicInfo() {
     $(".version-name").text("Ver."+v.versionName + " / " + v.versionCode);
     if ( v.userLevel ) {
       var user_level = t("label." + v.userLevel.toLocaleLowerCase() + "_user"); 
-      $(".user_level").text(user_level + (debugBadge?"D":""));
+      try {
+        $(".user_level").text(user_level + (debugBadge?"D":"") + (location.href.startsWith("file")?"F":""));
+      } catch(e) {
+      }
     }
 
     if ( info.isPaidLicense ) {
