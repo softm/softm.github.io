@@ -424,6 +424,10 @@ $( document ).ready(function() {
             $(".lifetime_msg").show();
         }
     });
+    $(".bill_products .box.lifetime").hide();
+    $(".monthly_msg").show();
+    $(".lifetime_msg").hide();
+
 });
 
 function initPage(v) {
@@ -719,7 +723,7 @@ function initPage(v) {
             <!-- <hr class="main"/> -->
             <div class="row bill_products flex paid">
                 <div class="margin_left_10 margin_top_10" style="flex-grow: 1;width:55%;overlow:scroll">
-                    <div class="box monthly" name="SUBS">
+                    <div class="box monthly active" name="SUBS">
                         <div>&nbsp;</div>
                         <div class="main" >
                             <div class="main_title" data-i18n="label.bill_monthly">월간</div>
@@ -729,7 +733,7 @@ function initPage(v) {
                         <span class="bottom_title" data-i18n="label.bill_monthly_oneday_price">하루에 16원</span>
                     </div>
 
-                    <div class="box lifetime active " name="INAPP_LIFETIME">
+                    <div class="box lifetime" name="INAPP_LIFETIME">
                         <div data-i18n="label.bill_lifetime_50percent_discount">50% 할인</div>
                         <div class="main">
                             <div class="main_title" data-i18n="label.bill_lifetime">평생</div>
