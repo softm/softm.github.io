@@ -195,8 +195,8 @@
    "79d88306dfb5f059"
 ],
  "checkServiceTimeUnitName":"0:NANOSECONDS,1:MICROSECONDS,2:MILLISECONDS,3:SECONDS,4:MINUTES,5:HOURS,6:DAYS;",
- "checkServiceRepeatInterval":15,
- "checkServiceRepeatIntervalTimeUnit":"MINUTES",
+ "checkServiceRepeatInterval":1,
+ "checkServiceRepeatIntervalTimeUnit":"HOURS",
  "checkServiceFlexInterval":5,
  "checkServiceFlexIntervalTimeUnit":"MINUTES",
  "checkServiceInitialDelay":0,
