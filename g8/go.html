@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+  <title>함께기도</title>
+  <link rel="shortcut icon" href="#">
+
+ 
+  <!-- <link href="./lib/material-components-web.min.css" rel="stylesheet"> -->
+  <link href="./lib/material-components-web.min.new.css" rel="stylesheet">
+  <!-- <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"> -->
+
+  <!-- <script src="./lib/material-components-web.min.js"></script> -->
+  <script src="./lib/material-components-web.min.new.js"></script>
+  <!-- <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script> -->
+  
+  <link rel="stylesheet" href="./lib/icon.css">
+  <link rel="stylesheet" href="./lib/common.css?a=4">
+  <script src="./lib/hangul.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
+ </head>
+    <script>
+        // URL에서 docId를 파싱하는 함수
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // docId 파싱
+        const docId = getQueryParam("docId");
+
+        // 딥링크 URL 생성 (앱의 딥링크 URL은 아래와 같이 구성합니다)
+        const deepLinkUrl = `pray://god.whisper?pDocId=${docId}`;
+
+        // 앱 실행 또는 Play Store 리다이렉트 함수
+        function redirectToApp() {
+            // 1초 후에 딥링크로 리다이렉트 시도
+            setTimeout(() => {
+            //     // 딥링크로 리다이렉트 (앱이 설치되어 있으면 앱 실행)
+            //     alert(deepLinkUrl);
+                // window.location.href = deepLinkUrl;
+            }, 1500);
+
+            // 2초 후에 Play Store로 리다이렉트 (앱이 설치되어 있지 않으면 Play Store로 이동)
+            setTimeout(() => {
+                // window.location = "https://play.google.com/store/apps/details?id=net.softm.god.whisper&referrer=" + encodeURIComponent("docId="+docId);
+                // window.location = "https://play.google.com/store/apps/details?id=net.softm.startnavi.poweron&referrer=" + encodeURIComponent("docId="+docId);
+            }, 1000);
+        }
+
+        // 페이지 로드 후 리다이렉트 시작
+        window.onload = redirectToApp;
+        function goDeepLink () {
+            window.location = deepLinkUrl;
+        }
+        //           setTimeout(() => {
+        // // goDeepLink ();
+        // $("#go").trigger("click");
+        //           },1000);
+//class UrlSchemeCaller {
+//   windowState = 'focus';
+    
+//   constructor() {
+//     this.init();
+//   }
+    
+//   init() {
+//     window.addEventListener('focus', () => {
+//       this.windowState = 'focus';
+//     });
+    
+//     window.addEventListener('blur', () => {
+//       this.windowState = 'blur';
+//     });
+//   }
+  
+//   call(urlScheme, notInstalledCallback) {
+//     location.href = urlScheme;
+      
+//     setTimeout(() => {
+//       if (this.windowState === 'focus') {
+//         // 앱이 설치되어 있지 않은 상태
+//         notInstalledCallback();
+//       } 
+//     }, 300);
+//   }
+// }
+
+// window.urlSchemeCaller = new UrlSchemeCaller();
+// urlSchemeCaller.call(deepLinkUrl, () => { 
+//   console.log('이 함수는 앱이 설치 되어 있지 않을 때 호출되는 함수입니다.');
+//   // other logic...
+//     window.location = "https://play.google.com/store/apps/details?id=net.softm.startnavi.poweron&referrer=" + encodeURIComponent("docId="+docId);
+
+// });
+    </script>
+</head>
+<!--
+http://127.0.0.1:5500/go.html?docId=gJHZlSuUdBspx9U9AUMd
+pray://god.whisper?pDocId=gJHZlSuUdBspx9U9AUMd
+    http://softm.net/gdev/go.html?docId=1234
+    https://play.google.com/store/apps/details?id=net.net.softm.god.whisper&referrer=docId%3D1234
+-->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f8ff;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 40px 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            text-align: center;
+        }
+
+        .container img {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        a {
+            text-decoration: none;
+            /* background-color: #4CAF50; */
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        a:hover {
+            /* background-color: #45a049; */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container padding_top_30 margin_top_50">
+        <img src="images/logo.svg" alt="기도 아이콘" />
+        <p class="basic_font_large1">기도초대를 위해서...</p>
+        <p class="basic_font_large1">아래 링크를 누르세요.</p>
+    <button id="btnWrite" onClick="goDeepLink()" class="basic_font_large1 margin_top_10 mdc-button mdc-button--raised margin_right_0" style="height:55px">
+    <div class="mdc-button__ripple"></div>
+    <strong class="" data-i18n="label.confirm_">함께기도 - 기도초대</strong>
+    </button>
+
+    </div>
+<div class="flex center w_full" style="position:fixed;bottom:5vh; border:0px solid red;background-color: transparent;">   
+    <span>
+        <a href="https://pf.kakao.com/_FCaCn/chat"><img src="images/kakao02.png" width="70" class="padding_0"></a>
+        <!-- <a href="https://pf.kakao.com/_FCaCn"><img src="./assets/kakao02.png" width="70"></a> -->
+    </span>                                 
+    <span>
+    <a href="https://play.google.com/store/apps/details?id=net.softm.god.whisper" class="padding_0">
+        <img src="images/GetItOnGooglePlay_Badge_Web_color_Korean.png" width="250"> 
+    </a>
+    </span>
+</div>
+</body>
+</html>
