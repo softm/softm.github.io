@@ -2,7 +2,7 @@
  "_msg_":{"_common_":{"error.code":"F0000","resCode":"00"},"_body_":{"status":"success","flag":"S"}},
  "msg":"성공",
  "msgCode":"200",
- "useServer":false,
+ "useServer":true,
  "useRewardForWaitOverlay":true,
  "useRewardButtonForWaitOverlay":false,
 
