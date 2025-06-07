@@ -1,0 +1,1524 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+  <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+  <title>함께기도</title>
+  <link rel="shortcut icon" href="#">
+  
+  <!-- <link href="./lib/material-components-web.min.css" rel="stylesheet"> -->
+  <!-- <link href="./lib/material-components-web.min.new.css" rel="stylesheet"> -->
+  <link href="./lib/material-components-web.min.css" rel="stylesheet">
+  <!-- <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"> -->
+
+  <!-- <script src="./lib/material-components-web.min.js"></script> -->
+  <script src="./lib/material-components-web.min.new.js"></script>
+  <!-- <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script> -->
+  
+  <link rel="stylesheet" href="./lib/icon.css">
+  <link rel="stylesheet" href="./lib/common.css?a=4">
+  <script src="./lib/hangul.js"></script>
+  <script>
+    if ( location.protocol.startsWith("https:") ) {
+      var meta = document.createElement('meta');
+      meta.httpEquiv = "Content-Security-Policy";
+      meta.content = "upgrade-insecure-requests";
+      document.getElementsByTagName('head')[0].appendChild(meta);
+    }
+    </script>
+ </head>
+
+<!--  using - default i18next-->
+<!--
+<script src="https://unpkg.com/i18next/i18next.js"></script>
+<script src="https://unpkg.com/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+<script src="https://unpkg.com/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.js"></script>
+-->
+
+<!-- using - jquery i18next -->
+<!-- -->
+<script src="./lib/jquery-3.6.4.min.js"></script>
+<!--<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>-->
+<script src="./lib/i18next.min.js"></script>
+<script src="./lib/common.js?a=4"></script>
+<script src="./lib/interface.js?a=1"></script>
+<script src="./lib/db.js"></script>
+<script src="./lib/map.js"></script>
+<script src="./lib/map_point.js"></script>
+<script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xx2c3bc6b282ed46c9805c99db13f56149"></script>
+<script src="https://unpkg.com/hangul-js" type="text/javascript"></script>
+
+<script>
+var isFirstLoad1 = true;
+var isFirstLoad2 = true;
+//var btnStart = null;
+//var btnStop = null;
+var chipSet = null;
+var search = null;
+var btnSearch = null;
+var btnMyLocation = null;
+
+var btnBack = null;
+
+var list = [];
+var tIdx = null;
+var btnHome = null;
+var btnSettings = null;
+
+var search1 = "";
+var search2 = "";
+var search4 = "";
+var btnConfirm = null;
+var tabArea = null;
+var maps = null;
+var map = null;
+
+var localStorageBasic = new InitLocalStorage("basic",['id', 'name', 'key' ]);
+var localStorageRecent = new InitLocalStorage("recent",['id', 'name', 'key']);
+
+var defaultListHeight = 60;
+var markerArr = [];
+var poiArr = [];
+var recentArr = [];
+var naviDestination = null;
+
+fn_Progress_Show();
+
+$( document ).ready(function() {
+    try {
+      maps = new Map_();
+    } catch (e) {
+    }
+    btnHome     = new mdc.ripple.MDCRipple(document.querySelector("#btnHome"));
+    btnSettings = new mdc.ripple.MDCRipple(document.querySelector("#btnSettings"));
+    btnConfirm  = new mdc.ripple.MDCRipple(document.querySelector("#btnConfirm"));
+    btnNavi     = new mdc.ripple.MDCRipple(document.querySelector("#btnNavi"));
+    btnBack     = new mdc.ripple.MDCRipple(document.querySelector("#btnBack"));
+    tabArea     = document.querySelectorAll(".tab_area");
+
+	if ( fowardPage == "SETTING" ) {
+//		document.body.hide();
+//		$(document.body).hide();
+	}
+
+//  btnStart = new mdc.ripple.MDCRipple(document.querySelector("#btnStart"));
+//  btnStop = new mdc.ripple.MDCRipple(document.querySelector("#btnStop"));
+    chipSet = new mdc.chips.MDCChipSet(document.querySelector('.mdc-chip-set'));
+    search = new mdc.textField.MDCTextField(document.querySelector('#search'));
+//    btnSearch = new mdc.ripple.MDCRipple(document.querySelector("#btnSearch"));
+//  btnSearch.root.hide();
+
+
+    btnBack.listen("click", function (event) {
+        // 
+        // if ( tIdx == 0  ) {
+        //     opener.fn_DeviceLoadData("_POI_HOME","opener.bindPoiHome");
+        //     // opener.fn_DeviceLoadData("_POI_HOME","bindPoiHome");
+        // } else if ( tIdx == 1 ) {
+        //     opener.fn_DeviceLoadData("_POI_COMPANY","opener.bindPoiCompany");
+        //     // opener.fn_DeviceLoadData("_POI_COMPANY","bindPoiCompany");
+        // }
+        // opener.location.reload();
+        // self.close();
+        windowClose();
+    });
+
+//    btnMyLocation = new mdc.ripple.MDCRipple(document.querySelector("#btnMyLocation"));
+    btnMyLocation = [].map.call(document.querySelectorAll(".btnMyLocation"),el=>{
+        var rtnEl = new mdc.ripple.MDCRipple(el);
+          rtnEl.listen("click", function(event) {
+            onChangeButton(false,false);
+			fn_GetLocation("map["+tIdx+"]","moveMylocation");
+          });
+        return rtnEl;
+    });
+  
+    btnSearch = [].map.call(document.querySelectorAll(".btnSearch"),el=>{
+        var rtnEl = new mdc.ripple.MDCRipple(el);
+          rtnEl.listen("click", function(event) {
+			if ( tIdx == 0 || tIdx == 1  || tIdx == 2 ) {
+				searchPOI();
+			} else if ( tIdx == 2 ) { // not using
+				searchFavoritePOI();
+			} else if ( tIdx == 3 ) {
+				searchRecentPOI();
+			}
+          });
+        return rtnEl;
+    });
+//    searchClear = new mdc.ripple.MDCRipple(document.querySelector("#search_clear"));
+
+    list = new mdc.list.MDCList(document.querySelector('.mdc-list'));
+    list.singleSelection = true;
+
+    btnHome.listen("click", function(event) {
+        document.location.replace("index.html");
+    });
+
+    btnSettings.listen("click", function(event) {
+        windowOpen("setting.html","_blank","");
+//        fn_OpenPop("setting.html");
+    });
+
+    btnNavi.listen("click", function(event) {
+		var poi = null;
+        if ( maps.current ) {
+			poi = maps.current;
+        } else {
+            console.info("fn_StartNavi");
+            if (tIdx == 0 ) {
+                poi = maps.home;
+            } else if (tIdx == 1 ) {
+                poi = maps.company;
+            } else if (tIdx == 2 ) {
+                poi = maps.favorite;
+            }
+        }
+        if ( poi ) {
+            console.info("fn_StartNavi",poi.getName(),poi.getLat(),poi.getLon());
+			localStorageRecent.delPoi("key",poi.id + "_" + poi.getName(),function(){
+				var mapPoint = objectToMapPoint(poi);
+				localStorageRecent.addPoi(mapPoint,function(){
+				});
+			});
+			fn_StartNavi(poi.getName(),poi.getLat(),poi.getLon());
+		} else {
+			snackbar( t("message.address_not_exist") );
+		}
+    });
+
+    btnConfirm.listen("click", function(event) {
+        onChangeButton(true,false);
+        if ( tIdx == 0 ) { // 집
+			var newHome = new MapPointForHome(maps.current.getLat(),maps.current.getLon(),maps.current.getName());
+//			var newHome = cloneObject(maps.current);
+//				newHome.setType(NaviDestination.HOME);
+			newHome.setId(maps.current.id);
+			newHome.setItem(maps.current.item);
+			maps.addHomeMarker(map,newHome);
+			maps.removeMarker(maps.home.marker);
+			maps.removeMarker(maps.current.marker);
+			newHome.marker = null;
+			fn_DeviceSaveData("_POI_HOME", JSON.stringify([mapPointToTmap(newHome)]));
+            fn_DeviceLoadData("_POI_HOME","bindPoiHome");
+            btnBack.emit("click")
+        } else if ( tIdx == 1 ) { // 회사
+			var newCompany = new MapPointForCompany(maps.current.getLat(),maps.current.getLon(),maps.current.getName());
+//			var newCompany = cloneObject(maps.current);
+//				newCompany.setType(NaviDestination.COMPANY);
+			newCompany.setId(maps.current.id);
+			newCompany.setItem(maps.current.item);
+			maps.addCompanyMarker(map,newCompany);
+			maps.removeMarker(maps.company.marker);
+			maps.removeMarker(maps.current.marker);
+			newCompany.marker = null;
+			fn_DeviceSaveData("_POI_COMPANY", JSON.stringify([mapPointToTmap(newCompany)]));
+            fn_DeviceLoadData("_POI_COMPANY","bindPoiCompany");
+            btnBack.emit("click")
+        } else if ( tIdx == 2 ) { // 즐겨찾기
+			var newFavorite = new MapPointForFavorite(maps.current.getLat(),maps.current.getLon(),maps.current.getName());
+//			var newFavorite = cloneObject(maps.current);
+//				newFavorite.setType(NaviDestination.FAVORITE);
+			newFavorite.setId(maps.current.id);
+			newFavorite.setItem(maps.current.item);
+			maps.addHomeMarker(map,newFavorite);
+			maps.removeMarker(maps.current.marker);
+			newFavorite.marker = null;
+			fn_DeviceSaveData("_POI_FAVORITE", JSON.stringify([mapPointToTmap(newFavorite)]));
+            fn_DeviceLoadData("_POI_FAVORITE","bindPoiFavorite");
+        }
+        scrollTopExec();
+//        var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
+//        event.onlySelect=true; // pass data custom
+//        var cb =document.querySelector("#mdc-chip-" + (tIdx+1));
+//        var cancelled = !cb.dispatchEvent(event);
+//        cb.focus();
+//        document.location.reload(true);
+    });
+
+
+//    btnStart.listen("click", function(event) {
+//      confirm(
+//        t("message.confirm_start"),
+//        function() {
+//          fn_StartService("fn_StartServiceCallback");
+//        }
+//      );
+//    });
+//
+//    btnStop.listen("click", function(event) {
+//      confirm(
+//        t("message.confirm_stop"),
+//        function() {
+//          fn_StopService("fn_StopServiceCallback");
+//        }
+//      );
+//    });
+
+    // var aa=  chipSet.getDefaultFoundation().adapter;
+    // var aa=  this.adapter;
+    // aa.focusChipPrimaryActionAtIndex(1)
+//  var tIdx = 3; // 기본
+
+//    chipSet = new mdc.chips.MDCChipSet(document.querySelector('.mdc-chip-set'));
+
+    // chipSet.listen('MDCChip:selection', ({ detail }) => {
+    //   console.log('Selected chip IDs:', detail.chipIds);
+    // });
+
+//     chipSet.listen("click",function(e){
+    chipSet.listen("MDCChip:interaction",function(e){
+        var selectId = e.detail.chipId;
+        var adapter =  chipSet.getDefaultFoundation().adapter;
+        var index  = adapter.getIndexOfChipById(selectId);
+        if ( !chipSet.chips[index].selected) {
+            chipSet.chips[index].selected = true;
+        }
+    });
+    chipSet.listen("MDCChip:selection",function(e){
+        var selectId = e.detail.chipId;
+        var seq = e.srcElement.offsetParent.id.replace(/[^0-9]/g,"");
+        var adapter =  chipSet.getDefaultFoundation().adapter;
+        var index  = adapter.getIndexOfChipById(selectId);
+        if ( !e.detail.selected ) {
+            return;
+        } else {
+            if ( tIdx == index ){
+                // chipSet.chips[tIdx].selected = true;
+            }
+        }
+        // e.detail.selected
+
+        if ( index == -1 ) {
+            if ( selectId ) {
+                chipSet.chips[seq-1].selected = true;
+            } else { // error
+                // chipSet.chips[tIdx].selected = true;
+                index = tIdx;
+            }
+        }  else {
+            tIdx = index;
+        }
+
+		maps.current = null;
+        [].map.call(tabArea,el =>{
+            el .hide();
+        });
+        if (tIdx == 0) {
+            window.search1 = search.value;
+        } else if (tIdx == 1) {
+            window.search2 = search.value;
+        } else if (tIdx == 3) {
+            window.search4 = search.value;
+        }
+
+        tabArea[tIdx].show("block");
+        btnNavi.root.innerHTML = t("label.navi");
+        setAddress(null);
+		$("#guide_message").show();
+
+// 내위치 로드는 처음 페이지 로드할떄 한뻔하꼐 로찎을 꾸현>
+// 최초 진입을 시작할떄 무쪼껀 마이 로켸이쎤을 태워서 그후 콜백으로 처리되게 해야한다.
+        if ( tIdx == 0 ) { // 집
+            search.root.show();
+            search.input.readOnly  = false;
+            if ( !e.onlySelect ) setDetaultNaviMode("1");
+            search.value = window.search1;
+            var event = new MouseEvent('keyup', {view: window,bubbles: true,cancelable: true});
+            search.input.dispatchEvent(event);
+            maps.items[tIdx] = maps.init({
+                id:"map_div" +tIdx
+    //          , height : (maps.option.height.replace(/[^0-9]/g,"") - (height) ) + "px"
+    //          , height : (maps.option.height.replace(/[^0-9]/g,"") ) + "px"
+              , height : "300px"
+              , callBack : function(map) {
+              }
+            });
+            map = maps.items[tIdx];
+
+            window.bindPoiHomeAndSearchPOI = function(v) {
+				bindPoiHome(v);
+                searchPOI();
+            };
+
+            fn_DeviceLoadData("_POI_HOME","bindPoiHomeAndSearchPOI");
+
+            map.addListener(CommonUtil.fn_IS_APP() == "X"?"drag":"touchend", redrawCurrentMarker);
+        } else if ( tIdx == 1 ) { // 회사
+            search.root.show();
+            search.input.readOnly  = false;
+            if ( !e.onlySelect ) setDetaultNaviMode("2");
+            search.value = window.search2;
+            var event = new MouseEvent('keyup', {view: window,bubbles: true,cancelable: true});
+            search.input.dispatchEvent(event);
+            maps.items[tIdx] = maps.init({
+                id:"map_div" +tIdx
+    //          , height : (maps.option.height.replace(/[^0-9]/g,"") - (height) ) + "px"
+    //          , height : (maps.option.height.replace(/[^0-9]/g,"") ) + "px"
+              , height : "300px"
+              , callBack : function(map) {
+              }
+            });
+            map = maps.items[tIdx];
+
+            window.bindPoiCompanyAndSearchPOI = function(v) {
+				bindPoiCompany(v);
+				var dbChecker = setInterval(function() {
+					if ( localStorageBasic.db != null ) {
+						console.info("db is not null");
+						clearInterval(dbChecker);
+						searchPOI();
+					} else {
+						console.info("db is null");
+					}
+				},1);
+            };
+
+            fn_DeviceLoadData("_POI_COMPANY","bindPoiCompanyAndSearchPOI");
+
+            map.addListener(CommonUtil.fn_IS_APP() == "X"?"drag":"touchend", redrawCurrentMarker);
+
+       } else if ( tIdx == 2 ) { // 즐겨찾기
+            search.root.show();
+            search.input.readOnly  = true;
+            searchClear.root.hide();
+            if ( !e.onlySelect ) setDetaultNaviMode("3");
+            search.value = "";
+            maps.items[tIdx] = maps.init({
+                id:"map_div" +tIdx
+    //          , height : (maps.option.height.replace(/[^0-9]/g,"") - (height) ) + "px"
+    //          , height : (maps.option.height.replace(/[^0-9]/g,"") ) + "px"
+              , height : "300px"
+              , callBack : function(map) {
+              }
+            });
+            map = maps.items[tIdx];
+
+            window.bindPoiFavoriteAndSearchPOI = function(v) {
+				bindPoiFavorite(v);
+				var dbChecker = setInterval(function() {
+					if ( localStorageBasic.db != null ) {
+						console.info("db is not null");
+						clearInterval(dbChecker);
+						searchFavoritePOI(function(){
+						});
+					} else {
+						console.info("db is null");
+					}
+				},1);
+            };
+            fn_DeviceLoadData("_POI_FAVORITE","bindPoiFavoriteAndSearchPOI");
+
+            map.addListener(CommonUtil.fn_IS_APP() == "X"?"drag":"touchend", redrawCurrentMarker);
+
+//            fn_GetLocation("map["+tIdx+"]","getMyLocation");
+       } else if ( tIdx == 3 ) { // 최근
+			onChangeButton(false,false);
+            search.root.show();
+            search.input.readOnly  = false;
+
+            if ( !e.onlySelect ) setDetaultNaviMode("4");
+			search.value = window.search4;
+
+			$("#guide_message").hide();
+			var dbChecker = setInterval(function() {
+				if ( localStorageRecent.db != null ) {
+					console.info("db is not null");
+					clearInterval(dbChecker);
+					var event = new MouseEvent('keyup', {view: window,bubbles: true,cancelable: true});
+					search.input.dispatchEvent(event);
+//					searchRecentPOI(function(){
+//					});
+				} else {
+					console.info("db is null");
+				}
+			},1);
+			btnMyLocation[0].root.hide();
+
+       }
+       if ( tIdx == 2) {
+            $(".btnSearch").hide();
+       } else {
+            $(".btnSearch").show();
+       }
+
+       if ( tIdx != 4 ) { // 운전
+          document.querySelector("#search_wrapper").show("block");
+//        fn_GetLocation("getLocationCallback");
+//          var offset = $('#move_point').offset();
+//          $('html').animate({scrollTop : offset.top-50}, 1000);
+//          document.location.href = "#move_point";
+//          window.scrollTo( 0, 110)
+       } else {
+          document.querySelector("#search_wrapper").hide();
+       }
+    });
+
+//      search.listen("keyup", function(event) {
+//          if(search.value) searchClear.root.show("inline");
+//        else  searchClear.root.hide();
+//      });
+
+    search.listen("click", function(event) {
+        if ( tIdx == 2) {
+            setTimeout(function(){
+//            window.open("http://softm.net/t/search.html?idx=1","_blank","");
+                windowOpen("search.html?idx=1","_blank","");
+//            fn_OpenPop("search.html");
+            },500);
+        }
+    });
+    search.listen("keyup", function(event) {
+        if(search.value) searchClear.root.show("inline");
+        else  searchClear.root.hide();
+        if ( tIdx != 3 && window.event.keyCode == 13 ) {
+            var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
+            var cancelled = !btnSearch[0].root.dispatchEvent(event);
+            btnSearch[0].root.focus();
+            //			cb.focus();
+        } else {
+			if ( tIdx == 3 ) {
+				$(list[tIdx].root).empty();
+				$(list[tIdx].root).show();
+				recentArr = [];
+
+				localStorageRecent.allPoi(function(data){
+					data.sort(function(a, b) {
+						return b.created - a.created;
+					});
+					// object 에 초성필드 추가 {name:"홍길동", diassembled:"ㅎㄱㄷ"}
+					data.forEach(function (item) {
+						var dis = Hangul.disassemble(item.name, true);
+						var cho = dis.reduce(function (prev, elem) {
+							elem = elem[0] ? elem[0] : elem;
+							return prev + elem;
+						}, "");
+						item.diassembled = cho;
+					});
+					console.info(data);
+
+	//                var search = this.value;
+					var search1 = Hangul.disassemble(search.value).join("");  // ㄺ=>ㄹㄱ
+
+					data
+					// 문자열 검색 || 초성검색
+					.filter(function (item) {
+						return item.name.includes(search.value) || item.diassembled.includes(search1);
+					})
+					// 검색결과 ul 아래에 li 로 추가
+					.forEach(function (item) {
+						var mapPoint  = new MapPoint(item.lat,item.lon,item.name,item);
+		//					mapPoint.gubun = item.id;
+//						if ( item.gubun.value === "search") {
+//						}
+						recentArr.push(mapPoint);
+
+						var row = document.querySelectorAll(".poi_list_item")[tIdx].cloneNode(true); //mdc-list-item fisrt node;
+						row.show();
+						row.className = row.className.replace("poi_list_item","");
+						row.children[0].innerText = item.gubun.value == NaviGubun.SEARCH.value?"search":"place";
+						row.children[1].innerText = mapPoint.getName();
+						var detail = [
+							item.upperAddrName  ,
+							item.middleAddrName ,
+							item.lowerAddrName  ,
+							item.roadName       ,
+							item.firstBuildNo
+						];
+						row.children[2].innerText = mapPoint.item.created.yyyymmdd().substring(4,6) + "." + mapPoint.item.created.yyyymmdd().substring(6);
+		//              }
+						document.querySelectorAll('.poi_list')[tIdx].appendChild(row);
+						listItemRipples = list[tIdx].listElements.map((listItemEl) => new mdc.ripple.MDCRipple(listItemEl));
+					});
+				});
+			}
+		}
+    });
+
+    var searchClear = new mdc.ripple.MDCRipple(document.querySelector("#search_clear"));
+    searchClear.listen("click", function(event) {
+        searchClear.root.hide();
+        search.value = "";
+		if (tIdx == 3) searchRecentPOI();
+    });
+//    search.focus();search.foundation_.activateFocus();
+
+    /* const chipSetAdapter = new mdc.chips.MDCChipSetAdapter(document.querySelector('.mdc-chip-set'));
+     */
+
+    list = [].map.call(document.querySelectorAll(".mdc-list"),el=>{
+            var rtnEl = new mdc.list.MDCList(el);
+            rtnEl.singleSelection = true;
+            rtnEl.listen("click",function(e){
+				if ( tIdx == 0 || tIdx == 1  || tIdx == 2 ) {
+					var index = rtnEl.selectedIndex;
+					var poi = poiArr[index];
+
+					if (e.srcElement.className.includes("icon")) {
+						e.stopPropagation();
+						console.info("key",poi.id + "_" + poi.getName());
+
+						localStorageBasic.getPoiCount("key",poi.id + "_" + poi.getName() ,function(count){
+							if ( count == 0 ) {
+//								localStorageBasic.addPoi(poi.item?poi.item:poi,function(){
+//								objectToMapPoint
+								poi.marker = null; //
+
+                                maps.addFavorite(poi);
+//								snackbar("즐겨찾기가 등록었습니다.");
+								e.srcElement.innerText = "star";
+								if (tIdx == 2 ) {
+									searchFavoritePOI();
+								}
+							} else {
+								material.confirm(t("message.confirm_favorite_delete"), function() {
+//									snackbar("즐겨찾기가 삭제었습니다.");
+                                    e.srcElement.innerText = "star";
+                                    maps.delFavorite(poi);
+
+									e.srcElement.innerText = "star_border";
+									if (tIdx == 2 ) {
+										searchFavoritePOI();
+									}
+								});
+							}
+						});
+					} else {
+						setCurrentMarkerNscrollTop(rtnEl.root,index);
+					}
+				} else {
+					var index = rtnEl.selectedIndex;
+					e.stopPropagation();
+					var poi = recentArr[index];
+					console.info(poi);
+					if ( poi.gubun.value == NaviGubun.SEARCH.value ) {
+						console.info("검색화면");
+						windowOpen("search.html?idx=1&search="+poi.name,"_blank","");
+					} else if ( poi.gubun.value == NaviGubun.POI.value ) {
+						fn_StartNavi(poi.getName(),poi.getLat(),poi.getLon());
+					}
+				}
+            });
+        return rtnEl;
+    });
+
+    /**
+    1 : 집
+    2 : 회사
+    3 : 운전
+    4 : 즐겨찾기
+    */
+    var modeNames = [
+         ""
+        ,"집"
+        ,"회사"
+        ,"즐겨찾기"
+        ,"운전"
+    ];
+    window.setDetaultNaviMode = function(v)
+	{
+		// _NAVI_DESTINATION --> _NAVI_SELECTED_INDEX;
+        fn_DeviceSaveData("_NAVI_DESTINATION", v);
+//        snackbar(modeNames[v] + "으로 설정 되었습니다.");
+    }
+
+    window.setGuideMessage = function(v) {
+        document.querySelector('#guide_message').innerHTML = v;
+    }
+
+    topScroll(function(){
+		if ( tIdx == 0 || tIdx == 1 || tIdx == 2 ) {
+			maps.setPositionClear({
+				mapId:"map_div" +tIdx
+			   ,marginElement:list[tIdx].root
+			});
+		}
+    },function(){
+		if ( tIdx == 0 || tIdx == 1 || tIdx == 2 ) {
+			if (maps.current) {
+				maps.setPositionBottom({
+					mapId:"map_div" +tIdx
+				   ,marginElement:list[tIdx].root
+				});
+				btnMyLocation[0].root.show();
+			}
+		}
+    });
+
+	fEndScroll();
+
+    window.readNaviDestination = function(naviDest) {
+    //  snackbar(modeNames[naviDestination] + "으로 설정 되어 있습니다.");
+        naviDestination = naviDest!="null"&&naviDest?naviDest:1; // 집
+        var idx = parseInt(naviDestination,10) - 1;
+        if ( tIdx == null ) tIdx = idx;
+    // chipSet.chips[chipSelectIndex].selected = true;
+
+        // 1. 진입점
+        //	fn_GetLocation("getMyLocation");
+        fn_GetLocation("map["+tIdx+"]","getLocationInitTab");
+
+        // Trigger Chip Changed :
+        // var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
+        // event.onlySelect=true; // pass data custom
+        // var cb =document.querySelector("#mdc-chip-" + (tIdx+1));
+        // var cancelled = !cb.dispatchEvent(event);
+        // cb.focus();
+    }
+
+    fn_DeviceLoadData("_NAVI_DESTINATION", "readNaviDestination");
+
+
+    window.getInfoCallBack = function (data) {
+        if (isWeb) {
+            window.info = {
+                "appPackage": "com.skt.tmap.ku",
+                "chargingMode": "1",
+                "startWifi": true,
+                "usingRegHome": true,
+                "wifi": {
+                    "bssid": "00:0D:18:00:00:01",
+                    "ssid": "SoftmWifi",
+                    "connected": true
+                },
+                "workGotoOffTime": false,
+                "startPower": true,
+                "naviGeofenceRadius": 200,
+                "naviDestination": "1",
+                "workOffTimeFrom": "17:30",
+                "naviMode": "1",
+                "workGotoTimeTo": "08:50",
+                "naviOverlayWaitTime": 3,
+                "naviPopupMode": true,
+                "bluetooth": {
+                    "bondState": 12,
+                    "address": "00:0D:18:00:00:01",
+                    "name": "OBDII",
+                    "type": 1,
+                    "diassembled": "OBDII"
+                },
+                "startBluetooth": false,
+                "workGotoTimeFrom": "06:00",
+                "naviRenaviPreventTime": 3,
+                "naviAutoStart": true,
+                "workOffTimeTo": "19:00",
+                "notiIcon": true,
+                "btnSwitchIndependenceCondition": true,
+                "startStopOnOff":{
+                    bluetooth:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
+                    wifi:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
+                    tethering:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
+                    airplane_mode:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
+                    screen_on:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
+                    unlock:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
+                    play_music:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
+                    home_screen:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
+                    power_off:{start:{use_yn:false,onoff:"on"},stop:{use_yn:false,onoff:"on"}},
+                },
+                serverHost:location.origin,
+                pathName:location.pathname.substring(1,location.pathname.length-1)
+                // + "http://www.softm.net/gdev"
+            }
+        } else {
+            window.info = (JSON.parse(data));
+        }
+    }
+
+    fn_GetInfo("", "getInfoCallBack");
+
+});
+
+function getLocationInitTab(mayId, lat, lon, address) {
+    getMyLocation(mayId, lat, lon, address,function(){
+        // chipSet
+        chipSet.chips[tIdx].selected = true;
+    });
+}
+
+// function redrawCurrentMarker(evt) {
+//     
+// 	maps.poiToAddress(evt.latLng.lat(),evt.latLng.lng(),function(data){
+// 		setAddress(null);
+// 		maps.removeMarker(maps.current);
+// 		maps.addCurrentMarker(map,new MapPoint(evt.latLng.lat(),evt.latLng.lng(),data.addressInfo.fullAddress));
+// 		maps.current.marker.addListener("touchend",redrawCurrentMarker);
+// 	});
+// }
+
+function redrawCurrentMarker(evt) {
+    maps.poiToAddress(evt.latLng.lat(), evt.latLng.lng(), function (data) {
+      setAddress(null);
+      setAddress(data.addressInfo ? data.addressInfo.fullAddress:"", data.addressInfo);
+      
+      maps.removeCurrentMarker();
+      maps.addCurrentMarker(map, new MapPoint(evt.latLng.lat(), evt.latLng.lng(), data.addressInfo ? data.addressInfo.fullAddress:"", data.addressInfo),function(evt){
+        redrawCurrentMarker(evt);
+        // maps.current.marker.addListener("touchend", redrawCurrentMarker);
+      });
+      // maps.current.marker.addListener("touchend", redrawCurrentMarker);
+      maps.poiCurrents[tIdx] = maps.current;
+
+    });
+
+    if ( tIdx==0 ) {
+		onChangeButton(true,true);
+	} else if ( tIdx==1 ) {
+		onChangeButton(true,true);
+	} else if ( tIdx==2 ) {
+		onChangeButton(true,true);
+    }
+  }
+
+
+function fEndScroll() {
+    endScroll(function(){
+		if ( tIdx == 0 || tIdx == 1 || tIdx == 2 ) {
+			btnMyLocation[0].root.show();
+		}
+    },function(){
+		if ( tIdx == 0 || tIdx == 1 || tIdx == 2 ) {
+			if ($("#map_div" +tIdx).css("position") == "fixed") {
+				btnMyLocation[0].root.show();
+			} else {
+				btnMyLocation[0].root.hide();
+			}
+		}
+    },200);
+}
+
+function setCurrentMarkerNscrollTop(list,index) {
+	var h = list.offsetTop + ( $(list).find("li:eq("+index+")").height() *(index-1) ) + 13;
+	scrollTopExec(h,300,function() {
+		btnMyLocation[0].root.show();
+		maps.setPositionBottom({
+			mapId:"map_div" +tIdx
+		   ,marginElement:list
+		});
+	});
+	console.info("setCurrentMarkerNscrollTop", h);
+//	maps.setCurrent(poiArr[index]);
+//	$(document).scrollTopExec($(document).height());
+
+	maps.addCurrentMarker(map,poiArr[index]);
+	maps.current.marker.addListener("touchend", redrawCurrentMarker);
+	maps.setCenter(map,maps.current.getLat(),maps.current.getLon());
+	maps.setZoom(map,maps.markerSelectZoom);
+
+	if (tIdx == 0) { // 집
+//		setPoiForHome ();
+	} else if (tIdx == 1) { // 회사
+//		setPoiForCompany();
+	} else if (tIdx == 2) { // 즐겨찾기
+//		setPoiForFavoite();
+	}
+	if ( tIdx==0 ) {
+		onChangeButton(true,true);
+	} else if ( tIdx==1 ) {
+		onChangeButton(true,true);
+	} else if ( tIdx==2 ) {
+		onChangeButton(true,true);
+	}
+
+	setAddress(null);
+	maps.poiToAddress(maps.current.getLat(),maps.current.getLon(),function(data){
+		setAddress(data.addressInfo.fullAddress);
+	});
+
+	maps.current.setDobound(true);
+
+}
+
+var fowardPage = getParam("p_foward_page");
+
+var idx = getParam("p_tidx");
+if (idx) {
+    tIdx = parseInt(idx, 10);
+}
+  
+
+function getMyLocation(mayId, lat, lon, address,cb) {
+    console.info("getMyLocation", lat, lon, address);
+    if (!lat) {
+      // lat = 37.566481622437934;
+      // lon = 126.98502302169841;
+      lat = 36.9876599;
+      lon = 126.8487439;
+      address = "포승읍 모아미래도2차";
+    }
+    moveMylocationCallback(mayId,lat, lon, address,cb);
+
+  }
+
+  window.moveMylocationCallback = function (mayId,lat, lon, address,cb) {
+      if (tIdx == 3) {
+        //			maps.addCurrentMarker(map,maps.my);
+        //			maps.setCenter(map,maps.my.getLat(),maps.my.getLon());
+        //			maps.removeMarker(maps.my);
+      }
+      setAddress(null);
+      maps.poiToAddress(lat, lon, function (data) {
+        maps.setMy(new MapPoint(lat, lon, address,data));
+        setAddress(data.addressInfo.fullAddress);
+        maps.removeMarker(maps.current);
+        if ( window.map ) {
+          maps.addMyMarker(map, maps.my);
+          maps.setCenter(map,maps.my.getLat(),maps.my.getLon());
+        }
+
+        if ( cb ) cb();
+
+      });
+    }
+
+
+function onChangeButton(enableNavi,enableConfirm) {
+    if( tIdx == 0 ) {
+        document.querySelector('#btnConfirm .mdc-button__label').innerHTML = t("label.reg_home");
+    } else if( tIdx == 1 ) {
+        document.querySelector('#btnConfirm .mdc-button__label').innerHTML = t("label.reg_company");
+    } else if( tIdx == 2 ) {
+        document.querySelector('#btnConfirm .mdc-button__label').innerHTML = t("label.reg_destination");
+//		document.querySelector('#btnConfirm .mdc-button__label').innerHTML = t("label.favorite");
+    }
+
+    btnNavi.root.hide();
+    btnConfirm.root.hide();
+    if ( enableNavi && enableConfirm ) {
+        btnNavi.root.show("inline");
+        btnNavi.root.style.width = "49%";
+        btnConfirm.root.show("inline");
+        btnConfirm.root.style.width = "49%";
+    } else {
+        if ( enableNavi ) {
+            btnNavi.root.show("block");
+            btnNavi.root.style.width = "100%";
+        } else if ( enableConfirm ) {
+            btnConfirm.root.show("block");
+            btnConfirm.root.style.width = "100%";
+        }
+    }
+}
+
+//  function fn_StartServiceCallback(ok) {
+////      alert("startCallback");
+////      snackbar( t("toast.start") );
+//  fn_DeviceSaveData("_START_POWER", "1"); // 1 : 시작, 0 : 중지
+//      document.querySelector("#status").innerHTML = t("label.status_start");
+//      btnStart.root.disabled = true;
+//      btnStop.root.disabled = false;
+//  }
+//  function fn_StopServiceCallback(ok) {
+////      alert("stopCallback");
+////      snackbar( t("toast.stop") );
+//  fn_DeviceSaveData("_START_POWER", "0"); // 1 : 시작, 0 : 중지
+//      document.querySelector("#status").innerHTML = t("label.status_stop");
+//      btnStart.root.disabled = false;
+//      btnStop.root.disabled = true;
+//  }
+
+    function searchPOI() {
+        if(markerArr.length > 0){
+            for(var i in markerArr){
+                maps.removeMarker(markerArr[i]);
+            }
+        }
+        markerArr = [];
+        search.input.blur(); // force unfocus
+        $(list[tIdx].root).empty();
+        var params = {
+            onComplete:successCallbackForSearchPOI,
+            onProgress:progressCallbackForSearchPOI,
+            onError:errorCallbackForSearchPOI
+        };
+//        if (search.value) {
+            maps.searchPoiData(search.value,successCallbackForSearchPOI,progressCallbackForSearchPOI,errorCallbackForSearchPOI);
+//        }
+    }
+
+    function searchFavoritePOI(callBack) {
+        localStorageBasic.allPoi(function(data){
+            data.sort(function(a, b) {
+                return b.created - a.created;
+            });
+
+            var v = {
+                    searchPoiInfo:{
+                        pois:{
+                            poi:data
+                        }
+                    }
+            }
+            successCallbackForSearchPOI.apply({
+                _responseData:v,
+                callBack:callBack
+            });
+        });
+    }
+
+    function searchRecentPOI(callBack) {
+        $(list[tIdx].root).empty();
+        localStorageRecent.allPoi(function(data){
+
+            data.sort(function(a, b) {
+                return b.created - a.created;
+            });
+            document.querySelectorAll(".poi_list")[tIdx].show("block");
+			recentArr = [];
+            jQuery(data).each(function(index, data){
+
+				var item = null;
+					item = data;
+                var id   = item.id;
+                var mapPoint  = new MapPoint(item.lat,item.lon,item.name,item);
+//					mapPoint.gubun = data.id;
+				if ( data.gubun.value === "search") {
+				}
+                recentArr.push(mapPoint);
+
+                var row = document.querySelectorAll(".poi_list_item")[tIdx].cloneNode(true); //mdc-list-item fisrt node;
+                row.show();
+                row.className = row.className.replace("poi_list_item","");
+                var icon = index<9?"pin_b_m_" + (index+1) + ".png":"pin_b_s_simple.png";
+                var widthHeight = "";
+                    widthHeight= "width='30' height='40'";
+                row.children[0].innerText = data.gubun.value == NaviGubun.SEARCH.value?"search":"place";
+                row.children[1].innerText = mapPoint.getName();
+                var detail = [
+                    item.upperAddrName  ,
+                    item.middleAddrName ,
+                    item.lowerAddrName  ,
+                    item.roadName       ,
+                    item.firstBuildNo
+                ];
+				row.children[2].innerText = mapPoint.item.created.yyyymmdd().substring(4,6) + "." + mapPoint.item.created.yyyymmdd().substring(6);
+//              }
+                document.querySelectorAll('.poi_list')[tIdx].appendChild(row);
+                listItemRipples = list[tIdx].listElements.map((listItemEl) => new mdc.ripple.MDCRipple(listItemEl));
+            });
+        });
+    }
+
+    //POI검색
+//    var positionBounds = null;
+    function successCallbackForSearchPOI() {
+        console.log(this._responseData);
+        markerArr = [];
+        poiArr = [];
+        var count = 0;
+        $(list[tIdx].root).empty();
+
+        maps.setPositionClear({
+            mapId:"map_div" +tIdx
+           ,marginElement:list[tIdx].root
+        });
+
+        if(this._responseData.searchPoiInfo &&
+           this._responseData.searchPoiInfo.pois &&
+           this._responseData.searchPoiInfo.pois.poi != '')
+        {
+            count = this._responseData.searchPoiInfo.pois.poi.length;
+            document.querySelectorAll(".poi_list")[tIdx].show("block");
+            jQuery(this._responseData.searchPoiInfo.pois.poi).each(function(index, data){
+
+				var item = null;
+//				if ( data instanceof MapPoint ) {
+				if ( data.item ) {
+                    item = Object.assign({},data,data.item);
+				} else {
+					item = data;
+				}
+
+                var name = item.name;
+                var id = item.id;
+                var lat = item.frontLat || item.lat;
+                var lon = item.frontLon || item.lon;
+
+                var detail = [
+                    item.upperAddrName,
+                    item.middleAddrName,
+                    item.lowerAddrName,
+                    item.roadName,
+                    item.firstBuildNo
+                ];
+                
+                var poi = new MapPoint(lat, lon, name, item);
+                var marker = maps.addNumberMarker(maps.items[tIdx],poi,index);
+                marker.addListener("touchend",
+                    function() {
+//                        maps.setCurrent( new MapPoint(poi.getLat(),poi.getLon(),poi.getName(),item) );
+//                        if (tIdx == 2) { // 즐겨찾기
+//                            setPoiForFavoite();
+//                        }
+            //          list[1].foundation_.setSelectedIndex(0);list[1].foundation_.adapter.focusItemAtIndex(0);
+                        list[tIdx].foundation_.setSelectedIndex(index);
+                        list[tIdx].foundation_.adapter.focusItemAtIndex(index);
+
+						setCurrentMarkerNscrollTop(list[tIdx].root,index);
+
+//                        if ( tIdx==0 ) {
+//                            onChangeButton(true,true);
+//                        } else if ( tIdx==1 ) {
+//                            onChangeButton(true,true);
+//                        } else if ( tIdx==2 ) {
+//                            onChangeButton(true,true);
+//                            document.querySelector('#btnConfirm .mdc-button__label').innerHTML = t("label.favorite");
+//                        }
+//                        maps.poiToAddress(maps.current.getLat(),maps.current.getLon(),function(data){
+//                            setAddress(data.addressInfo.fullAddress);
+//                        });
+//                        maps.removeMarker(maps.current.marker);
+//                        poi.setDobound(false);
+//                        setAddress(null);
+//                        maps.setCurrent(poi);
+//                    
+////                        maps.setCenter(map,maps.items[tIdx],poi.getLat(),poi.getLon());
+////                        maps.setZoom(maps.items[tIdx],markerZoom);
+                    }
+                );
+
+//                console.info("add Poi Marker", "marker" , marker );
+                markerArr.push(marker);
+                poiArr.push(poi);
+                maps.addBound(poi);
+            // 조회마커와, 목적지마커가 동일하면 조회마커 안보임
+                if (maps.home && maps.home.getLat() == poi.getLat() && maps.home.getLon() == poi.getLon() ) {
+                    marker.setVisible(false);
+                }
+                if (maps.company && maps.company.getLat() == poi.getLat() && maps.company.getLon() == poi.getLon() ) {
+                    marker.setVisible(false);
+                }
+                if (maps.favorite && maps.favorite.getLat() == poi.getLat() && maps.favorite.getLon() == poi.getLon() ) {
+                    marker.setVisible(false);
+                }
+
+//              var listItemRipples = list.listElements.map((listItemEl) => new mdc.ripple.MDCRipple(listItemEl));
+//              var row = listItemRipples[0].root.cloneNode(true);
+                var row = document.querySelectorAll(".poi_list_item")[tIdx].cloneNode(true); //mdc-list-item fisrt node;
+                row.show();
+                row.className = row.className.replace("poi_list_item","");
+                var icon = index<9?"pin_b_m_" + (index+1) + ".png":"pin_b_s_simple.png";
+                var widthHeight = "";
+                    widthHeight= "width='30' height='40'";
+                // row.children[0].innerHTML = "<img src='http://tmapapis.sktelecom.com/upload/tmap/marker/" + icon + "' " + widthHeight + " class='position_r' />";
+                row.children[0].innerHTML = "<img src='./images/tmap/marker/" + icon + "' " + widthHeight + " class='position_r' />";
+                row.children[1].children[0].innerText = poi.getName();
+                row.children[1].children[1].innerText = detail.join(" ");
+//              if (tIdx == 2) { // 즐겨찾기
+                localStorageBasic.getPoiCount("key",item.id + "_" + item.name ,function(count){
+                    if ( count > 0 ) {
+//                          console.error(row.children[2]);
+                        row.children[2].innerText = "star";
+                    } else {
+                        row.children[2].innerText = "star_border";
+                    }
+                });
+//              }
+                document.querySelectorAll('.poi_list')[tIdx].appendChild(row);
+                listItemRipples = list[tIdx].listElements.map((listItemEl) => new mdc.ripple.MDCRipple(listItemEl));
+//              list.selectedIndex = 1;
+//              list.listElements[6].focus();list.selectedIndex = 7; // 초기 Selection
+            });
+
+            if(tIdx == 0) {
+//              snackbar(count + '건의 검색결과가 있습니다.');
+//              snackbar('검색 되었습니다.');
+            } else if(tIdx == 1) {
+
+            }
+//            /[0].root.hide();
+			fEndScroll();
+
+			// 검색후 검색데이터가 있으면 최근기록 저장
+			if (search.value) {
+				var date = new Date();
+				var mapPointForSearch = new MapPoint(null,null,search.value);
+					mapPointForSearch.setGubun(NaviGubun.SEARCH);
+					mapPointForSearch.setId(mapPointForSearch.getCreated().yyyymmddhhmmss());
+				localStorageRecent.delPoi("name",search.value,function(){
+					localStorageRecent.addPoi(mapPointForSearch,function(){
+					});
+				});
+			}
+        } else {
+//          map.resize("","300px");
+            document.querySelectorAll(".poi_list")[tIdx].hide();
+//            snackbar('검색결과가 없습니다.');
+            var h = window.innerHeight -
+                    document.querySelector(".mdc-top-app-bar").offsetHeight -
+                    document.querySelector(".title").offsetHeight -
+                    document.querySelector("#navi_wrapper").offsetHeight -
+                    search.root.offsetHeight -
+                    60
+            ;
+//            h -=-12;
+//            
+//            maps.items[tIdx] = maps.init({
+//                id:"map_div" +tIdx,
+//                height:(h)+"px"
+//            });
+            maps.items[tIdx].resize(window.innerWidth - 10,h);
+            btnMyLocation[0].root.show();
+        }
+
+        maps.removeMarker(maps.current);
+        maps.addMyMarker(map, maps.my);
+
+        if ( tIdx == 0 ) {
+            if ( maps.home ) maps.addBound(maps.home);
+        } else if ( tIdx == 1 ) {
+            if ( maps.company ) maps.addBound(maps.company);
+        } else if ( tIdx == 2 ) {
+            if ( maps.favorite ) maps.addBound(maps.favorite);
+        }
+        console.info("maps.boundMapPoints.length",maps.boundMapPoints.length);
+        if (maps.boundMapPoints.length > 0 ) {
+            maps.addBound(maps.my);
+            maps.panToBounds(map);
+            if ( maps.boundMapPoints.length == 1 ) {
+                maps.setCenter(map,maps.my.getLat(),maps.my.getLon());
+            } else if ( maps.boundMapPoints.length < 3 ) {
+                maps.zoomOut(map,1000);
+            } else {
+//                
+//                maps.setZoom(maps.items[tIdx],maps.defaultZoom,1000);
+//                map.zoomIn();
+                maps.setCenter(map,maps.my.getLat(),maps.my.getLon());
+            }
+        } else {
+            maps.setCenter(map,maps.my.getLat(),maps.my.getLon());
+            maps.setZoom(map,maps.defaultZoom);
+        }
+    } // end successCallbackForSearchPOI
+
+    function progressCallbackForSearchPOI (){
+    }
+
+    function errorCallbackForSearchPOI(e){
+//        snackbar("조회된 자료가 없습니다.");
+        snackbar( t("message.data_not_found") );
+//        createMapNMyPin(0);
+    }
+
+function bindPoiHome(v) {
+    
+//	var tmaps = parsePoi(v);
+	var data = parsePoi(v);
+	var mapPoint = tmapToMapPoint(data&&v?data[0]:null);
+//	var mapPoint = objectToMapPoint(data&&v?data[0]:null);
+	if ( mapPoint && mapPoint.getName()) {
+//		maps.addHomeMarker(map,new MapPointForHome(mapPoint.getLat(),mapPoint.getLon(),mapPoint.getName()));
+		maps.addHomeMarker(map,mapPoint);
+		onChangeButton(true,false);
+		var infos = [
+			mapPoint.getName()
+//          item[0].frontLat,
+//          item[0].frontLon
+		];
+		setGuideMessage("<B>\"" + infos.join(" ") + "\"</B>" + "으로 안내합니다.");
+	} else {
+		onChangeButton(false,false);
+		setGuideMessage(t("message.guide_not_home"));
+        snackbar(t("message.guide_not_home"));
+	}
+};
+
+function bindPoiCompany(v) {
+//	var tmaps = parsePoi(v);
+	var data = parsePoi(v);
+	var mapPoint = tmapToMapPoint(data&&v?data[0]:null);
+//	var mapPoint = objectToMapPoint(data&&v?data[0]:null);
+
+	if ( mapPoint && mapPoint.getName()) {
+//		maps.addCompanyMarker(map,new MapPointForCompany(mapPoint.getLat(),mapPoint.getLon(),mapPoint.getName()));
+		maps.addCompanyMarker(map,mapPoint);
+
+		var infos = [
+			mapPoint.getName()
+//          item[0].frontLat,
+//          item[0].frontLon
+		];
+		onChangeButton(true,false);
+		setGuideMessage("<B>\"" + infos.join(" ") + "\"</B>" + "으로 안내합니다.");
+	} else {
+		onChangeButton(false,false);
+		setGuideMessage(t("message.guide_not_company"));
+        snackbar(t("message.guide_not_company"));
+	}
+};
+
+function bindPoiFavorite(v) {
+//	var tmaps = parsePoi(v);
+	var data = parsePoi(v);
+	var mapPoint = tmapToMapPoint(data&&v?data[0]:null);
+//	var mapPoint = objectToMapPoint(data&&v?data[0]:null);
+
+	if ( mapPoint && mapPoint.getName()) {
+//		maps.addFavoriteMarker(map,new MapPointForFavorite(mapPoint.getLat(),mapPoint.getLon(),mapPoint.getName()));
+		maps.addFavoriteMarker(map,mapPoint);
+
+		var infos = [
+			mapPoint.getName()
+//          item[0].frontLat,
+//          item[0].frontLon
+		];
+		onChangeButton(true,false);
+		setGuideMessage("<B>\"" + infos.join(" ") + "\"</B>" + "으로 안내합니다.");
+	} else {
+		onChangeButton(false,false);
+		setGuideMessage(t("message.guide_not_destination"));
+	}
+};
+
+window.bindPoiForFavoritePopup = function() {
+	if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
+		fn_DeviceLoadData("_POI_FAVORITE","opener.createPoiFavoriteNBoundMyPinCallBack");
+	} else {
+		fn_DeviceLoadData("_POI_FAVORITE","createPoiFavoriteNBoundMyPinCallBack");
+	}
+}
+
+window.createPoiFavoriteNBoundMyPinCallBack = function(v,bound) {
+	bindPoiFavoriteAndSearchPOI(v,bound);
+}
+
+window.reloadRecent = function() {
+	searchRecentPOI();
+}
+
+// alert("Please wait...");
+// fn_DeviceSaveData("_OPEN_POPUP", true);
+window.fn_BackKeyPressedCallBack = function () {
+    // fn_DeviceSaveData("_OPEN_POPUP", false);
+        // wifiSelectDialog.close();
+        // window.fn_BackKeyPressedCallBack = null;
+        // material.alert("");
+        // self.close();
+        // windowClose();
+
+        btnBack.emit("click");
+}  
+
+
+
+</script>
+</head>
+<body>
+<div class="i18n">
+    <header class="mdc-top-app-bar mdc-top-app-bar--fixed">
+        <div class="mdc-top-app-bar__row">
+            <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+                <button id="btnHome"
+                        class="none mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded">home</button>
+                <button id="btnBack"
+                        class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded">arrow_back_ios</button>
+
+                <span class="mdc-top-app-bar__title" data-i18n="label.top_bar">티맵실행</span> </section>
+            <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+                <button id="btnSettings" class="mdc-icon-button material-icons mdc-top-app-bar__action-item--unbounded"
+                        aria-label="Print this page">settings</button>
+            </section>
+        </div>
+    </header>
+
+    <div class="main mdc-top-app-bar--fixed-adjust i18n">
+        <a name="move_point" id="move_point"/>
+        <div class="row title">
+            <legend align="left" class="basic_font_medium3"><strong data-i18n="title.destination">목적지</strong></legend>
+            <hr style="margin-left:4px;margin-right:15px"/>
+        </div>
+
+        <div class="row">
+            <div style="text-align:left;margin:0px"><!--fieldset-->
+                <!--     <input type="radio" value="1" name="guide" id="guide_home" checked/><label for="guide_home">집</label>
+                    <input type="radio" value="2" name="guide" id="guide_company" /><label for="guide_company">회사</label>
+                    <input type="radio" value="2" name="guide" id="guide_favorite" /><label for="guide_company">즐겨찾기</label>     -->
+                <div id="navi_wrapper">
+                    <div class="mdc-chip-set mdc-chip-set--choice">
+                        <div class="mdc-chip mdc-ripple-upgraded basic_font_small1" role="row">
+                            <div class="mdc-chip__ripple"></div>
+                            <i class="material-icons mdc-chip__icon mdc-chip__icon--leading">home</i>
+                            <span role="gridcell">
+                     <span role="button" tabindex="0" class="mdc-chip__primary-action">
+                       <span class="mdc-chip__text" data-i18n="label.home">집</span>
+                     </span>
+                   </span>
+                        </div>
+                        <div class="mdc-chip basic_font_small1" role="row">
+                            <div class="mdc-chip__ripple"></div>
+                            <i class="material-icons mdc-chip__icon mdc-chip__icon--leading">business</i>
+                            <span role="gridcell">
+                     <span role="button" tabindex="-1" class="mdc-chip__primary-action">
+                       <span class="mdc-chip__text" data-i18n="label.company">회사</span>
+                     </span>
+                   </span>
+                        </div>
+                        <div class="mdc-chip basic_font_small1" role="row">
+                            <div class="mdc-chip__ripple"></div>
+                            <i class="material-icons mdc-chip__icon mdc-chip__icon--leading">pin_drop</i>
+                            <span role="gridcell">
+                     <span role="button" tabindex="-1" class="mdc-chip__primary-action">
+                       <span class="mdc-chip__text" data-i18n="label.favorite">즐겨찾기</span>
+                     </span>
+                   </span>
+                        </div>
+                        <div class="mdc-chip basic_font_small1" role="row">
+                            <div class="mdc-chip__ripple"></div>
+                            <i class="material-icons mdc-chip__icon mdc-chip__icon--leading">access_time</i>
+                            <span role="gridcell">
+                     <span role="button" tabindex="-1" class="mdc-chip__primary-action">
+                       <span class="mdc-chip__text" data-i18n="label.recent">최근기록</span>
+                     </span>
+                   </span>
+                        </div>
+                    </div>
+                    <div style="margin-top:5px !important;padding-left:10px">
+                        <span id="guide_message" class="basic_font_medium1"><B>"집"</B>으로 안내 합니다.</span>
+                    </div>
+                </div> <!-- end chips navi_wrapper-->
+            </div><!--fieldset-->
+        </div>
+        <div class="row" id="search_wrapper">
+            <label id="search" class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon " style="width:100%;">
+                <div class="mdc-text-field__ripple"></div>
+                <input class="mdc-text-field__input" type="text"
+                       aria-labelledby="my-label-id"
+                       aria-controls="my-helper-id"
+                       aria-describedby="my-helper-id"
+                >
+                <span id="label" class="mdc-floating-label" data-i18n="label.search_placeholder">장소, 주소, 전화번호 검색</span>
+                <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"  style="right:80px;display:none" id="search_clear">clear</i>
+                <div class="mdc-line-ripple"></div>
+                <button class="btnSearch mdc-button mdc-button--raised  material-icons " style="top:10px;"> <span
+                        class="mdc-button__ripple"></span>search</button>
+            </label>
+        </div>
+        <div class="row tab_area"> <!-- 집 -->
+            <div class="margin_top_5 left"><!--fieldset-->
+                <div style="margin-top:0px">
+                    <li class="poi_list_item mdc-list-item mdc-ripple-upgraded" tabindex="-1" style="display:none;padding-left:5px"><!-- ;height:40px -->
+                        <span class="mdc-list-item__graphic material-icons" aria-hidden="true">folder</span>
+                        <span class="mdc-list-item__text">
+                    <span class="mdc-list-item__primary-text">Potatoes</span>
+                    <span class="mdc-list-item__secondary-text">30 Noc 2017</span>
+                    </span>
+                        <span class="mdc-list-item__meta material-icons" aria-hidden="true" style="color:#F1C40F;font-size:30px">star_border</span>
+                    </li>
+                    <ul class="poi_list mdc-list mdc-list--two-line mdc-list--avatar-list padding_top_0 none" role="listbox" style="overflow-y:auto;"> <!-- height:140px; -->
+                    </ul>
+                    <hr/>
+                    <div id="map_div0" style="width:500px;height:100%;border:0px solid red;"></div><!-- position:fixed;bottom:100pxposition:fixed;bottom:calc(10% - 150px) -->
+                </div>
+            </div><!--fieldset-->
+        </div>
+        <div class="row tab_area"> <!-- 회사 -->
+            <div class="margin_top_5 left"><!--fieldset-->
+                <div style="margin-top:0px">
+                    <li class="poi_list_item mdc-list-item mdc-ripple-upgraded" tabindex="-1" style="display:none;padding-left:5px"><!-- ;height:40px -->
+                        <span class="mdc-list-item__graphic material-icons" aria-hidden="true">folder</span>
+                        <span class="mdc-list-item__text">
+                    <span class="mdc-list-item__primary-text">Potatoes</span>
+                    <span class="mdc-list-item__secondary-text">30 Noc 2017</span>
+                    </span>
+                        <span class="mdc-list-item__meta material-icons" aria-hidden="true" style="color:#F1C40F;font-size:30px">star_border</span>
+                    </li>
+                    <ul class="poi_list mdc-list mdc-list--two-line mdc-list--avatar-list padding_top_0 none" role="listbox" style="overflow-y:auto;"><!-- height:140px; -->
+                    </ul>
+                    <hr/>
+                    <div id="map_div1" style="width:500px;height:100%;border:0px solid red;"></div>
+                </div>
+            </div><!--fieldset-->
+        </div>
+        <div class="row tab_area"> <!-- 즐겨찾기 -->
+            <div class="margin_top_20 left"><!--fieldset-->
+                <div style="margin-top:0px">
+                    <li class="poi_list_item mdc-list-item mdc-ripple-upgraded" tabindex="-1" style="display:none;padding-left:5px"><!-- ;height:40px -->
+                        <span class="mdc-list-item__graphic material-icons" aria-hidden="true">folder</span>
+                        <span class="mdc-list-item__text">
+                    <span class="mdc-list-item__primary-text">Potatoes</span>
+                    <span class="mdc-list-item__secondary-text">30 Noc 2017</span>
+                </span>
+                        <span class="mdc-list-item__meta material-icons" aria-hidden="true" style="color:#F1C40F;font-size:30px">star</span>
+                    </li>
+                    <ul class="poi_list mdc-list mdc-list--two-line mdc-list--avatar-list padding_top_0 none" role="listbox" style="overflow-y:auto;"><!-- height:250px; -->
+                    </ul>
+                    <hr/>
+                    <div id="map_div2" style="width:500px;height:100%;border:0px solid red;"></div>
+                </div>
+            </div><!--fieldset-->
+        </div>
+        <div class="row tab_area"> <!-- 운전 -->
+            <div class="margin_top_5 left"><!--fieldset-->
+                <div style="margin-top:0px">
+                    <li class="poi_list_item mdc-list-item mdc-ripple-upgraded" tabindex="-1" style="display:none;padding-left:5px"><!-- ;height:40px -->
+                        <span class="mdc-list-item__graphic material-icons" aria-hidden="true" style="color:#000000">folder</span>
+                        <span class="mdc-list-item__text">
+                    </span>
+                        <span class="mdc-list-item__meta" aria-hidden="true" style="font-size: 1rem;">star_border</span>
+                    </li>
+                    <ul class="poi_list mdc-list mdc-list--avatar-list padding_top_0 none" role="listbox" style="overflow-y:auto;"><!-- height:140px; -->
+                    </ul>
+                    <hr/>
+                    <div id="map_div1" style="width:500px;height:100%;border:0px solid red;"></div>
+                </div>
+            </div><!--fieldset-->
+        </div>
+    </div>
+    <div style="position:fixed;bottom:0px;width:100%;border:0px solid red;width:100%;text-align:center;">
+        <div class="mdc-chip-set mdc-chip-set--choice" style="border:0px;width:50px;position:relative;top:-0px;right:calc(-100% + 70px);">
+            <div class="btnMyLocation mdc-chip mdc-ripple-upgraded " role="row" style="background-color:white;padding:15px;padding-bottom:20px;padding-right:12px">
+                <div class="mdc-chip__ripple"></div>
+                <i style="color: var(--mdc-theme-primary);font-size: 25px;" onselectstart="return false;" class="material-icons mdc-chip__icon mdc-chip__icon--leading">my_location</i>
+            </div>
+        </div>
+        <div id="place_address" style="font-size:13px;width:100%;border:0px solid blue;background-color: rgba( 0, 0, 0, 0.5 );color:white;font-weight:bold;height:45px;padding-top:15px;margin-bottom:2px">
+        </div>
+        <button id="btnNavi" type="button" class="none mdc-button mdc-button--raised none" data-mdc-dialog-action="close" style="height:50px;padding:20px;width:100%;left:0px">
+            <div class="mdc-button__ripple"></div>
+            <span class="mdc-button__label" data-i18n="label.navi">안내</span>
+        </button>
+        <button id="btnConfirm" type="button" class="none mdc-button mdc-button--raised " data-mdc-dialog-action="close" style="height:50px;padding:20px;width:100%;left:0px">
+            <div class="mdc-button__ripple"></div>
+            <span class="mdc-button__label" data-i18n="label.reg_home">집-등록</span>
+        </button>
+    </div>
+
+    <div class="mdc-snackbar">
+        <div class="mdc-snackbar__surface">
+            <div class="mdc-snackbar__label" role="status" aria-live="polite">~~</div>
+            <!--     <div class="mdc-snackbar__actions"><button_default type="button_default" class="mdc-button_default mdc-snackbar__action"><button_default
+                      class="mdc-icon-button_default mdc-snackbar__dismiss material-icons" title="Dismiss">close</button_default></div> -->
+        </div>
+    </div>
+
+    <div class="basic mdc-dialog">
+        <div class="mdc-dialog__container">
+            <div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" aria-labelledby="my-dialog-title"
+                 aria-describedby="my-dialog-content">
+                <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+                <h2 class="mdc-dialog__title" id="my-dialog-title">
+                    <!--
+                 -->Choose a Ringtone
+                    <!--
+               -->
+                </h2>
+                <div class="mdc-dialog__content" id="my-dialog-content">
+                </div>
+                <footer class="mdc-dialog__actions">
+                    <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label" data-i18n="label.cancel">Cancel</span>
+                    </button>
+                    <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="accept" data-mdc-dialog-button-default>
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label" data-i18n="label.ok">OK</span>
+                    </button>
+                </footer>
+            </div>
+        </div>
+        <div class="mdc-dialog__scrim"></div>
+    </div>
+</div>
+</body>
+
+</html>
