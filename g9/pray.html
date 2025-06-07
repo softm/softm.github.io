@@ -1452,7 +1452,7 @@ function viewParty(item) {
       for ( var idx in pPrayClass.parties ){ 
         // ;overflow: hidden;text-overflow: ellipsis;width: calc(30%)
         var pName = pPrayClass.parties[idx].profileName || pPrayClass.parties[idx].nickName || "익명";
-        $("#prayPartyUsers").append("<span style='border:1px solid gray;' class='margin_right_5 padding_5'>"+pName+"</span>");
+        $("#prayPartyUsers").append("<span style='border:1px solid gray;' class='margin_right_5 padding_5'>"+decode(pName)+"</span>");
         // partiesStr += pPrayClass.parties[idx].name + (idx < pPrayClass.parties.length-1?",":"")
       }
       // $("#prayPartyUsers").text(partiesStr);
@@ -2212,7 +2212,9 @@ function speak(v){
             </div>
     <div class="demo-card__secondary mdc-typography mdc-typography--body2 margin_top_5 margin_bottom_5">
       <textarea id="txtPrayContentToMP3" style="display: none;"></textarea>
-      <textarea rows="5" id="txtPrayContent" class="basic_font_small3 w_full" readonly style="overflow:initial !important;overflow-y:scroll!important;"></textarea>
+      <textarea rows="5" id="txtPrayContent" class="basic_font_small3 w_full" readonly style="border:0px solid red;overflow:initial !important;overflow-y:scroll!important;">
+
+      </textarea>
             <button id="btnPartyTTS" class="mdc-button mdc-ripple-upgraded margin_right_5 padding_2 right" 
               style="border:1px solid var(--softm-start);height: 23px;"
             >
