@@ -15,7 +15,7 @@
 
  "appReleaseUpdtedTime":1750636800000,
  "paidOPTypeName":"0:NONE,1:PAID",
- "paidOPType":"0",
+ "paidOPType":"1",
  "googlePaidErrorCaseTmp":[
     ["java.lang.VerifyError","com.google.android.gms.ads.internal.ClientApi"],
     ["java.lang.VerifyError","AdUtil.addBanner"   ,"BaseAdView.loadAd"],
