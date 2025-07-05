@@ -15,7 +15,7 @@
 
  "appReleaseUpdtedTime":1749081600000,
  "paidOPTypeName":"0:NONE,1:PAID",
- "paidOPType":"0",
+ "paidOPType":"1",
  "googlePaidErrorCaseTmp":[
     ["java.lang.VerifyError","com.google.android.gms.ads.internal.ClientApi"],
     ["java.lang.VerifyError","AdUtil.addBanner"   ,"BaseAdView.loadAd"],
@@ -141,7 +141,7 @@
 ],
  "adTypeForMainBanner":"1",
  "adTypeForPopupBanner":"1",
- "adTypeForWaitBanner":"1",
+ "adTypeForWaitBanner":"6",
  "adTypeForWaitBannerLoadTypeName":"1:DIRECT,2:INDIRECT",
  "adTypeForWaitBannerLoadType":"1", 
  "adTypeForWaitRewardName":"REWARDED",
