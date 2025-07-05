@@ -59,6 +59,8 @@
  "exceptPaidUUIDs":[
  ],
  "testUuids" :[
+  "f36f26a29353e6fc : 첫유로사용자",
+  "54de2dd281352181 : 은주?",
   "ecb6c1732c4b3f0f : emul",
   "3e6b779dfe737a19 : s25 운영",
   "29285b2e6ce94ee4 : s25 release",
@@ -85,7 +87,7 @@
 ],
  "adTypeForMainBanner":"1",
  "adTypeForPopupBanner":"1",
- "adTypeForWaitBanner":"1",
+ "adTypeForWaitBanner":"6",
  "adTypeForWaitBannerLoadTypeName":"1:DIRECT,2:INDIRECT",
  "adTypeForWaitBannerLoadType":"1", 
  "adTypeForWaitRewardName":"REWARDED",
