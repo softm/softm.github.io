@@ -1,0 +1,35 @@
+ {
+ "_msg_":{"_common_":{"error.code":"F0000","resCode":"00"},"_body_":{"status":"success","flag":"S"}},
+ "msg":"성공",
+ "msgCode":"200",
+ 
+  "groups":[
+    {
+      "id":1,
+      "name":"쳥년부"
+    },
+    {
+      "id":2,
+      "name":"아동부",
+      "selected":false
+    },
+    {
+      "id":3,
+      "name":"부녀자회"
+    },
+    {
+      "id":4,
+      "name":"성년회"
+    },
+    {
+      "id":5,
+      "name":"임원회"
+    },
+    {
+      "id":6,
+      "name":"아무나모두회",
+      "selected":true
+    }
+  ]
+
+ }
