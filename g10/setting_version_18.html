@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+  <title>함께기도</title>
+  <!-- <link href="./lib/material-components-web.min.css" rel="stylesheet">
+  <script src="./lib/material-components-web.min.js"></script> -->
+  <link href="./lib/material-components-web.min.new.css" rel="stylesheet">
+  <script src="./lib/material-components-web.min.new.js"></script>
+  <link rel="stylesheet" href="./lib/icon.css">
+  <link rel="stylesheet" href="./lib/common.css?a=4">
+
+ </head>
+
+<!--  using - default i18next-->
+<!--
+<script src="https://unpkg.com/i18next/i18next.js"></script>
+<script src="https://unpkg.com/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+<script src="https://unpkg.com/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.js"></script>
+-->
+
+<!-- using - jquery i18next -->
+<!-- -->
+   <script src="./lib/jquery-3.6.4.min.js"></script>
+<!--<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>-->
+  <script src="./lib/i18next.min.js"></script>
+  <script src="./lib/common.js?a=1"></script>
+  <script src="./lib/interface.js"></script>
+  <script src="./lib/db.js"></script>
+  <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xx2c3bc6b282ed46c9805c99db13f56149"></script>
+
+<script>
+var btnBack = null;
+// var btnSwitch = null;
+var chipSetPopup = null;
+var chipSetNaviAutoStart = null;
+var overlayWaitTime = null;
+var renaviPreventTime = null;
+var fenceDistance = null;
+var chipSetNaviMode = null;
+var chipPopupSelectedIndex = -1;
+var chipNaviModeSelectedIndex = -1;
+var chipNaviAutoStartSelectedIndex = -1;
+
+$( document ).ready(function() {
+    btnBack    = new mdc.ripple.MDCRipple(document.querySelector("#btnBack"));
+    // btnSwitch = new mdc.switchControl.MDCSwitch(document.querySelector('.mdc-switch'));
+    chipSetPopup = new mdc.chips.MDCChipSet(document.querySelector('#chip_popup_mode'));
+    chipSetNaviAutoStart = new mdc.chips.MDCChipSet(document.querySelector('#chip_navi_auto_start'));
+    chipSetNaviMode = new mdc.chips.MDCChipSet(document.querySelector('#chip_navi_mode'));
+
+    overlayWaitTime = new mdc.textField.MDCTextField(document.querySelector('#overlay_wait_time'));
+    renaviPreventTime = new mdc.textField.MDCTextField(document.querySelector('#renavi_prevent_time'));
+    fenceDistance = new mdc.textField.MDCTextField(document.querySelector('#fence_distance'));
+
+    fenceDistance.listen("focus", function(event) {
+		fenceDistance.input.select()
+	});
+
+    $(fenceDistance.input).blur(function(event) {
+		var v = fenceDistance.input.value;
+		if ( !v ) {
+			fenceDistance.input.value = window.tmpFenceDistance;
+		}
+		  var event = new MouseEvent('keyup', {view: window,bubbles: true,cancelable: true});
+		  var cb =$("#fence_distance")[0];
+		  var cancelled = !cb.dispatchEvent(event);
+	});
+
+    fenceDistance.listen("keydown", function(event) {
+		if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+			if ( fenceDistance.input.value ) {
+				window.tmpFenceDistance = fenceDistance.input.value;
+			}
+		}
+	});
+    fenceDistance.listen("keyup", function(event) {
+		if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+			var v = fenceDistance.input.value;
+			var max = parseFloat(fenceDistance.input.max);
+			var min = parseFloat(fenceDistance.input.min);
+			if ( v > max || v < min ) v = "";
+console.info( v, (/^[0-9]+$/).test(""+v) );
+			fenceDistance.input.value = 0;
+			fenceDistance.input.value = !v?"":parseFloat(v&&(/^[0-9]+$/).test(""+v)?v:window.tmpFenceDistance);
+			if ( v ) {
+				window.tmpFenceDistance = fenceDistance.input.value;
+			}
+			fn_DeviceSaveData("_NAVI_GEOFENCE_RADIUS", window.tmpFenceDistance);
+		}
+    });
+
+    overlayWaitTime.listen("focus", function(event) {
+		overlayWaitTime.input.select();
+	});
+
+    $(overlayWaitTime.input_).blur(function(event) {
+		var v = overlayWaitTime.input.value;
+		if ( !v ) {
+			overlayWaitTime.input.value = window.tmpOverlayWaitTime;
+		}
+		  var event = new MouseEvent('keyup', {view: window,bubbles: true,cancelable: true});
+		  var cb =$("#overlay_wait_time")[0];
+		  var cancelled = !cb.dispatchEvent(event);
+	});
+
+    overlayWaitTime.listen("keydown", function(event) {
+		if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+			if ( overlayWaitTime.input.value ) {
+				window.tmpOverlayWaitTime = overlayWaitTime.input.value;
+			}
+		}
+	});
+    overlayWaitTime.listen("keyup", function(event) {
+		if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+			var v = overlayWaitTime.input.value;
+			var max = parseFloat(overlayWaitTime.input.max);
+			var min = parseFloat(overlayWaitTime.input.min);
+			if ( v > max || v < min ) v = "";
+			overlayWaitTime.input.value = 0;
+			overlayWaitTime.input.value = !v?"":parseFloat(v&&(/^[0-9]+$/).test(""+v)?v:window.tmpOverlayWaitTime);
+			if ( v ) {
+				window.tmpOverlayWaitTime = overlayWaitTime.input.value;
+			}
+			fn_DeviceSaveData("_NAVI_OVERLAY_WAIT_TIME", window.tmpOverlayWaitTime);
+		}
+    });
+
+
+    renaviPreventTime.listen("focus", function(event) {
+		renaviPreventTime.input.select();
+	});
+
+    $(renaviPreventTime.input_).blur(function(event) {
+		var v = renaviPreventTime.input.value;
+		if ( !v ) {
+			renaviPreventTime.input.value = window.tmprenaviPreventTime;
+		}
+		  var event = new MouseEvent('keyup', {view: window,bubbles: true,cancelable: true});
+		  var cb =$("#renavi_prevent_time")[0];
+		  var cancelled = !cb.dispatchEvent(event);
+	});
+
+    renaviPreventTime.listen("keydown", function(event) {
+		if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+			if ( renaviPreventTime.input.value ) {
+				window.tmprenaviPreventTime = renaviPreventTime.input.value;
+			}
+		}
+	});
+    renaviPreventTime.listen("keyup", function(event) {
+		if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+			var v = renaviPreventTime.input.value;
+			var max = parseFloat(renaviPreventTime.input.max);
+			var min = parseFloat(renaviPreventTime.input.min);
+			if ( v > max || v < min ) v = "";
+			renaviPreventTime.input.value = 0;
+			renaviPreventTime.input.value = !v?"":parseFloat(v&&(/^[0-9]+$/).test(""+v)?v:window.tmprenaviPreventTime);
+			if ( v ) {
+				window.tmprenaviPreventTime = v;
+			}
+			fn_DeviceSaveData("_NAVI_RENAVI_PREVENT_TIME", window.tmprenaviPreventTime);
+		}
+    });
+
+	btnBack.listen("click", function(event) {
+	//	self.close();
+		fn_ClosePopData();
+	});
+
+    /**
+     *  팝업(오버레이)
+     *  1 : 팝업유지, 0 : 팝업닫기
+     */
+    var popupGuideModeNames = [
+         ""
+        ,"팝업유지"
+        ,"팝업닫기"
+    ];
+    chipSetPopup.listen("click",function(e){
+        var seq = e.srcElement.offsetParent.id.replace(/[^0-9]/g,"");
+       var adapter =  chipSetPopup.getDefaultFoundation().adapter;
+       var selectId = chipSetPopup.selectedChipIds[0];
+       var index  = adapter.getIndexOfChipById(selectId);
+       if ( index == -1 ) {
+         if ( selectId ) {
+          chipSetPopup.chips[seq-1].selected = true;
+         } else { // error
+          chipSetPopup.chips[chipPopupSelectedIndex].selected = true;
+		  index = chipPopupSelectedIndex;
+         }
+       }  else {
+         chipPopupSelectedIndex = index;
+       }
+       if ( index == 0 ){ // 1 : 팝업유지
+          document.querySelector('#popup_guide').innerHTML = t("message.popup_enable");
+			if ( !e.onlySelect ) {
+				snackbar(t("message.save"));
+				fn_DeviceSaveData("_NAVI_POPUP_MODE", "1");
+			}
+       } else if ( index == 1 ) { //  0 : 팝업닫기
+          document.querySelector('#popup_guide').innerHTML = t("message.popup_disable");
+			if ( !e.onlySelect ) {
+				snackbar(t("message.save"));
+				fn_DeviceSaveData("_NAVI_POPUP_MODE", "0");
+			}
+       }
+
+    });
+
+    chipSetNaviAutoStart.listen("click",function(e){
+        var seq = e.srcElement.offsetParent.id.replace(/[^0-9]/g,"");
+       var adapter =  chipSetNaviAutoStart.getDefaultFoundation().adapter;
+       var selectId = chipSetNaviAutoStart.selectedChipIds[0];
+       var index  = adapter.getIndexOfChipById(selectId);
+       if ( index == -1 ) {
+         if ( selectId ) {
+          chipSetNaviAutoStart.chips[seq-1].selected = true;
+         } else { // error
+          chipSetNaviAutoStart.chips[chipNaviAutoStartSelectedIndex].selected = true;
+		  index = chipNaviAutoStartSelectedIndex;
+         }
+       }  else {
+         chipNaviAutoStartSelectedIndex = index;
+       }
+       if ( index == 0 ){ // 1 : 실행
+          document.querySelector('#navi_auto_start').innerHTML = t("message.navi_auto_start_enable");
+			if ( !e.onlySelect ) {
+				snackbar(t("message.save"));
+				fn_DeviceSaveData("_NAVI_AUTO_START", "1");
+			}
+       } else if ( index == 1 ) { // 0 : 안함
+          document.querySelector('#navi_auto_start').innerHTML = t("message.navi_auto_start_disable");
+			if ( !e.onlySelect ) {
+				snackbar(t("message.save"));
+				fn_DeviceSaveData("_NAVI_AUTO_START", "0");
+			}
+       }
+    });
+
+    /**
+    1 : 집↔회사
+    2 : 집↔목적지
+    */
+    var naviModeNames = [
+         ""
+        ,"집↔회사"
+        ,"집↔목적지"
+        ,"안전운전"
+    ];
+    chipSetNaviMode.listen("click",function(e){
+        var seq = e.srcElement.offsetParent.id.replace(/[^0-9]/g,"");
+       var adapter =  chipSetNaviMode.getDefaultFoundation().adapter;
+       var selectId = chipSetNaviMode.selectedChipIds[0];
+       var index  = adapter.getIndexOfChipById(selectId);
+       if ( index == -1 ) {
+         if ( selectId ) {
+          chipSetNaviMode.chips[seq-1].selected = true;
+         } else { // error
+          chipSetNaviMode.chips[chipNaviModeSelectedIndex].selected = true;
+		  index = chipNaviModeSelectedIndex;
+         }
+       }  else {
+         chipNaviModeSelectedIndex = index;
+       }
+       if ( index == 0 ){ // 집↔회사
+          document.querySelector('#mode_guide').innerHTML = t("message.mode_guide_1");
+			if ( !e.onlySelect ) {
+				fn_DeviceSaveData("_NAVI_MODE", "1");
+				snackbar(t("message.save"));
+			}
+       } else if ( index == 1 ) { // 집↔목적지
+          document.querySelector('#mode_guide').innerHTML = t("message.mode_guide_2");
+			if ( !e.onlySelect ) {
+				fn_DeviceSaveData("_NAVI_MODE", "2");
+				snackbar(t("message.save"));
+			}
+       } else if ( index == 2 ) { // 운전
+          document.querySelector('#mode_guide').innerHTML = t("message.mode_guide_3");
+			if ( !e.onlySelect ) {
+				fn_DeviceSaveData("_NAVI_MODE", "3");
+				snackbar(t("message.save"));
+			}
+       }
+    });
+
+	window.readPopupGuideMode = function (v) {
+		$("#divPopupMode").show();
+	//		snackbar(modeNames[v] + "으로 설정 되어 있습니다.");
+		v = v!="null"&&v?v:0; // 0 : 팝업닫기
+		var idx = parseInt(v,10) - 1;
+		chipPopupSelectedIndex = idx;
+		// chipSetPopup.chips[chipSelectIndex].selected = true;
+		  var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
+		  event.onlySelect=true; // pass data custom 
+//		  var cb =document.querySelector("#mdc-chip-" + (chipPopupSelectedIndex+1));
+		  var cb =$("#chip_popup_mode").find(".mdc-chip:eq(" + chipPopupSelectedIndex+")")[0];
+		  var cancelled = !cb.dispatchEvent(event);
+		  cb.focus();
+	}
+
+	window.readnNaviAutoStart = function (v) {
+		$("#divNaviAutoStart").show();
+	//		snackbar(modeNames[v] + "으로 설정 되어 있습니다.");
+		v = v!="null"&&v?v:0; // 0 : 안함
+		var idx = parseInt(v,10) - 1;
+		chipNaviAutoStartSelectedIndex = idx;
+		// chipSetPopup.chips[chipSelectIndex].selected = true;
+		  var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
+		  event.onlySelect=true; // pass data custom 
+//		  var cb =document.querySelector("#mdc-chip-" + (chipNaviAutoStartSelectedIndex+1));
+		  var cb =$("#chip_navi_auto_start").find(".mdc-chip:eq(" + chipNaviAutoStartSelectedIndex+")")[0];
+		  var cancelled = !cb.dispatchEvent(event);
+		  cb.focus();
+	}
+
+	window.readNaviMode = function (v) {
+	//		snackbar(modeNames[v] + "으로 설정 되어 있습니다.");
+		v = v!="null"&&v?v:1; // 집↔회사
+		var idx = parseInt(v,10) - 1;
+		chipNaviModeSelectedIndex = idx;
+		// chipSetPopup.chips[chipSelectIndex].selected = true;
+		  var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
+		  event.onlySelect=true; // pass data custom 
+//		  var cb =document.querySelector("#mdc-chip-" + (chipNaviModeSelectedIndex+1));
+		  var cb =$("#chip_navi_mode").find(".mdc-chip:eq(" + chipNaviModeSelectedIndex+")")[0];
+		  var cancelled = !cb.dispatchEvent(event);
+		  cb.focus();
+	}
+
+	window.readFenceDistance = function (v) {
+		window.tmpFenceDistance = parseInt(v,10);
+		fenceDistance.input.value = window.tmpFenceDistance;
+	}
+
+	window.readOverlayWaitTime = function (v) {
+		window.tmpOverlayWaitTime = parseInt(v,10);
+		overlayWaitTime.input.value = window.tmpOverlayWaitTime;
+	}
+
+	window.readRenaviPreventTime = function (v) {
+		window.tmprenaviPreventTime = parseInt(v,10);
+		renaviPreventTime.input.value = window.tmprenaviPreventTime;
+	}
+
+	fn_DeviceLoadData("_NAVI_GEOFENCE_RADIUS", "readFenceDistance"  );
+	fn_DeviceLoadData("_NAVI_OVERLAY_WAIT_TIME"        , "readOverlayWaitTime");
+	fn_DeviceLoadData("_NAVI_RENAVI_PREVENT_TIME"        , "readRenaviPreventTime");
+
+	fn_DeviceLoadData("_NAVI_AUTO_START", "readnNaviAutoStart"); // 내비 자동실행 : 1 : 실행, 0 : 안함
+	fn_DeviceLoadData("_NAVI_MODE"      , "readNaviMode"      ); // 안내모드
+	fn_DeviceLoadData("_NAVI_POPUP_MODE", "readPopupGuideMode"); // 팝업 : 1 : 팝업유지, 0 : 팝업닫기
+
+
+});
+
+  function fn_StartServiceCallback(ok) {
+//      alert("startCallback");
+      snackbar( t("toast.start") );
+	fn_DeviceSaveData("_START_POWER", "1"); // 1 : 시작, 0 : 중지
+      document.querySelector("#status").innerHTML = t("label.status_start");
+      btnSwitch.foundation.setChecked(true);
+//      btnSwitch.root_.disabled = true;
+  }
+  function fn_StopServiceCallback(ok) {
+//      alert("stopCallback");
+      snackbar( t("toast.stop") );
+	fn_DeviceSaveData("_START_POWER", "0"); // 1 : 시작, 0 : 중지
+      document.querySelector("#status").innerHTML = t("label.status_stop");
+      btnSwitch.foundation.setChecked(false);
+//      btnSwitch.root_.disabled = false;
+  }
+</script>
+</head>
+<body>
+<div class="i18n">
+    <header class="mdc-top-app-bar mdc-top-app-bar--fixed">
+      <div class="mdc-top-app-bar__row">
+        <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+          <button id="btnBack"
+            class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded">arrow_back_ios</button>
+          <span class="mdc-top-app-bar__title" data-i18n="label.top_bar">티맵실행</span> </section>
+    <!--     <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+          <button_default id="btnSettings" class="mdc-icon-button_default material-icons mdc-top-app-bar__action-item--unbounded"
+            aria-label="Print this page">search</button_default>
+        </section> -->
+      </div>
+    </header>
+
+    <div class="main mdc-top-app-bar--fixed-adjust i18n">
+        <a name="move_point" id="move_point"/>
+        <div class="row title">
+            <legend align="left" class="basic_font_medium3"><strong data-i18n="title.setting">설정</strong></legend>
+            <hr style="margin-left:4px;margin-right:15px"/>
+        </div>
+        <div class="row none">
+            <div style="text-align:left;margin:10px"><!--fieldset-->
+                <label for="basic-switch" class="basic_font_medium2" style=""><strong data-i18n="label.run_on_charge">충전시 실행</strong></label>
+                <div class="mdc-switch" style="position: absolute;right: 5%;">
+                  <div class="mdc-switch__track"></div>
+                  <div class="mdc-switch__thumb-underlay">
+                    <div class="mdc-switch__thumb"></div>
+                    <input type="checkbox" id="basic-switch" class="mdc-switch__native-control" role="switch" aria-checked="false">
+                  </div>
+                </div>
+            </div><!--fieldset-->
+
+          <div  class="row basic_font_small2" style="text-align:right;padding-right:25px;marign-top:5px;margin-top: 10px !important;">
+            <span id="status" style="opacity: 0.7;">충전시 티맵실행이 [<span id="spnState"><span
+                  style="color:var(--softm-stop);font-weight:bold">중지</span></span>]됨.</span>
+          </div>
+          <hr style="margin-left:4px;margin-right:15px"/>
+        </div>
+
+        <div class="row">
+            <div style="text-align:left;margin:10px"><!--fieldset-->
+                <label class="basic_font_medium2" style="display:inline;"> <strong data-i18n="label.navi_mode">안내모드</strong></label>
+                <div style="position: absolute;right: 3%;display: inline;margin-top: -10px;">
+                    <div id="chip_navi_mode" class="mdc-chip-set mdc-chip-set--choice">
+                       <div class="mdc-chip mdc-chip--selected mdc-ripple-upgraded" role="row" style="">
+                         <div class="mdc-chip__ripple"></div>
+                         <span role="gridcell">
+                           <span role="button" tabindex="0" class="mdc-chip__primary-action">
+                             <span class="mdc-chip__text" data-i18n="label.home_to_co">집↔회사</span>
+                           </span>
+                         </span>
+                       </div>
+                       <div class="mdc-chip none" role="row" style="">
+                         <div class="mdc-chip__ripple"></div>
+                         <span role="gridcell">
+                           <span role="button" tabindex="-1" class="mdc-chip__primary-action">
+                             <span class="mdc-chip__text" data-i18n="label.home_to_fave">집↔목적지</span>
+                           </span>
+                         </span>
+                       </div>
+                       <div class="mdc-chip" role="row" style="">
+                         <div class="mdc-chip__ripple"></div>
+                         <span role="gridcell">
+                           <span role="button" tabindex="-1" class="mdc-chip__primary-action">
+                             <span class="mdc-chip__text" data-i18n="label.drive">운전</span>
+                           </span>
+                         </span>
+                       </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row basic_font_small2" style="text-align:right;padding-right:25px;margin-top:20px !important">
+            <span id="mode_guide" style="opacity: 0.7;">충전시 티맵실행이 [<span id="spnState"><span
+                  style="color:var(--softm-stop);font-weight:bold">중지</span></span>]됨.</span>
+            </div>
+            <hr style="margin-left:4px;margin-right:15px"/>
+
+        </div>
+
+        <div class="row none" id="divNaviAutoStart">
+            <div style="text-align:left;margin:10px"><!--fieldset-->
+                <label class="basic_font_medium2" style="display:inline;"><span class="mdc-chip__text"><strong data-i18n="label.navi_auto_start">내비 자동실행</strong></span></label>
+                <div style="position: absolute;right: 3%;display: inline;margin-top: -10px;">
+                    <div id="chip_navi_auto_start" class="mdc-chip-set mdc-chip-set--choice">
+                       <div class="mdc-chip mdc-chip--selected mdc-ripple-upgraded" role="row" style="">
+                         <div class="mdc-chip__ripple"></div>
+                         <span role="gridcell">
+                           <span role="button" tabindex="0" class="mdc-chip__primary-action">
+                             <span class="mdc-chip__text" data-i18n="label.navi_auto_start_enable">실행</span>
+                           </span>
+                         </span>
+                       </div>
+                       <div class="mdc-chip" role="row" style="">
+                         <div class="mdc-chip__ripple"></div>
+                         <span role="gridcell">
+                           <span role="button" tabindex="-1" class="mdc-chip__primary-action">
+                             <span class="mdc-chip__text" data-i18n="label.navi_auto_start_disable">안함</span>
+                           </span>
+                         </span>
+                       </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row basic_font_small2" style="text-align:right;padding-right:25px;padding-top:5px !important">
+            <span id="navi_auto_start"  style="opacity: 0.7;">충전시 티맵실행이 [<span id="spnState"><span
+                  style="color:var(--softm-stop);font-weight:bold">중지</span></span>]됨.</span>
+            </div>
+        </div>
+
+        <div class="row none" style="position:relative;top:-15px">
+
+            <div style="height:50px;text-align:right !important"><!--fieldset-->
+                <label class="basic_font_medium2" style="top:-20px;right:100px;position:relative"><span class="mdc-chip__text"><strong data-i18n="label.navi_popupx">목적지 진입 반경</strong></span></label>
+
+                <!-- <div style="position: absolute;display: inline;margin-top: -15px;"> -->
+                <label id="fence_distance" class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon " style="width:30%;padding-right:20px">
+                    <div class="mdc-text-field__ripple"></div>
+                    <input class="mdc-text-field__input" type="number"
+                         aria-labelledby="my-label-id"
+                         aria-controls="my-helper-id"
+                         aria-describedby="my-helper-id"
+value="200"
+style="padding: 10px 10px 10px 10px !important"
+maxlength="3"
+min="1" max="10000"
+                          >
+                    <!-- <span id="label" class="mdc-floating-label">대기시간</span> -->
+                    <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"  style="right:80px;display:none" id="search_clear">clear</i>
+                    <div class="mdc-line-ripple"></div>
+<!--                     <button class="btnSearch mdc-button mdc-button--raised  material-icons " style="top:10px;"> <span
+                        class="mdc-button__ripple"></span>search</button> -->
+                    <div class="" style="position:relative;top:20px;">m</div>
+
+                </label>
+			</div>
+
+		</div>
+
+        <div class="row" style="position:relative;top:-15px">
+
+            <div style="height:50px;text-align:right !important"><!--fieldset-->
+                <label class="basic_font_medium2" style="top:-20px;right:100px;position:relative"><span class="mdc-chip__text"><strong data-i18n="label.renavi_prevent_time">재실행 방지시간</strong></span></label>
+
+                <!-- <div style="position: absolute;display: inline;margin-top: -15px;"> -->
+                <label id="renavi_prevent_time" class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon " style="width:30%;padding-right:20px;">
+                    <div class="mdc-text-field__ripple"></div>
+                    <input class="mdc-text-field__input" type="number"
+                         aria-labelledby="my-label-id"
+                         aria-controls="my-helper-id"
+                         aria-describedby="my-helper-id"
+value="10"
+style="padding: 10px 10px 10px 10px !important"
+maxlength="2"
+min="0" max="999"
+pattern="[0-9]*"
+
+                          >
+                    <!-- <span id="label" class="mdc-floating-label">대기시간</span> -->
+                    <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"  style="right:80px;display:none" id="search_clear">clear</i>
+                    <div class="mdc-line-ripple"></div>
+<!--                     <button class="btnSearch mdc-button mdc-button--raised  material-icons " style="top:10px;"> <span
+                        class="mdc-button__ripple"></span>search</button> -->
+                    <div class="" style="position:relative;top:20px;" data-i18n="label.sec">초</div>
+
+                </label>
+			</div>
+            <hr style="margin-left:4px;margin-right:15px"/>
+
+		</div>
+
+        <div class="row none" id="divPopupMode">
+            <div style="text-align:left;margin:10px"><!--fieldset-->
+                <label class="basic_font_medium2" style="display:inline;"><span class="mdc-chip__text"><strong data-i18n="label.navi_popup">팝업(오버레이)</strong></span></label>
+                <div style="position: absolute;right: 3%;display: inline;margin-top: -10px;">
+                    <div id="chip_popup_mode" class="mdc-chip-set mdc-chip-set--choice">
+                       <div class="mdc-chip mdc-chip--selected mdc-ripple-upgraded" role="row" style="">
+                         <div class="mdc-chip__ripple"></div>
+                         <span role="gridcell">
+                           <span role="button" tabindex="0" class="mdc-chip__primary-action">
+                             <span class="mdc-chip__text" data-i18n="label.popup_enable">유지</span>
+                           </span>
+                         </span>
+                       </div>
+                       <div class="mdc-chip" role="row" style="">
+                         <div class="mdc-chip__ripple"></div>
+                         <span role="gridcell">
+                           <span role="button" tabindex="-1" class="mdc-chip__primary-action">
+                             <span class="mdc-chip__text" data-i18n="label.popup_disable">닫기</span>
+                           </span>
+                         </span>
+                       </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row basic_font_small2" style="text-align:right;padding-right:25px;padding-top:5px !important">
+            <span id="popup_guide" style="opacity: 0.7;">충전시 티맵실행이 [<span id="spnState"><span
+                  style="color:var(--softm-stop);font-weight:bold">중지</span></span>]됨.</span>
+            </div>
+        </div>
+
+        <div class="row" style="position:relative;top:-15px">
+
+            <div style="height:50px;text-align:right !important"><!--fieldset-->
+                <label class="basic_font_medium2" style="top:-20px;right:100px;position:relative"><span class="mdc-chip__text"><strong data-i18n="label.overlay_wait_time">대기시간</strong></span></label>
+
+                <!-- <div style="position: absolute;display: inline;margin-top: -15px;"> -->
+                <label id="overlay_wait_time" class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon " style="width:30%;padding-right:20px">
+                    <div class="mdc-text-field__ripple"></div>
+                    <input class="mdc-text-field__input" type="number"
+                         aria-labelledby="my-label-id"
+                         aria-controls="my-helper-id"
+                         aria-describedby="my-helper-id"
+value="10"
+style="padding: 10px 10px 10px 10px !important"
+maxlength="2"
+min="0" max="999"
+pattern="[0-9]*"
+
+                          >
+                    <!-- <span id="label" class="mdc-floating-label">대기시간</span> -->
+                    <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"  style="right:80px;display:none" id="search_clear">clear</i>
+                    <div class="mdc-line-ripple"></div>
+<!--                     <button class="btnSearch mdc-button mdc-button--raised  material-icons " style="top:10px;"> <span
+                        class="mdc-button__ripple"></span>search</button> -->
+                    <div class="" style="position:relative;top:20px;" data-i18n="label.sec">초</div>
+
+                </label>
+			</div>
+            <hr style="margin-left:4px;margin-right:15px"/>
+
+		</div>
+
+        <div class="mdc-snackbar">
+          <div class="mdc-snackbar__surface">
+            <div class="mdc-snackbar__label" role="status" aria-live="polite">~~</div>
+        <!--     <div class="mdc-snackbar__actions"><button_default type="button_default" class="mdc-button_default mdc-snackbar__action"><button_default
+                  class="mdc-icon-button_default mdc-snackbar__dismiss material-icons" title="Dismiss">close</button_default></div> -->
+          </div>
+        </div>
+
+        <div class="basic mdc-dialog">
+          <div class="mdc-dialog__container">
+            <div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" aria-labelledby="my-dialog-title"
+              aria-describedby="my-dialog-content">
+              <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+              <h2 class="mdc-dialog__title" id="my-dialog-title">
+                <!--
+             -->Choose a Ringtone
+                <!--
+           -->
+              </h2>
+              <div class="mdc-dialog__content" id="my-dialog-content">
+              </div>
+              <footer class="mdc-dialog__actions">
+                <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+                  <div class="mdc-button__ripple"></div>
+                  <span class="mdc-button__label" data-i18n="label.cancel">Cancel</span>
+                </button>
+                <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="accept" data-mdc-dialog-button-default>
+                  <div class="mdc-button__ripple"></div>
+                  <span class="mdc-button__label" data-i18n="label.ok">OK</span>
+                </button>
+              </footer>
+            </div>
+          </div>
+          <div class="mdc-dialog__scrim"></div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+</html>

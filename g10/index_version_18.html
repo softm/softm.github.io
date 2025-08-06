@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+  <title>함께기도</title>
+  <!-- <link href="./lib/material-components-web.min.css" rel="stylesheet"> -->
+  <link href="./lib/material-components-web.min.new.css" rel="stylesheet">
+  <!-- <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"> -->
+
+  <!-- <script src="./lib/material-components-web.min.js"></script> -->
+  <script src="./lib/material-components-web.min.new.js"></script>
+  <!-- <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script> -->
+
+  <link rel="stylesheet" href="./lib/icon.css">
+  <link rel="stylesheet" href="./lib/common.css?a=4">
+
+ </head>
+
+<!--  using - default i18next-->
+<!--
+<script src="https://unpkg.com/i18next/i18next.js"></script>
+<script src="https://unpkg.com/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+<script src="https://unpkg.com/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.js"></script>
+-->
+
+<!-- using - jquery i18next -->
+<!-- -->
+   <script src="./lib/jquery-3.6.4.min.js"></script>
+<!--<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>-->
+  <script src="./lib/i18next.min.js"></script>
+  <script src="./lib/common.js?a=1"></script>
+  <script src="./lib/interface.js"></script>
+  <script src="./lib/db.js"></script>
+  <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xx2c3bc6b282ed46c9805c99db13f56149"></script>
+
+<script>
+var btnHome = null;
+var btnSwitchStartPower = null;
+var btnSwitchNotiIcon = null;
+var btnSwitchGotoOffWorkTime = null;
+var btnSelectNavi = null;
+var btnSettings = null;
+var btnStartNaviHome     = null;
+var btnStartNaviCompany  = null;
+var btnStartN    = null;
+var fowardPage = getParam("p_foward_page");
+var drawer = null;
+var topAppBar = null;
+var drawerListEl = null;
+$( document ).ready(function() {
+        if ( fowardPage ) {
+            $(document.body).hide();
+        }
+		drawer = mdc.drawer.MDCDrawer.attachTo(document.querySelector('.mdc-drawer'));
+		topAppBar = mdc.topAppBar.MDCTopAppBar.attachTo(document.getElementById('app-bar'));
+		topAppBar.setScrollTarget(document.getElementById('main-content'));
+		topAppBar.listen('MDCTopAppBar:nav', () => {
+		    drawer.open = !drawer.open;
+		});
+        const mainContentEl = document.querySelector('.main-content');
+        document.body.addEventListener('MDCDrawer:closed', () => {
+           // mainContentEl.querySelector('input, button').focus();
+        });
+
+        drawerListEl = document.querySelector('.mdc-drawer .mdc-deprecated-list');
+
+        drawerListEl.addEventListener('click', (event) => {
+            drawer.open = false;
+            setTimeout(function(){
+                if ( drawer.innerList.selectedIndex === 0 ) {
+                    location.replace("index.html");
+                } else if ( drawer.innerList.selectedIndex === 1 ) {
+                    fn_OpenPop("setting.html");
+                } else if ( drawer.innerList.selectedIndex === 2 ) {
+                    fn_OpenPop("grant.html");
+                }
+                drawer.innerList.selectedIndex = 0;
+            },100)
+            event.preventDefault();
+        });
+//        drawer.innerList.selectedIndex = 2;
+
+
+        btnSwitchStartPower = new mdc.switchControl.MDCSwitch(document.querySelector('.start_power.mdc-switch'));
+        
+        //     for (const el of document.querySelectorAll('.mdc-switch')) {
+//   const switchControl = new MDCSwitch(el);
+// }
+
+btnSwitchNotiIcon = new mdc.switchControl.MDCSwitch(document.querySelector('.noti_icon.mdc-switch'));
+
+btnSwitchGotoOffWorkTime = new mdc.switchControl.MDCSwitch(document.querySelector('.work_goto_off_time.mdc-switch'));
+//    btnSelectNavi = new mdc.ripple.MDCRipple(document.querySelector("#btnSelectNavi"));
+    btnSettings = new mdc.ripple.MDCRipple(document.querySelector("#btnSettings"));
+    
+    btnStartNaviHome     = new mdc.ripple.MDCRipple(document.querySelector("#btnStartNaviHome"));
+    btnStartNaviCompany     = new mdc.ripple.MDCRipple(document.querySelector("#btnStartNaviCompany"));
+    btnStartNaviDrive     = new mdc.ripple.MDCRipple(document.querySelector("#btnStartNaviDrive"));
+/* 
+    btnHome    = new mdc.ripple.MDCRipple(document.querySelector("#btnHome"));
+	btnHome.listen("click", function(event) {
+		self.close();
+	});
+*/
+    btnSettings.listen("click", function(event) {
+//        window.open("setting.html","_blank","");
+        fn_OpenPop("setting.html");
+    });
+
+    btnSwitchStartPower.listen("mousedown", function(event) {
+        if ( !btnSwitchStartPower.selected ) { // true
+          confirm(
+            t("message.confirm_start"),
+            function() {
+              fn_StartService("fn_StartServiceCallback");
+            },
+            function(){
+            }
+          );
+        } else { // false
+          confirm(
+            t("message.confirm_stop"),
+            function() {
+              btnSwitchStartPower.selected = false;
+            //   btnSwitchStartPower.foundation_.setChecked(false);
+              fn_StopService("fn_StopServiceCallback");
+            },
+            function(){
+            }
+          );
+        }
+    });
+
+    btnSwitchNotiIcon.listen("mousedown", function(event) {
+        // btnSwitchNotiIcon.foundation_.setChecked(!btnSwitchNotiIcon.checked);
+        var st = btnSwitchNotiIcon.selected;
+        var granted = null;
+        if ( !st ) {
+            setTimeout(function () { btnSwitchNotiIcon.selected = st; }, 1000);
+            fn_StartSetting("notification_setting","changeNotiIconSettingCallback");
+
+        } else {
+            window.fnChk1 = function(grant,ok) {
+                if (ok =="ok") {
+                    window.fnChk2 = function(grant,ok) {
+                        if (ok =="ok") {
+                            setTimeout(function () { btnSwitchNotiIcon.selected = st; }, 1000);
+                            fn_StartSetting("notification_setting","changeNotiIconSettingCallback");  // 최종선택
+                        } else {
+                            confirm(t("message.disable_noti_icon_2"),function() {
+                                btnSwitchNotiIcon.selected = true;
+                                fn_OpenUrl("permission.html?p_check_mode=accessibility");
+                            },function() {
+                                btnSwitchNotiIcon.selected = true;
+                            });
+                        }
+                    }
+                    fn_CheckGrant("ignore_battery","fnChk2"); // 2차권한
+                } else {
+                    confirm(t("message.disable_noti_icon_1"),function() {
+                        if ( st ) {
+                            fn_OpenUrl("permission.html?p_check_mode=accessibility");
+                        }
+                    },function() {
+                        btnSwitchNotiIcon.selected = true;
+                    });
+                }
+            }
+        }
+        fn_CheckGrant("accessibility","fnChk1"); // 1차권한
+        
+    });
+
+    function changeNotiIconSettingCallback(grant,ok) {
+        if (grant == "notification_setting") {
+            debugger;
+        }
+    }
+        
+    btnSwitchGotoOffWorkTime.listen("mousedown", function(event) {
+		snackbar( t("message.save") );
+		document.querySelector("#work_goto_off_time_status").innerHTML = t("label.work_goto_off_time_status");
+        if ( !btnSwitchGotoOffWorkTime.selected ) { // true
+			fn_DeviceSaveData("_WORK_GOTO_OFF_TIME", "1"); // 1 : 시작, 0 : 중지
+//			btnSwitchGotoOffWorkTime.foundation_.setChecked(true);
+			$("input[type='time'].work_goto_off_time").removeAttr("disabled");
+        } else { // false
+//			btnSwitchGotoOffWorkTime.foundation_.setChecked(false);
+			fn_DeviceSaveData("_WORK_GOTO_OFF_TIME", "0"); // 1 : 시작, 0 : 중지
+//			btnSwitchGotoOffWorkTime.foundation_.setChecked(false);
+			$("input[type='time'].work_goto_off_time").attr("disabled","disabled");
+        }
+
+    });
+
+//    btnSelectNavi.listen("click", function(event) {
+//	  let eventListener = function(e) {
+//		// alert("closed");
+//		if (e.detail.action == "accept") {
+//debugger;
+//		}
+//		if (e.detail.action == "close") {
+//debugger;
+//		}
+//		console.info("closed action", e.detail.action);
+//		naviSelectDialog.unlisten("MDCDialog:closed",eventListener);
+//	  };
+//	  naviSelectDialog.open();
+//	  naviSelectDialog.listen("MDCDialog:closed", eventListener);
+//    });
+
+	window.readStartStatus = function (v) {
+		console.info("_START_POWER",v);
+		v = v!="null"&&v?v:"1";
+		var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
+		event.onlySelect=true; // pass data custom 
+		if ( v  == "0") { // stop
+			document.querySelector("#status").innerHTML = t("label.status_stop");
+            btnSwitchStartPower.selected = false;
+            // btnSwitchStartPower.foundation_.setChecked(false);
+		} else { // start
+			document.querySelector("#status").innerHTML = t("label.status_start");
+            btnSwitchStartPower.selected = true;
+            // btnSwitchStartPower.foundation_.setChecked(true);
+		}
+	}
+
+	fn_DeviceLoadData("_START_POWER"    , "readStartStatus"   ); // 충전시 실행
+
+
+	window.readNotiIcon = function (v) {
+		console.info("_NOTI_ICON",v);
+		v = v!="null"&&v?v:"1";
+		var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
+		event.onlySelect=true; // pass data custom 
+		if ( v  == "0") { // off
+			document.querySelector(".noti_icon #status").innerHTML = t("label.noti_icon_status_off");
+            btnSwitchNotiIcon.selected = false;
+            // btnSwitchNotiIcon.foundation_.setChecked(false);
+		} else { // on
+			document.querySelector(".noti_icon #status").innerHTML = t("label.noti_icon_status_on");
+            btnSwitchNotiIcon.selected = true;
+            // btnSwitchNotiIcon.foundation_.setChecked(true);
+		}
+	}
+
+	fn_DeviceLoadData("_NOTI_ICON"    , "readNotiIcon"   ); // 알림바 아이콘
+
+	window.readWorkGotoOffTimeStatus = function (v) {
+		console.info("_WORK_GOTO_OFF_TIME",v);
+		v = v!="null"&&v?v:"0";
+		var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
+		event.onlySelect=true; // pass data custom 
+		document.querySelector("#work_goto_off_time_status").innerHTML = t("label.work_goto_off_time_status");
+		if ( v  == "0") { // stop
+            btnSwitchGotoOffWorkTime.selected = false;
+            // btnSwitchGotoOffWorkTime.foundation_.setChecked(false);
+			$("input[type='time'].work_goto_off_time").attr("disabled","disabled");
+		} else { // start
+            btnSwitchGotoOffWorkTime.selected = true;
+            // btnSwitchGotoOffWorkTime.foundation_.setChecked(true);
+			$("input[type='time'].work_goto_off_time").removeAttr("disabled");
+		}
+	}
+
+	fn_DeviceLoadData("_WORK_GOTO_OFF_TIME"    , "readWorkGotoOffTimeStatus"   ); // 출/퇴근 시간
+
+	window.readWorkGotoTimeFrom = function (v) {
+		console.info("_WORK_GOTO_TIME_FROM",v);
+		v = v!="null"&&v?v:"06:00";
+		window.workGotoTimeFrom=v;
+		$("#work_goto_time_from").val(v);
+	}
+
+	window.readWorkGotoTimeTo = function (v) {
+		console.info("_WORK_GOTO_TIME_TO",v);
+		v = v!="null"&&v?v:"08:50";
+		window.workGotoTimeTo=v;
+		$("#work_goto_time_to").val(v);
+	}
+
+	window.readWorkOffTimeFrom = function (v) {
+		console.info("_WORK_OFF_TIME_FROM",v);
+		v = v!="null"&&v?v:"17:30";
+		window.workOffTimeFrom=v;
+		$("#work_off_time_from").val(v);
+	}
+
+	window.readWorkOffTimeTo = function (v) {
+		console.info("_WORK_OFF_TIME_TO",v);
+		v = v!="null"&&v?v:"19:00";
+		window.workOffTimeTo=v;
+		$("#work_off_time_to").val(v);
+	}
+
+	fn_DeviceLoadData("_WORK_GOTO_TIME_FROM"   , "readWorkGotoTimeFrom"   ); // 출근시작시간
+	fn_DeviceLoadData("_WORK_GOTO_TIME_TO"     , "readWorkGotoTimeTo"     ); // 출근종료시간
+	fn_DeviceLoadData("_WORK_OFF_TIME_FROM"    , "readWorkOffTimeFrom"    ); // 퇴근시작시간
+	fn_DeviceLoadData("_WORK_OFF_TIME_TO"      , "readWorkOffTimeTo"      ); // 퇴근종료시간
+
+//    const naviSelectDialog = new mdc.dialog.MDCDialog(
+//      document.querySelector(".navi_select.mdc-dialog")
+//    );
+//
+//	const naviSelectList = new mdc.list.MDCList(document.querySelector('.navi_select.mdc-dialog .mdc-list'));
+//    naviSelectList.singleSelection = true;
+//    // debugger;
+//    naviSelectDialog.listen("MDCDialog:opened", () => {
+//      // alert("opened");
+//	  naviSelectList.layout();
+//      console.info("opened");
+//    });
+	$("#work_goto_time_from").on("input",function() {
+		var v = this.value?this.value:window.workGotoTimeFrom;
+		if ( v > window.workGotoTimeTo ) {
+			v = window.workGotoTimeFrom;
+		}
+		fn_DeviceSaveData("_WORK_GOTO_TIME_FROM", v); // 출근시작시간
+		window.workGotoTimeFrom = v;
+		this.value=v;
+	});
+	$("#work_goto_time_from").on("change",function() {
+//		if (!this.value) this.blur();
+		console.info("change",this.value);
+	});
+
+	$("#work_goto_time_to").on("input",function() {
+		var v = this.value?this.value:window.workGotoTimeTo;
+		if ( v < window.workGotoTimeFrom ) {
+			v = window.workGotoTimeTo;
+		}
+		fn_DeviceSaveData("_WORK_GOTO_TIME_TO", v); // 출근종료시간
+		window.workGotoTimeTo = v;
+		this.value=v;
+	});
+
+	$("#work_off_time_from").on("input",function() {
+		var v = this.value?this.value:window.workOffTimeFrom;
+		if ( v > window.workOffTimeTo ) {
+			v = window.workOffTimeFrom;
+		}
+		fn_DeviceSaveData("_WORK_OFF_TIME_FROM", v); // 퇴근시작시간
+		window.workOffTimeFrom = v;
+		this.value=v;
+	});
+
+	$("#work_off_time_to").on("input",function() {
+		var v = this.value?this.value:window.workOffTimeTo;
+		if ( v < window.workOffTimeFrom ) {
+			v = window.workOffTimeTo;
+		}
+		fn_DeviceSaveData("_WORK_OFF_TIME_TO", v); // 퇴근종료시간
+		window.workOffTimeTo = v;
+		this.value=v;
+	});
+
+	btnStartNaviHome.listen("click", function(event) {
+//        fn_DeviceSaveData("_NAVI_DESTINATION", "1");
+		fn_StartNaviDestination("1");
+	});
+	btnStartNaviCompany.listen("click", function(event) {
+//        fn_DeviceSaveData("_NAVI_DESTINATION", "2");
+		fn_StartNaviDestination("2");
+	});
+
+	btnStartNaviDrive.listen("click", function(event) {
+//        fn_DeviceSaveData("_NAVI_DESTINATION", "4");
+		fn_StartNaviDestination("4");
+	});
+
+    // if (fowardPage == "SETTING") {
+    if ( fowardPage ) {
+        var url = fowardPage.toLowerCase() + ".html?1=1"
+        //getParam("p_check");
+        debugger;
+        //fn_OpenPop(url) ;
+
+        var p_check_mode = getParam("p_check_mode");
+        var p_params = getParam("p_params");
+        var p_tidx = getParam("p_tidx");
+
+        url +=  "&p_check_mode=" + p_check_mode;
+        url +=  "&p_params=" + p_params;
+        url +=  "&p_tidx=" + p_tidx;
+            
+        fn_OpenUrl(url);
+        setTimeout(function () { $(document.body).show() }, 2000);
+        //			window.open("setting.html","_blank","");
+        //			document.body.show();
+    }
+});
+
+  function fn_StartServiceCallback(ok) {
+//      alert("startCallback");
+      snackbar( t("toast.start") );
+	fn_DeviceSaveData("_START_POWER", "1"); // 1 : 시작, 0 : 중지
+      document.querySelector("#status").innerHTML = t("label.status_start");
+      btnSwitchStartPower.selected = true;
+    //   btnSwitchStartPower.foundation_.setChecked(true);
+//      btnSwitchStartPower.root_.disabled = true;
+  }
+  function fn_StopServiceCallback(ok) {
+//      alert("stopCallback");
+      snackbar( t("toast.stop") );
+	fn_DeviceSaveData("_START_POWER", "0"); // 1 : 시작, 0 : 중지
+      document.querySelector("#status").innerHTML = t("label.status_stop");
+      btnSwitchStartPower.selected = false;
+      //   btnSwitchStartPower.foundation_.setChecked(false);
+//      btnSwitchStartPower.root_.disabled = false;
+  }
+
+</script>
+</head>
+<body>
+<div class="i18n drawer-frame-root">
+	<!--
+    !-->
+    <div class="mdc-drawer-app-content">
+        <header class="mdc-top-app-bar app-bar" id="app-bar">
+            <div class="mdc-top-app-bar__row">
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+<!--                     
+-->
+                    <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button">menu</button>
+                    <button id="btnHome"
+                        class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded">home</button> 
+                        <span class="mdc-top-app-bar__title" data-i18n="label.top_bar">티맵실행</span>
+                    </section>
+                    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+                        <button id="btnSettings" class="mdc-icon-button material-icons mdc-top-app-bar__action-item--unbounded"
+                            aria-label="Print this page">settings</button>
+                    </section>
+            </div>
+        </header>
+<!--         
+-->
+        <main class="main-content" id="main-content">
+            <div class="mdc-top-app-bar--fixed-adjust">
+            </div>
+        </main>
+    </div>
+    <aside class="mdc-drawer mdc-drawer--modal">
+        <div class="mdc-drawer__content">
+            <div class="mdc-deprecated-list">
+                <a class="mdc-deprecated-list-item mdc-deprecated-list-item--activated" href="#" aria-current="page">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home</i>
+                    <span class="mdc-deprecated-list-item__text" data-i18n="label.home_page">Home</span>
+                </a>
+                <a class="mdc-deprecated-list-item">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">settings</i>
+                    <span class="mdc-deprecated-list-item__text">설정</span>
+                </a>
+                <a class="mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">lock_open</i>
+                    <span class="mdc-deprecated-list-item__text">권한</span>
+                    
+                </a>
+                <!-- <a class="mdc-deprecated-list-item" href="#">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">drafts</i>
+                    <span class="mdc-deprecated-list-item__text">Drafts</span>
+                </a> -->
+            </div>
+        </div>
+    </aside>
+    <div class="mdc-drawer-scrim"></div>
+    <div class="drawer-frame-app-content">
+<!-- 
+        <header class="mdc-top-app-bar mdc-top-app-bar--fixed">
+            <div class="mdc-top-app-bar__row">
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+                    <button id="btnHome"
+                        class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded">home</button>
+                    <span class="mdc-top-app-bar__title" data-i18n="label.top_bar">티맵실행</span>
+                </section>
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+                    <button id="btnSettings" class="mdc-icon-button material-icons mdc-top-app-bar__action-item--unbounded"
+                        aria-label="Print this page">settings</button>
+                </section>
+            </div>
+        </header>
+-->
+        <div class="main drawer-main-content i18n">
+            <a name="move_point" id="move_point" />
+<!-- 
+-->
+            <div class="row title">
+                <legend align="left" class="basic_font_medium4"><strong data-i18n="title.navi">안내</strong></legend>
+            </div>
+
+            <div class="row">
+                <button id="btnStartNaviHome" class="demo-button mdc-button mdc-button--outlined mdc-ripple-upgraded">
+                    <span class="mdc-button__ripple"></span>
+                    <i class="material-icons mdc-button__icon">home</i>
+                    <span class="mdc-button__label" data-i18n="label.home">집</span>
+                </button>
+                <button id="btnStartNaviCompany" class="demo-button mdc-button mdc-button--outlined mdc-ripple-upgraded"
+                    style="margin-left:10px">
+                    <span class="mdc-button__ripple"></span>
+                    <i class="material-icons mdc-button__icon">business</i>
+                    <span class="mdc-button__label" data-i18n="label.company">회사</span>
+                </button>
+                <button id="btnStartNaviDrive" class="demo-button mdc-button mdc-button--outlined mdc-ripple-upgraded"
+                    style="margin-left:10px">
+                    <span class="mdc-button__ripple"></span>
+                    <i class="material-icons mdc-button__icon">drive_eta</i>
+                    <span class="mdc-button__label" data-i18n="label.navi">내비</span>
+                </button>
+                <hr style="margin-left:4px;margin-right:15px;margin-top:25px" />
+<!-- 
+                <div class="blink1">
+                    <a style="font-size: 11pt;font-weight:bold">
+                      <button id="btnTest1" class="mdc-button mdc-button--raised margin_right_5" disabled style="font-size:16px;">
+                        <strong data-i18n="label.permission_settings~">중지됨</strong>
+                      </button>
+                    </a>
+                  </div>
+                  <div class="blink">
+                    <a style="font-size: 11pt;font-weight:bold">
+                      <button id="btnTest2" class="mdc-button mdc-button--raised margin_right_5" style="font-size:16px;background-color: red;">
+                        <strong data-i18n="label.permission_settings~">실행중</strong>
+                      </button>
+                    </a>
+                  </div>
+-->
+            </div>
+    
+            <!-- 
+                <div class="row">
+                    <div style="margin:10px;display:flex">fieldset
+                        <label for="basic-switch" class="basic_font_medium2" style="flex-grow:0"><strong data-i18n="label.navi_app">내비</strong></label>
+        				<div style="padding-right:20px;flex-grow:1;text-align:right">
+        				<button id="btnSelectNavi" type="button" class="mdc-button mdc-button--raised " data-mdc-dialog-action="close" style="height:25px;margin-top:0px !important;padding:0px !important;text-align:right !important">
+        				  <div class="mdc-button__ripple"></div>
+        				  <span class="mdc-button__label" data-i18n="label.select">선택</span>
+        				</button>
+        				</div>
+                    </div>fieldset
+        
+                  <div  class="row basic_font_small2" style="text-align:right;padding-right:25px;marign-top:5px;margin-top: 10px !important;">
+                    <span id="navi_status" style="opacity: 0.7;">충전시 티맵실행이 [<span id="spnState"><span
+                          style="color:var(--softm-stop);font-weight:bold">중지</span></span>]됨.</span>
+                  </div>
+                  <hr style="margin-left:4px;margin-right:15px"/>
+                </div>
+         -->
+            <div class="row" style="margin-top:20px !important">
+                <div style="text-align:left;margin:10px"><!--fieldset-->
+                    <label for="" class="basic_font_medium2" style=""><strong data-i18n="label.run_on_charge">충전시
+                            실행</strong></label>
+                            <button class="start_power mdc-switch mdc-switch--unselected" type="button" role="switch"
+                                aria-checked="false" style="position: absolute;right: 5%;">
+                                <div class="mdc-switch__track"></div>
+                                <div class="mdc-switch__handle-track">
+                                    <div class="mdc-switch__handle">
+                                        <div class="mdc-switch__shadow">
+                                            <div class="mdc-elevation-overlay"></div>
+                                        </div>
+                                        <div class="mdc-switch__ripple"></div>
+                                        <div class="mdc-switch__icons">
+                                            <svg class="mdc-switch__icon mdc-switch__icon--on" viewBox="0 0 24 24">
+                                                <path d="M19.69,5.23L8.96,15.96l-4.23-4.23L2.96,13.5l6,6L21.46,7L19.69,5.23z" />
+                                            </svg>
+                                            <svg class="mdc-switch__icon mdc-switch__icon--off" viewBox="0 0 24 24">
+                                                <path d="M20 13H4v-2h16v2z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="mdc-switch__focus-ring-wrapper">
+                                    <div class="mdc-switch__focus-ring"></div>
+                                </span>
+                            </button>
+                            <!-- <label for="basic-switch">충전시 실행</label> -->
+<!-- 
+                    <div class="start_power mdc-switch" type="button" style="position: absolute;right: 5%;">
+                        <div class="mdc-switch__track"></div>
+                        <div class="mdc-switch__thumb-underlay">
+                            <div class="mdc-switch__thumb"></div>
+                            <input type="checkbox" id="basic-switch1" class="mdc-switch__native-control" role="switch"
+                                aria-checked="false">
+                        </div>
+                    </div> -->
+                </div><!--fieldset-->
+    
+                <div class="row basic_font_small2"
+                    style="text-align:right;padding-right:25px;marign-top:5px;margin-top: 10px !important;">
+                    <span id="status" style="opacity: 0.7;">충전시 티맵실행이 [<span id="spnState"><span
+                                style="color:var(--softm-stop);font-weight:bold">중지</span></span>]됨.</span>
+                </div>
+                <hr style="margin-left:4px;margin-right:15px" />
+            </div>
+    
+            <div class="row" style="margin-top:20px !important">
+                <div style="text-align:left;margin:10px"><!--fieldset-->
+                    <label for="" class="basic_font_medium2" style=""><strong data-i18n="label.notification_icon">알림바</strong></label>
+                    <button class="noti_icon mdc-switch mdc-switch--unselected" type="button" role="switch"
+                        aria-checked="false" style="position: absolute;right: 5%;">
+                        <div class="mdc-switch__track"></div>
+                        <div class="mdc-switch__handle-track">
+                            <div class="mdc-switch__handle">
+                                <div class="mdc-switch__shadow">
+                                    <div class="mdc-elevation-overlay"></div>
+                                </div>
+                                <div class="mdc-switch__ripple"></div>
+                                <div class="mdc-switch__icons">
+                                    <svg class="mdc-switch__icon mdc-switch__icon--on" viewBox="0 0 24 24">
+                                        <path d="M19.69,5.23L8.96,15.96l-4.23-4.23L2.96,13.5l6,6L21.46,7L19.69,5.23z" />
+                                    </svg>
+                                    <svg class="mdc-switch__icon mdc-switch__icon--off" viewBox="0 0 24 24">
+                                        <path d="M20 13H4v-2h16v2z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="mdc-switch__focus-ring-wrapper">
+                            <div class="mdc-switch__focus-ring"></div>
+                        </span>
+                    </button>
+                    <!-- <label for="basic-switch">알림바</label> -->
+<!-- 
+                    <div class="noti_icon mdc-switch" style="position: absolute;right: 5%;">
+                        <div class="mdc-switch__track"></div>
+                        <div class="mdc-switch__thumb-underlay">
+                            <div class="mdc-switch__thumb"></div>
+                            <input type="checkbox" id="basic-switch1" class="mdc-switch__native-control" role="switch"
+                                aria-checked="false">
+                        </div>
+                    </div> -->
+
+
+                </div><!--fieldset-->
+    
+                <div class="noti_icon row basic_font_small2"
+                    style="text-align:right;padding-right:25px;marign-top:5px;margin-top: 10px !important;">
+                    <span id="status" style="opacity: 0.7;">알림바 아이콘 [<span id="spnState"><span
+                                style="color:var(--softm-stop);font-weight:bold">중지</span></span>]됨.</span>
+                </div>
+                <hr style="margin-left:4px;margin-right:15px" />
+            </div>
+    
+    
+    
+            <div class="row">
+                <div style="text-align:left;margin:10px"><!--fieldset-->
+                    <label for="" class="basic_font_medium2" style=""><strong data-i18n="label.work_goto_off_time">출/퇴근 시간</strong></label>
+                    <button class="work_goto_off_time mdc-switch mdc-switch--unselected" type="button" role="switch" aria-checked="false"
+                        style="position: absolute;right: 5%;">
+                        <div class="mdc-switch__track"></div>
+                        <div class="mdc-switch__handle-track">
+                            <div class="mdc-switch__handle">
+                                <div class="mdc-switch__shadow">
+                                    <div class="mdc-elevation-overlay"></div>
+                                </div>
+                                <div class="mdc-switch__ripple"></div>
+                                <div class="mdc-switch__icons">
+                                    <svg class="mdc-switch__icon mdc-switch__icon--on" viewBox="0 0 24 24">
+                                        <path d="M19.69,5.23L8.96,15.96l-4.23-4.23L2.96,13.5l6,6L21.46,7L19.69,5.23z" />
+                                    </svg>
+                                    <svg class="mdc-switch__icon mdc-switch__icon--off" viewBox="0 0 24 24">
+                                        <path d="M20 13H4v-2h16v2z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="mdc-switch__focus-ring-wrapper">
+                            <div class="mdc-switch__focus-ring"></div>
+                        </span>
+                    </button>
+                    <!-- <label for="basic-switch">알림바</label> -->
+<!--                     
+                    <div class="work_goto_off_time mdc-switch" style="position: absolute;right: 5%;">
+                        <div class="mdc-switch__track"></div>
+                        <div class="mdc-switch__thumb-underlay">
+                            <div class="mdc-switch__thumb"></div>
+                            <input type="checkbox" id="basic-switch2" class="mdc-switch__native-control" role="switch"
+                                aria-checked="false">
+                        </div>
+                    </div>
+ -->
+                </div><!--fieldset-->
+    
+                <div class="row basic_font_small2"
+                    style="text-align:right;padding-right:25px;marign-top:5px;margin-top: 10px !important;">
+                    <span id="work_goto_off_time_status" style="opacity: 0.7;">설정된 시간에만 동작합니다.</span>
+                </div>
+            </div>
+    
+            <div class="row">
+                <div style="margin:10px;display:flex"><!--fieldset-->
+                    <label for="basic-switch" class="basic_font_medium2" style="flex-grow:0;margin-left:10px"><strong
+                            data-i18n="label.work_goto_time">출근시간</strong></label>
+                    <div style="padding-right:20px;flex-grow:1;text-align:right">
+                        <input class="work_goto_off_time" id="work_goto_time_from" type="time" name="work_goto_time_from"
+                            min="12:00" max="18:00" value="06:00" style="width:95px"> ~
+                        <input class="work_goto_off_time" id="work_goto_time_to" type="time" name="work_goto_time_to"
+                            min="12:00" max="18:00" value="08:50" style="width:95px">
+                    </div>
+                </div><!--fieldset-->
+                <div style="margin:10px;display:flex"><!--fieldset-->
+                    <label for="basic-switch" class="basic_font_medium2" style="flex-grow:0;margin-left:10px"><strong
+                            data-i18n="label.work_off_time">퇴근시간</strong></label>
+                    <div style="padding-right:20px;flex-grow:1;text-align:right">
+                        <input class="work_goto_off_time" id="work_off_time_from" type="time" name="work_off_time_from"
+                            min="12:00" max="18:00" value="17:30" style="width:95px"> ~
+                        <input class="work_goto_off_time" id="work_off_time_to" type="time" name="work_off_time_to"
+                            min="12:00" max="18:00" value="19:00" style="width:95px">
+                    </div>
+                </div><!--fieldset-->
+                <hr style="margin-left:4px;margin-right:15px" />
+            </div>
+    
+            <div class="mdc-snackbar">
+                <div class="mdc-snackbar__surface">
+                    <div class="mdc-snackbar__label" role="status" aria-live="polite">~~</div>
+                    <!--     <div class="mdc-snackbar__actions"><button_default type="button_default" class="mdc-button_default mdc-snackbar__action"><button_default
+                          class="mdc-icon-button_default mdc-snackbar__dismiss material-icons" title="Dismiss">close</button_default></div> -->
+                </div>
+            </div>
+    
+            <div class="basic mdc-dialog">
+                <div class="mdc-dialog__container">
+                    <div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" aria-labelledby="my-dialog-title"
+                        aria-describedby="my-dialog-content">
+                        <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+                        <h2 class="mdc-dialog__title" id="my-dialog-title">
+                            <!--
+                     -->Choose a Ringtone
+                            <!--
+                   -->
+                        </h2>
+                        <div class="mdc-dialog__content" id="my-dialog-content">
+                        </div>
+                        <footer class="mdc-dialog__actions">
+                            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+                                <div class="mdc-button__ripple"></div>
+                                <span class="mdc-button__label" data-i18n="label.cancel">Cancel</span>
+                            </button>
+                            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="accept"
+                                data-mdc-dialog-button-default>
+                                <div class="mdc-button__ripple"></div>
+                                <span class="mdc-button__label" data-i18n="label.ok">OK</span>
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+                <div class="mdc-dialog__scrim"></div>
+            </div>
+    
+            <div class="navi_select mdc-dialog">
+                <div class="mdc-dialog__container">
+                    <div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" aria-labelledby="my-dialog-title"
+                        aria-describedby="my-dialog-content">
+                        <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+                        <h2 class="mdc-dialog__title" id="my-dialog-title"><!--
+        			 -->Choose a Ringtone<!--
+        		   --></h2>
+                        <div class="mdc-dialog__content" id="my-dialog-content">
+    
+                            <ul class="mdc-list mdc-list--avatar-list">
+    
+                                <li class="mdc-list-item " tabindex="0" data-mdc-dialog-action="none">
+                                    <img class="mdc-list-item__graphic"
+                                        src="data:image/png;base64,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"
+                                        width="56" height="56" alt="Panda">
+                                    <span class="mdc-list-item__text">None</span>
+                                </li>
+                                <li class="mdc-list-item" data-mdc-dialog-action="callisto">
+                                    <img class="mdc-list-item__graphic"
+                                        src="data:image/png;base64,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"
+                                        width="56" height="56" alt="Panda">
+                                    <span class="mdc-list-item__text">Callisto</span>
+                                </li>
+                                <!-- ... -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="mdc-dialog__scrim"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+</html>
