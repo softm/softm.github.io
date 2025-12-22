@@ -314,7 +314,7 @@ function initPermission(v,cb) {
         // {name: 'overlay', value: info.permissions.POST_NOTIFICATIONS},
         // {name: 'location', value: true},
         // {name: 'notification_access', value: info.permissions.POST_NOTIFICATIONS},
-        {name: 'accessibility', value: info.isAccessbilityServiceRunning},
+        // {name: 'accessibility', value: info.isAccessbilityServiceRunning},
         {name: 'ignore_battery', value: info.permissions.IGNORE_BATTERY}
     ];
     btnStatus = new mdc.ripple.MDCRipple(document.querySelector("#btnStatus"));
@@ -375,6 +375,34 @@ function initPermission(v,cb) {
         if (allGranted) $("#btnStatus").hide(); 
         else $("#btnStatus").show(); 
     }
+
+        window.checkGrantCallBack = function(grant,ok) {
+        window.startSettingCallback = function(grant,ok) {
+            if ( ok ) { fn_Reload(true) }
+        }
+        if ( grant == "location") {
+            if( ok != "ok" ) {
+                fn_StartSetting("location","startSettingCallback");
+            } else {
+/** 20250421. 121 버전 업데이트시 권한 거부 당해 테스트 위해 구현만 하고 제거
+              window.checkGrantCallBack = function(grant,ok) {
+                    window.startSettingCallback = function(grant,ok) {
+                        if ( ok ) { fn_Reload(true) }
+                    }
+                    if ( grant == "background_location") {
+                        if( ok != "ok" ) {
+                            fn_ClosePopData("","goPermissionForBackgroundLocation");
+                        }
+                    }
+                }
+                // https://softm.github.io/t121/permission.html?p_check_mode=background_location
+                fn_CheckGrant("background_location","checkGrantCallBack");
+*/
+            }
+        }
+    }
+    fn_CheckGrant("location","checkGrantCallBack");
+    
     if ( cb ) {
         cb();
     }
@@ -1676,7 +1704,7 @@ function saveStartStopOnOff() {
               <span data-i18n="message.overlay_wait_time" style="opacity: 0.7;">바로가기 팝업이 표시되고 사라지는 시간</span>
             </div>
     
-            <hr class="sub"/>
+            <!-- <hr class="sub"/> -->
 
 <div class="none">
             <!--상태-->
@@ -1802,7 +1830,7 @@ function saveStartStopOnOff() {
             </div>
 
             <hr class="sub"/>
-<div class="none">
+
             <hr class="sub status_permission"/>
 
             <div id="status_permission" class="row main padding_5 bg_lightwheat" style="background-color: wheat;border-radius: 10px 10px 10px 10px;">
@@ -1832,6 +1860,7 @@ function saveStartStopOnOff() {
                     </div>
                 </div>
             </div>
+<div class="none">            
             <hr class="sub"/>
 
             <!-- <hr class="sub"/> -->
