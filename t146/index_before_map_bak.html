@@ -1,0 +1,1237 @@
+
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+  <title>티</title>
+  <link href="./lib/material-components-web.min.css" rel="stylesheet">
+  <script src="./lib/material-components-web.min.js"></script>
+  <link rel="stylesheet" href="./lib/icon.css">
+  <link rel="stylesheet" href="./lib/common.css?a=11">
+
+ </head>
+
+<!--  using - default i18next-->
+<!--
+<script src="https://unpkg.com/i18next/i18next.js"></script>
+<script src="https://unpkg.com/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+<script src="https://unpkg.com/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.js"></script>
+-->
+
+<!-- using - jquery i18next -->
+<!-- -->
+   <script src="./lib/jquery-3.6.4.min.js"></script>
+<!--<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>-->
+  <script src="./lib/i18next.min.js"></script>
+  <script src="./lib/common.js?a=2"></script>
+  <script src="./lib/interface.js"></script>
+  <script src="./lib/db.js"></script>
+  <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xx2c3bc6b282ed46c9805c99db13f56149"></script>
+<script>
+var isFirstLoad1 = true;
+var isFirstLoad2 = true;
+//var btnStart = null;
+//var btnStop = null;
+var chipSet = null;
+var search = null;
+var btnSearch = null;
+var btnMyLocation = null;
+var list = [];
+var tIdx = 0;
+var btnHome = null;
+var btnSettings = null;
+
+var search1 = "";
+var search2 = "";
+var selectedPoiItem = [];
+var homePoiItem = null;
+var companyPoiItem = null;
+var favoritePoiItem = null;
+var btnConfirm = null;
+fn_Progress_Show();
+
+$( document ).ready(function() {
+    btnHome = new mdc.ripple.MDCRipple(document.querySelector("#btnHome"));
+    btnSettings = new mdc.ripple.MDCRipple(document.querySelector("#btnSettings"));
+    btnConfirm = new mdc.ripple.MDCRipple(document.querySelector("#btnConfirm"));
+    btnNavi = new mdc.ripple.MDCRipple(document.querySelector("#btnNavi"));
+
+//    btnStart = new mdc.ripple.MDCRipple(document.querySelector("#btnStart"));
+//    btnStop = new mdc.ripple.MDCRipple(document.querySelector("#btnStop"));
+    chipSet = new mdc.chips.MDCChipSet(document.querySelector('.mdc-chip-set'));
+    search = new mdc.textField.MDCTextField(document.querySelector('#search'));
+//    btnSearch = new mdc.ripple.MDCRipple(document.querySelector("#btnSearch"));
+//  btnSearch.root.hide();
+//    btnMyLocation = new mdc.ripple.MDCRipple(document.querySelector("#btnMyLocation"));
+    btnMyLocation = [].map.call(document.querySelectorAll(".btnMyLocation"),el=>{
+        var rtnEl = new mdc.ripple.MDCRipple(el);
+          rtnEl.listen("click", function(event) {
+              fn_GetLocation("getLocationCallback");
+          });
+        return rtnEl;
+    });
+    btnSearch = [].map.call(document.querySelectorAll(".btnSearch"),el=>{
+        var rtnEl = new mdc.ripple.MDCRipple(el);
+          rtnEl.listen("click", function(event) {
+            searchPOI()
+          });
+        return rtnEl;
+    });
+//    searchClear = new mdc.ripple.MDCRipple(document.querySelector("#search_clear"));
+
+    list = new mdc.list.MDCList(document.querySelector('.mdc-list'));
+    list.singleSelection = true;
+
+    btnHome.listen("click", function(event) {
+        document.location.replace("index.html");
+    });
+
+    btnSettings.listen("click", function(event) {
+        window.open("setting.html","_blank","");
+//        fn_OpenPop("setting.html");
+    });
+
+    btnConfirm.listen("click", function(event) {
+        document.querySelector('#btnConfirm').hide();
+        document.querySelector('#btnNavi').hide();
+        if ( tIdx == 0 ) {
+            setPoiForHome (selectedPoiItem);
+        } else if ( tIdx == 1 ) {
+            setPoiForCompany (selectedPoiItem);
+        }
+//        var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
+//        event.onlySelect=true; // pass data custom
+//        var cb =document.querySelector("#mdc-chip-" + (tIdx+1));
+//        var cancelled = !cb.dispatchEvent(event);
+//        cb.focus();
+//        document.location.reload(true);
+    });
+
+    btnNavi.listen("click", function(event) {
+//        debugger;
+        fn_StartNavi();
+    });
+
+//    btnStart.listen("click", function(event) {
+//      confirm(
+//        t("message.confirm_start"),
+//        function() {
+//          fn_StartService("fn_StartServiceCallback");
+//        }
+//      );
+//    });
+//
+//    btnStop.listen("click", function(event) {
+//      confirm(
+//        t("message.confirm_stop"),
+//        function() {
+//          fn_StopService("fn_StopServiceCallback");
+//        }
+//      );
+//    });
+
+    // var aa=  chipSet.getDefaultFoundation().adapter;
+    // var aa=  this.adapter;
+    // aa.focusChipPrimaryActionAtIndex(1)
+//  var tIdx = 3; // 기본
+    chipSet.listen("click",function(e){
+    debugger;
+        [].map.call(document.querySelectorAll(".tab_area"),el =>{
+            el .hide();
+        });
+        if (tIdx == 0) {
+            window.search1 = search.value;
+        } else if (tIdx == 1) {
+            window.search2 = search.value;
+        }
+        var seq = e.srcElement.offsetParent.id.replace(/[^0-9]/g,"");
+
+    //var aa=  chipSet.getDefaultFoundation().adapter;
+       var adapter =  chipSet.getDefaultFoundation().adapter;
+       //aa.focusChipPrimaryActionAtIndex(1)
+       var selectId = chipSet.selectedChipIds[0];
+       var index  = adapter.getIndexOfChipById(selectId);
+       if ( index == -1 ) {
+         if ( selectId ) {
+          chipSet.chips[seq-1].selected = true;
+         } else { // error
+          chipSet.chips[tIdx].selected = true;
+          index = tIdx;
+         }
+       }  else {
+         tIdx = index;
+       }
+        document.querySelectorAll(".tab_area")[tIdx].show("block");
+        document.querySelector('#btnNavi').hide();
+        document.querySelector('#btnConfirm').hide();
+        document.querySelector('#place_address').hide();
+        if ( tIdx == 0 ){ // 집
+            search.root.show();
+            search.input.readOnly  = false;
+            if ( !e.onlySelect ) setDetaultNaviMode("1");
+            search.value = window.search1;
+            var event = new MouseEvent('keyup', {view: window,bubbles: true,cancelable: true});
+            search.input.dispatchEvent(event);
+            initMap();
+            if( !isFirstLoad1 ) {
+                searchPOI();
+            }
+            isFirstLoad1 = false;
+        } else if ( tIdx == 1 ) { // 회사
+            search.root.show();
+            search.input.readOnly  = false;
+            if ( !e.onlySelect ) setDetaultNaviMode("2");
+            search.value = window.search2;
+            var event = new MouseEvent('keyup', {view: window,bubbles: true,cancelable: true});
+            search.input.dispatchEvent(event);
+            initMap();
+            if( !isFirstLoad2 ) {
+                searchPOI();
+            }
+            isFirstLoad2 = false;
+       } else if ( tIdx == 2 ) { // 즐겨찾기
+            search.root.show();
+            search.input.readOnly  = true;
+            searchClear.root.hide();
+            document.querySelector('#guide_message').innerHTML = t("message.guide_navi");
+            if ( !e.onlySelect ) setDetaultNaviMode("3");
+            search.value = "";
+            var dbChecker = setInterval(function() {
+                if ( localStorageRecent.db  != null ) {
+                    console.info("db is not null");
+                    clearInterval(dbChecker);
+                    retrieveFavoritePOI();
+                } else {
+                    console.info("db is null");
+                }
+            },1);
+       } else if ( tIdx == 3 ) { // 운전
+            search.root.hide();
+            btnMyLocation[0].root.hide();
+            document.querySelector('#guide_message').innerHTML = t("message.guide_navi");
+            if ( !e.onlySelect ) setDetaultNaviMode("4");
+       }
+       if ( tIdx == 2) {
+            $(".btnSearch").hide();
+       } else {
+            $(".btnSearch").show();
+       }
+
+       if ( tIdx != 4 ) { // 운전
+          document.querySelector("#search_wrapper").show("block");
+//        fn_GetLocation("getLocationCallback");
+//          var offset = $('#move_point').offset();
+//          $('html').animate({scrollTop : offset.top-50}, 1000);
+//          document.location.href = "#move_point";
+//          window.scrollTo( 0, 110)
+       } else {
+          document.querySelector("#search_wrapper").hide();
+       }
+//       debugger;
+    });
+
+//      search.listen("keyup", function(event) {
+//          if(search.value) searchClear.root.show("inline");
+//        else  searchClear.root.hide();
+//      });
+
+    search.listen("click", function(event) {
+        if ( tIdx == 2) {
+            setTimeout(function(){
+            window.open("http://softm.net/t/search.html","_blank","");
+//            fn_OpenPop("search.html");
+            },500);
+        }
+    });
+    search.listen("keyup", function(event) {
+        if(search.value) searchClear.root.show("inline");
+        else  searchClear.root.hide();
+        if (window.event.keyCode == 13) {
+            var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
+            var cancelled = !btnSearch[tIdx].root.dispatchEvent(event);
+            btnSearch[tIdx].root.focus();
+            //			cb.focus();
+        }
+    });
+    var searchClear = new mdc.ripple.MDCRipple(document.querySelector("#search_clear"));
+    searchClear.listen("click", function(event) {
+        searchClear.root.hide();
+        search.value = "";
+    });
+//    search.focus();search.foundation.activateFocus();
+
+    /* const chipSetAdapter = new mdc.chips.MDCChipSetAdapter(document.querySelector('.mdc-chip-set'));
+     */
+
+    list = [].map.call(document.querySelectorAll(".mdc-list"),el=>{
+            var rtnEl = new mdc.list.MDCList(el);
+            rtnEl.singleSelection = true;
+            rtnEl.listen("click",function(e){
+                var index = rtnEl.selectedIndex;
+                if (e.srcElement.className.includes("icon")) {
+                    e.stopPropagation();
+                    var item = poiArr[index];
+                    console.info("key",item.id + "_" + item.name);
+                    getPoiCount("key",item.id + "_" + item.name ,function(count){
+                        if ( count == 0 ) {
+                            addPoi(item);
+                            snackbar("즐겨찾기가 등록었습니다.");
+                            e.srcElement.innerText = "star";
+                            if (tIdx == 2 ) {
+                                retrieveFavoritePOI();
+                            }
+                        } else {
+                            confirm("즐겨찾기를 삭제 하시겠습니까?", function() {
+                                snackbar("즐겨찾기가 삭제었습니다.");
+                                delPoi("key",item.id + "_" + item.name);
+                                e.srcElement.innerText = "star_border";
+                                if (tIdx == 2 ) {
+                                    retrieveFavoritePOI();
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    selectedPoiItem = poiArr[index];
+                    if (tIdx == 0) { // 집
+//                        setPoiForHome ();
+                    } else if (tIdx == 1) { // 회사
+//                        setPoiForCompany();
+                    } else if (tIdx == 2) { // 즐겨찾기
+                        setPoiForFavoite();
+                    }
+
+                    confirmHomeCompany(selectedPoiItem);
+    //              markerArr[index].setMap(null);
+                    if (selectMarker) selectMarker.setMap(null);
+                    selectMarker = addMarker(selectedPoiItem,index,true);
+                    map[tIdx].setCenter(new Tmapv2.LatLng(selectedPoiItem.frontLat,selectedPoiItem.frontLon));
+                    map[tIdx].setZoom(18);
+        //          alert(list.selectedIndex + " : " + list.listElements[list.selectedIndex].innerText);
+                    /* debugger */;
+                }
+
+            });
+        return rtnEl;
+    });
+
+    /**
+    1 : 집
+    2 : 회사
+    3 : 운전
+    4 : 즐겨찾기
+    */
+    var modeNames = [
+         ""
+        ,"집"
+        ,"회사"
+        ,"즐겨찾기"
+        ,"운전"
+    ];
+    window.setDetaultNaviMode = function(v) {
+        fn_DeviceSaveData("_NAVI_DESTINATION", v);
+//        snackbar(modeNames[v] + "으로 설정 되었습니다.");
+    }
+
+    var setPoiForHome = function(v) {
+        homePoiItem = selectedPoiItem;
+//        fn_DeviceSaveData("_POI_HOME", v);
+        fn_DeviceSaveData("_POI_HOME", JSON.stringify([v]));
+        bindPoiForHome();
+    }
+    var setPoiForCompany = function(v) {
+        companyPoiItem = selectedPoiItem;
+//        fn_DeviceSaveData("_POI_HOME", v);
+        fn_DeviceSaveData("_POI_COMPANY", JSON.stringify([v]));
+        bindPoiForCompany();
+    }
+
+    window.setPoiForFavoite = function() {
+        fn_DeviceSaveData("_POI_FAVORITE", JSON.stringify([selectedPoiItem]));
+        bindPoiForFavorite();
+    }
+
+    window.readPoi =  function(gubun,v) {
+        var item = [{}];
+        var infos = [];
+        try {
+            item = JSON.parse(v);
+            infos = [
+                item[0].name
+    //          item[0].frontLat,
+    //          item[0].frontLon
+            ];
+        } catch (e) {
+
+        }
+        if ( item && item[0].name) {
+            document.querySelector('#btnConfirm').hide();
+            document.querySelector('#btnNavi').show("block");
+            document.querySelector("#place_address").show();
+            if ( gubun == "1") { // 집
+//                document.querySelector('#guide_message').innerHTML = t("message.guide_home");
+                homePoiItem = item[0];
+                document.querySelector('#guide_message').innerHTML = "<B>\"" + infos.join(" ") + "\"</B>" + "으로 안내합니다.";
+                var positionBounds = new Tmapv2.LatLngBounds();
+                    positionBounds.extend(new Tmapv2.LatLng(myLat, myLon)); // myPin
+                var icon = null;
+                var markerOption = {
+                    position: new Tmapv2.LatLng(item[0].frontLat,item[0].frontLon),
+                    map: map[tIdx],
+        //            title:"집",
+                    label:'<span onClick="zoomHome()" style="position:relative;top:0px;left:0px;top:5px">'
+                    +
+                    "<span style='background-color: #1266DC;color:white;font-size:14px;padding:5px;'><strong>집</strong></span>"
+                    +
+                    "</span>"
+                    ,
+//                    icon:"http://tmapapis.sktelecom.com/resources/images/common/icon_blet.png",
+                    icon:"http://softm.net/t/images/home.svg",
+                    iconSize :new Tmapv2.Size(36, 36)
+                }
+                homePinMarker = new Tmapv2.Marker(markerOption);
+                window.zoomHome = function() {
+                    map[tIdx].setCenter(new Tmapv2.LatLng(item[0].frontLat,item[0].frontLon));
+                    map[tIdx].setZoom(markerZoom);
+                }
+                homePinMarker.addListener("touchend",
+                    function() {
+                        map[tIdx].setCenter(new Tmapv2.LatLng(item[0].frontLat,item[0].frontLon));
+                        map[tIdx].setZoom(markerZoom);
+                    }
+                );
+                positionBounds.extend(new Tmapv2.LatLng(item[0].frontLat, item[0].frontLon)); // homePin
+                setTimeout(function(){
+                    map[tIdx].panToBounds(positionBounds);  // 확장된 bounds의 중심으로 이동시키기
+                    map[tIdx].zoomOut();
+                },1000);
+
+                tDataPoiAddress(new Tmapv2.LatLng(item[0].frontLat,item[0].frontLon),function(data){
+                    document.querySelector("#place_address").innerText = data.addressInfo.fullAddress;
+                });
+
+            } else if ( gubun == "2") { // 회사
+                companyPoiItem = item[0];
+//                document.querySelector('#guide_message').innerHTML = t("message.guide_home");
+                document.querySelector('#guide_message').innerHTML = "<B>\"" + infos.join(" ") + "\"</B>" + "으로 안내합니다.";
+                var positionBounds = new Tmapv2.LatLngBounds();
+                    positionBounds.extend(new Tmapv2.LatLng(myLat, myLon)); // myPin
+                var icon = null;
+                var markerOption = {
+                    position: new Tmapv2.LatLng(item[0].frontLat,item[0].frontLon),
+                    map: map[tIdx],
+        //            title:"회사",
+                    label:'<span onClick="zoomCompany()" style="position:relative;top:0px;left:0px;top:5px">'
+                    +
+                    "<span style='background-color: #1266DC;color:white;font-size:14px;padding:5px;'><strong>회사</strong></span>"
+                    +
+                    "</span>"
+                    ,
+//                    icon:"http://tmapapis.sktelecom.com/resources/images/common/icon_blet.png",
+                    icon:"http://softm.net/t/images/company.svg",
+                    iconSize :new Tmapv2.Size(36, 36)
+                }
+                companyPinMarker = new Tmapv2.Marker(markerOption);
+                companyPinMarker.addListener("touchend",
+                    function() {
+                        map[tIdx].setCenter(new Tmapv2.LatLng(item[0].frontLat,item[0].frontLon));
+                        map[tIdx].setZoom(markerZoom);
+                    }
+                );
+                window.zoomCompany = function() {
+                    debugger;
+                    map[tIdx].setCenter(new Tmapv2.LatLng(item[0].frontLat,item[0].frontLon));
+                    map[tIdx].setZoom(markerZoom);
+                }
+                positionBounds.extend(new Tmapv2.LatLng(item[0].frontLat, item[0].frontLon)); // homePin
+                setTimeout(function(){
+                    map[tIdx].panToBounds(positionBounds);  // 확장된 bounds의 중심으로 이동시키기
+                    map[tIdx].zoomOut();
+                },1000);
+
+                tDataPoiAddress(new Tmapv2.LatLng(item[0].frontLat,item[0].frontLon),function(data){
+                    document.querySelector("#place_address").innerText = data.addressInfo.fullAddress;
+                });
+            } else if ( gubun == "3") { // 즐겨찾기
+                favoritePoiItem = item[0];
+//                document.querySelector('#guide_message').innerHTML = t("message.guide_home");
+                document.querySelector('#guide_message').innerHTML = "<B>\"" + infos.join(" ") + "\"</B>" + "으로 안내합니다.";
+                var positionBounds = new Tmapv2.LatLngBounds();
+                    positionBounds.extend(new Tmapv2.LatLng(myLat, myLon)); // myPin
+                var icon = null;
+                var markerOption = {
+                    position: new Tmapv2.LatLng(item[0].frontLat,item[0].frontLon),
+                    map: map[tIdx],
+        //            title:"회사",
+                    label:'<span onClick="zoomCompany()" style="position:relative;top:0px;left:0px;top:5px">'
+                    +
+                    "<span style='background-color: #1266DC;color:white;font-size:14px;padding:5px;'><strong>즐겨찾기</strong></span>"
+                    +
+                    "</span>"
+                    ,
+//                    icon:"http://tmapapis.sktelecom.com/resources/images/common/icon_blet.png",
+                    icon:"http://softm.net/t/images/favorite.svg",
+                    iconSize :new Tmapv2.Size(36, 36)
+                }
+                favoritePinMarker = new Tmapv2.Marker(markerOption);
+                favoritePinMarker.addListener("touchend",
+                    function() {
+                        map[tIdx].setCenter(new Tmapv2.LatLng(item[0].frontLat,item[0].frontLon));
+                        map[tIdx].setZoom(markerZoom);
+                    }
+                );
+                window.zoomCompany = function() {
+                    map[tIdx].setCenter(new Tmapv2.LatLng(item[0].frontLat,item[0].frontLon));
+                    map[tIdx].setZoom(markerZoom);
+                }
+                positionBounds.extend(new Tmapv2.LatLng(item[0].frontLat, item[0].frontLon)); // homePin
+                setTimeout(function(){
+                    map[tIdx].panToBounds(positionBounds);  // 확장된 bounds의 중심으로 이동시키기
+                    map[tIdx].zoomOut();
+                },1000);
+
+                tDataPoiAddress(new Tmapv2.LatLng(item[0].frontLat,item[0].frontLon),function(data){
+                    document.querySelector("#place_address").innerText = data.addressInfo.fullAddress;
+                });
+            }
+        } else {
+            if ( gubun == "1") { // 집
+                document.querySelector('#guide_message').innerHTML = t("message.guide_not_home");
+            } else if ( gubun == "2") { // 회사
+                document.querySelector('#guide_message').innerHTML = t("message.guide_not_company");
+            } else if ( gubun == "3") { // 즐겨찾기
+                document.querySelector('#guide_message').innerHTML = t("message.guide_pindrop");
+            }
+        }
+    }
+    window.readPoiForFavorite =  function(v) {
+        readPoi("3",v);
+    }
+
+    window.readPoiForHome =  function(v) {
+        readPoi("1",v);
+    }
+    window.readPoiForCompany =  function(v) {
+        readPoi("2",v);
+    }
+
+    window.bindPoiForHome = function() {
+        if (homePinMarker) homePinMarker.setMap(null);
+        fn_DeviceLoadData("_POI_HOME","readPoiForHome");
+    }
+    window.bindPoiForCompany = function() {
+        if (companyPinMarker) companyPinMarker.setMap(null);
+        fn_DeviceLoadData("_POI_COMPANY","readPoiForCompany");
+    }
+    window.bindPoiForFavorite = function() {
+        if (favoritePinMarker) favoritePinMarker.setMap(null);
+        fn_DeviceLoadData("_POI_FAVORITE","readPoiForFavorite");
+    }
+
+    window.bindPoiForFavoritePopup = function() {
+        retrieveFavoritePOI();
+        if (favoritePinMarker) favoritePinMarker.setMap(null);
+        if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
+            fn_DeviceLoadData("_POI_FAVORITE","opener.readPoiForFavorite");
+        } else {
+            fn_DeviceLoadData("_POI_FAVORITE","readPoiForFavorite");
+        }
+    }
+
+    window.readDefaultNaviMode = function (v) {
+    //      snackbar(modeNames[v] + "으로 설정 되어 있습니다.");
+        v = v!="null"&&v?v:1; // 집
+        var idx = parseInt(v,10) - 1;
+        tIdx = idx;
+        // chipSet.chips[chipSelectIndex].selected = true;
+          var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
+          event.onlySelect=true; // pass data custom
+          var cb =document.querySelector("#mdc-chip-" + (tIdx+1));
+          var cancelled = !cb.dispatchEvent(event);
+          cb.focus();
+    }
+    fn_DeviceLoadData("_NAVI_DESTINATION", "readDefaultNaviMode");
+
+//    window.readDefaultNaviMode = function (v) {
+//    //      snackbar(modeNames[v] + "으로 설정 되어 있습니다.");
+//        v = v!="null"&&v?v:1; // 집
+//        var idx = parseInt(v,10) - 1;
+//        tIdx = idx;
+//        // chipSet.chips[chipSelectIndex].selected = true;
+//          var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
+//          event.onlySelect=true; // pass data custom
+//          var cb =document.querySelector("#mdc-chip-" + (tIdx+1));
+//          var cancelled = !cb.dispatchEvent(event);
+//          cb.focus();
+//    }
+//    fn_DeviceLoadData("_NAVI_DESTINATION", "readDefaultNaviMode");
+
+//  window.readStartStatus = function (v) {
+//      console.info("_START_POWER",v);
+//      v = v!="null"&&v?v:"0";
+//      var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
+//      event.onlySelect=true; // pass data custom
+//      if ( v  == "0") { // stop
+//          document.querySelector("#status").innerHTML = t("label.status_stop");
+//          btnStart.root.disabled = false;
+//          btnStop.root.disabled = true;
+//      } else { // start
+//          document.querySelector("#status").innerHTML = t("label.status_start");
+//          btnStart.root.disabled = true;
+//          btnStop.root.disabled = false;
+//      }
+//  }
+//  fn_DeviceLoadData("_START_POWER", "readStartStatus");
+//  bindPoiForFavorite();
+});
+
+
+function confirmHomeCompany(item) {
+    document.querySelector('#btnNavi').hide();
+    if( tIdx == 0 ) {
+        document.querySelector('#btnConfirm').show("block");
+        document.querySelector("#place_address").show();
+        document.querySelector('#btnConfirm .mdc-button__label').innerHTML = t("label.reg_home");
+    } else if( tIdx == 1 ) {
+        document.querySelector('#btnConfirm').show("block");
+        document.querySelector("#place_address").show();
+        document.querySelector('#btnConfirm .mdc-button__label').innerHTML = t("label.reg_company");
+    } else if( tIdx == 2 ) {
+        document.querySelector('#btnConfirm').show("block");
+        document.querySelector("#place_address").show();
+        document.querySelector('#btnConfirm .mdc-button__label').innerHTML = t("label.confirm");
+    }
+    tDataPoiAddress(new Tmapv2.LatLng(item.frontLat,item.frontLon),function(data){
+        document.querySelector("#place_address").innerText = data.addressInfo.fullAddress;
+    });
+}
+
+var myLat,myLon,myAddress;
+function getLocationCallback(lat_,lon_,address_) {
+    console.info("getLocationCallback",lat_,lon_,address_);
+//  search.value = "광명역";
+    if (!lat_) {
+        myLat = 37.566481622437934;
+        myLon = 126.98502302169841;
+        myAddress = "";
+    } else {
+        myLat = lat_ ;
+        myLon = lon_ ;
+        myAddress = address_;
+    }
+    initMyPin(myLat,myLon,myAddress);
+}
+
+//  function fn_StartServiceCallback(ok) {
+////      alert("startCallback");
+////      snackbar( t("toast.start") );
+//  fn_DeviceSaveData("_START_POWER", "1"); // 1 : 시작, 0 : 중지
+//      document.querySelector("#status").innerHTML = t("label.status_start");
+//      btnStart.root.disabled = true;
+//      btnStop.root.disabled = false;
+//  }
+//  function fn_StopServiceCallback(ok) {
+////      alert("stopCallback");
+////      snackbar( t("toast.stop") );
+//  fn_DeviceSaveData("_START_POWER", "0"); // 1 : 시작, 0 : 중지
+//      document.querySelector("#status").innerHTML = t("label.status_stop");
+//      btnStart.root.disabled = false;
+//      btnStop.root.disabled = true;
+//  }
+  function maxLengthCheck(object){
+   if (object.value.length > object.maxLength){
+    object.value = object.value.slice(0, object.maxLength);
+   }
+  }
+
+    var selectMarker = null;
+    var myPinMarker = null;
+    var homePinMarker = null;
+    var companyPinMarker = null;
+    var favoritePinMarker = null;
+    var currentMarker = [];
+    function initMyPin(lat,lon,address){
+        if (true) {
+            if(currentMarker.length > 0){
+                for(var i in currentMarker){
+                    currentMarker[i].setMap(null);
+                }
+            }
+            if (myPinMarker) myPinMarker.setMap(null);
+            setTimeout(function(){
+                //팝업 생성
+                var content = "<div style='position: relative; border-bottom: 1px solid #dcdcdc; line-height: 18px; padding: 0 35px 2px 0;'>"
+                        + "<div style='font-size: 12px; line-height: 15px;'>"
+                        + "<span style='display: inline-block; width: 14px; height: 14px; background-image: url(http://tmapapis.sktelecom.com/resources/images/common/icon_blet.png); vertical-align: middle; margin-right: 5px;'></span>" + address
+                        + "</div>"
+                        + "</div>";
+        //      debugger;
+
+
+                currentMarker.push(new Tmapv2.Marker({
+                    position : new Tmapv2.LatLng(lat,lon),
+                    title:address?address:"",
+                    label:address?"<span style='background-color: #46414E;color:white;font-size:14px'>"+address+"</span>":"",
+//                  icon:"http://tmapapis.sktelecom.com/upload/tmap/marker/pin_r_b_o.png",
+                    icon:"https://img.pngio.com/google-map-pinpoint-icon-321737-free-icons-library-google-map-pin-point-png-512_512.jpg",
+                    iconSize :new Tmapv2.Size(35, 40),
+                    map : map[tIdx]
+                }));
+
+    //          InfoWindow = new Tmapv2.InfoWindow({
+    //              position : new Tmapv2.LatLng(lat,lon),
+    //              content : content,
+    //              type : 2,
+    //              map : map
+    //          });
+
+                myPinMarker = new Tmapv2.Marker({
+                    position : new Tmapv2.LatLng(lat,lon),
+                    title:"내위치",
+//                  label:'<svg style="position:relative;top:0px" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path fill="blue" d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/></svg>',
+                label:'<svg style="position:relative;top:-20px" width="40" height="40" xmlns="http://www.w3.org/2000/svg"><g><title>background</title><rect fill="none" id="canvas_background" height="42" width="42" y="-1" x="-1"/></g><g><title>Layer 1</title><path stroke="null" id="svg_1" fill="none" d="m1.694915,1.694914l35.864401,0l0,36.71186l-35.864401,0l0,-36.71186z"/><path fill="#0000ff" stroke="null" id="svg_2" opacity="0.7" d="m19.627115,29.228809c4.946299,0 8.9661,-4.114788 8.9661,-9.177965s-4.019802,-9.177965 -8.9661,-9.177965s-8.9661,4.114788 -8.9661,9.177965s4.019802,9.177965 8.9661,9.177965z"/><path fill="#ffffff" stroke="null" id="svg_3" d="m19.627115,32.28813c6.605027,0 11.9548,-5.476186 11.9548,-12.237287s-5.349773,-12.237287 -11.9548,-12.237287s-11.9548,5.476186 -11.9548,12.237287s5.349773,12.237287 11.9548,12.237287zm0,-21.415251c4.946299,0 8.9661,4.114788 8.9661,9.177965s-4.019802,9.177965 -8.9661,9.177965s-8.9661,-4.114788 -8.9661,-9.177965s4.019802,-9.177965 8.9661,-9.177965z"/></g></svg>',
+//                  icon:"http://tmapapis.sktelecom.com/upload/tmap/marker/pin_r_b_x.png",
+                    icon:"http://tmapapis.sktelecom.com/resources/images/common/icon_blet.png",
+//                  icon:"http://tmapapis.sktelecom.com/upload/tmap/marker/pin_b_s_simple.png",
+                    iconSize :new Tmapv2.Size(0, 0),
+                    map : map[tIdx]
+                });
+//              debugger;
+//              myPinMarker.setElementPosition(0, 100);
+                map[tIdx].setCenter(new Tmapv2.LatLng(lat,lon));
+                map[tIdx].setZoom(defaultZoom);
+                if (tIdx==0) {
+                    bindPoiForHome();
+                } else if (tIdx==1) {
+                    bindPoiForCompany();
+                } else if (tIdx==2) {
+                    bindPoiForFavorite();
+                }
+            },300);
+        }
+    };
+
+    function searchPOI() {
+        // 기존 마커, 팝업 제거
+        if(markerArr.length > 0){
+            for(var i in markerArr){
+                markerArr[i].setMap(null);
+            }
+        }
+        markerArr = [];
+        var center = map[tIdx].getCenter();//map의 중심 좌표 값을 받아 옵니다.
+        var optionObj = {
+            reqCoordType:"WGS84GEO", //요청 좌표계 옵셥 설정입니다.
+            resCoordType:"WGS84GEO",  //응답 좌표계 옵셥 설정입니다.
+            centerLon:126.925356, //POI검색시 중앙좌표의 경도입니다.
+            centerLat:37.554034 //POI검색시 중앙좌표의 위도입니다.
+        };
+
+        var params = {
+            onComplete:onComplete,
+            onProgress:onProgress,
+            onError:onError
+        };
+        var tData = new Tmapv2.extension.TData();
+        if (search.value) {
+            tData.getPOIDataFromSearchJson(encodeURIComponent(search.value),optionObj,params);//encodeURIComponent함수로 해당 파라메터 값을 처리합니다.
+        }
+    }
+
+    function retrieveFavoritePOI() {
+        allPoi(function(data){
+            data.sort(function(a, b) {
+                return b.created - a.created;
+            });
+
+            var v = {
+                    searchPoiInfo:{
+                        pois:{
+                            poi:data
+                        }
+                    }
+            }
+
+
+            onComplete.apply({
+                _responseData:v
+            });
+        });
+    }
+
+    var markerArr = [];
+    var poiArr = [];
+    var currentMarker = [];
+    //POI검색
+    var positionBounds = null;
+    function onComplete() {
+        console.log(this._responseData); //json로 데이터를 받은 정보들을 콘솔창에서 확인할 수 있습니다.
+        markerArr = [];
+        poiArr = [];
+        var count = 0;
+        $(list[tIdx].root).empty();
+        if(this._responseData.searchPoiInfo && this._responseData.searchPoiInfo.pois && this._responseData.searchPoiInfo.pois.poi != '') {
+            count = this._responseData.searchPoiInfo.pois.poi.length;
+            document.querySelectorAll(".poi_list")[tIdx].show("block");
+            positionBounds = new Tmapv2.LatLngBounds();     //맵에 결과물 확인 하기 위한 LatLngBounds객체 생성
+
+            if (count>0) {
+                initMap(count);
+                positionBounds.extend(new Tmapv2.LatLng(myLat, myLon)); // LatLngBounds의 객체 확장
+            }
+
+            jQuery(this._responseData.searchPoiInfo.pois.poi).each(function(index, item){//결과를 each문으로 돌려 마커를 등록합니다.
+                //response 데이터중 원하는 값을 find 함수로 찾습니다.
+                var name = this.name;
+                var id = this.id;
+                var lon = this.frontLon;
+                var lat = this.frontLat;
+                var marker = addMarker(item,index);//마커를 추가하는 함수입니다.
+
+// marker click
+                marker.addListener("touchend",
+                    function() {
+                        debgger;
+                        selectedPoiItem = item;
+                        setPoiForFavoite();
+
+                        if (selectMarker) selectMarker.setMap(null);
+//                      debugger;
+            //          list[1].foundation.setSelectedIndex(0);list[1].foundation.adapter.focusItemAtIndex(0);
+
+                        list[tIdx].foundation.setSelectedIndex(index);
+                        list[tIdx].foundation.adapter.focusItemAtIndex(index);
+
+                    confirmHomeCompany(selectedPoiItem);
+
+
+                        selectMarker = addMarker(item,index,true)
+                        map[tIdx].setCenter(new Tmapv2.LatLng(item.frontLat,item.frontLon));
+                        map[tIdx].setZoom(markerZoom);
+                    }
+                );
+                markerArr.push(marker);
+                poiArr.push(item);
+                positionBounds.extend(new Tmapv2.LatLng(lat, lon)); // LatLngBounds의 객체 확장
+
+//               var listItemRipples = list.listElements.map((listItemEl) => new mdc.ripple.MDCRipple(listItemEl));
+//                var row = listItemRipples[0].root.cloneNode(true);
+                    var row = document.querySelectorAll(".poi_list_item")[tIdx].cloneNode(true); //mdc-list-item fisrt node;
+                    row.show();
+                    row.className = row.className.replace("poi_list_item","");
+                    var icon = index<9?"pin_b_m_" + (index+1) + ".png":"pin_b_s_simple.png";
+                    var widthHeight = "";
+//                  if (index>=9) {
+//                      widthHeight= "width='20' height='30'";
+//                  }
+//                      widthHeight= "width='20' height='30'";
+                        widthHeight= "width='30' height='40'";
+//                  console.info("icon",icon);
+//debugger;
+                    row.children[0].innerHTML = "<img src='http://tmapapis.sktelecom.com/upload/tmap/marker/" + icon + "' " + widthHeight + " class='position_r' />";
+                    row.children[1].children[0].innerText = item.name;
+                    var detail = [
+                        item.upperAddrName,
+                        item.middleAddrName,
+                        item.lowerAddrName,
+                        item.roadName,
+                        item.firstBuildNo
+                    ];
+                    row.children[1].children[1].innerText = detail.join(" ");
+
+                    if (tIdx == 2) { // 즐겨찾기
+                        getPoiCount("key",item.id + "_" + item.name ,function(count){
+//                            debugger;
+                            if ( count > 0 ) {
+    //                          console.error(row.children[2]);
+                                row.children[2].innerText = "star";
+                            } else {
+                                row.children[2].innerText = "star_border";
+                            }
+                        });
+                    }
+
+//upperAddrName: "서울"
+//middleAddrName: "구로구"
+//lowerAddrName: "온수동"
+//detailAddrName: ""
+//mlClass: "1"
+//firstNo: "155"
+//secondNo: ""
+//roadName: "부일로9길"
+//firstBuildNo: "127"
+//secondBuildNo: ""
+//radius: "11.174"
+                    document.querySelectorAll('.poi_list')[tIdx].appendChild(row);
+//                  console.info(item);
+                 listItemRipples = list[tIdx].listElements.map((listItemEl) => new mdc.ripple.MDCRipple(listItemEl));
+            //   list.selectedIndex = 1;
+            //  list.listElements[6].focus();list.selectedIndex = 7; // 초기 Selection
+            });
+//          map[tIdx].setCenter(new Tmapv2.LatLng(37.554034, 126.925356));
+//          map[tIdx].setZoom(14);
+            setTimeout(function(){
+                map[tIdx].panToBounds(positionBounds);  // 확장된 bounds의 중심으로 이동시키기
+                map[tIdx].zoomOut();
+            },1000);
+            if(tIdx == 0) {
+//              snackbar(count + '건의 검색결과가 있습니다.');
+//              snackbar('검색 되었습니다.');
+            } else if(tIdx == 1) {
+
+            }
+        }else {
+//          map.resize("","300px");
+            document.querySelectorAll(".poi_list")[tIdx].hide();
+//            snackbar('검색결과가 없습니다.');
+            initMap(0);
+        }
+    }
+
+/*
+http://tmapapis.sktelecom.com/upload/tmap/marker/pin_b_m_a.png
+http://tmapapis.sktelecom.com/upload/tmap/marker/pin_b_m_1.png
+http://tmapapis.sktelecom.com/upload/tmap/marker/pin_r_m_a.png
+http://tmapapis.sktelecom.com/upload/tmap/marker/pin_g_m_a.png
+http://tmapapis.sktelecom.com/upload/tmap/marker/pin_w_m_a.png
+
+http://tmapapis.sktelecom.com/upload/tmap/marker/pin_r_m_a.png
+http://tmapapis.sktelecom.com/upload/tmap/marker/pin_r_b_a.png
+
+http://tmapapi.sktelecom.com/resources/images/common/pin_car.png
+
+http://tmapapis.sktelecom.com/upload/tmap/marker/pin_r_b_x.png
+
+http://tmapapi.sktelecom.com/main.html#webservice/guide/webserviceGuide.guide4
+*/
+    function addMarker(poi,index,current){
+        var icon = null;
+        if (!current) {
+            icon = index<9?"pin_b_m_" + (index+1) + ".png":"pin_b_s_simple.png";
+        } else {
+//          icon = "pin_r_s_simple.png";
+            icon = "pin_r_b_x.png";
+        }
+
+        var markerOption = {
+            position: new Tmapv2.LatLng(poi.frontLat,poi.frontLon), //Marker의 중심좌표 설정.
+            map: map[tIdx], //Marker가 표시될 Map 설정..
+            title : poi.name, //마우스 위치시 출력할 타이틀
+            icon : "http://tmapapis.sktelecom.com/upload/tmap/marker/" + icon
+        }
+//      console.info(poi.name);
+        if (!current) {
+            if (index>=9) {
+                markerOption.iconSize = new Tmapv2.Size(20, 30);
+            }
+        } else {
+            markerOption.iconSize = new Tmapv2.Size(30, 40);
+            markerOption.label = "<span style='background-color: #46414E;color:white;font-size:14px;padding:5px'><strong>"+poi.name+"</strong></span>";//Marker의 라벨.
+        }
+        var marker = new Tmapv2.Marker(markerOption);
+        return marker;
+    }
+
+    //데이터 로드중 실행하는 함수입니다.
+    function onProgress(){
+
+    }
+
+    //데이터 로드 중 에러가 발생시 실행하는 함수입니다.
+    function onError(e){
+        alert("onError");
+    }
+
+    var defaultZoom = 18;
+    var markerZoom = 17;
+    var map = [];
+    var mapInitOption = [
+        {
+          center : new Tmapv2.LatLng(37.566481622437934, 126.98502302169841),
+            width : "100%",
+            height : "400px",
+            zoomControl  : false,
+            scaleBar : false
+        },
+        {
+          center : new Tmapv2.LatLng(37.566481622437934, 126.98502302169841),
+            width : "100%",
+            height : "400px",
+            zoomControl  : false,
+            scaleBar : false
+        },
+        {
+          center : new Tmapv2.LatLng(37.566481622437934, 126.98502302169841),
+            width : "100%",
+            height : "400px",
+            zoomControl  : false,
+            scaleBar : false
+        }
+    ];
+    var defaultListHeight = 60;
+    function initMap(count) {
+        if (map[tIdx]) {
+            $("#map_div" +tIdx).empty();
+        }
+        var mapOption = {
+            center : mapInitOption[tIdx].center,
+            width : mapInitOption[tIdx].width,
+            height : mapInitOption[tIdx].height,
+            zoomControl  : mapInitOption[tIdx].zoomControl,
+            scaleBar : mapInitOption[tIdx].scaleBar
+        };
+        count = count?count:0;
+        var height = count * defaultListHeight;
+        if (count>=2) {
+            height = 2 * defaultListHeight;
+        }
+        if ( tIdx == 0 ) {
+            var height = count * defaultListHeight;
+            if (count>=2) {
+                height = 2 * defaultListHeight;
+            }
+            document.querySelectorAll(".poi_list")[tIdx].style.height = (height) + "px";
+            mapOption.height = (mapInitOption[tIdx].height.replace(/[^0-9]/g,"") - (height) ) + "px";
+        } else if ( tIdx == 1 ) {
+                mapOption.height = (mapInitOption[tIdx].height.replace(/[^0-9]/g,"") - (height) ) + "px";
+                document.querySelectorAll(".poi_list")[tIdx].style.height = (height) + "px";
+        } else if ( tIdx == 2 ) {
+                mapOption.height = (mapInitOption[tIdx].height.replace(/[^0-9]/g,"") - (height) ) + "px";
+                document.querySelectorAll(".poi_list")[tIdx].style.height = (height) + "px";
+        }
+        map[tIdx] = new Tmapv2.Map("map_div" +tIdx, mapOption);
+//      map[tIdx].setCenter(new Tmapv2.LatLng(lat,lon));
+        map[tIdx].setZoom(defaultZoom);
+        // fn_GetLocation("getLocationCallback");
+        fn_GetLocation("map["+tIdx+"]","getLocationCallback");
+    }
+</script>
+</head>
+<body>
+<div class="i18n">
+    <header class="mdc-top-app-bar mdc-top-app-bar--fixed">
+      <div class="mdc-top-app-bar__row">
+        <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+          <button id="btnHome"
+            class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded">home</button>
+          <span class="mdc-top-app-bar__title" data-i18n="label.top_bar">티맵실행</span> </section>
+        <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+          <button id="btnSettings" class="mdc-icon-button material-icons mdc-top-app-bar__action-item--unbounded"
+            aria-label="Print this page">settings</button>
+        </section>
+      </div>
+    </header>
+
+    <div class="main mdc-top-app-bar--fixed-adjust i18n">
+        <a name="move_point" id="move_point"/>
+        <div class="row title">
+            <legend align="left" class="basic_font_medium3"><strong data-i18n="title.main">내비안내 목적지</strong></legend>
+            <hr style="margin-left:4px;margin-right:15px"/>
+        </div>
+
+        <div class="row">
+          <div style="text-align:left;margin:0px"><!--fieldset-->
+        <!--     <input type="radio" value="1" name="guide" id="guide_home" checked/><label for="guide_home">집</label>
+            <input type="radio" value="2" name="guide" id="guide_company" /><label for="guide_company">회사</label>
+            <input type="radio" value="2" name="guide" id="guide_favorite" /><label for="guide_company">즐겨찾기</label>     -->
+            <div id="navi_wrapper">
+              <div class="mdc-chip-set mdc-chip-set--choice">
+                 <div class="mdc-chip mdc-ripple-upgraded basic_font_small1" role="row">
+                   <div class="mdc-chip__ripple"></div>
+               <i class="material-icons mdc-chip__icon mdc-chip__icon--leading">home</i>
+                   <span role="gridcell">
+                     <span role="button" tabindex="0" class="mdc-chip__primary-action">
+                       <span class="mdc-chip__text">집</span>
+                     </span>
+                   </span>
+                 </div>
+                 <div class="mdc-chip basic_font_small1" role="row">
+                   <div class="mdc-chip__ripple"></div>
+               <i class="material-icons mdc-chip__icon mdc-chip__icon--leading">business</i>
+                   <span role="gridcell">
+                     <span role="button" tabindex="-1" class="mdc-chip__primary-action">
+                       <span class="mdc-chip__text">회사</span>
+                     </span>
+                   </span>
+                 </div>
+                 <div class="mdc-chip basic_font_small1" role="row">
+                   <div class="mdc-chip__ripple"></div>
+               <i class="material-icons mdc-chip__icon mdc-chip__icon--leading">pin_drop</i>
+                   <span role="gridcell">
+                     <span role="button" tabindex="-1" class="mdc-chip__primary-action">
+                       <span class="mdc-chip__text">즐겨찾기</span>
+                     </span>
+                   </span>
+                 </div>
+                 <div class="mdc-chip basic_font_small1" role="row">
+                   <div class="mdc-chip__ripple"></div>
+               <i class="material-icons mdc-chip__icon mdc-chip__icon--leading">navigation</i>
+                   <span role="gridcell">
+                     <span role="button" tabindex="-1" class="mdc-chip__primary-action">
+                       <span class="mdc-chip__text">운전</span>
+                     </span>
+                   </span>
+                 </div>
+               </div>
+              <div style="margin-top:5px !important;padding-left:10px">
+                 <span id="guide_message" class="basic_font_medium1"><B>"집"</B>으로 안내 합니다.</span>
+              </div>
+            </div> <!-- end chips navi_wrapper-->
+           </div><!--fieldset-->
+        </div>
+        <div class="row" id="search_wrapper">
+                <label id="search" class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon " style="width:100%;">
+                    <div class="mdc-text-field__ripple"></div>
+                    <input class="mdc-text-field__input" type="text"
+                         aria-labelledby="my-label-id"
+                         aria-controls="my-helper-id"
+                         aria-describedby="my-helper-id"
+                          >
+                    <span id="label" class="mdc-floating-label">장소, 주소, 전화번호 검색</span>
+                    <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"  style="right:80px;display:none" id="search_clear">clear</i>
+                    <div class="mdc-line-ripple"></div>
+                    <button class="btnSearch mdc-button mdc-button--raised  material-icons " style="top:10px;"> <span
+                        class="mdc-button__ripple"></span>search</button>
+                </label>
+        </div>
+        <div class="row tab_area"> <!-- 집 -->
+          <div class="margin_top_5 left"><!--fieldset-->
+            <div style="margin-top:0px">
+                <li class="poi_list_item mdc-list-item mdc-ripple-upgraded" tabindex="-1" style="display:none;padding-left:5px"><!-- ;height:40px -->
+                    <span class="mdc-list-item__graphic material-icons" aria-hidden="true">folder</span>
+                    <span class="mdc-list-item__text">
+                    <span class="mdc-list-item__primary-text">Potatoes</span>
+                    <span class="mdc-list-item__secondary-text">30 Noc 2017</span>
+                    </span>
+                    <!-- <span class="mdc-list-item__meta material-icons" aria-hidden="true" style="color:#F1C40F;font-size:30px">star_border</span> -->
+                </li>
+                <ul class="poi_list mdc-list mdc-list--two-line mdc-list--avatar-list padding_top_0 none" role="listbox" style="height:140px;overflow-y:auto;">
+                </ul>
+                <hr/>
+                <div id="map_div0" style="width:500px;height:100%;border:0px solid red;"></div>
+            </div>
+           </div><!--fieldset-->
+        </div>
+        <div class="row tab_area"> <!-- 회사 -->
+          <div class="margin_top_5 left"><!--fieldset-->
+            <div style="margin-top:0px">
+                <li class="poi_list_item mdc-list-item mdc-ripple-upgraded" tabindex="-1" style="display:none;padding-left:5px"><!-- ;height:40px -->
+                    <span class="mdc-list-item__graphic material-icons" aria-hidden="true">folder</span>
+                    <span class="mdc-list-item__text">
+                    <span class="mdc-list-item__primary-text">Potatoes</span>
+                    <span class="mdc-list-item__secondary-text">30 Noc 2017</span>
+                    </span>
+                    <!-- <span class="mdc-list-item__meta material-icons" aria-hidden="true" style="color:#F1C40F;font-size:30px">star_border</span> -->
+                </li>
+                <ul class="poi_list mdc-list mdc-list--two-line mdc-list--avatar-list padding_top_0 none" role="listbox" style="height:140px;overflow-y:auto;">
+                </ul>
+                <hr/>
+                <div id="map_div1" style="width:500px;height:100%;border:0px solid red;"></div>
+            </div>
+           </div><!--fieldset-->
+        </div>
+        <div class="row tab_area"> <!-- 즐겨찾기 -->
+          <div class="margin_top_20 left"><!--fieldset-->
+            <div style="margin-top:0px">
+                <!-- <label id="search" class="mdc-text-field mdc-text-field--outlined  mdc-text-field--no-label" style="width:100%;"> -->
+                <label class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon none " style="width:100%;">
+                  <div class="mdc-text-field__ripple"></div>
+                  <input class="mdc-text-field__input" type="text"
+                         aria-labelledby="my-label-id"
+                         aria-controls="my-helper-id"
+                         aria-describedby="my-helper-id"
+                          >
+                  <span id="label" class="mdc-floating-label">장소, 주소, 전화번호 검색</span>
+          <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"  style="right:80px;display:none" id="search_clear">clear</i>
+                  <div class="mdc-line-ripple"></div>
+                    <button class="btnSearch mdc-button mdc-button--raised  material-icons " style="top:10px;"> <span
+                        class="mdc-button__ripple"></span>search</button>
+                </label>
+            <li class="poi_list_item mdc-list-item mdc-ripple-upgraded" tabindex="-1" style="display:none;padding-left:5px"><!-- ;height:40px -->
+                <span class="mdc-list-item__graphic material-icons" aria-hidden="true">folder</span>
+                <span class="mdc-list-item__text">
+                    <span class="mdc-list-item__primary-text">Potatoes</span>
+                    <span class="mdc-list-item__secondary-text">30 Noc 2017</span>
+                </span>
+                <span class="mdc-list-item__meta material-icons" aria-hidden="true" style="color:#F1C40F;font-size:30px">star</span>
+            </li>
+            <ul class="poi_list mdc-list mdc-list--two-line mdc-list--avatar-list padding_top_0 none" role="listbox" style="height:250px;overflow-y:auto;">
+            </ul>
+           <hr/>
+        <!--  -->
+        <!--
+        <li class="mdc-list-item" role="option" tabindex="0" style="display:none;padding-left:5px;height:40px">
+        <span class="mdc-list-item__graphic material-icons" aria-hidden="true">folder</span>
+        <span class="mdc-list-item__text">Single-line item</span>
+        <span class="mdc-list-item__meta material-icons" aria-hidden="true">info</span>
+        </li>
+         -->
+               <div id="map_div2" style="width:500px;height:100%;border:0px solid red;"></div>
+            </div>
+           </div><!--fieldset-->
+        </div>
+        <div class="row tab_area"> <!-- 운전 -->
+
+        </div>
+    </div>
+   <div style="position:fixed;bottom:0px;width:100%;border:0px solid red;width:100%;text-align:center;">
+       <div class="mdc-chip-set mdc-chip-set--choice" style="border:0px;width:50px;position:relative;top:-0px;right:calc(-100% + 70px);">
+          <div class="btnMyLocation mdc-chip mdc-ripple-upgraded " role="row" style="background-color:white;padding:15px;padding-bottom:20px;padding-right:12px">
+            <div class="mdc-chip__ripple"></div>
+            <i style="color: var(--mdc-theme-primary);font-size: 25px;" onselectstart="return false;" class="material-icons mdc-chip__icon mdc-chip__icon--leading">my_location</i>
+          </div>
+       </div>
+         <div id="place_address" style="font-size:13px;width:100%;border:0px solid blue;background-color: rgba( 0, 0, 0, 0.5 );color:white;font-weight:bold;height:45px;padding-top:15px;margin-bottom:2px">
+         </div>
+        <button id="btnConfirm" type="button" class="mdc-button mdc-button--raised " data-mdc-dialog-action="close" style="height:50px;padding:20px;width:100%;left:0px">
+          <div class="mdc-button__ripple"></div>
+          <span class="mdc-button__label" data-i18n="label.reg_home">확인</span>
+        </button>
+
+        <button id="btnNavi" type="button" class="mdc-button mdc-button--raised none" data-mdc-dialog-action="close" style="height:50px;padding:20px;width:100%;left:0px">
+          <div class="mdc-button__ripple"></div>
+          <span class="mdc-button__label" data-i18n="label.navi">안내</span>
+        </button>
+   </div>
+
+<div class="mdc-snackbar">
+  <div class="mdc-snackbar__surface">
+    <div class="mdc-snackbar__label" role="status" aria-live="polite">~~</div>
+<!--     <div class="mdc-snackbar__actions"><button_default type="button_default" class="mdc-button_default mdc-snackbar__action"><button_default
+          class="mdc-icon-button_default mdc-snackbar__dismiss material-icons" title="Dismiss">close</button_default></div> -->
+  </div>
+</div>
+
+<div class="basic mdc-dialog">
+  <div class="mdc-dialog__container">
+    <div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" aria-labelledby="my-dialog-title"
+      aria-describedby="my-dialog-content">
+      <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+      <h2 class="mdc-dialog__title" id="my-dialog-title">
+        <!--
+     -->Choose a Ringtone
+        <!--
+   -->
+      </h2>
+      <div class="mdc-dialog__content" id="my-dialog-content">
+      </div>
+      <footer class="mdc-dialog__actions">
+        <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+          <div class="mdc-button__ripple"></div>
+          <span class="mdc-button__label" data-i18n="label.cancel">Cancel</span>
+        </button>
+        <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="accept" data-mdc-dialog-button-default>
+          <div class="mdc-button__ripple"></div>
+          <span class="mdc-button__label" data-i18n="label.ok">OK</span>
+        </button>
+      </footer>
+    </div>
+  </div>
+  <div class="mdc-dialog__scrim"></div>
+</div>
+</div>
+ </body>
+
+
+</html>
