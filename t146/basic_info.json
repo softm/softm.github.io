@@ -90,8 +90,8 @@
  "adTypeForWaitBanner":"6",
  "adTypeForWaitBannerLoadTypeName":"1:DIRECT,2:INDIRECT",
  "adTypeForWaitBannerLoadType":"1", 
- "adTypeForWaitRewardName":"REWARDED",
- "adTypeForWaitReward":"4",
+ "adTypeForWaitRewardName":"REWARDEDINTERSTITIAL",
+ "adTypeForWaitReward":"5",
 
  "betaLicensedUUIDs_Tmp":[
    "e083abff41564fd2 : 노트4-6.0.1",
