@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>티</title>
+  <link href="./lib/material-components-web.min.css" rel="stylesheet">
+  <script src="./lib/material-components-web.min.js"></script>
+  <link rel="stylesheet" href="./lib/icon.css">
+  <link rel="stylesheet" href="./lib/common.css?a=">
+
+ </head>
+
+<!--  using - default i18next-->
+<!--
+<script src="https://unpkg.com/i18next/i18next.js"></script>
+<script src="https://unpkg.com/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+<script src="https://unpkg.com/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.js"></script>
+-->
+
+<!-- using - jquery i18next -->
+<!-- -->
+  <script src="./lib/jquery-3.6.4.min.js"></script>
+  <script src="./lib/i18next.min.js"></script>
+  <script src="./lib/common.js?a=2"></script>
+  <script src="./lib/interface.js"></script>
+<script>
+$( document ).ready(function() {
+    const btnGrantOverlay = new mdc.ripple.MDCRipple(document.querySelector("#btnGrantOverlay"));
+    btnGrantOverlay.listen("click", function(event) {
+          fn_StartSetting("overlay","startSettingCallback");
+    });
+    const btnGrantUsageStats = new mdc.ripple.MDCRipple(document.querySelector("#btnGrantUsageStats"));
+    btnGrantUsageStats.listen("click", function(event) {
+          fn_StartSetting("usagestats","startSettingCallback");
+    });
+    const btnGrantLocation = new mdc.ripple.MDCRipple(document.querySelector("#btnGrantLocation"));
+    btnGrantLocation.listen("click", function(event) {
+          fn_StartSetting("location","startSettingCallback");
+    });
+	checkGrant();
+});
+
+function checkGrant() {
+	granted =[];
+	fn_CheckGrant("location","checkGrantCallBack");
+	fn_CheckGrant("overlay","checkGrantCallBack");
+	fn_CheckGrant("usagestats","checkGrantCallBack");
+//	alert( granted.length );
+}
+///**
+// * API 004 : 권한
+// */
+//function fn_CheckGrant(grant,callBackFunc) {
+//	var result = { "header":{ "api":"4" }, "body":{ "grant":grant, "callBackFunc":callBackFunc } };
+//	 if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
+//		 fn_Js_Bridge(result);
+//	 }else{
+//		if ( grant == "location" ) {
+//			eval(callBackFunc + "('" + grant+ "','ok')");
+//		} else if ( grant == "overlay" ) {
+//			 eval(callBackFunc + "('" + grant+ "','ok')");
+//		} else if ( grant == "usagestats" ) {
+//			 eval(callBackFunc + "('" + grant+ "','ok')");
+//		}
+//	 }
+//}
+function go() {
+//    debugger;
+	if ( granted.length == 3 ) {
+		snackbar( t("toast.grant") );
+		document.location.replace("index.html");
+	}
+}
+
+function checkGrantCallBack(grant,ok) {
+//debugger;
+	if (grant == "overlay") {
+		if( ok == "ok" ) {
+            if ( !granted.includes(grant) ) granted.push(grant);
+			$("#permission_overlay").hide();
+		} else {
+			$("#permission_overlay").show();
+		}
+		go();
+	} else if (grant == "usagestats") {
+		if( ok == "ok" ) {
+            if ( !granted.includes(grant) ) granted.push(grant);
+			$("#permission_usagestats").hide();
+		} else {
+			$("#permission_usagestats").show();
+		}
+		go();
+	} else if (grant == "location") {
+		if( ok == "ok" ) {
+            if ( !granted.includes(grant) ) granted.push(grant);
+			$("#permission_location").hide();
+		} else {
+			$("#permission_location").show();
+		}
+		go();
+	}
+    console.info(grant,ok, granted);
+}
+var granted =[];
+  function startSettingCallback(grant,ok) {
+	if (grant == "overlay") {
+		if (ok =="ok") {
+			fn_CheckGrant(grant,"checkGrantCallBack");
+		} else {
+			snackbar( t("toast.notgrant_overlay") );
+		}
+	} else if (grant == "usagestats") {
+		if (ok =="ok") {
+			fn_CheckGrant(grant,"checkGrantCallBack");
+		} else {
+			snackbar( t("toast.notgrant_usagestats") );
+		}
+	} else if (grant == "location") {
+		if (ok =="ok") {
+			fn_CheckGrant(grant,"checkGrantCallBack");
+		} else {
+			snackbar( t("toast.notgrant_location") );
+		}
+	}
+	checkGrant();
+  }
+</script>
+</head>
+<body>
+<div class="i18n">
+<header class="mdc-top-app-bar mdc-top-app-bar--fixed">
+  <div class="mdc-top-app-bar__row">
+    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+      <button id="btnHome"
+        class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded">home</button>
+      <span class="mdc-top-app-bar__title" data-i18n="label.top_bar">티맵실행</span> </section>
+    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+      <button id="btnSettings" class="mdc-icon-button material-icons mdc-top-app-bar__action-item--unbounded"
+        aria-label="Print this page">settings</button>
+    </section>
+  </div>
+</header>
+
+
+<div class="main mdc-top-app-bar--fixed-adjust i18n">
+    <div class="row">
+        <!--<div class="my_icon" style="">-->
+            <!--<i class="material-icons md-dark logo_image logo_image_car" style="">directions_car</i>-->
+            <!--<i class="material-icons md-dark logo_image" style="z-index:1">credit_card</i>-->
+            <!--<i class="material-icons md-dark logo_image logo_image_key" style="z-index:1">vpn_key</i>-->
+        <!--</div>-->
+        <div class="row" style="height:80px">
+            <img src="./images/logo_100.svg"/>
+        </div>
+
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row">
+        </div>
+
+        <div class="row none" id="permission_overlay" style="margin-top: 20px !important;margin-bottom: 20px !important;">
+			<div>
+				<span style="font-size:20px"><h5  style="display:inline" data-i18n="[html]message.permission1"></h5></span>
+			</div>
+
+			<div style="font-size:16px;margin-left:20px;margin-top:10px;margin-bottom:10px">
+				<div style="text-align:left;">
+					<span style=""><span>1. </span><span data-i18n="[html]message.permission_grant_on">"권한 허용"을 켜고, </span></span>
+				</div>
+				<div style="text-align:left;margin-top:10px">
+					<span style=""><span>2. </span><span data-i18n="[html]message.permission_grant_backkey_return">"권한 허용"을 켜고,</span></span>
+				</div>
+			</div>
+            <button id="btnGrantOverlay" class="mdc-button mdc-button--raised material-icons  margin_right_5" style="width:100%;font-size:16px">
+                <strong data-i18n="label.permission_overlay">다른 앱 위에 표시</strong>
+                <!-- <strong>시작</strong> -->
+            </button>
+			<img src="images/grant_guide_1.gif"/ style="width:80%;margin-top:20px"> 
+		</div>
+        <div class="row none" id="permission_usagestats" style="margin-top: 20px !important;margin-bottom: 20px !important;">
+			<div>
+				<span style="font-size:20px"><h5  style="display:inline" data-i18n="[html]message.permission2"></h5></span>
+			</div>
+
+			<div style="font-size:16px;margin-left:20px;margin-top:10px;margin-bottom:10px">
+				<div style="text-align:left;">
+					<span style=""><span>1. </span><span data-i18n="[html]message.permission_grant_app_select">티맵바로가기" 앱을 선택하세요.</span></span>
+				</div>
+				<div style="text-align:left;margin-top:10px">
+					<span style=""><span>2. </span><span data-i18n="[html]message.permission_grant_on">"권한 허용"을 켜고, </span></span>
+				</div>
+				<div style="text-align:left;margin-top:10px">
+					<span style=""><span>3. </span><span data-i18n="[html]message.permission_grant_backkey_return">"권한 허용"을 켜고,</span></span>
+				</div>
+			</div>
+            <button id="btnGrantUsageStats" class="mdc-button mdc-button--raised material-icons  margin_right_5" style="width:100%;font-size:16px">
+                <strong data-i18n="label.permission_usagestats">사용정보 접근 허용</strong>
+            </button>
+			<img src="images/grant_guide_2.gif"/ style="width:80%;margin-top:20px"> 
+        </div>
+        <div class="row none" id="permission_location">
+            <button id="btnGrantLocation" class="mdc-button mdc-button--raised material-icons  margin_right_5" style="width:100%;font-size:16px">
+                <strong data-i18n="label.permission_location">위치 서비스 활성화</strong>
+            </button>
+        </div>
+        <div class="row">
+        </div>
+    </div>
+
+<div class="mdc-snackbar">
+  <div class="mdc-snackbar__surface">
+    <div class="mdc-snackbar__label" role="status" aria-live="polite">~~</div>
+    <div class="mdc-snackbar__actions"><button type="button" class="mdc-button mdc-snackbar__action"><button
+          class="mdc-icon-button mdc-snackbar__dismiss material-icons" title="Dismiss">close</button></div>
+  </div>
+</div>
+
+<div class="mdc-dialog">
+  <div class="mdc-dialog__container">
+    <div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" aria-labelledby="my-dialog-title"
+      aria-describedby="my-dialog-content">
+      <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+      <h2 class="mdc-dialog__title" id="my-dialog-title">
+        <!--
+     -->Choose a Ringtone
+        <!--
+   -->
+      </h2>
+      <div class="mdc-dialog__content" id="my-dialog-content">
+      </div>
+      <footer class="mdc-dialog__actions">
+        <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+          <div class="mdc-button__ripple"></div>
+          <span class="mdc-button__label" data-i18n="label.cancel">Cancel</span>
+        </button>
+        <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="accept" data-mdc-dialog-button-default>
+          <div class="mdc-button__ripple"></div>
+          <span class="mdc-button__label" data-i18n="label.ok">OK</span>
+        </button>
+      </footer>
+    </div>
+  </div>
+  <div class="mdc-dialog__scrim"></div>
+</div>
+</div>
+ </body>
+
+
+</html>
