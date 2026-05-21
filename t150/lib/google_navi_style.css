@@ -1,0 +1,547 @@
+/*
+ * SOFTM-GOOGLE START: Google 지도 전용 목적지/검색 화면 공통 스타일 추가. 2026-05-16
+ */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background: #f4f6f8;
+  color: #1f2933;
+  font-family: Arial, "Noto Sans KR", sans-serif;
+}
+
+body {
+  overflow: hidden;
+}
+
+.google-navi-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 100%;
+}
+
+.google-navi-shell {
+  height: 100%;
+}
+
+/** SOFTM-HEADER START: 기존 MDC 고정 헤더 아래에서 Google 화면 높이를 계산한다. 2026-05-19 */
+.google-navi-page--with-top-app-bar {
+  box-sizing: border-box;
+  padding-top: 56px;
+}
+
+@media (min-width: 600px) {
+  .google-navi-page--with-top-app-bar {
+    padding-top: 64px;
+  }
+}
+/** SOFTM-HEADER END */
+
+.icon-button,
+.google-navi-button {
+  border: 1px solid #c9d2dc;
+  background: #ffffff;
+  color: #1f2933;
+  border-radius: 6px;
+  min-height: 36px;
+  padding: 0 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.icon-button {
+  width: 36px;
+  padding: 0;
+  font-size: 18px;
+}
+
+#btnMyLocation.icon-button {
+  position: fixed;
+  right: 14px;
+  bottom: 112px;
+  z-index: 6000;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  min-height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.96);
+  color: #1e88e5;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.24);
+  font-size: 0;
+}
+
+#btnMyLocation.icon-button::before {
+  content: "";
+  width: 28px;
+  height: 28px;
+  background: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2028%2028%22%3E%3Cpath%20d%3D%22M14%202v4M14%2022v4M2%2014h4M22%2014h4%22%20stroke%3D%22%231e88e5%22%20stroke-width%3D%222.7%22%20stroke-linecap%3D%22round%22/%3E%3Ccircle%20cx%3D%2214%22%20cy%3D%2214%22%20r%3D%228%22%20fill%3D%22none%22%20stroke%3D%22%231e88e5%22%20stroke-width%3D%222.7%22/%3E%3Ccircle%20cx%3D%2214%22%20cy%3D%2214%22%20r%3D%223.4%22%20fill%3D%22%231e88e5%22/%3E%3C/svg%3E") center / contain no-repeat;
+}
+/* SOFTM-GOOGLE: 기존 지도 화면처럼 현재 위치 버튼을 지도 우하단 오버레이와 타깃 아이콘으로 표시. 2026-05-16 */
+
+.google-navi-button.primary {
+  background: #0b74de;
+  color: #ffffff;
+  border-color: #0b74de;
+}
+
+/** SOFTM-READABILITY START: 삭제/해제 버튼은 과한 빨간 배경 대신 낮은 채도의 위험 버튼으로 표시한다. 2026-05-19 */
+.google-navi-button.danger {
+  background: #fff4f2;
+  color: #7a271a;
+  border-color: #e5b7b0;
+  box-shadow: none;
+}
+
+.google-navi-button.danger:active {
+  background: #fbe7e3;
+  border-color: #d89b93;
+}
+/** SOFTM-READABILITY END */
+
+#btnDelete {
+  display: none;
+}
+
+/* SOFTM-GOOGLE START: home_company_google/search_google 탭을 공통 아이콘 메뉴 스타일로 통합하고 높이를 44px로 추가 축소. 2026-05-17 */
+.google-navi-tabs {
+  display: flex;
+  gap: 0;
+  align-items: stretch;
+  height: 44px;
+  padding: 0;
+  background: #ffffff;
+  border-bottom: 1px solid #d7dde3;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+}
+
+.google-navi-home-page .google-navi-tabs {
+  justify-content: stretch;
+  gap: 0;
+  padding: 0;
+  border-bottom: 1px solid #d7dde3;
+}
+
+.google-navi-tab {
+  position: relative;
+  flex: 1 1 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  border-radius: 0;
+  padding: 0 4px;
+  background: #ffffff;
+  color: #737373;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.google-navi-tab-icon {
+  flex: 0 0 auto;
+  font-size: 21px;
+  line-height: 1;
+  margin: 0;
+  vertical-align: 0;
+}
+
+.google-navi-tab-label {
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.google-navi-tab.active {
+  background: #ffffff;
+  border-color: transparent;
+  color: #1e88e5;
+}
+
+.google-navi-tab.active::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 0;
+  height: 2px;
+  background: #1e88e5;
+}
+
+@media (max-width: 360px) {
+  .google-navi-tab {
+    gap: 4px;
+    font-size: 12px;
+  }
+
+  .google-navi-tab-icon {
+    font-size: 20px;
+  }
+}
+/* SOFTM-GOOGLE END */
+
+.google-navi-guide {
+  display: none;
+  padding: 0 12px 8px;
+  background: #ffffff;
+  border-bottom: 1px solid #d7dde3;
+  font-size: 14px;
+  line-height: 20px;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+}
+
+.google-navi-guide strong {
+  font-weight: 700;
+}
+
+.google-navi-guide .guide-action {
+  display: block;
+  color: #f05a5a;
+  font-weight: 700;
+}
+
+.google-navi-search {
+  display: flex;
+  gap: 6px;
+  padding: 8px 10px;
+  background: #ffffff;
+  border-bottom: 1px solid #d7dde3;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+}
+
+.google-navi-search input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 38px;
+  border: 1px solid #c9d2dc;
+  border-radius: 6px;
+  padding: 0 10px;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+.google-navi-status {
+  min-height: 28px;
+  padding: 6px 10px;
+  background: #edf2f7;
+  border-bottom: 1px solid #d7dde3;
+  color: #536272;
+  font-size: 12px;
+  line-height: 16px;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+}
+
+.google-navi-content {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.google-navi-list {
+  flex: 0 0 auto;
+  max-height: 42%;
+  overflow: auto;
+  background: #ffffff;
+  border-bottom: 1px solid #d7dde3;
+}
+
+.google-navi-list.empty {
+  display: none;
+}
+
+.google-navi-item {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 38px;
+  align-items: center;
+  gap: 8px;
+  min-height: 56px;
+  padding: 8px 8px 8px 10px;
+  border-bottom: 1px solid #edf0f3;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.google-navi-list.sortable .google-navi-item {
+  grid-template-columns: 24px 28px minmax(0, 1fr) 38px;
+}
+
+.google-navi-list.no-favorite .google-navi-item {
+  grid-template-columns: 28px minmax(0, 1fr);
+}
+
+/** SOFTM-DESTINATION START: home_company_google 집/회사 목록 좌측을 번호 대신 아이콘+명칭 배지로 표시. 2026-05-19 */
+.google-navi-list.destination-label .google-navi-item {
+  grid-template-columns: 72px minmax(0, 1fr);
+}
+
+.google-navi-destination-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 64px;
+  height: 28px;
+  border-radius: 14px;
+  background: #e8f2fc;
+  color: #1565c0;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.google-navi-destination-label .material-icons {
+  font-size: 18px;
+  line-height: 1;
+}
+/** SOFTM-DESTINATION END */
+
+.google-navi-list.no-favorite .google-navi-favorite {
+  display: none;
+}
+
+.google-navi-item.selected {
+  background: #dff0ff;
+  box-shadow: inset 4px 0 0 #3498db;
+}
+
+.google-navi-list.sorting .google-navi-item {
+  user-select: none;
+}
+
+.google-navi-item.dragging {
+  background: #f3f8ff;
+  box-shadow: inset 4px 0 0 #1e88e5, 0 6px 14px rgba(22, 56, 94, 0.16);
+  opacity: 0.94;
+}
+
+.google-navi-drag-handle {
+  width: 24px;
+  height: 34px;
+  border: 0;
+  border-radius: 4px;
+  background:
+    radial-gradient(circle, #8a99a8 1.8px, transparent 2px) 6px 8px / 8px 8px repeat-y,
+    radial-gradient(circle, #8a99a8 1.8px, transparent 2px) 14px 8px / 8px 8px repeat-y;
+  cursor: grab;
+  touch-action: none;
+}
+
+.google-navi-drag-handle:active {
+  cursor: grabbing;
+}
+
+.google-navi-item.selected .google-navi-index {
+  background: #1565c0;
+}
+
+/* SOFTM-GOOGLE: 즐겨찾기 목록에 드래그 정렬 핸들과 드래그 중 행 강조 스타일을 추가. 2026-05-17 */
+
+.google-navi-index {
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  border-radius: 50%;
+  background: #0b74de;
+  color: #ffffff;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.google-navi-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2933;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.google-navi-address {
+  margin-top: 3px;
+  font-size: 12px;
+  color: #647482;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.google-navi-favorite {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  background: transparent;
+  color: #c68200;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.google-navi-map {
+  flex: 1 1 auto;
+  min-height: 220px;
+  background: #dfe6ee;
+}
+
+.google-navi-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 18px;
+  color: #43515f;
+  font-size: 14px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.google-navi-footer {
+  display: flex;
+  gap: 8px;
+  padding: 8px 10px;
+  background: #ffffff;
+  border-top: 1px solid #d7dde3;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+}
+
+.google-navi-address-overlay {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 59px;
+  display: none;
+  min-height: 42px;
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.54);
+  color: #ffffff;
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 700;
+  text-align: center;
+  box-sizing: border-box;
+  z-index: 5000;
+}
+
+.google-navi-snackbar {
+  position: fixed;
+  left: 50%;
+  bottom: 112px;
+  display: none;
+  min-width: 220px;
+  max-width: calc(100% - 32px);
+  transform: translateX(-50%);
+  padding: 12px 16px;
+  border-radius: 4px;
+  background: #323232;
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+  box-sizing: border-box;
+  z-index: 10001;
+}
+
+/* SOFTM-GOOGLE: 원본 setAddress/snackbar 역할의 하단 주소 오버레이와 스낵바 추가. 2026-05-16 */
+
+.google-navi-footer .google-navi-button {
+  flex: 1 1 0;
+  height: 42px;
+}
+
+.google-navi-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.38);
+  z-index: 10000;
+  box-sizing: border-box;
+}
+
+.google-navi-dialog {
+  width: min(320px, 100%);
+  background: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.24);
+  padding: 22px 24px 12px;
+  box-sizing: border-box;
+}
+
+.google-navi-dialog-message {
+  min-height: 44px;
+  color: #222222;
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: 700;
+}
+
+.google-navi-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.google-navi-dialog-action {
+  min-width: 56px;
+  height: 36px;
+  border: 0;
+  background: transparent;
+  color: #3498db;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.google-navi-input-dialog .google-navi-dialog-message {
+  display: block;
+  min-height: 0;
+  margin-bottom: 12px;
+}
+
+.google-navi-dialog-input {
+  width: 100%;
+  height: 42px;
+  border: 1px solid #c9d2dc;
+  border-radius: 4px;
+  padding: 0 10px;
+  color: #1f2933;
+  font-size: 15px;
+  font-weight: 700;
+  box-sizing: border-box;
+}
+
+/* SOFTM-GOOGLE: 즐겨찾기 삭제 확인과 이름 직접 수정 입력 다이얼로그 스타일 추가. 2026-05-16 */
+
+@media (max-width: 360px) {
+  .google-navi-tab,
+  .google-navi-button {
+    font-size: 12px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .google-navi-search {
+    gap: 4px;
+  }
+}
+/*
+ * SOFTM-GOOGLE END
+ */

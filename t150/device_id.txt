@@ -1,0 +1,1 @@
+device_id=adb-R3CY10SD9CE-tPmnEd._adb-tls-connect._tcp.
