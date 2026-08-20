@@ -8,8 +8,10 @@
       "description": "농장 작업, 재배 계획, 농기계, 방제·관수와 수확 기록을 화곡농장 채팅별 페이지로 관리합니다.",
       "publicUrl": "https://softm.github.io/hwagok-farm/",
       "privateUrl": "https://hwagok.softm.chatgpt.site/#hwagok",
-      "pageCount": 13,
-      "latestTitle": "2026-08-11 양파 구입·저온창고 보관",
+      "pageCount": 14,
+      "latestTitle": "12mm 강우 후 늦파종 들깨 파종",
+      "pageSelector": ".chat-card",
+      "titleSelector": ".chat-card h3",
       "order": 10
     },
     {
@@ -20,6 +22,8 @@
       "publicUrl": "https://softm.github.io/gwangmyeong/",
       "pageCount": 2,
       "latestTitle": "광명 수도 계량기 현장점검 및 요금상담",
+      "pageSelector": ".card:not(.locked)",
+      "titleSelector": ".card:not(.locked) .title",
       "order": 20
     }
   ]
