@@ -10,6 +10,8 @@
       "privateUrl": "https://hwagok.softm.chatgpt.site/#hwagok",
       "pageCount": 14,
       "latestTitle": "2026-08-10 양파 구매처 조사",
+      "pageSelector": ".chat-card",
+      "titleSelector": ".chat-card h3",
       "order": 10
     },
     {
@@ -20,6 +22,8 @@
       "publicUrl": "https://softm.github.io/gwangmyeong/",
       "pageCount": 2,
       "latestTitle": "광명 수도 계량기 현장점검 및 요금상담",
+      "pageSelector": ".card:not(.locked)",
+      "titleSelector": ".card:not(.locked) .title",
       "order": 20
     }
   ]
