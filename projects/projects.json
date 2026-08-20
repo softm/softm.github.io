@@ -1,0 +1,26 @@
+{
+  "owner": "softm",
+  "projects": [
+    {
+      "repo": "hwagok-farm",
+      "title": "화곡농장",
+      "category": "농업",
+      "description": "농장 작업, 재배 계획, 농기계, 방제·관수와 수확 기록을 화곡농장 채팅별 페이지로 관리합니다.",
+      "publicUrl": "https://softm.github.io/hwagok-farm/",
+      "privateUrl": "https://hwagok.softm.chatgpt.site/#hwagok",
+      "pageCount": 13,
+      "latestTitle": "2026-08-11 양파 구입·저온창고 보관",
+      "order": 10
+    },
+    {
+      "repo": "gwangmyeong",
+      "title": "광명",
+      "category": "생활·주거",
+      "description": "광명 주거, 시설, 계량기와 생활 관련 기록을 채팅별 페이지로 관리합니다.",
+      "publicUrl": "https://softm.github.io/gwangmyeong/",
+      "pageCount": 2,
+      "latestTitle": "광명 수도 계량기 현장점검 및 요금상담",
+      "order": 20
+    }
+  ]
+}
