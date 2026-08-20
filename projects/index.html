@@ -20,7 +20,7 @@
   <main class="wrap">
     <div class="section-head"><div><h2>프로젝트 목록</h2><p>등록된 프로젝트 저장소를 기준으로 표시합니다.</p></div></div>
     <section id="grid" class="grid" aria-live="polite"></section>
-    <p class="policy">새 채팅을 공개 배포할 때는 해당 프로젝트 저장소에 페이지를 추가하고, 이 인덱스에는 프로젝트의 최신 페이지명과 페이지 수만 갱신합니다. 다른 프로젝트의 채팅을 하위 사이트에 섞지 않습니다.</p>
+    <p class="policy">새 채팅을 해당 프로젝트 홈에 공개하면 이 인덱스가 프로젝트별 공개 페이지 수와 최신 제목을 자동으로 확인합니다. 다른 프로젝트의 채팅을 하위 사이트에 섞지 않습니다.</p>
   </main>
   <footer class="wrap">프로젝트 콘텐츠는 각 프로젝트 저장소에서 관리합니다.</footer>
   <script>
@@ -30,14 +30,25 @@
       const safeUrl=(value)=>{try{const url=new URL(value,location.href);return ["http:","https:"].includes(url.protocol)?url.href:"#"}catch{return "#"}};
       const render=(projects)=>{
         grid.replaceChildren(...projects.map(project=>{
-          const card=node("article","card");card.dataset.search=[project.title,project.repo,project.description,project.category].filter(Boolean).join(" ").toLowerCase();
+          const card=node("article","card");card.dataset.repo=project.repo;card.dataset.search=[project.title,project.repo,project.description,project.category].filter(Boolean).join(" ").toLowerCase();
           const top=node("div","card-top"),heading=node("div");heading.append(node("h3","",project.title),node("div","repo",`${project.owner}/${project.repo}`));top.append(heading,node("span","badge",project.category||"프로젝트"));card.append(top,node("p","description",project.description));
-          const meta=node("div","meta");const pages=node("span");pages.append("공개 채팅 ",node("b","",`${project.pageCount??0}개`));const latest=node("span");latest.append("최근 페이지 ",node("b","",project.latestTitle||"등록 정보 없음"));meta.append(pages,latest);card.append(meta);
+          const meta=node("div","meta");const pages=node("span");pages.append("공개 채팅 ",node("b","page-count",`${project.pageCount??0}개`));const latest=node("span");latest.append("최근 페이지 ",node("b","latest-title",project.latestTitle||"등록 정보 없음"));meta.append(pages,latest);card.append(meta);
           const actions=node("div","actions"),site=node("a","action primary","프로젝트 열기"),repo=node("a","action","GitHub");site.href=safeUrl(project.publicUrl);repo.href=safeUrl(`https://github.com/${project.owner}/${project.repo}`);actions.append(site,repo);if(project.privateUrl){const privateLink=node("a","action","비공개 사이트");privateLink.href=safeUrl(project.privateUrl);actions.append(privateLink)}card.append(actions);return card;
         }));
         if(!projects.length)grid.append(node("div","empty","등록된 프로젝트가 없습니다."));count.textContent=`프로젝트 ${projects.length}`;
       };
-      fetch("./projects.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error();return r.json()}).then(config=>render((config.projects||[]).filter(p=>p.visibility!=="private").map(p=>({...p,owner:config.owner||"softm"})).sort((a,b)=>(a.order??999)-(b.order??999)))).catch(()=>grid.append(node("div","empty","프로젝트 목록을 불러오지 못했습니다.")));
+      const syncProjectStats=async(project)=>{
+        if(!project.pageSelector||!project.publicUrl)return;
+        try{
+          const url=new URL(safeUrl(project.publicUrl));url.searchParams.set("project-index-sync",Date.now());
+          const response=await fetch(url,{cache:"no-store"});if(!response.ok)return;
+          const doc=new DOMParser().parseFromString(await response.text(),"text/html"),entries=[...doc.querySelectorAll(project.pageSelector)];if(!entries.length)return;
+          const card=[...grid.querySelectorAll("[data-repo]")].find(item=>item.dataset.repo===project.repo);if(!card)return;
+          card.querySelector(".page-count").textContent=`${entries.length}개`;
+          const latest=doc.querySelector(project.titleSelector||`${project.pageSelector} h3`)?.textContent?.trim();if(latest)card.querySelector(".latest-title").textContent=latest;
+        }catch{}
+      };
+      fetch("./projects.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error();return r.json()}).then(config=>{const projects=(config.projects||[]).filter(p=>p.visibility!=="private").map(p=>({...p,owner:config.owner||"softm"})).sort((a,b)=>(a.order??999)-(b.order??999));render(projects);projects.forEach(syncProjectStats)}).catch(()=>grid.append(node("div","empty","프로젝트 목록을 불러오지 못했습니다.")));
       search.addEventListener("input",()=>{const q=search.value.trim().toLowerCase();document.querySelectorAll("[data-search]").forEach(el=>el.hidden=Boolean(q)&&!el.dataset.search.includes(q))});
     })();
   </script>
