@@ -1,15 +1,22 @@
 {
   "owner": "softm",
+  "updatedAt": "2026-08-22",
   "projects": [
     {
       "repo": "hwagok-farm",
       "title": "화곡농장",
       "category": "농업",
       "description": "농장 작업, 재배 계획, 농기계, 방제·관수와 수확 기록을 화곡농장 채팅별 페이지로 관리합니다.",
+      "visibility": "mixed",
+      "repoVisibility": "public",
+      "deploymentStatus": "deployed",
       "publicUrl": "https://softm.github.io/hwagok-farm/",
       "privateUrl": "https://hwagok.softm.chatgpt.site/#hwagok",
       "pageCount": 14,
-      "latestTitle": "2026-08-10 양파 구매처 조사",
+      "privatePageCount": 1,
+      "latestTitle": "2026-08-11 박 수확 기록",
+      "pageSelector": ".chat-card",
+      "titleSelector": ".chat-card h3",
       "order": 10
     },
     {
@@ -17,10 +24,87 @@
       "title": "광명",
       "category": "생활·주거",
       "description": "광명 주거, 시설, 계량기와 생활 관련 기록을 채팅별 페이지로 관리합니다.",
+      "visibility": "public",
+      "repoVisibility": "public",
+      "deploymentStatus": "deployed",
       "publicUrl": "https://softm.github.io/gwangmyeong/",
       "pageCount": 2,
       "latestTitle": "광명 수도 계량기 현장점검 및 요금상담",
+      "pageSelector": ".card:not(.locked)",
+      "titleSelector": ".card:not(.locked) .title",
       "order": 20
+    },
+    {
+      "repo": "mine",
+      "title": "나",
+      "category": "개인 기록",
+      "description": "개인 프로젝트의 채팅별 기록입니다. 현재 배포 상태는 비공개이며 공개 미러는 사용하지 않습니다.",
+      "visibility": "private",
+      "repoVisibility": "private",
+      "deploymentStatus": "deployed",
+      "privatePageCount": 1,
+      "latestTitle": "2026-08-19 비공개 기록",
+      "order": 30
+    },
+    {
+      "repo": "ungdo",
+      "title": "웅도 토지·성토",
+      "category": "토지·농지",
+      "description": "서산시 웅도리 63-1·65·66번지의 경계침범, 성토, 농지·산지 인허가와 도로보상 자료를 관리합니다.",
+      "visibility": "private",
+      "repoVisibility": "private",
+      "deploymentStatus": "deployed",
+      "privatePageCount": 1,
+      "latestTitle": "63-1·65·66 성토·경계침범 종합분석",
+      "order": 40
+    },
+    {
+      "repo": "hwagok-land-permit",
+      "title": "화곡리 개간허가",
+      "category": "토지·인허가",
+      "description": "서산시 대산읍 화곡리 산47-2·산47-3 개간허가, 측량, 수사·검찰 절차 자료를 관리합니다.",
+      "visibility": "private",
+      "repoVisibility": "private",
+      "deploymentStatus": "deployed",
+      "privatePageCount": 2,
+      "latestTitle": "처벌·기소 가능성 및 사후 하도급계약서 검증",
+      "order": 50
+    },
+    {
+      "repo": "father-hospital-treatment",
+      "title": "아버지 병원 치료",
+      "category": "의료·보험",
+      "description": "병원 진료기록, 의무기록 정정, 보험 심사와 민원 자료를 비공개로 관리합니다.",
+      "visibility": "private",
+      "repoVisibility": "private",
+      "deploymentStatus": "deployed",
+      "privatePageCount": 3,
+      "latestTitle": "한국교직원공제회 보험금 심사 지연 민원",
+      "order": 60
+    },
+    {
+      "repo": "gyeongju-kim",
+      "title": "경주김씨",
+      "category": "가족·기록",
+      "description": "공개 프로젝트 저장소가 생성되었으며 웹 콘텐츠 배포를 준비 중입니다.",
+      "visibility": "public",
+      "repoVisibility": "public",
+      "deploymentStatus": "pending",
+      "pageCount": 0,
+      "latestTitle": "배포 준비 중",
+      "order": 70
+    },
+    {
+      "repo": "seohae-nakji",
+      "title": "서해낙지",
+      "category": "수산·사업",
+      "description": "공개 프로젝트 저장소가 생성되었으며 웹 콘텐츠 배포를 준비 중입니다.",
+      "visibility": "public",
+      "repoVisibility": "public",
+      "deploymentStatus": "pending",
+      "pageCount": 0,
+      "latestTitle": "배포 준비 중",
+      "order": 80
     }
   ]
 }
