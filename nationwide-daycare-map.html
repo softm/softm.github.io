@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- nationwide map build 20260828-1913 official-evaluation -->
+<!-- nationwide map build 20260828-2005 viewport-region-sync -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -58,6 +58,8 @@ header{padding:25px clamp(16px,4vw,48px);background:linear-gradient(125deg,#1732
 <script>
 const DATA=window.NATIONAL_DAYCARE_DATA||[],PAGE=30,MAP_LIMIT=100;
 const DIRECTIONS_PROXY='https://daycare-directions-proxy.vercel.app/api/directions';
+const GEOCODE_PROXY='https://daycare-directions-proxy.vercel.app/api/geocode';
+const REVERSE_GEOCODE_PROXY='https://daycare-directions-proxy.vercel.app/api/reverse-geocode';
 const OFFICIAL_EVALUATIONS=window.NATIONAL_DAYCARE_EVALUATIONS||{};
 const PRESET_COORDS={
  '24121000275':[37.4211,126.8877],'24121000293':[37.4485,126.8835],'34121000214':[37.45,126.8838],
@@ -88,7 +90,7 @@ const ENRICHED={
 };
 const PRESET_ADDRESSES={'경기도 광명시 오리로 1034-1':{lat:37.48145,lng:126.84805}};
 DATA.forEach(c=>{c.ev=OFFICIAL_EVALUATIONS[c.i]||null;c.local=ENRICHED[c.i]||null});
-let page=1,filtered=[],selected=new Set(),gradeFilters=new Set(),scoreFilters=new Set(),mapSearchIds=null,routeOrder=[],naverMap=null,infoWindow=null,mapMarkers=[],routePolyline=null,mapRequest=0,mapReady=false,basePoint=null,baseMarker=null,pickLocation=false,mapTimer=null,boundsTimer=null,geocoderDenied=false,regionMapLoading=false;
+let page=1,filtered=[],selected=new Set(),gradeFilters=new Set(),scoreFilters=new Set(),mapSearchIds=null,routeOrder=[],naverMap=null,infoWindow=null,mapMarkers=[],routePolyline=null,mapRequest=0,mapReady=false,basePoint=null,baseMarker=null,pickLocation=false,mapTimer=null,boundsTimer=null,geocoderDenied=false,regionMapLoading=false,skipIdleUntil=0;
 const $=id=>document.getElementById(id),esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const mapQuery=c=>`${c.n} ${c.a}`.trim();
 const naverUrl=c=>`https://map.naver.com/p/search/${encodeURIComponent(mapQuery(c))}`;
@@ -105,10 +107,10 @@ function updateCities(){const p=$('province').value,cs=[...new Set(DATA.filter(x
 function matchesCapacity(c,v){if(!v)return true;if(v==='1-20')return c.z<=20;if(v==='21-40')return c.z>=21&&c.z<=40;if(v==='41-60')return c.z>=41&&c.z<=60;return c.z>=61}
 function toggleMultiFilter(type,value){const set=type==='grade'?gradeFilters:scoreFilters;if(value==='all')set.clear();else set.has(value)?set.delete(value):set.add(value);document.querySelectorAll(`[data-filter="${type}"]`).forEach(b=>b.classList.toggle('active',b.dataset.value==='all'?set.size===0:set.has(b.dataset.value)));page=1;apply()}
 function sortFiltered(){const sort=$('sort').value;filtered.sort((a,b)=>sort==='route'?routeIndex(a)-routeIndex(b)||(b.ev?.score||0)-(a.ev?.score||0):sort==='priority'?(b.ev?.score||0)-(a.ev?.score||0)||(a._distance??Infinity)-(b._distance??Infinity)||a.n.localeCompare(b.n,'ko'):sort==='distance'?(a._distance??Infinity)-(b._distance??Infinity)||a.n.localeCompare(b.n,'ko'):sort==='new'?b.d.localeCompare(a.d)||a.n.localeCompare(b.n,'ko'):sort==='capacity'?b.z-a.z||a.n.localeCompare(b.n,'ko'):sort==='caregiver'?b.cw-a.cw||a.n.localeCompare(b.n,'ko'):a.n.localeCompare(b.n,'ko'))}
-function apply(){
+function apply(skipMapUpdate=false){
  const q=$('q').value.trim().toLowerCase(),p=$('province').value,city=$('city').value,cap=$('capacity').value,st=$('staff').value;
  filtered=DATA.filter(c=>(!q||(c.n+c.a+c.i).toLowerCase().includes(q))&&(!p||c.p===p)&&(!city||c.c===city)&&matchesCapacity(c,cap)&&(!st||(st==='rehab'&&(c.pt+c.ot>0))||(st==='nurse'&&c.rn>0)||(st==='nursing'&&(c.rn+c.na>0))||(st==='new'&&isNew(c)))&&(!gradeFilters.size||gradeFilters.has(gradeCategory(c)))&&(!scoreFilters.size||scoreFilters.has(scoreCategory(c)))&&(!mapSearchIds||mapSearchIds.has(c.i)));
- sortFiltered();$('filteredCount').textContent=filtered.length.toLocaleString()+'곳';page=Math.min(page,Math.max(1,Math.ceil(filtered.length/PAGE)));render();if(mapReady&&($('province').value||filtered.length<=30))scheduleMapUpdate()
+ sortFiltered();$('filteredCount').textContent=filtered.length.toLocaleString()+'곳';page=Math.min(page,Math.max(1,Math.ceil(filtered.length/PAGE)));render();if(!skipMapUpdate&&mapReady&&($('province').value||filtered.length<=30))scheduleMapUpdate()
 }
 function row(c,rank){const ev=c.ev,routeRank=routeOrder.indexOf(c.i),evaluation=ev?`<span class="chip score">공단 ${scoreText(ev.score)}</span><span class="chip grade">${esc(gradeText(ev.grade))}</span><span class="chip">${ev.year||'-'}년 평가</span>`:(isNew(c)?'<span class="chip new">신설·미평가</span>':'<span class="chip">공식 평가 미확인</span>');return `<article class="row ${selected.has(c.i)?'route-selected':''}" onclick="showOnMap('${c.i}')"><input type="checkbox" ${selected.has(c.i)?'checked':''} aria-label="${esc(c.n)} 선택" onclick="event.stopPropagation()" onchange="toggle('${c.i}',this.checked)"><div><h3><span class="rank">${routeRank>=0&&$('sort').value==='route'?routeRank+1:rank}.</span>${esc(c.n)}</h3><div class="meta">${evaluation}<span class="chip">정원 ${c.z}명</span>${Number.isFinite(c._distance)?`<span class="chip">기준지 ${c._distance.toFixed(1)}km</span>`:''}<span class="chip${isNew(c)?' new':''}">지정 ${esc(c.d||'-')}</span></div><div class="details">${esc(c.a)}<br>사회복지사 ${c.s} · 간호 ${c.rn} · 간호조무 ${c.na} · 물리 ${c.pt} · 작업 ${c.ot} · 요양보호 ${c.cw}</div></div><div class="actions"><button class="map" onclick="event.stopPropagation();showOnMap('${c.i}')">지도 표시</button><a class="kakao" target="_blank" rel="noopener" onclick="event.stopPropagation()" href="${kakaoUrl(c)}">카카오 상세</a><a class="nhis" target="_blank" rel="noopener" onclick="event.stopPropagation()" href="${officialUrl(c)}">공단 검색</a></div></article>`}
 function render(){const start=(page-1)*PAGE,rows=filtered.slice(start,start+PAGE);$('list').innerHTML=rows.length?rows.map((c,i)=>row(c,start+i+1)).join(''):'<div class="empty">조건에 맞는 센터가 없습니다.</div>';const pages=Math.ceil(filtered.length/PAGE),from=Math.max(1,page-2),to=Math.min(pages,page+2);let h=`<button ${page===1?'disabled':''} onclick="go(${page-1})">이전</button>`;for(let i=from;i<=to;i++)h+=`<button class="${i===page?'active':''}" onclick="go(${i})">${i}</button>`;h+=`<button ${page>=pages?'disabled':''} onclick="go(${page+1})">다음</button>`;$('pager').innerHTML=h;renderSelected()}
@@ -127,24 +129,39 @@ function saveCoord(c,v){try{localStorage.setItem('daycareCoord:'+c.i,JSON.string
 function coordFor(c){if(c._coord)return c._coord;const p=PRESET_COORDS[c.i];if(p)return c._coord={lat:p[0],lng:p[1]};const hit=cachedCoord(c);return hit?(c._coord=hit):null}
 async function geocodeAddress(query){
  const fixed=PRESET_ADDRESSES[query.trim()];if(fixed)return fixed;
- if(window.naver?.maps?.Service&&!geocoderDenied){const clientResult=await new Promise(resolve=>naver.maps.Service.geocode({query},(status,res)=>{if(status!==naver.maps.Service.Status.OK||!res?.v2?.addresses?.length)return resolve(null);const a=res.v2.addresses[0];resolve({lat:Number(a.y),lng:Number(a.x)})}));if(clientResult)return clientResult}
- try{const response=await fetch(DIRECTIONS_PROXY.replace('/directions','/geocode'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query})});const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||'주소 좌표 조회 실패');return Number.isFinite(result.lat)&&Number.isFinite(result.lng)?{lat:result.lat,lng:result.lng}:null}catch(error){geocoderDenied=true;setMapStatus(error.message||'주소 좌표 권한 필요');return null}
+ if(window.naver?.maps?.Service){const clientResult=await new Promise(resolve=>naver.maps.Service.geocode({query},(status,res)=>{if(status!==naver.maps.Service.Status.OK||!res?.v2?.addresses?.length)return resolve(null);const a=res.v2.addresses[0];resolve({lat:Number(a.y),lng:Number(a.x)})}));if(clientResult)return clientResult}
+ try{const response=await fetch(GEOCODE_PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query})});const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||'주소 좌표 조회 실패');geocoderDenied=false;return Number.isFinite(result.lat)&&Number.isFinite(result.lng)?{lat:result.lat,lng:result.lng}:null}catch(error){setMapStatus(error.message||'주소 좌표 조회 실패');return null}
 }
-async function geocodeCenter(c){const known=coordFor(c);if(known)return known;if(geocoderDenied)return null;const v=await geocodeAddress(c.a);if(v){c._coord=v;saveCoord(c,v)}return v}
+async function geocodeCenter(c){const known=coordFor(c);if(known)return known;const v=await geocodeAddress(c.a);if(v){c._coord=v;saveCoord(c,v)}return v}
 function closeMapPopup(){if(infoWindow){infoWindow.close();infoWindow=null}}
 function clearRouteLine(){if(routePolyline){routePolyline.setMap(null);routePolyline=null}}
 function clearCenterMarkers(){mapMarkers.forEach(m=>m.setMap(null));mapMarkers=[];closeMapPopup();clearRouteLine()}
 function openCenter(c,m){closeMapPopup();infoWindow=new naver.maps.InfoWindow({content:popup(c),borderWidth:0,backgroundColor:'transparent',anchorSkew:false});infoWindow.open(naverMap,m)}
-async function displayCenters(rows,openFirst=false,routeMode=false,fitMap=true){
+async function displayCenters(rows,openFirst=false,routeMode=false,fitMap=true,clipBounds=null){
  if(!mapReady){showMapLoad('네이버지도 준비 후 다시 시도하세요.');return}const request=++mapRequest,list=rows.slice(0,MAP_LIMIT);clearCenterMarkers();if(!list.length){showMapLoad('표시할 센터가 없습니다.');setMapStatus('0곳');return}
  showMapLoad(`주소 좌표 확인 중 · 0/${list.length}`);const bounds=new naver.maps.LatLngBounds();let success=0;
- for(let start=0;start<list.length;start+=6){const batch=list.slice(start,start+6),coords=await Promise.all(batch.map(geocodeCenter));if(request!==mapRequest)return;batch.forEach((c,j)=>{const v=coords[j];if(!v)return;success++;if(basePoint)c._distance=hav(basePoint,v);const pos=new naver.maps.LatLng(v.lat,v.lng),label=routeMode?routeOrder.indexOf(c.i)+1:start+j+1,m=new naver.maps.Marker({map:naverMap,position:pos,title:c.n,icon:{content:`<div class="pin ${routeMode?'route':''}"><span>${label}</span></div>`,anchor:new naver.maps.Point(15,28)}});m.centerId=c.i;naver.maps.Event.addListener(m,'click',()=>openCenter(c,m));mapMarkers.push(m);bounds.extend(pos)});showMapLoad(`주소 좌표 확인 중 · ${Math.min(start+6,list.length)}/${list.length}`)}
- if(basePoint&&fitMap)bounds.extend(new naver.maps.LatLng(basePoint.lat,basePoint.lng));hideMapLoad();if(success){if(fitMap)naverMap.fitBounds(bounds,{top:70,right:45,bottom:45,left:45});setMapStatus(`${success}곳 마커${rows.length>MAP_LIMIT?' · 상위 100곳':''}`);if(openFirst&&mapMarkers[0])openCenter(list.find(c=>c.i===mapMarkers[0].centerId)||list[0],mapMarkers[0])}else{showMapLoad(geocoderDenied?'Geocoding API 권한이 필요합니다. 네이버 Cloud에서 Geocoding을 활성화하세요.':'현재 지도영역에 표시할 좌표 보유 센터가 없습니다.');setMapStatus(geocoderDenied?'Geocoding 권한 필요':'현재 영역 0곳')}if(basePoint){sortFiltered();render()}
+ for(let start=0;start<list.length;start+=6){const batch=list.slice(start,start+6),coords=await Promise.all(batch.map(geocodeCenter));if(request!==mapRequest)return;batch.forEach((c,j)=>{const v=coords[j];if(!v)return;if(basePoint)c._distance=hav(basePoint,v);const pos=new naver.maps.LatLng(v.lat,v.lng);if(clipBounds&&!clipBounds.hasLatLng(pos))return;success++;const label=routeMode?routeOrder.indexOf(c.i)+1:start+j+1,m=new naver.maps.Marker({map:naverMap,position:pos,title:c.n,icon:{content:`<div class="pin ${routeMode?'route':''}"><span>${label}</span></div>`,anchor:new naver.maps.Point(15,28)}});m.centerId=c.i;naver.maps.Event.addListener(m,'click',()=>openCenter(c,m));mapMarkers.push(m);bounds.extend(pos)});showMapLoad(`주소 좌표 확인 중 · ${Math.min(start+6,list.length)}/${list.length}`)}
+ hideMapLoad();if(success){if(fitMap){skipIdleUntil=Date.now()+1400;naverMap.fitBounds(bounds,{top:70,right:45,bottom:45,left:45})}setMapStatus(`${success}곳 마커${rows.length>MAP_LIMIT?' · 상위 100곳':''}`);if(openFirst&&mapMarkers[0])openCenter(list.find(c=>c.i===mapMarkers[0].centerId)||list[0],mapMarkers[0])}else{showMapLoad('현재 지도영역에 조건과 일치하는 센터가 없습니다.');setMapStatus('현재 영역 0곳')}if(basePoint){sortFiltered();render()}
 }
 function scheduleMapUpdate(){clearTimeout(mapTimer);mapTimer=setTimeout(()=>showFilteredOnMap(true),350)}
 function showFilteredOnMap(auto=false){if(filtered.length>MAP_LIMIT&&!$('province').value&&!$('city').value&&!$('q').value.trim()&&auto)return;displayCenters(filtered,false)}
-function loadMarkersInCurrentBounds(){if(!mapReady||regionMapLoading||routeOrder.length)return;const bounds=naverMap.getBounds(),rows=filtered.filter(c=>{const v=coordFor(c);return v&&bounds.hasLatLng(new naver.maps.LatLng(v.lat,v.lng))}).slice(0,MAP_LIMIT);displayCenters(rows,false,false,false);setMapStatus(`현재 지도영역 ${rows.length}곳`)}
-function scheduleBoundsMarkers(){clearTimeout(boundsTimer);boundsTimer=setTimeout(loadMarkersInCurrentBounds,450)}
+function findSelectValue(id,name){const values=[...$(id).options].map(o=>o.value).filter(Boolean);return values.find(v=>v===name)||values.find(v=>v.includes(name)||name.includes(v))||''}
+async function reverseMapRegion(){const center=naverMap.getCenter(),response=await fetch(REVERSE_GEOCODE_PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lat:center.lat(),lng:center.lng()})});const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||'현재 지도 행정구역 조회 실패');return result}
+async function loadMarkersInCurrentBounds(){
+ if(!mapReady||regionMapLoading||routeOrder.length||Date.now()<skipIdleUntil)return;
+ regionMapLoading=true;const bounds=naverMap.getBounds();
+ try{
+  const region=await reverseMapRegion(),province=findSelectValue('province',region.province);
+  if(province){$('province').value=province;updateCities();const city=findSelectValue('city',region.city);if(city)$('city').value=city;clearMapSearch(false);page=1;apply(true)}
+  await displayCenters(filtered,false,false,false,bounds);
+  setMapStatus(`${region.province} ${region.city} · 현재 영역 ${mapMarkers.length}곳`);
+  $('routeNote').textContent=`지도 이동 위치의 시군구 조건을 자동 적용해 현재 화면 안의 센터 ${mapMarkers.length}곳을 조회했습니다.`;
+ }catch(error){
+  const rows=filtered.filter(c=>{const v=coordFor(c);return v&&bounds.hasLatLng(new naver.maps.LatLng(v.lat,v.lng))}).slice(0,MAP_LIMIT);
+  await displayCenters(rows,false,false,false,bounds);setMapStatus(`현재 영역 ${mapMarkers.length}곳 · ${error.message}`);
+ }finally{regionMapLoading=false}
+}
+function scheduleBoundsMarkers(){if(Date.now()<skipIdleUntil)return;clearTimeout(boundsTimer);boundsTimer=setTimeout(loadMarkersInCurrentBounds,650)}
 function showSelectedOnMap(){const rows=DATA.filter(c=>selected.has(c.i));if(!rows.length){$('routeNote').textContent='센터를 먼저 선택하세요.';return}displayCenters(rows,false)}
 async function showOnMap(id){const c=DATA.find(x=>x.i===id);if(!c)return;if(!mapReady){window.open(naverUrl(c),'_blank');return}const found=mapMarkers.find(m=>m.centerId===id);if(found){naverMap.setCenter(found.getPosition());naverMap.setZoom(16);openCenter(c,found);return}if(coordFor(c))await displayCenters([c],true);else window.open(naverUrl(c),'_blank')}
 function searchCurrentMap(){if(!mapReady)return;closeMapPopup();const bounds=naverMap.getBounds(),ids=new Set();DATA.forEach(c=>{const v=coordFor(c);if(v&&bounds.hasLatLng(new naver.maps.LatLng(v.lat,v.lng)))ids.add(c.i)});mapSearchIds=ids;$('mapSearchClear').style.display='block';page=1;apply();setMapStatus(`현 지도 ${filtered.length}곳 검색`);$('routeNote').textContent=`현재 지도 안의 좌표 보유 기관 ${filtered.length}곳을 조회했습니다.`}
