@@ -71,7 +71,10 @@ tr.omitted{background:#fffaf1}tr:hover{background:#f2f7fd}.center-link{cursor:po
 .marker-pin{width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,.35)}
 .marker-pin span{transform:rotate(45deg);font-size:9px;color:white;font-weight:900}.m-green{background:var(--green)}.m-blue{background:var(--blue)}.m-orange{background:var(--orange)}.m-gray{background:var(--gray)}
 .base-marker{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#dc2626;color:white;border:3px solid white;font-weight:900;box-shadow:0 2px 9px rgba(0,0,0,.35)}
-.popup h3{font-size:15px;margin:0 0 6px}.popup p{margin:4px 0;line-height:1.45}.popup a{display:inline-block;margin:7px 4px 0 0;padding:5px 7px;border-radius:6px;background:#eef4ff;color:#1d4ed8;text-decoration:none}
+.popup{width:min(330px,78vw);color:#172033;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif}
+.popup-head{padding:14px 15px 12px;background:linear-gradient(135deg,#17324d,#285f8f);color:#fff;border-radius:11px 11px 0 0}.popup-eyebrow{display:flex;gap:6px;align-items:center;margin-bottom:7px}.popup-eyebrow span{padding:3px 7px;border-radius:999px;background:rgba(255,255,255,.16);font-size:10px;font-weight:800}.popup h3{font-size:17px;line-height:1.35;margin:0;font-weight:900}.popup-score-row{display:flex;align-items:center;gap:9px;margin-top:9px}.popup-score{font-size:25px;font-weight:900;color:#ffe082}.popup-stars{color:#ffd166;font-size:13px;white-space:nowrap}
+.popup-body{padding:12px 15px 14px;background:#fff;border:1px solid #d8e0ec;border-top:0;border-radius:0 0 11px 11px}.popup-meta{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}.popup-chip{padding:7px 8px;border-radius:8px;background:#f2f6fb;font-size:11px;line-height:1.35;color:#46576d}.popup-chip b{display:block;color:#172033;font-size:12px;margin-top:2px}.popup-row{display:flex;gap:8px;align-items:flex-start;padding:7px 0;border-top:1px solid #edf1f6;font-size:12px;line-height:1.45}.popup-row-label{flex:0 0 42px;color:#667085;font-weight:800}.popup-row-value{color:#25344a}.popup-phone{color:#1458b8;font-weight:800;text-decoration:none}.popup-note{margin-top:8px;padding:9px 10px;border-radius:8px;background:#fff8e8;color:#684b16;font-size:11px;line-height:1.48;border:1px solid #f3dfb0}
+.map-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}.map-actions a{display:flex;align-items:center;justify-content:center;min-height:34px;padding:7px 8px;border-radius:8px;text-decoration:none;font-size:11px;font-weight:900}.map-actions .kakao{background:#fee500;color:#191919}.map-actions .naver{background:#03c75a;color:#fff}.leaflet-popup-content{margin:0!important;width:auto!important}.leaflet-popup-content-wrapper{padding:0!important;border-radius:12px!important;overflow:hidden}.leaflet-popup-tip-container{margin-top:-1px}
 .static-stage{position:relative;width:100%;height:100%;overflow:hidden}.static-stage svg{width:100%;height:100%;display:block}.static-head{position:absolute;left:12px;top:12px;z-index:2;background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:12px;line-height:1.45;box-shadow:0 3px 10px rgba(0,0,0,.08)}
 .static-info{position:absolute;right:12px;top:12px;width:min(330px,calc(100% - 24px));z-index:3;background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:10px;padding:11px;font-size:12px;line-height:1.5;box-shadow:0 3px 14px rgba(0,0,0,.12)}
 .static-info h3{font-size:15px;margin:0 0 5px}.static-info button{float:right;padding:3px 7px;margin:-3px -3px 4px 6px}.static-marker{cursor:pointer}.static-marker circle{stroke:#fff;stroke-width:75;filter:drop-shadow(0 65px 75px rgba(0,0,0,.22))}.static-marker text{fill:#fff;font-weight:900;font-size:250px;text-anchor:middle;dominant-baseline:central;pointer-events:none}.static-marker:hover circle{stroke:#111827;stroke-width:105}
@@ -276,8 +279,25 @@ function cleanMapAddress(c){return c.geoAddress||String(c.address).replace(/,.*$
 function mapSearchQuery(c){return `${c.mapName||c.name} ${cleanMapAddress(c)}`.trim()}
 function naverSearchUrl(c){return `https://map.naver.com/p/search/${encodeURIComponent(mapSearchQuery(c))}`}
 function kakaoSearchUrl(c){return `https://map.kakao.com/link/search/${encodeURIComponent(c.mapName||c.name)}`}
-function mapLinks(c){return `<a target="_blank" rel="noopener" href="${kakaoSearchUrl(c)}">카카오맵 상세</a><a target="_blank" rel="noopener" href="${naverSearchUrl(c)}">네이버지도 상세</a>`}
-function popupHtml(c){return `<div class="popup"><h3>${c.name}</h3><p><b>${c.listed?'기존 조사':'추가 조사'}</b> · 자체 종합 <b>${Number(c.quality).toFixed(1)}</b></p><p>공식평가: ${c.grade} ${c.eval_year}</p><p>직선 약 <b>${c.distance.toFixed(1)}km</b> · ${c.phone}</p><p>${c.address}</p><p>${c.note}</p>${mapLinks(c)}</div>`}
+function mapLinks(c){return `<div class="map-actions"><a class="kakao" target="_blank" rel="noopener" href="${kakaoSearchUrl(c)}">카카오맵 상세</a><a class="naver" target="_blank" rel="noopener" href="${naverSearchUrl(c)}">네이버지도 상세</a></div>`}
+function popupHtml(c){return `<div class="popup">
+  <div class="popup-head">
+    <div class="popup-eyebrow"><span>${c.listed?'기존 조사':'추가 조사'}</span><span>${c.region}</span><span>정보신뢰 ${c.confidence}</span></div>
+    <h3>${c.name}</h3>
+    <div class="popup-score-row"><span class="popup-score">${Number(c.quality).toFixed(1)}</span><span class="popup-stars">${stars(c.quality)}</span><span style="font-size:11px;opacity:.85">종합평점</span></div>
+  </div>
+  <div class="popup-body">
+    <div class="popup-meta">
+      <div class="popup-chip">공식평가<b>${c.grade} · ${c.eval_year}</b></div>
+      <div class="popup-chip">기준지 거리<b>직선 약 ${c.distance.toFixed(1)}km</b></div>
+    </div>
+    <div class="popup-row"><span class="popup-row-label">전화</span><span class="popup-row-value"><a class="popup-phone" href="tel:${c.phone.replace(/[^0-9+]/g,'')}">${c.phone}</a></span></div>
+    <div class="popup-row"><span class="popup-row-label">주소</span><span class="popup-row-value">${c.address}</span></div>
+    <div class="popup-row"><span class="popup-row-label">프로그램</span><span class="popup-row-value">${c.program}</span></div>
+    <div class="popup-note"><b>검토 의견</b><br>${c.note}</div>
+    ${mapLinks(c)}
+  </div>
+</div>`}
 
 function setStatus(text){document.getElementById('mapStatus').textContent=text}
 function setViewButtons(view){
