@@ -350,8 +350,7 @@ function mapBoundsContains(c){
 function refreshAllViewsAfterMapSearch(){
   if(naverReady)refreshNaverMarkers();
   if(leafletReady)refreshLeafletMarkers();
-  activeRoute=[];drawActiveRoute();document.getElementById('staticMap').addEventListener('click',event=>{if(!event.target.closest?.('.static-marker'))closeOpenCenterPopup()});
-renderStaticMap();renderRanking();renderTable();updateFilterCount();updateRouteSelectionSummary();
+  activeRoute=[];drawActiveRoute();renderStaticMap();renderRanking();renderTable();updateFilterCount();updateRouteSelectionSummary();
 }
 function searchCurrentMap(event){
   if(event)event.stopPropagation();closeOpenCenterPopup();
@@ -769,6 +768,7 @@ function renderTable(){
   document.getElementById('tbody').innerHTML=rows.map(c=>`<tr class="${c.listed?'':'omitted'}"><td><span class="badge ${c.listed?'old':'new'}">${c.listed?'기존':'추가'}</span></td><td><b class="center-link" onclick="focusCenter(${c.id})">${c.name}</b><div class="small muted">${c.region} · 정보신뢰 ${c.confidence}</div></td><td><b>${c.distance.toFixed(1)}km</b><div class="small muted">직선거리</div></td><td><b>${c.grade}</b><div class="small muted">${c.eval_year} ${c.eval_score}</div></td><td><b>${Number(c.quality).toFixed(1)}</b><div class="stars">${stars(c.quality)}</div></td><td><div class="stars">${stars(c.program_star)}</div><div class="small">${c.program}</div></td><td><div class="stars">${stars(Number(c.clean))}</div><div class="small">${c.facility}</div></td><td>${c.staff}</td><td class="phone">${c.phone}${c.user_phone&&c.user_phone!==c.phone?`<div class="small muted">조사번호 ${c.user_phone}</div>`:''}</td><td>${c.note}</td><td>${c.address}</td></tr>`).join('');
 }
 
+document.getElementById('staticMap').addEventListener('click',event=>{if(!event.target.closest?.('.static-marker'))closeOpenCenterPopup()});
 renderStaticMap();renderRanking();renderTable();updateFilterCount();updateRouteSelectionSummary();
 if(IS_LOCAL_FILE){
   setStatus('로컬 파일 모드 · OpenStreetMap 연결 시도');
