@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- nationwide build 20260828-0200 -->
+<!-- nationwide map build 20260828-0245 -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -22,7 +22,7 @@ header{padding:25px clamp(16px,4vw,48px);background:linear-gradient(125deg,#1732
 <header><h1>전국 주야간보호센터 공식정보 검색</h1><p>국민건강보험공단 2026년 6월 10일 시설별 현황을 기반으로 전국 주야간보호기관을 검색합니다.</p><p><a style="color:#fff" href="gwangmyeong-daycare-center-map.html">광명·구로 상세 비교지도로 이동</a></p></header>
 <main class="wrap">
  <section class="stats"><div class="card stat"><span>전국 주야간보호기관</span><b id="allCount">-</b></div><div class="card stat"><span>현재 검색결과</span><b id="filteredCount">-</b></div><div class="card stat"><span>선택 기관</span><b id="selectedCount">0</b></div><div class="card stat"><span>데이터 기준일</span><b style="font-size:18px">2026-06-10</b></div></section>
- <section class="card source"><b>공식 데이터 범위</b> — 기관코드·기관명·주소·지정일·정원·인력을 표시합니다. 이 XLSX에는 전화번호·공단 평가등급·좌표가 없으므로 해당 값은 임의 생성하지 않고 <a href="https://www.longtermcare.or.kr/npbs/r/a/201/selectLtcoSrch.web" target="_blank">공단 기관 찾기</a>와 지도 상호검색으로 연결합니다.</section>
+ <section class="card source"><b>공식 데이터 범위</b> — 기관코드·기관명·주소·지정일·정원·인력을 표시합니다. 공단 XLSX에는 좌표가 없어 검증된 지역 좌표를 별도로 결합하며, 좌표가 없는 기관은 <a href="https://www.longtermcare.or.kr/npbs/r/a/201/selectLtcoSrch.web" target="_blank">공단 기관 찾기</a>와 지도 상호검색으로 연결합니다.</section>
  <section class="card filters"><div class="filter-grid">
    <input id="q" placeholder="센터명·주소·기관기호 검색" aria-label="검색">
    <select id="province" aria-label="시도"><option value="">전국 시·도</option></select>
@@ -31,7 +31,7 @@ header{padding:25px clamp(16px,4vw,48px);background:linear-gradient(125deg,#1732
    <select id="staff" aria-label="전문인력"><option value="">전문인력 전체</option><option value="rehab">물리·작업치료사 있음</option><option value="nurse">간호사 있음</option><option value="nursing">간호사·간호조무사 있음</option><option value="new">지정 3년 이내</option></select>
  </div><div class="filter-note">공식 평가등급·자체평점 필터는 평가자료가 결합된 지역 상세판에서만 제공합니다.</div></section>
  <section class="layout">
-  <div class="card map-card"><div class="map-toolbar"><h2>전국 센터 지도</h2><button class="primary" onclick="showFilteredOnMap()">검색결과 마커 표시</button><button class="secondary" onclick="showSelectedOnMap()">선택센터만 표시</button><span class="map-status" id="mapStatus">지도 준비 중</span></div><div class="location-tools"><input id="baseAddress" value="경기도 광명시 오리로 1034-1" placeholder="기준 위치 주소 입력" aria-label="기준 위치 주소"><button onclick="setBaseByAddress()">주소로 지정</button><button onclick="useCurrentLocation()">현재 위치</button><button id="pickLocationBtn" onclick="togglePickLocation()">지도 클릭 지정</button></div><div class="map-shell" id="naverMap"><div class="load" id="mapLoad">네이버지도를 불러오는 중입니다.<br>시·군·구를 선택하면 검색결과가 마커로 표시됩니다.</div></div><div class="map-note">주소·GPS·지도 클릭으로 기준 위치를 지정할 수 있습니다. 전국 5,751곳을 한 번에 좌표화하지 않고 검색결과를 100곳까지 표시합니다.</div></div>
+  <div class="card map-card"><div class="map-toolbar"><h2>전국 센터 지도</h2><button class="primary" onclick="showFilteredOnMap()">검색결과 마커 표시</button><button class="secondary" onclick="showSelectedOnMap()">선택센터만 표시</button><span class="map-status" id="mapStatus">지도 준비 중</span></div><div class="location-tools"><input id="baseAddress" value="경기도 광명시 오리로 1034-1" placeholder="기준 위치 주소 입력" aria-label="기준 위치 주소"><button onclick="setBaseByAddress()">주소로 지정</button><button onclick="useCurrentLocation()">현재 위치</button><button id="pickLocationBtn" onclick="togglePickLocation()">지도 클릭 지정</button></div><div class="map-shell" id="naverMap"><div class="load" id="mapLoad">네이버지도를 불러오는 중입니다.<br>시·군·구를 선택하면 검색결과가 마커로 표시됩니다.</div></div><div class="map-note">GPS 또는 지도 클릭으로 기준 위치를 바로 지정할 수 있습니다. 광명·구로 검증 좌표는 즉시 표시하며, 좌표가 결합되지 않은 전국 기관은 지도 상세검색으로 연결합니다.</div></div>
   <aside class="card results"><div class="result-head"><h2>검색결과·마커 목록</h2><select id="sort"><option value="name">기관명순</option><option value="distance">기준 위치 가까운순</option><option value="new">최근 지정순</option><option value="capacity">정원 큰순</option><option value="caregiver">요양보호사 많은순</option></select></div><div class="result-list" id="list"></div><div class="pager" id="pager"></div><div class="selected"><h2>비교 목록</h2><div class="selected-list" id="selectedList"><div class="empty">체크박스로 센터를 선택하세요.</div></div></div></aside>
  </section>
 </main>
@@ -53,7 +53,17 @@ header{padding:25px clamp(16px,4vw,48px);background:linear-gradient(125deg,#1732
 <script src="nationwide-daycare-data-gyeongnam.js"></script>
 <script src="nationwide-daycare-data-jeju.js"></script>
 <script>
-const DATA=window.NATIONAL_DAYCARE_DATA||[],PAGE=30,MAP_LIMIT=100;let page=1,filtered=[],selected=new Set(),naverMap=null,infoWindow=null,mapMarkers=[],mapRequest=0,mapReady=false,basePoint=null,baseMarker=null,pickLocation=false,mapTimer=null;
+const DATA=window.NATIONAL_DAYCARE_DATA||[],PAGE=30,MAP_LIMIT=100;
+const PRESET_COORDS={
+ '24121000275':[37.4211,126.8877],'24121000293':[37.4485,126.8835],'34121000214':[37.45,126.8838],
+ '24121000297':[37.4485,126.8838],'24121000312':[37.4742,126.8487],'24121000230':[37.4618,126.8787],
+ '24121000220':[37.4735766,126.8507671],'34121000038':[37.4447,126.8797],'34121000201':[37.4189,126.887],
+ '24121000233':[37.4469,126.8867],'24121000288':[37.4743,126.8356],'24121000299':[37.48155,126.8481],
+ '34121000146':[37.4613,126.8794],'21153000383':[37.498,126.858],'21153000322':[37.480564,126.83978],
+ '21153000369':[37.4933,126.8175],'21153000128':[37.5032,126.862]
+};
+const PRESET_ADDRESSES={'경기도 광명시 오리로 1034-1':{lat:37.48145,lng:126.84805}};
+let page=1,filtered=[],selected=new Set(),naverMap=null,infoWindow=null,mapMarkers=[],mapRequest=0,mapReady=false,basePoint=null,baseMarker=null,pickLocation=false,mapTimer=null,geocoderDenied=false;
 const $=id=>document.getElementById(id),esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const mapQuery=c=>`${c.n} ${c.a}`.trim();
 const naverUrl=c=>`https://map.naver.com/p/search/${encodeURIComponent(mapQuery(c))}`;
@@ -91,8 +101,8 @@ function hideMapLoad(){$('mapLoad').style.display='none'}
 function hav(a,b){const R=6371,r=x=>x*Math.PI/180,dLat=r(b.lat-a.lat),dLon=r(b.lng-a.lng),v=Math.sin(dLat/2)**2+Math.cos(r(a.lat))*Math.cos(r(b.lat))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(v))}
 function cachedCoord(c){try{const v=JSON.parse(localStorage.getItem('daycareCoord:'+c.i)||'null');return v&&Number.isFinite(v.lat)&&Number.isFinite(v.lng)?v:null}catch{return null}}
 function saveCoord(c,v){try{localStorage.setItem('daycareCoord:'+c.i,JSON.stringify(v))}catch{}}
-function geocodeAddress(query){return new Promise(resolve=>{if(!window.naver?.maps?.Service)return resolve(null);naver.maps.Service.geocode({query},(status,res)=>{if(status!==naver.maps.Service.Status.OK||!res.v2.addresses.length)return resolve(null);const a=res.v2.addresses[0];resolve({lat:Number(a.y),lng:Number(a.x)})})})}
-async function geocodeCenter(c){if(c._coord)return c._coord;const hit=cachedCoord(c);if(hit)return c._coord=hit;const v=await geocodeAddress(c.a);if(v){c._coord=v;saveCoord(c,v)}return v}
+function geocodeAddress(query){const fixed=PRESET_ADDRESSES[query.trim()];if(fixed)return Promise.resolve(fixed);return new Promise(resolve=>{if(!window.naver?.maps?.Service)return resolve(null);naver.maps.Service.geocode({query},(status,res)=>{if(status!==naver.maps.Service.Status.OK||!res?.v2?.addresses?.length){geocoderDenied=true;return resolve(null)}const a=res.v2.addresses[0];resolve({lat:Number(a.y),lng:Number(a.x)})})})}
+async function geocodeCenter(c){if(c._coord)return c._coord;const preset=PRESET_COORDS[c.i];if(preset)return c._coord={lat:preset[0],lng:preset[1]};const hit=cachedCoord(c);if(hit)return c._coord=hit;if(geocoderDenied)return null;const v=await geocodeAddress(c.a);if(v){c._coord=v;saveCoord(c,v)}return v}
 function clearCenterMarkers(){mapMarkers.forEach(m=>m.setMap(null));mapMarkers=[];if(infoWindow)infoWindow.close()}
 function openCenter(c,m){if(infoWindow)infoWindow.close();infoWindow=new naver.maps.InfoWindow({content:popup(c),borderWidth:0,backgroundColor:'transparent',anchorSkew:false});infoWindow.open(naverMap,m)}
 async function displayCenters(rows,openFirst=false){
@@ -107,7 +117,7 @@ async function displayCenters(rows,openFirst=false){
  }
  if(basePoint)bounds.extend(new naver.maps.LatLng(basePoint.lat,basePoint.lng));hideMapLoad();
  if(success){naverMap.fitBounds(bounds,{top:55,right:45,bottom:45,left:45});setMapStatus(`${success}곳 마커${rows.length>MAP_LIMIT?' · 상위 100곳':''}`);if(openFirst&&mapMarkers[0])openCenter(list.find(c=>c.i===mapMarkers[0].centerId)||list[0],mapMarkers[0])}
- else{showMapLoad('좌표를 찾지 못했습니다. 지도 API 인증과 주소를 확인하세요.');setMapStatus('좌표 없음')}
+ else{showMapLoad('이 지역은 아직 센터 좌표가 결합되지 않았습니다. 센터의 “카카오 상세” 또는 팝업의 네이버·카카오 상호검색을 이용하세요.');setMapStatus('좌표 데이터 준비 중')}
  if(basePoint){if($('sort').value==='distance')filtered.sort((a,b)=>(a._distance??Infinity)-(b._distance??Infinity));render()}
 }
 function scheduleMapUpdate(){clearTimeout(mapTimer);mapTimer=setTimeout(()=>showFilteredOnMap(true),350)}
@@ -115,10 +125,10 @@ function showFilteredOnMap(auto=false){if(filtered.length>MAP_LIMIT&&!$('city').
 function showSelectedOnMap(){const rows=DATA.filter(c=>selected.has(c.i));if(!rows.length){showMapLoad('비교 목록에서 센터를 먼저 선택하세요.');return}displayCenters(rows,false)}
 async function showOnMap(id){const c=DATA.find(x=>x.i===id);if(!c)return;if(!mapReady){window.open(naverUrl(c),'_blank');return}const found=mapMarkers.find(m=>m.centerId===id);if(found){naverMap.setCenter(found.getPosition());naverMap.setZoom(16);openCenter(c,found);return}await displayCenters([c],true)}
 function setBasePoint(v,label){basePoint=v;if(baseMarker)baseMarker.setMap(null);const pos=new naver.maps.LatLng(v.lat,v.lng);baseMarker=new naver.maps.Marker({map:naverMap,position:pos,title:label||'기준 위치',zIndex:5000,icon:{content:'<div class="base-pin">기준</div>',anchor:new naver.maps.Point(19,19)}});naverMap.setCenter(pos);naverMap.setZoom(14);setMapStatus('기준 위치 지정 완료');mapMarkers.forEach(m=>{const c=DATA.find(x=>x.i===m.centerId);if(c){c._distance=hav(basePoint,{lat:m.getPosition().lat(),lng:m.getPosition().lng()})}});if($('sort').value==='distance')apply();else render()}
-async function setBaseByAddress(){const q=$('baseAddress').value.trim();if(!q)return;showMapLoad('기준 주소를 찾는 중입니다…');const v=await geocodeAddress(q);hideMapLoad();if(v)setBasePoint(v,q);else{showMapLoad('기준 주소를 찾지 못했습니다. 주소를 확인하세요.');setMapStatus('주소 확인 필요')}}
+async function setBaseByAddress(){const q=$('baseAddress').value.trim();if(!q)return;showMapLoad('기준 주소를 찾는 중입니다…');const v=await geocodeAddress(q);hideMapLoad();if(v)setBasePoint(v,q);else{showMapLoad('주소 자동검색 권한이 없어 기준 위치를 찾지 못했습니다. “현재 위치” 또는 “지도 클릭 지정”을 사용하세요.');setMapStatus('GPS·지도 클릭 사용')}}
 function useCurrentLocation(){if(!navigator.geolocation){setMapStatus('현재 위치 미지원');return}setMapStatus('현재 위치 확인 중');navigator.geolocation.getCurrentPosition(p=>setBasePoint({lat:p.coords.latitude,lng:p.coords.longitude},'현재 위치'),()=>setMapStatus('위치 권한이 필요합니다.'),{enableHighAccuracy:true,timeout:10000,maximumAge:60000})}
 function togglePickLocation(){pickLocation=!pickLocation;$('pickLocationBtn').classList.toggle('active',pickLocation);setMapStatus(pickLocation?'지도에서 기준 위치를 클릭하세요.':'지도 클릭 지정 해제')}
-function initNaver(){if(!window.naver?.maps)return;naverMap=new naver.maps.Map('naverMap',{center:new naver.maps.LatLng(36.4,127.8),zoom:7,zoomControl:true});mapReady=true;hideMapLoad();setMapStatus('시·군·구 선택 후 자동 표시');naver.maps.Event.addListener(naverMap,'click',e=>{if(!pickLocation)return;setBasePoint({lat:e.coord.lat(),lng:e.coord.lng()},'지도에서 지정한 위치');togglePickLocation()});setBaseByAddress()}
+function initNaver(){if(!window.naver?.maps)return;naverMap=new naver.maps.Map('naverMap',{center:new naver.maps.LatLng(37.48145,126.84805),zoom:14,zoomControl:true});mapReady=true;hideMapLoad();setMapStatus('광명·구로 좌표 내장');naver.maps.Event.addListener(naverMap,'click',e=>{if(!pickLocation)return;setBasePoint({lat:e.coord.lat(),lng:e.coord.lng()},'지도에서 지정한 위치');togglePickLocation()});setBasePoint(PRESET_ADDRESSES['경기도 광명시 오리로 1034-1'],'경기도 광명시 오리로 1034-1');$('province').value='경기도';updateCities();$('city').value='광명시';apply()}
 function loadNaver(){const s=document.createElement('script');s.src='https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=p4sjps53pa&submodules=geocoder&callback=initNaver';s.onerror=()=>{showMapLoad('네이버지도를 불러오지 못했습니다. Web 서비스 URL과 지도 API 인증을 확인하세요.');setMapStatus('지도 인증 실패')};document.head.appendChild(s)}
 ['q','capacity','staff','sort'].forEach(id=>$(id).addEventListener(id==='q'?'input':'change',()=>{page=1;apply()}));$('province').addEventListener('change',()=>{updateCities();page=1;apply()});$('city').addEventListener('change',()=>{page=1;apply()});$('baseAddress').addEventListener('keydown',e=>{if(e.key==='Enter')setBaseByAddress()});
 initFilters();updateCities();apply();loadNaver();
