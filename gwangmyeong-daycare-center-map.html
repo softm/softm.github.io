@@ -678,7 +678,14 @@ function drawNaverRoute(){
   activeRoute.forEach((c,i)=>naverRouteOverlays.push(new naver.maps.Marker({map:naverMap,position:new naver.maps.LatLng(c.lat,c.lon),zIndex:4000,icon:{content:`<div class="route-map-marker">${i+1}</div>`,anchor:new naver.maps.Point(15,15)},title:`${i+1}. ${c.name}`})));
   if(currentView==='naver'){const bounds=new naver.maps.LatLngBounds();pts.forEach(p=>bounds.extend(p));naverMap.fitBounds(bounds,{top:50,right:50,bottom:50,left:50})}
 }
+function closeOpenCenterPopup(){
+  if(naverInfoWindow)naverInfoWindow.close();
+  if(leafletMap)leafletMap.closePopup();
+  const staticInfo=document.getElementById('staticInfo');
+  if(staticInfo)staticInfo.classList.add('hidden');
+}
 function optimizeRoute(){
+  closeOpenCenterPopup();
   const selected=selectedRouteCenters();
   if(!selected.length){document.getElementById('routeResult').innerHTML='<div class="muted">방문할 센터를 한 곳 이상 선택하세요.</div>';return}
   activeRoute=optimizeOpenPath(selected);const total=routeDistance(activeRoute);
