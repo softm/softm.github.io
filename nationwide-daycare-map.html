@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- nationwide map build 20260828-share-copy -->
+<!-- nationwide map build 20260828-share-copy-final -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -115,7 +115,7 @@ function restoreQueryState(){
  const gradeAllowed=new Set(['A','B','C','D','E','new','unknown']),scoreAllowed=new Set(['high','mid','low','lowest','unknown']);
  gradeFilters=new Set((params.get('grades')||'').split(',').filter(value=>gradeAllowed.has(value)));scoreFilters=new Set((params.get('scores')||'').split(',').filter(value=>scoreAllowed.has(value)));syncMultiButtons('grade',gradeFilters);syncMultiButtons('score',scoreFilters);
  const validIds=new Set(DATA.map(center=>center.i));selected=new Set((params.get('sel')||'').split(',').filter(id=>validIds.has(id)));$('baseAddress').value=params.get('ba')||$('baseAddress').value;
- const number=name=>{const value=Number(params.get(name));return Number.isFinite(value)?value:null},lat=number('lat'),lng=number('lng'),zoom=number('z'),baseLat=number('blat'),baseLng=number('blng');
+ const number=name=>{const raw=params.get(name);if(raw===null||raw==='')return null;const value=Number(raw);return Number.isFinite(value)?value:null},lat=number('lat'),lng=number('lng'),zoom=number('z'),baseLat=number('blat'),baseLng=number('blng');
  pendingSharedMap={center:lat!==null&&lng!==null?{lat,lng}:null,zoom:zoom!==null?Math.max(7,Math.min(19,Math.round(zoom))):14,base:baseLat!==null&&baseLng!==null?{lat:baseLat,lng:baseLng}:null};
  pendingViewportSearch=params.get('viewport')==='1';renderSelected();return true
 }
@@ -195,7 +195,7 @@ async function loadMarkersInCurrentBounds(){
 function scheduleBoundsMarkers(){if(Date.now()<skipIdleUntil)return;clearTimeout(boundsTimer);boundsTimer=setTimeout(loadMarkersInCurrentBounds,650)}
 function showSelectedOnMap(){const rows=DATA.filter(c=>selected.has(c.i));if(!rows.length){$('routeNote').textContent='센터를 먼저 선택하세요.';showToast('지도에 표시할 센터를 먼저 선택하세요.','warning');return}displayCenters(rows,false)}
 async function showOnMap(id){const c=DATA.find(x=>x.i===id);if(!c)return;if(!mapReady){window.open(naverUrl(c),'_blank');return}const found=mapMarkers.find(m=>m.centerId===id);if(found){naverMap.setCenter(found.getPosition());naverMap.setZoom(16);openCenter(c,found);return}if(coordFor(c))await displayCenters([c],true);else window.open(naverUrl(c),'_blank')}
-function searchCurrentMap(){if(!mapReady){showToast('지도가 준비된 뒤 다시 시도하세요.','warning');return}clearTimeout(boundsTimer);boundsTimer=null;skipIdleUntil=Date.now()+800;closeMapPopup();const bounds=naverMap.getBounds(),ids=new Set();DATA.forEach(c=>{const v=coordFor(c);if(v&&bounds.hasLatLng(new naver.maps.LatLng(v.lat,v.lng)))ids.add(c.i)});mapSearchIds=ids;$('mapSearchClear').style.display='block';page=1;apply(true);setMapStatus(`현 지도 ${filtered.length}곳 검색`);$('routeNote').textContent=`현재 지도 안의 좌표 보유 기관 ${filtered.length}곳을 조회했습니다.`;showToast(filtered.length?`현재 지도에서 ${filtered.length}곳을 조회했습니다.`:'현재 지도에서 조건과 일치하는 센터를 찾지 못했습니다.',filtered.length?'success':'warning')}
+async function searchCurrentMap(){if(!mapReady){showToast('지도가 준비된 뒤 다시 시도하세요.','warning');return}clearTimeout(boundsTimer);boundsTimer=null;skipIdleUntil=Date.now()+800;closeMapPopup();const bounds=naverMap.getBounds(),ids=new Set();DATA.forEach(c=>{const v=coordFor(c);if(v&&bounds.hasLatLng(new naver.maps.LatLng(v.lat,v.lng)))ids.add(c.i)});mapSearchIds=ids;$('mapSearchClear').style.display='block';page=1;apply(true);await displayCenters(filtered,false,false,false,bounds);setMapStatus(`현 지도 ${filtered.length}곳 검색`);$('routeNote').textContent=`현재 지도 안의 좌표 보유 기관 ${filtered.length}곳을 조회했습니다.`;showToast(filtered.length?`현재 지도에서 ${filtered.length}곳을 조회했습니다.`:'현재 지도에서 조건과 일치하는 센터를 찾지 못했습니다.',filtered.length?'success':'warning')}
 function clearMapSearch(run=true){mapSearchIds=null;$('mapSearchClear').style.display='none';if(run){page=1;apply(true);setMapStatus('지도영역 검색 해제');showToast('지도영역 검색을 해제했습니다.','success');loadMarkersInCurrentBounds()}}
 function setBasePoint(v,label,moveMap=true){basePoint=v;skipIdleUntil=0;if(baseMarker)baseMarker.setMap(null);const pos=new naver.maps.LatLng(v.lat,v.lng);baseMarker=new naver.maps.Marker({map:naverMap,position:pos,title:label||'기준 위치',zIndex:5000,icon:{content:'<div class="base-pin">기준</div>',anchor:new naver.maps.Point(19,19)}});if(moveMap)naverMap.panTo(pos);setMapStatus('기준 위치 지정 완료');DATA.forEach(c=>{const p=coordFor(c);if(p)c._distance=hav(basePoint,p)});apply(true)}
 async function setBaseByAddress(){const q=$('baseAddress').value.trim();if(!q){showToast('기준 위치 주소를 입력하세요.','warning');return}setMapStatus('기준 주소 확인 중');showToast('기준 주소를 찾는 중입니다…','info',1800);const v=await geocodeAddress(q);if(v){setBasePoint(v,q);showToast('기준 위치를 지정했습니다.','success')}else{setMapStatus('GPS·지도 클릭 사용');showToast('주소를 찾지 못했습니다. 현재 위치 또는 지도 클릭 지정을 사용해 주세요.','error')}}
