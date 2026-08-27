@@ -431,6 +431,18 @@ function handleTrackpadMapZoom(event){
   else if(currentView==='leaflet'&&leafletReady){leafletMap.setZoom(Math.max(10,Math.min(19,leafletMap.getZoom()+step)))}
 }
 handleTrackpadMapZoom.lastAt=0;
+let trackpadGestureZoom=null;
+function handleMapGestureStart(event){
+  if(currentView==='static')return;event.preventDefault();
+  trackpadGestureZoom=currentView==='naver'&&naverReady?naverMap.getZoom():currentView==='leaflet'&&leafletReady?leafletMap.getZoom():null;
+}
+function handleMapGestureChange(event){
+  if(trackpadGestureZoom===null)return;event.preventDefault();
+  const step=Math.round(Math.log2(Math.max(.25,Math.min(4,Number(event.scale)||1)))*2);
+  if(currentView==='naver'&&naverReady)naverMap.setZoom(Math.max(10,Math.min(21,trackpadGestureZoom+step)),true);
+  else if(currentView==='leaflet'&&leafletReady)leafletMap.setZoom(Math.max(10,Math.min(19,trackpadGestureZoom+step)));
+}
+function handleMapGestureEnd(event){if(trackpadGestureZoom!==null)event.preventDefault();trackpadGestureZoom=null}
 function mapBoundsContains(c){
   if(currentView==='naver'&&naverReady){
     const b=naverMap.getBounds();return b.hasLatLng(new naver.maps.LatLng(c.lat,c.lon));
@@ -875,9 +887,10 @@ function renderTable(){
 }
 
 document.getElementById('staticMap').addEventListener('click',event=>{if(!event.target.closest?.('.static-marker'))closeOpenCenterPopup()});
-document.querySelector('.map-shell').addEventListener('wheel',handleTrackpadMapZoom,{passive:false});
-document.querySelector('.map-shell').addEventListener('gesturestart',event=>event.preventDefault(),{passive:false});
-document.querySelector('.map-shell').addEventListener('gesturechange',event=>event.preventDefault(),{passive:false});
+document.querySelector('.map-shell').addEventListener('wheel',handleTrackpadMapZoom,{passive:false,capture:true});
+document.querySelector('.map-shell').addEventListener('gesturestart',handleMapGestureStart,{passive:false,capture:true});
+document.querySelector('.map-shell').addEventListener('gesturechange',handleMapGestureChange,{passive:false,capture:true});
+document.querySelector('.map-shell').addEventListener('gestureend',handleMapGestureEnd,{passive:false,capture:true});
 restoreSharedState();renderStaticMap();renderRanking();renderTable();updateFilterCount();updateRouteSelectionSummary();
 if(IS_LOCAL_FILE){
   setStatus('로컬 파일 모드 · OpenStreetMap 연결 시도');
