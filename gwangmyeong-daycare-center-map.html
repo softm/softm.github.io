@@ -350,7 +350,8 @@ function mapBoundsContains(c){
 function refreshAllViewsAfterMapSearch(){
   if(naverReady)refreshNaverMarkers();
   if(leafletReady)refreshLeafletMarkers();
-  activeRoute=[];drawActiveRoute();renderStaticMap();renderRanking();renderTable();updateFilterCount();updateRouteSelectionSummary();
+  activeRoute=[];drawActiveRoute();document.getElementById('staticMap').addEventListener('click',event=>{if(!event.target.closest?.('.static-marker'))closeOpenCenterPopup()});
+renderStaticMap();renderRanking();renderTable();updateFilterCount();updateRouteSelectionSummary();
 }
 function searchCurrentMap(event){
   if(event)event.stopPropagation();closeOpenCenterPopup();
