@@ -275,7 +275,8 @@ function stars(x){const n=Math.round(Number(x)*2)/2,full=Math.floor(n),half=n-fu
 function cleanMapAddress(c){return c.geoAddress||String(c.address).replace(/,.*$/,'')}
 function mapSearchQuery(c){return `${c.mapName||c.name} ${cleanMapAddress(c)}`.trim()}
 function naverSearchUrl(c){return `https://map.naver.com/p/search/${encodeURIComponent(mapSearchQuery(c))}`}
-function mapLinks(c){const kakaoQ=encodeURIComponent(mapSearchQuery(c));return `<a target="_blank" rel="noopener" href="https://map.kakao.com/link/search/${kakaoQ}">카카오맵 상세</a><a target="_blank" rel="noopener" href="${naverSearchUrl(c)}">네이버지도 상세</a>`}
+function kakaoSearchUrl(c){return `https://map.kakao.com/link/search/${encodeURIComponent(c.mapName||c.name)}`}
+function mapLinks(c){return `<a target="_blank" rel="noopener" href="${kakaoSearchUrl(c)}">카카오맵 상세</a><a target="_blank" rel="noopener" href="${naverSearchUrl(c)}">네이버지도 상세</a>`}
 function popupHtml(c){return `<div class="popup"><h3>${c.name}</h3><p><b>${c.listed?'기존 조사':'추가 조사'}</b> · 자체 종합 <b>${Number(c.quality).toFixed(1)}</b></p><p>공식평가: ${c.grade} ${c.eval_year}</p><p>직선 약 <b>${c.distance.toFixed(1)}km</b> · ${c.phone}</p><p>${c.address}</p><p>${c.note}</p>${mapLinks(c)}</div>`}
 
 function setStatus(text){document.getElementById('mapStatus').textContent=text}
