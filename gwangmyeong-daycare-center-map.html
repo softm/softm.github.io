@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- gwangmyeong detail build 20260828-1232-overlay-viewport-lock-nhis-direct -->
+<!-- gwangmyeong detail build 20260828-marker-preclick-viewport-lock-nhis-direct -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -270,6 +270,7 @@ let naverMap = null;
 let naverMarkers = [];
 let naverInfoWindow = null;
 let naverRouteOverlays = [];
+let pendingMarkerViewport = null;
 let leafletReady = false;
 let leafletLoading = false;
 let leafletMap = null;
@@ -487,8 +488,13 @@ function restoreVisibleMapViewport(state){
     }
   });
 }
-function showCenterPanel(c){
-  const viewport=captureVisibleMapViewport();
+function rememberMarkerViewport(){
+  pendingMarkerViewport={state:captureVisibleMapViewport(),capturedAt:Date.now()};
+}
+function showCenterPanel(c,usePendingMarkerViewport=true){
+  const pending=pendingMarkerViewport;
+  pendingMarkerViewport=null;
+  const viewport=usePendingMarkerViewport&&pending&&Date.now()-pending.capturedAt<2000?pending.state:captureVisibleMapViewport();
   closeOpenCenterPopup(null,false);
   const panel=document.getElementById('mapDetailPanel');if(!panel)return;
   panel.innerHTML=popupHtml(c);panel.classList.remove('hidden');
@@ -632,7 +638,7 @@ function refreshNaverMarkers(){
   if(!naverReady)return;
   naverMarkers.forEach(m=>m.setMap(null));naverMarkers=[];
   centers.filter(visible).forEach(c=>{
-    const marker=new naver.maps.Marker({position:new naver.maps.LatLng(c.lat,c.lon),map:naverMap,title:c.name,zIndex:1000-Math.round(c.distance*10),icon:{content:`<div class="marker-pin ${markerClass(Number(c.quality))}"><span>${Number(c.quality).toFixed(1)}</span></div>`,anchor:new naver.maps.Point(15,28)}});
+    const marker=new naver.maps.Marker({position:new naver.maps.LatLng(c.lat,c.lon),map:naverMap,title:c.name,zIndex:1000-Math.round(c.distance*10),icon:{content:`<div class="marker-pin ${markerClass(Number(c.quality))}" onpointerdown="rememberMarkerViewport()" onmousedown="rememberMarkerViewport()" ontouchstart="rememberMarkerViewport()"><span>${Number(c.quality).toFixed(1)}</span></div>`,anchor:new naver.maps.Point(15,28)}});
     marker.centerId=c.id;
     naver.maps.Event.addListener(marker,'click',()=>showCenterPanel(c));
     naverMarkers.push(marker);
@@ -710,7 +716,7 @@ function initLeaflet(){
 }
 
 function makeLeafletMarker(c){
-  const icon=L.divIcon({className:'',html:`<div class="marker-pin ${markerClass(Number(c.quality))}"><span>${Number(c.quality).toFixed(1)}</span></div>`,iconSize:[30,30],iconAnchor:[15,28],popupAnchor:[0,-27]});
+  const icon=L.divIcon({className:'',html:`<div class="marker-pin ${markerClass(Number(c.quality))}" onpointerdown="rememberMarkerViewport()" onmousedown="rememberMarkerViewport()" ontouchstart="rememberMarkerViewport()"><span>${Number(c.quality).toFixed(1)}</span></div>`,iconSize:[30,30],iconAnchor:[15,28],popupAnchor:[0,-27]});
   const m=L.marker([c.lat,c.lon],{icon,zIndexOffset:Math.round(1000-c.distance*10)});
   m.on('click',event=>{if(event.originalEvent)L.DomEvent.stopPropagation(event.originalEvent);showCenterPanel(c)});
   m.bindTooltip(c.name,{direction:'top',offset:[0,-25],opacity:.95});
@@ -784,11 +790,11 @@ function fitVisible(){
 function focusCenter(id){
   const c=centers.find(x=>x.id===id);if(!c)return;
   if(currentView==='naver'&&naverReady){
-    const marker=naverMarkers.find(m=>m.centerId===id);naverMap.setCenter(new naver.maps.LatLng(c.lat,c.lon));naverMap.setZoom(16);if(marker)showCenterPanel(c)
+    const marker=naverMarkers.find(m=>m.centerId===id);naverMap.setCenter(new naver.maps.LatLng(c.lat,c.lon));naverMap.setZoom(16);if(marker)showCenterPanel(c,false)
   }else if(currentView==='leaflet'&&leafletReady){
     let m=centerMarkers.get(id);
     if(!m&&visible(c)){refreshLeafletMarkers();m=centerMarkers.get(id)}
-    if(m){leafletMap.setView([c.lat,c.lon],16,{animate:false});showCenterPanel(c)}
+    if(m){leafletMap.setView([c.lat,c.lon],16,{animate:false});showCenterPanel(c,false)}
   }else{showStaticView('센터 선택');setTimeout(()=>selectStatic(id),0)}
   document.querySelector('.map-shell').scrollIntoView({behavior:'smooth',block:'center'});
 }
