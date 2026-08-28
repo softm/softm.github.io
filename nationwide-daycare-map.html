@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- nationwide map build 20260828-overlay-separate-copy -->
+<!-- nationwide map build 20260828-overlay-no-autopan -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -150,7 +150,7 @@ async function geocodeCenter(c){const known=coordFor(c);if(known)return known;co
 function closeMapPopup(){if(infoWindow){infoWindow.close();infoWindow=null}}
 function clearRouteLine(){if(routePolyline){routePolyline.setMap(null);routePolyline=null}}
 function clearCenterMarkers(){mapMarkers.forEach(m=>m.setMap(null));mapMarkers=[];closeMapPopup();clearRouteLine()}
-function openCenter(c,m){closeMapPopup();infoWindow=new naver.maps.InfoWindow({content:popup(c),borderWidth:0,backgroundColor:'transparent',anchorSkew:false});infoWindow.open(naverMap,m)}
+function openCenter(c,m){closeMapPopup();infoWindow=new naver.maps.InfoWindow({content:popup(c),borderWidth:0,backgroundColor:'transparent',anchorSkew:false,disableAutoPan:true});infoWindow.open(naverMap,m)}
 async function displayCenters(rows,openFirst=false,routeMode=false,fitMap=true,clipBounds=null){
  if(!mapReady){showToast('네이버지도 준비 후 다시 시도하세요.','warning');return}const request=++mapRequest,list=rows.slice(0,MAP_LIMIT);clearCenterMarkers();if(!list.length){setMapStatus('현재 영역 0곳');$('routeNote').textContent='조건과 일치하는 센터가 없습니다. 지도는 그대로 이동하거나 확대할 수 있습니다.';showToast('표시할 센터가 없습니다. 조회 조건이나 지도 영역을 변경해 주세요.','warning');return}
  setMapStatus(`주소 좌표 확인 중 · 0/${list.length}`);const bounds=new naver.maps.LatLngBounds();let success=0;
