@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- nationwide map build 20260828-gwangmyeong-popup-marker-route-r2 -->
+<!-- nationwide map build 20260828-gwangmyeong-popup-marker-route-r3 -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -202,7 +202,7 @@ async function loadMarkersInCurrentBounds(){
   await displayCenters(rows,false,false,false,bounds);setMapStatus(`현재 영역 ${mapMarkers.length}곳 · ${error.message}`);showToast(`현재 지도 행정구역 확인 실패: ${error.message}`,'error');
  }finally{regionMapLoading=false}
 }
-function scheduleBoundsMarkers(){if(Date.now()<skipIdleUntil)return;clearTimeout(boundsTimer);boundsTimer=setTimeout(loadMarkersInCurrentBounds,650)}
+function scheduleBoundsMarkers(){if(popupViewState||Date.now()<skipIdleUntil)return;clearTimeout(boundsTimer);boundsTimer=setTimeout(loadMarkersInCurrentBounds,650)}
 function showSelectedOnMap(){const rows=DATA.filter(c=>selected.has(c.i));if(!rows.length){$('routeNote').textContent='센터를 먼저 선택하세요.';showToast('지도에 표시할 센터를 먼저 선택하세요.','warning');return}displayCenters(rows,false)}
 async function showOnMap(id){const c=DATA.find(x=>x.i===id);if(!c)return;if(!mapReady){window.open(naverUrl(c),'_blank');return}const found=mapMarkers.find(m=>m.centerId===id);if(found){naverMap.setCenter(found.getPosition());naverMap.setZoom(16);openCenter(c,found);return}if(coordFor(c))await displayCenters([c],true);else window.open(naverUrl(c),'_blank')}
 async function searchCurrentMap(){if(!mapReady){showToast('지도가 준비된 뒤 다시 시도하세요.','warning');return}clearTimeout(boundsTimer);boundsTimer=null;skipIdleUntil=Date.now()+800;closeMapPopup();const bounds=naverMap.getBounds(),ids=new Set();DATA.forEach(c=>{const v=coordFor(c);if(v&&bounds.hasLatLng(new naver.maps.LatLng(v.lat,v.lng)))ids.add(c.i)});mapSearchIds=ids;$('mapSearchClear').style.display='block';page=1;apply(true);await displayCenters(filtered,false,false,false,bounds);setMapStatus(`현 지도 ${filtered.length}곳 검색`);$('routeNote').textContent=`현재 지도 안의 좌표 보유 기관 ${filtered.length}곳을 조회했습니다.`;if(filtered.length)showToast(`현재 지도에서 ${filtered.length}곳을 조회했습니다.`,'success')}
