@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- gwangmyeong detail build 20260828-fixed-detail-panel -->
+<!-- gwangmyeong detail build 20260828-overlay-viewport-lock -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -25,7 +25,7 @@ header p{margin:5px 0;color:#e7f0fb;line-height:1.6}
 .map-shell{position:relative;height:690px;border-radius:12px;border:1px solid var(--line);overflow:hidden;background:#e7eef7}
 .map-search-button{position:absolute;z-index:20;top:14px;left:50%;transform:translateX(-50%);border:0;border-radius:999px;background:#1877f2;color:#fff;font-weight:800;box-shadow:0 4px 14px rgba(24,119,242,.35);padding:9px 16px;white-space:nowrap}
 .map-search-button:hover{background:#1168d8}.map-search-clear{top:58px;background:#fff;color:#31557d;border:1px solid #cbd5e1;box-shadow:0 3px 10px rgba(0,0,0,.12)}
-.map-detail-panel{position:absolute;z-index:40;top:102px;right:12px;width:min(350px,calc(100% - 24px));max-height:calc(100% - 114px);overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;border-radius:12px;box-shadow:0 12px 34px rgba(15,35,55,.3)}
+.map-detail-panel{position:absolute;z-index:40;top:102px;right:12px;width:min(350px,calc(100% - 24px));max-height:calc(100% - 114px);overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;border-radius:12px;box-shadow:0 12px 34px rgba(15,35,55,.3);touch-action:pan-y}
 .map-detail-panel .popup{width:100%}
 .map-detail-panel .popup-close{position:sticky;float:right;top:8px;margin:8px 8px -36px 0;z-index:5}
 @media(max-width:560px){.map-detail-panel{left:10px;right:10px;width:auto;top:102px;max-height:calc(100% - 112px)}}
@@ -158,7 +158,7 @@ tr.omitted{background:#fffaf1}tr:hover{background:#f2f7fd}.center-link{cursor:po
       <div class="map-shell">
         <button class="map-search-button" onclick="searchCurrentMap(event)">↻ 현 지도에서 검색</button>
         <button class="map-search-button map-search-clear hidden" id="mapSearchClear" onclick="clearCurrentMapSearch(event)">지도영역 검색 해제</button>
-        <div id="mapDetailPanel" class="map-detail-panel hidden" role="dialog" aria-label="센터 상세정보"></div>
+        <div id="mapDetailPanel" class="map-detail-panel hidden" role="dialog" aria-label="센터 상세정보" onpointerdown="event.stopPropagation()" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" onclick="event.stopPropagation()" onwheel="event.stopPropagation()"></div>
         <div id="naverMap"><div class="load-note">네이버지도를 불러오는 중입니다.<br>인증되지 않으면 일반지도로 자동 전환합니다.</div></div>
         <div id="leafletMap" class="hidden"><div class="load-note">일반지도를 불러오는 중입니다.</div></div>
         <div id="staticMap" class="hidden"></div>
@@ -339,7 +339,7 @@ function officialBox(c){
 }
 function mapLinks(c){return `<div class="map-actions"><button class="copy" onclick="event.stopPropagation();copyCenterDestination(${c.id})">목적지명·주소 복사</button><a class="kakao" target="_blank" rel="noopener" href="${kakaoSearchUrl(c)}">카카오맵 상세</a><a class="naver" target="_blank" rel="noopener" href="${naverSearchUrl(c)}">네이버지도 상세</a><a class="nhis" target="_blank" rel="noopener" href="${officialUrl(c)}">공단 공식정보</a></div>`}
 function popupHtml(c){return `<div class="popup">
-  <button class="popup-close" onclick="event.stopPropagation();closeOpenCenterPopup()" aria-label="센터 정보 닫기">×</button>
+  <button class="popup-close" type="button" onclick="closeOpenCenterPopup(event)" aria-label="센터 정보 닫기">×</button>
   <div class="popup-head">
     <div class="popup-eyebrow"><span>${c.listed?'기존 조사':'추가 조사'}</span><span>${c.region}</span><span>정보신뢰 ${c.confidence}</span></div>
     <h3>${c.name}</h3>
@@ -448,11 +448,45 @@ function handleMapGestureChange(event){
   else if(currentView==='leaflet'&&leafletReady)leafletMap.setZoom(Math.max(10,Math.min(19,trackpadGestureZoom+step)));
 }
 function handleMapGestureEnd(event){if(trackpadGestureZoom!==null)event.preventDefault();trackpadGestureZoom=null}
+function captureVisibleMapViewport(){
+  const state={view:currentView,scrollX:window.scrollX,scrollY:window.scrollY,map:null};
+  if(currentView==='naver'&&naverReady){
+    const center=naverMap.getCenter();
+    state.map={lat:center.lat(),lon:center.lng(),zoom:naverMap.getZoom()};
+  }else if(currentView==='leaflet'&&leafletReady){
+    const center=leafletMap.getCenter();
+    state.map={lat:center.lat,lon:center.lng,zoom:leafletMap.getZoom()};
+  }
+  return state;
+}
+function restoreVisibleMapViewport(state){
+  if(!state)return;
+  requestAnimationFrame(()=>{
+    if(state.view==='naver'&&currentView==='naver'&&naverReady&&state.map){
+      const center=naverMap.getCenter();
+      if(naverMap.getZoom()!==state.map.zoom)naverMap.setZoom(state.map.zoom,false);
+      if(Math.abs(center.lat()-state.map.lat)>1e-10||Math.abs(center.lng()-state.map.lon)>1e-10){
+        naverMap.setCenter(new naver.maps.LatLng(state.map.lat,state.map.lon));
+      }
+    }else if(state.view==='leaflet'&&currentView==='leaflet'&&leafletReady&&state.map){
+      const center=leafletMap.getCenter();
+      if(leafletMap.getZoom()!==state.map.zoom||Math.abs(center.lat-state.map.lat)>1e-10||Math.abs(center.lng-state.map.lon)>1e-10){
+        leafletMap.setView([state.map.lat,state.map.lon],state.map.zoom,{animate:false});
+      }
+    }
+    if(Math.abs(window.scrollX-state.scrollX)>1||Math.abs(window.scrollY-state.scrollY)>1){
+      const root=document.documentElement,previous=root.style.scrollBehavior;
+      root.style.scrollBehavior='auto';window.scrollTo(state.scrollX,state.scrollY);root.style.scrollBehavior=previous;
+    }
+  });
+}
 function showCenterPanel(c){
-  closeOpenCenterPopup();
+  const viewport=captureVisibleMapViewport();
+  closeOpenCenterPopup(null,false);
   const panel=document.getElementById('mapDetailPanel');if(!panel)return;
   panel.innerHTML=popupHtml(c);panel.classList.remove('hidden');
   const body=panel.querySelector('.popup-body');if(body)body.scrollTop=0;
+  restoreVisibleMapViewport(viewport);
 }
 function mapBoundsContains(c){
   if(currentView==='naver'&&naverReady){
@@ -848,13 +882,16 @@ function drawNaverRoute(){
   activeRoute.forEach((c,i)=>naverRouteOverlays.push(new naver.maps.Marker({map:naverMap,position:new naver.maps.LatLng(c.lat,c.lon),zIndex:4000,icon:{content:`<div class="route-map-marker">${i+1}</div>`,anchor:new naver.maps.Point(15,15)},title:`${i+1}. ${c.name}`})));
   if(currentView==='naver'){const bounds=new naver.maps.LatLngBounds();pts.forEach(p=>bounds.extend(p));naverMap.fitBounds(bounds,{top:50,right:50,bottom:50,left:50})}
 }
-function closeOpenCenterPopup(){
+function closeOpenCenterPopup(event,preserveViewport=true){
+  if(event){event.preventDefault();event.stopPropagation()}
+  const viewport=preserveViewport?captureVisibleMapViewport():null;
   if(naverInfoWindow)naverInfoWindow.close();
   if(leafletMap)leafletMap.closePopup();
   const panel=document.getElementById('mapDetailPanel');
   if(panel){panel.classList.add('hidden');panel.innerHTML=''}
   const staticInfo=document.getElementById('staticInfo');
   if(staticInfo)staticInfo.classList.add('hidden');
+  if(viewport)restoreVisibleMapViewport(viewport);
 }
 function optimizeRoute(){
   closeOpenCenterPopup();
