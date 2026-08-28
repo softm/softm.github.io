@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- gwangmyeong detail build 20260828-confidence-share-copy-overlay -->
+<!-- gwangmyeong detail build 20260828-overlay-no-autopan -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -569,7 +569,7 @@ function initNaverMap(){
   const initial=sharedViewport||{lat:BASE.lat,lon:BASE.lon,zoom:14};
   naverMap=new naver.maps.Map('naverMap',{center:new naver.maps.LatLng(initial.lat,initial.lon),zoom:initial.zoom,zoomControl:true,zoomControlOptions:{position:naver.maps.Position.TOP_LEFT},scrollWheel:true});
   new naver.maps.Marker({position:new naver.maps.LatLng(BASE.lat,BASE.lon),map:naverMap,title:'기준 위치',zIndex:3000,icon:{content:'<div class="base-marker">기준</div>',anchor:new naver.maps.Point(19,19)}});
-  naverInfoWindow=new naver.maps.InfoWindow({maxWidth:360,backgroundColor:'#fff',borderColor:'#cbd5e1',borderWidth:1,anchorSize:new naver.maps.Size(10,10),pixelOffset:new naver.maps.Point(0,-12)});
+  naverInfoWindow=new naver.maps.InfoWindow({maxWidth:360,backgroundColor:'#fff',borderColor:'#cbd5e1',borderWidth:1,anchorSize:new naver.maps.Size(10,10),pixelOffset:new naver.maps.Point(0,-12),disableAutoPan:true});
   naver.maps.Event.addListener(naverMap,'click',()=>closeOpenCenterPopup());
   naverReady=true;refreshNaverMarkers();
   if(activeRoute.length)drawNaverRoute();
@@ -660,7 +660,7 @@ function initLeaflet(){
 function makeLeafletMarker(c){
   const icon=L.divIcon({className:'',html:`<div class="marker-pin ${markerClass(Number(c.quality))}"><span>${Number(c.quality).toFixed(1)}</span></div>`,iconSize:[30,30],iconAnchor:[15,28],popupAnchor:[0,-27]});
   const m=L.marker([c.lat,c.lon],{icon,zIndexOffset:Math.round(1000-c.distance*10)});
-  m.bindPopup(popupHtml(c),{maxWidth:350});
+  m.bindPopup(popupHtml(c),{maxWidth:350,autoPan:false});
   m.bindTooltip(c.name,{direction:'top',offset:[0,-25],opacity:.95});
   centerMarkers.set(c.id,m);return m;
 }
