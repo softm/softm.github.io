@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- gwangmyeong detail build 20260828-marker-preclick-viewport-lock-nhis-direct -->
+<!-- gwangmyeong detail build 20260828-hide-map-zoom-controls -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -625,7 +625,7 @@ function initNaverMap(){
   if(naverReady||!window.naver||!naver.maps)return;
   document.getElementById('naverMap').innerHTML='';
   const initial=sharedViewport||{lat:BASE.lat,lon:BASE.lon,zoom:14};
-  naverMap=new naver.maps.Map('naverMap',{center:new naver.maps.LatLng(initial.lat,initial.lon),zoom:initial.zoom,zoomControl:true,zoomControlOptions:{position:naver.maps.Position.TOP_LEFT},scrollWheel:true});
+  naverMap=new naver.maps.Map('naverMap',{center:new naver.maps.LatLng(initial.lat,initial.lon),zoom:initial.zoom,zoomControl:false,scrollWheel:true});
   new naver.maps.Marker({position:new naver.maps.LatLng(BASE.lat,BASE.lon),map:naverMap,title:'기준 위치',zIndex:3000,icon:{content:'<div class="base-marker">기준</div>',anchor:new naver.maps.Point(19,19)}});
   naverInfoWindow=new naver.maps.InfoWindow({maxWidth:360,backgroundColor:'#fff',borderColor:'#cbd5e1',borderWidth:1,anchorSize:new naver.maps.Size(10,10),pixelOffset:new naver.maps.Point(0,-12),disableAutoPan:true});
   naver.maps.Event.addListener(naverMap,'click',()=>closeOpenCenterPopup());
@@ -685,7 +685,7 @@ function initLeaflet(){
   leafletLoading=false;
   document.getElementById('leafletMap').innerHTML='';
   const initial=sharedViewport||{lat:BASE.lat,lon:BASE.lon,zoom:14};
-  leafletMap=L.map('leafletMap',{zoomControl:true,preferCanvas:true,scrollWheelZoom:true,minZoom:10,maxZoom:19}).setView([initial.lat,initial.lon],initial.zoom);
+  leafletMap=L.map('leafletMap',{zoomControl:false,preferCanvas:true,scrollWheelZoom:true,minZoom:10,maxZoom:19}).setView([initial.lat,initial.lon],initial.zoom);
   leafletMap.on('click',()=>closeOpenCenterPopup());
   const tiles=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors',updateWhenIdle:true,keepBuffer:2});
   let tileErrors=0;
