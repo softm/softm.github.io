@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- gwangmyeong detail build 20260829-gentle-map-wheel -->
+<!-- gwangmyeong detail build 20260829-gentle-map-wheel-lock -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -465,7 +465,7 @@ function restoreSharedState(){
 
 let mapWheelAccumulator=0;
 let mapWheelResetTimer=null;
-let lastMapWheelZoomAt=0;
+let mapWheelGestureLocked=false;
 function handleMapWheelZoom(event){
   if(currentView==='static')return;
   event.preventDefault();
@@ -474,12 +474,11 @@ function handleMapWheelZoom(event){
   if(!delta)return;
   mapWheelAccumulator+=delta;
   clearTimeout(mapWheelResetTimer);
-  mapWheelResetTimer=setTimeout(()=>{mapWheelAccumulator=0},360);
+  mapWheelResetTimer=setTimeout(()=>{mapWheelAccumulator=0;mapWheelGestureLocked=false},380);
   const threshold=event.ctrlKey?55:80;
-  const now=Date.now();
-  if(Math.abs(mapWheelAccumulator)<threshold||now-lastMapWheelZoomAt<320)return;
+  if(mapWheelGestureLocked||Math.abs(mapWheelAccumulator)<threshold)return;
   const step=mapWheelAccumulator<0?1:-1;
-  mapWheelAccumulator=0;lastMapWheelZoomAt=now;
+  mapWheelAccumulator=0;mapWheelGestureLocked=true;
   if(currentView==='naver'&&naverReady){naverMap.setZoom(Math.max(10,Math.min(21,naverMap.getZoom()+step)),true)}
   else if(currentView==='leaflet'&&leafletReady){leafletMap.setZoom(Math.max(10,Math.min(19,leafletMap.getZoom()+step)))}
 }
