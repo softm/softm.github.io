@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- gwangmyeong detail build 20260829-search-share-publish -->
+<!-- gwangmyeong detail build 20260829-gentle-map-wheel -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -239,8 +239,8 @@ tr.omitted{background:#fffaf1}tr:hover{background:#f2f7fd}.center-link{cursor:po
   </section>
 
   <section class="card foot">
-    <b>지도 사용법:</b> 처음에는 기준 주소가 중앙에 고정됩니다. 마우스 휠 확대는 실수로 지도가 튀는 현상을 막기 위해 꺼 두었으며,
-    지도 왼쪽의 +/− 버튼이나 두 손가락 확대를 사용하면 됩니다. 일반지도 배경이 보이지 않으면 ‘간이좌표도’를 누르십시오.
+    <b>지도 사용법:</b> 처음에는 기준 주소가 중앙에 고정됩니다. 휠·터치패드 확대/축소는 입력을 완만하게 처리해 한 단계씩 조정됩니다.
+    지도 오른쪽의 +/− 버튼이나 두 손가락 확대도 사용할 수 있습니다. 일반지도 배경이 보이지 않으면 ‘간이좌표도’를 누르십시오.
     거리와 좌표는 송영시간이 아니라 주소 기반 상대 비교용입니다.
   </section>
 </div>
@@ -463,15 +463,26 @@ function restoreSharedState(){
   pendingSharedMapSearch=p.get('map')==='1';syncFilterControls();
 }
 
-function handleTrackpadMapZoom(event){
-  if(!event.ctrlKey||currentView==='static')return;
+let mapWheelAccumulator=0;
+let mapWheelResetTimer=null;
+let lastMapWheelZoomAt=0;
+function handleMapWheelZoom(event){
+  if(currentView==='static')return;
   event.preventDefault();
-  const now=Date.now();if(now-handleTrackpadMapZoom.lastAt<70)return;handleTrackpadMapZoom.lastAt=now;
-  const step=event.deltaY<0?1:-1;
+  const modeScale=event.deltaMode===1?18:event.deltaMode===2?80:1;
+  const delta=Math.max(-100,Math.min(100,(Number(event.deltaY)||0)*modeScale));
+  if(!delta)return;
+  mapWheelAccumulator+=delta;
+  clearTimeout(mapWheelResetTimer);
+  mapWheelResetTimer=setTimeout(()=>{mapWheelAccumulator=0},360);
+  const threshold=event.ctrlKey?55:80;
+  const now=Date.now();
+  if(Math.abs(mapWheelAccumulator)<threshold||now-lastMapWheelZoomAt<320)return;
+  const step=mapWheelAccumulator<0?1:-1;
+  mapWheelAccumulator=0;lastMapWheelZoomAt=now;
   if(currentView==='naver'&&naverReady){naverMap.setZoom(Math.max(10,Math.min(21,naverMap.getZoom()+step)),true)}
   else if(currentView==='leaflet'&&leafletReady){leafletMap.setZoom(Math.max(10,Math.min(19,leafletMap.getZoom()+step)))}
 }
-handleTrackpadMapZoom.lastAt=0;
 let trackpadGestureZoom=null;
 function handleMapGestureStart(event){
   if(currentView==='static')return;event.preventDefault();
@@ -479,7 +490,7 @@ function handleMapGestureStart(event){
 }
 function handleMapGestureChange(event){
   if(trackpadGestureZoom===null)return;event.preventDefault();
-  const step=Math.round(Math.log2(Math.max(.25,Math.min(4,Number(event.scale)||1)))*2);
+  const step=Math.max(-2,Math.min(2,Math.round(Math.log2(Math.max(.25,Math.min(4,Number(event.scale)||1))))));
   if(currentView==='naver'&&naverReady)naverMap.setZoom(Math.max(10,Math.min(21,trackpadGestureZoom+step)),true);
   else if(currentView==='leaflet'&&leafletReady)leafletMap.setZoom(Math.max(10,Math.min(19,trackpadGestureZoom+step)));
 }
@@ -679,7 +690,7 @@ function initNaverMap(){
   if(naverReady||!window.naver||!naver.maps)return;
   document.getElementById('naverMap').innerHTML='';
   const initial=sharedViewport||{lat:BASE.lat,lon:BASE.lon,zoom:14};
-  naverMap=new naver.maps.Map('naverMap',{center:new naver.maps.LatLng(initial.lat,initial.lon),zoom:initial.zoom,zoomControl:true,zoomControlOptions:{position:naver.maps.Position.TOP_RIGHT},scrollWheel:true});
+  naverMap=new naver.maps.Map('naverMap',{center:new naver.maps.LatLng(initial.lat,initial.lon),zoom:initial.zoom,zoomControl:true,zoomControlOptions:{position:naver.maps.Position.TOP_RIGHT},scrollWheel:false});
   new naver.maps.Marker({position:new naver.maps.LatLng(BASE.lat,BASE.lon),map:naverMap,title:'기준 위치',zIndex:3000,icon:{content:'<div class="base-marker">기준</div>',anchor:new naver.maps.Point(19,19)}});
   naverInfoWindow=new naver.maps.InfoWindow({maxWidth:360,backgroundColor:'#fff',borderColor:'#cbd5e1',borderWidth:1,anchorSize:new naver.maps.Size(10,10),pixelOffset:new naver.maps.Point(0,-12),disableAutoPan:true});
   naver.maps.Event.addListener(naverMap,'click',()=>closeOpenCenterPopup());
@@ -739,7 +750,7 @@ function initLeaflet(){
   leafletLoading=false;
   document.getElementById('leafletMap').innerHTML='';
   const initial=sharedViewport||{lat:BASE.lat,lon:BASE.lon,zoom:14};
-  leafletMap=L.map('leafletMap',{zoomControl:true,preferCanvas:true,scrollWheelZoom:true,minZoom:10,maxZoom:19}).setView([initial.lat,initial.lon],initial.zoom);
+  leafletMap=L.map('leafletMap',{zoomControl:true,preferCanvas:true,scrollWheelZoom:false,minZoom:10,maxZoom:19}).setView([initial.lat,initial.lon],initial.zoom);
   leafletMap.on('click',()=>closeOpenCenterPopup());
   const tiles=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors',updateWhenIdle:true,keepBuffer:2});
   let tileErrors=0;
@@ -1006,7 +1017,7 @@ function renderTable(){
 }
 
 document.getElementById('staticMap').addEventListener('click',event=>{if(!event.target.closest?.('.static-marker'))closeOpenCenterPopup()});
-document.querySelector('.map-shell').addEventListener('wheel',handleTrackpadMapZoom,{passive:false,capture:true});
+document.querySelector('.map-shell').addEventListener('wheel',handleMapWheelZoom,{passive:false,capture:true});
 document.querySelector('.map-shell').addEventListener('gesturestart',handleMapGestureStart,{passive:false,capture:true});
 document.querySelector('.map-shell').addEventListener('gesturechange',handleMapGestureChange,{passive:false,capture:true});
 document.querySelector('.map-shell').addEventListener('gestureend',handleMapGestureEnd,{passive:false,capture:true});
