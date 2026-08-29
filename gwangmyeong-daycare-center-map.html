@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- gwangmyeong detail build 20260828-restore-map-zoom-controls -->
+<!-- gwangmyeong detail build 20260829-locality-center-search-share-icon -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -34,6 +34,16 @@ header p{margin:5px 0;color:#e7f0fb;line-height:1.6}
 #leafletMap{z-index:2;background:#e7eef7}
 #staticMap{z-index:1;background:linear-gradient(#f7fafc,#eef4f8)}
 .hidden{display:none!important}
+.map-primary-toolbar{display:grid;grid-template-columns:minmax(220px,1fr) 44px;gap:9px;align-items:center;margin-bottom:12px}
+.center-search-box{position:relative;display:flex;align-items:center}
+.center-search-box input{width:100%;height:44px;padding:10px 42px 10px 42px;border:1px solid #b9c8da;border-radius:12px;background:#f8fbff;font-size:15px;box-shadow:inset 0 1px 2px rgba(23,50,77,.04)}
+.center-search-box input:focus{outline:3px solid rgba(37,99,235,.16);border-color:#2563eb;background:#fff}
+.center-search-icon{position:absolute;left:14px;width:18px;height:18px;color:#48647f;pointer-events:none}
+.center-search-clear{position:absolute;right:7px;width:31px;height:31px;padding:0;border:0;border-radius:50%;background:transparent;color:#5f7185;font-size:20px;line-height:31px}
+.center-search-clear:hover{background:#e6eef8}
+.share-icon-button{width:44px;height:44px;padding:0;display:grid;place-items:center;border-radius:12px;border:1px solid #b9c8da;background:#17324d;color:#fff;box-shadow:0 3px 10px rgba(23,50,77,.2)}
+.share-icon-button:hover{background:#285f8f}.share-icon-button svg{width:20px;height:20px}
+.empty-state{padding:22px 10px;text-align:center;color:var(--muted);line-height:1.55}
 .controls{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
 button,input,select{border:1px solid #cbd5e1;border-radius:9px;background:white;padding:9px 11px;font-size:14px;color:var(--text)}
 button{cursor:pointer}button:hover{background:#f5f8fc}.filter-btn.active,.view-btn.active{background:var(--dark);color:white;border-color:var(--dark)}
@@ -90,7 +100,7 @@ tr.omitted{background:#fffaf1}tr:hover{background:#f2f7fd}.center-link{cursor:po
 .toast{position:fixed;left:50%;bottom:28px;z-index:10050;max-width:min(520px,calc(100vw - 32px));transform:translate(-50%,18px);padding:11px 16px;border-radius:10px;background:#172033;color:#fff;box-shadow:0 8px 28px rgba(0,0,0,.28);font-size:13px;font-weight:800;line-height:1.45;opacity:0;visibility:hidden;transition:opacity .18s,transform .18s,visibility .18s;pointer-events:none}.toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
 @media(max-width:980px){.summary{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.map-shell{height:560px}.side{max-height:none}}
 @media(max-width:760px){.route-layout{grid-template-columns:1fr}.route-options{max-height:300px}.route-stop{grid-template-columns:35px 1fr}.route-stop>div:last-child{grid-column:2}}
-@media(max-width:560px){.summary{grid-template-columns:1fr 1fr}.wrap{padding:10px}.map-shell{height:500px}.status{width:100%;margin-left:0}.static-info{top:auto;bottom:10px}}
+@media(max-width:560px){.summary{grid-template-columns:1fr 1fr}.wrap{padding:10px}.map-shell{height:500px}.status{width:100%;margin-left:0}.static-info{top:auto;bottom:10px}.map-primary-toolbar{grid-template-columns:minmax(0,1fr) 44px}.center-search-box input{font-size:14px}}
 </style>
 </head>
 <body>
@@ -114,6 +124,16 @@ tr.omitted{background:#fffaf1}tr:hover{background:#f2f7fd}.center-link{cursor:po
 
   <section class="grid" style="margin-top:16px">
     <div class="card">
+      <div class="map-primary-toolbar">
+        <div class="center-search-box">
+          <svg class="center-search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m16 16 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input id="search" type="search" autocomplete="off" placeholder="읍·면·동 또는 요양기관명 검색" aria-label="읍면동 또는 요양기관명 검색" oninput="handleCenterSearchInput(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();announceCenterSearch()}">
+          <button class="center-search-clear hidden" id="centerSearchClear" type="button" onclick="clearCenterSearch()" aria-label="검색어 지우기" title="검색어 지우기">×</button>
+        </div>
+        <button class="share-icon-button" type="button" onclick="shareCurrentState()" aria-label="현재 조회상태 공유" title="현재 조회상태 공유">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="2.5" fill="currentColor"/><circle cx="6" cy="12" r="2.5" fill="currentColor"/><circle cx="18" cy="19" r="2.5" fill="currentColor"/><path d="m8.2 10.8 7.6-4.5M8.2 13.2l7.6 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
       <div class="controls" id="mapControls">
         <span class="filter-label">지역</span>
         <button class="filter-btn active" data-filter="all" onclick="setFilter('all',this)">전체</button>
@@ -122,7 +142,6 @@ tr.omitted{background:#fffaf1}tr:hover{background:#f2f7fd}.center-link{cursor:po
         <button class="filter-btn" data-filter="구로" onclick="setFilter('구로',this)">구로</button>
         <button onclick="focusBase()">기준지 중심</button>
         <button onclick="fitVisible()">표시센터 전체보기</button>
-        <button onclick="shareCurrentState()">조회상태 공유</button>
         <button class="view-btn active" id="btnNaver" onclick="showNaverView(true)">네이버지도</button>
         <button class="view-btn" id="btnLeaflet" onclick="showLeafletView(true)">일반지도</button>
         <button class="view-btn" id="btnStatic" onclick="showStaticView('수동 전환')">간이좌표도</button>
@@ -203,7 +222,6 @@ tr.omitted{background:#fffaf1}tr:hover{background:#f2f7fd}.center-link{cursor:po
         <div class="muted small">센터명을 누르면 지도에서 해당 마커로 이동합니다. 거리는 입력 좌표 기준 직선거리입니다.</div>
       </div>
       <div class="controls">
-        <input id="search" placeholder="센터명·주소 검색" oninput="renderTable()">
         <select id="sort" onchange="renderTable()">
           <option value="quality">종합점수 순</option>
           <option value="distance">거리 순</option>
@@ -254,6 +272,9 @@ const officialRegistry = {
 };
 let currentFilter = 'all';
 let currentMapCenterIds = null;
+let centerSearchQuery = '';
+let centerSearchToastTimer = null;
+const centerLocalities={0:'소하동',1:'광명동',2:'광명동',3:'하안동',4:'소하동',5:'개봉동',6:'고척동',7:'일직동',8:'온수동',9:'하안동',10:'일직동',11:'소하동',12:'옥길동',13:'소하동',14:'광명동',15:'천왕동',16:'소하동',17:'고척동'};
 // 빈 Set은 '전체등급', 값이 있으면 선택된 여러 등급을 OR 조건으로 표시한다.
 const selectedGradeFilters = new Set();
 const selectedScoreFilters = new Set();
@@ -322,9 +343,15 @@ function scoreMatches(c){
 function confidenceMatches(c){
   return selectedConfidenceFilters.size===0||selectedConfidenceFilters.has(c.confidence);
 }
+function normalizeCenterSearch(value){return String(value||'').trim().toLowerCase().replace(/\s+/g,' ')}
+function centerMatchesSearch(c){
+  if(!centerSearchQuery)return true;
+  const haystack=[c.name,c.mapName,c.address,c.geoAddress,c.region,centerLocalities[c.id],c.note,c.program].filter(Boolean).join(' ').toLowerCase();
+  return centerSearchQuery.split(' ').every(token=>haystack.includes(token));
+}
 function visible(c){
   const regionMatches=currentFilter==='all'||(currentFilter==='omitted'&&!c.listed)||c.region===currentFilter;
-  return regionMatches&&gradeMatches(c)&&scoreMatches(c)&&confidenceMatches(c)&&(!currentMapCenterIds||currentMapCenterIds.has(c.id));
+  return regionMatches&&gradeMatches(c)&&scoreMatches(c)&&confidenceMatches(c)&&centerMatchesSearch(c)&&(!currentMapCenterIds||currentMapCenterIds.has(c.id));
 }
 function markerClass(q){return q>=4.4?'m-green':q>=4?'m-blue':q>=3.5?'m-orange':'m-gray'}
 function markerColor(q){return q>=4.4?'#0f8a5f':q>=4?'#2563eb':q>=3.5?'#d97706':'#64748b'}
@@ -425,7 +452,8 @@ function restoreSharedState(){
   selectedScoreFilters.clear();readCsvSet(p,'scores',['top','high','mid','low']).forEach(value=>selectedScoreFilters.add(value));
   selectedConfidenceFilters.clear();readCsvSet(p,'confidence',['높음','중상','중간','중하','낮음']).forEach(value=>selectedConfidenceFilters.add(value));
   const search=document.getElementById('search'),sort=document.getElementById('sort'),ranking=document.getElementById('rankingSort');
-  search.value=(p.get('q')||'').slice(0,100);
+  search.value=(p.get('q')||'').slice(0,100);centerSearchQuery=normalizeCenterSearch(search.value);
+  document.getElementById('centerSearchClear').classList.toggle('hidden',!centerSearchQuery);
   if(['quality','distance','grade'].includes(p.get('sort')))sort.value=p.get('sort');
   if(['priority','route'].includes(p.get('rsort'))){rankingSortMode=p.get('rsort');ranking.value=rankingSortMode}
   const ids=new Set(centers.map(c=>String(c.id)));(p.get('selected')||'').split(',').filter(id=>ids.has(id)).forEach(id=>selectedRouteIds.add(Number(id)));
@@ -583,6 +611,32 @@ function setConfidenceFilter(value,button){
 }
 function updateFilterCount(){
   document.getElementById('filterCount').textContent=centers.filter(visible).length+'곳 표시';
+}
+function refreshAfterCenterSearch(){
+  closeOpenCenterPopup();
+  if(naverReady)refreshNaverMarkers();
+  if(leafletReady)refreshLeafletMarkers();
+  resetRouteAfterFilter();
+  renderStaticMap();renderRanking();renderTable();updateFilterCount();updateRouteSelectionSummary();
+}
+function handleCenterSearchInput(value){
+  centerSearchQuery=normalizeCenterSearch(value);
+  document.getElementById('centerSearchClear').classList.toggle('hidden',!centerSearchQuery);
+  refreshAfterCenterSearch();
+  clearTimeout(centerSearchToastTimer);
+  centerSearchToastTimer=setTimeout(announceCenterSearch,450);
+}
+function announceCenterSearch(){
+  if(!centerSearchQuery)return;
+  const count=centers.filter(visible).length;
+  const message=count?`"${centerSearchQuery}" 검색 결과 ${count}곳입니다.`:`"${centerSearchQuery}" 검색 결과가 없습니다.`;
+  setStatus(`기관·지역 검색 · ${count}곳`);showToast(message);
+}
+function clearCenterSearch(){
+  const input=document.getElementById('search');input.value='';centerSearchQuery='';
+  document.getElementById('centerSearchClear').classList.add('hidden');
+  clearTimeout(centerSearchToastTimer);refreshAfterCenterSearch();
+  const count=centers.filter(visible).length;setStatus(`검색 해제 · ${count}곳 표시`);showToast('기관·지역 검색을 해제했습니다.');input.focus();
 }
 
 function loadNaver(){
@@ -933,6 +987,7 @@ function renderRanking(){
     rows.sort((a,b)=>b.quality-a.quality||a.distance-b.distance);
   }
   const sort=document.getElementById('rankingSort');if(sort)sort.value=rankingSortMode;
+  if(!rows.length){document.getElementById('ranking').innerHTML='<div class="empty-state">조건에 맞는 센터가 없습니다.<br>검색어 또는 조회조건을 변경하세요.</div>';return}
   document.getElementById('ranking').innerHTML=rows.map((c,idx)=>{
     const checked=selectedRouteIds.has(c.id),order=routeOrder.get(c.id);
     return `<div class="rank${checked?' selected':''}" onclick="focusCenter(${c.id})">
@@ -943,9 +998,10 @@ function renderRanking(){
   }).join('');
 }
 function renderTable(){
-  const q=document.getElementById('search').value.trim().toLowerCase(),sort=document.getElementById('sort').value;
-  let rows=centers.filter(c=>visible(c)&&(!q||(c.name+c.address+c.note).toLowerCase().includes(q)));
+  const sort=document.getElementById('sort').value;
+  let rows=centers.filter(visible);
   rows.sort((a,b)=>sort==='distance'?a.distance-b.distance:sort==='grade'?gradeRank(a.grade)-gradeRank(b.grade)||b.quality-a.quality:b.quality-a.quality||a.distance-b.distance);
+  if(!rows.length){document.getElementById('tbody').innerHTML='<tr><td colspan="11"><div class="empty-state">조건에 맞는 센터가 없습니다. 검색어 또는 조회조건을 변경하세요.</div></td></tr>';return}
   document.getElementById('tbody').innerHTML=rows.map(c=>`<tr class="${c.listed?'':'omitted'}"><td><span class="badge ${c.listed?'old':'new'}">${c.listed?'기존':'추가'}</span></td><td><b class="center-link" onclick="focusCenter(${c.id})">${c.name}</b><div class="small muted">${c.region} · 정보신뢰 ${c.confidence}</div><button class="rank-copy" onclick="copyCenterDestination(${c.id})">목적지명·주소 복사</button></td><td><b>${c.distance.toFixed(1)}km</b><div class="small muted">직선거리</div></td><td><b>${c.grade}</b><div class="small muted">${c.eval_year} ${c.eval_score}</div></td><td><b>${Number(c.quality).toFixed(1)}</b><div class="stars">${stars(c.quality)}</div></td><td><div class="stars">${stars(c.program_star)}</div><div class="small">${c.program}</div></td><td><div class="stars">${stars(Number(c.clean))}</div><div class="small">${c.facility}</div></td><td>${c.staff}</td><td class="phone">${c.phone}${c.user_phone&&c.user_phone!==c.phone?`<div class="small muted">조사번호 ${c.user_phone}</div>`:''}</td><td>${c.note}</td><td>${c.address}</td></tr>`).join('');
 }
 
