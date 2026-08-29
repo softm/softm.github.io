@@ -101,7 +101,9 @@ const $=id=>document.getElementById(id),esc=s=>String(s??'').replace(/[&<>"']/g,
 const mapQuery=c=>`${c.n} ${c.a}`.trim();
 const naverUrl=c=>`https://map.naver.com/p/search/${encodeURIComponent(mapQuery(c))}`;
 const kakaoUrl=c=>`https://map.kakao.com/link/search/${encodeURIComponent(c.n+' '+c.a)}`;
-const officialSearchUrl=()=>`https://www.longtermcare.or.kr/npbs/r/a/201/selectLtcoSrch.web`;\nconst officialDetailUrl=c=>`https://www.longtermcare.or.kr/npbs/r/a/201/selectLtcoSrchDetail.web?ltcAdminSym=${encodeURIComponent(c.i)}&adminPttnCd=${encodeURIComponent(c.t)}&aTab=11`;\nconst officialUrl=c=>c?.i&&c?.t?officialDetailUrl(c):officialSearchUrl();
+const officialSearchUrl=()=>`https://www.longtermcare.or.kr/npbs/r/a/201/selectLtcoSrch.web`;
+const officialDetailUrl=c=>`https://www.longtermcare.or.kr/npbs/r/a/201/selectLtcoSrchDetail.web?ltcAdminSym=${encodeURIComponent(c.i)}&adminPttnCd=${encodeURIComponent(c.t)}&aTab=11`;
+const officialUrl=c=>c?.i&&c?.t?officialDetailUrl(c):officialSearchUrl();
 const isNew=c=>c.d&&c.d>='2023-06-10';
 const scoreCategory=c=>!Number.isFinite(c.ev?.score)?'unknown':c.ev.score>=90?'high':c.ev.score>=80?'mid':c.ev.score>=70?'low':'lowest';
 const gradeCategory=c=>c.ev?.grade||(isNew(c)?'new':'unknown');
