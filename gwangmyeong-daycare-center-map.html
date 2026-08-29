@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- gwangmyeong detail build 20260829-map-search-viewport-v2 -->
+<!-- gwangmyeong detail build 20260829-route-select-checkbox -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -70,7 +70,7 @@ button{cursor:pointer}button:hover{background:#f5f8fc}.filter-btn.active,.view-b
 .side{max-height:745px;overflow:auto}
 .ranking-toolbar{position:sticky;top:-15px;z-index:4;background:#fff;padding:15px 0 10px;border-bottom:1px solid var(--line)}
 .ranking-title-row,.ranking-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.ranking-title-row{justify-content:space-between}.ranking-title-row h2{margin:0;font-size:19px}.ranking-title-row select{padding:7px 9px}
-.ranking-actions{margin-top:9px}.ranking-actions button{padding:7px 9px;font-size:12px}.ranking-actions .primary{background:#0f8a5f;color:#fff;border-color:#0f8a5f;font-weight:800}
+.ranking-actions{margin-top:9px}.ranking-actions button{padding:7px 9px;font-size:12px}.ranking-actions .primary{background:#0f8a5f;color:#fff;border-color:#0f8a5f;font-weight:800}.route-select-all{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid #cbd5e1;border-radius:9px;background:#fff;font-size:12px;font-weight:800;cursor:pointer;user-select:none}.route-select-all input{width:17px;height:17px;margin:0;padding:0;accent-color:#2563eb}.route-select-all:has(input:checked),.route-select-all:has(input:indeterminate){border-color:#8fb1e5;background:#eef5ff;color:#184f8c}
 #ranking{max-height:430px;overflow:auto;margin-top:6px}.rank{display:flex;gap:9px;align-items:flex-start;padding:11px 4px;border-bottom:1px solid #edf1f6;cursor:pointer;border-radius:8px}
 .rank:hover{background:#f6f9fd}.rank:last-child{border-bottom:none}
 .rank.selected{background:#f2f7ff}.rank-check{width:18px;height:18px;margin:5px 0 0 2px;flex:0 0 auto;accent-color:#2563eb}.route-order{display:inline-grid;place-items:center;min-width:22px;height:22px;border-radius:999px;background:#7c3aed;color:#fff;font-size:11px;font-weight:900;margin-right:4px}
@@ -204,8 +204,7 @@ tr.omitted{background:#fffaf1}tr:hover{background:#f2f7fd}.center-link{cursor:po
         </div>
         <div class="small muted">지도에 표시된 센터만 나오며 체크한 센터만 경로에 포함됩니다.</div>
         <div class="ranking-actions">
-          <button onclick="selectAllRoute(true)">표시센터 모두 선택</button>
-          <button onclick="selectAllRoute(false)">선택 해제</button>
+          <label class="route-select-all" for="routeSelectAll"><input id="routeSelectAll" type="checkbox" onchange="selectAllRoute(this.checked)"><span>표시센터 전체 선택</span></label>
           <button class="primary" onclick="optimizeRoute()">최적경로 탐색</button>
           <span class="status" id="routeSelectionCount">0곳 선택</span>
         </div>
@@ -243,7 +242,7 @@ tr.omitted{background:#fffaf1}tr:hover{background:#f2f7fd}.center-link{cursor:po
 
   <section class="card foot">
     <b>지도 사용법:</b> 처음에는 기준 주소가 중앙에 고정됩니다. 휠·터치패드 확대/축소는 입력을 완만하게 처리해 한 단계씩 조정됩니다.
-    지도 오른쪽의 +/− 버튼이나 두 손가락 확대도 사용할 수 있습니다. ‘현 지도에서 검색’을 누르면 검색에 사용된 중심 반경이 초록색 반투명 원으로 고정 표시됩니다. 일반지도 배경이 보이지 않으면 ‘간이좌표도’를 누르십시오.
+    지도 오른쪽의 +/− 버튼이나 두 손가락 확대도 사용할 수 있습니다. ‘현 지도에서 검색’을 누르면 현재 화면 전체가 초록색 반투명 사각영역으로 고정 표시됩니다. 일반지도 배경이 보이지 않으면 ‘간이좌표도’를 누르십시오.
     거리와 좌표는 송영시간이 아니라 주소 기반 상대 비교용입니다.
   </section>
 </div>
@@ -932,6 +931,15 @@ function selectAllRoute(on){
   else selectedRouteIds.clear();
   routeSelectionChanged();
 }
+function syncRouteSelectAll(){
+  const checkbox=document.getElementById('routeSelectAll');if(!checkbox)return;
+  const rows=centers.filter(visible),selected=rows.filter(c=>selectedRouteIds.has(c.id)).length;
+  checkbox.checked=rows.length>0&&selected===rows.length;
+  checkbox.indeterminate=selected>0&&selected<rows.length;
+  checkbox.disabled=rows.length===0;
+  checkbox.setAttribute('aria-checked',checkbox.indeterminate?'mixed':String(checkbox.checked));
+  checkbox.title=checkbox.indeterminate?`표시센터 ${selected}/${rows.length}곳 선택`:(checkbox.checked?'표시센터 전체 선택됨':'표시센터 전체 선택');
+}
 function toggleRouteSelection(id,on){
   if(on)selectedRouteIds.add(id);else selectedRouteIds.delete(id);
   routeSelectionChanged();
@@ -946,6 +954,7 @@ function updateRouteSelectionSummary(){
   const el=document.getElementById('routeSelectionCount');if(!el)return;
   const n=selectedRouteCenters().length,total=selectedRouteIds.size;
   el.textContent=total===n?`${n}곳 선택`:`필터 내 ${n}곳 · 전체 ${total}곳`;
+  syncRouteSelectAll();
 }
 function resetRouteAfterFilter(){
   activeRoute=[];drawActiveRoute();
