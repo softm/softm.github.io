@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- nationwide map build 20260829-map-search-area-overlay -->
+<!-- nationwide map build 20260829-map-search-area-overlay-v2 -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -194,6 +194,7 @@ function findSelectValue(id,name){const values=[...$(id).options].map(o=>o.value
 async function reverseMapRegion(){const center=naverMap.getCenter(),response=await fetch(REVERSE_GEOCODE_PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lat:center.lat(),lng:center.lng()})});const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||'현재 지도 행정구역 조회 실패');return result}
 async function loadMarkersInCurrentBounds(){
  if(!mapReady||regionMapLoading||routeOrder.length||Date.now()<skipIdleUntil)return;
+ if(mapSearchIds)return;
  regionMapLoading=true;const bounds=naverMap.getBounds();
  try{
   const region=await reverseMapRegion(),province=findSelectValue('province',region.province);
@@ -217,7 +218,7 @@ function drawMapSearchArea(bounds){
  const sw=new naver.maps.LatLng(swLat,swLng),se=new naver.maps.LatLng(swLat,neLng),ne=new naver.maps.LatLng(neLat,neLng),nw=new naver.maps.LatLng(neLat,swLng);
  const center={lat:(swLat+neLat)/2,lng:(swLng+neLng)/2},widthKm=hav({lat:center.lat,lng:swLng},{lat:center.lat,lng:neLng}),heightKm=hav({lat:swLat,lng:center.lng},{lat:neLat,lng:center.lng});
  const widthText=mapSpanText(widthKm),heightText=mapSpanText(heightKm);
- mapSearchAreaOverlay=new naver.maps.Polygon({map:naverMap,paths:[[sw,se,ne,nw]],strokeColor:'#2563eb',strokeWeight:2,strokeOpacity:.9,strokeStyle:'shortdash',fillColor:'#3b82f6',fillOpacity:.1,clickable:false,zIndex:500});
+ mapSearchAreaOverlay=new naver.maps.Polygon({map:naverMap,paths:[[sw,se,ne,nw]],strokeColor:'#2563eb',strokeWeight:3,strokeOpacity:.9,strokeStyle:'shortdash',fillColor:'#3b82f6',fillOpacity:.13,clickable:false,zIndex:500});
  mapSearchAreaLabel=new naver.maps.Marker({map:naverMap,position:new naver.maps.LatLng(center.lat,center.lng),clickable:false,zIndex:2500,icon:{content:`<div class="map-search-area-label">검색영역<br><b>약 ${widthText} × ${heightText}</b></div>`,anchor:new naver.maps.Point(71,20)}});
  return {widthText,heightText}
 }
