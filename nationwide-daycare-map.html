@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- nationwide map build 20260829-map-search-area-overlay-v2 -->
+<!-- nationwide map build 20260829-visible-area-search-v3 -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -62,7 +62,7 @@ header{padding:25px clamp(16px,4vw,48px);background:linear-gradient(125deg,#1732
 <script src="nationwide-daycare-data-jeju.js"></script>
 <script src="nationwide-daycare-evaluations.js"></script>
 <script>
-const DATA=window.NATIONAL_DAYCARE_DATA||[],PAGE=30,MAP_LIMIT=100;
+const DATA=window.NATIONAL_DAYCARE_DATA||[],PAGE=30,MAP_LIMIT=100,MAP_AREA_LIMIT=300;
 const DIRECTIONS_PROXY='https://daycare-directions-proxy.vercel.app/api/directions';
 const GEOCODE_PROXY='https://daycare-directions-proxy.vercel.app/api/geocode';
 const REVERSE_GEOCODE_PROXY='https://daycare-directions-proxy.vercel.app/api/reverse-geocode';
@@ -115,7 +115,7 @@ const gradeText=grade=>({A:'A(최우수)',B:'B(우수)',C:'C(양호)',D:'D(보�
 const scoreText=value=>Number.isFinite(value)?value.toFixed(2)+'점':'총점 미공개';
 const routeIndex=c=>{const i=routeOrder.indexOf(c.i);return i<0?99999:i};
 const normalizeSearch=value=>String(value??'').toLowerCase().replace(/\s+/g,'');
-function updateSearchScope(){const badge=$('mapScopeBadge');if(!badge)return;const province=$('province').value||'전국',city=$('city').value||(province==='전국'?'전체 지역':'전체 시·군·구'),query=$('q').value.trim(),basis=mapSearchIds?'현재 지도영역':'행정구역 기준';$('mapScopeText').textContent=`${province} · ${city} · ${basis}`;$('mapScopeMeta').textContent=`${query?`“${query}” · `:''}${filtered.length.toLocaleString()}곳`}
+function updateSearchScope(){const badge=$('mapScopeBadge');if(!badge)return;const province=$('province').value||'전국',city=$('city').value||(province==='전국'?'전체 지역':'전체 시·군·구'),query=$('q').value.trim();$('mapScopeText').textContent=mapSearchIds?'현재 지도영역':`${province} · ${city} · 행정구역 기준`;$('mapScopeMeta').textContent=`${mapSearchIds?'지역 선택값 유지 · ':''}${query?`“${query}” · `:''}${filtered.length.toLocaleString()}곳`}
 function initFilters(){const ps=[...new Set(DATA.map(x=>x.p))].sort();$('province').innerHTML='<option value="">전국 시·도</option>'+ps.map(x=>`<option>${esc(x)}</option>`).join('');$('allCount').textContent=DATA.length.toLocaleString()+'곳'}
 function updateCities(){const p=$('province').value,cs=[...new Set(DATA.filter(x=>!p||x.p===p).map(x=>x.c))].sort();$('city').innerHTML='<option value="">전체 시·군·구</option>'+cs.map(x=>`<option>${esc(x)}</option>`).join('')}
 function matchesCapacity(c,v){if(!v)return true;if(v==='1-20')return c.z<=20;if(v==='21-40')return c.z>=21&&c.z<=40;if(v==='41-60')return c.z>=41&&c.z<=60;return c.z>=61}
@@ -129,9 +129,13 @@ async function shareCurrentState(){const url=buildShareUrl(),data={title:'전국
 async function copyDestinationName(id){const c=DATA.find(x=>x.i===id);if(!c){showToast('복사할 목적지명을 찾지 못했습니다.','error');return}try{await copyText(c.n);showToast(`목적지명 “${c.n}”을 복사했습니다.`,'success')}catch{showToast('목적지명을 복사하지 못했습니다.','error')}}
 async function copyDestinationAddress(id){const c=DATA.find(x=>x.i===id);if(!c){showToast('복사할 주소를 찾지 못했습니다.','error');return}try{await copyText(c.a);showToast(`${c.n} 주소를 복사했습니다.`,'success')}catch{showToast('주소를 복사하지 못했습니다.','error')}}
 function sortFiltered(){const sort=$('sort').value;filtered.sort((a,b)=>sort==='route'?routeIndex(a)-routeIndex(b)||(b.ev?.score||0)-(a.ev?.score||0):sort==='priority'?(b.ev?.score||0)-(a.ev?.score||0)||(a._distance??Infinity)-(b._distance??Infinity)||a.n.localeCompare(b.n,'ko'):sort==='distance'?(a._distance??Infinity)-(b._distance??Infinity)||a.n.localeCompare(b.n,'ko'):sort==='new'?b.d.localeCompare(a.d)||a.n.localeCompare(b.n,'ko'):sort==='capacity'?b.z-a.z||a.n.localeCompare(b.n,'ko'):sort==='caregiver'?b.cw-a.cw||a.n.localeCompare(b.n,'ko'):a.n.localeCompare(b.n,'ko'))}
+function matchesActiveNonSpatialFilters(c){
+ const q=normalizeSearch($('q').value),cap=$('capacity').value,st=$('staff').value,confidence=$('confidence').value;
+ return (!q||normalizeSearch(`${c.n} ${c.p} ${c.c} ${c.a} ${c.i}`).includes(q))&&matchesCapacity(c,cap)&&(!st||(st==='rehab'&&(c.pt+c.ot>0))||(st==='nurse'&&c.rn>0)||(st==='nursing'&&(c.rn+c.na>0))||(st==='new'&&isNew(c)))&&(!confidence||confidenceCategory(c)===confidence)&&(!gradeFilters.size||gradeFilters.has(gradeCategory(c)))&&(!scoreFilters.size||scoreFilters.has(scoreCategory(c)))
+}
 function apply(skipMapUpdate=false){
- const q=normalizeSearch($('q').value),p=$('province').value,city=$('city').value,cap=$('capacity').value,st=$('staff').value,confidence=$('confidence').value;
- filtered=DATA.filter(c=>(!q||normalizeSearch(`${c.n} ${c.p} ${c.c} ${c.a} ${c.i}`).includes(q))&&(!p||c.p===p)&&(!city||c.c===city)&&matchesCapacity(c,cap)&&(!st||(st==='rehab'&&(c.pt+c.ot>0))||(st==='nurse'&&c.rn>0)||(st==='nursing'&&(c.rn+c.na>0))||(st==='new'&&isNew(c)))&&(!confidence||confidenceCategory(c)===confidence)&&(!gradeFilters.size||gradeFilters.has(gradeCategory(c)))&&(!scoreFilters.size||scoreFilters.has(scoreCategory(c)))&&(!mapSearchIds||mapSearchIds.has(c.i)));
+ const p=$('province').value,city=$('city').value;
+ filtered=DATA.filter(c=>matchesActiveNonSpatialFilters(c)&&(mapSearchIds?mapSearchIds.has(c.i):(!p||c.p===p)&&(!city||c.c===city)));
  sortFiltered();$('filteredCount').textContent=filtered.length.toLocaleString()+'곳';page=Math.min(page,Math.max(1,Math.ceil(filtered.length/PAGE)));updateSearchScope();render();if(!skipMapUpdate&&mapReady&&($('province').value||filtered.length<=30))scheduleMapUpdate()
 }
 function row(c,rank){const ev=c.ev,routeRank=routeOrder.indexOf(c.i),confidence=confidenceCategory(c),evaluation=ev?`<span class="chip score">공단 ${scoreText(ev.score)}</span><span class="chip grade">${esc(gradeText(ev.grade))}</span><span class="chip">${ev.year||'-'}년 평가</span>`:(isNew(c)?'<span class="chip new">신설·미평가</span>':'<span class="chip">공식 평가 미확인</span>');return `<article class="row ${selected.has(c.i)?'route-selected':''}" onclick="showOnMap('${c.i}')"><input type="checkbox" ${selected.has(c.i)?'checked':''} aria-label="${esc(c.n)} 선택" onclick="event.stopPropagation()" onchange="toggle('${c.i}',this.checked)"><div><h3><span class="rank">${routeRank>=0&&$('sort').value==='route'?routeRank+1:rank}.</span>${esc(c.n)}</h3><div class="meta">${evaluation}<span class="chip confidence-${confidence}">정보신뢰 ${esc(confidenceText(c))}</span><span class="chip">정원 ${c.z}명</span>${Number.isFinite(c._distance)?`<span class="chip">기준지 ${c._distance.toFixed(1)}km</span>`:''}<span class="chip${isNew(c)?' new':''}">지정 ${esc(c.d||'-')}</span></div><div class="details">${esc(c.a)}<br>사회복지사 ${c.s} · 간호 ${c.rn} · 간호조무 ${c.na} · 물리 ${c.pt} · 작업 ${c.ot} · 요양보호 ${c.cw}</div></div><div class="actions"><button class="map" onclick="event.stopPropagation();showOnMap('${c.i}')">지도 표시</button><button class="copy" onclick="event.stopPropagation();copyDestinationName('${c.i}')">목적지명 복사</button><button class="copy" onclick="event.stopPropagation();copyDestinationAddress('${c.i}')">주소 복사</button><a class="kakao" target="_blank" rel="noopener" onclick="event.stopPropagation()" href="${kakaoUrl(c)}">카카오 상세</a><a class="nhis" target="_blank" rel="noopener" onclick="event.stopPropagation()" href="${officialUrl(c)}">공단 상세</a></div></article>`}
@@ -182,29 +186,39 @@ function clearRouteLine(){if(routePolyline){routePolyline.setMap(null);routePoly
 function drawRouteOrderMarkers(){routeMarkers.forEach(m=>m.setMap(null));routeMarkers=[];mapMarkers.forEach(baseMarker=>{const index=routeOrder.indexOf(baseMarker.centerId);if(index<0)return;const c=DATA.find(x=>x.i===baseMarker.centerId),marker=new naver.maps.Marker({map:naverMap,position:baseMarker.getPosition(),zIndex:4000,icon:{content:`<div class="route-map-marker">${index+1}</div>`,anchor:new naver.maps.Point(15,15)},title:`${index+1}. ${c?.n||''}`});if(c)naver.maps.Event.addListener(marker,'click',()=>openCenter(c,marker));routeMarkers.push(marker)})}
 function clearCenterMarkers(){mapMarkers.forEach(m=>m.setMap(null));mapMarkers=[];closeMapPopup();clearRouteLine()}
 function openCenter(c,m){closeMapPopup();const center=naverMap.getCenter();popupViewState={lat:center.lat(),lng:center.lng(),zoom:naverMap.getZoom()};skipIdleUntil=Date.now()+1800;infoWindow=new naver.maps.InfoWindow({content:popup(c),maxWidth:360,backgroundColor:'#fff',borderColor:'#cbd5e1',borderWidth:1,anchorSize:new naver.maps.Size(10,10),pixelOffset:new naver.maps.Point(0,-12),anchorSkew:false,disableAutoPan:false});infoWindow.open(naverMap,m)}
-async function displayCenters(rows,openFirst=false,routeMode=false,fitMap=true,clipBounds=null){
- if(!mapReady){showToast('네이버지도 준비 후 다시 시도하세요.','warning');return}const request=++mapRequest,list=rows.slice(0,MAP_LIMIT);clearCenterMarkers();if(!list.length){setMapStatus('현재 영역 0곳');$('routeNote').textContent='조건과 일치하는 센터가 없습니다. 지도는 그대로 이동하거나 확대할 수 있습니다.';showToast('표시할 센터가 없습니다. 조회 조건이나 지도 영역을 변경해 주세요.','warning');return}
+async function displayCenters(rows,openFirst=false,routeMode=false,fitMap=true,clipBounds=null,limit=MAP_LIMIT){
+ if(!mapReady){showToast('네이버지도 준비 후 다시 시도하세요.','warning');return}const request=++mapRequest,list=rows.slice(0,limit);clearCenterMarkers();if(!list.length){setMapStatus('현재 영역 0곳');$('routeNote').textContent='조건과 일치하는 센터가 없습니다. 지도는 그대로 이동하거나 확대할 수 있습니다.';showToast('표시할 센터가 없습니다. 조회 조건이나 지도 영역을 변경해 주세요.','warning');return}
  setMapStatus(`주소 좌표 확인 중 · 0/${list.length}`);const bounds=new naver.maps.LatLngBounds();let success=0;
  for(let start=0;start<list.length;start+=6){const batch=list.slice(start,start+6),coords=await Promise.all(batch.map(geocodeCenter));if(request!==mapRequest)return;batch.forEach((c,j)=>{const v=coords[j];if(!v)return;if(basePoint)c._distance=hav(basePoint,v);const pos=new naver.maps.LatLng(v.lat,v.lng);if(clipBounds&&!clipBounds.hasLatLng(pos))return;success++;const m=new naver.maps.Marker({map:naverMap,position:pos,title:c.n,zIndex:1000,icon:{content:`<div class="marker-pin ${markerClass(c)}"><span>${markerLabel(c)}</span></div>`,anchor:new naver.maps.Point(15,28)}});m.centerId=c.i;naver.maps.Event.addListener(m,'click',()=>openCenter(c,m));mapMarkers.push(m);bounds.extend(pos)});setMapStatus(`주소 좌표 확인 중 · ${Math.min(start+6,list.length)}/${list.length}`)}
- if(success){if(routeMode)drawRouteOrderMarkers();if(fitMap){skipIdleUntil=Date.now()+1400;naverMap.fitBounds(bounds,{top:70,right:45,bottom:45,left:45})}setMapStatus(`${success}곳 마커${rows.length>MAP_LIMIT?' · 상위 100곳':''}`);if(openFirst&&mapMarkers[0])openCenter(list.find(c=>c.i===mapMarkers[0].centerId)||list[0],mapMarkers[0])}else{setMapStatus('현재 영역 0곳');$('routeNote').textContent='현재 화면 안에 조건과 일치하는 센터가 없습니다. 지도를 계속 이동하거나 조건을 변경할 수 있습니다.';showToast('현재 지도 영역에 조건과 일치하는 센터가 없습니다.','warning')}if(basePoint){sortFiltered();render()}
+ if(success){if(routeMode)drawRouteOrderMarkers();if(fitMap){skipIdleUntil=Date.now()+1400;naverMap.fitBounds(bounds,{top:70,right:45,bottom:45,left:45})}setMapStatus(`${success}곳 마커${rows.length>limit?` · 상위 ${limit}곳`:''}`);if(openFirst&&mapMarkers[0])openCenter(list.find(c=>c.i===mapMarkers[0].centerId)||list[0],mapMarkers[0])}else{setMapStatus('현재 영역 0곳');$('routeNote').textContent='현재 화면 안에 조건과 일치하는 센터가 없습니다. 지도를 계속 이동하거나 조건을 변경할 수 있습니다.';showToast('현재 지도 영역에 조건과 일치하는 센터가 없습니다.','warning')}if(basePoint){sortFiltered();render()}
 }
 function scheduleMapUpdate(){clearTimeout(mapTimer);mapTimer=setTimeout(()=>showFilteredOnMap(true),350)}
 function showFilteredOnMap(auto=false){if(filtered.length>MAP_LIMIT&&!$('province').value&&!$('city').value&&!$('q').value.trim()&&auto)return;displayCenters(filtered,false)}
 function findSelectValue(id,name){const values=[...$(id).options].map(o=>o.value).filter(Boolean);return values.find(v=>v===name)||values.find(v=>v.includes(name)||name.includes(v))||''}
-async function reverseMapRegion(){const center=naverMap.getCenter(),response=await fetch(REVERSE_GEOCODE_PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lat:center.lat(),lng:center.lng()})});const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||'현재 지도 행정구역 조회 실패');return result}
+function matchDataRegionValue(values,name){return values.find(v=>v===name)||values.find(v=>v.includes(name)||name.includes(v))||''}
+async function reverseRegionAt(lat,lng){const response=await fetch(REVERSE_GEOCODE_PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lat,lng})});const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||'현재 지도 행정구역 조회 실패');return result}
+async function reverseMapRegion(){const center=naverMap.getCenter();return reverseRegionAt(center.lat(),center.lng())}
+async function reverseVisibleMapRegions(bounds){
+ const center=naverMap.getCenter(),sw=bounds.getSW(),ne=bounds.getNE(),points=[{lat:center.lat(),lng:center.lng()},{lat:sw.lat(),lng:sw.lng()},{lat:sw.lat(),lng:ne.lng()},{lat:ne.lat(),lng:sw.lng()},{lat:ne.lat(),lng:ne.lng()}];
+ const results=await Promise.allSettled(points.map(p=>reverseRegionAt(p.lat,p.lng))),provinces=[...new Set(DATA.map(c=>c.p))],regions=[],seen=new Set();
+ results.forEach(result=>{if(result.status!=='fulfilled')return;const raw=result.value,province=matchDataRegionValue(provinces,raw.province||'');if(!province)return;const cities=[...new Set(DATA.filter(c=>c.p===province).map(c=>c.c))],city=matchDataRegionValue(cities,raw.city||'');if(!city)return;const key=province+'|'+city;if(!seen.has(key)){seen.add(key);regions.push({province,city})}});
+ if(!regions.length)throw new Error('현재 화면의 행정구역을 확인하지 못했습니다.');
+ return regions
+}
+function visibleRegionCandidates(regions){const keys=new Set(regions.map(r=>r.province+'|'+r.city));return DATA.filter(c=>keys.has(c.p+'|'+c.c)&&matchesActiveNonSpatialFilters(c))}
 async function loadMarkersInCurrentBounds(){
  if(!mapReady||regionMapLoading||routeOrder.length||Date.now()<skipIdleUntil)return;
  if(mapSearchIds)return;
  regionMapLoading=true;const bounds=naverMap.getBounds();
  try{
-  const region=await reverseMapRegion(),province=findSelectValue('province',region.province);
-  if(province){$('province').value=province;updateCities();const city=findSelectValue('city',region.city);if(city)$('city').value=city;clearMapSearch(false);page=1;apply(true)}
- await displayCenters(filtered,false,false,false,bounds);
- setMapStatus(`${region.province} ${region.city} · 현재 영역 ${mapMarkers.length}곳`);
-  $('routeNote').textContent=`지도 이동 위치의 시군구 조건을 자동 적용해 현재 화면 안의 센터 ${mapMarkers.length}곳을 조회했습니다.`;
+  const regions=await reverseVisibleMapRegions(bounds),rows=visibleRegionCandidates(regions);
+  await displayCenters(rows,false,false,false,bounds,MAP_AREA_LIMIT);
+  const names=regions.map(r=>r.city).join(' · ');
+  setMapStatus(`${names} · 현재 영역 ${mapMarkers.length}곳`);
+  $('routeNote').textContent=`지도 이동 위치의 ${names} 기관을 미리 표시했습니다. 시·도/시·군·구 목록값과 검색결과 목록은 변경하지 않습니다.`;
  }catch(error){
-  const rows=filtered.filter(c=>{const v=coordFor(c);return v&&bounds.hasLatLng(new naver.maps.LatLng(v.lat,v.lng))}).slice(0,MAP_LIMIT);
-  await displayCenters(rows,false,false,false,bounds);setMapStatus(`현재 영역 ${mapMarkers.length}곳 · ${error.message}`);showToast(`현재 지도 행정구역 확인 실패: ${error.message}`,'error');
+  const rows=DATA.filter(c=>matchesActiveNonSpatialFilters(c)&&coordFor(c)&&bounds.hasLatLng(new naver.maps.LatLng(coordFor(c).lat,coordFor(c).lng))).slice(0,MAP_AREA_LIMIT);
+  await displayCenters(rows,false,false,false,bounds,MAP_AREA_LIMIT);setMapStatus(`현재 영역 ${mapMarkers.length}곳 · ${error.message}`);showToast(`현재 지도 행정구역 확인 실패: ${error.message}`,'error');
  }finally{regionMapLoading=false}
 }
 function scheduleBoundsMarkers(){if(popupViewState||Date.now()<skipIdleUntil)return;clearTimeout(boundsTimer);boundsTimer=setTimeout(loadMarkersInCurrentBounds,650)}
@@ -222,7 +236,19 @@ function drawMapSearchArea(bounds){
  mapSearchAreaLabel=new naver.maps.Marker({map:naverMap,position:new naver.maps.LatLng(center.lat,center.lng),clickable:false,zIndex:2500,icon:{content:`<div class="map-search-area-label">검색영역<br><b>약 ${widthText} × ${heightText}</b></div>`,anchor:new naver.maps.Point(71,20)}});
  return {widthText,heightText}
 }
-async function searchCurrentMap(){if(!mapReady){showToast('지도가 준비된 뒤 다시 시도하세요.','warning');return}clearTimeout(boundsTimer);boundsTimer=null;skipIdleUntil=Date.now()+800;closeMapPopup();const bounds=naverMap.getBounds(),area=drawMapSearchArea(bounds),ids=new Set();DATA.forEach(c=>{const v=coordFor(c);if(v&&bounds.hasLatLng(new naver.maps.LatLng(v.lat,v.lng)))ids.add(c.i)});mapSearchIds=ids;$('mapSearchClear').style.display='block';page=1;apply(true);await displayCenters(filtered,false,false,false,bounds);setMapStatus(`현 지도 ${filtered.length}곳 · 약 ${area.widthText} × ${area.heightText}`);$('routeNote').textContent=`파란 검색영역(약 ${area.widthText} × ${area.heightText}) 안의 좌표 보유 기관 ${filtered.length}곳을 조회했습니다.`;if(filtered.length)showToast(`현재 지도영역에서 ${filtered.length}곳을 조회했습니다.`,'success')}
+async function searchCurrentMap(){
+ if(!mapReady){showToast('지도가 준비된 뒤 다시 시도하세요.','warning');return}
+ clearTimeout(boundsTimer);boundsTimer=null;skipIdleUntil=Date.now()+800;closeMapPopup();
+ const bounds=naverMap.getBounds(),area=drawMapSearchArea(bounds);setMapStatus('현재 화면의 기관 좌표 확인 중');
+ let regions=[],rows=[];
+ try{regions=await reverseVisibleMapRegions(bounds);rows=visibleRegionCandidates(regions)}catch(error){rows=DATA.filter(matchesActiveNonSpatialFilters);showToast(error.message||'현재 화면의 행정구역 확인 실패','warning')}
+ await displayCenters(rows,false,false,false,bounds,MAP_AREA_LIMIT);
+ mapSearchIds=new Set(mapMarkers.map(m=>m.centerId));$('mapSearchClear').style.display='block';page=1;apply(true);
+ const names=regions.length?regions.map(r=>r.city).join(' · '):'현재 화면';
+ setMapStatus(`현 지도 ${filtered.length}곳 · 약 ${area.widthText} × ${area.heightText}`);
+ $('routeNote').textContent=`파란 검색영역(약 ${area.widthText} × ${area.heightText})의 ${names} 기관 ${filtered.length}곳을 조회했습니다. 지역 목록값은 그대로 유지됩니다.`;
+ if(filtered.length)showToast(`현재 지도영역에서 ${filtered.length}곳을 조회했습니다.`,'success')
+}
 function clearMapSearch(run=true){mapSearchIds=null;clearMapSearchArea();$('mapSearchClear').style.display='none';if(run){page=1;apply(true);setMapStatus('지도영역 검색 해제');showToast('지도영역 검색을 해제했습니다.','success');loadMarkersInCurrentBounds()}}
 function setBasePoint(v,label){basePoint=v;skipIdleUntil=0;if(baseMarker)baseMarker.setMap(null);const pos=new naver.maps.LatLng(v.lat,v.lng);baseMarker=new naver.maps.Marker({map:naverMap,position:pos,title:label||'기준 위치',zIndex:5000,icon:{content:'<div class="base-pin">기준</div>',anchor:new naver.maps.Point(19,19)}});naverMap.panTo(pos);setMapStatus('기준 위치 지정 완료');DATA.forEach(c=>{const p=coordFor(c);if(p)c._distance=hav(basePoint,p)});apply(true)}
 async function setBaseByAddress(){const q=$('baseAddress').value.trim();if(!q){showToast('기준 위치 주소를 입력하세요.','warning');return}setMapStatus('기준 주소 확인 중');showToast('기준 주소를 찾는 중입니다…','info',1800);const v=await geocodeAddress(q);if(v){setBasePoint(v,q);showToast('기준 위치를 지정했습니다.','success')}else{setMapStatus('GPS·지도 클릭 사용');showToast('주소를 찾지 못했습니다. 현재 위치 또는 지도 클릭 지정을 사용해 주세요.','error')}}
@@ -266,7 +292,7 @@ let trackpadGestureZoom=null;
 function handleMapGestureStart(event){if(!mapReady)return;event.preventDefault();trackpadGestureZoom=naverMap.getZoom()}
 function handleMapGestureChange(event){if(trackpadGestureZoom===null)return;event.preventDefault();const step=Math.round(Math.log2(Math.max(.25,Math.min(4,Number(event.scale)||1)))*2);naverMap.setZoom(Math.max(6,Math.min(21,trackpadGestureZoom+step)),true)}
 function handleMapGestureEnd(event){if(trackpadGestureZoom!==null)event.preventDefault();trackpadGestureZoom=null}
-function initNaver(){if(!window.naver?.maps)return;naverMap=new naver.maps.Map('naverMap',{center:new naver.maps.LatLng(37.48145,126.84805),zoom:14,zoomControl:false,scrollWheel:false});mapReady=true;hideMapLoad();setMapStatus('전국 좌표 자동연결');naver.maps.Event.addListener(naverMap,'click',e=>{closeMapPopup();if(!pickLocation)return;setBasePoint({lat:e.coord.lat(),lng:e.coord.lng()},'지도에서 지정한 위치');togglePickLocation()});naver.maps.Event.addListener(naverMap,'idle',scheduleBoundsMarkers);if(sharedState){$('baseAddress').value='';apply(true);if(sharedState.lat!==null&&sharedState.lng!==null&&sharedState.zoom!==null){skipIdleUntil=Date.now()+500;naverMap.setCenter(new naver.maps.LatLng(sharedState.lat,sharedState.lng));naverMap.setZoom(sharedState.zoom);setTimeout(async()=>{skipIdleUntil=0;await loadMarkersInCurrentBounds();if(sharedState.mapSearch)searchCurrentMap();showToast('공유된 조회상태를 불러왔습니다.','success')},650)}else{apply();showToast('공유된 조회조건을 불러왔습니다.','success')}}else{setBasePoint(PRESET_ADDRESSES['경기도 광명시 오리로 1034-1'],'경기도 광명시 오리로 1034-1');$('province').value='경기도';updateCities();$('city').value='광명시';apply()}}
+function initNaver(){if(!window.naver?.maps)return;naverMap=new naver.maps.Map('naverMap',{center:new naver.maps.LatLng(37.48145,126.84805),zoom:14,zoomControl:true,zoomControlOptions:{position:naver.maps.Position.BOTTOM_RIGHT,style:naver.maps.ZoomControlStyle.SMALL},scrollWheel:false});mapReady=true;hideMapLoad();setMapStatus('전국 좌표 자동연결');naver.maps.Event.addListener(naverMap,'click',e=>{closeMapPopup();if(!pickLocation)return;setBasePoint({lat:e.coord.lat(),lng:e.coord.lng()},'지도에서 지정한 위치');togglePickLocation()});naver.maps.Event.addListener(naverMap,'idle',scheduleBoundsMarkers);if(sharedState){$('baseAddress').value='';apply(true);if(sharedState.lat!==null&&sharedState.lng!==null&&sharedState.zoom!==null){skipIdleUntil=Date.now()+500;naverMap.setCenter(new naver.maps.LatLng(sharedState.lat,sharedState.lng));naverMap.setZoom(sharedState.zoom);setTimeout(async()=>{skipIdleUntil=0;await loadMarkersInCurrentBounds();if(sharedState.mapSearch)searchCurrentMap();showToast('공유된 조회상태를 불러왔습니다.','success')},650)}else{apply();showToast('공유된 조회조건을 불러왔습니다.','success')}}else{setBasePoint(PRESET_ADDRESSES['경기도 광명시 오리로 1034-1'],'경기도 광명시 오리로 1034-1');$('province').value='경기도';updateCities();$('city').value='광명시';apply()}}
 function loadNaver(){const s=document.createElement('script');s.src='https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=p4sjps53pa&submodules=geocoder&callback=initNaver';s.onerror=()=>{showMapLoad('네이버지도를 불러오지 못했습니다. Web 서비스 URL과 지도 API 인증을 확인하세요.');setMapStatus('지도 인증 실패')};document.head.appendChild(s)}
 document.querySelector('.map-shell').addEventListener('wheel',handleTrackpadMapZoom,{passive:false,capture:true});document.querySelector('.map-shell').addEventListener('gesturestart',handleMapGestureStart,{passive:false,capture:true});document.querySelector('.map-shell').addEventListener('gesturechange',handleMapGestureChange,{passive:false,capture:true});document.querySelector('.map-shell').addEventListener('gestureend',handleMapGestureEnd,{passive:false,capture:true});
 ['q','capacity','staff','confidence','sort'].forEach(id=>$(id).addEventListener(id==='q'?'input':'change',()=>{page=1;apply()}));$('province').addEventListener('change',()=>{clearMapSearch(false);updateCities();page=1;apply()});$('city').addEventListener('change',()=>{clearMapSearch(false);page=1;apply()});$('baseAddress').addEventListener('keydown',e=>{if(e.key==='Enter')setBaseByAddress()});document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMapPopup();closeCompare()}});
