@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- gwangmyeong detail build 20260829-route-select-checkbox-v2 -->
+<!-- gwangmyeong detail build 20260829-loading-auto-search-base-click-v1 -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -30,6 +30,12 @@ header p{margin:5px 0;color:#e7f0fb;line-height:1.6}
 .map-detail-panel{position:absolute;z-index:40;top:102px;right:12px;width:min(350px,calc(100% - 24px));max-height:calc(100% - 114px);overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;border-radius:12px;box-shadow:0 12px 34px rgba(15,35,55,.3);touch-action:pan-y}
 .map-detail-panel .popup{width:100%}
 .map-detail-panel .popup-close{position:sticky;float:right;top:8px;margin:8px 8px -36px 0;z-index:5}
+.map-progress{position:absolute;inset:0;z-index:55;display:grid;place-items:center;padding:18px;background:rgba(231,238,247,.16);pointer-events:none}
+.map-progress-card{width:min(320px,calc(100% - 32px));padding:14px 15px;border:1px solid rgba(255,255,255,.86);border-radius:14px;background:rgba(23,50,77,.92);color:#fff;box-shadow:0 12px 32px rgba(15,35,55,.3);backdrop-filter:blur(7px)}
+.map-progress-head{display:grid;grid-template-columns:22px 1fr auto;gap:9px;align-items:center;font-size:13px}.map-progress-head b{line-height:1.35}.map-progress-head span{color:#dcecff;font-size:12px;font-weight:800}
+.map-progress-spinner{width:20px;height:20px;border:3px solid rgba(255,255,255,.28);border-top-color:#fff;border-radius:50%;animation:map-progress-spin .75s linear infinite}
+.map-progress-track{height:6px;margin-top:10px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.2)}.map-progress-track i{display:block;width:8%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#6ee7b7,#7dd3fc);transition:width .16s ease}
+@keyframes map-progress-spin{to{transform:rotate(360deg)}}
 @media(max-width:560px){.map-detail-panel{left:10px;right:10px;width:auto;top:102px;max-height:calc(100% - 112px)}}
 #naverMap,#leafletMap,#staticMap{position:absolute;inset:0;width:100%;height:100%}
 #naverMap{z-index:3;background:#e7eef7}
@@ -120,8 +126,8 @@ tr.omitted{background:#fffaf1}tr:hover{background:#f2f7fd}.center-link{cursor:po
   </section>
 
   <section class="card alert">
-    <b>수정 사항:</b> 지도를 열 때 마커가 하나씩 움직이던 주소 재검색을 없앴습니다. 처음 위치는 항상 오리로 1034-1 중심으로 고정되고,
-    확대·축소는 사용자가 버튼이나 지도 조작으로만 변경됩니다. 마커가 겹쳐 보일 때는 표 또는 우선순위 항목을 누르면 해당 센터로 이동합니다.
+    <b>지도 사용:</b> 지도를 끌어 이동하면 보이는 화면을 자동으로 다시 검색합니다. 지도 빈 곳을 누르면 그 지점이 새 붉은 ‘기준’이 되고 거리·목록·마커가 즉시 다시 계산됩니다.
+    확대·축소는 현재 축척을 유지하며, 마커가 겹쳐 보일 때는 표 또는 우선순위 항목을 누르면 해당 센터로 이동합니다.
   </section>
 
   <section class="grid" style="margin-top:16px">
@@ -181,6 +187,12 @@ tr.omitted{background:#fffaf1}tr:hover{background:#f2f7fd}.center-link{cursor:po
         <button class="map-search-button map-search-clear hidden" id="mapSearchClear" onclick="clearCurrentMapSearch(event)">지도영역 검색 해제</button>
         <div id="mapSearchAreaBadge" class="map-search-area-badge hidden" role="status" aria-live="polite"></div>
         <div id="mapDetailPanel" class="map-detail-panel hidden" role="dialog" aria-label="센터 상세정보" onpointerdown="event.stopPropagation()" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" onclick="event.stopPropagation()" onwheel="event.stopPropagation()"></div>
+        <div id="mapProgress" class="map-progress hidden" role="status" aria-live="polite" aria-busy="false">
+          <div class="map-progress-card">
+            <div class="map-progress-head"><i class="map-progress-spinner" aria-hidden="true"></i><b id="mapProgressLabel">지도 준비 중</b><span id="mapProgressPercent">0%</span></div>
+            <div class="map-progress-track" aria-hidden="true"><i id="mapProgressBar"></i></div>
+          </div>
+        </div>
         <div id="naverMap"><div class="load-note">네이버지도를 불러오는 중입니다.<br>인증되지 않으면 일반지도로 자동 전환합니다.</div></div>
         <div id="leafletMap" class="hidden"><div class="load-note">일반지도를 불러오는 중입니다.</div></div>
         <div id="staticMap" class="hidden"></div>
@@ -190,7 +202,7 @@ tr.omitted{background:#fffaf1}tr:hover{background:#f2f7fd}.center-link{cursor:po
         <span><i class="dot" style="background:#2563eb"></i>4.0~4.39</span>
         <span><i class="dot" style="background:#d97706"></i>3.5~3.99</span>
         <span><i class="dot" style="background:#64748b"></i>3.49 이하</span>
-        <span class="status" id="mapStatus">고정 좌표 · 자동 이동 없음</span>
+        <span class="status" id="mapStatus">지도 준비 중</span>
       </div>
     </div>
     <div class="card side">
@@ -213,7 +225,7 @@ tr.omitted{background:#fffaf1}tr:hover{background:#f2f7fd}.center-link{cursor:po
       <div class="route-result" id="routeResult">
         <div class="muted">센터를 체크하고 ‘최적경로 탐색’을 누르세요.</div>
       </div>
-      <div class="route-note">출발은 오리로 1034-1, 마지막 센터에서 종료합니다. 실제 도로·교통 상황은 내비게이션에서 최종 확인하세요.</div>
+      <div class="route-note">출발은 지도 위 붉은 ‘기준’ 위치이며 마지막 센터에서 종료합니다. 실제 도로·교통 상황은 내비게이션에서 최종 확인하세요.</div>
     </div>
   </section>
 
@@ -294,6 +306,7 @@ const NAVER_MAP_KEY_PARAM = 'ncpClientId';
 let naverReady = false;
 let naverMap = null;
 let naverMarkers = [];
+let naverBaseMarker = null;
 let naverInfoWindow = null;
 let naverRouteOverlays = [];
 let pendingMarkerViewport = null;
@@ -310,6 +323,11 @@ let routeLayer = null;
 let activeRoute = [];
 const selectedRouteIds = new Set();
 let rankingSortMode = 'priority';
+let mapProgressSequence = 0;
+let mapProgressHideTimer = null;
+let mapAutoSearchTimer = null;
+let suppressMapClickUntil = 0;
+let initialMapLoadProgress = null;
 const IS_LOCAL_FILE = location.protocol === 'file:';
 
 function hav(lat1,lon1,lat2,lon2){
@@ -402,6 +420,49 @@ function popupHtml(c){return `<div class="popup">
 function setStatus(text){document.getElementById('mapStatus').textContent=text}
 let toastTimer=null;
 function showToast(message){const el=document.getElementById('toast');if(!el)return;el.textContent=message;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3000)}
+function beginMapProgress(label,percent=8){
+  const token=++mapProgressSequence,overlay=document.getElementById('mapProgress');
+  clearTimeout(mapProgressHideTimer);
+  if(!overlay)return token;
+  overlay.classList.remove('hidden');overlay.setAttribute('aria-busy','true');
+  updateMapProgress(token,label,percent);return token;
+}
+function updateMapProgress(token,label,percent){
+  if(token!==mapProgressSequence)return;
+  const value=Math.max(0,Math.min(100,Math.round(percent))),overlay=document.getElementById('mapProgress');
+  if(!overlay)return;
+  document.getElementById('mapProgressLabel').textContent=label;
+  document.getElementById('mapProgressPercent').textContent=value+'%';
+  document.getElementById('mapProgressBar').style.width=value+'%';
+}
+function finishMapProgress(token,label='완료'){
+  if(token!==mapProgressSequence)return;
+  updateMapProgress(token,label,100);
+  mapProgressHideTimer=setTimeout(()=>{
+    if(token!==mapProgressSequence)return;
+    const overlay=document.getElementById('mapProgress');if(!overlay)return;
+    overlay.classList.add('hidden');overlay.setAttribute('aria-busy','false');
+  },260);
+}
+function failMapProgress(token,label='처리하지 못했습니다'){
+  if(token!==mapProgressSequence)return;
+  updateMapProgress(token,label,100);finishMapProgress(token,label);
+}
+function waitForMapPaint(){return new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)))}
+async function refreshFilteredViewsWithProgress(label='조회조건 적용 중'){
+  const token=beginMapProgress(label,10);
+  await waitForMapPaint();if(token!==mapProgressSequence)return;
+  try{
+    closeOpenCenterPopup();updateMapProgress(token,'조건에 맞는 센터 조회 중',30);
+    if(naverReady)refreshNaverMarkers();
+    updateMapProgress(token,'지도 마커 표시 중',58);
+    if(leafletReady)refreshLeafletMarkers();
+    await waitForMapPaint();if(token!==mapProgressSequence)return;
+    resetRouteAfterFilter();renderStaticMap();renderRanking();renderTable();updateFilterCount();updateRouteSelectionSummary();
+    const count=centers.filter(visible).length;
+    finishMapProgress(token,count?`${count}곳 표시 완료`:'표시할 센터 없음');
+  }catch(error){console.error(error);failMapProgress(token);showToast('조회 중 오류가 발생했습니다. 다시 시도해 주세요.')}
+}
 async function copyText(value){
   if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(value);return}
   const area=document.createElement('textarea');area.value=value;area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();
@@ -428,6 +489,7 @@ function buildShareUrl(){
   setParam(p,'rsort',rankingSortMode);setParam(p,'view',currentView);
   if(selectedRouteIds.size)setParam(p,'selected',[...selectedRouteIds].join(','));
   const v=currentViewport();setParam(p,'lat',Number(v.lat).toFixed(5));setParam(p,'lon',Number(v.lon).toFixed(5));setParam(p,'zoom',v.zoom);
+  setParam(p,'baseLat',Number(BASE.lat).toFixed(6));setParam(p,'baseLon',Number(BASE.lon).toFixed(6));
   if(currentMapCenterIds)setParam(p,'map','1');
   return url.toString();
 }
@@ -462,6 +524,11 @@ function restoreSharedState(){
   if(['quality','distance','grade'].includes(p.get('sort')))sort.value=p.get('sort');
   if(['priority','route'].includes(p.get('rsort'))){rankingSortMode=p.get('rsort');ranking.value=rankingSortMode}
   const ids=new Set(centers.map(c=>String(c.id)));(p.get('selected')||'').split(',').filter(id=>ids.has(id)).forEach(id=>selectedRouteIds.add(Number(id)));
+  const baseLat=Number(p.get('baseLat')),baseLon=Number(p.get('baseLon'));
+  if(baseLat>=33&&baseLat<=39&&baseLon>=124&&baseLon<=132){
+    BASE.lat=baseLat;BASE.lon=baseLon;BASE.name='공유된 지도 기준';BASE.address=`공유된 지도 기준 (${baseLat.toFixed(5)}, ${baseLon.toFixed(5)})`;
+    centers.forEach(c=>{c.distance=hav(BASE.lat,BASE.lon,c.lat,c.lon)});
+  }
   const lat=Number(p.get('lat')),lon=Number(p.get('lon')),zoom=Number(p.get('zoom'));
   if(lat>=33&&lat<=39&&lon>=124&&lon<=132&&zoom>=10&&zoom<=19)sharedViewport={lat,lon,zoom};
   if(['naver','leaflet','static'].includes(p.get('view')))sharedView=p.get('view');
@@ -597,27 +664,60 @@ function renderSearchRangeOverlays(){
   }
   updateSearchAreaBadge();
 }
-function refreshAllViewsAfterMapSearch(){
+function refreshAllViewsAfterMapSearch(token){
   if(naverReady)refreshNaverMarkers();
+  if(token)updateMapProgress(token,'지도 마커 표시 중',62);
   if(leafletReady)refreshLeafletMarkers();
   activeRoute=[];drawActiveRoute();renderStaticMap();renderRanking();renderTable();updateFilterCount();updateRouteSelectionSummary();
 }
-function searchCurrentMap(event){
+async function searchCurrentMap(event,options={}){
   if(event)event.stopPropagation();closeOpenCenterPopup();
-  if(currentView==='static'){const message='간이좌표도는 전체 범위를 표시합니다. 네이버지도 또는 일반지도에서 검색하세요.';setStatus(message);showToast(message);return}
-  currentMapSearchArea=captureCurrentMapSearchArea();
-  if(!currentMapSearchArea){showToast('현재 지도 검색영역을 계산하지 못했습니다.');return}
-  currentMapCenterIds=new Set(centers.filter(searchAreaContains).map(c=>c.id));
-  document.getElementById('mapSearchClear').classList.remove('hidden');
-  renderSearchRangeOverlays();refreshAllViewsAfterMapSearch();
-  const count=centers.filter(visible).length,areaText=mapSearchAreaText();
-  setStatus(`현재 화면 전체 ${areaText} · ${count}곳 검색`);
-  showToast(count?`현재 지도 화면 전체에서 ${count}곳을 조회했습니다.`:'현재 지도 화면 안에 표시할 센터가 없습니다.');
+  const source=options.source||'manual',notify=options.notify!==false;
+  if(currentView==='static'){
+    const message='간이좌표도는 전체 범위를 표시합니다. 네이버지도 또는 일반지도에서 검색하세요.';setStatus(message);if(notify)showToast(message);return null;
+  }
+  const token=beginMapProgress(source==='drag'?'이동한 지도 영역 자동 조회 중':source==='base'?'새 기준으로 다시 조회 중':'현재 지도 영역 조회 중',10);
+  await waitForMapPaint();if(token!==mapProgressSequence)return null;
+  try{
+    currentMapSearchArea=captureCurrentMapSearchArea();
+    if(!currentMapSearchArea){failMapProgress(token,'검색영역 계산 실패');if(notify)showToast('현재 지도 검색영역을 계산하지 못했습니다.');return null}
+    updateMapProgress(token,'화면 안의 센터 찾는 중',32);
+    currentMapCenterIds=new Set(centers.filter(searchAreaContains).map(c=>c.id));
+    document.getElementById('mapSearchClear').classList.remove('hidden');
+    renderSearchRangeOverlays();await waitForMapPaint();if(token!==mapProgressSequence)return null;
+    refreshAllViewsAfterMapSearch(token);
+    const count=centers.filter(visible).length,areaText=mapSearchAreaText();
+    setStatus(`${source==='drag'?'지도 이동 자동검색':'현재 화면 전체'} ${areaText} · ${count}곳 검색`);
+    finishMapProgress(token,count?`${count}곳 마커 표시 완료`:'표시할 센터 없음');
+    if(notify)showToast(count?`현재 지도 화면 전체에서 ${count}곳을 조회했습니다.`:'현재 지도 화면 안에 표시할 센터가 없습니다.');
+    return count;
+  }catch(error){console.error(error);failMapProgress(token);showToast('지도 조회 중 오류가 발생했습니다. 다시 시도해 주세요.');return null}
 }
-function clearCurrentMapSearch(event){
-  if(event)event.stopPropagation();currentMapCenterIds=null;currentMapSearchArea=null;
+async function clearCurrentMapSearch(event){
+  if(event)event.stopPropagation();
+  const token=beginMapProgress('지도 검색영역 해제 중',15);
+  currentMapCenterIds=null;currentMapSearchArea=null;
   document.getElementById('mapSearchClear').classList.add('hidden');
-  renderSearchRangeOverlays();refreshAllViewsAfterMapSearch();setStatus('지도영역 검색 해제');showToast('지도 검색영역을 해제했습니다.');
+  await waitForMapPaint();if(token!==mapProgressSequence)return;
+  renderSearchRangeOverlays();refreshAllViewsAfterMapSearch(token);setStatus('지도영역 검색 해제');finishMapProgress(token,'전체 센터 표시 완료');showToast('지도 검색영역을 해제했습니다.');
+}
+function scheduleMapDragSearch(){
+  clearTimeout(mapAutoSearchTimer);suppressMapClickUntil=Date.now()+350;
+  mapAutoSearchTimer=setTimeout(()=>searchCurrentMap(null,{source:'drag',notify:false}),220);
+}
+function updateBaseVisuals(){
+  if(naverBaseMarker)naverBaseMarker.setPosition(new naver.maps.LatLng(BASE.lat,BASE.lon));
+  if(baseLayer){baseLayer.setLatLng([BASE.lat,BASE.lon]);baseLayer.setPopupContent(`<div class="popup"><h3>기준 위치</h3><p>${BASE.address}</p></div>`)}
+  rangeLayers.forEach(layer=>layer.setLatLng&&layer.setLatLng([BASE.lat,BASE.lon]));
+}
+async function setMapReferencePoint(lat,lon){
+  if(!Number.isFinite(lat)||!Number.isFinite(lon)||lat<33||lat>39||lon<124||lon>132)return;
+  clearTimeout(mapAutoSearchTimer);closeOpenCenterPopup();
+  BASE.lat=lat;BASE.lon=lon;BASE.name='지도에서 지정한 기준';BASE.address=`지도에서 지정한 위치 (${lat.toFixed(5)}, ${lon.toFixed(5)})`;
+  centers.forEach(c=>{c.distance=hav(BASE.lat,BASE.lon,c.lat,c.lon)});
+  updateBaseVisuals();activeRoute=[];drawActiveRoute();
+  const count=await searchCurrentMap(null,{source:'base',notify:false});
+  if(count!==null){setStatus(`새 기준 지정 · 현재 화면 ${count}곳 자동검색`);showToast(`클릭한 위치를 새 기준으로 지정하고 ${count}곳을 조회했습니다.`)}
 }
 function setViewButtons(view){
   document.getElementById('btnNaver').classList.toggle('active',view==='naver');
@@ -628,10 +728,7 @@ function setFilter(filter,button){
   currentFilter=filter;
   document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
   if(button)button.classList.add('active');
-  if(naverReady)refreshNaverMarkers();
-  if(leafletReady)refreshLeafletMarkers();
-  resetRouteAfterFilter();
-  renderStaticMap();renderRanking();renderTable();updateFilterCount();updateRouteSelectionSummary();
+  refreshFilteredViewsWithProgress('지역 조회조건 적용 중');
 }
 function setGradeFilter(grade,button){
   if(grade==='all')selectedGradeFilters.clear();
@@ -642,10 +739,7 @@ function setGradeFilter(grade,button){
     b.classList.toggle('active',value==='all'?selectedGradeFilters.size===0:selectedGradeFilters.has(value));
     b.setAttribute('aria-pressed',b.classList.contains('active')?'true':'false');
   });
-  if(naverReady)refreshNaverMarkers();
-  if(leafletReady)refreshLeafletMarkers();
-  resetRouteAfterFilter();
-  renderStaticMap();renderRanking();renderTable();updateFilterCount();updateRouteSelectionSummary();
+  refreshFilteredViewsWithProgress('등급 조회조건 적용 중');
 }
 function setScoreFilter(range,button){
   if(range==='all')selectedScoreFilters.clear();
@@ -656,10 +750,7 @@ function setScoreFilter(range,button){
     b.classList.toggle('active',value==='all'?selectedScoreFilters.size===0:selectedScoreFilters.has(value));
     b.setAttribute('aria-pressed',b.classList.contains('active')?'true':'false');
   });
-  if(naverReady)refreshNaverMarkers();
-  if(leafletReady)refreshLeafletMarkers();
-  resetRouteAfterFilter();
-  renderStaticMap();renderRanking();renderTable();updateFilterCount();updateRouteSelectionSummary();
+  refreshFilteredViewsWithProgress('평점 조회조건 적용 중');
 }
 function setConfidenceFilter(value,button){
   if(value==='all')selectedConfidenceFilters.clear();
@@ -670,10 +761,7 @@ function setConfidenceFilter(value,button){
     b.classList.toggle('active',item==='all'?selectedConfidenceFilters.size===0:selectedConfidenceFilters.has(item));
     b.setAttribute('aria-pressed',b.classList.contains('active')?'true':'false');
   });
-  if(naverReady)refreshNaverMarkers();
-  if(leafletReady)refreshLeafletMarkers();
-  resetRouteAfterFilter();
-  renderStaticMap();renderRanking();renderTable();updateFilterCount();updateRouteSelectionSummary();
+  refreshFilteredViewsWithProgress('신뢰도 조회조건 적용 중');
 }
 function updateFilterCount(){
   const count=centers.filter(visible).length;
@@ -681,11 +769,7 @@ function updateFilterCount(){
   updateSearchAreaBadge(count);
 }
 function refreshAfterCenterSearch(){
-  closeOpenCenterPopup();
-  if(naverReady)refreshNaverMarkers();
-  if(leafletReady)refreshLeafletMarkers();
-  resetRouteAfterFilter();
-  renderStaticMap();renderRanking();renderTable();updateFilterCount();updateRouteSelectionSummary();
+  refreshFilteredViewsWithProgress('기관·지역 검색 중');
 }
 function handleCenterSearchInput(value){
   centerSearchQuery=normalizeCenterSearch(value);
@@ -708,6 +792,7 @@ function clearCenterSearch(){
 }
 
 function loadNaver(){
+  initialMapLoadProgress=beginMapProgress('네이버지도 불러오는 중',6);
   if(IS_LOCAL_FILE){
     setStatus('로컬 파일 모드 · 일반지도 연결 중');
     showLeafletView(true);
@@ -745,15 +830,22 @@ function loadNaver(){
 }
 function initNaverMap(){
   if(naverReady||!window.naver||!naver.maps)return;
+  const progress=initialMapLoadProgress||beginMapProgress('네이버지도 준비 중',15);
+  updateMapProgress(progress,'네이버지도 초기화 중',28);
   document.getElementById('naverMap').innerHTML='';
   const initial=sharedViewport||{lat:BASE.lat,lon:BASE.lon,zoom:14};
   naverMap=new naver.maps.Map('naverMap',{center:new naver.maps.LatLng(initial.lat,initial.lon),zoom:initial.zoom,zoomControl:true,zoomControlOptions:{position:naver.maps.Position.RIGHT_BOTTOM,style:naver.maps.ZoomControlStyle.LARGE},scrollWheel:false});
-  new naver.maps.Marker({position:new naver.maps.LatLng(BASE.lat,BASE.lon),map:naverMap,title:'기준 위치',zIndex:3000,icon:{content:'<div class="base-marker">기준</div>',anchor:new naver.maps.Point(19,19)}});
+  naverBaseMarker=new naver.maps.Marker({position:new naver.maps.LatLng(BASE.lat,BASE.lon),map:naverMap,title:'기준 위치',zIndex:3000,icon:{content:'<div class="base-marker">기준</div>',anchor:new naver.maps.Point(19,19)}});
   naverInfoWindow=new naver.maps.InfoWindow({maxWidth:360,backgroundColor:'#fff',borderColor:'#cbd5e1',borderWidth:1,anchorSize:new naver.maps.Size(10,10),pixelOffset:new naver.maps.Point(0,-12),disableAutoPan:true});
-  naver.maps.Event.addListener(naverMap,'click',()=>closeOpenCenterPopup());
+  naver.maps.Event.addListener(naverMap,'dragend',scheduleMapDragSearch);
+  naver.maps.Event.addListener(naverMap,'click',event=>{
+    closeOpenCenterPopup();if(Date.now()<suppressMapClickUntil||!event?.coord)return;
+    setMapReferencePoint(event.coord.lat(),event.coord.lng());
+  });
+  updateMapProgress(progress,'센터 마커 표시 중',68);
   naverReady=true;refreshNaverMarkers();renderSearchRangeOverlays();
   if(activeRoute.length)drawNaverRoute();
-  showNaverView(false);setStatus('네이버지도 · 고정 좌표');
+  showNaverView(false);setStatus('네이버지도 · 지도를 끌면 자동검색, 빈 곳을 누르면 기준 지정');finishMapProgress(progress,`${centers.filter(visible).length}곳 마커 표시 완료`);initialMapLoadProgress=null;
   if(pendingSharedMapSearch){pendingSharedMapSearch=false;setTimeout(()=>searchCurrentMap(),120)}
 }
 function refreshNaverMarkers(){
@@ -772,11 +864,12 @@ function showNaverView(retry){
   document.getElementById('naverMap').classList.remove('hidden');
   document.getElementById('leafletMap').classList.add('hidden');
   document.getElementById('staticMap').classList.add('hidden');
-  naver.maps.Event.trigger(naverMap,'resize');setStatus('네이버지도 · 고정 좌표');
+  naver.maps.Event.trigger(naverMap,'resize');setStatus('네이버지도 · 지도를 끌면 자동검색, 빈 곳을 누르면 기준 지정');
 }
 
 function loadLeaflet(){
   if(leafletLoading||leafletReady)return;
+  initialMapLoadProgress=beginMapProgress('일반지도 불러오는 중',8);
   leafletLoading=true;
   const css=document.createElement('link');
   css.rel='stylesheet';
@@ -804,12 +897,18 @@ function loadLeaflet(){
 
 function initLeaflet(){
   if(leafletReady||!window.L)return;
+  const progress=initialMapLoadProgress||beginMapProgress('일반지도 준비 중',15);
+  updateMapProgress(progress,'일반지도 초기화 중',28);
   leafletLoading=false;
   document.getElementById('leafletMap').innerHTML='';
   const initial=sharedViewport||{lat:BASE.lat,lon:BASE.lon,zoom:14};
   leafletMap=L.map('leafletMap',{zoomControl:false,preferCanvas:true,scrollWheelZoom:false,minZoom:10,maxZoom:19}).setView([initial.lat,initial.lon],initial.zoom);
   L.control.zoom({position:'bottomright'}).addTo(leafletMap);
-  leafletMap.on('click',()=>closeOpenCenterPopup());
+  leafletMap.on('dragend',scheduleMapDragSearch);
+  leafletMap.on('click',event=>{
+    closeOpenCenterPopup();if(Date.now()<suppressMapClickUntil||!event?.latlng)return;
+    setMapReferencePoint(event.latlng.lat,event.latlng.lng);
+  });
   const tiles=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors',updateWhenIdle:true,keepBuffer:2});
   let tileErrors=0;
   tiles.on('tileerror',()=>{
@@ -819,7 +918,7 @@ function initLeaflet(){
       else setStatus('배경지도 지연 · 마커는 정상');
     }
   });
-  tiles.on('load',()=>setStatus('일반지도 · 고정 좌표'));
+  tiles.on('load',()=>{if(!currentMapSearchArea)setStatus('일반지도 · 지도를 끌면 자동검색, 빈 곳을 누르면 기준 지정')});
   tiles.addTo(leafletMap);
   rangeLayers=[
     L.circle([BASE.lat,BASE.lon],{radius:3000,color:'#2563eb',weight:1,fillOpacity:.025,dashArray:'6 6'}).addTo(leafletMap),
@@ -829,12 +928,14 @@ function initLeaflet(){
     .addTo(leafletMap).bindPopup(`<div class="popup"><h3>기준 위치</h3><p>${BASE.address}</p></div>`);
   centerLayer=L.layerGroup().addTo(leafletMap);
   routeLayer=L.layerGroup().addTo(leafletMap);
+  updateMapProgress(progress,'센터 마커 표시 중',68);
   leafletReady=true;
   refreshLeafletMarkers();renderSearchRangeOverlays();
   if(activeRoute.length)drawActiveRoute();
   leafletMap.whenReady(()=>setTimeout(()=>leafletMap.invalidateSize(false),80));
   window.addEventListener('resize',()=>leafletMap&&leafletMap.invalidateSize(false));
   if(!loadTimedOut)showLeafletView(false);
+  finishMapProgress(progress,`${centers.filter(visible).length}곳 마커 표시 완료`);initialMapLoadProgress=null;
   if(pendingSharedMapSearch){pendingSharedMapSearch=false;setTimeout(()=>searchCurrentMap(),120)}
 }
 
@@ -860,7 +961,7 @@ function showLeafletView(retry){
   document.getElementById('staticMap').classList.add('hidden');
   document.getElementById('leafletMap').classList.remove('hidden');
   setTimeout(()=>leafletMap.invalidateSize(false),30);
-  setStatus('일반지도 · 고정 좌표');
+  setStatus('일반지도 · 지도를 끌면 자동검색, 빈 곳을 누르면 기준 지정');
 }
 
 function localXY(c){
@@ -896,10 +997,11 @@ function showStaticView(reason){
   document.getElementById('leafletMap').classList.add('hidden');
   document.getElementById('staticMap').classList.remove('hidden');
   setStatus('간이좌표도 · '+reason);
+  if(initialMapLoadProgress){finishMapProgress(initialMapLoadProgress,'간이좌표도 표시 완료');initialMapLoadProgress=null}
 }
 function focusBase(){
-  if(currentView==='naver'&&naverReady){naverMap.setCenter(new naver.maps.LatLng(BASE.lat,BASE.lon));naverMap.setZoom(15)}
-  else if(currentView==='leaflet'&&leafletReady){leafletMap.setView([BASE.lat,BASE.lon],15);baseLayer.openPopup()}
+  if(currentView==='naver'&&naverReady){naverMap.setCenter(new naver.maps.LatLng(BASE.lat,BASE.lon));naverMap.setZoom(15);setTimeout(()=>searchCurrentMap(null,{source:'base',notify:false}),180)}
+  else if(currentView==='leaflet'&&leafletReady){leafletMap.setView([BASE.lat,BASE.lon],15,{animate:false});setTimeout(()=>searchCurrentMap(null,{source:'base',notify:false}),180)}
   else{showStaticView('기준지 중심');const i=document.getElementById('staticInfo');if(i){i.classList.remove('hidden');i.innerHTML=`<button onclick="this.parentElement.classList.add('hidden')">닫기</button><h3>기준 위치</h3><div>${BASE.address}</div>`}}
 }
 function fitVisible(){
@@ -1046,7 +1148,8 @@ function optimizeRoute(){
   activeRoute=optimizeOpenPath(selected);const total=routeDistance(activeRoute);
   let prev=BASE;
   const stops=activeRoute.map((c,i)=>{const leg=legDistance(prev,c),from=prev;prev=c;return `<div class="route-stop"><div class="route-no">${i+1}</div><div><b>${c.name}</b><div class="small muted">${c.address} · 이전 지점에서 직선 ${leg.toFixed(1)}km</div></div><div><a href="${naverAppRouteUrl(from,c)}">네이버앱 길찾기</a><a target="_blank" rel="noopener" href="${naverSearchUrl(c)}">네이버 웹 위치</a><a target="_blank" rel="noopener" href="${kakaoLegUrl(from,c)}">카카오 길찾기</a></div></div>`}).join('');
-  document.getElementById('routeResult').innerHTML=`<div class="route-summary"><span class="route-chip">출발: 오리로 1034-1</span><span class="route-chip">방문 ${activeRoute.length}곳</span><span class="route-chip">직선 연결거리 ${total.toFixed(1)}km</span><span class="route-chip">마지막 센터에서 종료</span></div>${stops}<div class="route-actions"><b>여러 지점 묶음 실행</b><br>${routeGroupLinks(activeRoute)}<div class="route-note">묶음경로는 지도 서비스의 경유지 제한 때문에 7곳 단위로 나뉩니다.</div></div>`;
+  const startLabel=BASE.name==='기준 위치'?'오리로 1034-1':'지도 지정 기준';
+  document.getElementById('routeResult').innerHTML=`<div class="route-summary"><span class="route-chip">출발: ${startLabel}</span><span class="route-chip">방문 ${activeRoute.length}곳</span><span class="route-chip">직선 연결거리 ${total.toFixed(1)}km</span><span class="route-chip">마지막 센터에서 종료</span></div>${stops}<div class="route-actions"><b>여러 지점 묶음 실행</b><br>${routeGroupLinks(activeRoute)}<div class="route-note">묶음경로는 지도 서비스의 경유지 제한 때문에 7곳 단위로 나뉩니다.</div></div>`;
   rankingSortMode='route';document.getElementById('rankingSort').value='route';renderRanking();updateRouteSelectionSummary();
   if(naverReady){showNaverView(false);drawActiveRoute()}
   else if(leafletReady){showLeafletView(false);drawActiveRoute()}
