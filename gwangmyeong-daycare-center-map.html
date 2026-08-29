@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- gwangmyeong detail build 20260829-marker-rank-natural-zoom-v2 -->
+<!-- gwangmyeong detail build 20260829-remove-search-area-layer-v3 -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -25,8 +25,6 @@ header p{margin:5px 0;color:#e7f0fb;line-height:1.6}
 .map-shell{position:relative;height:690px;border-radius:12px;border:1px solid var(--line);overflow:hidden;overscroll-behavior:contain;background:#e7eef7}
 .map-search-button{position:absolute;z-index:20;top:14px;left:50%;transform:translateX(-50%);border:0;border-radius:999px;background:#1877f2;color:#fff;font-weight:800;box-shadow:0 4px 14px rgba(24,119,242,.35);padding:9px 16px;white-space:nowrap}
 .map-search-button:hover{background:#1168d8}.map-search-clear{top:58px;background:#fff;color:#31557d;border:1px solid #cbd5e1;box-shadow:0 3px 10px rgba(0,0,0,.12)}
-.map-search-area-badge{position:absolute;z-index:21;top:102px;left:12px;display:flex;flex-direction:column;gap:2px;max-width:calc(100% - 24px);padding:9px 12px;border:1px solid rgba(167,243,208,.8);border-radius:11px;background:rgba(6,95,70,.86);color:#fff;box-shadow:0 5px 16px rgba(6,78,59,.26);backdrop-filter:blur(5px);pointer-events:none}
-.map-search-area-badge b{font-size:12px}.map-search-area-badge span{font-size:11px;color:#d1fae5}
 .map-detail-panel{position:absolute;z-index:40;top:102px;right:12px;width:min(350px,calc(100% - 24px));max-height:calc(100% - 114px);overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;border-radius:12px;box-shadow:0 12px 34px rgba(15,35,55,.3);touch-action:pan-y}
 .map-detail-panel .popup{width:100%}
 .map-detail-panel .popup-close{position:sticky;float:right;top:8px;margin:8px 8px -36px 0;z-index:5}
@@ -189,7 +187,6 @@ tr.omitted{background:#fffaf1}tr:hover{background:#f2f7fd}.center-link{cursor:po
       <div class="map-shell">
         <button class="map-search-button" onclick="searchCurrentMap(event)">↻ 현 지도에서 검색</button>
         <button class="map-search-button map-search-clear hidden" id="mapSearchClear" onclick="clearCurrentMapSearch(event)">지도영역 검색 해제</button>
-        <div id="mapSearchAreaBadge" class="map-search-area-badge hidden" role="status" aria-live="polite"></div>
         <div id="mapDetailPanel" class="map-detail-panel hidden" role="dialog" aria-label="센터 상세정보" onpointerdown="event.stopPropagation()" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" onclick="event.stopPropagation()" onwheel="event.stopPropagation()"></div>
         <div id="mapProgress" class="map-progress hidden" role="status" aria-live="polite" aria-busy="false">
           <div class="map-progress-card">
@@ -292,8 +289,6 @@ const officialRegistry = {
 let currentFilter = 'all';
 let currentMapCenterIds = null;
 let currentMapSearchArea = null;
-let naverSearchRangeOverlay = null;
-let leafletSearchRangeLayer = null;
 let centerSearchQuery = '';
 let centerSearchToastTimer = null;
 const centerLocalities={0:'소하동',1:'광명동',2:'광명동',3:'하안동',4:'소하동',5:'개봉동',6:'고척동',7:'일직동',8:'온수동',9:'하안동',10:'일직동',11:'소하동',12:'옥길동',13:'소하동',14:'광명동',15:'천왕동',16:'소하동',17:'고척동'};
@@ -567,7 +562,7 @@ function applyMapZoomStep(step,clientX,clientY,effect=true){
   return false;
 }
 function handleMapWheelZoom(event){
-  if(event.target.closest?.('#mapDetailPanel,.map-search-button,.map-search-area-badge,.map-progress'))return;
+  if(event.target.closest?.('#mapDetailPanel,.map-search-button,.map-progress'))return;
   if(currentView==='static')return;
   if(event.cancelable)event.preventDefault();event.stopPropagation();
   const modeScale=event.deltaMode===1?18:event.deltaMode===2?80:1;
@@ -585,7 +580,7 @@ function handleMapWheelZoom(event){
 let trackpadGestureZoom=null;
 let trackpadGesturePoint=null;
 function handleMapGestureStart(event){
-  if(touchPinchActive||event.target.closest?.('#mapDetailPanel,.map-search-button,.map-search-area-badge,.map-progress'))return;
+  if(touchPinchActive||event.target.closest?.('#mapDetailPanel,.map-search-button,.map-progress'))return;
   if(currentView==='static')return;if(event.cancelable)event.preventDefault();
   trackpadGestureZoom=currentView==='naver'&&naverReady?naverMap.getZoom():currentView==='leaflet'&&leafletReady?leafletMap.getZoom():null;
   trackpadGesturePoint={x:event.clientX||document.querySelector('.map-shell').getBoundingClientRect().left+document.querySelector('.map-shell').clientWidth/2,y:event.clientY||document.querySelector('.map-shell').getBoundingClientRect().top+document.querySelector('.map-shell').clientHeight/2};
@@ -674,30 +669,8 @@ function mapSearchAreaText(){
   const area=currentMapSearchArea;
   return area?`약 ${formatMapSpan(area.widthKm)} × ${formatMapSpan(area.heightKm)}`:'';
 }
-function updateSearchAreaBadge(count=centers.filter(visible).length){
-  const badge=document.getElementById('mapSearchAreaBadge');if(!badge)return;
-  if(!currentMapSearchArea){badge.classList.add('hidden');badge.innerHTML='';return}
-  badge.classList.remove('hidden');
-  badge.innerHTML=`<b>현재 지도 화면 전체 · ${mapSearchAreaText()}</b><span>사각 영역 안의 조건 일치 센터 ${count}곳</span>`;
-}
 function renderSearchRangeOverlays(){
-  if(naverSearchRangeOverlay){naverSearchRangeOverlay.setMap(null);naverSearchRangeOverlay=null}
-  if(leafletSearchRangeLayer&&leafletMap){leafletMap.removeLayer(leafletSearchRangeLayer);leafletSearchRangeLayer=null}
-  if(!currentMapSearchArea){updateSearchAreaBadge();return}
-  const area=currentMapSearchArea;
-  if(naverReady){
-    const sw=new naver.maps.LatLng(area.south,area.west),se=new naver.maps.LatLng(area.south,area.east),ne=new naver.maps.LatLng(area.north,area.east),nw=new naver.maps.LatLng(area.north,area.west);
-    naverSearchRangeOverlay=new naver.maps.Polygon({
-      map:naverMap,paths:[[sw,se,ne,nw]],strokeColor:'#047857',strokeOpacity:.95,strokeWeight:2,strokeStyle:'shortdash',
-      fillColor:'#34d399',fillOpacity:.14,clickable:false,zIndex:20
-    });
-  }
-  if(leafletReady){
-    leafletSearchRangeLayer=L.rectangle([[area.south,area.west],[area.north,area.east]],{
-      color:'#047857',weight:2,opacity:.95,dashArray:'8 6',fillColor:'#34d399',fillOpacity:.14,interactive:false
-    }).addTo(leafletMap);
-  }
-  updateSearchAreaBadge();
+  // 검색 범위는 마커 필터링에만 사용하고 지도 위 시각 레이어는 표시하지 않는다.
 }
 function refreshAllViewsAfterMapSearch(token){
   activeRoute=[];drawActiveRoute();
