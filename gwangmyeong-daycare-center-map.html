@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- gwangmyeong detail build 20260829-loading-auto-search-base-click-v2 -->
+<!-- gwangmyeong detail build 20260829-loading-auto-search-base-click-v3 -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -689,7 +689,7 @@ async function searchCurrentMap(event,options={}){
     const count=centers.filter(visible).length,areaText=mapSearchAreaText();
     setStatus(`${source==='drag'?'지도 이동 자동검색':'현재 화면 전체'} ${areaText} · ${count}곳 검색`);
     finishMapProgress(token,count?`${count}곳 마커 표시 완료`:'표시할 센터 없음');
-    if(notify)showToast(count?`현재 지도 화면 전체에서 ${count}곳을 조회했습니다.`:'현재 지도 화면 안에 표시할 센터가 없습니다.');
+    if(notify||count===0)showToast(count?`현재 지도 화면 전체에서 ${count}곳을 조회했습니다.`:'현재 지도 화면 안에 표시할 센터가 없습니다.');
     return count;
   }catch(error){console.error(error);failMapProgress(token);showToast('지도 조회 중 오류가 발생했습니다. 다시 시도해 주세요.');return null}
 }
