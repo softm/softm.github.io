@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- gwangmyeong detail build 20260829-gentle-map-wheel-lock -->
+<!-- gwangmyeong detail build 20260829-map-search-radius -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -25,6 +25,8 @@ header p{margin:5px 0;color:#e7f0fb;line-height:1.6}
 .map-shell{position:relative;height:690px;border-radius:12px;border:1px solid var(--line);overflow:hidden;background:#e7eef7}
 .map-search-button{position:absolute;z-index:20;top:14px;left:50%;transform:translateX(-50%);border:0;border-radius:999px;background:#1877f2;color:#fff;font-weight:800;box-shadow:0 4px 14px rgba(24,119,242,.35);padding:9px 16px;white-space:nowrap}
 .map-search-button:hover{background:#1168d8}.map-search-clear{top:58px;background:#fff;color:#31557d;border:1px solid #cbd5e1;box-shadow:0 3px 10px rgba(0,0,0,.12)}
+.map-search-area-badge{position:absolute;z-index:21;top:102px;left:12px;display:flex;flex-direction:column;gap:2px;max-width:calc(100% - 24px);padding:9px 12px;border:1px solid rgba(167,243,208,.8);border-radius:11px;background:rgba(6,95,70,.86);color:#fff;box-shadow:0 5px 16px rgba(6,78,59,.26);backdrop-filter:blur(5px);pointer-events:none}
+.map-search-area-badge b{font-size:12px}.map-search-area-badge span{font-size:11px;color:#d1fae5}
 .map-detail-panel{position:absolute;z-index:40;top:102px;right:12px;width:min(350px,calc(100% - 24px));max-height:calc(100% - 114px);overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;border-radius:12px;box-shadow:0 12px 34px rgba(15,35,55,.3);touch-action:pan-y}
 .map-detail-panel .popup{width:100%}
 .map-detail-panel .popup-close{position:sticky;float:right;top:8px;margin:8px 8px -36px 0;z-index:5}
@@ -177,6 +179,7 @@ tr.omitted{background:#fffaf1}tr:hover{background:#f2f7fd}.center-link{cursor:po
       <div class="map-shell">
         <button class="map-search-button" onclick="searchCurrentMap(event)">↻ 현 지도에서 검색</button>
         <button class="map-search-button map-search-clear hidden" id="mapSearchClear" onclick="clearCurrentMapSearch(event)">지도영역 검색 해제</button>
+        <div id="mapSearchAreaBadge" class="map-search-area-badge hidden" role="status" aria-live="polite"></div>
         <div id="mapDetailPanel" class="map-detail-panel hidden" role="dialog" aria-label="센터 상세정보" onpointerdown="event.stopPropagation()" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" onclick="event.stopPropagation()" onwheel="event.stopPropagation()"></div>
         <div id="naverMap"><div class="load-note">네이버지도를 불러오는 중입니다.<br>인증되지 않으면 일반지도로 자동 전환합니다.</div></div>
         <div id="leafletMap" class="hidden"><div class="load-note">일반지도를 불러오는 중입니다.</div></div>
@@ -240,7 +243,7 @@ tr.omitted{background:#fffaf1}tr:hover{background:#f2f7fd}.center-link{cursor:po
 
   <section class="card foot">
     <b>지도 사용법:</b> 처음에는 기준 주소가 중앙에 고정됩니다. 휠·터치패드 확대/축소는 입력을 완만하게 처리해 한 단계씩 조정됩니다.
-    지도 오른쪽의 +/− 버튼이나 두 손가락 확대도 사용할 수 있습니다. 일반지도 배경이 보이지 않으면 ‘간이좌표도’를 누르십시오.
+    지도 오른쪽의 +/− 버튼이나 두 손가락 확대도 사용할 수 있습니다. ‘현 지도에서 검색’을 누르면 검색에 사용된 중심 반경이 초록색 반투명 원으로 고정 표시됩니다. 일반지도 배경이 보이지 않으면 ‘간이좌표도’를 누르십시오.
     거리와 좌표는 송영시간이 아니라 주소 기반 상대 비교용입니다.
   </section>
 </div>
@@ -272,6 +275,9 @@ const officialRegistry = {
 };
 let currentFilter = 'all';
 let currentMapCenterIds = null;
+let currentMapSearchArea = null;
+let naverSearchRangeOverlay = null;
+let leafletSearchRangeLayer = null;
 let centerSearchQuery = '';
 let centerSearchToastTimer = null;
 const centerLocalities={0:'소하동',1:'광명동',2:'광명동',3:'하안동',4:'소하동',5:'개봉동',6:'고척동',7:'일직동',8:'온수동',9:'하안동',10:'일직동',11:'소하동',12:'옥길동',13:'소하동',14:'광명동',15:'천왕동',16:'소하동',17:'고척동'};
@@ -539,12 +545,57 @@ function showCenterPanel(c,usePendingMarkerViewport=true){
   const body=panel.querySelector('.popup-body');if(body)body.scrollTop=0;
   restoreVisibleMapViewport(viewport);
 }
-function mapBoundsContains(c){
+function innerMapRadiusKm(lat,lon,south,west,north,east){
+  const distances=[
+    hav(lat,lon,south,lon),hav(lat,lon,north,lon),
+    hav(lat,lon,lat,west),hav(lat,lon,lat,east)
+  ].filter(Number.isFinite);
+  return Math.max(.1,Math.min(...distances)*.95);
+}
+function captureCurrentMapSearchArea(){
   if(currentView==='naver'&&naverReady){
-    const b=naverMap.getBounds();return b.hasLatLng(new naver.maps.LatLng(c.lat,c.lon));
+    const center=naverMap.getCenter(),bounds=naverMap.getBounds(),sw=bounds.getSW(),ne=bounds.getNE();
+    return {lat:center.lat(),lon:center.lng(),radiusKm:innerMapRadiusKm(center.lat(),center.lng(),sw.lat(),sw.lng(),ne.lat(),ne.lng())};
   }
-  if(currentView==='leaflet'&&leafletReady)return leafletMap.getBounds().contains([c.lat,c.lon]);
-  return true;
+  if(currentView==='leaflet'&&leafletReady){
+    const center=leafletMap.getCenter(),bounds=leafletMap.getBounds(),sw=bounds.getSouthWest(),ne=bounds.getNorthEast();
+    return {lat:center.lat,lon:center.lng,radiusKm:innerMapRadiusKm(center.lat,center.lng,sw.lat,sw.lng,ne.lat,ne.lng)};
+  }
+  return null;
+}
+function searchAreaContains(c){
+  return !currentMapSearchArea||hav(currentMapSearchArea.lat,currentMapSearchArea.lon,c.lat,c.lon)<=currentMapSearchArea.radiusKm;
+}
+function formatSearchRadius(radiusKm){
+  if(radiusKm>=10)return radiusKm.toFixed(0)+'km';
+  if(radiusKm>=1)return radiusKm.toFixed(1)+'km';
+  return Math.round(radiusKm*1000)+'m';
+}
+function updateSearchAreaBadge(count=centers.filter(visible).length){
+  const badge=document.getElementById('mapSearchAreaBadge');if(!badge)return;
+  if(!currentMapSearchArea){badge.classList.add('hidden');badge.innerHTML='';return}
+  badge.classList.remove('hidden');
+  badge.innerHTML=`<b>현재 지도 검색 반경 ${formatSearchRadius(currentMapSearchArea.radiusKm)}</b><span>원 안의 조건 일치 센터 ${count}곳</span>`;
+}
+function renderSearchRangeOverlays(){
+  if(naverSearchRangeOverlay){naverSearchRangeOverlay.setMap(null);naverSearchRangeOverlay=null}
+  if(leafletSearchRangeLayer&&leafletMap){leafletMap.removeLayer(leafletSearchRangeLayer);leafletSearchRangeLayer=null}
+  if(!currentMapSearchArea){updateSearchAreaBadge();return}
+  const area=currentMapSearchArea;
+  if(naverReady){
+    naverSearchRangeOverlay=new naver.maps.Circle({
+      map:naverMap,center:new naver.maps.LatLng(area.lat,area.lon),radius:area.radiusKm*1000,
+      strokeColor:'#047857',strokeOpacity:.95,strokeWeight:2,strokeStyle:'shortdash',
+      fillColor:'#34d399',fillOpacity:.14,clickable:false,zIndex:20
+    });
+  }
+  if(leafletReady){
+    leafletSearchRangeLayer=L.circle([area.lat,area.lon],{
+      radius:area.radiusKm*1000,color:'#047857',weight:2,opacity:.95,dashArray:'8 6',
+      fillColor:'#34d399',fillOpacity:.14,interactive:false
+    }).addTo(leafletMap);
+  }
+  updateSearchAreaBadge();
 }
 function refreshAllViewsAfterMapSearch(){
   if(naverReady)refreshNaverMarkers();
@@ -554,14 +605,19 @@ function refreshAllViewsAfterMapSearch(){
 function searchCurrentMap(event){
   if(event)event.stopPropagation();closeOpenCenterPopup();
   if(currentView==='static'){const message='간이좌표도는 전체 범위를 표시합니다. 네이버지도 또는 일반지도에서 검색하세요.';setStatus(message);showToast(message);return}
-  currentMapCenterIds=new Set(centers.filter(mapBoundsContains).map(c=>c.id));
+  currentMapSearchArea=captureCurrentMapSearchArea();
+  if(!currentMapSearchArea){showToast('현재 지도 검색영역을 계산하지 못했습니다.');return}
+  currentMapCenterIds=new Set(centers.filter(searchAreaContains).map(c=>c.id));
   document.getElementById('mapSearchClear').classList.remove('hidden');
-  refreshAllViewsAfterMapSearch();const count=centers.filter(visible).length;setStatus(`현 지도에서 ${count}곳 검색`);showToast(count?`현재 지도에서 ${count}곳을 조회했습니다.`:'현재 화면 안에 표시할 센터가 없습니다.');
+  renderSearchRangeOverlays();refreshAllViewsAfterMapSearch();
+  const count=centers.filter(visible).length,radius=formatSearchRadius(currentMapSearchArea.radiusKm);
+  setStatus(`중심 반경 ${radius} · ${count}곳 검색`);
+  showToast(count?`현재 지도 중심 반경 ${radius}에서 ${count}곳을 조회했습니다.`:`현재 지도 중심 반경 ${radius} 안에 표시할 센터가 없습니다.`);
 }
 function clearCurrentMapSearch(event){
-  if(event)event.stopPropagation();currentMapCenterIds=null;
+  if(event)event.stopPropagation();currentMapCenterIds=null;currentMapSearchArea=null;
   document.getElementById('mapSearchClear').classList.add('hidden');
-  refreshAllViewsAfterMapSearch();setStatus('지도영역 검색 해제');
+  renderSearchRangeOverlays();refreshAllViewsAfterMapSearch();setStatus('지도영역 검색 해제');showToast('지도 검색 반경을 해제했습니다.');
 }
 function setViewButtons(view){
   document.getElementById('btnNaver').classList.toggle('active',view==='naver');
@@ -620,7 +676,9 @@ function setConfidenceFilter(value,button){
   renderStaticMap();renderRanking();renderTable();updateFilterCount();updateRouteSelectionSummary();
 }
 function updateFilterCount(){
-  document.getElementById('filterCount').textContent=centers.filter(visible).length+'곳 표시';
+  const count=centers.filter(visible).length;
+  document.getElementById('filterCount').textContent=count+'곳 표시';
+  updateSearchAreaBadge(count);
 }
 function refreshAfterCenterSearch(){
   closeOpenCenterPopup();
@@ -693,7 +751,7 @@ function initNaverMap(){
   new naver.maps.Marker({position:new naver.maps.LatLng(BASE.lat,BASE.lon),map:naverMap,title:'기준 위치',zIndex:3000,icon:{content:'<div class="base-marker">기준</div>',anchor:new naver.maps.Point(19,19)}});
   naverInfoWindow=new naver.maps.InfoWindow({maxWidth:360,backgroundColor:'#fff',borderColor:'#cbd5e1',borderWidth:1,anchorSize:new naver.maps.Size(10,10),pixelOffset:new naver.maps.Point(0,-12),disableAutoPan:true});
   naver.maps.Event.addListener(naverMap,'click',()=>closeOpenCenterPopup());
-  naverReady=true;refreshNaverMarkers();
+  naverReady=true;refreshNaverMarkers();renderSearchRangeOverlays();
   if(activeRoute.length)drawNaverRoute();
   showNaverView(false);setStatus('네이버지도 · 고정 좌표');
   if(pendingSharedMapSearch){pendingSharedMapSearch=false;setTimeout(()=>searchCurrentMap(),120)}
@@ -771,7 +829,7 @@ function initLeaflet(){
   centerLayer=L.layerGroup().addTo(leafletMap);
   routeLayer=L.layerGroup().addTo(leafletMap);
   leafletReady=true;
-  refreshLeafletMarkers();
+  refreshLeafletMarkers();renderSearchRangeOverlays();
   if(activeRoute.length)drawActiveRoute();
   leafletMap.whenReady(()=>setTimeout(()=>leafletMap.invalidateSize(false),80));
   window.addEventListener('resize',()=>leafletMap&&leafletMap.invalidateSize(false));
