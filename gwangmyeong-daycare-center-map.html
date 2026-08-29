@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- gwangmyeong detail build 20260829-marker-rank-natural-zoom-v1 -->
+<!-- gwangmyeong detail build 20260829-marker-rank-natural-zoom-v2 -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -567,6 +567,7 @@ function applyMapZoomStep(step,clientX,clientY,effect=true){
   return false;
 }
 function handleMapWheelZoom(event){
+  if(event.target.closest?.('#mapDetailPanel,.map-search-button,.map-search-area-badge,.map-progress'))return;
   if(currentView==='static')return;
   if(event.cancelable)event.preventDefault();event.stopPropagation();
   const modeScale=event.deltaMode===1?18:event.deltaMode===2?80:1;
@@ -584,6 +585,7 @@ function handleMapWheelZoom(event){
 let trackpadGestureZoom=null;
 let trackpadGesturePoint=null;
 function handleMapGestureStart(event){
+  if(touchPinchActive||event.target.closest?.('#mapDetailPanel,.map-search-button,.map-search-area-badge,.map-progress'))return;
   if(currentView==='static')return;if(event.cancelable)event.preventDefault();
   trackpadGestureZoom=currentView==='naver'&&naverReady?naverMap.getZoom():currentView==='leaflet'&&leafletReady?leafletMap.getZoom():null;
   trackpadGesturePoint={x:event.clientX||document.querySelector('.map-shell').getBoundingClientRect().left+document.querySelector('.map-shell').clientWidth/2,y:event.clientY||document.querySelector('.map-shell').getBoundingClientRect().top+document.querySelector('.map-shell').clientHeight/2};
