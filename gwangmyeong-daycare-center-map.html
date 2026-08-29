@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- gwangmyeong detail build 20260829-map-search-radius -->
+<!-- gwangmyeong detail build 20260829-map-search-viewport -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -545,37 +545,39 @@ function showCenterPanel(c,usePendingMarkerViewport=true){
   const body=panel.querySelector('.popup-body');if(body)body.scrollTop=0;
   restoreVisibleMapViewport(viewport);
 }
-function innerMapRadiusKm(lat,lon,south,west,north,east){
-  const distances=[
-    hav(lat,lon,south,lon),hav(lat,lon,north,lon),
-    hav(lat,lon,lat,west),hav(lat,lon,lat,east)
-  ].filter(Number.isFinite);
-  return Math.max(.1,Math.min(...distances)*.95);
+function formatMapSpan(km){
+  if(km>=10)return km.toFixed(0)+'km';
+  if(km>=1)return km.toFixed(1)+'km';
+  return Math.max(1,Math.round(km*1000))+'m';
+}
+function makeViewportSearchArea(south,west,north,east){
+  const middleLat=(south+north)/2,middleLon=(west+east)/2;
+  return {south,west,north,east,widthKm:hav(middleLat,west,middleLat,east),heightKm:hav(south,middleLon,north,middleLon)};
 }
 function captureCurrentMapSearchArea(){
   if(currentView==='naver'&&naverReady){
-    const center=naverMap.getCenter(),bounds=naverMap.getBounds(),sw=bounds.getSW(),ne=bounds.getNE();
-    return {lat:center.lat(),lon:center.lng(),radiusKm:innerMapRadiusKm(center.lat(),center.lng(),sw.lat(),sw.lng(),ne.lat(),ne.lng())};
+    const bounds=naverMap.getBounds(),sw=bounds.getSW(),ne=bounds.getNE();
+    return makeViewportSearchArea(sw.lat(),sw.lng(),ne.lat(),ne.lng());
   }
   if(currentView==='leaflet'&&leafletReady){
-    const center=leafletMap.getCenter(),bounds=leafletMap.getBounds(),sw=bounds.getSouthWest(),ne=bounds.getNorthEast();
-    return {lat:center.lat,lon:center.lng,radiusKm:innerMapRadiusKm(center.lat,center.lng,sw.lat,sw.lng,ne.lat,ne.lng)};
+    const bounds=leafletMap.getBounds(),sw=bounds.getSouthWest(),ne=bounds.getNorthEast();
+    return makeViewportSearchArea(sw.lat,sw.lng,ne.lat,ne.lng);
   }
   return null;
 }
 function searchAreaContains(c){
-  return !currentMapSearchArea||hav(currentMapSearchArea.lat,currentMapSearchArea.lon,c.lat,c.lon)<=currentMapSearchArea.radiusKm;
+  const area=currentMapSearchArea;
+  return !area||(c.lat>=area.south&&c.lat<=area.north&&c.lon>=area.west&&c.lon<=area.east);
 }
-function formatSearchRadius(radiusKm){
-  if(radiusKm>=10)return radiusKm.toFixed(0)+'km';
-  if(radiusKm>=1)return radiusKm.toFixed(1)+'km';
-  return Math.round(radiusKm*1000)+'m';
+function mapSearchAreaText(){
+  const area=currentMapSearchArea;
+  return area?`약 ${formatMapSpan(area.widthKm)} × ${formatMapSpan(area.heightKm)}`:'';
 }
 function updateSearchAreaBadge(count=centers.filter(visible).length){
   const badge=document.getElementById('mapSearchAreaBadge');if(!badge)return;
   if(!currentMapSearchArea){badge.classList.add('hidden');badge.innerHTML='';return}
   badge.classList.remove('hidden');
-  badge.innerHTML=`<b>현재 지도 검색 반경 ${formatSearchRadius(currentMapSearchArea.radiusKm)}</b><span>원 안의 조건 일치 센터 ${count}곳</span>`;
+  badge.innerHTML=`<b>현재 지도 화면 전체 · ${mapSearchAreaText()}</b><span>사각 영역 안의 조건 일치 센터 ${count}곳</span>`;
 }
 function renderSearchRangeOverlays(){
   if(naverSearchRangeOverlay){naverSearchRangeOverlay.setMap(null);naverSearchRangeOverlay=null}
@@ -583,16 +585,15 @@ function renderSearchRangeOverlays(){
   if(!currentMapSearchArea){updateSearchAreaBadge();return}
   const area=currentMapSearchArea;
   if(naverReady){
-    naverSearchRangeOverlay=new naver.maps.Circle({
-      map:naverMap,center:new naver.maps.LatLng(area.lat,area.lon),radius:area.radiusKm*1000,
-      strokeColor:'#047857',strokeOpacity:.95,strokeWeight:2,strokeStyle:'shortdash',
+    const sw=new naver.maps.LatLng(area.south,area.west),se=new naver.maps.LatLng(area.south,area.east),ne=new naver.maps.LatLng(area.north,area.east),nw=new naver.maps.LatLng(area.north,area.west);
+    naverSearchRangeOverlay=new naver.maps.Polygon({
+      map:naverMap,paths:[[sw,se,ne,nw]],strokeColor:'#047857',strokeOpacity:.95,strokeWeight:2,strokeStyle:'shortdash',
       fillColor:'#34d399',fillOpacity:.14,clickable:false,zIndex:20
     });
   }
   if(leafletReady){
-    leafletSearchRangeLayer=L.circle([area.lat,area.lon],{
-      radius:area.radiusKm*1000,color:'#047857',weight:2,opacity:.95,dashArray:'8 6',
-      fillColor:'#34d399',fillOpacity:.14,interactive:false
+    leafletSearchRangeLayer=L.rectangle([[area.south,area.west],[area.north,area.east]],{
+      color:'#047857',weight:2,opacity:.95,dashArray:'8 6',fillColor:'#34d399',fillOpacity:.14,interactive:false
     }).addTo(leafletMap);
   }
   updateSearchAreaBadge();
@@ -610,14 +611,14 @@ function searchCurrentMap(event){
   currentMapCenterIds=new Set(centers.filter(searchAreaContains).map(c=>c.id));
   document.getElementById('mapSearchClear').classList.remove('hidden');
   renderSearchRangeOverlays();refreshAllViewsAfterMapSearch();
-  const count=centers.filter(visible).length,radius=formatSearchRadius(currentMapSearchArea.radiusKm);
-  setStatus(`중심 반경 ${radius} · ${count}곳 검색`);
-  showToast(count?`현재 지도 중심 반경 ${radius}에서 ${count}곳을 조회했습니다.`:`현재 지도 중심 반경 ${radius} 안에 표시할 센터가 없습니다.`);
+  const count=centers.filter(visible).length,areaText=mapSearchAreaText();
+  setStatus(`현재 화면 전체 ${areaText} · ${count}곳 검색`);
+  showToast(count?`현재 지도 화면 전체에서 ${count}곳을 조회했습니다.`:'현재 지도 화면 안에 표시할 센터가 없습니다.');
 }
 function clearCurrentMapSearch(event){
   if(event)event.stopPropagation();currentMapCenterIds=null;currentMapSearchArea=null;
   document.getElementById('mapSearchClear').classList.add('hidden');
-  renderSearchRangeOverlays();refreshAllViewsAfterMapSearch();setStatus('지도영역 검색 해제');showToast('지도 검색 반경을 해제했습니다.');
+  renderSearchRangeOverlays();refreshAllViewsAfterMapSearch();setStatus('지도영역 검색 해제');showToast('지도 검색영역을 해제했습니다.');
 }
 function setViewButtons(view){
   document.getElementById('btnNaver').classList.toggle('active',view==='naver');
@@ -747,7 +748,7 @@ function initNaverMap(){
   if(naverReady||!window.naver||!naver.maps)return;
   document.getElementById('naverMap').innerHTML='';
   const initial=sharedViewport||{lat:BASE.lat,lon:BASE.lon,zoom:14};
-  naverMap=new naver.maps.Map('naverMap',{center:new naver.maps.LatLng(initial.lat,initial.lon),zoom:initial.zoom,zoomControl:true,zoomControlOptions:{position:naver.maps.Position.TOP_RIGHT},scrollWheel:false});
+  naverMap=new naver.maps.Map('naverMap',{center:new naver.maps.LatLng(initial.lat,initial.lon),zoom:initial.zoom,zoomControl:true,zoomControlOptions:{position:naver.maps.Position.RIGHT_BOTTOM,style:naver.maps.ZoomControlStyle.LARGE},scrollWheel:false});
   new naver.maps.Marker({position:new naver.maps.LatLng(BASE.lat,BASE.lon),map:naverMap,title:'기준 위치',zIndex:3000,icon:{content:'<div class="base-marker">기준</div>',anchor:new naver.maps.Point(19,19)}});
   naverInfoWindow=new naver.maps.InfoWindow({maxWidth:360,backgroundColor:'#fff',borderColor:'#cbd5e1',borderWidth:1,anchorSize:new naver.maps.Size(10,10),pixelOffset:new naver.maps.Point(0,-12),disableAutoPan:true});
   naver.maps.Event.addListener(naverMap,'click',()=>closeOpenCenterPopup());
@@ -807,7 +808,8 @@ function initLeaflet(){
   leafletLoading=false;
   document.getElementById('leafletMap').innerHTML='';
   const initial=sharedViewport||{lat:BASE.lat,lon:BASE.lon,zoom:14};
-  leafletMap=L.map('leafletMap',{zoomControl:true,preferCanvas:true,scrollWheelZoom:false,minZoom:10,maxZoom:19}).setView([initial.lat,initial.lon],initial.zoom);
+  leafletMap=L.map('leafletMap',{zoomControl:false,preferCanvas:true,scrollWheelZoom:false,minZoom:10,maxZoom:19}).setView([initial.lat,initial.lon],initial.zoom);
+  L.control.zoom({position:'bottomright'}).addTo(leafletMap);
   leafletMap.on('click',()=>closeOpenCenterPopup());
   const tiles=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors',updateWhenIdle:true,keepBuffer:2});
   let tileErrors=0;
