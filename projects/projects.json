@@ -1,6 +1,6 @@
 {
   "owner": "softm",
-  "updatedAt": "2026-08-22",
+  "updatedAt": "2026-08-31",
   "projects": [
     {
       "repo": "hwagok-farm",
@@ -12,9 +12,9 @@
       "deploymentStatus": "deployed",
       "publicUrl": "https://softm.github.io/hwagok-farm/",
       "privateUrl": "https://hwagok.softm.chatgpt.site/#hwagok",
-      "pageCount": 14,
+      "pageCount": 15,
       "privatePageCount": 1,
-      "latestTitle": "2026-08-11 박 수확 기록",
+      "latestTitle": "2026-08-30 663-1·667-35 들깨 정식 및 농관원 현장확인",
       "pageSelector": ".chat-card",
       "titleSelector": ".chat-card h3",
       "order": 10
