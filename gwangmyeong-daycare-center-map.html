@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- gwangmyeong detail build 20260829-remove-search-area-layer-v3 -->
+<!-- gwangmyeong detail build 20260831-map-runtime-fix-v4 -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -780,7 +780,6 @@ function setConfidenceFilter(value,button){
 function updateFilterCount(){
   const count=centers.filter(visible).length;
   document.getElementById('filterCount').textContent=count+'곳 표시';
-  updateSearchAreaBadge(count);
 }
 function refreshAfterCenterSearch(){
   refreshFilteredViewsWithProgress('기관·지역 검색 중');
