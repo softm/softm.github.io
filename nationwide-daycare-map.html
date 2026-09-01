@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- nationwide map build 20260901-current-location-center-v13 -->
+<!-- nationwide map build 20260901-current-map-refresh-v14 -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -265,7 +265,7 @@ async function reverseVisibleMapRegions(bounds){
 function visibleRegionCandidates(regions){const keys=new Set(regions.map(r=>r.province+'|'+r.city));return DATA.filter(c=>keys.has(c.p+'|'+c.c)&&matchesActiveNonSpatialFilters(c))}
 async function loadMarkersInCurrentBounds(){
  if(!mapReady||regionMapLoading||routeOrder.length||Date.now()<skipIdleUntil)return;
- if(mapSearchIds)return;
+ if(mapSearchIds){await searchCurrentMap(false);return;}
  regionMapLoading=true;const bounds=naverMap.getBounds();showMapProgress('현재 화면 마커 갱신 중');
  try{
   const regions=await reverseVisibleMapRegions(bounds),rows=visibleRegionCandidates(regions).filter(c=>selected.has(c.i)),visibleLimit=naverMap.getZoom()>=11?rows.length:MAP_AREA_LIMIT;
@@ -280,7 +280,7 @@ async function loadMarkersInCurrentBounds(){
 }
 function scheduleBoundsMarkers(){if(popupViewState||Date.now()<skipIdleUntil)return;clearTimeout(boundsTimer);boundsTimer=setTimeout(loadMarkersInCurrentBounds,650)}
 async function showOnMap(id){const c=DATA.find(x=>x.i===id);if(!c)return;if(!mapReady){window.open(naverUrl(c),'_blank');return}closeMapPopup(false);if(!selected.has(c.i)){selected.add(c.i);render()}if(window.innerWidth<=1000)document.querySelector('.map-card')?.scrollIntoView({behavior:'auto',block:'start'});showMapProgress(`목록 ${listRank(c)||'-'}번 마커로 이동 중`);let found=mapMarkers.find(m=>m.centerId===id);if(!found){const v=await geocodeCenter(c);if(!v){hideMapProgress();window.open(naverUrl(c),'_blank');return}found=createCenterMarker(c,v,listRank(c)||1)}skipIdleUntil=Date.now()+1800;found.setZIndex(3500);naverMap.panTo(found.getPosition());if(naverMap.getZoom()<15)naverMap.setZoom(15,true);setMapStatus(`목록 ${listRank(c)||'-'}번 · ${c.n}`);setTimeout(()=>{openCenter(c,found);found.setZIndex(1200);hideMapProgress()},320)}
-async function searchCurrentMap(){
+async function searchCurrentMap(notify=true){
  if(!mapReady){showToast('지도가 준비된 뒤 다시 시도하세요.','warning');return}
  clearTimeout(boundsTimer);boundsTimer=null;skipIdleUntil=Date.now()+800;closeMapPopup();
  const bounds=naverMap.getBounds();setMapStatus('현재 화면의 기관 좌표 확인 중');showMapProgress('현재 화면 행정구역 조회 중');
@@ -292,7 +292,7 @@ async function searchCurrentMap(){
  const names=regions.length?regions.map(r=>r.city).join(' · '):'현재 화면';
  setMapStatus(`현 지도 ${filtered.length}곳 · 모두 선택`);
  $('routeNote').textContent=`현재 화면의 ${names} 기관 ${filtered.length}곳을 조회해 모두 선택했습니다. 체크를 해제하면 해당 마커가 사라지며 지역 목록값은 그대로 유지됩니다.`;
- showMapProgress(`${filtered.length.toLocaleString()}곳 조회 완료`,Math.max(filtered.length,1),Math.max(filtered.length,1));hideMapProgress(650);if(filtered.length)showToast(`현재 지도영역에서 ${filtered.length}곳을 조회했습니다.`,'success')
+ showMapProgress(`${filtered.length.toLocaleString()}곳 조회 완료`,Math.max(filtered.length,1),Math.max(filtered.length,1));hideMapProgress(650);if(notify&&filtered.length)showToast(`현재 지도영역에서 ${filtered.length}곳을 조회했습니다.`,'success')
 }
 function clearMapSearch(run=true){mapSearchIds=null;$('mapSearchClear').style.display='none';if(run){page=1;apply(true);setMapStatus('지도영역 검색 해제');showMapProgress('지도영역 검색 해제 · 마커 갱신 중');showToast('지도영역 검색을 해제했습니다.','success');loadMarkersInCurrentBounds()}}
 function setBasePoint(v,label,isCurrent=false){basePoint=v;if(!isCurrent)skipIdleUntil=0;if(baseMarker)baseMarker.setMap(null);const pos=new naver.maps.LatLng(v.lat,v.lng),icon=isCurrent?'<div class="current-position-pin"><span></span></div>':'<div class="base-pin">기준</div>',anchor=isCurrent?new naver.maps.Point(11,11):new naver.maps.Point(19,19);baseMarker=new naver.maps.Marker({map:naverMap,position:pos,title:label||'기준 위치',zIndex:5000,icon:{content:icon,anchor}});if(isCurrent){skipIdleUntil=Date.now()+1800;naverMap.setCenter(pos)}else naverMap.panTo(pos);setMapStatus(isCurrent?'현재 위치 지정 완료':'지도 클릭 기준 위치 지정');DATA.forEach(c=>{const p=coordFor(c);if(p)c._distance=hav(basePoint,p)});apply(true,false)}
