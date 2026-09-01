@@ -51,7 +51,7 @@ const GEOCODE_PROXY='https://daycare-directions-proxy.vercel.app/api/geocode';
 const REVERSE_PROXY='https://daycare-directions-proxy.vercel.app/api/reverse-geocode';
 const DIRECTIONS_PROXY='https://daycare-directions-proxy.vercel.app/api/directions';
 const PAGE_LIMIT=90,MAP_CANDIDATE_LIMIT=300;
-const ASSET_VERSION='20260901-2';
+const ASSET_VERSION='20260901-3';
 const PRESET_COORDS={
  '24121000275':[37.4211,126.8877],'24121000293':[37.4485,126.8835],'34121000214':[37.45,126.8838],
  '24121000297':[37.4485,126.8838],'24121000312':[37.4742,126.8487],'24121000230':[37.4618,126.8787],
@@ -79,7 +79,9 @@ function matchesText(c,q){if(!q)return true;const terms=q.toLowerCase().split(/\
 function applyFilters(ignoreRegion=false){const q=$('q').value.trim(),p=$('province').value,city=$('city').value,conf=$('confidence').value;filtered=DATA.filter(c=>matchesText(c,q)&&(ignoreRegion||(!p||c.p===p)&&(!city||c.c===city))&&(!conf||confidence(c)===conf)&&(!gradeFilters.size||gradeFilters.has(gradeCategory(c))));sortRows(filtered);return filtered}
 function sortRows(rows){const sort=$('sort').value;rows.sort((a,b)=>{if(sort==='score')return (b.es??-1)-(a.es??-1)||a.n.localeCompare(b.n);if(sort==='distance')return (a._distance??99999)-(b._distance??99999);if(sort==='name')return a.n.localeCompare(b.n);if(sort==='new')return (b.d||'').localeCompare(a.d||'');if(sort==='capacity')return (b.z||0)-(a.z||0);const rank={A:0,B:1,C:2,D:3,E:4,new:5,unknown:6};return rank[gradeCategory(a)]-rank[gradeCategory(b)]||(b.es??-1)-(a.es??-1)||a.n.localeCompare(b.n)})}
 function hav(a,b){const R=6371,r=x=>x*Math.PI/180,dLat=r(b.lat-a.lat),dLon=r(b.lng-a.lng),v=Math.sin(dLat/2)**2+Math.cos(r(a.lat))*Math.cos(r(b.lat))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(v))}
-function cacheKey(c){return `careCoord:${c.i}`}function cachedCoord(c){if(c._coord)return c._coord;const preset=PRESET_COORDS[c.i];if(preset)return c._coord={lat:preset[0],lng:preset[1]};try{const v=JSON.parse(localStorage.getItem(cacheKey(c))||'null');if(v&&Number.isFinite(v.lat)&&Number.isFinite(v.lng))return c._coord=v}catch{}return null}function saveCoord(c,v){c._coord=v;try{localStorage.setItem(cacheKey(c),JSON.stringify(v))}catch{}}
+function coordCacheKeys(c){return TYPE==='daycare'?[`daycareCoord:${c.i}`,`careCoord:${c.i}`]:[`careCoord:${c.i}`]}
+function cachedCoord(c){if(c._coord)return c._coord;const preset=PRESET_COORDS[c.i];if(preset)return c._coord={lat:preset[0],lng:preset[1]};for(const key of coordCacheKeys(c)){try{const v=JSON.parse(localStorage.getItem(key)||'null');if(v&&Number.isFinite(v.lat)&&Number.isFinite(v.lng))return c._coord=v}catch{}}return null}
+function saveCoord(c,v){c._coord=v;for(const key of coordCacheKeys(c)){try{localStorage.setItem(key,JSON.stringify(v))}catch{}}}
 async function geocodeAddress(query){if(window.naver?.maps?.Service){const clientResult=await new Promise(resolve=>window.naver.maps.Service.geocode({query},(status,res)=>{if(status!==window.naver.maps.Service.Status.OK||!res?.v2?.addresses?.length)return resolve(null);const a=res.v2.addresses[0];resolve({lat:Number(a.y),lng:Number(a.x)})}));if(clientResult)return clientResult}try{const res=await fetch(GEOCODE_PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query})}),data=await res.json();if(!res.ok||!Number.isFinite(data.lat)||!Number.isFinite(data.lng))return null;return{lat:data.lat,lng:data.lng}}catch{return null}}
 async function geocode(c){const known=cachedCoord(c);if(known)return known;const v=await geocodeAddress(c.a);if(v)saveCoord(c,v);return v}
 function matchDataRegionValue(values,name){return values.find(v=>v===name)||values.find(v=>v.includes(name)||name.includes(v))||''}
@@ -94,8 +96,41 @@ function renderList(){sortRows(areaRows);$('list').innerHTML=areaRows.length?are
 function showDataPreview(rows=filtered,label='전국 데이터'){areaRows=rows.slice(0,PAGE_LIMIT);selected=new Set(areaRows.map(c=>c.i));renderList();$('areaBadge').textContent=`${label} · ${rows.length.toLocaleString()}곳`;$('routeNote').textContent=rows.length>PAGE_LIMIT?`전체 ${rows.length.toLocaleString()}곳 중 우선 ${PAGE_LIMIT}곳입니다. 지역·기관명으로 좁히면 지도 마커를 표시합니다.`:'목록을 선택하면 해당 기관 좌표를 확인해 지도에서 보여줍니다.';setStatus('공식 데이터 로드 완료',`${CONFIG.label} ${DATA.length.toLocaleString()}곳 · 위치 확인과 관계없이 목록을 사용할 수 있습니다.`)}
 function toggleCenter(id,on){on?selected.add(id):selected.delete(id);const marker=markers.get(id);if(marker)marker.setMap(on?map:null);renderList()}
 async function focusCenter(id){const c=DATA.find(x=>x.i===id);if(!c)return;if(!mapReady){toast('지도를 준비하고 있습니다. 잠시 후 다시 선택해 주세요.');return}showLoading('선택한 기관으로 이동 중',c.n);const v=await geocode(c);hideLoading();if(!v){toast('기관 좌표를 확인하지 못했습니다. 주소는 목록에서 확인할 수 있습니다.');openDetail(c);return}if(!markers.has(id)){const marker=new window.naver.maps.Marker({map,position:new window.naver.maps.LatLng(v.lat,v.lng),title:c.n,icon:markerIcon(c,areaRows.indexOf(c)+1)});window.naver.maps.Event.addListener(marker,'click',()=>openDetail(c));markers.set(id,marker);selected.add(id)}skipIdleUntil=Date.now()+1000;map.panTo(new window.naver.maps.LatLng(v.lat,v.lng));map.setZoom(Math.max(map.getZoom(),16));openDetail(c)}
-async function loadMarkers(candidates,{fit=false,regionText=''}={}){if(!mapReady){showDataPreview(candidates,regionText||'검색결과');return}const token=++refreshToken;clearMarkers();const bounds=map.getBounds(),center={lat:map.getCenter().lat(),lng:map.getCenter().lng()},known=[],unknown=[];for(const c of candidates){const p=cachedCoord(c);if(p){c._mapCenterDistance=hav(center,p);known.push(c)}else unknown.push(c)}known.sort((a,b)=>a._mapCenterDistance-b._mapCenterDistance);const limit=fit?Math.min(MAP_CANDIDATE_LIMIT,Math.max(PAGE_LIMIT,candidates.length)):candidates.length,list=[...known,...unknown].slice(0,limit),placed=[],fitBounds=new window.naver.maps.LatLngBounds();showLoading('기관 데이터를 확인하는 중',`현재 지도 기준 · 0 / ${list.length}`);try{for(let start=0;start<list.length;start+=8){const batch=list.slice(start,start+8),coords=await Promise.all(batch.map(geocode));if(token!==refreshToken)return;for(let i=0;i<batch.length;i++){const c=batch[i],v=coords[i];if(!v)continue;c._mapCenterDistance=hav(center,v);if(basePoint)c._distance=hav(basePoint,v);const pos=new window.naver.maps.LatLng(v.lat,v.lng);if(!fit&&!bounds.hasLatLng(pos))continue;placed.push(c);fitBounds.extend(pos)}$('loadingText').textContent=`현재 지도 기준 · ${Math.min(start+8,list.length)} / ${list.length}`}
- if(token!==refreshToken)return;placed.sort((a,b)=>(a._mapCenterDistance??Infinity)-(b._mapCenterDistance??Infinity));areaRows=fit?list:placed;sortRows(areaRows);selected=new Set(areaRows.map(c=>c.i));const ranks=new Map(areaRows.map((c,i)=>[c.i,i+1]));$('loadingTitle').textContent='지도에 기관을 표시하는 중';$('loadingText').textContent=`화면 내 ${placed.length.toLocaleString()}곳`;placed.forEach(c=>{const v=cachedCoord(c),marker=new window.naver.maps.Marker({map,position:new window.naver.maps.LatLng(v.lat,v.lng),title:c.n,icon:markerIcon(c,ranks.get(c.i)||1)});window.naver.maps.Event.addListener(marker,'click',()=>openDetail(c));markers.set(c.i,marker)});if(fit&&placed.length){skipIdleUntil=Date.now()+1500;map.fitBounds(fitBounds,{top:70,right:70,bottom:70,left:70})}renderList();$('areaBadge').textContent=regionText||`현재 화면 ${areaRows.length}곳`;const checked=list.length,limited=candidates.length>checked;setStatus(`현재 화면 ${placed.length.toLocaleString()}곳 표시`,`지역 후보 ${candidates.length.toLocaleString()}곳 중 ${checked.toLocaleString()}곳 위치 확인${limited?' · 지도 중심 우선':''}`);$('routeNote').textContent='현재 지도 화면 안에 있는 기관을 다시 확인해 표시했습니다. 체크를 끄면 해당 기관이 지도에서 숨겨집니다.'}finally{if(token===refreshToken)hideLoading()}}
+async function loadMarkers(candidates,{fit=false,regionText=''}={}){
+ if(!mapReady){showDataPreview(candidates,regionText||'검색결과');return}
+ const token=++refreshToken;clearMarkers();
+ const bounds=map.getBounds(),center={lat:map.getCenter().lat(),lng:map.getCenter().lng()},known=[],unknown=[];
+ for(const c of candidates){const p=cachedCoord(c);if(p){c._mapCenterDistance=hav(center,p);known.push(c)}else unknown.push(c)}
+ known.sort((a,b)=>a._mapCenterDistance-b._mapCenterDistance);
+ const limit=fit?Math.min(MAP_CANDIDATE_LIMIT,Math.max(PAGE_LIMIT,candidates.length)):candidates.length;
+ const list=[...known,...unknown].slice(0,limit),placed=[],fitBounds=new window.naver.maps.LatLngBounds();
+ let resolvedCount=0;
+ showLoading('기관 데이터를 확인하는 중',`기관 데이터 · 0 / ${list.length}`);
+ try{
+  for(let start=0;start<list.length;start+=8){
+   const batch=list.slice(start,start+8),coords=await Promise.all(batch.map(geocode));
+   if(token!==refreshToken)return;
+   for(let i=0;i<batch.length;i++){
+    const c=batch[i],v=coords[i];if(!v)continue;
+    resolvedCount++;c._mapCenterDistance=hav(center,v);if(basePoint)c._distance=hav(basePoint,v);
+    const pos=new window.naver.maps.LatLng(v.lat,v.lng);if(!fit&&!bounds.hasLatLng(pos))continue;
+    placed.push(c);fitBounds.extend(pos)
+   }
+   $('loadingText').textContent=`기관 데이터 · ${Math.min(start+8,list.length)} / ${list.length}`
+  }
+  if(token!==refreshToken)return;
+  placed.sort((a,b)=>(a._mapCenterDistance??Infinity)-(b._mapCenterDistance??Infinity));
+  areaRows=fit?list:placed;sortRows(areaRows);selected=new Set(areaRows.map(c=>c.i));
+  const ranks=new Map(areaRows.map((c,i)=>[c.i,i+1]));
+  $('loadingTitle').textContent='기관 데이터를 지도에 반영하는 중';$('loadingText').textContent=`화면 안 ${placed.length.toLocaleString()}곳`;
+  placed.forEach(c=>{const v=cachedCoord(c),marker=new window.naver.maps.Marker({map,position:new window.naver.maps.LatLng(v.lat,v.lng),title:c.n,icon:markerIcon(c,ranks.get(c.i)||1)});window.naver.maps.Event.addListener(marker,'click',()=>openDetail(c));markers.set(c.i,marker)});
+  if(fit&&placed.length){skipIdleUntil=Date.now()+1500;map.fitBounds(fitBounds,{top:70,right:70,bottom:70,left:70})}
+  renderList();$('areaBadge').textContent=regionText||`현재 화면 ${areaRows.length}곳`;
+  const limited=candidates.length>list.length;
+  setStatus(`현재 화면 ${placed.length.toLocaleString()}곳 표시`,`지역 후보 ${candidates.length.toLocaleString()}곳 · 좌표 확인 ${resolvedCount.toLocaleString()}곳 · 화면 안 ${placed.length.toLocaleString()}곳${limited?' · 지도 중심 우선':''}`);
+  $('routeNote').textContent='현재 지도 화면 안에 있는 기관을 다시 확인해 표시했습니다. 체크를 끄면 해당 기관이 지도에서 숨겨집니다.'
+ }finally{if(token===refreshToken)hideLoading()}
+}
 async function searchByControls(){applyFilters();if(!$('q').value.trim()&&!$('province').value&&!$('city').value){showDataPreview(filtered,'전국 데이터');toast('전국 목록을 표시했습니다. 지역이나 기관명으로 좁히면 마커가 표시됩니다.');return}await loadMarkers(filtered,{fit:true,regionText:`조회조건 · ${filtered.length.toLocaleString()}곳`})}
 async function refreshFromMap(){if(!mapReady||Date.now()<skipIdleUntil||map.getZoom()<10)return;try{showLoading('현재 지도 영역을 확인하는 중','화면에 걸친 지역을 찾고 있습니다.');const regions=await viewportRegions(),candidates=applyFilters(true).filter(c=>regions.some(region=>regionMatch(c,region))),labels=regions.map(region=>`${region.province||''} ${region.city||''}`.trim()),text=`지도 영역 · ${labels.join(' · ')}`;$('areaBadge').textContent=text;await loadMarkers(candidates,{fit:false,regionText:text})}catch(error){hideLoading();setStatus('현재 화면 조회 실패',error.message)}}
 function scheduleRefresh(){if(Date.now()<skipIdleUntil)return;clearTimeout(refreshTimer);refreshTimer=setTimeout(refreshFromMap,650)}
