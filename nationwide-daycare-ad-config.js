@@ -23,12 +23,12 @@ window.DAYCARE_AD_CONFIG = {
   kakao: {
     script: 'https://t1.daumcdn.net/kas/static/ba.min.js',
     desktop: {
-      unit: 'DAN-DdXdjwSaSd8ZEVXD',
+      unit: 'DAN-fDUWOBpqrfscdNlK',
       width: 728,
       height: 90
     },
     mobile: {
-      unit: 'DAN-tA8Y4NJWtn5UWsht',
+      unit: 'DAN-hgrhcmULAyovFfmV',
       width: 320,
       height: 100
     }
