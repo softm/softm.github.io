@@ -30,6 +30,11 @@ window.DAYCARE_AD_CONFIG = {
       unit: 'DAN-hgrhcmULAyovFfmV',
       width: 320,
       height: 100
+    },
+    list: {
+      unit: 'DAN-QoNUKnQ9iNLRJxYm',
+      width: 320,
+      height: 100
     }
   },
   direct: {
