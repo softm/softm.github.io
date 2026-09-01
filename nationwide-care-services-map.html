@@ -16,6 +16,10 @@
 .map-control svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:2.5}
 .map-control:focus-visible{outline:3px solid rgba(38,121,223,.35);outline-offset:2px}
 @media(max-width:640px){.map-controls{right:10px;bottom:10px;width:46px}.map-control{width:46px;height:46px;flex-basis:46px}}
+.layout{grid-template-columns:minmax(480px,1.18fr) minmax(390px,.82fr)}
+.map-wrap{height:670px}
+@media(max-width:1000px){.layout{grid-template-columns:1fr}.map-wrap{height:560px}}
+@media(max-width:640px){.map-wrap{height:470px;min-height:460px}}
 </style>
 </head>
 <body>
@@ -51,7 +55,7 @@ const GEOCODE_PROXY='https://daycare-directions-proxy.vercel.app/api/geocode';
 const REVERSE_PROXY='https://daycare-directions-proxy.vercel.app/api/reverse-geocode';
 const DIRECTIONS_PROXY='https://daycare-directions-proxy.vercel.app/api/directions';
 const PAGE_LIMIT=90,MAP_CANDIDATE_LIMIT=300;
-const ASSET_VERSION='20260901-3';
+const ASSET_VERSION='20260901-4';
 const PRESET_COORDS={
  '24121000275':[37.4211,126.8877],'24121000293':[37.4485,126.8835],'34121000214':[37.45,126.8838],
  '24121000297':[37.4485,126.8838],'24121000312':[37.4742,126.8487],'24121000230':[37.4618,126.8787],
