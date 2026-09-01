@@ -53,6 +53,6 @@ window.DAYCARE_AD_CONFIG = {
   },
   operator: {
     queryKey: 'ad-settings',
-    storageKey: 'daycare-map-ad-overrides-v1'
+    storageKey: 'daycare-map-ad-overrides-v2'
   }
 };
