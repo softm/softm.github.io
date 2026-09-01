@@ -1,6 +1,6 @@
 {
   "owner": "softm",
-  "updatedAt": "2026-08-31",
+  "updatedAt": "2026-09-01",
   "projects": [
     {
       "repo": "hwagok-farm",
@@ -54,8 +54,8 @@
       "visibility": "private",
       "repoVisibility": "private",
       "deploymentStatus": "deployed",
-      "privatePageCount": 1,
-      "latestTitle": "63-1·65·66 성토·경계침범 종합분석",
+      "privatePageCount": 3,
+      "latestTitle": "웅도리 66 현장·드론·방문 기록",
       "order": 40,
       "privateUrl": "https://ungdo-private.vercel.app/"
     },
