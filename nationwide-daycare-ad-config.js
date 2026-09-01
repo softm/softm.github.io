@@ -13,7 +13,6 @@
 window.DAYCARE_AD_CONFIG = {
   enabled: true,
   mode: 'hybrid',
-  allowViewerDismiss: true,
   fallbackToDirect: true,
   placements: {
     banner: true,
