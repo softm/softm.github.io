@@ -11,7 +11,8 @@ window.CARE_AD_CONFIG = {
   placements: {
     banner: true,
     listNative: true,
-    listAfter: 6
+    listAfter: 6,
+    listRepeat: 10
   },
   kakao: {
     script: 'https://t1.daumcdn.net/kas/static/ba.min.js',
