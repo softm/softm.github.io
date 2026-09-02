@@ -26,11 +26,13 @@ window.CARE_AD_CONFIG = {
       width: 320,
       height: 100
     },
-    list: {
-      unit: 'DAN-FQMjWsPJLpaM7tdG',
-      width: 320,
-      height: 100
-    }
+    listUnits: [
+      {
+        unit: 'DAN-FQMjWsPJLpaM7tdG',
+        width: 320,
+        height: 100
+      }
+    ]
   },
   direct: {
     disclosure: '기관 검색순위와 공단평가에는 영향을 주지 않는 별도 광고입니다.',
