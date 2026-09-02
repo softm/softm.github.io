@@ -67,7 +67,7 @@
 <section class="detail-sheet" id="detailSheet" hidden aria-live="polite"><div class="detail-head"><small id="detailRegion"></small><h3 id="detailName"></h3><button class="detail-close" id="detailClose" aria-label="상세 닫기">×</button></div><div class="detail-body" id="detailBody"></div></section>
 <section class="compare-modal" id="compareLayer" hidden><div class="compare-dialog" role="dialog" aria-modal="true" aria-labelledby="compareTitle"><header class="compare-head"><h2 id="compareTitle">선택센터 비교표 <span class="compare-count" id="compareCount">0곳</span></h2><div class="compare-actions"><button type="button" class="excel-btn" id="compareExcel">엑셀 다운로드</button><button type="button" class="compare-close" id="compareClose" aria-label="비교표 닫기">×</button></div></header><div class="compare-scroll"><div id="compareBody"></div></div><p class="compare-foot">컬럼 제목을 누르면 해당 값으로 오름차순·내림차순 정렬됩니다. 평점·등급은 국민건강보험공단 평가 연결 자료이며 미평가 기관은 마지막에 표시됩니다.</p></div></section>
 <div class="toast" id="toast" hidden></div>
-<script src="nationwide-daycare-ad-config.js"></script>
+<script src="nationwide-care-ad-config.js?v=20260902-18"></script>
 <script src="nationwide-care-manifest.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" defer></script>
 <script>
@@ -81,7 +81,7 @@ const DIRECTIONS_PROXY='https://daycare-directions-proxy.vercel.app/api/directio
 const OFFICIAL_DETAIL_PROXY='https://daycare-directions-proxy.vercel.app/api/official-detail';
 const NHIS_DETAIL_API='https://daycare-nhis-detail-api.softm.chatgpt.site';
 const PAGE_LIMIT=90,MAP_CANDIDATE_LIMIT=300;
-const ASSET_VERSION='20260902-17';
+const ASSET_VERSION='20260902-18';
 const PRESET_COORDS={
  '24121000275':[37.4211,126.8877],'24121000293':[37.4485,126.8835],'34121000214':[37.45,126.8838],
  '24121000297':[37.4485,126.8838],'24121000312':[37.4742,126.8487],'24121000230':[37.4618,126.8787],
@@ -98,7 +98,7 @@ function showLoading(title,text=''){$('loadingTitle').textContent=title;$('loadi
 function hideLoading(){$('mapLoading').classList.remove('show')}
 let toastTimer;function toast(message){clearTimeout(toastTimer);$('toast').textContent=message;$('toast').hidden=false;toastTimer=setTimeout(()=>$('toast').hidden=true,3200)}
 function setStatus(title,text=''){$('mapStatus').innerHTML=`<b>${esc(title)}</b>${text?`<br>${esc(text)}`:''}`}
-function careAdConfig(){return window.DAYCARE_AD_CONFIG||{enabled:false,mode:'off',placements:{}}}
+function careAdConfig(){return window.CARE_AD_CONFIG||{enabled:false,mode:'off',placements:{}}}
 function careAdMode(){const config=careAdConfig();return config.enabled&&config.mode!=='off'?config.mode:'off'}
 function safeAdUrl(value){try{const url=new URL(value,location.href);return ['https:','http:','mailto:'].includes(url.protocol)?url.href:'#'}catch{return'#'}}
 function directAdHtml(item){if(!item)return'';return `<div class="house-banner"><div><span class="ad-kicker">${esc(item.eyebrow||'돌봄 생활 정보')}</span><h3>${esc(item.title)}</h3><p>${esc(item.description||'')}</p></div><a class="ad-cta" href="${esc(safeAdUrl(item.url))}" target="${String(item.url).startsWith('mailto:')?'_self':'_blank'}" rel="sponsored noopener">${esc(item.cta||'자세히 보기')}</a></div>`}
