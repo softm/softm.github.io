@@ -12,7 +12,7 @@ window.CARE_AD_CONFIG = {
     banner: true,
     listNative: true,
     listAfter: 6,
-    listRepeat: 10
+    listRepeat: 6
   },
   kakao: {
     script: 'https://t1.daumcdn.net/kas/static/ba.min.js',
