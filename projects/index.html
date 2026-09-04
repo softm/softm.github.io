@@ -8,26 +8,27 @@
   <style>
     :root{--bg:#f3f7f4;--paper:#fff;--ink:#17251d;--muted:#68766d;--line:#dce6df;--brand:#1f6b42;--dark:#164c31;--soft:#e8f4ec;--shadow:0 18px 50px rgba(25,55,37,.1)}
     *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 8% 0%,rgba(109,190,139,.18),transparent 28rem),var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI","Noto Sans KR",sans-serif}a{color:inherit}.wrap{width:min(1120px,calc(100% - 40px));margin:auto}
-    .hero{position:relative;overflow:hidden;padding:68px 0 62px;background:linear-gradient(135deg,#113925,#246b45 62%,#3d875c);color:#fff}.hero:after{content:"";position:absolute;right:-110px;bottom:-230px;width:360px;height:360px;border:54px solid rgba(255,255,255,.09);border-radius:50%}.eyebrow{margin:0 0 12px;color:#bfe7cb;font-size:.82rem;font-weight:800;letter-spacing:.12em}.hero h1{margin:0;font-size:clamp(2.2rem,5vw,3.7rem);line-height:1.1;letter-spacing:-.045em}.hero p:last-child{max-width:720px;margin:18px 0 0;color:#dceee2;font-size:1.08rem}
+    .hero{position:relative;overflow:hidden;padding:68px 0 62px;background:linear-gradient(135deg,#113925,#246b45 62%,#3d875c);color:#fff}.hero:after{content:"";position:absolute;right:-110px;bottom:-230px;width:360px;height:360px;border:54px solid rgba(255,255,255,.09);border-radius:50%}.eyebrow{margin:0 0 12px;color:#bfe7cb;font-size:.82rem;font-weight:800;letter-spacing:.12em}.hero h1{margin:0;font-size:clamp(2.2rem,5vw,3.7rem);line-height:1.1;letter-spacing:-.045em}.hero p:last-child{max-width:760px;margin:18px 0 0;color:#dceee2;font-size:1.08rem}
     .toolbar{position:relative;z-index:2;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;margin-top:-28px;padding:16px;border:1px solid rgba(220,230,223,.9);border-radius:18px;background:rgba(255,255,255,.96);box-shadow:var(--shadow)}.search{width:100%;min-height:48px;padding:0 16px;border:1px solid var(--line);border-radius:12px;background:#f8faf8;font:inherit}.counter{padding:8px 12px;border-radius:999px;background:var(--soft);color:var(--dark);font-size:.86rem;font-weight:800;white-space:nowrap}
-    main{padding:52px 0 76px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:18px}.section-head h2{margin:0;font-size:clamp(1.45rem,3vw,1.9rem)}.section-head p{margin:5px 0 0;color:var(--muted);font-size:.9rem}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.card{display:flex;min-height:310px;flex-direction:column;padding:26px;border:1px solid var(--line);border-top:5px solid var(--brand);border-radius:6px 6px 19px 19px;background:var(--paper);box-shadow:0 8px 28px rgba(33,65,44,.06)}.card-top{display:flex;justify-content:space-between;gap:14px}.card h3{margin:0;font-size:1.55rem}.repo{margin-top:5px;color:var(--muted);font-size:.8rem}.badge{height:max-content;padding:4px 9px;border-radius:999px;background:var(--soft);color:var(--dark);font-size:.75rem;font-weight:800}.badge.private{background:#edf0f3;color:#4d5660}.badge.mixed{background:#f7efe3;color:#7a4d18}.card.private{border-top-color:#697681}.card.mixed{border-top-color:#9a641f}.description{margin:20px 0;color:#4d5e53}.meta{display:grid;gap:7px;margin:auto 0 18px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:.82rem}.meta b{color:var(--ink)}.actions{display:flex;flex-wrap:wrap;gap:8px}.action{display:inline-flex;min-height:40px;align-items:center;justify-content:center;padding:8px 14px;border:1px solid var(--line);border-radius:10px;text-decoration:none;font-size:.86rem;font-weight:800}.action.primary{border-color:var(--brand);background:var(--brand);color:#fff}.action.disabled{cursor:default;background:#f3f5f4;color:#768078}.policy{margin-top:34px;padding:19px 21px;border-left:4px solid #78a388;border-radius:12px;background:#eaf1ec;color:#536158;font-size:.88rem}.empty{grid-column:1/-1;padding:28px;border:1px dashed #bdcac0;border-radius:14px;text-align:center;color:var(--muted)}footer{padding:0 0 42px;color:var(--muted);text-align:center;font-size:.82rem}[hidden]{display:none!important}
+    main{padding:52px 0 76px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:18px}.section-head h2{margin:0;font-size:clamp(1.45rem,3vw,1.9rem)}.section-head p{margin:5px 0 0;color:var(--muted);font-size:.9rem}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.card{display:flex;min-height:310px;flex-direction:column;padding:26px;border:1px solid var(--line);border-top:5px solid var(--brand);border-radius:6px 6px 19px 19px;background:var(--paper);box-shadow:0 8px 28px rgba(33,65,44,.06);transition:.16s ease}.card.clickable{cursor:pointer}.card.clickable:hover{transform:translateY(-2px);box-shadow:0 18px 48px rgba(33,65,44,.13);border-color:#bdd0c2}.card.clickable:focus{outline:3px solid rgba(31,107,66,.22);outline-offset:3px}.card-top{display:flex;justify-content:space-between;gap:14px}.card h3{margin:0;font-size:1.55rem}.repo{margin-top:5px;color:var(--muted);font-size:.8rem}.badge{height:max-content;padding:4px 9px;border-radius:999px;background:var(--soft);color:var(--dark);font-size:.75rem;font-weight:800}.badge.private{background:#edf0f3;color:#4d5660}.badge.mixed{background:#f7efe3;color:#7a4d18}.card.private{border-top-color:#697681}.card.mixed{border-top-color:#9a641f}.description{margin:20px 0;color:#4d5e53}.meta{display:grid;gap:7px;margin:auto 0 18px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:.82rem}.meta b{color:var(--ink)}.actions{display:flex;flex-wrap:wrap;gap:8px}.action{display:inline-flex;min-height:40px;align-items:center;justify-content:center;padding:8px 14px;border:1px solid var(--line);border-radius:10px;text-decoration:none;font-size:.86rem;font-weight:800;background:#fff}.action.primary{border-color:var(--brand);background:var(--brand);color:#fff}.action.disabled{cursor:default;background:#f3f5f4;color:#768078}.policy{margin-top:34px;padding:19px 21px;border-left:4px solid #78a388;border-radius:12px;background:#eaf1ec;color:#536158;font-size:.88rem}.empty{grid-column:1/-1;padding:28px;border:1px dashed #bdcac0;border-radius:14px;text-align:center;color:var(--muted)}footer{padding:0 0 42px;color:var(--muted);text-align:center;font-size:.82rem}[hidden]{display:none!important}
     @media(max-width:760px){.toolbar,.grid{grid-template-columns:1fr}.section-head{align-items:flex-start;flex-direction:column}.card{min-height:0}}@media(max-width:520px){.wrap{width:min(100% - 28px,1120px)}.hero{padding:50px 0 48px}.card{padding:22px}.action{flex:1}}
   </style>
 </head>
 <body>
-  <header class="hero"><div class="wrap"><p class="eyebrow">SOFTM · PROJECT DIRECTORY</p><h1>웹 배포 프로젝트</h1><p>여기서는 프로젝트만 선택합니다. 각 프로젝트에서 해당 프로젝트의 채팅별 공개·비공개 사이트로 이동할 수 있습니다.</p></div></header>
+  <header class="hero"><div class="wrap"><p class="eyebrow">SOFTM · PROJECT DIRECTORY</p><h1>웹 배포 프로젝트</h1><p>프로젝트 카드를 누르면 해당 프로젝트 홈으로 이동합니다. 공개·비공개 세부 링크는 각 프로젝트 홈 안에서 관리합니다.</p></div></header>
   <div class="wrap"><div class="toolbar"><input id="search" class="search" type="search" placeholder="프로젝트명, 저장소명, 설명 검색" aria-label="프로젝트 검색"><span id="count" class="counter">프로젝트 0</span></div></div>
   <main class="wrap">
-    <div class="section-head"><div><h2>프로젝트 목록</h2><p>등록된 프로젝트 저장소를 기준으로 표시합니다.</p></div></div>
+    <div class="section-head"><div><h2>프로젝트 목록</h2><p>등록된 프로젝트 저장소와 배포 홈을 기준으로 표시합니다.</p></div></div>
     <section id="grid" class="grid" aria-live="polite"></section>
-    <p class="policy">공개·비공개 프로젝트의 생성과 공개 범위 변경은 모두 이 인덱스에 반영합니다. 비공개 배포 주소는 표시하되 비공개 저장소 주소와 내부 콘텐츠는 노출하지 않습니다.</p>
+    <p class="policy">공개·비공개 프로젝트의 생성과 공개 범위 변경은 모두 이 인덱스에 반영합니다. 중앙 인덱스의 카드 클릭 대상은 개별 채팅 페이지가 아니라 프로젝트 홈이어야 합니다. 비공개 저장소 주소, 비밀번호, 원본 자료와 개인정보는 노출하지 않습니다.</p>
   </main>
-  <footer class="wrap">프로젝트 콘텐츠는 각 프로젝트 저장소에서 관리합니다.</footer>
+  <footer class="wrap">프로젝트 콘텐츠는 각 프로젝트 저장소와 각 프로젝트 홈에서 관리합니다.</footer>
   <script>
     (() => {
-      const grid = document.querySelector("#grid");
-      const search = document.querySelector("#search");
-      const count = document.querySelector("#count");
+      const grid = document.querySelector('#grid');
+      const search = document.querySelector('#search');
+      const count = document.querySelector('#count');
+      let allProjects = [];
       const node = (tag, cls, text) => {
         const el = document.createElement(tag);
         if (cls) el.className = cls;
@@ -35,141 +36,155 @@
         return el;
       };
       const safeUrl = (value) => {
+        if (!value) return '';
         try {
           const url = new URL(value, location.href);
-          return ["http:", "https:"].includes(url.protocol) ? url.href : "#";
+          return ['http:', 'https:'].includes(url.protocol) ? url.href : '';
         } catch {
-          return "#";
+          return '';
         }
       };
-      const visibilityLabel = (value) => ({
-        public: "공개",
-        private: "비공개",
-        mixed: "공개+비공개"
-      }[value] || "프로젝트");
-      const statusLabel = (value) => ({
-        pending: "배포 준비 중",
-        deployed: "운영 중",
-        unverified: "주소 확인 필요"
-      }[value] || "상태 확인 필요");
+      const sameUrl = (a, b) => {
+        const left = safeUrl(a).replace(/\/$/, '');
+        const right = safeUrl(b).replace(/\/$/, '');
+        return Boolean(left && right && left === right);
+      };
+      const visibilityLabel = (value) => ({ public: '공개', private: '비공개', mixed: '공개+비공개' }[value] || '프로젝트');
+      const statusLabel = (value) => ({ pending: '배포 준비 중', deployed: '운영 중', unverified: '주소 확인 필요', needsHome: '홈 구현 필요' }[value] || '상태 확인 필요');
+      const homeUrlOf = (project) => safeUrl(project.homeUrl || project.publicUrl || project.privateUrl);
+      const addLink = (parent, cls, label, url) => {
+        const href = safeUrl(url);
+        if (!href) return null;
+        const a = node('a', cls, label);
+        a.href = href;
+        a.rel = 'noopener';
+        parent.append(a);
+        return a;
+      };
 
       const render = (projects) => {
         grid.replaceChildren(...projects.map((project) => {
-          const visibility = project.visibility || "public";
-          const card = node("article", `card ${visibility}`);
+          const visibility = project.visibility || 'public';
+          const homeUrl = homeUrlOf(project);
+          const card = node('article', `card ${visibility}${homeUrl ? ' clickable' : ''}`);
           card.dataset.repo = project.repo;
-          card.dataset.search = [
-            project.title,
-            project.repo,
-            project.description,
-            project.category,
-            visibilityLabel(visibility),
-            statusLabel(project.deploymentStatus)
-          ].filter(Boolean).join(" ").toLowerCase();
+          card.dataset.homeUrl = homeUrl;
+          card.dataset.search = [project.title, project.repo, project.description, project.category, visibilityLabel(visibility), statusLabel(project.deploymentStatus)]
+            .filter(Boolean).join(' ').toLowerCase();
+          if (homeUrl) {
+            card.setAttribute('role', 'link');
+            card.tabIndex = 0;
+            card.title = `${project.title} 프로젝트 홈 열기`;
+          }
 
-          const top = node("div", "card-top");
-          const heading = node("div");
-          const repoText = project.repoStatus === "missing"
-            ? "GitHub 저장소 미연결"
-            : project.repoVisibility === "private"
+          const top = node('div', 'card-top');
+          const heading = node('div');
+          const repoText = project.repoStatus === 'missing'
+            ? 'GitHub 저장소 미연결'
+            : project.repoVisibility === 'private'
               ? `${project.repo} · 저장소 비공개`
               : `${project.owner}/${project.repo}`;
-          heading.append(node("h3", "", project.title), node("div", "repo", repoText));
-          top.append(heading, node("span", `badge ${visibility}`, visibilityLabel(visibility)));
-          card.append(top, node("p", "description", project.description));
+          heading.append(node('h3', '', project.title), node('div', 'repo', repoText));
+          top.append(heading, node('span', `badge ${visibility}`, visibilityLabel(visibility)));
+          card.append(top, node('p', 'description', project.description));
 
-          const meta = node("div", "meta");
-          const deployment = node("span");
-          deployment.append("배포 상태 ", node("b", "", statusLabel(project.deploymentStatus)));
+          const meta = node('div', 'meta');
+          const deployment = node('span');
+          deployment.append('배포 상태 ', node('b', '', statusLabel(project.deploymentStatus)));
           meta.append(deployment);
-
-          if (visibility !== "private") {
-            const pages = node("span");
-            pages.append("공개 페이지 ", node("b", "page-count", `${project.pageCount ?? 0}개`));
+          const home = node('span');
+          home.append('프로젝트 홈 ', node('b', '', homeUrl ? '연결됨' : '미구현'));
+          meta.append(home);
+          if (visibility !== 'private') {
+            const pages = node('span');
+            pages.append('공개 페이지 ', node('b', 'page-count', `${project.pageCount ?? 0}개`));
             meta.append(pages);
           }
-          if (visibility !== "public") {
-            const privatePages = node("span");
-            privatePages.append("비공개 배포 ", node("b", "", `${project.privatePageCount ?? 0}개`));
+          if (visibility !== 'public') {
+            const privatePages = node('span');
+            privatePages.append('비공개 배포 ', node('b', '', `${project.privatePageCount ?? 0}개`));
             meta.append(privatePages);
           }
-          const latest = node("span");
-          latest.append("최근 페이지 ", node("b", "latest-title", project.latestTitle || "등록 정보 없음"));
+          const latest = node('span');
+          latest.append('최근 페이지 ', node('b', 'latest-title', project.latestTitle || '등록 정보 없음'));
           meta.append(latest);
           card.append(meta);
 
-          const actions = node("div", "actions");
-          if (project.publicUrl) {
-            const site = node("a", "action primary", "공개 사이트");
-            site.href = safeUrl(project.publicUrl);
-            actions.append(site);
+          const actions = node('div', 'actions');
+          if (homeUrl) {
+            addLink(actions, 'action primary', '프로젝트 홈', homeUrl);
+          } else {
+            actions.append(node('span', 'action disabled', visibility === 'public' ? '홈 준비 중' : '비공개 홈 필요'));
           }
-          if (project.repoVisibility === "public" && project.repoStatus !== "missing") {
-            const repo = node("a", "action", "GitHub");
-            repo.href = safeUrl(`https://github.com/${project.owner}/${project.repo}`);
-            actions.append(repo);
-          }
-          if (project.privateUrl) {
-            const privateLink = node("a", project.publicUrl ? "action" : "action primary", "비공개 사이트");
-            privateLink.href = safeUrl(project.privateUrl);
-            actions.append(privateLink);
-          } else if (visibility !== "public") {
-            actions.append(node("span", "action disabled", "비공개 · 인증 필요"));
-          }
-          if (!project.publicUrl && visibility === "public") {
-            actions.append(node("span", "action disabled", "배포 준비 중"));
-          }
-          (project.links || []).forEach((link) => {
-            const extra = node("a", "action", link.label || "관련 사이트");
-            extra.href = safeUrl(link.url);
-            actions.append(extra);
-          });
+          if (project.publicUrl && !sameUrl(project.publicUrl, homeUrl)) addLink(actions, 'action', '공개 사이트', project.publicUrl);
+          if (project.privateUrl && !sameUrl(project.privateUrl, homeUrl)) addLink(actions, 'action', '비공개 사이트', project.privateUrl);
+          if (project.repoVisibility === 'public' && project.repoStatus !== 'missing') addLink(actions, 'action', 'GitHub', `https://github.com/${project.owner}/${project.repo}`);
+          (project.links || []).forEach((link) => addLink(actions, 'action', link.label || '관련 사이트', link.url));
           card.append(actions);
           return card;
         }));
-
-        if (!projects.length) grid.append(node("div", "empty", "등록된 프로젝트가 없습니다."));
+        if (!projects.length) grid.append(node('div', 'empty', '등록된 프로젝트가 없습니다.'));
         count.textContent = `프로젝트 ${projects.length}`;
+      };
+
+      const applyFilter = () => {
+        const query = search.value.trim().toLowerCase();
+        let visible = 0;
+        document.querySelectorAll('[data-search]').forEach((element) => {
+          const matched = !query || element.dataset.search.includes(query);
+          element.hidden = !matched;
+          if (matched) visible += 1;
+        });
+        count.textContent = query ? `검색 ${visible}/${allProjects.length}` : `프로젝트 ${allProjects.length}`;
       };
 
       const syncProjectStats = async (project) => {
         if (!project.pageSelector || !project.publicUrl) return;
         try {
           const url = new URL(safeUrl(project.publicUrl));
-          url.searchParams.set("project-index-sync", Date.now());
-          const response = await fetch(url, { cache: "no-store" });
+          url.searchParams.set('project-index-sync', Date.now());
+          const response = await fetch(url, { cache: 'no-store' });
           if (!response.ok) return;
-          const doc = new DOMParser().parseFromString(await response.text(), "text/html");
+          const doc = new DOMParser().parseFromString(await response.text(), 'text/html');
           const entries = [...doc.querySelectorAll(project.pageSelector)];
           if (!entries.length) return;
-          const card = [...grid.querySelectorAll("[data-repo]")].find((item) => item.dataset.repo === project.repo);
+          const card = [...grid.querySelectorAll('[data-repo]')].find((item) => item.dataset.repo === project.repo);
           if (!card) return;
-          card.querySelector(".page-count").textContent = `${entries.length}개`;
+          const pageCount = card.querySelector('.page-count');
+          if (pageCount) pageCount.textContent = `${entries.length}개`;
           const latest = doc.querySelector(project.titleSelector || `${project.pageSelector} h3`)?.textContent?.trim();
-          if (latest) card.querySelector(".latest-title").textContent = latest;
+          if (latest) card.querySelector('.latest-title').textContent = latest;
         } catch {}
       };
 
-      fetch("./projects.json", { cache: "no-store" })
+      fetch('./projects.json', { cache: 'no-store' })
         .then((response) => {
           if (!response.ok) throw new Error();
           return response.json();
         })
         .then((config) => {
-          const projects = (config.projects || [])
-            .map((project) => ({ ...project, owner: config.owner || "softm" }))
+          allProjects = (config.projects || [])
+            .map((project) => ({ ...project, owner: config.owner || 'softm' }))
             .sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
-          render(projects);
-          projects.forEach(syncProjectStats);
+          render(allProjects);
+          allProjects.forEach(syncProjectStats);
         })
-        .catch(() => grid.append(node("div", "empty", "프로젝트 목록을 불러오지 못했습니다.")));
+        .catch(() => grid.append(node('div', 'empty', '프로젝트 목록을 불러오지 못했습니다.')));
 
-      search.addEventListener("input", () => {
-        const query = search.value.trim().toLowerCase();
-        document.querySelectorAll("[data-search]").forEach((element) => {
-          element.hidden = Boolean(query) && !element.dataset.search.includes(query);
-        });
+      grid.addEventListener('click', (event) => {
+        if (event.target.closest('a, button, input, select, textarea')) return;
+        const card = event.target.closest('[data-home-url]');
+        if (card?.dataset.homeUrl) location.href = card.dataset.homeUrl;
       });
+      grid.addEventListener('keydown', (event) => {
+        if (!['Enter', ' '].includes(event.key)) return;
+        const card = event.target.closest('[data-home-url]');
+        if (card?.dataset.homeUrl) {
+          event.preventDefault();
+          location.href = card.dataset.homeUrl;
+        }
+      });
+      search.addEventListener('input', applyFilter);
     })();
   </script>
 </body>
