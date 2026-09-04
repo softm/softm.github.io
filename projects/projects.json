@@ -1,6 +1,6 @@
 {
   "owner": "softm",
-  "updatedAt": "2026-09-01",
+  "updatedAt": "2026-09-04",
   "projects": [
     {
       "repo": "hwagok-farm",
@@ -45,6 +45,19 @@
       "privatePageCount": 1,
       "latestTitle": "2026-08-19 비공개 기록",
       "order": 30
+    },
+    {
+      "repo": "onsuhill-private",
+      "title": "온수힐",
+      "category": "주거·시설관리",
+      "description": "온수힐 임대차 및 시설물 수리·유지관리 기록을 비공개로 관리합니다.",
+      "visibility": "private",
+      "repoVisibility": "private",
+      "deploymentStatus": "deployed",
+      "privatePageCount": 1,
+      "latestTitle": "2026-09-03 온수힐 804호 LED 수리",
+      "order": 35,
+      "privateUrl": "https://onsuhill-804-led-repair.softm.chatgpt.site"
     },
     {
       "repo": "ungdo",
