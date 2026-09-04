@@ -6,18 +6,32 @@
       "repo": "hwagok-farm",
       "title": "화곡농장",
       "category": "농업",
-      "description": "농장 작업, 재배 계획, 농기계, 방제·관수와 수확 기록을 화곡농장 채팅별 페이지로 관리합니다.",
+      "description": "농장 작업, 재배 계획, 농기계, 방제·관수와 수확 기록을 공개·비공개 페이지로 관리합니다.",
       "visibility": "mixed",
       "repoVisibility": "public",
       "deploymentStatus": "deployed",
       "publicUrl": "https://softm.github.io/hwagok-farm/",
       "privateUrl": "https://hwagok.softm.chatgpt.site/#hwagok",
       "pageCount": 15,
-      "privatePageCount": 1,
-      "latestTitle": "2026-08-30 663-1·667-35 들깨 정식 및 농관원 현장확인",
+      "privatePageCount": 4,
+      "latestTitle": "화곡농장 양파 구매처 조사",
       "pageSelector": ".chat-card",
       "titleSelector": ".chat-card h3",
-      "order": 10
+      "order": 10,
+      "links": [
+        {
+          "label": "양파 구매처",
+          "url": "https://hwagok-onion-sourcing.softm.chatgpt.site"
+        },
+        {
+          "label": "농기계 임대·운반",
+          "url": "https://hwagok-farm-machine-rental.softm.chatgpt.site"
+        },
+        {
+          "label": "화이트클로버 파종",
+          "url": "https://hwagok-clover-plan.softm.chatgpt.site"
+        }
+      ]
     },
     {
       "repo": "gwangmyeong",
@@ -35,15 +49,16 @@
       "order": 20
     },
     {
-      "repo": "mine",
-      "title": "나",
-      "category": "개인 기록",
-      "description": "개인 프로젝트의 채팅별 기록입니다. 현재 배포 상태는 비공개이며 공개 미러는 사용하지 않습니다.",
+      "repo": "mine-private",
+      "title": "나·건강 기록",
+      "category": "개인·건강",
+      "description": "개인 기록과 건강검진 자료를 비공개로 관리합니다.",
       "visibility": "private",
       "repoVisibility": "private",
       "deploymentStatus": "deployed",
+      "privateUrl": "https://health-checkup-20260903.softm.chatgpt.site",
       "privatePageCount": 1,
-      "latestTitle": "2026-08-19 비공개 기록",
+      "latestTitle": "2026-09-03 건강검진 기록",
       "order": 30
     },
     {
@@ -54,47 +69,97 @@
       "visibility": "private",
       "repoVisibility": "private",
       "deploymentStatus": "deployed",
+      "privateUrl": "https://onsuhill-804-led-repair.softm.chatgpt.site",
       "privatePageCount": 1,
       "latestTitle": "2026-09-03 온수힐 804호 LED 수리",
-      "order": 35,
-      "privateUrl": "https://onsuhill-804-led-repair.softm.chatgpt.site"
+      "order": 35
     },
     {
-      "repo": "ungdo",
+      "repo": "yeonseo",
+      "title": "연서 교육",
+      "category": "자녀·교육",
+      "description": "연서의 학교 선택과 교육 관련 비교·판단 자료를 비공개로 관리합니다.",
+      "visibility": "private",
+      "repoVisibility": "private",
+      "deploymentStatus": "deployed",
+      "privateUrl": "https://yeonseo-middle-school-choice.softm.chatgpt.site",
+      "privatePageCount": 1,
+      "latestTitle": "새길중·옥길중 선택 보고서",
+      "order": 38
+    },
+    {
+      "repo": "ungdo-private",
       "title": "웅도 토지·성토",
       "category": "토지·농지",
-      "description": "서산시 웅도리 63-1·65·66번지의 경계침범, 성토, 농지·산지 인허가와 도로보상 자료를 관리합니다.",
+      "description": "서산시 웅도리 63-1·65·66번지의 경계침범, 성토, 인허가와 도로보상 자료를 비공개로 관리합니다.",
       "visibility": "private",
       "repoVisibility": "private",
       "deploymentStatus": "deployed",
-      "privatePageCount": 3,
+      "privateUrl": "https://ungdo-private.vercel.app/",
+      "privatePageCount": 4,
       "latestTitle": "웅도리 66 현장·드론·방문 기록",
       "order": 40,
-      "privateUrl": "https://ungdo-private.vercel.app/"
+      "links": [
+        {
+          "label": "웅도 기록",
+          "url": "https://ungdo-land-records-private.softm.chatgpt.site"
+        },
+        {
+          "label": "웅도 프로젝트",
+          "url": "https://ungdo.softm.chatgpt.site"
+        },
+        {
+          "label": "웅도 토지 기록",
+          "url": "https://ungdo-land-records.softm.chatgpt.site"
+        }
+      ]
     },
     {
-      "repo": "hwagok-land-permit",
+      "repo": "hwagok-land-permit-private",
       "title": "화곡리 개간허가",
       "category": "토지·인허가",
-      "description": "서산시 대산읍 화곡리 산47-2·산47-3 개간허가, 측량, 수사·검찰 절차 자료를 관리합니다.",
+      "description": "서산시 대산읍 화곡리 산47-2·산47-3 개간허가, 측량, 수사·검찰 절차 자료를 비공개로 관리합니다.",
       "visibility": "private",
       "repoVisibility": "private",
-      "deploymentStatus": "deployed",
+      "deploymentStatus": "unverified",
       "privatePageCount": 2,
       "latestTitle": "처벌·기소 가능성 및 사후 하도급계약서 검증",
       "order": 50
     },
     {
-      "repo": "father-hospital-treatment",
+      "repo": "father-hospital-treatment-private",
       "title": "아버지 병원 치료",
       "category": "의료·보험",
       "description": "병원 진료기록, 의무기록 정정, 보험 심사와 민원 자료를 비공개로 관리합니다.",
       "visibility": "private",
       "repoVisibility": "private",
-      "deploymentStatus": "deployed",
+      "deploymentStatus": "unverified",
       "privatePageCount": 3,
       "latestTitle": "한국교직원공제회 보험금 심사 지연 민원",
       "order": 60
+    },
+    {
+      "repo": "homecare-nationwide-care-services-map",
+      "title": "돌봄한눈·전국 요양기관",
+      "category": "생활·돌봄",
+      "description": "전국 주야간보호센터와 요양기관을 지도에서 검색·비교하고 공단 상세정보를 확인하는 공개 서비스입니다.",
+      "visibility": "public",
+      "repoVisibility": "public",
+      "deploymentStatus": "deployed",
+      "publicUrl": "https://homecare.designboard.net",
+      "pageCount": 3,
+      "latestTitle": "전국 요양기관 통합지도 및 공단 상세 API",
+      "order": 65,
+      "links": [
+        {
+          "label": "공단 상세 API",
+          "url": "https://daycare-nhis-detail-api.softm.chatgpt.site"
+        },
+        {
+          "label": "주간보호 결정지원",
+          "url": "https://github.com/softm/homecare-dolbom-itda-daycare-finder"
+        }
+      ]
     },
     {
       "repo": "gyeongju-kim",
@@ -110,15 +175,36 @@
     },
     {
       "repo": "seohae-nakji",
-      "title": "서해낙지",
+      "title": "서해박속낙지",
       "category": "수산·사업",
-      "description": "공개 프로젝트 저장소가 생성되었으며 웹 콘텐츠 배포를 준비 중입니다.",
-      "visibility": "public",
+      "description": "서해박속낙지 사업과 세무·매출 분석 자료를 비공개 사이트로 운영합니다.",
+      "visibility": "private",
       "repoVisibility": "public",
-      "deploymentStatus": "pending",
-      "pageCount": 0,
-      "latestTitle": "배포 준비 중",
-      "order": 80
+      "deploymentStatus": "deployed",
+      "privateUrl": "https://seohae-baksok-nakji.softm.chatgpt.site",
+      "privatePageCount": 2,
+      "latestTitle": "서해박속낙지 세무 및 매출 분석",
+      "order": 80,
+      "links": [
+        {
+          "label": "세무·매출 분석",
+          "url": "https://seohae-baksok-nakji-tax.softm.chatgpt.site"
+        }
+      ]
+    },
+    {
+      "repo": "gyeongju-trip-map",
+      "repoStatus": "missing",
+      "title": "용인·경주·이천 가족여행",
+      "category": "가족·여행",
+      "description": "2박 3일 가족여행 지도는 공개 배포됐지만 연결된 softm GitHub 저장소가 확인되지 않았습니다.",
+      "visibility": "public",
+      "repoVisibility": "missing",
+      "deploymentStatus": "deployed",
+      "publicUrl": "https://gyeongju-trip-map.softm.chatgpt.site",
+      "pageCount": 1,
+      "latestTitle": "용인·경주·이천 2박 3일 가족여행",
+      "order": 90
     }
   ]
 }
