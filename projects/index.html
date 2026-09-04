@@ -47,7 +47,11 @@
         private: "비공개",
         mixed: "공개+비공개"
       }[value] || "프로젝트");
-      const statusLabel = (value) => value === "pending" ? "배포 준비 중" : "운영 중";
+      const statusLabel = (value) => ({
+        pending: "배포 준비 중",
+        deployed: "운영 중",
+        unverified: "주소 확인 필요"
+      }[value] || "상태 확인 필요");
 
       const render = (projects) => {
         grid.replaceChildren(...projects.map((project) => {
@@ -65,9 +69,11 @@
 
           const top = node("div", "card-top");
           const heading = node("div");
-          const repoText = project.repoVisibility === "private"
-            ? `${project.repo} · 저장소 비공개`
-            : `${project.owner}/${project.repo}`;
+          const repoText = project.repoStatus === "missing"
+            ? "GitHub 저장소 미연결"
+            : project.repoVisibility === "private"
+              ? `${project.repo} · 저장소 비공개`
+              : `${project.owner}/${project.repo}`;
           heading.append(node("h3", "", project.title), node("div", "repo", repoText));
           top.append(heading, node("span", `badge ${visibility}`, visibilityLabel(visibility)));
           card.append(top, node("p", "description", project.description));
@@ -79,12 +85,12 @@
 
           if (visibility !== "private") {
             const pages = node("span");
-            pages.append("공개 채팅 ", node("b", "page-count", `${project.pageCount ?? 0}개`));
+            pages.append("공개 페이지 ", node("b", "page-count", `${project.pageCount ?? 0}개`));
             meta.append(pages);
           }
           if (visibility !== "public") {
             const privatePages = node("span");
-            privatePages.append("비공개 채팅 ", node("b", "", `${project.privatePageCount ?? 0}개`));
+            privatePages.append("비공개 배포 ", node("b", "", `${project.privatePageCount ?? 0}개`));
             meta.append(privatePages);
           }
           const latest = node("span");
@@ -98,7 +104,7 @@
             site.href = safeUrl(project.publicUrl);
             actions.append(site);
           }
-          if (project.repoVisibility === "public") {
+          if (project.repoVisibility === "public" && project.repoStatus !== "missing") {
             const repo = node("a", "action", "GitHub");
             repo.href = safeUrl(`https://github.com/${project.owner}/${project.repo}`);
             actions.append(repo);
@@ -113,6 +119,11 @@
           if (!project.publicUrl && visibility === "public") {
             actions.append(node("span", "action disabled", "배포 준비 중"));
           }
+          (project.links || []).forEach((link) => {
+            const extra = node("a", "action", link.label || "관련 사이트");
+            extra.href = safeUrl(link.url);
+            actions.append(extra);
+          });
           card.append(actions);
           return card;
         }));
