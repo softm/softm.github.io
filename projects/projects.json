@@ -53,16 +53,16 @@
     },
     {
       "repo": "mine-private",
-      "title": "나·건강 기록",
-      "category": "개인·건강",
-      "description": "개인 기록과 건강검진 자료를 비공개로 관리합니다.",
+      "title": "나",
+      "category": "개인 기록",
+      "description": "개인 자산, 성격·기질·천성, 건강과 생활 기록을 인증이 필요한 비공개 사이트에서 관리합니다.",
       "visibility": "private",
       "repoVisibility": "private",
       "deploymentStatus": "deployed",
       "homeUrl": "https://mine-private-sigma.vercel.app/",
       "privateUrl": "https://mine-private-sigma.vercel.app/",
-      "privatePageCount": 1,
-      "latestTitle": "2026-09-03 건강검진 기록",
+      "privatePageCount": 3,
+      "latestTitle": "인증 후 확인",
       "order": 30
     },
     {
