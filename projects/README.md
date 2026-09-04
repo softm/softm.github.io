@@ -18,8 +18,18 @@
 - 공개 → 비공개, 비공개 → 공개 전환
 - 공개+비공개 병행 상태 변경
 - 실제 배포 전·후의 `pending` ↔ `deployed` 상태 변경
+- 프로젝트 홈 URL 생성·변경
 
 변경 후에는 `https://softm.github.io/projects/`에서 카드, 공개 여부, 링크와 상태가 실제로 보이는지 확인한다. 저장소만 만들거나 공개 범위만 바꾸고 중앙 인덱스를 갱신하지 않은 작업은 완료로 보지 않는다.
+
+## 프로젝트 홈 연결 규칙
+
+- 중앙 인덱스에서 프로젝트 카드를 누르면 개별 채팅 페이지가 아니라 **해당 프로젝트 홈**으로 이동해야 한다.
+- `homeUrl`은 카드 클릭과 `프로젝트 홈` 버튼의 기준 URL이다.
+- 공개 프로젝트는 `homeUrl`과 `publicUrl`을 같은 프로젝트 홈으로 맞춘다.
+- 비공개 프로젝트는 `homeUrl`과 `privateUrl`을 인증 게이트가 있는 프로젝트 홈으로 맞춘다.
+- 공개+비공개 병행 프로젝트는 안전한 공개 홈을 `homeUrl`로 두고, 인증 홈은 `privateUrl`로 별도 표시한다.
+- 전용 프로젝트 홈이 아직 없으면 임시 개별 페이지를 홈처럼 숨기지 말고, `deploymentStatus`와 설명에서 홈 구현 필요 상태를 표시한다.
 
 ## 공개 범위
 
@@ -43,9 +53,10 @@
 - `category`: 프로젝트 분류
 - `description`: 간단한 설명
 - `visibility`: `public`, `private`, `mixed`
-- `repoVisibility`: GitHub 링크 노출 여부를 결정하는 `public` 또는 `private`
-- `deploymentStatus`: `pending` 또는 `deployed`
-- `publicUrl`: 실제 운영 중인 공개 사이트 주소
-- `privateUrl`: 공개 인덱스에 표시해도 되는 인증 사이트 주소만 선택적으로 지정
+- `repoVisibility`: GitHub 링크 노출 여부를 결정하는 `public`, `private`, `missing`
+- `deploymentStatus`: `pending`, `deployed`, `unverified`, `needsHome`
+- `homeUrl`: 중앙 인덱스 카드 클릭 및 `프로젝트 홈` 버튼의 기준 URL
+- `publicUrl`: 실제 운영 중인 공개 프로젝트 홈 또는 공개 사이트 주소
+- `privateUrl`: 공개 인덱스에 표시해도 되는 인증 프로젝트 홈 주소만 선택적으로 지정
 - `pageCount`, `privatePageCount`: 공개·비공개 채팅 페이지 수
 - `order`: 표시 순서
