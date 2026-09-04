@@ -21,18 +21,9 @@
       "titleSelector": ".chat-card h3",
       "order": 10,
       "links": [
-        {
-          "label": "양파 구매처",
-          "url": "https://hwagok-onion-sourcing.softm.chatgpt.site"
-        },
-        {
-          "label": "농기계 임대·운반",
-          "url": "https://hwagok-farm-machine-rental.softm.chatgpt.site"
-        },
-        {
-          "label": "화이트클로버 파종",
-          "url": "https://hwagok-clover-plan.softm.chatgpt.site"
-        }
+        {"label": "양파 구매처", "url": "https://hwagok-onion-sourcing.softm.chatgpt.site"},
+        {"label": "농기계 임대·운반", "url": "https://hwagok-farm-machine-rental.softm.chatgpt.site"},
+        {"label": "화이트클로버 파종", "url": "https://hwagok-clover-plan.softm.chatgpt.site"}
       ]
     },
     {
@@ -55,14 +46,14 @@
       "repo": "mine-private",
       "title": "나",
       "category": "개인 기록",
-      "description": "개인 자산, 성격·기질·천성, 건강과 생활 기록을 인증이 필요한 비공개 사이트에서 관리합니다.",
+      "description": "개인 자산, 성격·기질·천성, 건강검진과 오른손 검지 열상 진료 경과 등 건강·생활 기록을 인증이 필요한 비공개 사이트에서 관리합니다.",
       "visibility": "private",
       "repoVisibility": "private",
       "deploymentStatus": "deployed",
       "homeUrl": "https://mine-private-sigma.vercel.app/",
       "privateUrl": "https://mine-private-sigma.vercel.app/",
-      "privatePageCount": 3,
-      "latestTitle": "인증 후 확인",
+      "privatePageCount": 4,
+      "latestTitle": "오른손 검지 열상 진료 경과",
       "order": 30
     },
     {
@@ -107,18 +98,9 @@
       "latestTitle": "웅도리 66 현장·드론·방문 기록",
       "order": 40,
       "links": [
-        {
-          "label": "웅도 기록",
-          "url": "https://ungdo-land-records-private.softm.chatgpt.site"
-        },
-        {
-          "label": "웅도 프로젝트",
-          "url": "https://ungdo.softm.chatgpt.site"
-        },
-        {
-          "label": "웅도 토지 기록",
-          "url": "https://ungdo-land-records.softm.chatgpt.site"
-        }
+        {"label": "웅도 기록", "url": "https://ungdo-land-records-private.softm.chatgpt.site"},
+        {"label": "웅도 프로젝트", "url": "https://ungdo.softm.chatgpt.site"},
+        {"label": "웅도 토지 기록", "url": "https://ungdo-land-records.softm.chatgpt.site"}
       ]
     },
     {
@@ -163,14 +145,8 @@
       "latestTitle": "전국 요양기관 통합지도 및 공단 상세 API",
       "order": 65,
       "links": [
-        {
-          "label": "공단 상세 API",
-          "url": "https://daycare-nhis-detail-api.softm.chatgpt.site"
-        },
-        {
-          "label": "주간보호 결정지원",
-          "url": "https://github.com/softm/homecare-dolbom-itda-daycare-finder"
-        }
+        {"label": "공단 상세 API", "url": "https://daycare-nhis-detail-api.softm.chatgpt.site"},
+        {"label": "주간보호 결정지원", "url": "https://github.com/softm/homecare-dolbom-itda-daycare-finder"}
       ]
     },
     {
@@ -199,10 +175,7 @@
       "latestTitle": "서해박속낙지 세무 및 매출 분석",
       "order": 80,
       "links": [
-        {
-          "label": "세무·매출 분석",
-          "url": "https://seohae-baksok-nakji-tax.softm.chatgpt.site"
-        }
+        {"label": "세무·매출 분석", "url": "https://seohae-baksok-nakji-tax.softm.chatgpt.site"}
       ]
     },
     {
