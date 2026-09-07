@@ -1,6 +1,6 @@
 {
   "owner": "softm",
-  "updatedAt": "2026-09-04",
+  "updatedAt": "2026-09-07",
   "projectClickRule": "카드 또는 프로젝트 홈 버튼은 항상 해당 프로젝트의 홈 URL로 연결한다.",
   "projects": [
     {
@@ -14,9 +14,9 @@
       "homeUrl": "https://softm.github.io/hwagok-farm/",
       "publicUrl": "https://softm.github.io/hwagok-farm/",
       "privateUrl": "https://hwagok-farm-private.vercel.app/",
-      "pageCount": 15,
+      "pageCount": 16,
       "privatePageCount": 5,
-      "latestTitle": "농업인NH안전보험 가입 기록",
+      "latestTitle": "2026-09-07 화곡농장 벌초 작업 기록",
       "pageSelector": ".chat-card",
       "titleSelector": ".chat-card h3",
       "order": 10,
