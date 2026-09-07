@@ -97,14 +97,14 @@
       "repo": "ungdo-private",
       "title": "웅도 토지·성토",
       "category": "토지·농지",
-      "description": "서산시 웅도리 63-1·65·66번지의 경계침범, 성토, 인허가와 도로보상 자료를 비공개로 관리합니다.",
+      "description": "서산시 웅도리 63-1·65·66번지의 경계침범, 성토, 하수관·맨홀 무단매설, 인허가와 도로보상 자료를 비공개로 관리합니다.",
       "visibility": "private",
       "repoVisibility": "private",
       "deploymentStatus": "deployed",
       "homeUrl": "https://ungdo-private.vercel.app/",
       "privateUrl": "https://ungdo-private.vercel.app/",
-      "privatePageCount": 4,
-      "latestTitle": "웅도리 66 현장·드론·방문 기록",
+      "privatePageCount": 5,
+      "latestTitle": "66번지 하수관·맨홀 무단매설",
       "order": 40,
       "links": [
         {
