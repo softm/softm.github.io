@@ -1,6 +1,6 @@
 {
   "owner": "softm",
-  "updatedAt": "2026-09-07",
+  "updatedAt": "2026-09-09",
   "projectClickRule": "카드 또는 프로젝트 홈 버튼은 항상 해당 프로젝트의 홈 URL로 연결한다.",
   "projects": [
     {
@@ -21,18 +21,9 @@
       "titleSelector": ".chat-card h3",
       "order": 10,
       "links": [
-        {
-          "label": "양파 구매처",
-          "url": "https://hwagok-onion-sourcing.softm.chatgpt.site"
-        },
-        {
-          "label": "농기계 임대·운반",
-          "url": "https://hwagok-farm-machine-rental.softm.chatgpt.site"
-        },
-        {
-          "label": "화이트클로버 파종",
-          "url": "https://hwagok-clover-plan.softm.chatgpt.site"
-        }
+        {"label": "양파 구매처", "url": "https://hwagok-onion-sourcing.softm.chatgpt.site"},
+        {"label": "농기계 임대·운반", "url": "https://hwagok-farm-machine-rental.softm.chatgpt.site"},
+        {"label": "화이트클로버 파종", "url": "https://hwagok-clover-plan.softm.chatgpt.site"}
       ]
     },
     {
@@ -107,22 +98,10 @@
       "latestTitle": "66번지 원상복구·우량농지 조성 이행합의서 및 2026-09-07 현황자료",
       "order": 40,
       "links": [
-        {
-          "label": "66번지 이행합의서",
-          "url": "https://ungdo-private.vercel.app/ungdo-66-restoration-agreement"
-        },
-        {
-          "label": "웅도 기록",
-          "url": "https://ungdo-land-records-private.softm.chatgpt.site"
-        },
-        {
-          "label": "웅도 프로젝트",
-          "url": "https://ungdo.softm.chatgpt.site"
-        },
-        {
-          "label": "웅도 토지 기록",
-          "url": "https://ungdo-land-records.softm.chatgpt.site"
-        }
+        {"label": "66번지 이행합의서", "url": "https://ungdo-private.vercel.app/ungdo-66-restoration-agreement"},
+        {"label": "웅도 기록", "url": "https://ungdo-land-records-private.softm.chatgpt.site"},
+        {"label": "웅도 프로젝트", "url": "https://ungdo.softm.chatgpt.site"},
+        {"label": "웅도 토지 기록", "url": "https://ungdo-land-records.softm.chatgpt.site"}
       ]
     },
     {
@@ -167,14 +146,8 @@
       "latestTitle": "전국 요양기관 통합지도 및 공단 상세 API",
       "order": 65,
       "links": [
-        {
-          "label": "공단 상세 API",
-          "url": "https://daycare-nhis-detail-api.softm.chatgpt.site"
-        },
-        {
-          "label": "주간보호 결정지원",
-          "url": "https://github.com/softm/homecare-dolbom-itda-daycare-finder"
-        }
+        {"label": "공단 상세 API", "url": "https://daycare-nhis-detail-api.softm.chatgpt.site"},
+        {"label": "주간보호 결정지원", "url": "https://github.com/softm/homecare-dolbom-itda-daycare-finder"}
       ]
     },
     {
@@ -190,23 +163,23 @@
       "order": 70
     },
     {
-      "repo": "seohae-nakji",
+      "repo": "baksok",
       "title": "서해박속낙지",
       "category": "수산·사업",
-      "description": "서해박속낙지 사업과 세무·매출 분석 자료를 비공개 사이트로 운영합니다.",
-      "visibility": "private",
-      "repoVisibility": "public",
+      "description": "서해박속낙지 운영·구매·설비·세무 자료를 프로젝트 홈에서 공개·비공개 페이지로 관리합니다.",
+      "visibility": "mixed",
+      "repoVisibility": "private",
       "deploymentStatus": "deployed",
-      "homeUrl": "https://seohae-baksok-nakji.softm.chatgpt.site",
-      "privateUrl": "https://seohae-baksok-nakji.softm.chatgpt.site",
-      "privatePageCount": 2,
-      "latestTitle": "서해박속낙지 세무 및 매출 분석",
+      "homeUrl": "https://softm.github.io/baksok/",
+      "publicUrl": "https://softm.github.io/baksok/",
+      "privateUrl": "https://baksok-private.vercel.app/",
+      "pageCount": 2,
+      "privatePageCount": 3,
+      "latestTitle": "2026-09-09 이가구 계약·RIR-4000S·가스연결",
       "order": 80,
       "links": [
-        {
-          "label": "세무·매출 분석",
-          "url": "https://seohae-baksok-nakji-tax.softm.chatgpt.site"
-        }
+        {"label": "세무·매출 분석", "url": "https://seohae-baksok-nakji-tax.softm.chatgpt.site"},
+        {"label": "기존 ChatGPT Site", "url": "https://seohae-baksok-nakji.softm.chatgpt.site"}
       ]
     },
     {
