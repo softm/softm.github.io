@@ -89,20 +89,21 @@
       "repo": "ungdo-private",
       "title": "웅도 토지·성토",
       "category": "토지·농지",
-      "description": "서산시 웅도리 63-1·65·66번지의 경계침범, 성토, 하수관·맨홀 무단매설, 우량농지 조성 이행합의·공증, 인허가와 도로보상 자료를 비공개로 관리합니다.",
-      "visibility": "private",
+      "description": "웅도 프로젝트의 현재 Vercel 페이지, 별도 보고서, 기존 공개·비공개 사이트를 통합 관리합니다.",
+      "visibility": "mixed",
       "repoVisibility": "private",
       "deploymentStatus": "deployed",
       "homeUrl": "https://ungdo-private.vercel.app/",
+      "publicUrl": "https://ungdo.softm.chatgpt.site",
       "privateUrl": "https://ungdo-private.vercel.app/",
-      "privatePageCount": 5,
-      "latestTitle": "66번지 원상복구·우량농지 조성 합의·공증 완료 기록 (2026-09-11)",
+      "pageCount": 2,
+      "privatePageCount": 7,
+      "latestTitle": "2026-09-14 웅도 공개·비공개 배포 인덱스 통합",
       "order": 40,
       "links": [
-        {"label": "66번지 합의·공증 기록", "url": "https://ungdo-private.vercel.app/ungdo-66-restoration-agreement"},
-        {"label": "웅도 기록", "url": "https://ungdo-land-records-private.softm.chatgpt.site"},
-        {"label": "웅도 프로젝트", "url": "https://ungdo.softm.chatgpt.site"},
-        {"label": "웅도 토지 기록", "url": "https://ungdo-land-records.softm.chatgpt.site"}
+        {"label": "공개 웅도 프로젝트", "url": "https://ungdo.softm.chatgpt.site"},
+        {"label": "공개 웅도 토지 기록", "url": "https://ungdo-land-records.softm.chatgpt.site"},
+        {"label": "비공개 웅도 현장 기록", "url": "https://ungdo-land-records-private.softm.chatgpt.site"}
       ]
     },
     {
