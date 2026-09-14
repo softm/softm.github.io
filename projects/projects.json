@@ -103,7 +103,8 @@
       "links": [
         {"label": "공개 웅도 프로젝트", "url": "https://ungdo.softm.chatgpt.site"},
         {"label": "공개 웅도 토지 기록", "url": "https://ungdo-land-records.softm.chatgpt.site"},
-        {"label": "비공개 웅도 현장 기록", "url": "https://ungdo-land-records-private.softm.chatgpt.site"}
+        {"label": "비공개 웅도 현장 기록", "url": "https://ungdo-land-records-private.softm.chatgpt.site"},
+        {"label": "66번지 2026-09-11 합의·공증 보강", "url": "https://ungdo-66-report-private.vercel.app/"}
       ]
     },
     {
