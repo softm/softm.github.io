@@ -1,6 +1,6 @@
 {
   "owner": "softm",
-  "updatedAt": "2026-09-14",
+  "updatedAt": "2026-09-18",
   "projectClickRule": "카드 또는 프로젝트 홈 버튼은 항상 해당 프로젝트의 홈 URL로 연결한다.",
   "projects": [
     {
@@ -21,10 +21,22 @@
       "titleSelector": ".chat-card h3",
       "order": 10,
       "links": [
-        {"label": "단골 들깨밭 살포", "url": "https://softm.github.io/hwagok-farm/dangol-spray-20260811/"},
-        {"label": "양파 구매처", "url": "https://hwagok-onion-sourcing.softm.chatgpt.site"},
-        {"label": "농기계 임대·운반", "url": "https://hwagok-farm-machine-rental.softm.chatgpt.site"},
-        {"label": "화이트클로버 파종", "url": "https://hwagok-clover-plan.softm.chatgpt.site"}
+        {
+          "label": "단골 들깨밭 살포",
+          "url": "https://softm.github.io/hwagok-farm/dangol-spray-20260811/"
+        },
+        {
+          "label": "양파 구매처",
+          "url": "https://hwagok-onion-sourcing.softm.chatgpt.site"
+        },
+        {
+          "label": "농기계 임대·운반",
+          "url": "https://hwagok-farm-machine-rental.softm.chatgpt.site"
+        },
+        {
+          "label": "화이트클로버 파종",
+          "url": "https://hwagok-clover-plan.softm.chatgpt.site"
+        }
       ]
     },
     {
@@ -101,10 +113,22 @@
       "latestTitle": "2026-09-14 웅도 66 합의·공증 기록 보강",
       "order": 40,
       "links": [
-        {"label": "공개 웅도 프로젝트", "url": "https://ungdo.softm.chatgpt.site"},
-        {"label": "공개 웅도 토지 기록", "url": "https://ungdo-land-records.softm.chatgpt.site"},
-        {"label": "비공개 웅도 현장 기록", "url": "https://ungdo-land-records-private.softm.chatgpt.site"},
-        {"label": "66번지 2026-09-11 합의·공증 보강", "url": "https://ungdo-66-report-private.vercel.app/"}
+        {
+          "label": "공개 웅도 프로젝트",
+          "url": "https://ungdo.softm.chatgpt.site"
+        },
+        {
+          "label": "공개 웅도 토지 기록",
+          "url": "https://ungdo-land-records.softm.chatgpt.site"
+        },
+        {
+          "label": "비공개 웅도 현장 기록",
+          "url": "https://ungdo-land-records-private.softm.chatgpt.site"
+        },
+        {
+          "label": "66번지 2026-09-11 합의·공증 보강",
+          "url": "https://ungdo-66-report-private.vercel.app/"
+        }
       ]
     },
     {
@@ -149,8 +173,14 @@
       "latestTitle": "전국 요양기관 통합지도 및 공단 상세 API",
       "order": 65,
       "links": [
-        {"label": "공단 상세 API", "url": "https://daycare-nhis-detail-api.softm.chatgpt.site"},
-        {"label": "주간보호 결정지원", "url": "https://github.com/softm/homecare-dolbom-itda-daycare-finder"}
+        {
+          "label": "공단 상세 API",
+          "url": "https://daycare-nhis-detail-api.softm.chatgpt.site"
+        },
+        {
+          "label": "주간보호 결정지원",
+          "url": "https://github.com/softm/homecare-dolbom-itda-daycare-finder"
+        }
       ]
     },
     {
@@ -176,13 +206,19 @@
       "homeUrl": "https://softm.github.io/baksok/",
       "publicUrl": "https://softm.github.io/baksok/",
       "privateUrl": "https://baksok-private.vercel.app/",
-      "pageCount": 2,
-      "privatePageCount": 3,
-      "latestTitle": "2026-09-09 이가구 계약·RIR-4000S·가스연결",
+      "pageCount": 1,
+      "privatePageCount": 2,
+      "latestTitle": "2026-09-11 RIR-4000S 5대 배송 완료 · 설명서/개별 라벨 보강",
       "order": 80,
       "links": [
-        {"label": "세무·매출 분석", "url": "https://seohae-baksok-nakji-tax.softm.chatgpt.site"},
-        {"label": "기존 ChatGPT Site", "url": "https://seohae-baksok-nakji.softm.chatgpt.site"}
+        {
+          "label": "세무·매출 분석",
+          "url": "https://seohae-baksok-nakji-tax.softm.chatgpt.site"
+        },
+        {
+          "label": "기존 ChatGPT Site",
+          "url": "https://seohae-baksok-nakji.softm.chatgpt.site"
+        }
       ]
     },
     {
