@@ -144,9 +144,20 @@
       "deploymentStatus": "deployed",
       "homeUrl": "https://hwagok-land-permit-private.vercel.app/",
       "privateUrl": "https://hwagok-land-permit-private.vercel.app/",
-      "privatePageCount": 2,
-      "latestTitle": "처벌·기소 가능성 및 사후 하도급계약서 검증",
-      "order": 50
+      "privatePageCount": 5,
+      "latestTitle": "2026-09-26 화곡리 개간허가 프로젝트 아카이브 갱신",
+      "order": 50,
+      "archiveStatus": "git-updated-vercel-refresh-pending",
+      "links": [
+        {
+          "label": "프로젝트 아카이브",
+          "url": "https://hwagok-land-permit-private.vercel.app/asset/archive-20260926.html"
+        },
+        {
+          "label": "항고장 3건 최종본 보관",
+          "url": "https://hwagok-land-permit-private.vercel.app/asset/appeals-20260922/staging.html"
+        }
+      ]
     },
     {
       "repo": "father-hospital-treatment-private",
