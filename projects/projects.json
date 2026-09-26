@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "owner": "softm",
   "updatedAt": "2026-09-27",
-  "auditVersion": "20260927-global-archive-redeploy-v3",
+  "auditVersion": "20260927-restore-detailed-archive-v4",
   "projectClickRule": "공개 프로젝트 홈 또는 해당 공개 저장소의 안내로 먼저 연결한다. 비공개 자료는 별도 인증 링크로 표시한다. 공개 안내가 없는 프로젝트는 그 상태를 명시한다.",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -12,9 +12,11 @@
     "privateDelivery": "Vercel 서버에서 인증 후 GitHub 최신 원본을 요청 시 읽기",
     "media": "사진·영상·음성·녹취·문서·ZIP 원본을 실제 파일로 보관하고 문서에서 연결",
     "privacy": "공개 안내에 비공개 링크는 표시하되 원문·개인정보·비밀번호·토큰은 공개하지 않음",
-    "completion": "저장소 반영, 운영 배포, 인증, 직접 파일 접근, 미디어 표시·재생을 각각 검증"
+    "completion": "저장소 반영, 운영 배포, 인증, 직접 파일 접근, 미디어 표시·재생을 각각 검증",
+    "preserveExisting": "기존 채팅별 상세 본문과 미디어는 축약·삭제·대체하지 않고 누적 보존",
+    "indexRole": "최상위 projects 페이지는 상세본을 대체하지 않는 목차/연결 허브"
   },
-  "auditNotice": "2026-09-27 전체 프로젝트 아카이브 재배포를 실행했습니다. 중앙 인덱스와 각 저장소에 재배포 트리거를 반영했으며, Git 연결된 mine-private·ungdo-private·baksok-private는 새 커밋 기준 Vercel production READY를 확인했습니다. 일부 기존 Vercel 프로젝트는 Git 미연결 또는 잘못된 저장소 연결 때문에 자동 재배포가 발생하지 않아 상태를 명시합니다.",
+  "auditNotice": "기존 상세 정리와 미디어를 요약본으로 대체하지 않습니다. 프로젝트별 원본 HTML·MD·사진·영상·음성·PDF·ZIP을 유지하고, 이 중앙 페이지는 상세 기록으로 연결하는 목차 역할만 합니다.",
   "projects": [
     {
       "repo": "hwagok-farm",
@@ -30,7 +32,7 @@
       "publicRepoUrl": "https://github.com/softm/hwagok-farm",
       "privateUrl": "https://hwagok-farm-private.vercel.app/",
       "authProvider": "vercel",
-      "pageCount": 24,
+      "pageCount": 23,
       "privatePageCount": 6,
       "latestTitle": "2026-09-24 농기계 임대·출고 기록",
       "pageSelector": ".chat-card",
@@ -41,58 +43,134 @@
       "archiveSource": "project-github",
       "archiveMissingAssets": true,
       "auditStatus": "partial",
-      "mediaStatus": "원본 누락 대조 필요",
-      "deploymentNote": "2026-09-27 공개 및 hwagok-farm-private 저장소 재배포 트리거 커밋 반영. 기존 private Vercel READY는 있으나 새 private Git 커밋 기준 자동 배포는 생성되지 않음.",
+      "mediaStatus": "현재 Git 저장소: 이미지 100개 + ZIP 3개(총 미디어성 자산 103개), 상세 문서 44개",
+      "deploymentNote": "기존 23개 상세 기록과 실제 이미지·ZIP 자산은 저장소에 남아 있습니다. 중앙 목록에서 전체 상세 기록으로 다시 연결합니다. 더덕/관리기 임대 등 일부 영상 원본은 아직 Git 미반영 상태라 별도 복구 대상입니다.",
       "links": [
         {
-          "label": "아세아 관리기 수동 시동·초크",
-          "url": "https://softm.github.io/hwagok-farm/archive/cultivator-manual-start-20260922/",
-          "visibility": "public",
-          "mediaStatus": "사진 10장 웹 최적화본·MD·HTML·ZIP",
-          "mediaStatusUrl": "https://softm.github.io/hwagok-farm/archive/cultivator-manual-start-20260922/image_manifest.json"
-        },
-        {
-          "label": "아세아 관리기 엔진 정지",
-          "url": "https://softm.github.io/hwagok-farm/archive/asea-engine-stop-20260922/",
-          "visibility": "public",
-          "mediaStatusUrl": "https://softm.github.io/hwagok-farm/archive/asea-engine-stop-20260922/status.json"
-        },
-        {
-          "label": "타이거킹 선풍기 회전기어박스 수리",
-          "url": "https://softm.github.io/hwagok-farm/fan-gearbox-repair-20260914/",
+          "label": "2026-09-24 관리기 임대·출고",
+          "url": "https://softm.github.io/hwagok-farm/archive/farm-machine-rental-20260924/",
           "visibility": "public"
         },
         {
-          "label": "더덕 수확·씨앗 채취",
+          "label": "2026-09-23 더덕 수확·씨앗 채취",
           "url": "https://softm.github.io/hwagok-farm/archive/deodeok-harvest-20260923/",
           "visibility": "public"
         },
         {
-          "label": "관리기 임대·출고",
-          "url": "https://softm.github.io/hwagok-farm/farm-machine-rental-20260924/",
+          "label": "2026-09-22 관리기 수동시동·초크",
+          "url": "https://softm.github.io/hwagok-farm/archive/cultivator-manual-start-20260922/",
           "visibility": "public"
         },
         {
-          "label": "단골 들깨밭 살포",
-          "url": "https://softm.github.io/hwagok-farm/dangol-spray-20260811/",
+          "label": "2026-09-22 관리기 엔진정지",
+          "url": "https://softm.github.io/hwagok-farm/archive/asea-engine-stop-20260922/",
           "visibility": "public"
         },
         {
-          "label": "기존 양파 구매처",
-          "url": "https://hwagok-onion-sourcing.softm.chatgpt.site",
+          "label": "2026-09-14 공업용 선풍기 회전기어박스",
+          "url": "https://softm.github.io/hwagok-farm/archive/fan-gearbox-repair-20260914/",
           "visibility": "public"
         },
         {
-          "label": "기존 농기계 임대·운반",
-          "url": "https://hwagok-farm-machine-rental.softm.chatgpt.site",
+          "label": "2026-09-07 벌초",
+          "url": "https://softm.github.io/hwagok-farm/archive/mowing-20260907/",
           "visibility": "public"
         },
         {
-          "label": "기존 화이트클로버 파종",
-          "url": "https://hwagok-clover-plan.softm.chatgpt.site",
+          "label": "2026-09-05 화이트클로버 자동급수",
+          "url": "https://softm.github.io/hwagok-farm/archive/irrigation-20260905/",
+          "visibility": "public"
+        },
+        {
+          "label": "2026-08-30 들깨 정식",
+          "url": "https://softm.github.io/hwagok-farm/archive/perilla-transplant-20260830/",
+          "visibility": "public"
+        },
+        {
+          "label": "2026-08-26 벌초",
+          "url": "https://softm.github.io/hwagok-farm/archive/mowing-20260826/",
+          "visibility": "public"
+        },
+        {
+          "label": "2026-08-21 CCTV 인터넷 연결",
+          "url": "https://softm.github.io/hwagok-farm/archive/cctv-internet-20260821/",
+          "visibility": "public"
+        },
+        {
+          "label": "2026-08-20 스프링클러 나사 규격",
+          "url": "https://softm.github.io/hwagok-farm/archive/sprinkler-thread-20260820/",
+          "visibility": "public"
+        },
+        {
+          "label": "2026-08-13 농막 아랫밭 방제",
+          "url": "https://softm.github.io/hwagok-farm/archive/spray-record-20260813/",
+          "visibility": "public"
+        },
+        {
+          "label": "2026-08-11 단골 들깨밭 살포",
+          "url": "https://softm.github.io/hwagok-farm/archive/dangol-spray-20260811/",
+          "visibility": "public"
+        },
+        {
+          "label": "2026-08-11 박 수확 · 사진 53장",
+          "url": "https://softm.github.io/hwagok-farm/archive/20260811-gourd-harvest/",
+          "visibility": "public"
+        },
+        {
+          "label": "2026-08-11 양파 구입·저온창고 보관",
+          "url": "https://softm.github.io/hwagok-farm/archive/onion-purchase-20260811/",
+          "visibility": "public"
+        },
+        {
+          "label": "2026-08-10 양파 구매처 조사",
+          "url": "https://softm.github.io/hwagok-farm/archive/onion-sourcing-20260810/",
+          "visibility": "public"
+        },
+        {
+          "label": "2026-08-07 농막 그늘막",
+          "url": "https://softm.github.io/hwagok-farm/archive/shade-net-20260807/",
+          "visibility": "public"
+        },
+        {
+          "label": "2026-07-11 냉동고 전기 증설",
+          "url": "https://softm.github.io/hwagok-farm/archive/freezer-electric-20260711/",
+          "visibility": "public"
+        },
+        {
+          "label": "2026-07-11 농막 차양막 시정조치",
+          "url": "https://softm.github.io/hwagok-farm/archive/farm-awning-repair-20260711/",
+          "visibility": "public"
+        },
+        {
+          "label": "2026-07-05 들깨·열무 밑거름",
+          "url": "https://softm.github.io/hwagok-farm/archive/fertilizer-plan/",
+          "visibility": "public"
+        },
+        {
+          "label": "2026-05-27 모스킬 방제",
+          "url": "https://softm.github.io/hwagok-farm/archive/moskill-20260527/",
+          "visibility": "public"
+        },
+        {
+          "label": "화이트클로버 파종계획",
+          "url": "https://softm.github.io/hwagok-farm/archive/white-clover/",
+          "visibility": "public"
+        },
+        {
+          "label": "농기계 임대·운반 서비스",
+          "url": "https://softm.github.io/hwagok-farm/archive/farm-machine-rental/",
           "visibility": "public"
         }
-      ]
+      ],
+      "storedAssets": {
+        "files": 197,
+        "documents": 44,
+        "images": 100,
+        "videos": 0,
+        "audio": 0,
+        "pdf": 0,
+        "zip": 3
+      }
     },
     {
       "repo": "gwangmyeong",
@@ -113,8 +191,29 @@
       "titleSelector": ".card:not(.locked) .title",
       "order": 20,
       "auditStatus": "needs-review",
-      "mediaStatus": "저장소 첨부 검사 추가",
-      "deploymentNote": "실제 배포 브랜치 gh-pages에 첨부 검사 반영. 이번 운영 화면의 최신 반영 여부는 별도 확인이 필요합니다."
+      "mediaStatus": "현재 저장소에는 상세 HTML 2건이 있으나 별도 미디어 원본은 0개",
+      "deploymentNote": "실제 배포 브랜치 gh-pages에 첨부 검사 반영. 이번 운영 화면의 최신 반영 여부는 별도 확인이 필요합니다.",
+      "links": [
+        {
+          "label": "수도 계량기 현장점검 및 요금상담",
+          "url": "https://softm.github.io/gwangmyeong/20260630-water-meter/",
+          "visibility": "public"
+        },
+        {
+          "label": "하이마트 가전 기록",
+          "url": "https://softm.github.io/gwangmyeong/20260718-himart-appliances/",
+          "visibility": "public"
+        }
+      ],
+      "storedAssets": {
+        "files": 17,
+        "documents": 5,
+        "images": 0,
+        "videos": 0,
+        "audio": 0,
+        "pdf": 0,
+        "zip": 0
+      }
     },
     {
       "repo": "mine-private",
@@ -142,8 +241,17 @@
       "archiveSource": "github-live",
       "archiveMissingAssets": true,
       "auditStatus": "deployed",
-      "mediaStatus": "일부 사진 존재 · 전체 대조 미완료",
-      "deploymentNote": "2026-09-27 전체 재배포 트리거 후 Vercel production READY 확인. 공개 안내와 비공개 인증 링크 구조 유지."
+      "mediaStatus": "인증 후 상세 HTML·MD 6건과 실제 이미지 4개 보존. 과거 확인된 일부 의료/보험 이미지 원본은 추가 복구 필요",
+      "deploymentNote": "2026-09-27 전체 재배포 트리거 후 Vercel production READY 확인. 공개 안내와 비공개 인증 링크 구조 유지.",
+      "storedAssets": {
+        "files": 40,
+        "documents": 19,
+        "images": 4,
+        "videos": 0,
+        "audio": 0,
+        "pdf": 0,
+        "zip": 0
+      }
     },
     {
       "repo": "onsuhill-private",
@@ -161,9 +269,18 @@
       "latestTitle": "비공개 기록 2개",
       "order": 35,
       "auditStatus": "partial",
-      "mediaStatus": "저장소 첨부 검사 추가",
+      "mediaStatus": "비공개 상세 HTML과 증빙 이미지 1개 보존",
       "deploymentNote": "2026-09-27 저장소 재배포 트리거 커밋 반영. 기존 Vercel production READY 배포는 있으나 새 Git 커밋 기준 자동 배포는 생성되지 않아 Git 연결/배포 훅 확인 필요.",
-      "privateDeploymentStatus": "not-triggered"
+      "privateDeploymentStatus": "not-triggered",
+      "storedAssets": {
+        "files": 9,
+        "documents": 5,
+        "images": 1,
+        "videos": 0,
+        "audio": 0,
+        "pdf": 0,
+        "zip": 0
+      }
     },
     {
       "repo": "yeonseo",
@@ -181,8 +298,17 @@
       "latestTitle": "비공개 교육 기록",
       "order": 38,
       "auditStatus": "blocked",
-      "mediaStatus": "기존 저장소 첨부 검사 추가",
-      "deploymentNote": "2026-09-27 private 저장소 재배포 트리거 커밋 반영. 현재 연결된 Vercel 프로젝트가 없고 기존 ChatGPT Sites 링크만 있어 인증 Vercel 배포는 생성되지 않음."
+      "mediaStatus": "Private Git에 사진 46개·영상 3개·음성 2개가 실제 보존되어 있으나 Vercel 상세 홈이 아직 없어 노출되지 않음",
+      "deploymentNote": "2026-09-27 private 저장소 재배포 트리거 커밋 반영. 현재 연결된 Vercel 프로젝트가 없고 기존 ChatGPT Sites 링크만 있어 인증 Vercel 배포는 생성되지 않음.",
+      "storedAssets": {
+        "files": 56,
+        "documents": 1,
+        "images": 46,
+        "videos": 3,
+        "audio": 2,
+        "pdf": 0,
+        "zip": 0
+      }
     },
     {
       "repo": "ungdo-private",
@@ -205,7 +331,7 @@
       "order": 40,
       "archiveSource": "github-live",
       "auditStatus": "deployed",
-      "mediaStatus": "사진·음성·영상 원본 대조 필요",
+      "mediaStatus": "Private Git에 사진 25개·영상 1개·상세 문서/녹취 텍스트 20개 보존",
       "deploymentNote": "2026-09-27 전체 재배포 트리거 후 Vercel production READY 확인. 비공개 원본은 GitHub live 구조 유지.",
       "links": [
         {
@@ -225,7 +351,16 @@
           "visibility": "private",
           "authProvider": "vercel"
         }
-      ]
+      ],
+      "storedAssets": {
+        "files": 70,
+        "documents": 20,
+        "images": 25,
+        "videos": 1,
+        "audio": 0,
+        "pdf": 0,
+        "zip": 0
+      }
     },
     {
       "repo": "hwagok-land-permit-private",
@@ -247,7 +382,7 @@
       "latestTitle": "비공개 기록 5개",
       "order": 50,
       "auditStatus": "blocked",
-      "mediaStatus": "원본·직접 파일 인증 대조 필요",
+      "mediaStatus": "Private Git에 이미지/미리보기 18개·PDF 5개·상세 문서 15개 보존. Vercel Git 연결 오류로 운영 화면에서 누락되어 보임",
       "deploymentNote": "2026-09-27 재배포 시 Vercel 프로젝트가 hwagok-land-permit-private가 아니라 hwagok-farm-private Git 저장소를 추적하는 것이 재확인됨. 새 farm 커밋으로 ERROR 배포가 생성되어 Git 연결 정정이 필요.",
       "links": [
         {
@@ -262,7 +397,16 @@
           "visibility": "private",
           "authProvider": "vercel"
         }
-      ]
+      ],
+      "storedAssets": {
+        "files": 73,
+        "documents": 15,
+        "images": 18,
+        "videos": 0,
+        "audio": 0,
+        "pdf": 5,
+        "zip": 0
+      }
     },
     {
       "repo": "father-hospital-treatment-private",
@@ -285,8 +429,17 @@
       "order": 60,
       "archiveDeployment": true,
       "auditStatus": "partial",
-      "mediaStatus": "운영 원본 연결 확인 필요",
-      "deploymentNote": "2026-09-27 저장소 재배포 트리거 커밋 반영. 기존 Vercel production READY 배포는 있으나 새 Git 커밋 기준 자동 배포는 생성되지 않아 Git 연결/배포 훅 확인 필요."
+      "mediaStatus": "Private Git에 상세 문서 33개·음성 1개·PDF 1개·전체자료 ZIP 1개 보존",
+      "deploymentNote": "2026-09-27 저장소 재배포 트리거 커밋 반영. 기존 Vercel production READY 배포는 있으나 새 Git 커밋 기준 자동 배포는 생성되지 않아 Git 연결/배포 훅 확인 필요.",
+      "storedAssets": {
+        "files": 61,
+        "documents": 33,
+        "images": 0,
+        "videos": 0,
+        "audio": 1,
+        "pdf": 1,
+        "zip": 1
+      }
     },
     {
       "repo": "homecare-nationwide-care-services-map",
@@ -305,7 +458,7 @@
       "latestTitle": "전국 요양기관 통합지도",
       "order": 65,
       "auditStatus": "needs-review",
-      "mediaStatus": "저장소 첨부 검사 추가",
+      "mediaStatus": "운영 데이터·문서 3만여 개와 UI/참조 이미지 12개가 저장소에 유지",
       "deploymentNote": "공개 원본 저장소에 첨부 검사 반영. 기존 서비스 기능을 임의 변경하지 않았으며 최신 운영 재배포는 미확인입니다.",
       "links": [
         {
@@ -318,7 +471,16 @@
           "url": "https://github.com/softm/homecare-dolbom-itda-daycare-finder",
           "visibility": "public"
         }
-      ]
+      ],
+      "storedAssets": {
+        "files": 63979,
+        "documents": 32222,
+        "images": 12,
+        "videos": 0,
+        "audio": 0,
+        "pdf": 0,
+        "zip": 0
+      }
     },
     {
       "repo": "gyeongju-kim",
@@ -337,8 +499,17 @@
       "latestTitle": "공개 안내 홈 소스 생성",
       "order": 70,
       "auditStatus": "blocked",
-      "mediaStatus": "원본 자료 미등록",
-      "deploymentNote": "공개 홈 소스는 생성됐으나 GitHub Pages 활성화·웹 배포와 원본 등록은 확인되지 않았습니다."
+      "mediaStatus": "현재 공개 안내 문서만 존재; 원문·미디어 아카이브는 아직 미등록",
+      "deploymentNote": "공개 홈 소스는 생성됐으나 GitHub Pages 활성화·웹 배포와 원본 등록은 확인되지 않았습니다.",
+      "storedAssets": {
+        "files": 3,
+        "documents": 3,
+        "images": 0,
+        "videos": 0,
+        "audio": 0,
+        "pdf": 0,
+        "zip": 0
+      }
     },
     {
       "repo": "baksok-public",
@@ -364,24 +535,29 @@
       "archiveSource": "github-live",
       "archiveMissingAssets": true,
       "auditStatus": "partial",
-      "mediaStatus": "사진 원본 16장 회수 · GitHub 업로드 미완료",
+      "mediaStatus": "상세 비공개 HTML 3건은 보존. 회수한 원본 사진 16개가 현재 Git에 아직 미반영되어 복구 대상",
       "deploymentNote": "2026-09-27 공개·비공개 저장소 재배포 트리거 및 baksok-private production READY 확인. 회수 사진 16장 원본은 현재 세션의 GitHub 바이너리 업로드 제약 때문에 아직 private 저장소에 반영되지 않아 별도 표시.",
       "links": [
         {
-          "label": "비공개 구매 기록",
+          "label": "RIR-4000S 13대 교체 공개 기록",
+          "url": "https://softm.github.io/baksok-public/20260819_rir4000s_13ea/",
+          "visibility": "public"
+        },
+        {
+          "label": "비공개 세무·매출 분석",
+          "url": "https://baksok-private.vercel.app/reports/20260721-tax/",
+          "visibility": "private",
+          "authProvider": "vercel"
+        },
+        {
+          "label": "비공개 이가구 계약·가스설비",
           "url": "https://baksok-private.vercel.app/reports/20260909-furniture-gas/",
           "visibility": "private",
           "authProvider": "vercel"
         },
         {
-          "label": "비공개 배송 기록",
+          "label": "비공개 RIR-4000S 배송 기록",
           "url": "https://baksok-private.vercel.app/reports/20260911-rir4000s-delivery/",
-          "visibility": "private",
-          "authProvider": "vercel"
-        },
-        {
-          "label": "비공개 운영 분석",
-          "url": "https://baksok-private.vercel.app/reports/20260721-tax/",
           "visibility": "private",
           "authProvider": "vercel"
         }
@@ -389,7 +565,15 @@
       "legacyChatGPTSites": [
         "https://seohae-baksok-nakji.softm.chatgpt.site",
         "https://seohae-baksok-nakji-tax.softm.chatgpt.site"
-      ]
+      ],
+      "storedAssets": {
+        "publicFiles": 7,
+        "privateFiles": 18,
+        "privateDocuments": 12,
+        "privateImages": 0,
+        "privateVideos": 0,
+        "privateAudio": 0
+      }
     },
     {
       "repo": "gyeongju-trip-map",
