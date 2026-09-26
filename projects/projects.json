@@ -134,7 +134,7 @@
         }
       ],
       "privateLiveSource": "softm/ungdo-private:main/live",
-      "privateLiveStatus": "source-ready-vercel-refresh-pending"
+      "privateLiveStatus": "source-ready-vercel-token-required"
     },
     {
       "repo": "hwagok-land-permit-private",
@@ -241,7 +241,7 @@
       "privateRepo": "softm/baksok-private",
       "archiveCheckedAt": "2026-09-26",
       "nextPublicUrl": "https://softm.github.io/baksok-public/",
-      "publicMigrationStatus": "pages-bootstrap-pending"
+      "publicMigrationStatus": "source-ready-pages-enable-required"
     },
     {
       "repo": "gyeongju-trip-map",
