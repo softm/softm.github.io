@@ -213,16 +213,16 @@
       "repo": "baksok",
       "title": "서해박속낙지",
       "category": "수산·사업",
-      "description": "서해박속낙지 운영·구매·설비·세무 자료를 프로젝트 홈에서 공개·비공개 페이지로 관리합니다.",
+      "description": "서해박속낙지 운영·구매·설비·세무 자료를 공개 GitHub Pages와 인증형 비공개 Vercel 아카이브로 관리합니다.",
       "visibility": "mixed",
       "repoVisibility": "private",
       "deploymentStatus": "deployed",
       "homeUrl": "https://softm.github.io/baksok/",
       "publicUrl": "https://softm.github.io/baksok/",
       "privateUrl": "https://baksok-private.vercel.app/",
-      "pageCount": 2,
+      "pageCount": 1,
       "privatePageCount": 2,
-      "latestTitle": "2026-09-11 RIR-4000S 5대 배송 완료 · 설명서/개별 라벨 보강",
+      "latestTitle": "2026-09-11 RIR-4000S 5대 배송 완료",
       "order": 80,
       "links": [
         {
@@ -233,7 +233,11 @@
           "label": "기존 ChatGPT Site",
           "url": "https://seohae-baksok-nakji.softm.chatgpt.site"
         }
-      ]
+      ],
+      "publicRepo": "softm/softm.github.io",
+      "publicPath": "baksok/",
+      "privateRepo": "softm/baksok-private",
+      "archiveCheckedAt": "2026-09-26"
     },
     {
       "repo": "gyeongju-trip-map",
