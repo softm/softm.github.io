@@ -1,6 +1,6 @@
 {
   "owner": "softm",
-  "updatedAt": "2026-09-18",
+  "updatedAt": "2026-09-26",
   "projectClickRule": "카드 또는 프로젝트 홈 버튼은 항상 해당 프로젝트의 홈 URL로 연결한다.",
   "projects": [
     {
@@ -109,8 +109,8 @@
       "publicUrl": "https://ungdo.softm.chatgpt.site",
       "privateUrl": "https://ungdo-private.vercel.app/",
       "pageCount": 2,
-      "privatePageCount": 8,
-      "latestTitle": "2026-09-14 웅도 66 합의·공증 기록 보강",
+      "privatePageCount": 9,
+      "latestTitle": "2026-09-26 공개·비공개 배포 기준 점검 아카이브",
       "order": 40,
       "links": [
         {
@@ -128,6 +128,10 @@
         {
           "label": "66번지 2026-09-11 합의·공증 보강",
           "url": "https://ungdo-66-report-private.vercel.app/"
+        },
+        {
+          "label": "2026-09-26 배포 기준 점검 아카이브",
+          "url": "https://ungdo-private.vercel.app/archive/20260926-deployment-audit"
         }
       ]
     },
