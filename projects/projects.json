@@ -216,25 +216,25 @@
       "repo": "baksok-public",
       "title": "서해박속낙지",
       "category": "수산·사업",
-      "description": "서해박속낙지 공개 자료는 전용 공개 저장소를 Source of Truth로, 구매·배송·계약 등 비공개 운영자료는 인증형 Vercel에서 분리 관리합니다.",
+      "description": "서해박속낙지 공개 사이트는 softm/baksok-public + GitHub Pages로, 세무·매출·구매·배송 등 비공개 운영자료는 softm/baksok-private + Vercel 인증으로 아카이브 관리합니다.",
       "visibility": "mixed",
       "repoVisibility": "public",
       "deploymentStatus": "deployed",
       "homeUrl": "https://softm.github.io/baksok/",
-      "publicUrl": "https://softm.github.io/baksok/",
+      "publicUrl": "https://softm.github.io/baksok-public/",
       "privateUrl": "https://baksok-private.vercel.app/",
-      "pageCount": 1,
-      "privatePageCount": 2,
+      "pageCount": 2,
+      "privatePageCount": 3,
       "latestTitle": "2026-09-11 RIR-4000S 5대 배송 완료",
       "order": 80,
       "links": [
         {
-          "label": "세무·매출 분석",
-          "url": "https://seohae-baksok-nakji-tax.softm.chatgpt.site"
+          "label": "공개 사이트",
+          "url": "https://softm.github.io/baksok-public/"
         },
         {
-          "label": "기존 ChatGPT Site",
-          "url": "https://seohae-baksok-nakji.softm.chatgpt.site"
+          "label": "세무·매출 분석 (비공개)",
+          "url": "https://baksok-private.vercel.app/reports/20260721-tax/"
         }
       ],
       "publicRepo": "softm/baksok-public",
@@ -242,7 +242,11 @@
       "privateRepo": "softm/baksok-private",
       "archiveCheckedAt": "2026-09-26",
       "nextPublicUrl": "https://softm.github.io/baksok-public/",
-      "publicMigrationStatus": "source-ready-pages-enable-required"
+      "publicMigrationStatus": "deployed",
+      "legacyChatGPTSites": [
+        "https://seohae-baksok-nakji.softm.chatgpt.site",
+        "https://seohae-baksok-nakji-tax.softm.chatgpt.site"
+      ]
     },
     {
       "repo": "gyeongju-trip-map",
