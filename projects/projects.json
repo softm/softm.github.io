@@ -134,7 +134,8 @@
         }
       ],
       "privateLiveSource": "softm/ungdo-private:main/live",
-      "privateLiveStatus": "source-ready-vercel-token-required"
+      "privateLiveStatus": "git-auto-deploy-ready-shared-token-configured",
+      "archiveCheckedAt": "2026-09-26"
     },
     {
       "repo": "hwagok-land-permit-private",
