@@ -21,10 +21,11 @@
       "description": "농장 작업, 재배 계획, 농기계, 방제·관수와 수확 기록을 공개·비공개로 관리합니다.",
       "visibility": "mixed", "repoVisibility": "public", "deploymentStatus": "partial",
       "homeUrl": "https://softm.github.io/hwagok-farm/", "publicUrl": "https://softm.github.io/hwagok-farm/", "publicRepoUrl": "https://github.com/softm/hwagok-farm", "privateUrl": "https://hwagok-farm-private.vercel.app/", "authProvider": "vercel",
-      "pageCount": 21, "privatePageCount": 6, "latestTitle": "2026-09-24 농기계 임대·출고 기록", "pageSelector": ".chat-card", "titleSelector": ".chat-card h3", "order": 10,
+      "pageCount": 22, "privatePageCount": 6, "latestTitle": "2026-09-24 농기계 임대·출고 기록", "pageSelector": ".chat-card", "titleSelector": ".chat-card h3", "order": 10,
       "archiveDeployment": true, "archiveRoot": "archive", "archiveSource": "project-github", "archiveMissingAssets": true,
       "auditStatus": "needs-review", "mediaStatus": "원본 누락 대조 필요", "deploymentNote": "공개·비공개 저장소에 실제 첨부 파일 검사 추가. 비공개 운영 재배포와 미디어 전체 대조는 미확인입니다.",
       "links": [
+        {"label":"타이거킹 선풍기 회전기어박스 수리", "url":"https://softm.github.io/hwagok-farm/fan-gearbox-repair-20260914/", "visibility":"public"},
         {"label":"더덕 수확·씨앗 채취", "url":"https://softm.github.io/hwagok-farm/archive/deodeok-harvest-20260923/", "visibility":"public"},
         {"label":"관리기 임대·출고", "url":"https://softm.github.io/hwagok-farm/farm-machine-rental-20260924/", "visibility":"public"},
         {"label":"단골 들깨밭 살포", "url":"https://softm.github.io/hwagok-farm/dangol-spray-20260811/", "visibility":"public"},
