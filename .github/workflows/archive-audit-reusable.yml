@@ -1,0 +1,97 @@
+name: Archive source and media audit
+on:
+  workflow_call:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - name: Inventory actual attachments and validate local references
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import collections, hashlib, html, json, os, pathlib, re, subprocess, urllib.parse, urllib.request, urllib.error
+          from html.parser import HTMLParser
+          from datetime import datetime, timezone
+          root=pathlib.Path.cwd()
+          paths=[pathlib.Path(p) for p in subprocess.check_output(['git','ls-files','-z']).decode().split('\0') if p]
+          types={'.jpg':'image','.jpeg':'image','.png':'image','.webp':'image','.gif':'image','.avif':'image','.heic':'image','.heif':'image','.svg':'image','.mp4':'video','.mov':'video','.m4v':'video','.webm':'video','.m4a':'audio','.mp3':'audio','.wav':'audio','.aac':'audio','.ogg':'audio','.flac':'audio','.pdf':'document','.docx':'document','.xlsx':'document','.hwp':'document','.hwpx':'document','.zip':'archive','.srt':'transcript','.vtt':'transcript'}
+          assets=[]; counts=collections.Counter(); missing=[]; manifests=[]
+          for p in paths:
+              if p.is_symlink() or not p.is_file(): continue
+              kind=types.get(p.suffix.lower())
+              if kind:
+                  digest=hashlib.sha256()
+                  with p.open('rb') as f:
+                      for block in iter(lambda:f.read(1024*1024),b''): digest.update(block)
+                  assets.append({'path':p.as_posix(),'kind':kind,'bytes':p.stat().st_size,'sha256':digest.hexdigest()})
+                  counts[kind]+=1
+              if p.name in ('assets-manifest.json','asset-manifest.json','manifest.json','project.json'):
+                  try:
+                      obj=json.loads(p.read_text('utf-8'))
+                      manifests.append({'path':p.as_posix(),'data':obj})
+                  except (ValueError,UnicodeError): pass
+          class Links(HTMLParser):
+              def __init__(self): super().__init__(); self.urls=[]
+              def handle_starttag(self, tag, attrs):
+                  for key,value in attrs:
+                      if key in ('src','href','poster') and value: self.urls.append(value)
+          for p in paths:
+              if p.suffix.lower() not in ('.html','.htm','.md') or not p.is_file() or p.is_symlink() or p.stat().st_size>5000000: continue
+              text=p.read_text('utf-8',errors='replace')
+              parser=Links(); parser.feed(text)
+              urls=parser.urls+re.findall(r'!?\[[^\]]*\]\(([^\n)]+)\)',text)
+              for raw in urls:
+                  url=urllib.parse.urlsplit(html.unescape(raw.strip().split(' "')[0]))
+                  if url.scheme or url.netloc or not url.path: continue
+                  value=urllib.parse.unquote(url.path)
+                  if pathlib.Path(value).suffix.lower() not in types: continue
+                  # Absolute application routes are not filesystem paths: only inspect relative references here.
+                  if value.startswith('/'): continue
+                  target=(p.parent/value).resolve()
+                  if root not in target.parents or not target.is_file():
+                      missing.append({'document':p.as_posix(),'reference':raw})
+          report={'schemaVersion':1,'repository':os.environ['GITHUB_REPOSITORY'],'sourceCommit':os.environ['GITHUB_SHA'],'checkedAt':datetime.now(timezone.utc).isoformat(),'scope':'git-tracked files only; historical chat completeness is not inferred','counts':dict(counts),'assetCount':len(assets),'assets':assets,'missingLocalReferences':missing,'declaredManifests':manifests}
+          # The central directory also checks anonymous HTTP behavior, never fetching private content with a token.
+          config=root/'projects/projects.json'
+          if config.exists():
+              checks=[]
+              for project in json.loads(config.read_text('utf-8')).get('projects',[]):
+                  for role in ('homeUrl','publicUrl','privateUrl'):
+                      address=project.get(role)
+                      if not address: continue
+                      result={'project':project.get('title'),'role':role,'url':address}
+                      try:
+                          request=urllib.request.Request(address,headers={'User-Agent':'softm-archive-audit/1.0'})
+                          with urllib.request.urlopen(request,timeout=20) as response:
+                              body=response.read(2000000).decode('utf-8',errors='replace')
+                              result.update(status=response.status,finalUrl=response.url)
+                              gate=bool(re.search(r'type\s*=\s*[\"\x27]password|authentication required|log in to vercel|로그인|접근 인증',body,re.I))
+                              result['authenticationScreenDetected']=gate
+                              result['interpretation']='login screen observed; post-login access not tested' if role=='privateUrl' and gate else 'anonymous content requires privacy review' if role=='privateUrl' else 'HTTP response observed; not a visual test'
+                      except urllib.error.HTTPError as error:
+                          result.update(status=error.code,interpretation='access blocked' if error.code in (401,403) else 'HTTP error')
+                      except Exception as error: result.update(status=None,error=type(error).__name__)
+                      checks.append(result)
+              report['directoryHttpChecks']=checks
+          out=root/'audit-result'; out.mkdir(exist_ok=True)
+          (out/'archive-audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a',encoding='utf-8') as f:
+              f.write('# Archive audit\n\nSource: `'+os.environ['GITHUB_SHA']+'`\n\n')
+              f.write(f'Actual tracked attachments: **{len(assets)}**. Broken relative attachment references: **{len(missing)}**.\n\n')
+              f.write('This is a repository inventory, not confirmation that all historical chat attachments were recovered. Authenticated playback still requires verification. The detailed artifact retains the visibility of this repository.\n')
+          print(json.dumps({'assetCount':len(assets),'counts':dict(counts),'missingRelativeReferences':len(missing)},ensure_ascii=False))
+          PY
+      - name: Retain audit in this repository only
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: archive-audit-${{ github.sha }}
+          path: audit-result/archive-audit.json
+          retention-days: 30
+          if-no-files-found: error
