@@ -12,6 +12,45 @@ jobs:
       - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 2
+      - name: Block accidental archive detail or media loss
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os, pathlib, subprocess, sys
+          media={'.jpg','.jpeg','.png','.webp','.gif','.avif','.heic','.heif','.svg','.mp4','.mov','.m4v','.webm','.m4a','.mp3','.wav','.aac','.ogg','.flac','.pdf','.docx','.xlsx','.hwp','.hwpx','.zip','.srt','.vtt'}
+          detail={'.html','.htm','.md'}
+          roots=('archive/','records/','reports/','public/archive/','private_assets/','private-assets/')
+          def names(ref=None):
+              if ref:
+                  try: raw=subprocess.check_output(['git','ls-tree','-r','--name-only','-z',ref])
+                  except subprocess.CalledProcessError: return []
+              else:
+                  raw=subprocess.check_output(['git','ls-files','-z'])
+              return [pathlib.PurePosixPath(p) for p in raw.decode(errors='replace').split('\0') if p]
+          prev=names('HEAD^')
+          if not prev:
+              print('No parent tree available; preservation comparison skipped.')
+              raise SystemExit(0)
+          cur=names()
+          def counts(items):
+              return {
+                  'media':sum(1 for p in items if p.suffix.lower() in media),
+                  'detail':sum(1 for p in items if p.suffix.lower() in detail and p.as_posix().startswith(roots)),
+              }
+          before,after=counts(prev),counts(cur)
+          removed=[p.as_posix() for p in prev if p not in set(cur) and (p.suffix.lower() in media or (p.suffix.lower() in detail and p.as_posix().startswith(roots)))]
+          if after['media'] < before['media'] or after['detail'] < before['detail']:
+              msg=subprocess.check_output(['git','log','-1','--pretty=%B']).decode(errors='replace')
+              if '[archive-remove-ok]' not in msg:
+                  print('::error::Archive preservation guard blocked this change.')
+                  print('Before:',before,'After:',after)
+                  print('Removed archive assets/details:')
+                  for p in removed[:200]: print(' -',p)
+                  print('Existing detailed HTML/MD and media must not be reduced during normal archive deployment.')
+                  sys.exit(1)
+          print('Archive preservation guard OK:',before,'→',after)
+          PY
       - name: Inventory actual attachments and validate local references
         shell: bash
         run: |
