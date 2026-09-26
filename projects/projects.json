@@ -14,7 +14,7 @@
       "homeUrl": "https://softm.github.io/hwagok-farm/",
       "publicUrl": "https://softm.github.io/hwagok-farm/",
       "privateUrl": "https://hwagok-farm-private.vercel.app/",
-      "pageCount": 20,
+      "pageCount": 21,
       "privatePageCount": 6,
       "latestTitle": "2026-09-24 북부 농업기계 임대사업소 관리기 임대·출고",
       "pageSelector": ".chat-card",
@@ -22,12 +22,12 @@
       "order": 10,
       "links": [
         {
-          "label": "2026-09-24 관리기 임대·출고",
-          "url": "https://softm.github.io/hwagok-farm/farm-machine-rental-20260924/"
+          "label": "2026-09-23 더덕 수확·씨앗 채취 아카이브",
+          "url": "https://softm.github.io/hwagok-farm/archive/deodeok-harvest-20260923/"
         },
         {
-          "label": "2026-09-23 더덕 수확·씨앗 채취",
-          "url": "https://softm.github.io/hwagok-farm/deodeok-harvest-20260923/"
+          "label": "2026-09-24 관리기 임대·출고",
+          "url": "https://softm.github.io/hwagok-farm/farm-machine-rental-20260924/"
         },
         {
           "label": "단골 들깨밭 살포",
@@ -46,7 +46,13 @@
           "url": "https://hwagok-clover-plan.softm.chatgpt.site"
         }
       ],
-      "archiveCheckedAt": "2026-09-26"
+      "archiveCheckedAt": "2026-09-26",
+      "archiveDeployment": true,
+      "archiveRoot": "archive",
+      "archiveUpdatedAt": "2026-09-26",
+      "archiveSource": "github-central-manifest",
+      "archiveMissingAssets": true,
+      "archiveStatus": "migration-active-assets-audit-pending"
     },
     {
       "repo": "gwangmyeong",
