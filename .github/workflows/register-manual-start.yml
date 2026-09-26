@@ -1,0 +1,139 @@
+name: Register and verify manual-start archive
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/register-manual-start.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: manual-start-directory-registration
+  cancel-in-progress: false
+jobs:
+  register:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify ten published images, documents, ZIP and farm home
+        run: |
+          python3 -u - <<'PY'
+          import hashlib,io,json,re,time,urllib.request,zipfile
+          from pathlib import Path
+          slug='cultivator-manual-start-20260922'
+          home='https://softm.github.io/hwagok-farm/'
+          root=home+'archive/'+slug+'/'
+          def get(url):
+              req=urllib.request.Request(url,headers={'Cache-Control':'no-cache','User-Agent':'HwagokArchiveVerification/1.0'})
+              with urllib.request.urlopen(req,timeout=45) as response:
+                  assert response.status==200,(url,response.status)
+                  return response.read()
+          last=None
+          for attempt in range(45):
+              try:
+                  manifest=json.loads(get(root+'image_manifest.json'))
+                  assert len(manifest['media'])==10
+                  for item in manifest['media']:
+                      data=get(root+item['file'])
+                      assert data.startswith(b'\x89PNG\r\n\x1a\n'),item['file']
+                      assert hashlib.sha256(data).hexdigest()==item['sha256'],item['file']
+                  page=get(root+'record.html').decode()
+                  assert len(re.findall(r'<img src="images/',page))==10
+                  assert '시동 후에는 초크를 열림' in page
+                  assert 'POKGZK2ds34' in page
+                  assert '웹 최적화본' in page
+                  md=get(root+'record.md').decode()
+                  assert len(re.findall(r'!\[',md))==10
+                  bundle=get(root+'manual-start-20260922-web.zip')
+                  with zipfile.ZipFile(io.BytesIO(bundle)) as z:
+                      assert len([n for n in z.namelist() if n.startswith('images/') and n.endswith('.png')])==10
+                      assert 'index.html' in z.namelist() and 'record.md' in z.namelist()
+                      for item in manifest['media']:
+                          assert hashlib.sha256(z.read(item['file'])).hexdigest()==item['sha256']
+                  index=get(home).decode()
+                  assert slug in index
+                  get(root)
+                  result={'slug':slug,'url':root,'html':root+'record.html','images':10,'imageType':'web-optimized derivatives','imageHashesVerified':True,'markdownVerified':True,'zipVerified':True,'farmHomeVerified':True,'pageCount':len(re.findall(r'<article[^>]*class="chat-card"',index))}
+                  Path('manual-start-verification.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+                  print(json.dumps(result,ensure_ascii=False,indent=2))
+                  break
+              except Exception as exc:
+                  last=exc
+                  print('Awaiting publication',attempt+1,str(exc),flush=True)
+                  time.sleep(15)
+          else:
+              raise RuntimeError('Manual-start public verification failed: '+str(last))
+          PY
+      - name: Merge the verified link into the latest directory without changing other projects
+        run: |
+          git pull --rebase origin main
+          python3 - <<'PY'
+          import json
+          from datetime import datetime
+          from pathlib import Path
+          from zoneinfo import ZoneInfo
+          path=Path('projects/projects.json')
+          data=json.loads(path.read_text())
+          receipt=json.loads(Path('manual-start-verification.json').read_text())
+          farm=next(p for p in data['projects'] if p.get('repo')=='hwagok-farm')
+          link={'label':'아세아 관리기 수동 시동·초크','url':receipt['url'],'visibility':'public','mediaStatus':'사진 10장 웹 최적화본·MD·HTML·ZIP 검증 완료'}
+          links=farm.setdefault('links',[])
+          found=next((x for x in links if x.get('url')==link['url']),None)
+          if found is None:
+              links.insert(0,link)
+          else:
+              found.update(link)
+          farm['pageCount']=max(farm.get('pageCount',0),receipt['pageCount'])
+          farm['manualStartArchive']={'url':receipt['url'],'status':'public-verified','imageCount':10,'imageType':'web-optimized','verifiedAt':datetime.now(ZoneInfo('Asia/Seoul')).isoformat(timespec='seconds')}
+          data['updatedAt']=datetime.now(ZoneInfo('Asia/Seoul')).date().isoformat()
+          path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+          receipt['directorySourceUpdated']=True
+          Path('projects/manual-start-verification.json').write_text(json.dumps(receipt,ensure_ascii=False,indent=2)+'\n')
+          PY
+          git add projects/projects.json projects/manual-start-verification.json
+          if ! git diff --cached --quiet; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git commit -m 'Add verified manual-start guide, ten images and downloads to farm directory'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - name: Request Pages rebuild from existing configured source
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 - <<'PY'
+          import os,urllib.request,urllib.error
+          url='https://api.github.com/repos/softm/softm.github.io/pages/builds'
+          request=urllib.request.Request(url,data=b'{}',method='POST',headers={'Authorization':'Bearer '+os.environ['GITHUB_TOKEN'],'Accept':'application/vnd.github+json','Content-Type':'application/json','X-GitHub-Api-Version':'2022-11-28'})
+          try:
+              with urllib.request.urlopen(request,timeout=30) as response:
+                  print('Pages rebuild requested:',response.status)
+          except urllib.error.HTTPError as error:
+              print('Pages rebuild response:',error.code,error.read().decode())
+          PY
+      - name: Verify the public top-level directory
+        run: |
+          python3 -u - <<'PY'
+          import json,time,urllib.request
+          url='https://softm.github.io/projects/projects.json'
+          for attempt in range(40):
+              try:
+                  request=urllib.request.Request(url+'?manual-start-check='+str(int(time.time())),headers={'Cache-Control':'no-cache'})
+                  with urllib.request.urlopen(request,timeout=30) as response:
+                      data=json.load(response)
+                  farm=next(p for p in data['projects'] if p.get('repo')=='hwagok-farm')
+                  assert any('cultivator-manual-start-20260922' in x.get('url','') for x in farm['links'])
+                  with urllib.request.urlopen('https://softm.github.io/projects/',timeout=30) as response:
+                      assert response.status==200
+                  print('PUBLIC DIRECTORY VERIFIED: https://softm.github.io/projects/ ; farm pageCount=',farm['pageCount'])
+                  break
+              except Exception as exc:
+                  print('Waiting for public directory',attempt+1,str(exc),flush=True)
+                  time.sleep(15)
+          else:
+              raise RuntimeError('Directory source committed but public publication not confirmed')
+          PY
