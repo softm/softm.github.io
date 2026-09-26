@@ -108,7 +108,7 @@
       "visibility": "mixed",
       "repoVisibility": "private",
       "deploymentStatus": "deployed",
-      "homeUrl": "https://ungdo-private.vercel.app/",
+      "homeUrl": "https://ungdo.softm.chatgpt.site",
       "publicUrl": "https://ungdo.softm.chatgpt.site",
       "privateUrl": "https://ungdo-private.vercel.app/",
       "pageCount": 2,
@@ -132,7 +132,9 @@
           "label": "66번지 2026-09-11 합의·공증 보강",
           "url": "https://ungdo-66-report-private.vercel.app/"
         }
-      ]
+      ],
+      "privateLiveSource": "softm/ungdo-private:main/live",
+      "privateLiveStatus": "source-ready-vercel-refresh-pending"
     },
     {
       "repo": "hwagok-land-permit-private",
@@ -210,12 +212,12 @@
       "order": 70
     },
     {
-      "repo": "baksok",
+      "repo": "baksok-public",
       "title": "서해박속낙지",
       "category": "수산·사업",
-      "description": "서해박속낙지 운영·구매·설비·세무 자료를 공개 GitHub Pages와 인증형 비공개 Vercel 아카이브로 관리합니다.",
+      "description": "서해박속낙지 공개 자료는 전용 공개 저장소를 Source of Truth로, 구매·배송·계약 등 비공개 운영자료는 인증형 Vercel에서 분리 관리합니다.",
       "visibility": "mixed",
-      "repoVisibility": "private",
+      "repoVisibility": "public",
       "deploymentStatus": "deployed",
       "homeUrl": "https://softm.github.io/baksok/",
       "publicUrl": "https://softm.github.io/baksok/",
@@ -234,10 +236,12 @@
           "url": "https://seohae-baksok-nakji.softm.chatgpt.site"
         }
       ],
-      "publicRepo": "softm/softm.github.io",
+      "publicRepo": "softm/baksok-public",
       "publicPath": "baksok/",
       "privateRepo": "softm/baksok-private",
-      "archiveCheckedAt": "2026-09-26"
+      "archiveCheckedAt": "2026-09-26",
+      "nextPublicUrl": "https://softm.github.io/baksok-public/",
+      "publicMigrationStatus": "pages-bootstrap-pending"
     },
     {
       "repo": "gyeongju-trip-map",
