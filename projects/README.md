@@ -42,6 +42,9 @@
 - PDF·문서·ZIP 등 기타 첨부파일이 있으면 실제 파일을 `files/`에 저장한다.
 - 확보되지 않은 원본 파일은 임의로 만들거나 있다고 표시하지 않는다.
 - 공개 아카이브는 해당 프로젝트의 공개 저장소를 원본으로 사용한다.
+- 비공개 아카이브는 `<project>-private` Private GitHub 저장소를 **유일한 원본(Source of Truth)** 으로 사용한다.
+- Vercel은 인증과 라우팅만 담당하고 `GITHUB_TOKEN`으로 GitHub의 최신 HTML·MD·이미지·첨부파일을 요청 시 읽어 제공한다.
+- `archive/**` 등 원본 콘텐츠는 `.vercelignore`로 Vercel 배포 번들에서 제외하여 Vercel에 별도 아카이브 사본을 만들지 않는다.
 - 비공개 아카이브는 `<project>-private` Private GitHub 저장소를 원본으로 사용한다.
 - 프로젝트 홈에서 채팅별 아카이브 페이지로 이동할 수 있어야 한다.
 - 배포와 같은 작업 단위에서 중앙 인덱스도 갱신한다.
