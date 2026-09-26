@@ -59,18 +59,20 @@
       "repo": "mine-private",
       "title": "나",
       "category": "개인 기록",
-      "description": "개인 기록을 채팅별 HTML·Markdown·실제 첨부 자산과 함께 아카이브하여 인증이 필요한 비공개 사이트에서 관리합니다.",
+      "description": "개인 기록을 채팅별 HTML·Markdown·실제 첨부 자산과 함께 GitHub 단일 원본으로 아카이브하고, Vercel 인증 서버가 GITHUB_TOKEN으로 최신 자료를 실시간 제공하도록 관리합니다.",
       "visibility": "private",
       "repoVisibility": "private",
       "deploymentStatus": "deployed",
       "homeUrl": "https://mine-private-sigma.vercel.app/",
       "privateUrl": "https://mine-private-sigma.vercel.app/",
-      "privatePageCount": 4,
+      "privatePageCount": 6,
       "latestTitle": "2026-09-04 온수힐스테이트 임대차 갱신계약 정리",
       "order": 30,
       "archiveDeployment": true,
       "archiveRoot": "archive",
-      "archiveUpdatedAt": "2026-09-26"
+      "archiveUpdatedAt": "2026-09-26",
+      "archiveSource": "github-live",
+      "archiveMissingAssets": true
     },
     {
       "repo": "onsuhill-private",
