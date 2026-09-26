@@ -1,6 +1,6 @@
 {
   "owner": "softm",
-  "updatedAt": "2026-09-18",
+  "updatedAt": "2026-09-26",
   "projectClickRule": "카드 또는 프로젝트 홈 버튼은 항상 해당 프로젝트의 홈 URL로 연결한다.",
   "projects": [
     {
@@ -59,15 +59,18 @@
       "repo": "mine-private",
       "title": "나",
       "category": "개인 기록",
-      "description": "개인 자산·성격·기질·건강·생활 기록을 인증이 필요한 비공개 사이트에서 관리합니다.",
+      "description": "개인 기록을 채팅별 HTML·Markdown·실제 첨부 자산과 함께 아카이브하여 인증이 필요한 비공개 사이트에서 관리합니다.",
       "visibility": "private",
       "repoVisibility": "private",
       "deploymentStatus": "deployed",
       "homeUrl": "https://mine-private-sigma.vercel.app/",
       "privateUrl": "https://mine-private-sigma.vercel.app/",
       "privatePageCount": 4,
-      "latestTitle": "인증 후 확인",
-      "order": 30
+      "latestTitle": "2026-09-04 온수힐스테이트 임대차 갱신계약 정리",
+      "order": 30,
+      "archiveDeployment": true,
+      "archiveRoot": "archive",
+      "archiveUpdatedAt": "2026-09-26"
     },
     {
       "repo": "onsuhill-private",
