@@ -1,0 +1,13 @@
+{
+  "archivedAt": "2026-09-26",
+  "page": "baksok/20260819_rir4000s_13ea/",
+  "status": "source-recovered-binary-push-pending",
+  "assets": [
+    {
+      "sourceFile": "1000065049.jpg",
+      "fileId": "file_0000000019a081f7a57c44af8af8077f",
+      "role": "기존 RIR-4000N 명판 근거 사진",
+      "target": "images/01_RIR4000N_명판.jpg"
+    }
+  ]
+}
