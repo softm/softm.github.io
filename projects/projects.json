@@ -1,224 +1,151 @@
 {
+  "schemaVersion": 2,
   "owner": "softm",
-  "updatedAt": "2026-09-04",
-  "projectClickRule": "카드 또는 프로젝트 홈 버튼은 항상 해당 프로젝트의 홈 URL로 연결한다.",
+  "updatedAt": "2026-09-26",
+  "auditVersion": "20260926-global-archive-v2",
+  "projectClickRule": "공개 프로젝트 홈 또는 해당 공개 저장소의 안내로 먼저 연결한다. 비공개 자료는 별도 인증 링크로 표시한다. 공개 안내가 없는 프로젝트는 그 상태를 명시한다.",
+  "archivePolicy": {
+    "name": "아카이브 배포",
+    "scope": "공개 배포와 비공개 배포를 포함하는 상위 개념",
+    "publicSource": "각 프로젝트의 공개 GitHub 저장소",
+    "privateSource": "각 프로젝트의 Private GitHub 저장소를 유일한 원본으로 사용",
+    "privateDelivery": "Vercel 서버에서 인증 후 GitHub 최신 원본을 요청 시 읽기",
+    "media": "사진·영상·음성·녹취·문서·ZIP 원본을 실제 파일로 보관하고 문서에서 연결",
+    "privacy": "공개 안내에 비공개 링크는 표시하되 원문·개인정보·비밀번호·토큰은 공개하지 않음",
+    "completion": "저장소 반영, 운영 배포, 인증, 직접 파일 접근, 미디어 표시·재생을 각각 검증"
+  },
+  "auditNotice": "12개 전체 등록 정보를 점검했습니다. 이번 변경을 전체 미디어 복구·전체 재배포 완료로 보지 않습니다. 아래 상태는 실제 확인 범위만 표시하며 페이지 수는 등록 수입니다.",
   "projects": [
     {
-      "repo": "hwagok-farm",
-      "title": "화곡농장",
-      "category": "농업",
-      "description": "농장 작업, 재배 계획, 농기계, 방제·관수와 수확 기록을 공개·비공개 페이지로 관리합니다.",
-      "visibility": "mixed",
-      "repoVisibility": "public",
-      "deploymentStatus": "deployed",
-      "homeUrl": "https://softm.github.io/hwagok-farm/",
-      "publicUrl": "https://softm.github.io/hwagok-farm/",
-      "privateUrl": "https://hwagok-farm-private.vercel.app/",
-      "pageCount": 15,
-      "privatePageCount": 4,
-      "latestTitle": "화곡농장 양파 구매처 조사",
-      "pageSelector": ".chat-card",
-      "titleSelector": ".chat-card h3",
-      "order": 10,
+      "repo": "hwagok-farm", "publicRepo": "hwagok-farm", "title": "화곡농장", "category": "농업",
+      "description": "농장 작업, 재배 계획, 농기계, 방제·관수와 수확 기록을 공개·비공개로 관리합니다.",
+      "visibility": "mixed", "repoVisibility": "public", "deploymentStatus": "partial",
+      "homeUrl": "https://softm.github.io/hwagok-farm/", "publicUrl": "https://softm.github.io/hwagok-farm/", "publicRepoUrl": "https://github.com/softm/hwagok-farm", "privateUrl": "https://hwagok-farm-private.vercel.app/", "authProvider": "vercel",
+      "pageCount": 21, "privatePageCount": 6, "latestTitle": "2026-09-24 농기계 임대·출고 기록", "pageSelector": ".chat-card", "titleSelector": ".chat-card h3", "order": 10,
+      "archiveDeployment": true, "archiveRoot": "archive", "archiveSource": "project-github", "archiveMissingAssets": true,
+      "auditStatus": "needs-review", "mediaStatus": "원본 누락 대조 필요", "deploymentNote": "공개·비공개 저장소에 실제 첨부 파일 검사 추가. 비공개 운영 재배포와 미디어 전체 대조는 미확인입니다.",
       "links": [
-        {
-          "label": "양파 구매처",
-          "url": "https://hwagok-onion-sourcing.softm.chatgpt.site"
-        },
-        {
-          "label": "농기계 임대·운반",
-          "url": "https://hwagok-farm-machine-rental.softm.chatgpt.site"
-        },
-        {
-          "label": "화이트클로버 파종",
-          "url": "https://hwagok-clover-plan.softm.chatgpt.site"
-        }
+        {"label":"더덕 수확·씨앗 채취", "url":"https://softm.github.io/hwagok-farm/archive/deodeok-harvest-20260923/", "visibility":"public"},
+        {"label":"관리기 임대·출고", "url":"https://softm.github.io/hwagok-farm/farm-machine-rental-20260924/", "visibility":"public"},
+        {"label":"단골 들깨밭 살포", "url":"https://softm.github.io/hwagok-farm/dangol-spray-20260811/", "visibility":"public"},
+        {"label":"기존 양파 구매처", "url":"https://hwagok-onion-sourcing.softm.chatgpt.site", "visibility":"public"},
+        {"label":"기존 농기계 임대·운반", "url":"https://hwagok-farm-machine-rental.softm.chatgpt.site", "visibility":"public"},
+        {"label":"기존 화이트클로버 파종", "url":"https://hwagok-clover-plan.softm.chatgpt.site", "visibility":"public"}
       ]
     },
     {
-      "repo": "gwangmyeong",
-      "title": "광명",
-      "category": "생활·주거",
-      "description": "광명 주거, 시설, 계량기와 생활 관련 기록을 채팅별 페이지로 관리합니다.",
-      "visibility": "public",
-      "repoVisibility": "public",
-      "deploymentStatus": "deployed",
-      "homeUrl": "https://softm.github.io/gwangmyeong/",
-      "publicUrl": "https://softm.github.io/gwangmyeong/",
-      "pageCount": 2,
-      "latestTitle": "광명 수도 계량기 현장점검 및 요금상담",
-      "pageSelector": ".card:not(.locked)",
-      "titleSelector": ".card:not(.locked) .title",
-      "order": 20
+      "repo": "gwangmyeong", "publicRepo":"gwangmyeong", "title":"광명", "category":"생활·주거",
+      "description":"광명 주거, 시설, 계량기와 생활 관련 공개 기록을 관리합니다.",
+      "visibility":"public", "repoVisibility":"public", "deploymentStatus":"unverified",
+      "homeUrl":"https://softm.github.io/gwangmyeong/", "publicUrl":"https://softm.github.io/gwangmyeong/", "publicRepoUrl":"https://github.com/softm/gwangmyeong",
+      "pageCount":2, "privatePageCount":0, "latestTitle":"수도 계량기 현장점검 및 요금상담", "pageSelector":".card:not(.locked)", "titleSelector":".card:not(.locked) .title", "order":20,
+      "auditStatus":"needs-review", "mediaStatus":"저장소 첨부 검사 추가", "deploymentNote":"실제 배포 브랜치 gh-pages에 첨부 검사 반영. 이번 운영 화면의 최신 반영 여부는 별도 확인이 필요합니다."
     },
     {
-      "repo": "mine-private",
-      "title": "나",
-      "category": "개인 기록",
-      "description": "개인 자산, 성격·기질·천성, 건강과 생활 기록을 인증이 필요한 비공개 사이트에서 관리합니다.",
-      "visibility": "private",
-      "repoVisibility": "private",
-      "deploymentStatus": "deployed",
-      "homeUrl": "https://mine-private-sigma.vercel.app/",
-      "privateUrl": "https://mine-private-sigma.vercel.app/",
-      "privatePageCount": 3,
-      "latestTitle": "인증 후 확인",
-      "order": 30
+      "repo":"mine-private", "publicRepo":"mine", "title":"나", "category":"개인 기록",
+      "description":"공개 안내에서 기록별 인증 링크를 제공하며 개인 원문과 첨부 원본은 비공개로 관리합니다.",
+      "visibility":"mixed", "repoVisibility":"private", "deploymentStatus":"partial",
+      "homeUrl":"https://github.com/softm/mine", "publicUrl":"https://softm.github.io/mine/", "publicRepoUrl":"https://github.com/softm/mine", "publicHomeStatus":"source-updated-web-unverified",
+      "privateUrl":"https://mine-private-sigma.vercel.app/", "authProvider":"vercel", "privateDeploymentStatus":"ready", "privateDeploymentCommit":"1df23a39cf818956642f6d8f6cc814af66c8feff",
+      "pageCount":0, "privatePageCount":6, "latestTitle":"비공개 기록 6개", "order":30,
+      "archiveDeployment":true, "archiveRoot":"archive", "archiveSource":"github-live", "archiveMissingAssets":true,
+      "auditStatus":"partial", "mediaStatus":"일부 사진 존재 · 전체 대조 미완료", "deploymentNote":"공개 홈 소스에 비공개 기록 6개의 인증 링크 추가. Vercel 운영 재배포 READY 확인. 인증 후 전체 미디어와 공개 웹 반영은 아직 검증하지 못했습니다."
     },
     {
-      "repo": "onsuhill-private",
-      "title": "온수힐",
-      "category": "주거·시설관리",
-      "description": "온수힐 임대차 및 시설물 수리·유지관리 기록을 비공개로 관리합니다.",
-      "visibility": "private",
-      "repoVisibility": "private",
-      "deploymentStatus": "deployed",
-      "homeUrl": "https://onsuhill-private.vercel.app/",
-      "privateUrl": "https://onsuhill-private.vercel.app/",
-      "privatePageCount": 2,
-      "latestTitle": "온수힐스테이트 임대차 갱신계약 정리",
-      "order": 35
+      "repo":"onsuhill-private", "title":"온수힐", "category":"주거·시설관리",
+      "description":"주거·시설관리 기록을 인증된 비공개 아카이브로 관리합니다.",
+      "visibility":"private", "repoVisibility":"private", "deploymentStatus":"unverified",
+      "privateUrl":"https://onsuhill-private.vercel.app/", "authProvider":"vercel", "publicHomeStatus":"missing",
+      "pageCount":0, "privatePageCount":2, "latestTitle":"비공개 기록 2개", "order":35,
+      "auditStatus":"needs-review", "mediaStatus":"저장소 첨부 검사 추가", "deploymentNote":"공개 안내 저장소·홈이 확인되지 않았습니다. 비공개 저장소 반영과 운영 재배포 여부를 구분하여 확인해야 합니다."
     },
     {
-      "repo": "yeonseo",
-      "title": "연서 교육",
-      "category": "자녀·교육",
-      "description": "연서의 학교 선택과 교육 관련 비교·판단 자료를 비공개로 관리합니다.",
-      "visibility": "private",
-      "repoVisibility": "private",
-      "deploymentStatus": "deployed",
-      "homeUrl": "https://yeonseo-middle-school-choice.softm.chatgpt.site",
-      "privateUrl": "https://yeonseo-middle-school-choice.softm.chatgpt.site",
-      "privatePageCount": 1,
-      "latestTitle": "새길중·옥길중 선택 보고서",
-      "order": 38
+      "repo":"yeonseo", "title":"연서 교육", "category":"자녀·교육",
+      "description":"상세 교육 자료는 비공개로 유지하며 공개 안내에는 접근 방법만 표시합니다.",
+      "visibility":"private", "repoVisibility":"private", "deploymentStatus":"pending",
+      "privateUrl":"https://yeonseo-middle-school-choice.softm.chatgpt.site", "authProvider":"chatgpt-legacy", "publicHomeStatus":"missing",
+      "pageCount":0, "privatePageCount":1, "latestTitle":"비공개 교육 기록", "order":38,
+      "auditStatus":"blocked", "mediaStatus":"기존 저장소 첨부 검사 추가", "deploymentNote":"현재 링크는 기존 ChatGPT Sites입니다. 인증된 Vercel 배포·공개 안내 저장소 연결이 아직 완료되지 않았습니다."
     },
     {
-      "repo": "ungdo-private",
-      "title": "웅도 토지·성토",
-      "category": "토지·농지",
-      "description": "서산시 웅도리 63-1·65·66번지의 경계침범, 성토, 인허가와 도로보상 자료를 비공개로 관리합니다.",
-      "visibility": "private",
-      "repoVisibility": "private",
-      "deploymentStatus": "deployed",
-      "homeUrl": "https://ungdo-private.vercel.app/",
-      "privateUrl": "https://ungdo-private.vercel.app/",
-      "privatePageCount": 4,
-      "latestTitle": "웅도리 66 현장·드론·방문 기록",
-      "order": 40,
-      "links": [
-        {
-          "label": "웅도 기록",
-          "url": "https://ungdo-land-records-private.softm.chatgpt.site"
-        },
-        {
-          "label": "웅도 프로젝트",
-          "url": "https://ungdo.softm.chatgpt.site"
-        },
-        {
-          "label": "웅도 토지 기록",
-          "url": "https://ungdo-land-records.softm.chatgpt.site"
-        }
+      "repo":"ungdo-private", "title":"웅도 토지·성토", "category":"토지·농지",
+      "description":"프로젝트의 공개 안내와 인증된 비공개 기록·관련 첨부 원본을 구분하여 관리합니다.",
+      "visibility":"mixed", "repoVisibility":"private", "deploymentStatus":"partial",
+      "homeUrl":"https://ungdo.softm.chatgpt.site", "publicUrl":"https://ungdo.softm.chatgpt.site", "publicHomeStatus":"legacy-no-public-repo",
+      "privateUrl":"https://ungdo-private.vercel.app/", "authProvider":"vercel", "privateDeploymentStatus":"ready", "privateDeploymentCommit":"812cc0857e6afc271863cd20606bd1a111957195",
+      "pageCount":2, "privatePageCount":9, "latestTitle":"비공개 미디어·기록 아카이브", "order":40, "archiveSource":"github-live",
+      "auditStatus":"partial", "mediaStatus":"사진·음성·영상 원본 대조 필요", "deploymentNote":"이번 커밋의 Vercel 운영 재배포 READY 확인. 전용 공개 GitHub 저장소는 검색 결과에서 확인되지 않았으며 전체 원본·재생 검증은 미완료입니다.",
+      "links":[
+        {"label":"기존 공개 토지 기록", "url":"https://ungdo-land-records.softm.chatgpt.site", "visibility":"public"},
+        {"label":"기존 비공개 현장 기록 · Vercel 아님", "url":"https://ungdo-land-records-private.softm.chatgpt.site", "visibility":"private", "authProvider":"chatgpt-legacy"},
+        {"label":"비공개 미디어 기록", "url":"https://ungdo-66-report-private.vercel.app/", "visibility":"private", "authProvider":"vercel"}
       ]
     },
     {
-      "repo": "hwagok-land-permit-private",
-      "title": "화곡리 개간허가",
-      "category": "토지·인허가",
-      "description": "서산시 대산읍 화곡리 산47-2·산47-3 개간허가, 측량, 수사·검찰 절차 자료를 비공개로 관리합니다.",
-      "visibility": "private",
-      "repoVisibility": "private",
-      "deploymentStatus": "deployed",
-      "homeUrl": "https://hwagok-land-permit-private.vercel.app/",
-      "privateUrl": "https://hwagok-land-permit-private.vercel.app/",
-      "privatePageCount": 2,
-      "latestTitle": "처벌·기소 가능성 및 사후 하도급계약서 검증",
-      "order": 50
-    },
-    {
-      "repo": "father-hospital-treatment-private",
-      "title": "아버지 병원 치료",
-      "category": "의료·보험",
-      "description": "병원 진료기록, 의무기록 정정, 보험 심사와 민원 자료를 비공개로 관리합니다.",
-      "visibility": "private",
-      "repoVisibility": "private",
-      "deploymentStatus": "deployed",
-      "homeUrl": "https://father-hospital-treatment-private.vercel.app/",
-      "privateUrl": "https://father-hospital-treatment-private.vercel.app/",
-      "privatePageCount": 3,
-      "latestTitle": "한국교직원공제회 보험금 심사 지연 민원",
-      "order": 60
-    },
-    {
-      "repo": "homecare-nationwide-care-services-map",
-      "title": "돌봄한눈·전국 요양기관",
-      "category": "생활·돌봄",
-      "description": "전국 주야간보호센터와 요양기관을 지도에서 검색·비교하고 공단 상세정보를 확인하는 공개 서비스입니다.",
-      "visibility": "public",
-      "repoVisibility": "public",
-      "deploymentStatus": "deployed",
-      "homeUrl": "https://homecare.designboard.net",
-      "publicUrl": "https://homecare.designboard.net",
-      "pageCount": 3,
-      "latestTitle": "전국 요양기관 통합지도 및 공단 상세 API",
-      "order": 65,
-      "links": [
-        {
-          "label": "공단 상세 API",
-          "url": "https://daycare-nhis-detail-api.softm.chatgpt.site"
-        },
-        {
-          "label": "주간보호 결정지원",
-          "url": "https://github.com/softm/homecare-dolbom-itda-daycare-finder"
-        }
+      "repo":"hwagok-land-permit-private", "publicRepo":"hwagok-land-permit", "title":"화곡리 개간허가", "category":"토지·인허가",
+      "description":"공개 프로젝트 안내와 인증된 비공개 문서·현장 자료를 구분하여 관리합니다.",
+      "visibility":"mixed", "repoVisibility":"private", "deploymentStatus":"pending",
+      "homeUrl":"https://github.com/softm/hwagok-land-permit", "publicRepoUrl":"https://github.com/softm/hwagok-land-permit", "publicHomeStatus":"source-created-web-unverified",
+      "privateUrl":"https://hwagok-land-permit-private.vercel.app/", "authProvider":"vercel", "privateDeploymentStatus":"error",
+      "pageCount":0, "privatePageCount":5, "latestTitle":"비공개 기록 5개", "order":50,
+      "auditStatus":"blocked", "mediaStatus":"원본·직접 파일 인증 대조 필요", "deploymentNote":"공개 안내 홈 소스 생성. Vercel 최신 배포에 다른 프로젝트 저장소 커밋이 표시되며 ERROR입니다. 저장소 연결 수정 및 정상 재배포가 필요합니다.",
+      "links":[
+        {"label":"비공개 아카이브", "url":"https://hwagok-land-permit-private.vercel.app/asset/archive-20260926.html", "visibility":"private", "authProvider":"vercel"},
+        {"label":"비공개 문서 보관", "url":"https://hwagok-land-permit-private.vercel.app/asset/appeals-20260922/staging.html", "visibility":"private", "authProvider":"vercel"}
       ]
     },
     {
-      "repo": "gyeongju-kim",
-      "title": "경주김씨",
-      "category": "가족·기록",
-      "description": "공개 프로젝트 저장소가 생성되었으며 웹 콘텐츠 배포를 준비 중입니다.",
-      "visibility": "public",
-      "repoVisibility": "public",
-      "deploymentStatus": "pending",
-      "pageCount": 0,
-      "latestTitle": "배포 준비 중",
-      "order": 70
+      "repo":"father-hospital-treatment-private", "publicRepo":"father-hospital-treatment", "title":"아버지 병원 치료", "category":"의료·보험",
+      "description":"공개 안내와 인증 링크만 제공합니다. 상세 의료·보험 원문과 첨부 원본은 비공개입니다.",
+      "visibility":"mixed", "repoVisibility":"private", "deploymentStatus":"pending",
+      "homeUrl":"https://github.com/softm/father-hospital-treatment", "publicRepoUrl":"https://github.com/softm/father-hospital-treatment", "publicHomeStatus":"source-created-web-unverified",
+      "privateUrl":"https://father-hospital-treatment-private.vercel.app/", "authProvider":"vercel", "privateDeploymentStatus":"not-triggered",
+      "pageCount":0, "privatePageCount":7, "latestTitle":"비공개 기록 7개", "order":60, "archiveDeployment":true,
+      "auditStatus":"blocked", "mediaStatus":"운영 원본 연결 확인 필요", "deploymentNote":"공개 안내 홈 소스 및 비공개 첨부 검사 반영. 이번 저장소 변경 이후 Vercel 새 배포가 조회되지 않았습니다. Git 연결 또는 운영 재배포가 필요합니다."
     },
     {
-      "repo": "seohae-nakji",
-      "title": "서해박속낙지",
-      "category": "수산·사업",
-      "description": "서해박속낙지 사업과 세무·매출 분석 자료를 비공개 사이트로 운영합니다.",
-      "visibility": "private",
-      "repoVisibility": "public",
-      "deploymentStatus": "deployed",
-      "homeUrl": "https://seohae-baksok-nakji.softm.chatgpt.site",
-      "privateUrl": "https://seohae-baksok-nakji.softm.chatgpt.site",
-      "privatePageCount": 2,
-      "latestTitle": "서해박속낙지 세무 및 매출 분석",
-      "order": 80,
-      "links": [
-        {
-          "label": "세무·매출 분석",
-          "url": "https://seohae-baksok-nakji-tax.softm.chatgpt.site"
-        }
+      "repo":"homecare-nationwide-care-services-map", "publicRepo":"homecare-nationwide-care-services-map", "title":"돌봄한눈·전국 요양기관", "category":"생활·돌봄",
+      "description":"전국 요양기관을 지도에서 검색·비교하는 공개 서비스입니다.",
+      "visibility":"public", "repoVisibility":"public", "deploymentStatus":"unverified",
+      "homeUrl":"https://homecare.designboard.net", "publicUrl":"https://homecare.designboard.net", "publicRepoUrl":"https://github.com/softm/homecare-nationwide-care-services-map",
+      "pageCount":3, "privatePageCount":0, "latestTitle":"전국 요양기관 통합지도", "order":65,
+      "auditStatus":"needs-review", "mediaStatus":"저장소 첨부 검사 추가", "deploymentNote":"공개 원본 저장소에 첨부 검사 반영. 기존 서비스 기능을 임의 변경하지 않았으며 최신 운영 재배포는 미확인입니다.",
+      "links":[
+        {"label":"공단 상세 API", "url":"https://daycare-nhis-detail-api.softm.chatgpt.site", "visibility":"public"},
+        {"label":"주간보호 결정지원", "url":"https://github.com/softm/homecare-dolbom-itda-daycare-finder", "visibility":"public"}
       ]
     },
     {
-      "repo": "gyeongju-trip-map",
-      "repoStatus": "missing",
-      "title": "용인·경주·이천 가족여행",
-      "category": "가족·여행",
-      "description": "2박 3일 가족여행 지도는 공개 배포됐지만 연결된 softm GitHub 저장소가 확인되지 않았습니다.",
-      "visibility": "public",
-      "repoVisibility": "missing",
-      "deploymentStatus": "deployed",
-      "homeUrl": "https://gyeongju-trip-map.softm.chatgpt.site",
-      "publicUrl": "https://gyeongju-trip-map.softm.chatgpt.site",
-      "pageCount": 1,
-      "latestTitle": "용인·경주·이천 2박 3일 가족여행",
-      "order": 90
+      "repo":"gyeongju-kim", "publicRepo":"gyeongju-kim", "title":"경주김씨", "category":"가족·기록",
+      "description":"기존 공개 저장소에 프로젝트 안내 홈을 생성했습니다. 원문 아카이브는 아직 등록되지 않았습니다.",
+      "visibility":"public", "repoVisibility":"public", "deploymentStatus":"pending",
+      "homeUrl":"https://github.com/softm/gyeongju-kim", "publicRepoUrl":"https://github.com/softm/gyeongju-kim", "publicHomeStatus":"source-created-web-unverified",
+      "pageCount":0, "privatePageCount":0, "latestTitle":"공개 안내 홈 소스 생성", "order":70,
+      "auditStatus":"blocked", "mediaStatus":"원본 자료 미등록", "deploymentNote":"공개 홈 소스는 생성됐으나 GitHub Pages 활성화·웹 배포와 원본 등록은 확인되지 않았습니다."
+    },
+    {
+      "repo":"baksok-public", "publicRepo":"baksok-public", "title":"서해박속낙지", "category":"수산·사업",
+      "description":"공개 프로젝트 안내에서 비공개 운영 기록으로 연결합니다. 비공개 원문과 첨부 원본은 인증 후 확인합니다.",
+      "visibility":"mixed", "repoVisibility":"public", "deploymentStatus":"partial",
+      "homeUrl":"https://softm.github.io/baksok-public/", "publicUrl":"https://softm.github.io/baksok-public/", "publicRepoUrl":"https://github.com/softm/baksok-public",
+      "privateUrl":"https://baksok-private.vercel.app/", "authProvider":"vercel", "privateDeploymentStatus":"ready", "privateDeploymentCommit":"e7e8acaa924d4e9bcc7ca927ce8cd4736fc29fe8", "anonymousAuthStatus":"login-screen-observed",
+      "pageCount":2, "privatePageCount":3, "latestTitle":"비공개 구매·배송 기록", "order":80,
+      "archiveSource":"github-live", "archiveMissingAssets":true, "auditStatus":"partial", "mediaStatus":"사진 원본 16장 회수 · GitHub 업로드 미완료",
+      "deploymentNote":"인증된 사진·영상·음성 스트리밍 및 직접 파일 경로 보호를 수정해 Vercel 운영 READY 확인. 저장소 검사에서 실제 미디어 0개를 확인했고, 누락 사진 16장은 회수했으나 아직 저장소에 반영하지 못했습니다.",
+      "links":[
+        {"label":"비공개 구매 기록", "url":"https://baksok-private.vercel.app/reports/20260909-furniture-gas/", "visibility":"private", "authProvider":"vercel"},
+        {"label":"비공개 배송 기록", "url":"https://baksok-private.vercel.app/reports/20260911-rir4000s-delivery/", "visibility":"private", "authProvider":"vercel"},
+        {"label":"비공개 운영 분석", "url":"https://baksok-private.vercel.app/reports/20260721-tax/", "visibility":"private", "authProvider":"vercel"}
+      ],
+      "legacyChatGPTSites":["https://seohae-baksok-nakji.softm.chatgpt.site","https://seohae-baksok-nakji-tax.softm.chatgpt.site"]
+    },
+    {
+      "repo":"gyeongju-trip-map", "repoStatus":"missing", "title":"용인·경주·이천 가족여행", "category":"가족·여행",
+      "description":"기존 가족여행 공개 지도입니다. GitHub 아카이브 원본 저장소가 연결되지 않았습니다.",
+      "visibility":"public", "repoVisibility":"missing", "deploymentStatus":"pending",
+      "homeUrl":"https://gyeongju-trip-map.softm.chatgpt.site", "publicUrl":"https://gyeongju-trip-map.softm.chatgpt.site", "publicHomeStatus":"legacy-no-repo",
+      "pageCount":1, "privatePageCount":0, "latestTitle":"기존 가족여행 지도", "order":90,
+      "auditStatus":"blocked", "mediaStatus":"원본 저장소 미연결", "deploymentNote":"기존 링크는 유지했습니다. 저장소가 확인되지 않아 이번 아카이브 재배포 완료로 처리하지 않았습니다."
     }
   ]
 }
