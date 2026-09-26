@@ -44,16 +44,16 @@
       "archiveMissingAssets": true,
       "auditStatus": "partial",
       "mediaStatus": "현재 Git 저장소: 이미지 100개 + ZIP 3개(총 미디어성 자산 103개), 상세 문서 44개",
-      "deploymentNote": "기존 23개 상세 기록과 실제 이미지·ZIP 자산은 저장소에 남아 있습니다. 중앙 목록에서 전체 상세 기록으로 다시 연결합니다. 더덕/관리기 임대 등 일부 영상 원본은 아직 Git 미반영 상태라 별도 복구 대상입니다.",
+      "deploymentNote": "기존 23개 상세 페이지를 중앙 목록에서 직접 연결하도록 복구했습니다. /archive 공통 경로도 얇은 요약을 표시하지 않고 기존 상세 본문·사진·영상 페이지로 이동하도록 수정했습니다. 일부 영상 원본 자체가 Git에 없는 기록은 별도 복구 대상입니다.",
       "links": [
         {
           "label": "2026-09-24 관리기 임대·출고",
-          "url": "https://softm.github.io/hwagok-farm/archive/farm-machine-rental-20260924/",
+          "url": "https://softm.github.io/hwagok-farm/farm-machine-rental-20260924/",
           "visibility": "public"
         },
         {
           "label": "2026-09-23 더덕 수확·씨앗 채취",
-          "url": "https://softm.github.io/hwagok-farm/archive/deodeok-harvest-20260923/",
+          "url": "https://softm.github.io/hwagok-farm/deodeok-harvest-20260923/",
           "visibility": "public"
         },
         {
@@ -68,97 +68,97 @@
         },
         {
           "label": "2026-09-14 공업용 선풍기 회전기어박스",
-          "url": "https://softm.github.io/hwagok-farm/archive/fan-gearbox-repair-20260914/",
+          "url": "https://softm.github.io/hwagok-farm/fan-gearbox-repair-20260914/",
           "visibility": "public"
         },
         {
           "label": "2026-09-07 벌초",
-          "url": "https://softm.github.io/hwagok-farm/archive/mowing-20260907/",
+          "url": "https://softm.github.io/hwagok-farm/mowing-20260907/",
           "visibility": "public"
         },
         {
           "label": "2026-09-05 화이트클로버 자동급수",
-          "url": "https://softm.github.io/hwagok-farm/archive/irrigation-20260905/",
+          "url": "https://softm.github.io/hwagok-farm/irrigation-20260905/",
           "visibility": "public"
         },
         {
           "label": "2026-08-30 들깨 정식",
-          "url": "https://softm.github.io/hwagok-farm/archive/perilla-transplant-20260830/",
+          "url": "https://softm.github.io/hwagok-farm/perilla-transplant-20260830/",
           "visibility": "public"
         },
         {
           "label": "2026-08-26 벌초",
-          "url": "https://softm.github.io/hwagok-farm/archive/mowing-20260826/",
+          "url": "https://softm.github.io/hwagok-farm/mowing-20260826/",
           "visibility": "public"
         },
         {
           "label": "2026-08-21 CCTV 인터넷 연결",
-          "url": "https://softm.github.io/hwagok-farm/archive/cctv-internet-20260821/",
+          "url": "https://softm.github.io/hwagok-farm/cctv-internet-20260821/",
           "visibility": "public"
         },
         {
           "label": "2026-08-20 스프링클러 나사 규격",
-          "url": "https://softm.github.io/hwagok-farm/archive/sprinkler-thread-20260820/",
+          "url": "https://softm.github.io/hwagok-farm/sprinkler-thread-20260820/",
           "visibility": "public"
         },
         {
           "label": "2026-08-13 농막 아랫밭 방제",
-          "url": "https://softm.github.io/hwagok-farm/archive/spray-record-20260813/",
+          "url": "https://softm.github.io/hwagok-farm/spray-record-20260813/",
           "visibility": "public"
         },
         {
           "label": "2026-08-11 단골 들깨밭 살포",
-          "url": "https://softm.github.io/hwagok-farm/archive/dangol-spray-20260811/",
+          "url": "https://softm.github.io/hwagok-farm/dangol-spray-20260811/",
           "visibility": "public"
         },
         {
           "label": "2026-08-11 박 수확 · 사진 53장",
-          "url": "https://softm.github.io/hwagok-farm/archive/20260811-gourd-harvest/",
+          "url": "https://softm.github.io/hwagok-farm/20260811-gourd-harvest/",
           "visibility": "public"
         },
         {
           "label": "2026-08-11 양파 구입·저온창고 보관",
-          "url": "https://softm.github.io/hwagok-farm/archive/onion-purchase-20260811/",
+          "url": "https://softm.github.io/hwagok-farm/onion-purchase-20260811/",
           "visibility": "public"
         },
         {
           "label": "2026-08-10 양파 구매처 조사",
-          "url": "https://softm.github.io/hwagok-farm/archive/onion-sourcing-20260810/",
+          "url": "https://softm.github.io/hwagok-farm/onion-sourcing-20260810/",
           "visibility": "public"
         },
         {
           "label": "2026-08-07 농막 그늘막",
-          "url": "https://softm.github.io/hwagok-farm/archive/shade-net-20260807/",
+          "url": "https://softm.github.io/hwagok-farm/shade-net-20260807/",
           "visibility": "public"
         },
         {
           "label": "2026-07-11 냉동고 전기 증설",
-          "url": "https://softm.github.io/hwagok-farm/archive/freezer-electric-20260711/",
+          "url": "https://softm.github.io/hwagok-farm/freezer-electric-20260711/",
           "visibility": "public"
         },
         {
           "label": "2026-07-11 농막 차양막 시정조치",
-          "url": "https://softm.github.io/hwagok-farm/archive/farm-awning-repair-20260711/",
+          "url": "https://softm.github.io/hwagok-farm/farm-awning-repair-20260711/",
           "visibility": "public"
         },
         {
           "label": "2026-07-05 들깨·열무 밑거름",
-          "url": "https://softm.github.io/hwagok-farm/archive/fertilizer-plan/",
+          "url": "https://softm.github.io/hwagok-farm/fertilizer-plan/",
           "visibility": "public"
         },
         {
           "label": "2026-05-27 모스킬 방제",
-          "url": "https://softm.github.io/hwagok-farm/archive/moskill-20260527/",
+          "url": "https://softm.github.io/hwagok-farm/moskill-20260527/",
           "visibility": "public"
         },
         {
           "label": "화이트클로버 파종계획",
-          "url": "https://softm.github.io/hwagok-farm/archive/white-clover/",
+          "url": "https://softm.github.io/hwagok-farm/white-clover/",
           "visibility": "public"
         },
         {
           "label": "농기계 임대·운반 서비스",
-          "url": "https://softm.github.io/hwagok-farm/archive/farm-machine-rental/",
+          "url": "https://softm.github.io/hwagok-farm/farm-machine-rental/",
           "visibility": "public"
         }
       ],
