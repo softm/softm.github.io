@@ -181,7 +181,7 @@
       "description": "비공개 의료·보험 자료 아카이브입니다. 상세 내용은 인증 후 확인할 수 있습니다.",
       "visibility": "private",
       "repoVisibility": "private",
-      "deploymentStatus": "deployed",
+      "deploymentStatus": "pending",
       "homeUrl": "https://father-hospital-treatment-private.vercel.app/",
       "privateUrl": "https://father-hospital-treatment-private.vercel.app/",
       "privatePageCount": 7,
@@ -192,7 +192,9 @@
       "archiveDeployment": true,
       "pageCount": 0,
       "latestDate": "2026-09-23",
-      "updatedAt": "2026-09-26"
+      "updatedAt": "2026-09-26",
+      "deploymentNote": "GitHub archive source updated 2026-09-26; Vercel production is still the previous build and requires one-time production redeploy/reconnection.",
+      "sourceCommit": "2c681aa9e8f3287b309c553759513c9842bd0be1"
     },
     {
       "repo": "homecare-nationwide-care-services-map",
