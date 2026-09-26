@@ -1,0 +1,13 @@
+name: All project directory audit
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'projects/**'
+      - '.github/workflows/archive-directory-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  archive-audit:
+    uses: softm/softm.github.io/.github/workflows/archive-audit-reusable.yml@8cb5321c4af1c8d7b7fd750c3c09aab8399c28ee
