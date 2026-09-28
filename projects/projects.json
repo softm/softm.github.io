@@ -242,7 +242,7 @@
       "archiveMissingAssets": true,
       "auditStatus": "deployed",
       "mediaStatus": "인증 후 상세 HTML·MD 6건과 실제 이미지 4개 보존. 과거 확인된 일부 의료/보험 이미지 원본은 추가 복구 필요",
-      "deploymentNote": "2026-09-27 전체 재배포 트리거 후 Vercel production READY 확인. 공개 안내와 비공개 인증 링크 구조 유지.",
+      "deploymentNote": "비공개 홈과 상세 6건 모두 GitHub Private 원본을 Vercel 인증 후 실시간 제공. 중앙 공개 목록에는 민감한 제목을 노출하지 않고 인증 링크만 표시.",
       "storedAssets": {
         "files": 40,
         "documents": 19,
@@ -251,7 +251,45 @@
         "audio": 0,
         "pdf": 0,
         "zip": 0
-      }
+      },
+      "links": [
+        {
+          "label": "비공개 상세 기록 01",
+          "url": "https://mine-private-sigma.vercel.app/archive/20260806-right-index-laceration/",
+          "visibility": "private",
+          "authProvider": "vercel"
+        },
+        {
+          "label": "비공개 상세 기록 02",
+          "url": "https://mine-private-sigma.vercel.app/archive/20260810-medical-referral/",
+          "visibility": "private",
+          "authProvider": "vercel"
+        },
+        {
+          "label": "비공개 상세 기록 03",
+          "url": "https://mine-private-sigma.vercel.app/archive/20260812-farmer-safety-insurance/",
+          "visibility": "private",
+          "authProvider": "vercel"
+        },
+        {
+          "label": "비공개 상세 기록 04",
+          "url": "https://mine-private-sigma.vercel.app/archive/20260819-all-i-have/",
+          "visibility": "private",
+          "authProvider": "vercel"
+        },
+        {
+          "label": "비공개 상세 기록 05",
+          "url": "https://mine-private-sigma.vercel.app/archive/20260903-health-checkup-insurance/",
+          "visibility": "private",
+          "authProvider": "vercel"
+        },
+        {
+          "label": "비공개 상세 기록 06",
+          "url": "https://mine-private-sigma.vercel.app/archive/20260904-onsu-hill-renewal/",
+          "visibility": "private",
+          "authProvider": "vercel"
+        }
+      ]
     },
     {
       "repo": "onsuhill-private",
@@ -629,29 +667,36 @@
       "archiveSource": "github-live",
       "archiveMissingAssets": true,
       "auditStatus": "partial",
-      "mediaStatus": "상세 비공개 HTML 3건은 보존. 회수한 원본 사진 16개가 현재 Git에 아직 미반영되어 복구 대상",
-      "deploymentNote": "2026-09-27 공개·비공개 저장소 재배포 트리거 및 baksok-private production READY 확인. 회수 사진 16장 원본은 현재 세션의 GitHub 바이너리 업로드 제약 때문에 아직 private 저장소에 반영되지 않아 별도 표시.",
+      "mediaStatus": "상세 비공개 HTML 3건 + 회수 사진 16장의 갤러리 구조 복원. 사진 바이너리 16개는 GitHub 업로드 대기",
+      "deploymentNote": "2026-09-28 9/9 사진 7장·9/11 사진 9장의 갤러리 HTML과 기존 상세 보고서 연결을 Private Git에 복원했고 Vercel 새 배포가 생성됨. 이미지 원본 바이너리 자체 업로드는 연결 도구 제약으로 남아 있음.",
       "links": [
         {
-          "label": "RIR-4000S 13대 교체 공개 기록",
-          "url": "https://softm.github.io/baksok-public/20260819_rir4000s_13ea/",
-          "visibility": "public"
-        },
-        {
-          "label": "비공개 세무·매출 분석",
-          "url": "https://baksok-private.vercel.app/reports/20260721-tax/",
-          "visibility": "private",
-          "authProvider": "vercel"
-        },
-        {
-          "label": "비공개 이가구 계약·가스설비",
+          "label": "비공개 구매·계약 상세",
           "url": "https://baksok-private.vercel.app/reports/20260909-furniture-gas/",
           "visibility": "private",
           "authProvider": "vercel"
         },
         {
-          "label": "비공개 RIR-4000S 배송 기록",
+          "label": "9/9 회수 사진 갤러리",
+          "url": "https://baksok-private.vercel.app/reports/20260909-furniture-gas/media-gallery.html",
+          "visibility": "private",
+          "authProvider": "vercel"
+        },
+        {
+          "label": "비공개 배송 상세",
           "url": "https://baksok-private.vercel.app/reports/20260911-rir4000s-delivery/",
+          "visibility": "private",
+          "authProvider": "vercel"
+        },
+        {
+          "label": "9/11 회수 사진 갤러리",
+          "url": "https://baksok-private.vercel.app/reports/20260911-rir4000s-delivery/media-gallery.html",
+          "visibility": "private",
+          "authProvider": "vercel"
+        },
+        {
+          "label": "비공개 운영 분석",
+          "url": "https://baksok-private.vercel.app/reports/20260721-tax/",
           "visibility": "private",
           "authProvider": "vercel"
         }
