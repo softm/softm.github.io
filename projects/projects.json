@@ -317,39 +317,69 @@
       "description": "프로젝트의 공개 안내와 인증된 비공개 기록·관련 첨부 원본을 구분하여 관리합니다.",
       "visibility": "mixed",
       "repoVisibility": "private",
-      "deploymentStatus": "deployed",
+      "deploymentStatus": "deploying-detailed-links",
       "homeUrl": "https://ungdo.softm.chatgpt.site",
       "publicUrl": "https://ungdo.softm.chatgpt.site",
       "publicHomeStatus": "legacy-no-public-repo",
       "privateUrl": "https://ungdo-private.vercel.app/",
       "authProvider": "vercel",
       "privateDeploymentStatus": "ready",
-      "privateDeploymentCommit": "a410de78544572c744a0eb8fda1aa77d69100372",
+      "privateDeploymentCommit": "79fb62dcdc5c230350450d36f7afb0c6fe7c493e",
       "pageCount": 2,
       "privatePageCount": 9,
       "latestTitle": "비공개 미디어·기록 아카이브",
       "order": 40,
       "archiveSource": "github-live",
-      "auditStatus": "deployed",
-      "mediaStatus": "Private Git에 사진 25개·영상 1개·상세 문서/녹취 텍스트 20개 보존",
-      "deploymentNote": "2026-09-27 전체 재배포 트리거 후 Vercel production READY 확인. 비공개 원본은 GitHub live 구조 유지.",
+      "auditStatus": "deployed-detail-restored",
+      "mediaStatus": "Private Git 원본 유지 · 사진 25개·영상 1개·상세 미디어 보고서·녹취 5건을 인증 후 직접 열도록 복원",
+      "deploymentNote": "2026-09-28 프로젝트 홈에 원본 동영상, 공증 상세 미디어 보고서, Markdown, 녹취 5건을 직접 연결. GitHub-live 인증 경로를 확장했고 Vercel 새 배포가 생성됨.",
       "links": [
+        {
+          "label": "63-1·66 관련 종합 기록",
+          "url": "https://ungdo-private.vercel.app/ungdo-case",
+          "visibility": "private",
+          "authProvider": "vercel"
+        },
+        {
+          "label": "웅도리 66 현장·드론·방문 기록",
+          "url": "https://ungdo-private.vercel.app/ungdo-66-field-record",
+          "visibility": "private",
+          "authProvider": "vercel"
+        },
+        {
+          "label": "66 원상복구·우량농지 조성 기록",
+          "url": "https://ungdo-private.vercel.app/ungdo-66-restoration-agreement",
+          "visibility": "private",
+          "authProvider": "vercel"
+        },
+        {
+          "label": "66번지 배수시설 관련 기록",
+          "url": "https://ungdo-private.vercel.app/ungdo-66-sewer-pipe",
+          "visibility": "private",
+          "authProvider": "vercel"
+        },
+        {
+          "label": "현장 원본 동영상",
+          "url": "https://ungdo-private.vercel.app/media/KakaoTalk_Video_2026-09-01-22-35-25.mp4",
+          "visibility": "private",
+          "authProvider": "vercel"
+        },
+        {
+          "label": "공증 상세 미디어 보고서",
+          "url": "https://ungdo-private.vercel.app/live/records/20260911-notarization/deployed-media-report.html",
+          "visibility": "private",
+          "authProvider": "vercel"
+        },
+        {
+          "label": "공증 정리 Markdown",
+          "url": "https://ungdo-private.vercel.app/live/records/20260911-notarization/report.md",
+          "visibility": "private",
+          "authProvider": "vercel"
+        },
         {
           "label": "기존 공개 토지 기록",
           "url": "https://ungdo-land-records.softm.chatgpt.site",
           "visibility": "public"
-        },
-        {
-          "label": "기존 비공개 현장 기록 · Vercel 아님",
-          "url": "https://ungdo-land-records-private.softm.chatgpt.site",
-          "visibility": "private",
-          "authProvider": "chatgpt-legacy"
-        },
-        {
-          "label": "비공개 미디어 기록",
-          "url": "https://ungdo-66-report-private.vercel.app/",
-          "visibility": "private",
-          "authProvider": "vercel"
         }
       ],
       "storedAssets": {
