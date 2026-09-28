@@ -268,9 +268,9 @@
       "privatePageCount": 2,
       "latestTitle": "비공개 기록 2개",
       "order": 35,
-      "auditStatus": "partial",
-      "mediaStatus": "비공개 상세 HTML과 증빙 이미지 1개 보존",
-      "deploymentNote": "2026-09-27 저장소 재배포 트리거 커밋 반영. 기존 Vercel production READY 배포는 있으나 새 Git 커밋 기준 자동 배포는 생성되지 않아 Git 연결/배포 훅 확인 필요.",
+      "auditStatus": "source-detail-restored-deploy-pending",
+      "mediaStatus": "비공개 상세 기록 6개 + LED 수리 증빙 이미지 1개. 증빙 이미지를 인증 API 경로로 연결 완료",
+      "deploymentNote": "2026-09-28 LED 수리 상세 페이지에 실제 증빙 이미지를 인증 후 제공하도록 소스 복원. Vercel 프로젝트는 기존 READY 배포만 있고 새 Git 커밋 자동배포가 발생하지 않아 운영 반영 대기.",
       "privateDeploymentStatus": "not-triggered",
       "storedAssets": {
         "files": 9,
@@ -280,7 +280,45 @@
         "audio": 0,
         "pdf": 0,
         "zip": 0
-      }
+      },
+      "links": [
+        {
+          "label": "온수힐 비공개 프로젝트 홈",
+          "url": "https://onsuhill-private.vercel.app/",
+          "visibility": "private",
+          "authProvider": "vercel"
+        },
+        {
+          "label": "임대차 갱신계약 전체 정리",
+          "url": "https://onsuhill-private.vercel.app/api/site?route=renewal",
+          "visibility": "private",
+          "authProvider": "vercel"
+        },
+        {
+          "label": "생성 문서 및 계약서 작성본",
+          "url": "https://onsuhill-private.vercel.app/api/site?route=documents",
+          "visibility": "private",
+          "authProvider": "vercel"
+        },
+        {
+          "label": "세입자 문자·전화 대응",
+          "url": "https://onsuhill-private.vercel.app/api/site?route=messages",
+          "visibility": "private",
+          "authProvider": "vercel"
+        },
+        {
+          "label": "욕실·보일러 수선 이슈",
+          "url": "https://onsuhill-private.vercel.app/api/site?route=facilities",
+          "visibility": "private",
+          "authProvider": "vercel"
+        },
+        {
+          "label": "LED 수리 기록·증빙",
+          "url": "https://onsuhill-private.vercel.app/api/site?route=led-repair",
+          "visibility": "private",
+          "authProvider": "vercel"
+        }
+      ]
     },
     {
       "repo": "yeonseo",
