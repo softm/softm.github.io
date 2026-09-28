@@ -487,9 +487,9 @@
       "privatePageCount": 5,
       "latestTitle": "비공개 기록 5개",
       "order": 50,
-      "auditStatus": "blocked",
-      "mediaStatus": "Private Git에 이미지/미리보기 18개·PDF 5개·상세 문서 15개 보존. Vercel Git 연결 오류로 운영 화면에서 누락되어 보임",
-      "deploymentNote": "2026-09-27 재배포 시 Vercel 프로젝트가 hwagok-land-permit-private가 아니라 hwagok-farm-private Git 저장소를 추적하는 것이 재확인됨. 새 farm 커밋으로 ERROR 배포가 생성되어 Git 연결 정정이 필요.",
+      "auditStatus": "source-detail-restored-vercel-mislinked",
+      "mediaStatus": "Private Git 상세문서 8개·이미지/미리보기 18개·PDF 5개를 전체자료 인덱스로 연결 완료",
+      "deploymentNote": "2026-09-28 Private Git 내부 전체자료 인덱스와 프로젝트 홈 연결을 복원. 그러나 Vercel hwagok-land-permit-private는 여전히 hwagok-farm-private를 추적해 ERROR이므로 운영 반영은 차단 상태.",
       "links": [
         {
           "label": "비공개 아카이브",
