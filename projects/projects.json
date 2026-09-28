@@ -1,8 +1,8 @@
 {
   "schemaVersion": 2,
   "owner": "softm",
-  "updatedAt": "2026-09-27",
-  "auditVersion": "20260927-restore-detailed-archive-v4",
+  "updatedAt": "2026-09-28",
+  "auditVersion": "20260928-medical-finder-mvp-v1",
   "projectClickRule": "공개 프로젝트 홈 또는 해당 공개 저장소의 안내로 먼저 연결한다. 비공개 자료는 별도 인증 링크로 표시한다. 공개 안내가 없는 프로젝트는 그 상태를 명시한다.",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -476,6 +476,32 @@
         "files": 63979,
         "documents": 32222,
         "images": 12,
+        "videos": 0,
+        "audio": 0,
+        "pdf": 0,
+        "zip": 0
+      }
+    },
+    {
+      "repo": "medical-finder",
+      "title": "메디찾기 · 병원·약국·비급여",
+      "category": "보건·의료",
+      "description": "공공데이터를 기반으로 병원·약국 탐색, 비급여 가격 비교, 응급·야간 행동 안내, 건강검진 조건 검색을 통합하는 서비스입니다.",
+      "visibility": "private",
+      "repoVisibility": "private",
+      "deploymentStatus": "source-updated-web-not-deployed",
+      "publicHomeStatus": "missing",
+      "pageCount": 0,
+      "privatePageCount": 1,
+      "latestTitle": "2026-09-28 MVP UI/UX · 공공데이터 연동 설계",
+      "order": 66,
+      "auditStatus": "partial",
+      "mediaStatus": "MVP 코드 4개 + 기획·데이터·API 문서 4개를 Private GitHub에 저장",
+      "deploymentNote": "2026-09-28 softm/medical-finder Private 저장소에 MVP 소스와 기획 문서를 반영했습니다. 현재 저장소명이 비공개 규칙의 *-private 형식과 다르고 Vercel 인증 운영 URL이 아직 없어 웹 배포 완료로 처리하지 않습니다.",
+      "storedAssets": {
+        "files": 9,
+        "documents": 4,
+        "images": 0,
         "videos": 0,
         "audio": 0,
         "pdf": 0,
