@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "dateMeaning": "original-chat-authored-date",
+  "timezone": "Asia/Seoul",
+  "entries": {
+    "https://hwagok-farm-private.vercel.app/records/20260812-nh-farm-safety-insurance": {"chatCreatedAt":"2026-08-12","chatTitle":"농업인 안전보험 가입정보","dateSource":"project-conversation-created-at"},
+    "https://mine-private-sigma.vercel.app/archive/20260810-medical-referral": {"chatCreatedAt":"2026-08-10","chatTitle":"진료의뢰서 내용 요약","dateSource":"project-conversation-created-at"},
+    "https://mine-private-sigma.vercel.app/archive/20260812-farmer-safety-insurance": {"chatCreatedAt":"2026-08-12","chatTitle":"농업인 안전보험 가입정보","dateSource":"project-conversation-created-at"},
+    "https://mine-private-sigma.vercel.app/archive/20260819-all-i-have": {"chatCreatedAt":"2026-08-19","userTitle":"내가 가진 모든 것","dateSource":"project-conversation-created-at","titleSource":"user"},
+    "https://mine-private-sigma.vercel.app/archive/20260903-health-checkup-insurance": {"chatCreatedAt":"2026-08-28","chatTitle":"건강검진 연세수내과","dateSource":"project-conversation-created-at","eventDate":"2026-09-03"},
+    "https://softm.github.io/hwagok-farm/fertilizer-plan": {"chatCreatedAt":"2026-07-03","chatTitle":"지선이밭 아랫밭 맞춤 18호 비료 사용법","dateSource":"project-conversation-created-at","eventDate":"2026-07-05"},
+    "https://softm.github.io/hwagok-farm/archive/cultivator-manual-start-20260922": {"chatCreatedAt":"2026-09-22","chatTitle":"관리기 수동시동","dateSource":"conversation-created-at"},
+    "https://softm.github.io/hwagok-farm/archive/asea-engine-stop-20260922": {"chatCreatedAt":"2026-09-22","chatTitle":"관리기 엔진정지","dateSource":"conversation-created-at"},
+    "https://softm.github.io/hwagok-farm/fan-gearbox-repair-20260914": {"chatCreatedAt":"2026-09-06","chatTitle":"선풍기 기어박스 수리 안내","dateSource":"conversation-created-at"},
+    "https://softm.github.io/hwagok-farm/deodeok-harvest-20260923": {"chatCreatedAt":"2026-09-24","chatTitle":"화곡농장 더덕수확과 씨앗채취","dateSource":"conversation-created-at","eventDate":"2026-09-23"},
+    "https://baksok-private.vercel.app/reports/20260909-furniture-gas": {"chatCreatedAt":"2026-09-09","chatTitle":"불판 탁자 이가구 계약 배송 & 린나이 RIR4000s 구매","dateSource":"conversation-created-at"},
+    "https://baksok-private.vercel.app/reports/20260911-rir4000s-delivery": {"chatCreatedAt":"2026-09-11","chatTitle":"서해박속낙지 RIR4000S 5대 배송완료","dateSource":"conversation-created-at"},
+    "https://father-hospital-treatment-private.vercel.app/archive/20260923-seosan-medical-record-ha-correction": {"chatCreatedAt":"2026-09-24","chatTitle":"서산의료원 진료기록 발급 정정 요청","dateSource":"conversation-created-at","eventDate":"2026-09-23"}
+  }
+}
