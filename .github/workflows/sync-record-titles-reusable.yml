@@ -27,7 +27,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Fetch a pinned public title policy and the tested title-only processor
+      - name: Fetch pinned title-only processors and public canonical metadata
         env:
           TITLE_TOOLS: ${{ runner.temp }}/title-tools
         run: |
@@ -45,14 +45,16 @@ jobs:
               (target/name).write_bytes(get(f'https://raw.githubusercontent.com/softm/softm.github.io/{revision}/projects/{name}'))
           (target/'revision.txt').write_text(revision)
           (target/'sync-titles.cjs').write_bytes(get('https://raw.githubusercontent.com/softm/softm.github.io/bdde9c857a61f66dbf8b15f5b47530e1fcfb6605/projects/sync-titles.cjs'))
+          (target/'title-adapters.cjs').write_bytes(get('https://raw.githubusercontent.com/softm/softm.github.io/7daeec72af6be0875b152b3c4dc662e35dfcf3b6/projects/title-adapters.cjs'))
           PY
           npm install --prefix "$TITLE_TOOLS/parser" --no-package-lock --ignore-scripts --no-audit --no-fund typescript@5.9.3
-      - name: Audit all registered records for this repository and align only titles
+      - name: Align only titles and verify known query and private-view route mappings
         env:
           TITLE_TOOLS: ${{ runner.temp }}/title-tools
           TYPESCRIPT_PATH: ${{ runner.temp }}/title-tools/parser/node_modules/typescript
         run: |
           node "$TITLE_TOOLS/sync-titles.cjs" --repo "$GITHUB_REPOSITORY" --central "$TITLE_TOOLS" --revision "$(cat "$TITLE_TOOLS/revision.txt")" --apply
+          node "$TITLE_TOOLS/title-adapters.cjs"
       - name: Commit only enumerated title changes, preserving all other files
         env:
           SOURCE_BRANCH: ${{ inputs.source_branch }}
