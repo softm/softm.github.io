@@ -8,6 +8,9 @@ on:
       - projects/project-home.js
       - projects/project-home.css
       - projects/project-home.test.cjs
+      - projects/view-controls.js
+      - projects/view-controls.css
+      - projects/view-controls.test.cjs
       - projects/chat-metadata.json
       - projects/projects.json
       - .github/workflows/publish-project-homes.yml

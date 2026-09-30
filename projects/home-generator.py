@@ -9,13 +9,14 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '20260930-project-browser-v5'
+VERSION = '20260930-project-browser-icons-v6'
 
 def frame(title: str, canonical: str, project: str = '') -> str:
     e = lambda value: html.escape(str(value), quote=True)
-    return f'''<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><meta name="description" content="{e(title)} 기록 검색 · 카드·목록·표·갤러리 보기와 날짜·제목·자료 수 정렬"><link rel="canonical" href="{e(canonical)}"><title>{e(title)} · SOFTM</title><link rel="stylesheet" href="/projects/project-home.css?v={VERSION}"><script src="/projects/project-home.js?v={VERSION}" defer></script></head><body data-home-version="{VERSION}" data-project="{e(project)}"><header class="hero"><div class="wrap"><a id="back" href="/projects/" hidden>← 전체 프로젝트</a><p class="eyebrow">SOFTM / PROJECTS</p><h1 id="title">{e(title)}</h1><p id="lead">기록과 자료를 찾아보세요.</p></div></header><main id="app" class="wrap"><p>목록을 읽는 중입니다.</p></main><noscript><p class="wrap">목록을 표시하려면 JavaScript가 필요합니다. <a href="https://github.com/softm/softm.github.io/blob/main/projects/projects.json">등록 정보 보기</a></p></noscript><footer class="wrap"><a href="/projects/">전체 프로젝트</a> · <a href="/projects/PROJECT-HOME-POLICY.md">공개·비공개 자료 안내</a></footer></body></html>'''
+    return f'''<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><meta name="description" content="{e(title)} 기록 검색 · 카드·목록·표·갤러리 보기와 날짜·제목·자료 수 정렬"><link rel="canonical" href="{e(canonical)}"><title>{e(title)} · SOFTM</title><link rel="stylesheet" href="/projects/project-home.css?v={VERSION}"><link rel="stylesheet" href="/projects/view-controls.css?v={VERSION}"><script src="/projects/project-home.js?v={VERSION}" defer></script><script src="/projects/view-controls.js?v={VERSION}" defer></script></head><body data-home-version="{VERSION}" data-project="{e(project)}"><header class="hero"><div class="wrap"><a id="back" href="/projects/" hidden>← 전체 프로젝트</a><p class="eyebrow">SOFTM / PROJECTS</p><h1 id="title">{e(title)}</h1><p id="lead">기록과 자료를 찾아보세요.</p></div></header><main id="app" class="wrap"><p>목록을 읽는 중입니다.</p></main><noscript><p class="wrap">목록을 표시하려면 JavaScript가 필요합니다. <a href="https://github.com/softm/softm.github.io/blob/main/projects/projects.json">등록 정보 보기</a></p></noscript><footer class="wrap"><a href="/projects/">전체 프로젝트</a> · <a href="/projects/PROJECT-HOME-POLICY.md">공개·비공개 자료 안내</a></footer></body></html>'''
 
 def build():
+    subprocess.run(['node', str(ROOT / 'view-controls.test.cjs')], check=True, timeout=30)
     catalog = json.loads((ROOT / 'projects.json').read_text(encoding='utf-8'))
     metadata = json.loads((ROOT / 'chat-metadata.json').read_text(encoding='utf-8'))
     if metadata.get('schemaVersion') != 1 or not isinstance(metadata.get('entries'), dict):
@@ -66,12 +67,14 @@ process.stdout.write(JSON.stringify(out));"""
     report['chatTitlePolicy'] = 'authored date + user title (preferred) or original chat title'
     report['unknownAuthoredDatesAreNotGuessed'] = True
     report['features'] = {'views': ['cards', 'list', 'table', 'gallery'],
+                          'viewControls': 'icon-only with accessible names and hover titles',
                           'sorts': ['newest', 'oldest', 'title-asc', 'title-desc', 'count-desc'],
                           'privateContentFetched': False}
     report['files'] = list(dict.fromkeys(report['files'] + homes + [
         'projects/index.html', 'projects/chat-metadata.json', 'projects/project-home.js',
         'projects/project-home.css', 'projects/home-generator.py',
         'projects/home-generator-core.py', 'projects/CHAT-TITLE-POLICY.md',
+        'projects/view-controls.js', 'projects/view-controls.css', 'projects/view-controls.test.cjs',
     ]))
     report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
