@@ -627,7 +627,7 @@
       "description": "공개 안내와 인증 링크만 제공합니다. 상세 의료·보험 원문과 첨부 원본은 비공개입니다.",
       "visibility": "mixed",
       "repoVisibility": "private",
-      "deploymentStatus": "formatted-web-view-deploying",
+      "deploymentStatus": "archive-structure-canonical-links-deploying",
       "homeUrl": "https://softm.github.io/projects/father-hospital-treatment/",
       "publicRepoUrl": "https://github.com/softm/father-hospital-treatment",
       "publicHomeStatus": "github-pages-home-generated",
@@ -636,11 +636,11 @@
       "privateDeploymentStatus": "deploying",
       "pageCount": 0,
       "privatePageCount": 7,
-      "latestTitle": "비공개 기록 7개",
+      "latestTitle": "서산의료원 진료기록 발급 및 HA(-) → HA(+) 정정 요청",
       "order": 60,
       "archiveDeployment": true,
       "auditStatus": "partial",
-      "mediaStatus": "Private Git에 상세 문서 33개·음성 1개·PDF 1개·전체자료 ZIP 1개 보존",
+      "mediaStatus": "Private Git 상세 7건. 2026-09-23 스캔 5장은 manifest에 Library 식별자만 있고 바이너리가 Git에 없어 미디어 복구 필요. 기존 음성/PDF/ZIP 포함 여부도 원본 대조 계속 필요.",
       "deploymentNote": "중앙 공개 프로젝트 홈은 softm.github.io/projects/father-hospital-treatment/에서 GitHub 등록정보를 읽어 목록을 생성한다. 상세 의료·보험 원문은 Private GitHub를 유일한 원본으로 유지하고 Vercel 인증 후 GitHub 최신 원본을 no-store로 제공한다.",
       "storedAssets": {
         "files": 61,
@@ -664,43 +664,50 @@
       "vercelProtectionStatus": "설정 여부 별도 확인 필요",
       "links": [
         {
-          "label": "진료기록 발급·정정 요청",
+          "label": "서산의료원 진료기록 발급 및 HA(-) → HA(+) 정정 요청",
+          "date": "2026-09-23",
           "url": "https://father-hospital-treatment-private.vercel.app/view/20260923-seosan-medical-record-ha-correction",
           "visibility": "private",
           "authProvider": "vercel"
         },
         {
-          "label": "민원답변 검토",
+          "label": "서산의료원 민원답변 검토 및 추가의견서",
+          "date": "2026-09-11",
           "url": "https://father-hospital-treatment-private.vercel.app/view/20260911-seosan-medical-center-response-review",
           "visibility": "private",
           "authProvider": "vercel"
         },
         {
-          "label": "보험 보완서류 준비",
+          "label": "한국교직원공제회 보험서류 재준비 · ADL 진단자료",
+          "date": "2026-09-08",
           "url": "https://father-hospital-treatment-private.vercel.app/view/20260908-teacher-mutual-aid-adl-documents",
           "visibility": "private",
           "authProvider": "vercel"
         },
         {
-          "label": "보험금 심사 관련 민원",
+          "label": "한국교직원공제회 보험금 심사 지연 및 반복 보완요구 민원",
+          "date": "2026-08-19",
           "url": "https://father-hospital-treatment-private.vercel.app/view/20260819-teacher-mutual-aid-insurance-complaint",
           "visibility": "private",
           "authProvider": "vercel"
         },
         {
-          "label": "의무기록 정정·민원",
+          "label": "서산의료원 의무기록 정정·민원",
+          "date": "2026-08-11",
           "url": "https://father-hospital-treatment-private.vercel.app/view/20260811-seosan-medical-record-complaint",
           "visibility": "private",
           "authProvider": "vercel"
         },
         {
-          "label": "의무기록 정정 및 재심사 정리",
+          "label": "서산의료원 의무기록 정정 및 농업인안전보험 재심사 정리",
+          "date": "2026-08-07",
           "url": "https://father-hospital-treatment-private.vercel.app/view/20260807-seosan-medical-record-correction",
           "visibility": "private",
           "authProvider": "vercel"
         },
         {
-          "label": "진료 녹취 정리",
+          "label": "신경안과 좌측 시야 결손·우안 시력 저하 진료 정리",
+          "date": "2026-07-03",
           "url": "https://father-hospital-treatment-private.vercel.app/view/20260703-neuro-ophthalmology-visual-field",
           "visibility": "private",
           "authProvider": "vercel"
@@ -713,7 +720,9 @@
       "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
       "vercelAccountAuthVerified": false,
       "homePublicListCount": 0,
-      "homePrivateListCount": 14
+      "homePrivateListCount": 14,
+      "archiveRoot": "archive",
+      "archiveMissingAssets": true
     },
     {
       "repo": "homecare-nationwide-care-services-map",
