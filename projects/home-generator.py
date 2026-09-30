@@ -9,7 +9,7 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '20260930-project-browser-icons-v6'
+VERSION = '20260930-archive-structure-v7'
 
 def frame(title: str, canonical: str, project: str = '') -> str:
     e = lambda value: html.escape(str(value), quote=True)
@@ -59,6 +59,10 @@ process.stdout.write(JSON.stringify(out));"""
         target = ROOT / slug / 'index.html'
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(frame(project['title'], 'https://softm.github.io/projects/' + slug + '/', repo), encoding='utf-8')
+        # Every registered project must have a public TOC shell. This is the archive-deployment hub;
+        # private bodies remain in the project's private GitHub/Vercel origin.
+        if not target.is_file() or target.stat().st_size < 500:
+            raise RuntimeError(f'Missing generated project home: {target}')
         homes.append('projects/' + slug + '/index.html')
     (ROOT / 'index.html').write_text(frame('전체 프로젝트', 'https://softm.github.io/projects/'), encoding='utf-8')
     report_path = ROOT / 'home-build.json'
@@ -69,7 +73,9 @@ process.stdout.write(JSON.stringify(out));"""
     report['features'] = {'views': ['cards', 'list', 'table', 'gallery'],
                           'viewControls': 'icon-only with accessible names and hover titles',
                           'sorts': ['newest', 'oldest', 'title-asc', 'title-desc', 'count-desc'],
-                          'privateContentFetched': False}
+                          'privateContentFetched': False,
+                          'archiveDeploymentHub': True,
+                          'projectHomesRequired': True}
     report['files'] = list(dict.fromkeys(report['files'] + homes + [
         'projects/index.html', 'projects/chat-metadata.json', 'projects/project-home.js',
         'projects/project-home.css', 'projects/home-generator.py',
