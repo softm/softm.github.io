@@ -1,0 +1,28 @@
+name: Verify live list and detail titles
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - projects/audit-live-titles.py
+      - .github/workflows/audit-live-titles.yml
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare canonical list titles with actual public headings
+        run: python3 projects/audit-live-titles.py
+      - name: Preserve the exact public metadata used by the test
+        if: always()
+        run: |
+          mkdir -p projects/title-audit/policy
+          cp projects/projects.json projects/chat-metadata.json projects/project-home.js projects/CHAT-TITLE-POLICY.md projects/title-audit/policy/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: global-live-title-audit
+          path: projects/title-audit/
