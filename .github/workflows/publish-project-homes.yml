@@ -4,6 +4,11 @@ on:
     branches: [main]
     paths:
       - projects/home-generator.py
+      - projects/home-generator-core.py
+      - projects/project-home.js
+      - projects/project-home.css
+      - projects/project-home.test.cjs
+      - projects/chat-metadata.json
       - projects/projects.json
       - .github/workflows/publish-project-homes.yml
   workflow_dispatch:
@@ -28,13 +33,14 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git pull --ff-only origin main
+          node projects/project-home.test.cjs
           python3 projects/home-generator.py
           git add -- projects
           if git diff --cached --name-status | grep -q '^D'; then
             echo 'Refusing to delete an existing archive file'; exit 1
           fi
           if ! git diff --cached --quiet; then
-            git commit -m 'Publish public project homes and preserve existing chat links'
+            git commit -m 'Publish project browser views and preserve existing chat links'
             git push origin HEAD:main
           fi
       - name: Synchronize only generated public files to publishing branch
@@ -64,7 +70,7 @@ jobs:
             echo 'Refusing to delete a published file'; exit 1
           fi
           if ! git -C "$PAGE_WORKTREE" diff --cached --quiet; then
-            git -C "$PAGE_WORKTREE" commit -m 'Publish public project home navigation and chat lists'
+            git -C "$PAGE_WORKTREE" commit -m 'Publish project browser views, sorting and record summaries'
             git -C "$PAGE_WORKTREE" push origin HEAD:gh-pages
           fi
           echo '### Project home sources synchronized' >> "$GITHUB_STEP_SUMMARY"
