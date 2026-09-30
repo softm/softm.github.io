@@ -12,8 +12,10 @@ const put=(f,s)=>{if(!known.has(f))throw Error('Untracked source refused: '+f);i
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const references=s=>[...s.matchAll(/\b(?:href|src|poster)\s*=\s*(?:"[^"]*"|'[^']*')/g)].map(m=>m[0]);
 function checked(f,before,after){if(JSON.stringify(references(before))!==JSON.stringify(references(after)))throw Error('Reference change refused: '+f);put(f,after)}
-function html(f,r){if(!known.has(f))return false;let s=read(f),heads=[...s.matchAll(/<h1\b[^>]*>[\s\S]*?<\/h1>/gi)];if(heads.length!==1)throw Error('Expected one primary heading: '+f);let h=heads[0][0],newH=h.replace(/^(<h1\b[^>]*>)[\s\S]*?(<\/h1>)$/i,(_,a,b)=>a+esc(r.title)+b);
- let out=s.replace(h,newH).replace(/<title\b[^>]*>[\s\S]*?<\/title>/i,()=>'<title>'+esc(r.title)+'</title>');
+function html(f,r){if(!known.has(f))return false;let s=read(f),heads=[...s.matchAll(/<h1\b[^>]*>[\s\S]*?<\/h1>/gi)];const duplicatedCaseTitle=repo==='hwagok-land-permit-private'&&f==='private_assets/case/nonprosecution-appeal.html'&&heads.length===2;
+ if(heads.length!==1&&!duplicatedCaseTitle)throw Error('Unexpected primary heading count: '+f);
+ let out=s;for(const item of heads){const h=item[0],newH=h.replace(/^(<h1\b[^>]*>)[\s\S]*?(<\/h1>)$/i,(_,a,b)=>a+esc(r.title)+b);out=out.replace(h,newH)}
+ out=out.replace(/<title\b[^>]*>[\s\S]*?<\/title>/i,()=>'<title>'+esc(r.title)+'</title>');
  out=out.replace(/<meta\b[^>]*(?:property|name)=["'](?:og:title|twitter:title)["'][^>]*>/gi,m=>m.replace(/content=(?:"[^"]*"|'[^']*')/i,()=> 'content="'+esc(r.title)+'"'));
  checked(f,s,out);r.files.push({file:f,state:s===out?'matched':'title-corrected',after:r.title,adapter:'verified-route-to-original'});return true;
 }
