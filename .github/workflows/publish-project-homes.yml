@@ -38,6 +38,21 @@ jobs:
           git pull --ff-only origin main
           node projects/project-home.test.cjs
           python3 projects/home-generator.py
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.loads(Path('projects/projects.json').read_text())
+          aliases={'baksok-public':'baksok','mine-private':'mine'}
+          missing=[]
+          for p in data['projects']:
+              slug=aliases.get(p['repo'],p['repo'].removesuffix('-private'))
+              f=Path('projects')/slug/'index.html'
+              if not f.is_file() or f.stat().st_size < 500:
+                  missing.append(str(f))
+          if missing:
+              raise SystemExit('Missing project archive hubs: '+', '.join(missing))
+          print(f'Archive hubs verified: {len(data["projects"])}')
+          PY
           git add -- projects
           if git diff --cached --name-status | grep -q '^D'; then
             echo 'Refusing to delete an existing archive file'; exit 1
