@@ -8,6 +8,9 @@ on:
       - projects/project-home.js
       - projects/project-home.css
       - projects/project-home.test.cjs
+      - projects/test-title-parity.cjs
+      - projects/verify-title-parity-live.py
+      - projects/CHAT-TITLE-POLICY.md
       - projects/view-controls.js
       - projects/view-controls.css
       - projects/view-controls.test.cjs
@@ -37,6 +40,7 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git pull --ff-only origin main
           node projects/project-home.test.cjs
+          node projects/test-title-parity.cjs
           python3 projects/home-generator.py
           python3 - <<'PY'
           import json
@@ -99,9 +103,33 @@ jobs:
           print('|Project|Public list|Private list|Home|\n|---|---:|---:|---|')
           for p in r['projects']:
               print('|{}|{}|{}|{}|'.format(p['title'],p['publicEntries'],p['privateEntries'],p['homeUrl']))
-          print('\nPublication must be verified separately. No private source content or media was copied.')
+          print('\nPublication is checked separately. No private source content or media was copied.')
           PY
       - uses: actions/upload-artifact@v4
         with:
           name: project-home-build-report
           path: projects/home-build.json
+  verify-live:
+    needs: generate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          sparse-checkout: projects
+      - name: Verify deployed entry pages and all four title renderers
+        env:
+          TITLE_PARITY_LIVE_REPORT: ${{ runner.temp }}/title-parity-live.json
+        run: python3 projects/verify-title-parity-live.py
+      - name: Compare public detail headings without fetching private origins
+        run: python3 projects/audit-live-titles.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: live-title-parity-verification
+          path: |
+            ${{ runner.temp }}/title-parity-live.json
+            projects/title-audit/live-titles.json
