@@ -1,0 +1,173 @@
+{
+  "version": "20260930-archive-structure-v7",
+  "projectCount": 13,
+  "projects": [
+    {
+      "repo": "hwagok-farm",
+      "title": "화곡농장",
+      "homeUrl": "https://softm.github.io/projects/hwagok-farm/",
+      "publicEntries": 23,
+      "privateEntries": 4,
+      "htmlSha256": "7d66e90f4cba3524ea45694c2ca0dda28fa43f459c68eff18a27f57a31523543",
+      "authenticatedContentVerified": false
+    },
+    {
+      "repo": "gwangmyeong",
+      "title": "광명",
+      "homeUrl": "https://softm.github.io/projects/gwangmyeong/",
+      "publicEntries": 2,
+      "privateEntries": 0,
+      "htmlSha256": "a286ef6aa59ab9418a3b4957d000529f7cab6eb56ab6a5ac22c3f82c939e7f11",
+      "authenticatedContentVerified": false
+    },
+    {
+      "repo": "mine-private",
+      "title": "나",
+      "homeUrl": "https://softm.github.io/projects/mine/",
+      "publicEntries": 0,
+      "privateEntries": 6,
+      "htmlSha256": "4a998892f9371a9916142b165d588d9672474e381e4d8dbc6d96bbfd07e16ec9",
+      "authenticatedContentVerified": false
+    },
+    {
+      "repo": "onsuhill-private",
+      "title": "온수힐",
+      "homeUrl": "https://softm.github.io/projects/onsuhill/",
+      "publicEntries": 0,
+      "privateEntries": 7,
+      "htmlSha256": "9b1f3058f78cc1c57e9609dc067ba63234cfee1717e990e7ad80d0c48b88c8b7",
+      "authenticatedContentVerified": false
+    },
+    {
+      "repo": "yeonseo",
+      "title": "연서 교육",
+      "homeUrl": "https://softm.github.io/projects/yeonseo/",
+      "publicEntries": 0,
+      "privateEntries": 2,
+      "htmlSha256": "86a08bdfb977b9834fa531885a9b5b725464ee5525f9907118cba9283fc8db46",
+      "authenticatedContentVerified": false
+    },
+    {
+      "repo": "ungdo-private",
+      "title": "웅도 토지·성토",
+      "homeUrl": "https://softm.github.io/projects/ungdo/",
+      "publicEntries": 1,
+      "privateEntries": 9,
+      "htmlSha256": "7acbeeef0b8fe0acd7f034e98b07e0cb351ebbc432548e11d4876e0c6fd97c1e",
+      "authenticatedContentVerified": false
+    },
+    {
+      "repo": "hwagok-land-permit-private",
+      "title": "화곡리 개간허가",
+      "homeUrl": "https://softm.github.io/projects/hwagok-land-permit/",
+      "publicEntries": 0,
+      "privateEntries": 5,
+      "htmlSha256": "eae613b21d59008c4ebc10604708d7301f6ef601d8fa519871dd4981464254eb",
+      "authenticatedContentVerified": false
+    },
+    {
+      "repo": "father-hospital-treatment-private",
+      "title": "아버지 병원 치료",
+      "homeUrl": "https://softm.github.io/projects/father-hospital-treatment/",
+      "publicEntries": 0,
+      "privateEntries": 14,
+      "htmlSha256": "18260f5631ff63df8b9c8ea3085fd1658a5e07cd21a83d30acfa539ac53575e3",
+      "authenticatedContentVerified": false
+    },
+    {
+      "repo": "homecare-nationwide-care-services-map",
+      "title": "돌봄한눈·전국 요양기관",
+      "homeUrl": "https://softm.github.io/projects/homecare-nationwide-care-services-map/",
+      "publicEntries": 2,
+      "privateEntries": 0,
+      "htmlSha256": "ce489af222204b286a49eb7eb5f8f59cf4b0a26238653d131a1c39d59f5d8d38",
+      "authenticatedContentVerified": false
+    },
+    {
+      "repo": "medical-finder",
+      "title": "메디찾기 · 병원·약국·비급여",
+      "homeUrl": "https://softm.github.io/projects/medical-finder/",
+      "publicEntries": 0,
+      "privateEntries": 1,
+      "htmlSha256": "90e7a9b1fe80e1bc4b22b4d5178ee5a8108720c516853c6842beb748372c98a3",
+      "authenticatedContentVerified": false
+    },
+    {
+      "repo": "gyeongju-kim",
+      "title": "경주김씨",
+      "homeUrl": "https://softm.github.io/projects/gyeongju-kim/",
+      "publicEntries": 0,
+      "privateEntries": 0,
+      "htmlSha256": "832aff77471dcb9d519209eb393bb4ce2ec467b7008b0d8ed42a2c3c4360539e",
+      "authenticatedContentVerified": false
+    },
+    {
+      "repo": "baksok-public",
+      "title": "서해박속낙지",
+      "homeUrl": "https://softm.github.io/projects/baksok/",
+      "publicEntries": 1,
+      "privateEntries": 5,
+      "htmlSha256": "49bb7eba7f3c01448d22ed97ff78a8e2fb8a62456cbc31b9eea80caf2b2f6e5b",
+      "authenticatedContentVerified": false
+    },
+    {
+      "repo": "gyeongju-trip-map",
+      "title": "용인·경주·이천 가족여행",
+      "homeUrl": "https://softm.github.io/projects/gyeongju-trip-map/",
+      "publicEntries": 0,
+      "privateEntries": 0,
+      "htmlSha256": "1818aa7bab0a24d00f33e294577cf628120d6a9e107cffd35fa1063f1111fa84",
+      "authenticatedContentVerified": false
+    }
+  ],
+  "files": [
+    "projects/hwagok-farm/index.html",
+    "projects/gwangmyeong/index.html",
+    "projects/mine/index.html",
+    "projects/onsuhill/index.html",
+    "projects/yeonseo/index.html",
+    "projects/ungdo/index.html",
+    "projects/hwagok-land-permit/index.html",
+    "projects/father-hospital-treatment/index.html",
+    "projects/homecare-nationwide-care-services-map/index.html",
+    "projects/medical-finder/index.html",
+    "projects/gyeongju-kim/index.html",
+    "projects/baksok/index.html",
+    "projects/gyeongju-trip-map/index.html",
+    "projects/projects.json",
+    "projects/index.html",
+    "projects/README.md",
+    "projects/home-build.json",
+    "projects/chat-metadata.json",
+    "projects/project-home.js",
+    "projects/project-home.css",
+    "projects/home-generator.py",
+    "projects/home-generator-core.py",
+    "projects/CHAT-TITLE-POLICY.md",
+    "projects/view-controls.js",
+    "projects/view-controls.css",
+    "projects/view-controls.test.cjs"
+  ],
+  "detailsAndMediaModified": false,
+  "chatTitlePolicy": "authored date + user title (preferred) or original chat title",
+  "unknownAuthoredDatesAreNotGuessed": true,
+  "features": {
+    "views": [
+      "cards",
+      "list",
+      "table",
+      "gallery"
+    ],
+    "viewControls": "icon-only with accessible names and hover titles",
+    "sorts": [
+      "newest",
+      "oldest",
+      "title-asc",
+      "title-desc",
+      "count-desc"
+    ],
+    "privateContentFetched": false,
+    "archiveDeploymentHub": true,
+    "projectHomesRequired": true
+  }
+}
