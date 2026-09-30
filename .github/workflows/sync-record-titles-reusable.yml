@@ -1,0 +1,102 @@
+name: Synchronize record titles
+on:
+  workflow_call:
+    inputs:
+      source_branch:
+        type: string
+        default: main
+      trigger_workflow:
+        type: string
+        default: ''
+      request_pages_build:
+        type: boolean
+        default: false
+permissions:
+  contents: write
+  actions: write
+  pages: write
+jobs:
+  titles:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_branch }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Fetch a pinned public title policy and the tested title-only processor
+        env:
+          TITLE_TOOLS: ${{ runner.temp }}/title-tools
+        run: |
+          mkdir -p "$TITLE_TOOLS"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          from urllib.request import Request,urlopen
+          target=Path(os.environ['TITLE_TOOLS'])
+          def get(url):
+              with urlopen(Request(url,headers={'User-Agent':'SOFTM-Title-Consistency'}),timeout=35) as r:
+                  return r.read()
+          revision=json.loads(get('https://api.github.com/repos/softm/softm.github.io/git/ref/heads/main'))['object']['sha']
+          for name in ['projects.json','chat-metadata.json','project-home.js']:
+              (target/name).write_bytes(get(f'https://raw.githubusercontent.com/softm/softm.github.io/{revision}/projects/{name}'))
+          (target/'revision.txt').write_text(revision)
+          (target/'sync-titles.cjs').write_bytes(get('https://raw.githubusercontent.com/softm/softm.github.io/bdde9c857a61f66dbf8b15f5b47530e1fcfb6605/projects/sync-titles.cjs'))
+          PY
+          npm install --prefix "$TITLE_TOOLS/parser" --no-package-lock --ignore-scripts --no-audit --no-fund typescript@5.9.3
+      - name: Audit all registered records for this repository and align only titles
+        env:
+          TITLE_TOOLS: ${{ runner.temp }}/title-tools
+          TYPESCRIPT_PATH: ${{ runner.temp }}/title-tools/parser/node_modules/typescript
+        run: |
+          node "$TITLE_TOOLS/sync-titles.cjs" --repo "$GITHUB_REPOSITORY" --central "$TITLE_TOOLS" --revision "$(cat "$TITLE_TOOLS/revision.txt")" --apply
+      - name: Commit only enumerated title changes, preserving all other files
+        env:
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+        run: |
+          python3 - <<'PY'
+          import json,subprocess
+          from pathlib import Path
+          report=json.loads(Path('.title-audit/result.json').read_text())
+          assert report['mediaUnchanged']
+          files=report['changedFiles']
+          if files: subprocess.run(['git','add','--',*files],check=True)
+          PY
+          if ! git diff --cached --quiet; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git commit -m 'Align record titles with canonical project list; preserve all bodies and media'
+            git pull --rebase origin "$SOURCE_BRANCH"
+            git push origin "HEAD:$SOURCE_BRANCH"
+          fi
+          git rev-parse HEAD > .title-audit/source-commit.txt
+      - name: Request the existing project deployment workflow
+        if: inputs.trigger_workflow != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_WORKFLOW: ${{ inputs.trigger_workflow }}
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+        run: |
+          gh workflow run "$TARGET_WORKFLOW" --repo "$GITHUB_REPOSITORY" --ref "$SOURCE_BRANCH"
+          echo 'Deployment requested; not marked as live verified.'
+      - name: Request existing branch-based Pages publication without changing settings
+        if: inputs.request_pages_build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/pages" --jq '{build_type,source,html_url}' > .title-audit/pages-settings.json
+          if [ "$(gh api "repos/$GITHUB_REPOSITORY/pages" --jq '.build_type')" = legacy ]; then
+            gh api -X POST "repos/$GITHUB_REPOSITORY/pages/builds" > .title-audit/pages-build-request.json
+          else
+            echo 'Pages uses an Actions deployment. No unverified settings change was made.'
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: title-consistency-audit
+          path: .title-audit/
+          include-hidden-files: true
+          if-no-files-found: warn
