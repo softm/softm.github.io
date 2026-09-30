@@ -1,0 +1,84 @@
+name: Repair all project title parity
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/repair-title-parity.yml
+      - projects/repair-title-parity.cjs
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: public-project-homes
+  cancel-in-progress: false
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Repair shared title values and all project home entry points
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git pull --ff-only origin main
+          node projects/repair-title-parity.cjs
+          node --check projects/project-home.js
+          node projects/project-home.test.cjs
+          node projects/test-chat-titles.cjs
+          TITLE_PARITY_REPORT="$RUNNER_TEMP/title-parity-main.json" node projects/test-title-parity.cjs
+          if [ -f projects/private-link-guard.test.cjs ]; then node projects/private-link-guard.test.cjs; fi
+          git diff --stat
+          git add -- projects .github/workflows/publish-project-homes.yml
+          if git diff --cached --name-status | grep -q '^D'; then exit 1; fi
+          if ! git diff --cached --quiet; then
+            git commit -m 'Use the canonical date-prefixed title in every public/private list view'
+            git push origin HEAD:main
+          fi
+          echo "TITLE_PARITY_MAIN_COMMIT=$(git rev-parse HEAD)"
+      - name: Apply the same guarded repair to the publishing branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin gh-pages
+          target="$RUNNER_TEMP/title-parity-pages"
+          git worktree add "$target" origin/gh-pages
+          cp projects/test-title-parity.cjs "$target/projects/test-title-parity.cjs"
+          node projects/repair-title-parity.cjs "$target"
+          node --check "$target/projects/project-home.js"
+          TITLE_PARITY_REPORT="$RUNNER_TEMP/title-parity-pages.json" node "$target/projects/test-title-parity.cjs"
+          git -C "$target" add -- projects
+          if [ -f "$target/.github/workflows/publish-project-homes.yml" ]; then
+            git -C "$target" add -- .github/workflows/publish-project-homes.yml
+          fi
+          if git -C "$target" diff --cached --name-status | grep -q '^D'; then exit 1; fi
+          if ! git -C "$target" diff --cached --quiet; then
+            git -C "$target" commit -m 'Publish identical date-prefixed titles across all project record views'
+            git -C "$target" push origin HEAD:gh-pages
+          fi
+          echo "TITLE_PARITY_PAGES_COMMIT=$(git -C "$target" rev-parse HEAD)"
+      - name: Summarize all-project regression checks
+        shell: bash
+        run: |
+          python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json, os
+          from pathlib import Path
+          data=json.loads((Path(os.environ['RUNNER_TEMP'])/'title-parity-main.json').read_text())
+          print('# All-project canonical title checks')
+          print(f"Projects: {data['projects']}; records: {data['rows']}; rendered title comparisons: {data['renderedTitles']}.")
+          print('|Project|Records|Views checked|\n|---|---:|---:|')
+          for p in data['projectResults']:
+              print(f"|{p['project']}|{p['rows']}|{p['viewsChecked']}|")
+          print('\nAuthored dates, custom names, destinations and private access links were preserved. Production publication is verified separately.')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: title-parity-regression
+          path: |
+            ${{ runner.temp }}/title-parity-main.json
+            ${{ runner.temp }}/title-parity-pages.json
