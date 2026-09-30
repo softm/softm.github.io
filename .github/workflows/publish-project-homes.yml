@@ -1,0 +1,83 @@
+name: Publish project homes
+on:
+  push:
+    branches: [main]
+    paths:
+      - projects/home-generator.py
+      - projects/projects.json
+      - .github/workflows/publish-project-homes.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: public-project-homes
+  cancel-in-progress: false
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Generate public project homes and verify preserved metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git pull --ff-only origin main
+          python3 projects/home-generator.py
+          git add -- projects
+          if git diff --cached --name-status | grep -q '^D'; then
+            echo 'Refusing to delete an existing archive file'; exit 1
+          fi
+          if ! git diff --cached --quiet; then
+            git commit -m 'Publish public project homes and preserve existing chat links'
+            git push origin HEAD:main
+          fi
+      - name: Synchronize only generated public files to publishing branch
+        shell: bash
+        env:
+          PAGE_WORKTREE: ${{ runner.temp }}/project-home-pages
+        run: |
+          set -euo pipefail
+          git fetch origin gh-pages
+          git worktree add "$PAGE_WORKTREE" origin/gh-pages
+          python3 - <<'PY'
+          import json, os, shutil
+          from pathlib import Path
+          report=json.loads(Path('projects/home-build.json').read_text())
+          target=Path(os.environ['PAGE_WORKTREE'])
+          for name in report['files']:
+              rel=Path(name)
+              if rel.is_absolute() or '..' in rel.parts or rel.parts[0]!='projects':
+                  raise RuntimeError('Unexpected output path')
+              dest=target/rel
+              dest.parent.mkdir(parents=True,exist_ok=True)
+              shutil.copyfile(rel,dest)
+          print(json.dumps({'generatedHomes':report['projectCount'],'copiedFiles':len(report['files']),'detailsAndMediaModified':False}))
+          PY
+          git -C "$PAGE_WORKTREE" add -- projects
+          if git -C "$PAGE_WORKTREE" diff --cached --name-status | grep -q '^D'; then
+            echo 'Refusing to delete a published file'; exit 1
+          fi
+          if ! git -C "$PAGE_WORKTREE" diff --cached --quiet; then
+            git -C "$PAGE_WORKTREE" commit -m 'Publish public project home navigation and chat lists'
+            git -C "$PAGE_WORKTREE" push origin HEAD:gh-pages
+          fi
+          echo '### Project home sources synchronized' >> "$GITHUB_STEP_SUMMARY"
+          python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+          r=json.loads(Path('projects/home-build.json').read_text())
+          print('|Project|Public list|Private list|Home|\n|---|---:|---:|---|')
+          for p in r['projects']:
+              print('|{}|{}|{}|{}|'.format(p['title'],p['publicEntries'],p['privateEntries'],p['homeUrl']))
+          print('\nPublication must be verified separately. No private source content or media was copied.')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: project-home-build-report
+          path: projects/home-build.json
