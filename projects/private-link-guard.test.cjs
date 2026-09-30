@@ -1,0 +1,9 @@
+'use strict';
+const assert=require('node:assert/strict');
+const {privateLinkGuard:g}=require('./view-controls.js');
+const slugs=['20260923-seosan-medical-record-ha-correction','20260911-seosan-medical-center-response-review','20260908-teacher-mutual-aid-adl-documents','20260819-teacher-mutual-aid-insurance-complaint','20260811-seosan-medical-record-complaint','20260807-seosan-medical-record-correction','20260703-neuro-ophthalmology-visual-field'];
+for(const s of slugs){const x=g.classify('https://father-hospital-treatment-private.vercel.app/archive/'+s);assert.equal(x.code,'confirmed-404');assert.equal(x.href,'https://github.com/softm/father-hospital-treatment-private/blob/main/archive/'+s+'/index.html');}
+const paths=['case/appeal','case/prosecution-outlook','case/nonprosecution-appeal','asset/archive-20260926.html','asset/appeals-20260922/staging.html'];
+for(const p of paths){const x=g.classify('https://hwagok-land-permit-private.vercel.app/'+p);assert.equal(x.code,'deployment-repository-mismatch');assert.equal(x.href,'#private-link-audit-notice-land');}
+for(const u of ['javascript:alert(1)','https://evil.example/archive/'+slugs[0],'https://father-hospital-treatment-private.vercel.app.evil.example/archive/'+slugs[0],'https://father-hospital-treatment-private.vercel.app@evil.example/archive/'+slugs[0],'http://father-hospital-treatment-private.vercel.app/archive/'+slugs[0],'https://father-hospital-treatment-private.vercel.app/archive/unknown','https://father-hospital-treatment-private.vercel.app/','https://mine-private-sigma.vercel.app/archive/x/','https://softm.github.io/hwagok-farm/','https://baksok-private.vercel.app/reports/20260911-rir4000s-delivery/'])assert.equal(g.classify(u),null,u);
+console.log('PASS: 7 verified source mappings, 5 mismatched deployment guards, 10 unchanged/untrusted URLs.');
