@@ -94,3 +94,10 @@ async function run(){const area=document.getElementById('app');try{const respons
 if(typeof module!=='undefined'&&module.exports){module.exports={keyFor,dateOnly,authoredDate,display,labelRows,VERSION,homeUrl,lists,safe,unique,dateOf,titleOf,sortRows,record,matches,canEnrich,FARM};return}
 run();
 })();
+// Retain the small server-side renderer contract used by existing title-policy tests.
+if(typeof module!=='undefined'&&module.exports){
+ module.exports.records=function(title,items,privateMode){
+  const f=module.exports,escape=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  return '<section><h2>'+escape(title)+'</h2>'+items.map(item=>{const x=f.display(item),u=f.safe(x.url);return '<article><h3>'+(x.displayDate?'<time datetime="'+escape(x.displayDate)+'">'+escape(x.displayDate)+'</time>':'작성일 미확인')+' '+escape(x.displayName)+'</h3>'+(u?'<a href="'+escape(u)+'">'+(privateMode?'인증 후 열기':'기록 열기')+'</a>':'')+'</article>'}).join('')+'</section>';
+ };
+}
