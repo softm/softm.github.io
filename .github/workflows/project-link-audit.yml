@@ -1,0 +1,41 @@
+name: Audit project chat links
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - projects/audit-links.cjs
+      - .github/workflows/project-link-audit.yml
+permissions:
+  contents: write
+concurrency:
+  group: project-chat-link-audit
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Audit the exact rendered URLs without credentials
+        run: node projects/audit-links.cjs
+      - name: Preserve audit results without changing any original link or record
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add projects/link-audit/latest.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record all-project unauthenticated route audit; not a content-completeness claim'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: project-chat-link-audit
+          path: projects/link-audit/latest.json
