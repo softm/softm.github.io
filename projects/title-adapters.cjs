@@ -12,8 +12,9 @@ const put=(f,s)=>{if(!known.has(f))throw Error('Untracked source refused: '+f);i
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const references=s=>[...s.matchAll(/\b(?:href|src|poster)\s*=\s*(?:"[^"]*"|'[^']*')/g)].map(m=>m[0]);
 function checked(f,before,after){if(JSON.stringify(references(before))!==JSON.stringify(references(after)))throw Error('Reference change refused: '+f);put(f,after)}
-function html(f,r){if(!known.has(f))return false;let s=read(f),heads=[...s.matchAll(/<h1\b[^>]*>[\s\S]*?<\/h1>/gi)];const duplicatedCaseTitle=repo==='hwagok-land-permit-private'&&f==='private_assets/case/nonprosecution-appeal.html'&&heads.length===2;
- if(heads.length!==1&&!duplicatedCaseTitle)throw Error('Unexpected primary heading count: '+f);
+function html(f,r){if(!known.has(f))return false;let s=read(f),heads=[...s.matchAll(/<h1\b[^>]*>[\s\S]*?<\/h1>/gi)];const compound=repo==='hwagok-land-permit-private'&&f==='private_assets/case/nonprosecution-appeal.html';
+ if(compound){const first=heads.slice(0,2).map(x=>x[0].replace(/<[^>]*>/g,'').trim());if(first.length!==2||first[0]!=='불기소처분 및 항고 정리'&&first[0]!==r.title||first[1]!=='화곡리 개간허가 사건 — 불기소처분 및 항고 정리'&&first[1]!==r.title)throw Error('Compound report title structure changed: '+f);heads=heads.slice(0,2)}
+ else if(heads.length!==1)throw Error('Unexpected primary heading count: '+f);
  let out=s;for(const item of heads){const h=item[0],newH=h.replace(/^(<h1\b[^>]*>)[\s\S]*?(<\/h1>)$/i,(_,a,b)=>a+esc(r.title)+b);out=out.replace(h,newH)}
  out=out.replace(/<title\b[^>]*>[\s\S]*?<\/title>/i,()=>'<title>'+esc(r.title)+'</title>');
  out=out.replace(/<meta\b[^>]*(?:property|name)=["'](?:og:title|twitter:title)["'][^>]*>/gi,m=>m.replace(/content=(?:"[^"]*"|'[^']*')/i,()=> 'content="'+esc(r.title)+'"'));
@@ -49,7 +50,6 @@ if(repo==='hwagok-land-permit-private'){
  for(const[route,f]of Object.entries(names)){const r=routes.get(route);if(r&&html(f,r)){md(f.replace(/\.html$/,'.md'),r);r.state='source-resolved'}}
  apiTemplates('api/index.js',{appealFallback:routes.get('/case/appeal'),outlookPage:routes.get('/case/prosecution-outlook'),nonprosecutionAppealPage:routes.get('/case/nonprosecution-appeal')});
  const outlook=routes.get('/case/prosecution-outlook');if(outlook&&outlook.files.length)outlook.state='source-resolved';
- // Existing project-home card labels for these exact routes, not arbitrary prose.
  const s=read('api/index.js');const out=s.replace(/<a\b[^>]*href="([^"]+)"[^>]*>[\s\S]*?<\/a>/g,(a,href)=>{const r=routes.get(href.replace(/\/$/,''));return r?a.replace(/(<h3\b[^>]*>)[\s\S]*?(<\/h3>)/i,(_,x,y)=>x+esc(r.title).replace(/`/g,'&#96;').replace(/\$\{/g,'&#36;{')+y):a});checked('api/index.js',s,out);
 }
 if(repo==='onsuhill-private'){
