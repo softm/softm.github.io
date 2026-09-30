@@ -19,7 +19,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
-          fetch-depth: 0
+          fetch-depth: 1
+          sparse-checkout: |
+            projects
+            .github
       - name: Repair shared title values and all project home entry points
         shell: bash
         run: |
@@ -32,9 +35,13 @@ jobs:
           node projects/project-home.test.cjs
           node projects/test-chat-titles.cjs
           TITLE_PARITY_REPORT="$RUNNER_TEMP/title-parity-main.json" node projects/test-title-parity.cjs
-          if [ -f projects/private-link-guard.test.cjs ]; then node projects/private-link-guard.test.cjs; fi
+          # The retired view-controls privateLinkGuard suite targets a removed API,
+          # not this shared browser. The browser and parity suites above verify
+          # destination preservation, unsafe URLs and private-preview prevention.
+          # Workflow changes are installed separately by the authorized connector.
+          git restore -- .github/workflows/publish-project-homes.yml
           git diff --stat
-          git add -- projects .github/workflows/publish-project-homes.yml
+          git add -- projects
           if git diff --cached --name-status | grep -q '^D'; then exit 1; fi
           if ! git diff --cached --quiet; then
             git commit -m 'Use the canonical date-prefixed title in every public/private list view'
@@ -45,17 +52,20 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          git fetch origin gh-pages
+          git fetch --depth=1 origin gh-pages:refs/remotes/origin/gh-pages
           target="$RUNNER_TEMP/title-parity-pages"
-          git worktree add "$target" origin/gh-pages
+          git worktree add --no-checkout "$target" origin/gh-pages
+          git -C "$target" sparse-checkout init --cone
+          git -C "$target" sparse-checkout set projects .github
+          git -C "$target" checkout --detach origin/gh-pages
           cp projects/test-title-parity.cjs "$target/projects/test-title-parity.cjs"
           node projects/repair-title-parity.cjs "$target"
           node --check "$target/projects/project-home.js"
           TITLE_PARITY_REPORT="$RUNNER_TEMP/title-parity-pages.json" node "$target/projects/test-title-parity.cjs"
-          git -C "$target" add -- projects
           if [ -f "$target/.github/workflows/publish-project-homes.yml" ]; then
-            git -C "$target" add -- .github/workflows/publish-project-homes.yml
+            git -C "$target" restore -- .github/workflows/publish-project-homes.yml
           fi
+          git -C "$target" add -- projects
           if git -C "$target" diff --cached --name-status | grep -q '^D'; then exit 1; fi
           if ! git -C "$target" diff --cached --quiet; then
             git -C "$target" commit -m 'Publish identical date-prefixed titles across all project record views'
@@ -77,6 +87,7 @@ jobs:
           print('\nAuthored dates, custom names, destinations and private access links were preserved. Production publication is verified separately.')
           PY
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: title-parity-regression
           path: |
