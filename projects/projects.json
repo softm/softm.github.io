@@ -580,13 +580,13 @@
       "description": "공개 안내와 인증 링크만 제공합니다. 상세 의료·보험 원문과 첨부 원본은 비공개입니다.",
       "visibility": "mixed",
       "repoVisibility": "private",
-      "deploymentStatus": "source-updated-vercel-not-triggered",
+      "deploymentStatus": "github-live-routes-restored-awaiting-vercel",
       "homeUrl": "https://github.com/softm/father-hospital-treatment",
       "publicRepoUrl": "https://github.com/softm/father-hospital-treatment",
       "publicHomeStatus": "generated-from-central-github-registry",
       "privateUrl": "https://father-hospital-treatment-private.vercel.app/",
       "authProvider": "vercel",
-      "privateDeploymentStatus": "not-triggered",
+      "privateDeploymentStatus": "source-ready-awaiting-vercel-deploy",
       "pageCount": 0,
       "privatePageCount": 7,
       "latestTitle": "비공개 기록 7개",
@@ -618,43 +618,43 @@
       "links": [
         {
           "label": "진료기록 발급·정정 요청",
-          "url": "https://father-hospital-treatment-private.vercel.app/archive/20260923-seosan-medical-record-ha-correction/",
+          "url": "https://father-hospital-treatment-private.vercel.app/api/archive/20260923-seosan-medical-record-ha-correction/index.html",
           "visibility": "private",
           "authProvider": "vercel"
         },
         {
           "label": "민원답변 검토",
-          "url": "https://father-hospital-treatment-private.vercel.app/archive/20260911-seosan-medical-center-response-review/",
+          "url": "https://father-hospital-treatment-private.vercel.app/api/archive/20260911-seosan-medical-center-response-review/index.html",
           "visibility": "private",
           "authProvider": "vercel"
         },
         {
           "label": "보험 보완서류 준비",
-          "url": "https://father-hospital-treatment-private.vercel.app/archive/20260908-teacher-mutual-aid-adl-documents/",
+          "url": "https://father-hospital-treatment-private.vercel.app/api/archive/20260908-teacher-mutual-aid-adl-documents/index.html",
           "visibility": "private",
           "authProvider": "vercel"
         },
         {
           "label": "보험금 심사 관련 민원",
-          "url": "https://father-hospital-treatment-private.vercel.app/archive/20260819-teacher-mutual-aid-insurance-complaint/",
+          "url": "https://father-hospital-treatment-private.vercel.app/api/archive/20260819-teacher-mutual-aid-insurance-complaint/index.html",
           "visibility": "private",
           "authProvider": "vercel"
         },
         {
           "label": "의무기록 정정·민원",
-          "url": "https://father-hospital-treatment-private.vercel.app/archive/20260811-seosan-medical-record-complaint/",
+          "url": "https://father-hospital-treatment-private.vercel.app/api/archive/20260811-seosan-medical-record-complaint/index.html",
           "visibility": "private",
           "authProvider": "vercel"
         },
         {
           "label": "의무기록 정정 및 재심사 정리",
-          "url": "https://father-hospital-treatment-private.vercel.app/archive/20260807-seosan-medical-record-correction/",
+          "url": "https://father-hospital-treatment-private.vercel.app/api/archive/20260807-seosan-medical-record-correction/index.html",
           "visibility": "private",
           "authProvider": "vercel"
         },
         {
           "label": "진료 녹취 정리",
-          "url": "https://father-hospital-treatment-private.vercel.app/archive/20260703-neuro-ophthalmology-visual-field/",
+          "url": "https://father-hospital-treatment-private.vercel.app/api/archive/20260703-neuro-ophthalmology-visual-field/index.html",
           "visibility": "private",
           "authProvider": "vercel"
         }
