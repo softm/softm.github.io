@@ -16,6 +16,16 @@ jobs:
       - uses: actions/checkout@v4
       - name: Compare canonical list titles with actual public headings
         run: python3 projects/audit-live-titles.py
+      - name: Require all scoped public detail headings to match
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          report=json.loads(Path('projects/title-audit/live-titles.json').read_text())
+          failed=[r for r in report['results'] if r['visibility']=='public' and r['status'] in ['title-mismatch','unverified']]
+          print(json.dumps({'projects':report['projectCount'],'listedEntries':report['rowCount'],'matchedPublicDetails':sum(r['status']=='matched' for r in report['results']),'failures':failed},ensure_ascii=False,indent=2))
+          assert not failed, 'Published public titles do not match the canonical list.'
+          PY
       - name: Preserve the exact public metadata used by the test
         if: always()
         run: |
