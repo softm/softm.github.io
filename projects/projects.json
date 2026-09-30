@@ -720,7 +720,7 @@
       "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
       "vercelAccountAuthVerified": false,
       "homePublicListCount": 0,
-      "homePrivateListCount": 14,
+      "homePrivateListCount": 7,
       "archiveRoot": "archive",
       "archiveMissingAssets": true
     },
