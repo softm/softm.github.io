@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "owner": "softm",
   "updatedAt": "2026-09-30",
-  "auditVersion": "20261004-baksok-public-redeploy-v1",
+  "auditVersion": "20261005-hwagok-july-public-redeploy-v2",
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -45,7 +45,7 @@
       "archiveMissingAssets": true,
       "auditStatus": "static-html-migration-complete-media-audit-partial",
       "mediaStatus": "현재 Git 저장소: 이미지 100개 + ZIP 3개(총 미디어성 자산 103개), 상세 문서 44개",
-      "deploymentNote": "2026-10-05 업로드된 화곡농장 2026-07 묶음을 공개 아카이브에 재정리. 기존 4개 페이지는 같은 URL로 본문·미디어 갤러리를 보강하고, 6/5 제초·7/1 카랑·7/1~2 냉동고 수리 3개 페이지를 추가. 공개 홈 목록 26개로 갱신.",
+      "deploymentNote": "2026-10-05 업로드된 화곡농장 2026-07 묶음을 공개 아카이브에 재정리. 기존 4개 페이지는 같은 URL로 본문·미디어 갤러리를 보강하고, 6/5 제초·7/1 카랑·7/1~2 냉동고 수리 3개 페이지를 추가. 공개 홈 목록 26개로 갱신하고 중앙 Projects 운영 목록 재배포를 트리거.",
       "links": [
         {
           "label": "2026-09-24 관리기 임대·출고",
@@ -206,7 +206,7 @@
       "vercelAccountAuthVerified": false,
       "homePublicListCount": 26,
       "homePrivateListCount": 4,
-      "homeVersion": "20261005-july-bundle"
+      "homeVersion": "20261005-july-bundle-v2"
     },
     {
       "repo": "gwangmyeong",
