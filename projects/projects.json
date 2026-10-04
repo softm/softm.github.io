@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "owner": "softm",
   "updatedAt": "2026-09-30",
-  "auditVersion": "20260930-father-hospital-full-rebuild-v4",
+  "auditVersion": "20261004-baksok-public-redeploy-v1",
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -851,7 +851,7 @@
       "description": "공개 프로젝트 안내에서 비공개 운영 기록으로 연결합니다. 비공개 원문과 첨부 원본은 인증 후 확인합니다.",
       "visibility": "mixed",
       "repoVisibility": "public",
-      "deploymentStatus": "deployed-partial-media",
+      "deploymentStatus": "deployed",
       "homeUrl": "https://softm.github.io/projects/baksok/",
       "publicUrl": "https://softm.github.io/baksok-public/",
       "publicRepoUrl": "https://github.com/softm/baksok-public",
@@ -860,45 +860,27 @@
       "privateDeploymentStatus": "ready",
       "privateDeploymentCommit": "9e5d742cd91602987c69c1b0474d91b415a2ff32",
       "anonymousAuthStatus": "login-screen-observed",
-      "pageCount": 2,
+      "pageCount": 1,
       "privatePageCount": 3,
-      "latestTitle": "비공개 구매·배송 기록",
+      "latestTitle": "2026-09-11 RIR-4000S 5대 배송 완료",
       "order": 80,
       "archiveSource": "github-live",
       "archiveMissingAssets": true,
-      "auditStatus": "partial",
-      "mediaStatus": "상세 비공개 HTML 3건 + 회수 사진 16장의 갤러리 구조 복원. 사진 바이너리 16개는 GitHub 업로드 대기",
-      "deploymentNote": "2026-09-28 9/9 사진 7장·9/11 사진 9장의 갤러리 HTML과 기존 상세 보고서 연결을 Private Git에 복원했고 Vercel 새 배포가 생성됨. 이미지 원본 바이너리 자체 업로드는 연결 도구 제약으로 남아 있음.",
+      "auditStatus": "public-redeploy-verified",
+      "mediaStatus": "공개본은 현재 문서 중심 1건. 원본 사진·영상은 비공개 아카이브에서 별도 관리하며 공개 전 검토 후 선별 이관.",
+      "deploymentNote": "2026-10-04 새 기준 공개 배포 시작. softm/baksok-public에 2026-09-11 RIR-4000S 5대 배송 기록을 공개본으로 등록하고 GitHub Pages 배포, 프로젝트 홈과 최상위 Projects 연결을 갱신. 개별 제품 식별번호와 비공개 운영정보는 공개본에서 제외.",
       "links": [
         {
-          "label": "비공개 구매·계약 상세",
-          "url": "https://baksok-private.vercel.app/reports/20260909-furniture-gas/",
-          "visibility": "private",
-          "authProvider": "vercel"
+          "label": "2026-09-11 RIR-4000S 5대 배송 완료",
+          "date": "2026-09-11",
+          "url": "https://softm.github.io/baksok-public/reports/20260911-rir4000s-delivery/",
+          "visibility": "public"
         },
         {
-          "label": "9/9 회수 사진 갤러리",
-          "url": "https://baksok-private.vercel.app/reports/20260909-furniture-gas/media-gallery.html",
+          "label": "비공개 운영 기록",
+          "url": "https://baksok-private.vercel.app/",
           "visibility": "private",
-          "authProvider": "vercel"
-        },
-        {
-          "label": "비공개 배송 상세",
-          "url": "https://baksok-private.vercel.app/reports/20260911-rir4000s-delivery/",
-          "visibility": "private",
-          "authProvider": "vercel"
-        },
-        {
-          "label": "9/11 회수 사진 갤러리",
-          "url": "https://baksok-private.vercel.app/reports/20260911-rir4000s-delivery/media-gallery.html",
-          "visibility": "private",
-          "authProvider": "vercel"
-        },
-        {
-          "label": "비공개 운영 분석",
-          "url": "https://baksok-private.vercel.app/reports/20260721-tax/",
-          "visibility": "private",
-          "authProvider": "vercel"
+          "authProvider": "project-password"
         }
       ],
       "legacyChatGPTSites": [
@@ -929,8 +911,8 @@
       "publicHomeStatus": "github-pages-home-generated",
       "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
       "vercelAccountAuthVerified": false,
-      "homePublicListCount": 1,
-      "homePrivateListCount": 5
+      "homePublicListCount": 2,
+      "homePrivateListCount": 4
     },
     {
       "repo": "gyeongju-trip-map",
