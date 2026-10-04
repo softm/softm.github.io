@@ -1,8 +1,8 @@
 {
   "schemaVersion": 2,
   "owner": "softm",
-  "updatedAt": "2026-09-30",
-  "auditVersion": "20261005-hwagok-july-public-redeploy-v2",
+  "updatedAt": "2026-10-05",
+  "auditVersion": "20261005-hwagok-directory-unit-reset-v1",
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -33,7 +33,7 @@
       "publicRepoUrl": "https://github.com/softm/hwagok-farm",
       "privateUrl": "https://hwagok-farm-private.vercel.app/",
       "authProvider": "vercel",
-      "pageCount": 26,
+      "pageCount": 7,
       "privatePageCount": 6,
       "latestTitle": "2026-09-24 화곡농장 더덕수확과 씨앗채취",
       "pageSelector": ".chat-card",
@@ -45,136 +45,48 @@
       "archiveMissingAssets": true,
       "auditStatus": "static-html-migration-complete-media-audit-partial",
       "mediaStatus": "현재 Git 저장소: 이미지 100개 + ZIP 3개(총 미디어성 자산 103개), 상세 문서 44개",
-      "deploymentNote": "2026-10-05 업로드된 화곡농장 2026-07 묶음을 공개 아카이브에 재정리. 기존 4개 페이지는 같은 URL로 본문·미디어 갤러리를 보강하고, 6/5 제초·7/1 카랑·7/1~2 냉동고 수리 3개 페이지를 추가. 공개 홈 목록 26개로 갱신하고 중앙 Projects 운영 목록 재배포를 트리거.",
+      "deploymentNote": "2026-10-05 공개 저장소를 기존 아카이브에서 클리어하고, 사용자가 업로드한 화곡농장_202607.zip의 최상위 디렉토리 단위를 목록 단위로 적용해 7건만 재배포. __MACOSX는 제외. 기존 공개 기록은 이번 목록에 합치지 않음.",
       "links": [
         {
-          "label": "2026-09-24 관리기 임대·출고",
-          "url": "https://softm.github.io/hwagok-farm/farm-machine-rental-20260924/",
-          "visibility": "public"
-        },
-        {
-          "label": "2026-09-23 더덕 수확·씨앗 채취",
-          "url": "https://softm.github.io/hwagok-farm/deodeok-harvest-20260923/",
-          "visibility": "public"
-        },
-        {
-          "label": "2026-09-22 관리기 수동시동·초크",
-          "url": "https://softm.github.io/hwagok-farm/archive/cultivator-manual-start-20260922/",
-          "visibility": "public"
-        },
-        {
-          "label": "2026-09-22 관리기 엔진정지",
-          "url": "https://softm.github.io/hwagok-farm/archive/asea-engine-stop-20260922/",
-          "visibility": "public"
-        },
-        {
-          "label": "2026-09-14 공업용 선풍기 회전기어박스",
-          "url": "https://softm.github.io/hwagok-farm/fan-gearbox-repair-20260914/",
-          "visibility": "public"
-        },
-        {
-          "label": "2026-09-07 벌초",
-          "url": "https://softm.github.io/hwagok-farm/mowing-20260907/",
-          "visibility": "public"
-        },
-        {
-          "label": "2026-09-05 화이트클로버 자동급수",
-          "url": "https://softm.github.io/hwagok-farm/irrigation-20260905/",
-          "visibility": "public"
-        },
-        {
-          "label": "2026-08-30 들깨 정식",
-          "url": "https://softm.github.io/hwagok-farm/perilla-transplant-20260830/",
-          "visibility": "public"
-        },
-        {
-          "label": "2026-08-26 벌초",
-          "url": "https://softm.github.io/hwagok-farm/mowing-20260826/",
-          "visibility": "public"
-        },
-        {
-          "label": "2026-08-21 CCTV 인터넷 연결",
-          "url": "https://softm.github.io/hwagok-farm/cctv-internet-20260821/",
-          "visibility": "public"
-        },
-        {
-          "label": "2026-08-20 스프링클러 나사 규격",
-          "url": "https://softm.github.io/hwagok-farm/sprinkler-thread-20260820/",
-          "visibility": "public"
-        },
-        {
-          "label": "2026-08-13 농막 아랫밭 방제",
-          "url": "https://softm.github.io/hwagok-farm/spray-record-20260813/",
-          "visibility": "public"
-        },
-        {
-          "label": "2026-08-11 단골 들깨밭 살포",
-          "url": "https://softm.github.io/hwagok-farm/dangol-spray-20260811/",
-          "visibility": "public"
-        },
-        {
-          "label": "2026-08-11 박 수확 · 사진 53장",
-          "url": "https://softm.github.io/hwagok-farm/20260811-gourd-harvest/",
-          "visibility": "public"
-        },
-        {
-          "label": "2026-08-11 양파 구입·저온창고 보관",
-          "url": "https://softm.github.io/hwagok-farm/onion-purchase-20260811/",
-          "visibility": "public"
-        },
-        {
-          "label": "2026-08-10 양파 구매처 조사",
-          "url": "https://softm.github.io/hwagok-farm/onion-sourcing-20260810/",
-          "visibility": "public"
-        },
-        {
-          "label": "2026-08-07 농막 그늘막",
-          "url": "https://softm.github.io/hwagok-farm/shade-net-20260807/",
-          "visibility": "public"
-        },
-        {
-          "label": "2026-07-11 냉동고 전기 증설",
+          "label": "2026-07-11 냉동고 전기 증설 작업 기록",
+          "date": "2026-07-11",
           "url": "https://softm.github.io/hwagok-farm/freezer-electric-20260711/",
           "visibility": "public"
         },
         {
-          "label": "2026-07-11 농막 차양막 시정조치",
+          "label": "2026-07-11 농막 차양막 거치대 대각선 보강 수리",
+          "date": "2026-07-11",
           "url": "https://softm.github.io/hwagok-farm/farm-awning-repair-20260711/",
           "visibility": "public"
         },
         {
-          "label": "2026-07-05 들깨·열무 밑거름",
+          "label": "2026-07-05 들깨·열무 밑거름 시비 계획",
+          "date": "2026-07-05",
           "url": "https://softm.github.io/hwagok-farm/fertilizer-plan/",
           "visibility": "public"
         },
         {
-          "label": "2026-07-01 감자밭 가장자리 카랑 제초제 살포",
-          "url": "https://softm.github.io/hwagok-farm/karang-herbicide-20260701/",
-          "visibility": "public"
-        },
-        {
           "label": "2026-07-01~02 냉동고 4마력 컴프레서 교체 수리",
+          "date": "2026-07-02",
           "url": "https://softm.github.io/hwagok-farm/freezer-compressor-20260701-02/",
           "visibility": "public"
         },
         {
-          "label": "2026-06-05 엄마 무밭 예초기·타랑 제초제 살포",
+          "label": "2026-07-01 감자밭 가장자리 카랑 제초제 살포",
+          "date": "2026-07-01",
+          "url": "https://softm.github.io/hwagok-farm/karang-herbicide-20260701/",
+          "visibility": "public"
+        },
+        {
+          "label": "2026-06-05 엄마 무밭 예초기 작업 및 타랑 제초제 살포",
+          "date": "2026-06-05",
           "url": "https://softm.github.io/hwagok-farm/weeding-tarang-20260605/",
           "visibility": "public"
         },
         {
-          "label": "2026-05-27 모스킬 방제",
+          "label": "2026-05-27 모스킬 방제 기록",
+          "date": "2026-05-27",
           "url": "https://softm.github.io/hwagok-farm/moskill-20260527/",
-          "visibility": "public"
-        },
-        {
-          "label": "농기계 임대·운반 서비스",
-          "url": "https://softm.github.io/hwagok-farm/farm-machine-rental/",
-          "visibility": "public"
-        },
-        {
-          "label": "화이트클로버 파종계획",
-          "url": "https://softm.github.io/hwagok-farm/white-clover/",
           "visibility": "public"
         }
       ],
@@ -204,9 +116,9 @@
       "publicHomeStatus": "github-pages-home-generated",
       "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
       "vercelAccountAuthVerified": false,
-      "homePublicListCount": 26,
+      "homePublicListCount": 7,
       "homePrivateListCount": 4,
-      "homeVersion": "20261005-july-bundle-v2"
+      "homeVersion": "20261005-directory-unit-reset"
     },
     {
       "repo": "gwangmyeong",
