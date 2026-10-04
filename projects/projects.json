@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "owner": "softm",
-  "updatedAt": "2026-10-04",
+  "updatedAt": "2026-09-30",
   "auditVersion": "20261004-baksok-public-redeploy-v1",
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
   "archivePolicy": {
@@ -911,8 +911,8 @@
       "publicHomeStatus": "github-pages-home-generated",
       "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
       "vercelAccountAuthVerified": false,
-      "homePublicListCount": 1,
-      "homePrivateListCount": 3
+      "homePublicListCount": 2,
+      "homePrivateListCount": 4
     },
     {
       "repo": "gyeongju-trip-map",
