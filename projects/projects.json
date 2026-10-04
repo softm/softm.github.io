@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "owner": "softm",
-  "updatedAt": "2026-10-05",
+  "updatedAt": "2026-09-30",
   "auditVersion": "20261005-hwagok-july-public-redeploy-v2",
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
   "archivePolicy": {
