@@ -127,6 +127,58 @@ jobs:
               f.write('This is a repository inventory, not confirmation that all historical chat attachments were recovered. Authenticated playback still requires verification. The detailed artifact retains the visibility of this repository.\n')
           print(json.dumps({'assetCount':len(assets),'counts':dict(counts),'missingRelativeReferences':len(missing)},ensure_ascii=False))
           PY
+      - name: Validate archive ZIP packages
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, pathlib, sys, zipfile
+          root=pathlib.Path.cwd()
+          errors=[]
+          zips=[p for p in root.rglob('*.zip') if '.git' not in p.parts and 'audit-result' not in p.parts]
+          for zp in zips:
+              # Generic uploaded archives may be source material. Enforce the package contract only
+              # when the archive declares itself as a generated record package.
+              try:
+                  with zipfile.ZipFile(zp) as z:
+                      names=[n for n in z.namelist() if not n.endswith('/')]
+                      basenames={pathlib.PurePosixPath(n).name for n in names}
+                      is_package=('manifest.json' in basenames and
+                                  ('README.md' in basenames or 'summary.md' in basenames) and
+                                  'index.html' in basenames)
+                      if not is_package:
+                          continue
+                      bad=z.testzip()
+                      if bad: errors.append(f'{zp}: corrupt member {bad}'); continue
+                      manifest_name=next(n for n in names if pathlib.PurePosixPath(n).name=='manifest.json')
+                      try: manifest=json.loads(z.read(manifest_name).decode('utf-8'))
+                      except Exception as e:
+                          errors.append(f'{zp}: invalid manifest.json ({type(e).__name__})'); continue
+                      entries=manifest.get('assets') or manifest.get('files') or []
+                      by_name=set(names)
+                      for item in entries:
+                          if not isinstance(item,dict): continue
+                          path=item.get('path')
+                          if not path or item.get('missing'): continue
+                          # Accept a manifest path relative to the manifest directory.
+                          base=pathlib.PurePosixPath(manifest_name).parent
+                          candidates={path, (base/path).as_posix()}
+                          actual=next((n for n in candidates if n in by_name),None)
+                          if not actual:
+                              errors.append(f'{zp}: manifest file missing: {path}'); continue
+                          data=z.read(actual)
+                          if item.get('bytes') is not None and len(data)!=int(item['bytes']):
+                              errors.append(f'{zp}: byte mismatch: {path}')
+                          if item.get('sha256'):
+                              digest=hashlib.sha256(data).hexdigest()
+                              if digest.lower()!=str(item['sha256']).lower():
+                                  errors.append(f'{zp}: sha256 mismatch: {path}')
+              except zipfile.BadZipFile:
+                  errors.append(f'{zp}: invalid ZIP')
+          if errors:
+              for e in errors: print('::error::'+e)
+              sys.exit(1)
+          print(f'ZIP package audit OK; checked {len(zips)} tracked ZIP candidate(s).')
+          PY
       - name: Retain audit in this repository only
         uses: actions/upload-artifact@v7.0.1
         with:
