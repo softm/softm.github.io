@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-10-06",
+  "updatedAt": "2026-09-30",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -586,7 +586,7 @@
       "projectHomeUrl": "https://softm.github.io/projects/ungdo/",
       "homeUrl": "https://softm.github.io/projects/ungdo/",
       "publicHomeStatus": "github-pages-home-generated",
-      "privateEntryPolicy": "Vercel Authentication; direct deep link after authentication",
+      "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
       "authProvider": "vercel-sso",
       "homePublicListCount": 0,
       "homePrivateListCount": 9,
@@ -740,9 +740,11 @@
           "recordPath": "archive/20260204-ungdo-40-25-sale-review",
           "media": "사진 6 · 문서 1"
         }
-      ]
+      ],
+      "previousHomeUrl": "https://softm.github.io/projects/ungdo/",
+      "vercelAccountAuthVerified": false
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
-  "homeVersion": "20261006-ungdo-private-v14"
+  "homeVersion": "20261005-zip-live-sync-v13"
 }
