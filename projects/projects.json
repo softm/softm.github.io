@@ -23,11 +23,11 @@
       "category": "농업",
       "deploymentStatus": "deployed",
       "repoStatus": "available",
-      "publicRepo": "plant",
-      "publicRepoUrl": "https://github.com/softm/plant",
-      "publicUrl": "https://softm.github.io/plant/",
-      "mediaStatus": "2026-05-27 기록의 Markdown·HTML과 현장 사진 10장을 프로젝트 공개 아카이브에 직접 포함",
-      "deploymentNote": "2026-10-05 새 아카이브 기준으로 공개 상세 페이지·프로젝트 홈·최상위 projects 목록 재등록",
+      "publicRepo": "hwagok-farm",
+      "publicRepoUrl": "https://github.com/softm/hwagok-farm",
+      "publicUrl": "https://softm.github.io/hwagok-farm/",
+      "mediaStatus": "2026-05-27 모스킬 방제 기록: HTML·Markdown·현장 사진 10장 공개 아카이브 포함",
+      "deploymentNote": "공개 실제 콘텐츠는 softm/hwagok-farm에 보관하고 softm.github.io는 projects 전체정보만 관리",
       "links": [
         {
           "visibility": "public",
@@ -36,10 +36,10 @@
           "chatTitle": "박 오이잎벌레 모스킬 방제 기록",
           "authoredAt": "2026-05-27",
           "dateSource": "user-specified",
-          "url": "https://softm.github.io/projects/hwagok-farm/records/20260527-moskill/",
+          "url": "https://softm.github.io/hwagok-farm/records/20260527-moskill/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260527-moskill",
           "category": "방제",
-          "summary": "박밭 3개 두둑에 모스킬을 약 50L 살포하고 오이잎벌레류 발생, 약효 반응, 강우 시점을 기록한 현장 방제 기록.",
-          "repoUrl": "https://github.com/softm/softm.github.io/tree/main/projects/hwagok-farm/records/20260527-moskill"
+          "summary": "박밭 3개 두둑에 모스킬 약 50L를 살포하고 오이잎벌레류 발생·약효 반응·강우 시점을 기록. 현장 사진 10장 포함."
         }
       ]
     }
