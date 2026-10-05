@@ -39,7 +39,9 @@
           "url": "https://softm.github.io/hwagok-farm/records/20260527-moskill/",
           "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260527-moskill",
           "category": "방제",
-          "summary": "박밭 3개 두둑에 모스킬 약 50L를 살포하고 오이잎벌레류 발생·약효 반응·강우 시점을 기록. 현장 사진 10장 포함."
+          "summary": "박밭 3개 두둑에 모스킬 약 50L를 살포하고 오이잎벌레류 발생·약효 반응·강우 시점을 기록. 현장 사진 10장 포함.",
+          "directory": "20260527-moskill",
+          "recordPath": "public/records/20260527-moskill"
         }
       ]
     }
