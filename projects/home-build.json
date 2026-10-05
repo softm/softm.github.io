@@ -1,6 +1,6 @@
 {
   "version": "20261005-zip-live-sync-v13",
-  "projectCount": 3,
+  "projectCount": 4,
   "projects": [
     {
       "repo": "hwagok-farm",
@@ -28,12 +28,22 @@
       "privateEntries": 0,
       "htmlSha256": "5c2478b818d9099bcde94cd1448a5ff05ec2286a90e4d135ffb2ce19f6659dc1",
       "authenticatedContentVerified": false
+    },
+    {
+      "repo": "ungdo-private",
+      "title": "웅도",
+      "homeUrl": "https://softm.github.io/projects/ungdo/",
+      "publicEntries": 0,
+      "privateEntries": 9,
+      "htmlSha256": "a7524b1ff9f0d9a1dd2efbfc0156b9f198ce3b0ac2027235a1a5638697921eb2",
+      "authenticatedContentVerified": false
     }
   ],
   "files": [
     "projects/hwagok-farm/index.html",
     "projects/baksok/index.html",
     "projects/farmland-policy-map/index.html",
+    "projects/ungdo/index.html",
     "projects/projects.json",
     "projects/index.html",
     "projects/README.md",
