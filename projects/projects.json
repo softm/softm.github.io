@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-10-05",
+  "updatedAt": "2026-09-30",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -14,7 +14,14 @@
     "sync": "프로젝트 서비스 홈 + 중앙 /projects/<project>/ + 최상위 /projects/를 같은 작업에서 갱신",
     "verify": "운영 URL·인증·직접 파일 접근·미디어 표시/재생·404/403/500을 실제 검증",
     "liveIndexCompletion": "소스/JSON/commit/CI 성공만으로 완료하지 않으며 /projects/<project>/와 /projects/ 양쪽 운영 화면에서 새 기록/프로젝트 카드의 실제 렌더링을 확인",
-    "completionGate": ["record-detail-live", "project-home-rendered", "top-projects-rendered", "project-to-home-link", "home-to-record-link", "media-live"],
+    "completionGate": [
+      "record-detail-live",
+      "project-home-rendered",
+      "top-projects-rendered",
+      "project-to-home-link",
+      "home-to-record-link",
+      "media-live"
+    ],
     "projectHome": "Public GitHub Pages TOC; private bodies and media remain in the original private repository"
   },
   "projects": [
@@ -31,7 +38,22 @@
       "publicUrl": "https://softm.github.io/hwagok-farm/",
       "mediaStatus": "2026-05-27 모스킬 방제 기록: HTML·Markdown·현장 사진 10장 공개 아카이브 포함",
       "deploymentNote": "공개 실제 콘텐츠는 softm/hwagok-farm에 보관하고 softm.github.io는 projects 전체정보만 관리",
-      "links": [{"visibility": "public", "label": "박 오이잎벌레 모스킬 방제 기록", "userTitle": "박 오이잎벌레 모스킬 방제 기록", "chatTitle": "박 오이잎벌레 모스킬 방제 기록", "authoredAt": "2026-05-27", "dateSource": "user-specified", "url": "https://softm.github.io/hwagok-farm/records/20260527-moskill/", "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260527-moskill", "category": "방제", "summary": "박밭 3개 두둑에 모스킬 약 50L를 살포하고 오이잎벌레류 발생·약효 반응·강우 시점을 기록. 현장 사진 10장 포함.", "directory": "20260527-moskill", "recordPath": "public/records/20260527-moskill"}],
+      "links": [
+        {
+          "visibility": "public",
+          "label": "박 오이잎벌레 모스킬 방제 기록",
+          "userTitle": "박 오이잎벌레 모스킬 방제 기록",
+          "chatTitle": "박 오이잎벌레 모스킬 방제 기록",
+          "authoredAt": "2026-05-27",
+          "dateSource": "user-specified",
+          "url": "https://softm.github.io/hwagok-farm/records/20260527-moskill/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260527-moskill",
+          "category": "방제",
+          "summary": "박밭 3개 두둑에 모스킬 약 50L를 살포하고 오이잎벌레류 발생·약효 반응·강우 시점을 기록. 현장 사진 10장 포함.",
+          "directory": "20260527-moskill",
+          "recordPath": "public/records/20260527-moskill"
+        }
+      ],
       "previousHomeUrl": null,
       "projectHomeUrl": "https://softm.github.io/projects/hwagok-farm/",
       "homeUrl": "https://softm.github.io/projects/hwagok-farm/",
@@ -54,7 +76,22 @@
       "publicUrl": "https://softm.github.io/baksok-public/",
       "mediaStatus": "2026-09-29 광진소파 스툴 제작 완료: HTML·Markdown·사진 4장·동영상 2개 공개 아카이브 포함",
       "deploymentNote": "공개 실제 콘텐츠는 softm/baksok-public에 보관하고 softm.github.io는 projects 전체정보만 관리",
-      "links": [{"visibility": "public", "label": "2026-09-29 신당동 광진소파 스툴 제작 완료", "userTitle": "20260929 서해박속낙지 신당동 광진소파 스툴 제작완료 500×500×450", "chatTitle": "서해박속낙지 광진소파 스툴 제작 완료", "authoredAt": "2026-09-29", "dateSource": "user-specified", "url": "https://softm.github.io/baksok-public/records/20260929-gwangjin-sofa-stool/", "repoUrl": "https://github.com/softm/baksok-public/tree/main/public/records/20260929-gwangjin-sofa-stool", "category": "시설·인테리어", "summary": "신당동 광진소파에서 제작한 서해박속낙지 매장용 스툴(500 × 500 × 450 mm) 제작 완료 기록. 사진 4장과 동영상 2개 포함.", "directory": "20260929-gwangjin-sofa-stool", "recordPath": "public/records/20260929-gwangjin-sofa-stool"}],
+      "links": [
+        {
+          "visibility": "public",
+          "label": "2026-09-29 신당동 광진소파 스툴 제작 완료",
+          "userTitle": "20260929 서해박속낙지 신당동 광진소파 스툴 제작완료 500×500×450",
+          "chatTitle": "서해박속낙지 광진소파 스툴 제작 완료",
+          "authoredAt": "2026-09-29",
+          "dateSource": "user-specified",
+          "url": "https://softm.github.io/baksok-public/records/20260929-gwangjin-sofa-stool/",
+          "repoUrl": "https://github.com/softm/baksok-public/tree/main/public/records/20260929-gwangjin-sofa-stool",
+          "category": "시설·인테리어",
+          "summary": "신당동 광진소파에서 제작한 서해박속낙지 매장용 스툴(500 × 500 × 450 mm) 제작 완료 기록. 사진 4장과 동영상 2개 포함.",
+          "directory": "20260929-gwangjin-sofa-stool",
+          "recordPath": "public/records/20260929-gwangjin-sofa-stool"
+        }
+      ],
       "homeUrl": "https://softm.github.io/projects/baksok/",
       "projectHomeUrl": "https://softm.github.io/projects/baksok/",
       "pageCount": 1,
@@ -87,7 +124,22 @@
       "privatePageCount": 0,
       "mediaStatus": "사용자 증빙은 브라우저 로컬 보관. 공개 저장소 미포함.",
       "deploymentNote": "공개 소스 main → 테스트/빌드 → gh-pages → GitHub Pages. 개인 농지·증빙 서버 전송 없음.",
-      "links": [{"visibility": "public", "label": "농지전수조사·정책 지도 앱", "chatTitle": "농지전수조사·정책 지도 앱", "authoredAt": "2026-10-05", "dateSource": "conversation-created-at", "url": "https://softm.github.io/farmland-policy-map/", "repoUrl": "https://github.com/softm/farmland-policy-map", "category": "농업 앱", "summary": "실제 지도에서 농지를 등록하고 점검 이유·할 일·공식 근거와 활용기회를 확인합니다. 증빙·인쇄·백업 지원. 공식 행정 판정은 아닙니다."}]
+      "links": [
+        {
+          "visibility": "public",
+          "label": "농지전수조사·정책 지도 앱",
+          "chatTitle": "농지전수조사·정책 지도 앱",
+          "authoredAt": "2026-10-05",
+          "dateSource": "conversation-created-at",
+          "url": "https://softm.github.io/farmland-policy-map/",
+          "repoUrl": "https://github.com/softm/farmland-policy-map",
+          "category": "농업 앱",
+          "summary": "실제 지도에서 농지를 등록하고 점검 이유·할 일·공식 근거와 활용기회를 확인합니다. 증빙·인쇄·백업 지원. 공식 행정 판정은 아닙니다."
+        }
+      ],
+      "previousHomeUrl": "https://softm.github.io/projects/farmland-policy-map/",
+      "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
+      "vercelAccountAuthVerified": false
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",

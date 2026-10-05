@@ -1,6 +1,6 @@
 {
   "version": "20261005-live-reflection-v12",
-  "projectCount": 2,
+  "projectCount": 3,
   "projects": [
     {
       "repo": "hwagok-farm",
@@ -19,11 +19,21 @@
       "privateEntries": 0,
       "htmlSha256": "23b2accf239ee7d5b9053f854afcdc56a60eefc2fac5fe571e8cee0b859ca80c",
       "authenticatedContentVerified": false
+    },
+    {
+      "repo": "farmland-policy-map",
+      "title": "농지안심맵",
+      "homeUrl": "https://softm.github.io/projects/farmland-policy-map/",
+      "publicEntries": 1,
+      "privateEntries": 0,
+      "htmlSha256": "44fe8818e5a7cdef6628cee76e0f1042e78287db1b7da22f845dbe4b33d2a289",
+      "authenticatedContentVerified": false
     }
   ],
   "files": [
     "projects/hwagok-farm/index.html",
     "projects/baksok/index.html",
+    "projects/farmland-policy-map/index.html",
     "projects/projects.json",
     "projects/index.html",
     "projects/README.md",
