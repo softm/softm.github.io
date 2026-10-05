@@ -1,0 +1,682 @@
+<!doctype html>
+<!-- SOFTM-markdown-html 2026-07-29 시작: Markdown 방제 기록을 반응형 단일 HTML 문서로 변환 -->
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="2026-05-27 화곡농장 박 오이잎벌레류 발생과 모스킬 방제 작업 기록. 사진 10장 포함.">
+    <meta name="theme-color" content="#315a3d">
+    <title>2026-05-27 박 오이잎벌레 모스킬 방제 기록</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --background: #f5f3eb;
+            --surface: #fffdf8;
+            --surface-muted: #edf1e8;
+            --ink: #1f2922;
+            --ink-muted: #637066;
+            --line: #d8ded4;
+            --accent: #315a3d;
+            --accent-deep: #21432c;
+            --accent-soft: #dce8d8;
+            --highlight: #c78a36;
+            --shadow: 0 18px 50px rgba(40, 56, 43, 0.1);
+            --radius-large: 28px;
+            --radius-medium: 18px;
+            --content-width: 1120px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-width: 320px;
+            background:
+                radial-gradient(circle at top left, rgba(199, 138, 54, 0.12), transparent 30rem),
+                linear-gradient(180deg, #eef2e9 0, var(--background) 28rem);
+            color: var(--ink);
+            font-family: Pretendard, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+            line-height: 1.7;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+        .page {
+            width: min(calc(100% - 40px), var(--content-width));
+            margin: 0 auto;
+            padding: 48px 0 72px;
+        }
+
+        .hero {
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
+            min-height: 390px;
+            padding: clamp(34px, 7vw, 76px);
+            border-radius: var(--radius-large);
+            background:
+                linear-gradient(125deg, rgba(24, 62, 36, 0.98), rgba(49, 90, 61, 0.9)),
+                url("img_10.jpg") center / cover;
+            box-shadow: var(--shadow);
+            color: #fff;
+        }
+
+        .hero::after {
+            position: absolute;
+            z-index: -1;
+            right: -100px;
+            bottom: -160px;
+            width: 440px;
+            height: 440px;
+            border: 1px solid rgba(255, 255, 255, 0.24);
+            border-radius: 50%;
+            box-shadow:
+                0 0 0 52px rgba(255, 255, 255, 0.04),
+                0 0 0 104px rgba(255, 255, 255, 0.03);
+            content: "";
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 0 22px;
+            color: #dfe9dc;
+            font-size: 0.86rem;
+            font-weight: 800;
+            letter-spacing: 0.16em;
+        }
+
+        .eyebrow::before {
+            width: 26px;
+            height: 2px;
+            background: #e5ad5e;
+            content: "";
+        }
+
+        .hero h1 {
+            max-width: 780px;
+            margin: 0;
+            font-size: clamp(2.3rem, 6vw, 4.8rem);
+            font-weight: 800;
+            letter-spacing: -0.055em;
+            line-height: 1.06;
+        }
+
+        .hero-description {
+            max-width: 630px;
+            margin: 24px 0 0;
+            color: rgba(255, 255, 255, 0.78);
+            font-size: clamp(1rem, 2vw, 1.15rem);
+        }
+
+        .summary-list {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            max-width: 720px;
+            margin: 38px 0 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .summary-list li {
+            padding: 15px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.09);
+            backdrop-filter: blur(8px);
+        }
+
+        .summary-label {
+            display: block;
+            margin-bottom: 2px;
+            color: rgba(255, 255, 255, 0.62);
+            font-size: 0.76rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+        }
+
+        .summary-value {
+            font-size: 1.05rem;
+            font-weight: 800;
+        }
+
+        main {
+            display: grid;
+            gap: 28px;
+            margin-top: 28px;
+        }
+
+        .section {
+            padding: clamp(28px, 5vw, 52px);
+            border: 1px solid rgba(216, 222, 212, 0.9);
+            border-radius: var(--radius-large);
+            background: rgba(255, 253, 248, 0.94);
+            box-shadow: 0 12px 36px rgba(40, 56, 43, 0.06);
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 26px;
+        }
+
+        .section-kicker {
+            margin: 0 0 5px;
+            color: var(--highlight);
+            font-size: 0.78rem;
+            font-weight: 900;
+            letter-spacing: 0.14em;
+        }
+
+        .section h2 {
+            margin: 0;
+            font-size: clamp(1.55rem, 3vw, 2.2rem);
+            letter-spacing: -0.04em;
+            line-height: 1.25;
+        }
+
+        .section-note {
+            margin: 0;
+            color: var(--ink-muted);
+            font-size: 0.9rem;
+        }
+
+        .table-wrap {
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: var(--radius-medium);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 17px 20px;
+            border-bottom: 1px solid var(--line);
+            text-align: left;
+            vertical-align: top;
+        }
+
+        tr:last-child th,
+        tr:last-child td {
+            border-bottom: 0;
+        }
+
+        th {
+            width: 23%;
+            background: var(--surface-muted);
+            color: var(--accent-deep);
+            font-size: 0.9rem;
+            font-weight: 800;
+        }
+
+        td {
+            background: var(--surface);
+            font-weight: 600;
+        }
+
+        .observations {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+            margin: 0;
+            padding: 0;
+            counter-reset: observation;
+            list-style: none;
+        }
+
+        .observations li {
+            position: relative;
+            min-height: 126px;
+            padding: 26px 26px 24px 72px;
+            border: 1px solid var(--line);
+            border-radius: var(--radius-medium);
+            background: var(--surface);
+            counter-increment: observation;
+        }
+
+        .observations li::before {
+            position: absolute;
+            top: 25px;
+            left: 24px;
+            display: grid;
+            width: 32px;
+            height: 32px;
+            place-items: center;
+            border-radius: 50%;
+            background: var(--accent-soft);
+            color: var(--accent-deep);
+            font-size: 0.78rem;
+            font-weight: 900;
+            content: counter(observation, decimal-leading-zero);
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .gallery figure {
+            overflow: hidden;
+            margin: 0;
+            border: 1px solid var(--line);
+            border-radius: var(--radius-medium);
+            background: var(--surface);
+            transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+        }
+
+        .gallery figure:hover {
+            border-color: #9db39f;
+            box-shadow: 0 14px 30px rgba(41, 66, 48, 0.13);
+            transform: translateY(-3px);
+        }
+
+        .gallery a {
+            display: block;
+            background: #e7ebe3;
+        }
+
+        .gallery a:focus-visible,
+        .source-link:focus-visible {
+            outline: 3px solid #df9b3f;
+            outline-offset: 3px;
+        }
+
+        .gallery img {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            transition: transform 240ms ease;
+        }
+
+        .gallery a:hover img {
+            transform: scale(1.025);
+        }
+
+        .gallery figcaption {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 13px 15px;
+            color: var(--ink-muted);
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .gallery figcaption::after {
+            color: var(--accent);
+            content: "원본 보기";
+        }
+
+        .gallery figure:last-child {
+            grid-column: 2;
+        }
+
+        footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            padding: 24px 8px 0;
+            color: var(--ink-muted);
+            font-size: 0.87rem;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        .source-link {
+            color: var(--accent-deep);
+            font-weight: 800;
+            text-underline-offset: 4px;
+        }
+
+        @media (max-width: 800px) {
+            .page {
+                width: min(calc(100% - 24px), var(--content-width));
+                padding-top: 12px;
+            }
+
+            .hero {
+                min-height: auto;
+                border-radius: 22px;
+            }
+
+            .summary-list {
+                grid-template-columns: 1fr;
+                max-width: 420px;
+            }
+
+            .section {
+                border-radius: 22px;
+            }
+
+            .section-heading {
+                align-items: start;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .observations {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .gallery figure:last-child {
+                grid-column: auto;
+            }
+        }
+
+        @media (max-width: 560px) {
+            body {
+                word-break: normal;
+            }
+
+            .page {
+                width: min(calc(100% - 16px), var(--content-width));
+                padding-bottom: 40px;
+            }
+
+            .hero {
+                padding: 32px 24px;
+            }
+
+            .hero h1 {
+                font-size: clamp(2.2rem, 13vw, 3.5rem);
+            }
+
+            .section {
+                padding: 26px 18px;
+            }
+
+            .table-wrap {
+                overflow: visible;
+                border: 0;
+            }
+
+            table,
+            tbody,
+            tr,
+            th,
+            td {
+                display: block;
+                width: 100%;
+            }
+
+            table {
+                display: grid;
+                gap: 10px;
+            }
+
+            tr {
+                overflow: hidden;
+                border: 1px solid var(--line);
+                border-radius: 14px;
+            }
+
+            th,
+            td {
+                border: 0;
+            }
+
+            th {
+                padding: 10px 14px 5px;
+                background: var(--surface-muted);
+            }
+
+            td {
+                padding: 5px 14px 13px;
+                background: var(--surface-muted);
+            }
+
+            .observations li {
+                padding: 68px 20px 22px;
+            }
+
+            .observations li::before {
+                top: 20px;
+                left: 20px;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+
+            footer {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 8px;
+                padding-inline: 6px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            .gallery figure,
+            .gallery img {
+                transition: none;
+            }
+        }
+
+        @media print {
+            body {
+                background: #fff;
+            }
+
+            .page {
+                width: 100%;
+                padding: 0;
+            }
+
+            .hero,
+            .section {
+                box-shadow: none;
+            }
+
+            .gallery {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+    </style>
+<link rel="canonical" href="https://softm.github.io/projects/hwagok-farm/records/20260527-moskill/">
+</head>
+<body>
+    <div class="page">
+        <header class="hero">
+            <p class="eyebrow">방제 기록 · <time datetime="2026-05-27">2026.05.27</time></p>
+            <h1>2026-05-27 박 오이잎벌레 모스킬 방제 기록</h1>
+            <p class="hero-description">
+                오이잎벌레류 대량 발생 구역에 모스킬을 살포하고 약효 반응과 현장 상황을 기록했습니다.
+            </p>
+            <ul class="summary-list" aria-label="주요 방제 정보">
+                <li>
+                    <span class="summary-label">살포 시각</span>
+                    <span class="summary-value">14:30</span>
+                </li>
+                <li>
+                    <span class="summary-label">총 살포량</span>
+                    <span class="summary-value">약 50L</span>
+                </li>
+                <li>
+                    <span class="summary-label">방제 구역</span>
+                    <span class="summary-value">3개 두둑</span>
+                </li>
+            </ul>
+        </header>
+
+        <main>
+            <section class="section" aria-labelledby="details-title">
+                <div class="section-heading">
+                    <div>
+                        <p class="section-kicker">APPLICATION DETAILS</p>
+                        <h2 id="details-title">방제 정보</h2>
+                    </div>
+                    <p class="section-note">살포 당일 작업 기준</p>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th scope="row">방제일</th>
+                                <td><time datetime="2026-05-27">2026-05-27</time></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">약제</th>
+                                <td>모스킬(브로플라닐라이드 액상수화제)</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">구매처</th>
+                                <td>대산읍 한국농자재마트</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">구매가격</th>
+                                <td>13,000원</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">살포시각</th>
+                                <td>14:30</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">강우시작</th>
+                                <td>18:00경(약 3시간 30분 후)</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">살포량</th>
+                                <td>20L 분무기 × 2.5회 (약 50L)</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">방제구역</th>
+                                <td>3개 두둑</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="section" aria-labelledby="observations-title">
+                <div class="section-heading">
+                    <div>
+                        <p class="section-kicker">FIELD NOTES</p>
+                        <h2 id="observations-title">현장 관찰</h2>
+                    </div>
+                </div>
+                <ol class="observations">
+                    <li>오이잎벌레류 대량 발생.</li>
+                    <li>살포 후 개체가 비틀거리며 비행능력 저하.</li>
+                    <li>약효가 나타난 개체 약 100마리 직접 제거.</li>
+                    <li>비가 왔지만 약효는 상당 부분 발현된 것으로 판단.</li>
+                </ol>
+            </section>
+
+            <section class="section" aria-labelledby="gallery-title">
+                <div class="section-heading">
+                    <div>
+                        <p class="section-kicker">PHOTO LOG</p>
+                        <h2 id="gallery-title">현장 사진</h2>
+                    </div>
+                    <p class="section-note">사진을 누르면 원본 크기로 열립니다.</p>
+                </div>
+                <div class="gallery">
+                    <figure>
+                        <a href="img_01.jpg" target="_blank" rel="noopener" aria-label="현장 사진 1 원본 보기">
+                            <img src="img_01.jpg" alt="모스킬 방제 현장 사진 1" loading="lazy">
+                        </a>
+                        <figcaption>img_01.jpg</figcaption>
+                    </figure>
+                    <figure>
+                        <a href="img_02.jpg" target="_blank" rel="noopener" aria-label="현장 사진 2 원본 보기">
+                            <img src="img_02.jpg" alt="모스킬 방제 현장 사진 2" loading="lazy">
+                        </a>
+                        <figcaption>img_02.jpg</figcaption>
+                    </figure>
+                    <figure>
+                        <a href="img_03.jpg" target="_blank" rel="noopener" aria-label="현장 사진 3 원본 보기">
+                            <img src="img_03.jpg" alt="모스킬 방제 현장 사진 3" loading="lazy">
+                        </a>
+                        <figcaption>img_03.jpg</figcaption>
+                    </figure>
+                    <figure>
+                        <a href="img_04.jpg" target="_blank" rel="noopener" aria-label="현장 사진 4 원본 보기">
+                            <img src="img_04.jpg" alt="모스킬 방제 현장 사진 4" loading="lazy">
+                        </a>
+                        <figcaption>img_04.jpg</figcaption>
+                    </figure>
+                    <figure>
+                        <a href="img_05.jpg" target="_blank" rel="noopener" aria-label="현장 사진 5 원본 보기">
+                            <img src="img_05.jpg" alt="모스킬 방제 현장 사진 5" loading="lazy">
+                        </a>
+                        <figcaption>img_05.jpg</figcaption>
+                    </figure>
+                    <figure>
+                        <a href="img_06.jpg" target="_blank" rel="noopener" aria-label="현장 사진 6 원본 보기">
+                            <img src="img_06.jpg" alt="모스킬 방제 현장 사진 6" loading="lazy">
+                        </a>
+                        <figcaption>img_06.jpg</figcaption>
+                    </figure>
+                    <figure>
+                        <a href="img_07.jpg" target="_blank" rel="noopener" aria-label="현장 사진 7 원본 보기">
+                            <img src="img_07.jpg" alt="모스킬 방제 현장 사진 7" loading="lazy">
+                        </a>
+                        <figcaption>img_07.jpg</figcaption>
+                    </figure>
+                    <figure>
+                        <a href="img_08.jpg" target="_blank" rel="noopener" aria-label="현장 사진 8 원본 보기">
+                            <img src="img_08.jpg" alt="모스킬 방제 현장 사진 8" loading="lazy">
+                        </a>
+                        <figcaption>img_08.jpg</figcaption>
+                    </figure>
+                    <figure>
+                        <a href="img_09.jpg" target="_blank" rel="noopener" aria-label="현장 사진 9 원본 보기">
+                            <img src="img_09.jpg" alt="모스킬 방제 현장 사진 9" loading="lazy">
+                        </a>
+                        <figcaption>img_09.jpg</figcaption>
+                    </figure>
+                    <figure>
+                        <a href="img_10.jpg" target="_blank" rel="noopener" aria-label="현장 사진 10 원본 보기">
+                            <img src="img_10.jpg" alt="모스킬 방제 현장 사진 10" loading="lazy">
+                        </a>
+                        <figcaption>img_10.jpg</figcaption>
+                    </figure>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>모스킬 방제 현장 기록 · <time datetime="2026-05-27">2026년 5월 27일</time></p>
+            <span><a class="source-link" href="20260527_모스킬_방제기록_최종.md">원본 Markdown 보기</a> · <a class="source-link" href="https://softm.github.io/projects/hwagok-farm/">화곡농장 아카이브</a></span>
+        </footer>
+    </div>
+</body>
+</html>
+<!-- SOFTM-markdown-html 2026-07-29 끝 -->

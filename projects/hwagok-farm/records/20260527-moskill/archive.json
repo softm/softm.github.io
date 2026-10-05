@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "20260527-moskill",
+  "date": "2026-05-27",
+  "title": "2026-05-27 박 오이잎벌레 모스킬 방제 기록",
+  "project": "화곡농장",
+  "visibility": "public",
+  "category": "방제",
+  "sourceRepository": "softm/plant",
+  "sourcePath": "농약로그/20260527_모스킬_방제기록_최종",
+  "files": {
+    "html": "index.html",
+    "markdown": "20260527_모스킬_방제기록_최종.md",
+    "images": [
+      "img_01.jpg",
+      "img_02.jpg",
+      "img_03.jpg",
+      "img_04.jpg",
+      "img_05.jpg",
+      "img_06.jpg",
+      "img_07.jpg",
+      "img_08.jpg",
+      "img_09.jpg",
+      "img_10.jpg"
+    ]
+  }
+}
