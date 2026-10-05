@@ -44,6 +44,36 @@
           "recordPath": "public/records/20260527-moskill"
         }
       ]
+    },
+    {
+      "order": 2,
+      "repo": "baksok-public",
+      "title": "서해박속낙지",
+      "description": "서해박속낙지 매장 운영·시설·메뉴·작업 기록 아카이브",
+      "category": "음식점",
+      "deploymentStatus": "deployed",
+      "repoStatus": "available",
+      "publicRepo": "baksok-public",
+      "publicRepoUrl": "https://github.com/softm/baksok-public",
+      "publicUrl": "https://softm.github.io/baksok-public/",
+      "mediaStatus": "2026-09-29 광진소파 스툴 제작 완료: HTML·Markdown·사진 4장·동영상 2개 공개 아카이브 포함",
+      "deploymentNote": "공개 실제 콘텐츠는 softm/baksok-public에 보관하고 softm.github.io는 projects 전체정보만 관리",
+      "links": [
+        {
+          "visibility": "public",
+          "label": "2026-09-29 신당동 광진소파 스툴 제작 완료",
+          "userTitle": "20260929 서해박속낙지 신당동 광진소파 스툴 제작완료 500×500×450",
+          "chatTitle": "서해박속낙지 광진소파 스툴 제작 완료",
+          "authoredAt": "2026-09-29",
+          "dateSource": "user-specified",
+          "url": "https://softm.github.io/baksok-public/records/20260929-gwangjin-sofa-stool/",
+          "repoUrl": "https://github.com/softm/baksok-public/tree/main/public/records/20260929-gwangjin-sofa-stool",
+          "category": "시설·인테리어",
+          "summary": "신당동 광진소파에서 제작한 서해박속낙지 매장용 스툴(500 × 500 × 450 mm) 제작 완료 기록. 사진 4장과 동영상 2개 포함.",
+          "directory": "20260929-gwangjin-sofa-stool",
+          "recordPath": "public/records/20260929-gwangjin-sofa-stool"
+        }
+      ]
     }
   ]
 }
