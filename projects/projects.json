@@ -571,7 +571,7 @@
       "projectHomeUrl": "https://softm.github.io/projects/ungdo/",
       "homeUrl": "https://softm.github.io/projects/ungdo/",
       "publicHomeStatus": "github-pages-home-generated",
-      "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
+      "privateEntryPolicy": "Vercel Authentication required on all deployment targets; direct deep link after authentication",
       "authProvider": "vercel-sso",
       "homePublicListCount": 0,
       "homePrivateListCount": 9,
@@ -727,7 +727,7 @@
         }
       ],
       "previousHomeUrl": "https://softm.github.io/projects/ungdo/",
-      "vercelAccountAuthVerified": false
+      "vercelAccountAuthVerified": true
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
