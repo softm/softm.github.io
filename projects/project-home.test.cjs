@@ -16,9 +16,10 @@ assert.deepEqual(b.sortRows(rows,'title-asc').map(x=>x.title),['가','나','다'
 assert.deepEqual(b.sortRows(rows,'title-desc').map(x=>x.title),['라','다','나','가']);
 assert.deepEqual(rows.map(x=>x.title),['나','다','가','라']);
 assert.equal(b.unique([{url:'https://example.com/a/'},{url:'https://example.com/a/index.html'}]).length,1);
-const p={repo:'hwagok-farm',category:'농업',privateUrl:'https://hwagok-farm-private.vercel.app/',publicUrl:'https://softm.github.io/hwagok-farm/',links:Object.keys(b.FARM).map(slug=>({label:slug,url:'https://softm.github.io/hwagok-farm/'+slug+'/',visibility:'public'}))};
+const publicLinks=Object.keys(b.FARM).map(slug=>({label:slug,url:'https://softm.github.io/hwagok-farm/'+slug+'/',visibility:'public'}));
+const p={repo:'hwagok-farm',category:'농업',privateUrl:'https://hwagok-farm-private.vercel.app/',publicUrl:'https://softm.github.io/hwagok-farm/',links:[...publicLinks,{label:'비공개 샘플',url:'https://hwagok-farm-private.vercel.app/sample/',visibility:'private'}]};
 const r=b.lists(p);
-assert.equal(r.public.length,23);assert.equal(r.private.length,4);
+assert.equal(r.public.length,publicLinks.length);assert.equal(r.private.length,1);
 const privateRecord=b.record(p,{label:'비공개',summary:'DO NOT EXPOSE',url:p.privateUrl},0,'private');
 assert.equal(privateRecord.summary,'');assert.equal(privateRecord.count,null);
 assert.equal(b.canEnrich(privateRecord,p),false);
@@ -41,3 +42,9 @@ const customized=b.lists(p,{entries:{[b.keyFor(r.public[0].url)]:{authoredAt:'20
 assert.equal(customized.public[0].displayName,'사용자 제목');
 assert.equal(customized.public[0].displayDate,'2026-09-30');
 console.log('PASS: concurrent authored-date and user-title policy preserved; no filename/event/deployment-date inference');
+
+const baksokReset=b.lists({repo:'baksok-public',category:'음식점',deploymentStatus:'deployed',links:[{label:'새 기록',url:'https://softm.github.io/baksok-public/records/new/',visibility:'public'}]});
+assert.equal(baksokReset.public.length,1);
+assert.equal(baksokReset.private.length,0);
+assert.equal(baksokReset.public[0].displayName,'새 기록');
+console.log('PASS: reset-safe baksok list uses only projects.json declared records');
