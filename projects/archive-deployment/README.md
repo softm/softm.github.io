@@ -2,7 +2,16 @@
 
 최종 갱신: 2026-10-05
 
-이 문서는 “아카이브 배포” 프로젝트에서 사용하는 운영 기준 소스다. 전역 상세 기준은 `../README.md`와 `../PROJECT-HOME-POLICY.md`를 함께 따른다.
+이 문서는 “아카이브 배포” 프로젝트에서 사용하는 운영 기준 소스다.
+
+## 기준 문서 우선순위
+
+2026-10-05부터 다음 두 문서를 **Source of Truth**로 사용한다.
+
+1. `archive_deployment_prompt.md` — 아카이브 배포 전체 정책, 공개/비공개, 인증, 미디어, 홈/중앙 인덱스, 완료 판정
+2. `20261005_아카이브배포_ZIP폴더_Workflow_처리기준.md` — `zip/` 수집함, ZIP/폴더 처리, manifest, live verification, cleanup 구현 기준
+
+`../README.md`, `../PROJECT-HOME-POLICY.md` 및 공통 workflow는 위 두 기준을 구현하는 운영 소스이며 충돌 시 위 기준 문서에 맞춰 수정한다.
 
 ## 목적
 
@@ -36,7 +45,31 @@
 8. 공개/비공개 프로젝트 홈과 중앙 프로젝트 인덱스를 갱신한다.
 9. 사용자용 상세 링크와 GitHub slug 디렉토리 링크를 각각 생성한다.
 10. 운영 URL, 사진 표시, 영상·음성 재생, 원본 다운로드, 404/403/500, 인증을 실제 검증한다.
-11. 모든 검증이 통과한 입력만 `zip/`에서 삭제한다.
+11. final verification까지 통과한 입력만 별도 cleanup 단계에서 `zip/`에서 삭제한다.
+
+권장 파이프라인은 다음 순서를 고정한다.
+
+```text
+archive-inbox-detect
+  ↓
+archive-build
+  ↓
+archive-manifest-verify
+  ↓
+commit-record
+  ↓
+deploy
+  ↓
+live-verify
+  ↓
+sync-project-index
+  ↓
+final-verify
+  ↓
+cleanup-inbox
+```
+
+`archive-build` 또는 `commit-record` 단계에서 입력을 삭제해서는 안 된다.
 
 ## 수집함 삭제 안전장치
 
