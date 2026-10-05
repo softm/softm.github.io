@@ -16,6 +16,10 @@ on:
       - projects/view-controls.test.cjs
       - projects/chat-metadata.json
       - projects/projects.json
+      - projects/archive-sync.js
+      - projects/archive-sync.test.cjs
+      - projects/sync-archive-catalog.py
+      - 'projects/archive-deployment/**'
       - .github/workflows/publish-project-homes.yml
   workflow_dispatch:
 permissions:
@@ -42,6 +46,7 @@ jobs:
           node projects/project-home.test.cjs
           node projects/test-title-parity.cjs
           python3 projects/home-generator.py
+          node projects/archive-sync.test.cjs
           python3 - <<'PY'
           import json
           from pathlib import Path
