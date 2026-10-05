@@ -10,7 +10,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '20261005-zip-live-sync-v13'
+VERSION = '20261006-ungdo-v14'
 
 class ArchiveDataParser(HTMLParser):
     def __init__(self):
@@ -38,7 +38,7 @@ def patch_runtime():
     path = ROOT / 'project-home.js'
     source = path.read_text(encoding='utf-8')
     replacements = [
-        ("const VERSION='20261005-live-reflection-v12';", "const VERSION='20261005-zip-live-sync-v13';"),
+        ("const VERSION='20261005-live-reflection-v12';", "const VERSION='20261006-ungdo-v14';"),
         ("function authoredDate(row){", "function authoredDate(row){if(row.dateSource==='archive-canonical')return dateOnly(row.date);"),
         ("function display(row){const date=authoredDate(row);", "function display(row){const date=authoredDate(row);if(row.dateSource==='archive-canonical'){const title=text(row.title)||text(row.label)||'기록';return {...row,displayDate:date,displayName:title,displayTitle:title,titleSource:'archive-canonical'}}"),
         ("return display({...metadata?.entries?.[key],...row,...p.chatMetadata?.[key]})", "return row.dateSource==='archive-canonical'?display(row):display({...metadata?.entries?.[key],...row,...p.chatMetadata?.[key]})"),
