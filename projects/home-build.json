@@ -1,14 +1,14 @@
 {
-  "version": "20261005-live-reflection-v12",
+  "version": "20261005-zip-live-sync-v13",
   "projectCount": 3,
   "projects": [
     {
       "repo": "hwagok-farm",
       "title": "화곡농장",
       "homeUrl": "https://softm.github.io/projects/hwagok-farm/",
-      "publicEntries": 1,
+      "publicEntries": 29,
       "privateEntries": 0,
-      "htmlSha256": "54243c1306f6712a651f91a6539bba82c5f03fd8780f6bfd18ab07e26bcab836",
+      "htmlSha256": "24cdcb186d2be0f4add7d46877c6af6a71a0b43bee71b2fdb07f8d0ef8394c58",
       "authenticatedContentVerified": false
     },
     {
@@ -17,7 +17,7 @@
       "homeUrl": "https://softm.github.io/projects/baksok/",
       "publicEntries": 1,
       "privateEntries": 0,
-      "htmlSha256": "23b2accf239ee7d5b9053f854afcdc56a60eefc2fac5fe571e8cee0b859ca80c",
+      "htmlSha256": "2c5f3512e8da456cbcfb7488211e44f9e80651f9cdce421d321017863a338271",
       "authenticatedContentVerified": false
     },
     {
@@ -26,7 +26,7 @@
       "homeUrl": "https://softm.github.io/projects/farmland-policy-map/",
       "publicEntries": 1,
       "privateEntries": 0,
-      "htmlSha256": "44fe8818e5a7cdef6628cee76e0f1042e78287db1b7da22f845dbe4b33d2a289",
+      "htmlSha256": "5c2478b818d9099bcde94cd1448a5ff05ec2286a90e4d135ffb2ce19f6659dc1",
       "authenticatedContentVerified": false
     }
   ],
@@ -46,10 +46,17 @@
     "projects/CHAT-TITLE-POLICY.md",
     "projects/view-controls.js",
     "projects/view-controls.css",
-    "projects/view-controls.test.cjs"
+    "projects/view-controls.test.cjs",
+    "projects/archive-sync.js",
+    "projects/archive-sync.test.cjs",
+    "projects/sync-archive-catalog.py",
+    "projects/archive-deployment/README.md",
+    "projects/archive-deployment/CHANGELOG.md",
+    "projects/archive-deployment/archive_deployment_prompt.md",
+    "projects/archive-deployment/20261005_아카이브배포_ZIP폴더_Workflow_처리기준.md"
   ],
   "detailsAndMediaModified": false,
-  "chatTitlePolicy": "authored date + user title (preferred) or original chat title",
+  "chatTitlePolicy": "ZIP archives: canonical source date/title; other records: confirmed authored date and user title",
   "unknownAuthoredDatesAreNotGuessed": true,
   "features": {
     "views": [
@@ -68,6 +75,7 @@
     ],
     "privateContentFetched": false,
     "archiveDeploymentHub": true,
-    "projectHomesRequired": true
+    "projectHomesRequired": true,
+    "liveArchiveSource": "published HTML archive-data; no manual duplicate list"
   }
 }
