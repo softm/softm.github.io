@@ -116,8 +116,10 @@ def build():
         p.setdefault('previousHomeUrl',p.get('homeUrl'))
         p.update(projectHomeUrl=home,homeUrl=home,publicHomeStatus='github-pages-home-generated')
         if p.get('repoStatus')=='missing': p.pop('publicRepoUrl',None)
-        p['privateEntryPolicy']='direct-deep-link; server authentication; return to requested chat'
-        p['vercelAccountAuthVerified']=False
+        if not p.get('privateEntryPolicy'):
+            p['privateEntryPolicy']='direct-deep-link; server authentication; return to requested chat'
+        if 'vercelAccountAuthVerified' not in p:
+            p['vercelAccountAuthVerified']=False
         pub,pri=chats(p)
         p['homePublicListCount']=len(pub);p['homePrivateListCount']=len(pri)
         repolinks=anchor(p.get('publicRepoUrl'),'GitHub 공개 저장소')+anchor(p.get('privateRepoUrl'),'🔒 GitHub 비공개 저장소')
