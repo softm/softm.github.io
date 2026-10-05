@@ -1,5 +1,5 @@
 {
-  "version": "20261005-zip-live-sync-v13",
+  "version": "20261006-ungdo-v14",
   "projectCount": 4,
   "projects": [
     {
@@ -8,7 +8,7 @@
       "homeUrl": "https://softm.github.io/projects/hwagok-farm/",
       "publicEntries": 28,
       "privateEntries": 0,
-      "htmlSha256": "2e416ed48b966f387c9a4256fdf00d3b3c80e61f96c84bd98550a1f47ba3d4ff",
+      "htmlSha256": "0fab096c0e17c6f148745a3e80b8e0246513ad94ae4299b3c3256bdc173f285d",
       "authenticatedContentVerified": false
     },
     {
@@ -17,7 +17,7 @@
       "homeUrl": "https://softm.github.io/projects/baksok/",
       "publicEntries": 1,
       "privateEntries": 1,
-      "htmlSha256": "418d1625d4a241aaa7b15245f2dfa298fa4efb5bb530f558dfb1321dbf09f998",
+      "htmlSha256": "535523e1bd062811d94f7afaa202ca4e7c91e48db16c91e50717f4621fe68d9e",
       "authenticatedContentVerified": false
     },
     {
@@ -26,7 +26,7 @@
       "homeUrl": "https://softm.github.io/projects/farmland-policy-map/",
       "publicEntries": 1,
       "privateEntries": 0,
-      "htmlSha256": "5c2478b818d9099bcde94cd1448a5ff05ec2286a90e4d135ffb2ce19f6659dc1",
+      "htmlSha256": "0a8647a059f680b1f1dbb61ac6769006595885a04745409687ddc2faa9ee893b",
       "authenticatedContentVerified": false
     },
     {
@@ -35,7 +35,7 @@
       "homeUrl": "https://softm.github.io/projects/ungdo/",
       "publicEntries": 0,
       "privateEntries": 9,
-      "htmlSha256": "70350b5e229ca138120c17f8100de21243d9f78aea727489f27d1c52b8711531",
+      "htmlSha256": "b2ecf09620873cec825f647a1cdcd71faac63051438e65ddf8bfdc699e04b52e",
       "authenticatedContentVerified": false
     }
   ],

@@ -9,7 +9,7 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '20261005-zip-live-sync-v13'
+VERSION = '20261006-ungdo-v14'
 
 def frame(title: str, canonical: str, project: str = '') -> str:
     e = lambda value: html.escape(str(value), quote=True)
