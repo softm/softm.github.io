@@ -27,6 +27,7 @@
 | 원본 보존 | 사진·영상·음성·PDF·문서 등 확보 가능한 원본을 최종 기록 디렉토리에 실제 파일로 보존 |
 | 처리 결과 | 공개 예: `public/records/<slug>/`; 비공개는 해당 Private 저장소의 표준 기록 경로 |
 | 홈 동기화 | 프로젝트 서비스·기록 홈 + 중앙 `/projects/<project>/` + `projects.json` |
+| 중앙 운영 반영 | `/projects/<project>/`와 `/projects/` 양쪽에서 새 기록/프로젝트가 실제 렌더링된 것을 확인해야 완료 |
 | 상세 링크 | 기록 제목/기록 열기 → 실제 운영 상세페이지 |
 | slug 링크 | `20260527-moskill` 같은 slug/디렉토리명 → 실제 GitHub 기록 디렉토리 |
 | 입력 삭제 | 반영·배포·운영 검증까지 모두 성공한 ZIP/폴더만 삭제 |
@@ -95,3 +96,8 @@ cleanup-inbox
 
 - `projects/README.md` — 전역 아카이브 배포 규칙
 - `projects/PROJECT-HOME-POLICY.md` — 프로젝트 홈·상세 링크·GitHub 디렉토리 링크 규칙
+
+
+## 소스 반영과 운영 반영의 구분
+
+`projects.json`, 프로젝트 홈 HTML, GitHub commit이 존재해도 운영 GitHub Pages에 예전 화면이 보이면 미완료다. 반드시 `https://softm.github.io/projects/<project>/`와 `https://softm.github.io/projects/`를 실제 브라우저에서 열어 새 기록/프로젝트 카드가 렌더링되는지 확인한다.
