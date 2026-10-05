@@ -390,7 +390,7 @@
       "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
       "vercelAccountAuthVerified": false,
       "homePublicListCount": 0,
-      "homePrivateListCount": 2
+      "homePrivateListCount": 1
     },
     {
       "repo": "ungdo-private",
@@ -408,11 +408,11 @@
       "pageCount": 0,
       "privatePageCount": 0,
       "homePublicListCount": 0,
-      "homePrivateListCount": 1,
+      "homePrivateListCount": 0,
       "links": [],
       "archiveDeployment": true,
       "archiveSource": "zip-top-level-directories-only",
-      "deploymentNote": "기존 상세/레거시 목록 제거 완료. ZIP 최상위 디렉토리 1개를 채팅 목록 1개로만 등록하며 실제 배포 완료 전에는 중앙 목록에 상세 항목을 추가하지 않음.",
+      "deploymentNote": "기존 웅도 콘텐츠와 목록 초기화 완료. ZIP 최상위 디렉토리 단위 중 실제 HTML+미디어 배포가 검증된 항목만 중앙 목록에 추가한다.",
       "order": 40,
       "previousHomeUrl": "https://softm.github.io/projects/ungdo/",
       "projectHomeUrl": "https://softm.github.io/projects/ungdo/",

@@ -85,7 +85,7 @@ def chats(p):
     service=safe_url(p.get('publicUrl'))
     if service and not any(x['url']==service for x in pub):
         pub.append({'label':'기존 공개 서비스·기록 홈','url':service,'visibility':'public','kind':'service'})
-    if not pri and safe_url(p.get('privateUrl')):
+    if not pri and safe_url(p.get('privateUrl')) and p.get('deploymentStatus') in ('deployed','static-html-deployed'):
         pri=[{'label':p.get('latestTitle') or '기존 비공개 채팅 정리','url':p['privateUrl'],'visibility':'private','kind':'legacy-home'}]
     if p['repo']=='yeonseo':
         pri.append({'label':'사진·영상·음성 기록 모음','url':'','visibility':'private','note':'Private GitHub 원본은 보존되어 있습니다. 인증된 웹 배포 연결 전입니다.'})
