@@ -168,3 +168,33 @@ CI가 성공했다는 이유만으로 아카이브 완료라고 보고하지 않
 6. 검증 성공 후 inbox cleanup
 7. 공개/비공개 저장소 동일 원칙 적용
 8. canonical 기록 비파괴 업데이트 정책
+
+
+## 16. 중앙 프로젝트 홈·전체 인덱스 운영 반영 게이트
+
+중앙 동기화는 소스 파일 수정으로 끝나지 않는다. 각 기록 처리마다 아래를 모두 통과해야 한다.
+
+1. `projects/projects.json`에 프로젝트/기록 메타데이터 반영
+2. `projects/<project>/` 프로젝트 홈 소스 반영
+3. 중앙 GitHub Pages 배포 완료
+4. 운영 `https://softm.github.io/projects/<project>/`에서 새 기록이 실제 렌더링되는지 확인
+5. 운영 `https://softm.github.io/projects/`에서 해당 프로젝트 카드가 실제 렌더링되는지 확인
+6. 프로젝트 카드 → 프로젝트 홈 → 새 상세 기록 링크를 실제로 따라가며 검증
+
+CI success, commit 존재, raw JSON 반영만으로는 4~6단계를 대체하지 못한다. Pages가 pending/cancelled/stale이면 재배포하고 실제 운영 화면이 갱신될 때까지 `final-verify`를 통과시키지 않는다.
+
+```text
+sync-project-index-source
+ ↓
+deploy-project-index
+ ↓
+verify-project-home-rendered
+ ↓
+verify-top-projects-rendered
+ ↓
+verify-record-deep-link
+ ↓
+final-verify
+ ↓
+cleanup-inbox
+```
