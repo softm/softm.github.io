@@ -1,1 +1,11 @@
-{}
+{
+  "schemaVersion": 1,
+  "entries": {
+    "https://softm.github.io/hwagok-farm/records/20260527-moskill": {
+      "authoredAt": "2026-05-27",
+      "userTitle": "박 오이잎벌레 모스킬 방제 기록",
+      "directory": "20260527-moskill",
+      "recordPath": "public/records/20260527-moskill"
+    }
+  }
+}
