@@ -1,5 +1,5 @@
 {
-  "version": "20260930-title-parity-v8",
+  "version": "20261005-ungdo-zip-directory-reset-v1",
   "projectCount": 13,
   "projects": [
     {
@@ -49,11 +49,11 @@
     },
     {
       "repo": "ungdo-private",
-      "title": "웅도 토지·성토",
+      "title": "웅도",
       "homeUrl": "https://softm.github.io/projects/ungdo/",
-      "publicEntries": 1,
-      "privateEntries": 9,
-      "htmlSha256": "685f2884a89f17a8fcd6a6a16219a86c1637273890dff137122b2e16733c07a0",
+      "publicEntries": 0,
+      "privateEntries": 0,
+      "htmlSha256": "",
       "authenticatedContentVerified": false
     },
     {
