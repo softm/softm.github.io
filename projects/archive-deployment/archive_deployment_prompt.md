@@ -605,3 +605,36 @@ GitHub 저장소: 없음
 - 저장소명과 프로젝트 홈 slug가 다른 alias를 보존한다. 예: `baksok-public` → `/projects/baksok/`.
 
 완료 보고의 `프로젝트 홈 반영`, `전체 projects 반영`은 소스 반영 여부가 아니라 **실제 운영 화면에서 확인한 결과**를 기록한다.
+
+
+## 22. ZIP/폴더 배포의 index.html 원본 기준
+
+ZIP 또는 폴더를 아카이브 입력으로 배포할 때 상세 웹페이지의 기준 원본은 **입력에 이미 존재하는 HTML 파일**이다.
+
+필수 규칙:
+
+- ZIP/폴더 안에 HTML이 있으면 해당 HTML을 canonical web entry로 선택한다.
+- 선택된 원본 HTML은 내용 재작성·요약·Markdown 역변환 없이 **그 파일 자체를 `index.html`로 사용**한다.
+- 원본 HTML과 배포된 `index.html`은 동일 내용이어야 하며 가능하면 SHA-256까지 비교한다.
+- Markdown(`.md`)을 읽어 새 `index.html`을 생성하지 않는다.
+- HTML이 없는 ZIP/폴더는 자동으로 MD를 HTML로 변환해 배포하지 않고, HTML 원본이 없는 상태로 처리 중단/보류한다.
+- ZIP 내부의 이미지·영상·CSS·JS 등 상대경로가 깨지지 않도록 원래 디렉토리 구조를 기록 루트에 보존한다.
+- 기존 배포 기록도 동일 기준으로 점검하고, 원본 HTML이 존재하면 그 HTML을 `index.html`로 다시 맞춘 뒤 실제 운영 URL에서 검증한다.
+
+예:
+
+```text
+20260811_화곡농장_박수확_작업정리.html
+        ↓ 그대로 사용
+records/<slug>/index.html
+```
+
+금지:
+
+```text
+README.md / 작업정리.md
+        ↓ Markdown 변환
+새 index.html 생성
+```
+
+이 규칙은 공개/비공개 아카이브의 ZIP·폴더 기반 배포에 공통 적용한다.
