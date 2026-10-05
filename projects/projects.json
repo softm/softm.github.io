@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-09-30",
+  "updatedAt": "2026-10-06",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -505,9 +505,25 @@
       "publicRepo": "baksok-public",
       "publicRepoUrl": "https://github.com/softm/baksok-public",
       "publicUrl": "https://softm.github.io/baksok-public/",
-      "mediaStatus": "2026-09-29 광진소파 스툴 제작 완료: HTML·Markdown·사진 4장·동영상 2개 공개 아카이브 포함",
-      "deploymentNote": "공개 실제 콘텐츠는 softm/baksok-public에 보관하고 softm.github.io는 projects 전체정보만 관리",
+      "mediaStatus": "비공개 ZIP 원본의 HTML과 이미지/첨부를 인증 Vercel에서 실시간 제공; 공개 기록은 baksok-public 유지",
+      "deploymentNote": "공개는 baksok-public/GitHub Pages, 비공개는 baksok-private/Vercel 인증 구조. 중앙 프로젝트 홈에서 공개·비공개 기록을 함께 탐색합니다.",
       "links": [
+        {
+          "visibility": "private",
+          "label": "2026-10-05 서해박속낙지 세무·매출 분석 전체자료",
+          "title": "2026-10-05 서해박속낙지 세무·매출 분석 전체자료",
+          "chatTitle": "서해박속낙지 세무·매출 분석 전체자료",
+          "date": "2026-10-05",
+          "authoredAt": "2026-10-05",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://baksok-private.vercel.app/archive/20261005-tax-sales-analysis/",
+          "repoUrl": "https://github.com/softm/baksok-private/blob/main/zip/20261005_%EC%84%9C%ED%95%B4%EB%B0%95%EC%86%8D%EB%82%99%EC%A7%80_%EC%84%B8%EB%AC%B4%EB%A7%A4%EC%B6%9C%EB%B6%84%EC%84%9D_%EC%A0%84%EC%B2%B4%EC%9E%90%EB%A3%8C.zip",
+          "category": "운영·세무",
+          "summary": "서해박속낙지 세무·매출 분석 전체자료 비공개 아카이브. 원본 ZIP의 HTML을 대표 페이지로 사용하고 이미지·첨부를 인증 후 제공합니다.",
+          "directory": "20261005-tax-sales-analysis",
+          "recordPath": "zip/20261005_서해박속낙지_세무매출분석_전체자료.zip"
+        },
         {
           "visibility": "public",
           "label": "2026-09-29 신당동 광진소파 스툴 제작 완료",
@@ -526,14 +542,14 @@
       "homeUrl": "https://softm.github.io/projects/baksok/",
       "projectHomeUrl": "https://softm.github.io/projects/baksok/",
       "pageCount": 1,
-      "privatePageCount": 0,
-      "latestTitle": "2026-09-29 신당동 광진소파 스툴 제작 완료",
+      "privatePageCount": 1,
+      "latestTitle": "2026-10-05 서해박속낙지 세무·매출 분석 전체자료",
       "publicHomeStatus": "github-pages-home-generated",
       "previousHomeUrl": "https://softm.github.io/projects/baksok/",
       "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
       "vercelAccountAuthVerified": false,
       "homePublicListCount": 1,
-      "homePrivateListCount": 0
+      "homePrivateListCount": 1
     },
     {
       "order": 3,
