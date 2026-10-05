@@ -1,5 +1,5 @@
 {
-  "version": "20261005-ungdo-zip-directory-reset-v1",
+  "version": "20260930-title-parity-v8",
   "projectCount": 13,
   "projects": [
     {
@@ -52,8 +52,8 @@
       "title": "웅도",
       "homeUrl": "https://softm.github.io/projects/ungdo/",
       "publicEntries": 0,
-      "privateEntries": 0,
-      "htmlSha256": "",
+      "privateEntries": 7,
+      "htmlSha256": "61ef02bcd49aac926effd6ec6db3837f0bd240cf4b84db63145076d1b39e4086",
       "authenticatedContentVerified": false
     },
     {

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "owner": "softm",
-  "updatedAt": "2026-10-05",
+  "updatedAt": "2026-09-30",
   "auditVersion": "20261005-ungdo-zip-directory-reset-v1",
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
   "archivePolicy": {
@@ -408,12 +408,17 @@
       "pageCount": 0,
       "privatePageCount": 0,
       "homePublicListCount": 0,
-      "homePrivateListCount": 0,
+      "homePrivateListCount": 7,
       "links": [],
       "archiveDeployment": true,
       "archiveSource": "zip-top-level-directories-only",
       "deploymentNote": "기존 상세/레거시 목록 제거 완료. ZIP 최상위 디렉토리 1개를 채팅 목록 1개로만 등록하며 실제 배포 완료 전에는 중앙 목록에 상세 항목을 추가하지 않음.",
-      "order": 40
+      "order": 40,
+      "previousHomeUrl": "https://softm.github.io/projects/ungdo/",
+      "projectHomeUrl": "https://softm.github.io/projects/ungdo/",
+      "publicHomeStatus": "github-pages-home-generated",
+      "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
+      "vercelAccountAuthVerified": false
     },
     {
       "repo": "hwagok-land-permit-private",
