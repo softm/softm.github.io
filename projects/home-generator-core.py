@@ -48,14 +48,7 @@ CHAT_PATHS={
   ('가구 계약·설비 구매 정리','reports/20260909-furniture-gas/'),
   ('제품 배송·개봉 기록','reports/20260911-rir4000s-delivery/'),
   ('운영·세무 분석 정리','reports/20260721-tax/')],
- 'ungdo-private':[
-  ('토지 관련 종합 기록','ungdo-case'),
-  ('현장·방문 기록','ungdo-66-field-record'),
-  ('잔여지 검토 기록','40-25-sale'),
-  ('원상복구·농지 조성 기록','ungdo-66-restoration-agreement'),
-  ('배수시설 관련 기록','ungdo-66-sewer-pipe'),
-  ('지도·현장사진 보고서','reports/ungdo-66-20260907/index.html'),
-  ('합의·공증 상세 기록','live/records/20260911-notarization/deployed-media-report.html')]
+ 'ungdo-private':[]
 }
 CSS='''*{box-sizing:border-box}body{margin:0;background:#f4f7f4;color:#1b3429;font:16px/1.65 system-ui,-apple-system,"Noto Sans KR",sans-serif}a{color:#205b43;text-underline-offset:3px}a:focus-visible,input:focus-visible,button:focus-visible{outline:3px solid #d79319;outline-offset:4px}.wrap{width:min(1160px,calc(100% - 32px));margin:auto}.hero{background:#173b2c;color:white;padding:38px 0}.hero a{color:#d7eddf}.eyebrow{font-size:12px;letter-spacing:.15em}h1{font-size:clamp(28px,5vw,44px);line-height:1.2;margin:16px 0}h2{font-size:24px;margin:28px 0 14px}h3{font-size:19px;margin:8px 0}.lead{max-width:850px}.stats,.actions,.tabs{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.badge{display:inline-block;padding:4px 10px;border-radius:30px;background:#e8f1ea;color:#31563d;font-size:13px}.private{background:#edf0fb;color:#344b7a}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:#fff;border:1px solid #d4e1d6;border-radius:15px;padding:20px;min-width:0}.card p{color:#526c5b}.card a{overflow-wrap:anywhere}.button{display:inline-block;padding:9px 13px;border:1px solid #bbd0c0;border-radius:9px;background:white;text-decoration:none;font-weight:700}.primary{background:#205b43;color:white}.note,.empty{padding:16px 18px;border-radius:12px;background:#fff8e7;border:1px solid #ead7a8;margin:16px 0}.muted{color:#647367;font-size:14px}.toolbar{margin:22px 0}input{width:100%;padding:12px;border:1px solid #b9ccbe;border-radius:9px;font:inherit}.repo{font-size:13px}.disabled{color:#825c19}footer{border-top:1px solid #d4e1d6;margin:34px 0;padding:20px 0;font-size:13px;color:#566d5e}details{margin-top:15px}summary{cursor:pointer}.chat{border-left:4px solid #b7cfbd}.chat.private{background:white;border-left-color:#8399c3}.count{font-size:15px;color:#647367}[hidden]{display:none!important}@media(max-width:700px){.grid{grid-template-columns:1fr}.hero{padding:28px 0}.card{padding:17px}}'''
 JS="""const q=document.querySelector('#search');if(q)q.addEventListener('input',()=>{const v=q.value.trim().toLocaleLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.hidden=!el.dataset.search.toLocaleLowerCase().includes(v)});});"""

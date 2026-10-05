@@ -49,11 +49,11 @@
     },
     {
       "repo": "ungdo-private",
-      "title": "웅도 토지·성토",
+      "title": "웅도",
       "homeUrl": "https://softm.github.io/projects/ungdo/",
-      "publicEntries": 1,
-      "privateEntries": 9,
-      "htmlSha256": "685f2884a89f17a8fcd6a6a16219a86c1637273890dff137122b2e16733c07a0",
+      "publicEntries": 0,
+      "privateEntries": 7,
+      "htmlSha256": "61ef02bcd49aac926effd6ec6db3837f0bd240cf4b84db63145076d1b39e4086",
       "authenticatedContentVerified": false
     },
     {
