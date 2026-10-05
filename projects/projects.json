@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-09-30",
+  "updatedAt": "2026-10-06",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -158,21 +158,6 @@
           "summary": "수집함 원본 61개 파일을 보존한 공개 아카이브 기록.",
           "directory": "20260905-v2",
           "recordPath": "public/records/20260905-v2"
-        },
-        {
-          "visibility": "public",
-          "label": "화곡농장 농지증여 경영체정리",
-          "title": "화곡농장 농지증여 경영체정리",
-          "chatTitle": "화곡농장 농지증여 경영체정리",
-          "date": "2026-09-04",
-          "dateSource": "archive-canonical",
-          "titleSource": "archive-canonical",
-          "url": "https://softm.github.io/hwagok-farm/records/20260904-a7dc05f760/",
-          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260904-a7dc05f760",
-          "category": "아카이브",
-          "summary": "수집함 원본 4개 파일을 보존한 공개 아카이브 기록.",
-          "directory": "20260904-a7dc05f760",
-          "recordPath": "public/records/20260904-a7dc05f760"
         },
         {
           "visibility": "public",
@@ -481,16 +466,16 @@
       "publicHomeStatus": "github-pages-home-generated",
       "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
       "vercelAccountAuthVerified": false,
-      "homePublicListCount": 29,
+      "homePublicListCount": 28,
       "homePrivateListCount": 0,
       "publicIndexSource": {
         "url": "https://softm.github.io/hwagok-farm/",
         "format": "html-archive-data"
       },
-      "pageCount": 29,
+      "pageCount": 28,
       "publicIndexSnapshot": {
         "source": "https://softm.github.io/hwagok-farm/",
-        "recordCount": 29,
+        "recordCount": 28,
         "purpose": "build snapshot; browsers refresh from the deployed source on every page load"
       }
     },
