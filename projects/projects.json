@@ -14,5 +14,33 @@
     "sync": "프로젝트 홈과 최상위 /projects/ 인덱스를 같은 작업에서 갱신",
     "verify": "운영 URL·인증·직접 파일 접근·미디어 표시/재생·404/403/500을 실제 검증"
   },
-  "projects": []
+  "projects": [
+    {
+      "order": 1,
+      "repo": "hwagok-farm",
+      "title": "화곡농장",
+      "description": "화곡농장 영농·재배·방제·시설·농기계 기록 아카이브",
+      "category": "농업",
+      "deploymentStatus": "deployed",
+      "repoStatus": "available",
+      "publicRepo": "plant",
+      "publicRepoUrl": "https://github.com/softm/plant",
+      "publicUrl": "https://softm.github.io/plant/",
+      "mediaStatus": "2026-05-27 기록의 Markdown·HTML과 현장 사진 10장 공개 저장소 확인",
+      "deploymentNote": "2026-10-05 아카이브 재정비 후 첫 공개 기록 등록",
+      "links": [
+        {
+          "visibility": "public",
+          "label": "박 오이잎벌레 모스킬 방제 기록",
+          "userTitle": "박 오이잎벌레 모스킬 방제 기록",
+          "chatTitle": "박 오이잎벌레 모스킬 방제 기록",
+          "authoredAt": "2026-05-27",
+          "dateSource": "user-specified",
+          "url": "https://softm.github.io/plant/농약로그/20260527_모스킬_방제기록_최종/",
+          "category": "방제",
+          "summary": "박밭 3개 두둑에 모스킬을 약 50L 살포하고 오이잎벌레류 발생, 약효 반응, 강우 시점을 기록한 현장 방제 기록."
+        }
+      ]
+    }
+  ]
 }
