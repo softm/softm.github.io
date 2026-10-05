@@ -11,8 +11,17 @@
     "privateDelivery": "Vercel 인증 후 Private GitHub 최신 원본 조회",
     "media": "사진·영상·음성·문서·ZIP 등 확보 가능한 원본을 새 기록마다 실제 파일로 포함",
     "canonicalMetadata": "사건 실제 날짜 기준 date/title/slug/id를 단일 기준으로 사용",
-    "sync": "프로젝트 홈과 최상위 /projects/ 인덱스를 같은 작업에서 갱신",
-    "verify": "운영 URL·인증·직접 파일 접근·미디어 표시/재생·404/403/500을 실제 검증"
+    "sync": "프로젝트 서비스 홈 + 중앙 /projects/<project>/ + 최상위 /projects/를 같은 작업에서 갱신",
+    "verify": "운영 URL·인증·직접 파일 접근·미디어 표시/재생·404/403/500을 실제 검증",
+    "liveIndexCompletion": "소스/JSON/commit/CI 성공만으로 완료하지 않으며 /projects/<project>/와 /projects/ 양쪽 운영 화면에서 새 기록/프로젝트 카드의 실제 렌더링을 확인",
+    "completionGate": [
+      "record-detail-live",
+      "project-home-rendered",
+      "top-projects-rendered",
+      "project-to-home-link",
+      "home-to-record-link",
+      "media-live"
+    ]
   },
   "projects": [
     {
@@ -73,7 +82,13 @@
           "directory": "20260929-gwangjin-sofa-stool",
           "recordPath": "public/records/20260929-gwangjin-sofa-stool"
         }
-      ]
+      ],
+      "homeUrl": "https://softm.github.io/projects/baksok/",
+      "projectHomeUrl": "https://softm.github.io/projects/baksok/",
+      "pageCount": 1,
+      "privatePageCount": 0,
+      "latestTitle": "2026-09-29 신당동 광진소파 스툴 제작 완료",
+      "publicHomeStatus": "github-pages-home-generated"
     }
   ]
 }
