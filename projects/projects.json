@@ -390,7 +390,7 @@
       "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
       "vercelAccountAuthVerified": false,
       "homePublicListCount": 0,
-      "homePrivateListCount": 2
+      "homePrivateListCount": 1
     },
     {
       "repo": "ungdo-private",
