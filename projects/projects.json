@@ -1,8 +1,8 @@
 {
   "schemaVersion": 2,
   "owner": "softm",
-  "updatedAt": "2026-09-30",
-  "auditVersion": "20261005-hwagok-directory-unit-reset-v1",
+  "updatedAt": "2026-10-05",
+  "auditVersion": "20261005-ungdo-zip-directory-reset-v1",
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -394,102 +394,26 @@
     },
     {
       "repo": "ungdo-private",
-      "title": "웅도 토지·성토",
-      "category": "토지·농지",
-      "description": "프로젝트의 공개 안내와 인증된 비공개 기록·관련 첨부 원본을 구분하여 관리합니다.",
-      "visibility": "mixed",
+      "title": "웅도",
+      "category": "토지·기록",
+      "description": "2026-10-05 기존 웅도 배포 목록을 전부 초기화하고, 업로드 ZIP의 최상위 디렉토리를 채팅 단위로 다시 배포하는 중입니다.",
+      "visibility": "private",
       "repoVisibility": "private",
-      "deploymentStatus": "deploying-detailed-links",
+      "deploymentStatus": "reset-rebuild-in-progress",
       "homeUrl": "https://softm.github.io/projects/ungdo/",
-      "publicUrl": "https://ungdo.softm.chatgpt.site",
-      "publicHomeStatus": "github-pages-home-generated",
       "privateUrl": "https://ungdo-private.vercel.app/",
-      "authProvider": "vercel",
-      "privateDeploymentStatus": "ready",
-      "privateDeploymentCommit": "79fb62dcdc5c230350450d36f7afb0c6fe7c493e",
-      "pageCount": 2,
-      "privatePageCount": 9,
-      "latestTitle": "비공개 미디어·기록 아카이브",
-      "order": 40,
-      "archiveSource": "github-live",
-      "auditStatus": "deployed-detail-restored",
-      "mediaStatus": "Private Git 원본 유지 · 사진 25개·영상 1개·상세 미디어 보고서·녹취 5건을 인증 후 직접 열도록 복원",
-      "deploymentNote": "2026-09-28 프로젝트 홈에 원본 동영상, 공증 상세 미디어 보고서, Markdown, 녹취 5건을 직접 연결. GitHub-live 인증 경로를 확장했고 Vercel 새 배포가 생성됨.",
-      "links": [
-        {
-          "label": "63-1·66 관련 종합 기록",
-          "url": "https://ungdo-private.vercel.app/ungdo-case",
-          "visibility": "private",
-          "authProvider": "vercel"
-        },
-        {
-          "label": "웅도리 66 현장·드론·방문 기록",
-          "url": "https://ungdo-private.vercel.app/ungdo-66-field-record",
-          "visibility": "private",
-          "authProvider": "vercel"
-        },
-        {
-          "label": "66 원상복구·우량농지 조성 기록",
-          "url": "https://ungdo-private.vercel.app/ungdo-66-restoration-agreement",
-          "visibility": "private",
-          "authProvider": "vercel"
-        },
-        {
-          "label": "66번지 배수시설 관련 기록",
-          "url": "https://ungdo-private.vercel.app/ungdo-66-sewer-pipe",
-          "visibility": "private",
-          "authProvider": "vercel"
-        },
-        {
-          "label": "현장 원본 동영상",
-          "url": "https://ungdo-private.vercel.app/media/KakaoTalk_Video_2026-09-01-22-35-25.mp4",
-          "visibility": "private",
-          "authProvider": "vercel"
-        },
-        {
-          "label": "공증 상세 미디어 보고서",
-          "url": "https://ungdo-private.vercel.app/live/records/20260911-notarization/deployed-media-report.html",
-          "visibility": "private",
-          "authProvider": "vercel"
-        },
-        {
-          "label": "공증 정리 Markdown",
-          "url": "https://ungdo-private.vercel.app/live/records/20260911-notarization/report.md",
-          "visibility": "private",
-          "authProvider": "vercel"
-        },
-        {
-          "label": "기존 공개 토지 기록",
-          "url": "https://ungdo-land-records.softm.chatgpt.site",
-          "visibility": "public"
-        }
-      ],
-      "storedAssets": {
-        "files": 70,
-        "documents": 20,
-        "images": 25,
-        "videos": 1,
-        "audio": 0,
-        "pdf": 0,
-        "zip": 0
-      },
       "privateRepo": "ungdo-private",
       "privateRepoUrl": "https://github.com/softm/ungdo-private",
-      "passwordAuthUrl": "https://ungdo-private.vercel.app/",
-      "passwordAuthLabel": "🔑 프로젝트 비밀번호로 열기",
-      "vercelAuthUrl": "https://ungdo-private.vercel.app/",
-      "vercelAuthLabel": "▲ Vercel 계정 인증으로 열기",
-      "authModes": [
-        "project-password",
-        "vercel-deployment-protection"
-      ],
-      "vercelProtectionStatus": "설정 여부 별도 확인 필요",
-      "previousHomeUrl": "https://ungdo.softm.chatgpt.site",
-      "projectHomeUrl": "https://softm.github.io/projects/ungdo/",
-      "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
-      "vercelAccountAuthVerified": false,
-      "homePublicListCount": 1,
-      "homePrivateListCount": 9
+      "authProvider": "vercel",
+      "pageCount": 0,
+      "privatePageCount": 0,
+      "homePublicListCount": 0,
+      "homePrivateListCount": 0,
+      "links": [],
+      "archiveDeployment": true,
+      "archiveSource": "zip-top-level-directories-only",
+      "deploymentNote": "기존 상세/레거시 목록 제거 완료. ZIP 최상위 디렉토리 1개를 채팅 목록 1개로만 등록하며 실제 배포 완료 전에는 중앙 목록에 상세 항목을 추가하지 않음.",
+      "order": 40
     },
     {
       "repo": "hwagok-land-permit-private",
