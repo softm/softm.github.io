@@ -1,4 +1,6 @@
 {
   "generatedAt": "2026-10-05",
-  "projects": []
+  "projects": [],
+  "forcedDeployAt": "2026-10-05T22:27:00+09:00",
+  "reason": "Refresh top-level projects index after adding baksok-public"
 }
