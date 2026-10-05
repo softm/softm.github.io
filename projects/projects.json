@@ -503,11 +503,11 @@
           "dateSource": "archive-canonical",
           "titleSource": "archive-canonical",
           "url": "https://baksok-private.vercel.app/archive/20261005-tax-sales-analysis/",
-          "repoUrl": "https://github.com/softm/baksok-private/blob/main/zip/20261005_%EC%84%9C%ED%95%B4%EB%B0%95%EC%86%8D%EB%82%99%EC%A7%80_%EC%84%B8%EB%AC%B4%EB%A7%A4%EC%B6%9C%EB%B6%84%EC%84%9D_%EC%A0%84%EC%B2%B4%EC%9E%90%EB%A3%8C.zip",
+          "repoUrl": "https://github.com/softm/baksok-private/tree/main/archive/20261005-tax-sales-analysis",
           "category": "운영·세무",
-          "summary": "서해박속낙지 세무·매출 분석 전체자료 비공개 아카이브. 원본 ZIP의 HTML을 대표 페이지로 사용하고 이미지·첨부를 인증 후 제공합니다.",
+          "summary": "서해박속낙지 세무·매출 분석 전체자료 비공개 아카이브. Private GitHub의 압축 해제본을 Vercel 인증 후 실시간 조회합니다.",
           "directory": "20261005-tax-sales-analysis",
-          "recordPath": "zip/20261005_서해박속낙지_세무매출분석_전체자료.zip"
+          "recordPath": "archive/20261005-tax-sales-analysis"
         },
         {
           "visibility": "public",
