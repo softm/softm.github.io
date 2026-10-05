@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-10-05",
+  "updatedAt": "2026-09-30",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -21,7 +21,8 @@
       "project-to-home-link",
       "home-to-record-link",
       "media-live"
-    ]
+    ],
+    "projectHome": "Public GitHub Pages TOC; private bodies and media remain in the original private repository"
   },
   "projects": [
     {
@@ -52,7 +53,15 @@
           "directory": "20260527-moskill",
           "recordPath": "public/records/20260527-moskill"
         }
-      ]
+      ],
+      "previousHomeUrl": null,
+      "projectHomeUrl": "https://softm.github.io/projects/hwagok-farm/",
+      "homeUrl": "https://softm.github.io/projects/hwagok-farm/",
+      "publicHomeStatus": "github-pages-home-generated",
+      "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
+      "vercelAccountAuthVerified": false,
+      "homePublicListCount": 1,
+      "homePrivateListCount": 0
     },
     {
       "order": 2,
@@ -88,7 +97,14 @@
       "pageCount": 1,
       "privatePageCount": 0,
       "latestTitle": "2026-09-29 신당동 광진소파 스툴 제작 완료",
-      "publicHomeStatus": "github-pages-home-generated"
+      "publicHomeStatus": "github-pages-home-generated",
+      "previousHomeUrl": "https://softm.github.io/projects/baksok/",
+      "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
+      "vercelAccountAuthVerified": false,
+      "homePublicListCount": 1,
+      "homePrivateListCount": 0
     }
-  ]
+  ],
+  "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
+  "homeVersion": "20261005-live-reflection-v12"
 }

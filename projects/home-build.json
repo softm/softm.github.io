@@ -1,6 +1,63 @@
 {
-  "generatedAt": "2026-10-05",
-  "projects": [],
-  "forcedDeployAt": "2026-10-05T22:27:00+09:00",
-  "reason": "Refresh top-level projects index after adding baksok-public"
+  "version": "20261005-live-reflection-v12",
+  "projectCount": 2,
+  "projects": [
+    {
+      "repo": "hwagok-farm",
+      "title": "화곡농장",
+      "homeUrl": "https://softm.github.io/projects/hwagok-farm/",
+      "publicEntries": 1,
+      "privateEntries": 0,
+      "htmlSha256": "54243c1306f6712a651f91a6539bba82c5f03fd8780f6bfd18ab07e26bcab836",
+      "authenticatedContentVerified": false
+    },
+    {
+      "repo": "baksok-public",
+      "title": "서해박속낙지",
+      "homeUrl": "https://softm.github.io/projects/baksok/",
+      "publicEntries": 1,
+      "privateEntries": 0,
+      "htmlSha256": "23b2accf239ee7d5b9053f854afcdc56a60eefc2fac5fe571e8cee0b859ca80c",
+      "authenticatedContentVerified": false
+    }
+  ],
+  "files": [
+    "projects/hwagok-farm/index.html",
+    "projects/baksok/index.html",
+    "projects/projects.json",
+    "projects/index.html",
+    "projects/README.md",
+    "projects/home-build.json",
+    "projects/chat-metadata.json",
+    "projects/project-home.js",
+    "projects/project-home.css",
+    "projects/home-generator.py",
+    "projects/home-generator-core.py",
+    "projects/CHAT-TITLE-POLICY.md",
+    "projects/view-controls.js",
+    "projects/view-controls.css",
+    "projects/view-controls.test.cjs"
+  ],
+  "detailsAndMediaModified": false,
+  "chatTitlePolicy": "authored date + user title (preferred) or original chat title",
+  "unknownAuthoredDatesAreNotGuessed": true,
+  "features": {
+    "views": [
+      "cards",
+      "list",
+      "table",
+      "gallery"
+    ],
+    "viewControls": "icon-only with accessible names and hover titles",
+    "sorts": [
+      "newest",
+      "oldest",
+      "title-asc",
+      "title-desc",
+      "count-desc"
+    ],
+    "privateContentFetched": false,
+    "archiveDeploymentHub": true,
+    "projectHomesRequired": true
+  }
 }
