@@ -51,7 +51,7 @@ function lists(p,metadata={}){
  let pri=(ROUTES[p.repo]||[]).map(([label,path])=>({label,url:base?base.replace(/\/$/,'')+'/'+path:'',visibility:'private'}));
  pri=unique(pri.concat(links.filter(x=>x.visibility==='private')));
  if(p.repo==='baksok-public')pub.unshift({label:'가스레인지 교체 검토 기록',url:'https://softm.github.io/baksok-public/20260819_rir4000s_13ea/',visibility:'public'});
- if(!pri.length&&base)pri.push({label:'기존 비공개 채팅 정리',url:base,visibility:'private',note:p.authProvider==='chatgpt-legacy'?'ChatGPT Sites 인증 경로 · Vercel 전환 전':'개별 채팅 목록 연결 확인 필요'});
+ if(!pri.length&&base&&['deployed','static-html-deployed'].includes(p.deploymentStatus))pri.push({label:'기존 비공개 채팅 정리',url:base,visibility:'private',note:p.authProvider==='chatgpt-legacy'?'ChatGPT Sites 인증 경로 · Vercel 전환 전':'개별 채팅 목록 연결 확인 필요'});
  if(p.repo==='yeonseo')pri.push({label:'사진·영상·음성 기록 모음',url:'',visibility:'private',note:'비공개 저장소 보관 · 웹 연결 전'});
  if(p.repo==='medical-finder'&&!pri.length)pri.push({label:'사이트 기획·데이터·구현 문서',url:'',visibility:'private',note:'비공개 저장소 보관 · 웹 연결 전'});
  return {public:labelRows(unique(pub),p,metadata),private:labelRows(pri,p,metadata)};
