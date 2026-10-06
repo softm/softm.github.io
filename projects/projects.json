@@ -855,22 +855,22 @@
       "title": "온수힐",
       "description": "온수힐 주거·수선·임대차 계약 관련 비공개 기록 아카이브",
       "category": "생활·주거",
-      "deploymentStatus": "source-deployed-vercel-connection-required",
+      "deploymentStatus": "deployed",
       "repoStatus": "available",
       "privateRepo": "onsuhill-private",
       "privateRepoUrl": "https://github.com/softm/onsuhill-private",
-      "privateUrl": null,
+      "privateUrl": "https://onsuhill-private-softms-projects.vercel.app/",
       "projectHomeUrl": "https://softm.github.io/projects/onsuhill/",
       "homeUrl": "https://softm.github.io/projects/onsuhill/",
       "publicHomeStatus": "github-pages-home-generated",
-      "privateEntryPolicy": "Vercel project connection required; repository is private",
+      "privateEntryPolicy": "Vercel Authentication; direct deep links after authentication",
       "homePublicListCount": 0,
       "homePrivateListCount": 2,
       "pageCount": 2,
       "privatePageCount": 2,
       "latestTitle": "온수힐스테이트 임대차 갱신계약 전체정리 문서모음",
       "mediaStatus": "LED 수리 기록 사진 1장 및 원본 ZIP 1개, 임대차 계약 PDF/DOCX/MD 원본 보존.",
-      "deploymentNote": "Private GitHub archive 생성 완료. Vercel Git 연결은 저장소 접근 권한 문제로 연결 대기.",
+      "deploymentNote": "Private GitHub archive와 Vercel production 배포 완료. 운영 URL 및 2개 상세페이지 HTTP 200 확인.",
       "links": [
         {
           "visibility": "private",
@@ -879,7 +879,7 @@
           "date": "2026-09-04",
           "dateSource": "archive-canonical",
           "titleSource": "archive-canonical",
-          "url": null,
+          "url": "https://onsuhill-private-softms-projects.vercel.app/archive/20260904-led-repair/",
           "repoUrl": "https://github.com/softm/onsuhill-private/tree/main/archive/20260904-led-repair",
           "category": "수선",
           "summary": "온수힐 804호 LED 방등 수리와 계좌이체 증빙. HTML 1 · MD 1 · 사진 1 · 원본 ZIP 1.",
@@ -893,7 +893,7 @@
           "date": "2026-09-04",
           "dateSource": "archive-canonical",
           "titleSource": "archive-canonical",
-          "url": null,
+          "url": "https://onsuhill-private-softms-projects.vercel.app/archive/20260904-onsuhill-lease-renewal/",
           "repoUrl": "https://github.com/softm/onsuhill-private/tree/main/archive/20260904-onsuhill-lease-renewal",
           "category": "임대차",
           "summary": "임대차 갱신계약 관련 PDF 1 · DOCX 6 · MD 1 원본 문서 묶음.",
@@ -901,7 +901,7 @@
           "recordPath": "archive/20260904-onsuhill-lease-renewal"
         }
       ],
-      "vercelAccountAuthVerified": false
+      "vercelAccountAuthVerified": true
     },
     {
       "order": 7,
