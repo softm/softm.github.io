@@ -1,6 +1,6 @@
 {
-  "version": "20261006-ungdo-v14",
-  "projectCount": 5,
+  "version": "20261007-private-live-read-v18",
+  "projectCount": 7,
   "projects": [
     {
       "repo": "hwagok-farm",
@@ -8,7 +8,7 @@
       "homeUrl": "https://softm.github.io/projects/hwagok-farm/",
       "publicEntries": 28,
       "privateEntries": 1,
-      "htmlSha256": "98b9560270327358072d5db29b92f111ded17a0c54ca6653785abe4c956002d3",
+      "htmlSha256": "ab203c19a9b50ffc416b6714b23cd819254122edf7c6d3db609360537d183672",
       "authenticatedContentVerified": false
     },
     {
@@ -17,7 +17,7 @@
       "homeUrl": "https://softm.github.io/projects/baksok/",
       "publicEntries": 1,
       "privateEntries": 1,
-      "htmlSha256": "535523e1bd062811d94f7afaa202ca4e7c91e48db16c91e50717f4621fe68d9e",
+      "htmlSha256": "16f3ef1e559ad0f7c5b2b2eac8a45a399cb4e86485ff22415d5d78e9acd3d8c8",
       "authenticatedContentVerified": false
     },
     {
@@ -26,7 +26,7 @@
       "homeUrl": "https://softm.github.io/projects/farmland-policy-map/",
       "publicEntries": 1,
       "privateEntries": 0,
-      "htmlSha256": "0a8647a059f680b1f1dbb61ac6769006595885a04745409687ddc2faa9ee893b",
+      "htmlSha256": "c0dd537d1b2e21980b2499a12c1a9617a681ae757d60dbfb6b5ef9ccfc5b7e44",
       "authenticatedContentVerified": false
     },
     {
@@ -35,7 +35,7 @@
       "homeUrl": "https://softm.github.io/projects/gwangmyeong/",
       "publicEntries": 1,
       "privateEntries": 3,
-      "htmlSha256": "dbb39da9c40f8ba5c314530b7954eb7d0664e913a5ebcb1e6e71a5072438dc56",
+      "htmlSha256": "b6b0f5eec1e732b225f9e2483418a045bf599dce5041d7c2f9959eeb4d23b579",
       "authenticatedContentVerified": false
     },
     {
@@ -44,7 +44,25 @@
       "homeUrl": "https://softm.github.io/projects/ungdo/",
       "publicEntries": 0,
       "privateEntries": 9,
-      "htmlSha256": "b2ecf09620873cec825f647a1cdcd71faac63051438e65ddf8bfdc699e04b52e",
+      "htmlSha256": "8afc84cc7886dbf715dd174ab06bc329231cd559606e5480a8354079ad53d5d3",
+      "authenticatedContentVerified": false
+    },
+    {
+      "repo": "onsuhill-private",
+      "title": "온수힐",
+      "homeUrl": "https://softm.github.io/projects/onsuhill/",
+      "publicEntries": 0,
+      "privateEntries": 8,
+      "htmlSha256": "ae07801ae7bf8250ced0d87344cca3d6ad3ec099c52a09beb64e37c531df32be",
+      "authenticatedContentVerified": false
+    },
+    {
+      "repo": "hwagok-land-permit-private",
+      "title": "화곡리 개간허가",
+      "homeUrl": "https://softm.github.io/projects/hwagok-land-permit/",
+      "publicEntries": 0,
+      "privateEntries": 8,
+      "htmlSha256": "894c188a1d44d5105ba59b6878c4827f8282ba7f308b975b5163a025f520eed8",
       "authenticatedContentVerified": false
     }
   ],
@@ -54,6 +72,8 @@
     "projects/farmland-policy-map/index.html",
     "projects/gwangmyeong/index.html",
     "projects/ungdo/index.html",
+    "projects/onsuhill/index.html",
+    "projects/hwagok-land-permit/index.html",
     "projects/projects.json",
     "projects/index.html",
     "projects/README.md",

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-10-07",
+  "updatedAt": "2026-09-30",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -500,7 +500,7 @@
         "url": "https://softm.github.io/hwagok-farm/",
         "format": "html-archive-data"
       },
-      "pageCount": 29,
+      "pageCount": 28,
       "publicIndexSnapshot": {
         "source": "https://softm.github.io/hwagok-farm/",
         "recordCount": 28,
@@ -877,7 +877,7 @@
       "publicHomeStatus": "github-pages-home-generated",
       "privateEntryPolicy": "Vercel Authentication; direct deep links after authentication",
       "homePublicListCount": 0,
-      "homePrivateListCount": 2,
+      "homePrivateListCount": 8,
       "pageCount": 2,
       "privatePageCount": 2,
       "latestTitle": "온수힐스테이트 임대차 갱신계약 전체정리 문서모음",
@@ -913,7 +913,8 @@
           "recordPath": "archive/20260904-onsuhill-lease-renewal"
         }
       ],
-      "vercelAccountAuthVerified": true
+      "vercelAccountAuthVerified": true,
+      "previousHomeUrl": "https://softm.github.io/projects/onsuhill/"
     },
     {
       "order": 7,
@@ -932,7 +933,7 @@
       "privateEntryPolicy": "Vercel Authentication required; authenticated gateway live-reads Private GitHub main on each request",
       "authProvider": "vercel-sso",
       "homePublicListCount": 0,
-      "homePrivateListCount": 3,
+      "homePrivateListCount": 8,
       "pageCount": 3,
       "privatePageCount": 3,
       "latestTitle": "항고장 제출 및 수사기록목록 정리",
@@ -990,5 +991,5 @@
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
-  "homeVersion": "20261007-private-live-read-policy-v18"
+  "homeVersion": "20261007-private-live-read-v18"
 }
