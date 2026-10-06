@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-09-30",
+  "updatedAt": "2026-10-06",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -575,6 +575,88 @@
     },
     {
       "order": 4,
+      "repo": "gwangmyeong",
+      "title": "광명",
+      "description": "광명 주거·시설·계약·가전 관련 공개·비공개 기록 아카이브",
+      "category": "생활·주거",
+      "deploymentStatus": "public-deployed-private-repo-ready",
+      "repoStatus": "available",
+      "publicRepo": "gwangmyeong",
+      "publicRepoUrl": "https://github.com/softm/gwangmyeong",
+      "publicUrl": "https://softm.github.io/gwangmyeong/",
+      "privateRepo": "gwangmyeong-private",
+      "privateRepoUrl": "https://github.com/softm/gwangmyeong-private",
+      "privateUrl": null,
+      "projectHomeUrl": "https://softm.github.io/projects/gwangmyeong/",
+      "homeUrl": "https://softm.github.io/projects/gwangmyeong/",
+      "publicHomeStatus": "github-pages-home-generated",
+      "privateEntryPolicy": "Vercel project connection required; repository is private",
+      "homePublicListCount": 1,
+      "homePrivateListCount": 3,
+      "pageCount": 4,
+      "privatePageCount": 3,
+      "latestTitle": "401호 계약갱신요구권 행사 갱신계약서",
+      "mediaStatus": "공개 기록 사진 11장 배포. 비공개 저장소에는 수도 계량기·도시가스 배관 이미지와 계약 PDF/DOCX 원본 보존.",
+      "deploymentNote": "공개 ZIP은 HTML 원본 기준 GitHub Pages 배포 완료. 비공개 ZIP 3건은 archive 생성 완료했으나 Vercel GitHub 연동이 해당 private 저장소를 찾지 못해 운영 URL 연결 대기.",
+      "links": [
+        {
+          "visibility": "private",
+          "label": "401호 계약갱신요구권 행사 갱신계약서 1페이지",
+          "title": "401호 계약갱신요구권 행사 갱신계약서 1페이지",
+          "date": "2026-08-05",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": null,
+          "repoUrl": "https://github.com/softm/gwangmyeong-private/tree/main/archive/20260805-401호-계약갱신요구권-행사-갱신계약서-1페이지",
+          "category": "계약",
+          "summary": "PDF 1 · 문서 1",
+          "directory": "20260805-401호-계약갱신요구권-행사-갱신계약서-1페이지"
+        },
+        {
+          "visibility": "private",
+          "label": "광명 도시가스 계량기 배관 구성 정리",
+          "title": "광명 도시가스 계량기 배관 구성 정리",
+          "date": "2026-07-22",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": null,
+          "repoUrl": "https://github.com/softm/gwangmyeong-private/tree/main/archive/20260722-20260722-광명-도시가스-계량기-배관-구성",
+          "category": "시설",
+          "summary": "사진 26 · 문서 1",
+          "directory": "20260722-20260722-광명-도시가스-계량기-배관-구성"
+        },
+        {
+          "visibility": "private",
+          "label": "광명 수도과 계량기 현장점검 및 요금상담 상세 정리",
+          "title": "광명 수도과 계량기 현장점검 및 요금상담 상세 정리",
+          "date": "2026-07-22",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": null,
+          "repoUrl": "https://github.com/softm/gwangmyeong-private/tree/main/archive/20260722-20260722-가족-광명수도계량기점검-상세정리",
+          "category": "시설",
+          "summary": "사진 4 · 문서 3",
+          "directory": "20260722-20260722-가족-광명수도계량기점검-상세정리"
+        },
+        {
+          "visibility": "public",
+          "label": "하이마트 가전 구매·결제 기록",
+          "title": "하이마트 가전 구매·결제 기록",
+          "date": "2026-07-18",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/gwangmyeong/archive/20260718-하이마트-가전-구매/",
+          "repoUrl": "https://github.com/softm/gwangmyeong/tree/gh-pages/archive/20260718-하이마트-가전-구매",
+          "category": "가전 구매",
+          "summary": "사진 11 · HTML 원본",
+          "directory": "20260718-하이마트-가전-구매"
+        }
+      ],
+      "previousHomeUrl": "https://softm.github.io/projects/gwangmyeong/",
+      "vercelAccountAuthVerified": false
+    },
+    {
+      "order": 5,
       "repo": "ungdo-private",
       "title": "웅도",
       "description": "웅도 토지·현장·원상복구·합의 및 관련 자료의 비공개 아카이브",
@@ -747,5 +829,5 @@
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
-  "homeVersion": "20261006-ungdo-v14"
+  "homeVersion": "20261006-gwangmyeong-v15"
 }
