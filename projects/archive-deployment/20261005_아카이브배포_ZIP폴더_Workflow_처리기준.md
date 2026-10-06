@@ -204,3 +204,54 @@ final-verify
  ↓
 cleanup-inbox
 ```
+
+
+## 17. 개별 배포 완료와 아카이브 전체 완료를 분리
+
+아카이브 workflow에서 `deploy` 성공은 전체 작업 완료가 아니다.
+
+특히 Vercel의 `READY`, Pages 배포 성공, Git commit 성공을 `final-verify`와 혼동하지 않는다.
+
+필수 순서는 다음과 같이 고정한다.
+
+```text
+commit-record
+ ↓
+deploy
+ ↓
+verify-record-live
+ ↓
+sync-project-local-home
+ ↓
+sync-projects-json
+ ↓
+deploy-central-project-pages
+ ↓
+verify-/projects/<project>/
+ ↓
+verify-/projects/
+ ↓
+verify-deep-links-auth-media
+ ↓
+final-verify
+ ↓
+cleanup-inbox
+```
+
+### 중앙 반영 체크포인트
+
+매 작업마다 다음을 확인한다.
+
+| 체크 | 필수 |
+|---|---|
+| 프로젝트 자체 홈/목록 | 예 |
+| `projects/projects.json` | 예 |
+| `/projects/<project>/` | 예 |
+| `/projects/` | 예 |
+| 기록 상세 deep link | 예 |
+| 공개/비공개 인증 | 해당 시 예 |
+| 미디어/첨부 | 해당 시 예 |
+
+위 항목 중 하나라도 생략되면 workflow 상태는 `incomplete`로 처리한다.
+
+**Vercel READY ≠ 아카이브 배포 완료**를 공통 규칙으로 사용한다.
