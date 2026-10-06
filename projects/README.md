@@ -275,3 +275,22 @@ ZIP 생성은 아카이브 배포 전체의 한 단계다. ZIP이 정상이어�
 
 반대로 웹사이트가 정상이어도 원본 보존을 요청한 기록의 ZIP이 불완전하면 전체 작업을 완료로 처리하지 않는다. ZIP 검증과 웹 배포 검증을 각각 독립된 체크포인트로 기록한다.
 
+## 비공개 아카이브 절대 규칙 — 2026-10-07
+
+비공개 아카이브의 원본은 **Private GitHub만** 보관한다. Vercel은 원본 저장/복제 장소가 아니라 **인증된 server-side live-read gateway**다.
+
+```text
+Private GitHub 원본
+→ Vercel 인증 gateway
+→ GITHUB_TOKEN으로 GitHub API 실시간 조회
+→ 인증된 브라우저
+```
+
+- `zip/`, `archive/`, HTML, PDF, 이미지, 영상, 음성을 Vercel static output에 넣지 않는다.
+- Vercel Git 연결은 허용하되 build 대상은 gateway/API/login 코드로 제한한다.
+- Shared `GITHUB_TOKEN`이 이미 연결됐다고 확인된 프로젝트는 새 token이나 프로젝트 전용 token 설정을 다시 요구하지 않는다.
+- 프로젝트 env 조회가 비어 있어도 Shared env 부재로 단정하지 않는다.
+- 비공개 작업 전에 기존 정상 비공개 프로젝트 구현을 비교한다.
+- 완료 전 GitHub 최신 원본 live-read, 인증, 미디어, no-store, 중앙 프로젝트 링크를 실제 운영 환경에서 검증한다.
+
+세부 기준은 `projects/archive-deployment/README.md`와 `archive_deployment_prompt.md`를 따른다.
