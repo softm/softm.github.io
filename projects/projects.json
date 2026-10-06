@@ -34,7 +34,8 @@
       "relative-assets-through-gateway",
       "private-no-store",
       "central-project-links-live-read"
-    ]
+    ],
+    "htmlFirstZipWorkflow": "모든 아카이브 프로젝트에 .github/workflows/archive-zip-inbox.yml 공통 적용: zip/ ZIP·폴더 입력, 기존 HTML 우선, 원본 전체 보존, archive/<slug>/index.html 및 manifest 생성, 검증 전 입력 삭제 금지"
   },
   "projects": [
     {
@@ -988,6 +989,29 @@
       ],
       "previousHomeUrl": "https://softm.github.io/projects/hwagok-land-permit/",
       "vercelAccountAuthVerified": true
+    },
+    {
+      "order": 8,
+      "repo": "father-hospital-treatment-private",
+      "title": "아버지 병원 치료",
+      "description": "아버지 병원 치료·보험·의무기록·재활 관련 비공개 기록 아카이브",
+      "category": "의료·보험",
+      "deploymentStatus": "deployed",
+      "repoStatus": "available",
+      "privateRepo": "father-hospital-treatment-private",
+      "privateRepoUrl": "https://github.com/softm/father-hospital-treatment-private",
+      "privateUrl": "https://father-hospital-treatment-private.vercel.app/",
+      "projectHomeUrl": "https://softm.github.io/projects/father-hospital-treatment/",
+      "homeUrl": "https://softm.github.io/projects/father-hospital-treatment/",
+      "authProvider": "vercel-sso",
+      "deploymentNote": "Private GitHub zip/ 수집함을 HTML 우선 기준으로 archive/에 보존하고 Vercel 인증 배포를 사용한다.",
+      "links": [],
+      "previousHomeUrl": "https://softm.github.io/projects/father-hospital-treatment/",
+      "publicHomeStatus": "github-pages-home-generated",
+      "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
+      "vercelAccountAuthVerified": false,
+      "homePublicListCount": 0,
+      "homePrivateListCount": 1
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",

@@ -237,3 +237,36 @@ Vercel에는 원칙적으로 **게이트웨이/API/로그인 코드만 빌드 �
 ```
 
 이 게이트는 비공개 아카이브의 다른 일반 규칙보다 우선한다.
+
+
+## 2026-10-07 전체 프로젝트 공통 적용
+
+모든 아카이브 프로젝트 저장소에 공통 `.github/workflows/archive-zip-inbox.yml`을 적용한다.
+
+공통 동작:
+
+1. `zip/` 아래 ZIP 파일과 작업 폴더를 입력으로 탐지한다.
+2. 기존 HTML을 대표 원본으로 선택한다. `index.html`이 있으면 최우선이며, 없으면 루트 HTML 또는 가장 큰 HTML을 사용한다.
+3. Markdown을 HTML로 재생성하지 않는다.
+4. 사진·영상·음성·PDF·TXT·문서 등 원본 파일 구조를 그대로 보존한다.
+5. 결과를 `archive/<slug>/`에 만들고 대표 HTML을 `index.html`로 둔다.
+6. `archive-manifest.json`에 입력 해시와 원본 파일 메타데이터를 기록한다.
+7. `archive/index.json`과 `archive/index.html`을 생성한다.
+8. 기존 프로젝트 홈·배포 구조는 덮어쓰지 않는 추가형으로 운영한다.
+9. `zip/` 입력은 live deployment, 미디어, 링크, 인증 최종 검증 전에는 삭제하지 않는다.
+10. 공개/비공개 여부는 기존 저장소 및 배포 구조를 유지한다.
+
+적용 저장소:
+
+- `hwagok-farm`
+- `hwagok-farm-private`
+- `baksok-public`
+- `baksok-private`
+- `farmland-policy-map`
+- `gwangmyeong`
+- `gwangmyeong-private`
+- `ungdo-private`
+- `onsuhill-private`
+- `hwagok-land-permit-private`
+- `father-hospital-treatment-private`
+
