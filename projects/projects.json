@@ -36,8 +36,8 @@
       "publicRepo": "hwagok-farm",
       "publicRepoUrl": "https://github.com/softm/hwagok-farm",
       "publicUrl": "https://softm.github.io/hwagok-farm/",
-      "mediaStatus": "공개 홈의 canonical 목록을 동기화했습니다. 첨부 수와 재생 가능 여부는 별도 점검 대상입니다.",
-      "deploymentNote": "실제 콘텐츠는 프로젝트 저장소에 보존하고 중앙 목록은 배포된 HTML의 archive-data를 직접 조회합니다.",
+      "mediaStatus": "공개 기록은 GitHub Pages, 비공개 기록은 Private GitHub 원본과 첨부 PDF를 Vercel 인증 후 열람.",
+      "deploymentNote": "공개 기록은 hwagok-farm/GitHub Pages, 비공개 기록은 hwagok-farm-private/Vercel Authentication으로 제공하며 중앙 프로젝트 홈에서 함께 탐색합니다.",
       "links": [
         {
           "visibility": "public",
@@ -158,6 +158,22 @@
           "summary": "수집함 원본 61개 파일을 보존한 공개 아카이브 기록.",
           "directory": "20260905-v2",
           "recordPath": "public/records/20260905-v2"
+        },
+        {
+          "visibility": "private",
+          "label": "화곡농장 농지 증여·자경·농업경영체 검토 정리",
+          "title": "화곡농장 농지 증여·자경·농업경영체 검토 정리",
+          "chatTitle": "화곡농장 농지 증여·자경·농업경영체 검토 정리",
+          "date": "2026-09-04",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://hwagok-farm-private.vercel.app/records/20260904-hwagok-farm-gift-farm-management/",
+          "repoUrl": "https://github.com/softm/hwagok-farm-private/tree/main/records/20260904-hwagok-farm-gift-farm-management",
+          "category": "농지·증여·경영체",
+          "summary": "농지 증여·자경·농업경영체 유지 검토와 관련 PDF 원자료를 포함한 비공개 아카이브 기록.",
+          "directory": "20260904-hwagok-farm-gift-farm-management",
+          "recordPath": "records/20260904-hwagok-farm-gift-farm-management",
+          "media": "PDF 2 · HTML 1 · MD 1"
         },
         {
           "visibility": "public",
@@ -464,20 +480,26 @@
       "projectHomeUrl": "https://softm.github.io/projects/hwagok-farm/",
       "homeUrl": "https://softm.github.io/projects/hwagok-farm/",
       "publicHomeStatus": "github-pages-home-generated",
-      "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
-      "vercelAccountAuthVerified": false,
+      "privateEntryPolicy": "Vercel Authentication required; direct deep link after authentication",
+      "vercelAccountAuthVerified": true,
       "homePublicListCount": 28,
-      "homePrivateListCount": 0,
+      "homePrivateListCount": 1,
       "publicIndexSource": {
         "url": "https://softm.github.io/hwagok-farm/",
         "format": "html-archive-data"
       },
-      "pageCount": 28,
+      "pageCount": 29,
       "publicIndexSnapshot": {
         "source": "https://softm.github.io/hwagok-farm/",
         "recordCount": 28,
         "purpose": "build snapshot; browsers refresh from the deployed source on every page load"
-      }
+      },
+      "privateRepo": "hwagok-farm-private",
+      "privateRepoUrl": "https://github.com/softm/hwagok-farm-private",
+      "privateUrl": "https://hwagok-farm-private.vercel.app/",
+      "privatePageCount": 1,
+      "latestTitle": "화곡농장 분무기 편사호스 사진정리",
+      "authProvider": "vercel-sso"
     },
     {
       "order": 2,
@@ -829,5 +851,5 @@
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
-  "homeVersion": "20261006-gwangmyeong-v15"
+  "homeVersion": "20261006-hwagok-private-v15"
 }
