@@ -2,6 +2,7 @@
 """Install narrow live-list hooks and refresh only configured public archive snapshots."""
 from __future__ import annotations
 import json
+import re
 import subprocess
 import time
 import urllib.parse
@@ -10,7 +11,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '20261006-ungdo-v14'
+VERSION = '20261007-private-live-read-v18'
 
 class ArchiveDataParser(HTMLParser):
     def __init__(self):
@@ -37,8 +38,10 @@ class ArchiveDataParser(HTMLParser):
 def patch_runtime():
     path = ROOT / 'project-home.js'
     source = path.read_text(encoding='utf-8')
+    source, version_count = re.subn(r"const VERSION='[^']+';", f"const VERSION='{VERSION}';", source, count=1)
+    if version_count != 1:
+        raise RuntimeError(f'Expected one runtime VERSION declaration, found {version_count}')
     replacements = [
-        ("const VERSION='20261005-live-reflection-v12';", "const VERSION='20261006-ungdo-v14';"),
         ("function authoredDate(row){", "function authoredDate(row){if(row.dateSource==='archive-canonical')return dateOnly(row.date);"),
         ("function display(row){const date=authoredDate(row);", "function display(row){const date=authoredDate(row);if(row.dateSource==='archive-canonical'){const title=text(row.title)||text(row.label)||'기록';return {...row,displayDate:date,displayName:title,displayTitle:title,titleSource:'archive-canonical'}}"),
         ("return display({...metadata?.entries?.[key],...row,...p.chatMetadata?.[key]})", "return row.dateSource==='archive-canonical'?display(row):display({...metadata?.entries?.[key],...row,...p.chatMetadata?.[key]})"),

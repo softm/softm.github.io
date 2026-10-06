@@ -776,3 +776,49 @@ COMPLETE
 - 중앙 반영을 생략한 사실을 나중에 발견하면 이유 설명으로 끝내지 않고 즉시 중앙 정보까지 수정·배포·검증한다.
 
 완료 보고서의 “프로젝트 홈 반영”과 “전체 projects 반영” 항목은 항상 포함하며, 둘 중 하나라도 확인되지 않으면 `배포 완료`라고 표현하지 않는다.
+
+## 8-1. 비공개 배포 강제 사전점검 — 2026-10-07
+
+비공개 아카이브 작업을 시작할 때는 구현 전에 아래 판단을 먼저 끝낸다.
+
+**정답 구조는 `Private GitHub 원본 + Vercel 인증 server-side live-read gateway`다. Vercel은 비공개 아카이브 원본의 두 번째 저장소가 아니다.**
+
+### 사전 확인 순서
+
+1. 대상 Private GitHub 저장소와 기존 Vercel 프로젝트 연결 상태를 확인한다.
+2. 같은 계정의 정상 구현 프로젝트(`baksok-private`, `ungdo-private` 등)의 `vercel.json`과 gateway 코드를 먼저 비교한다.
+3. 사용자 또는 현재 프로젝트 정보에서 Shared `GITHUB_TOKEN` 연결이 이미 확인됐다면 이를 재사용한다.
+4. Shared env는 프로젝트 전용 env 조회에 보이지 않을 수 있으므로, 빈 프로젝트 env 목록만 보고 토큰이 없다고 판단하지 않는다.
+5. Vercel build 대상이 gateway/API/login 코드로 제한되는지 확인한다.
+6. `zip/`, `archive/`, 상세 HTML, PDF, 이미지, 영상, 음성이 정적 output에 포함되지 않는 것을 확인한 뒤에만 배포한다.
+
+### 금지 판단
+
+다음 구조는 비공개 아카이브 기준 위반이다.
+
+```text
+Private GitHub repo 전체
+        ↓ Git clone/build
+Vercel static output에 zip/archive/원본 포함
+        ↓
+브라우저
+```
+
+Git 연결 자체는 허용되지만 **build output에는 gateway 코드만 들어가야 한다**. 저장소 안에 원본이 존재한다는 사실과 Vercel에 원본을 배포한다는 것은 전혀 다른 문제다.
+
+### 이미 한 사용자 설정 반복 금지
+
+- 사용자가 Shared `GITHUB_TOKEN` 연결을 확인했다면 다시 token 생성/입력을 요구하지 않는다.
+- 사용자가 저장소·Vercel 연결·인증 설정을 이미 완료했다고 확인했고 도구에서 반증되지 않으면 같은 설정을 반복 안내하지 않는다.
+- 필요한 추가 설정이 정말 있을 때만 무엇이 부족한지 하나의 구체적인 근거와 직접 링크를 제시한다.
+
+### 완료 판정 추가 조건
+
+비공개 배포는 아래를 모두 만족해야 완료다.
+
+- Vercel에서 정적 원본이 아니라 server-side gateway를 통한다.
+- 운영 상세 요청이 Private GitHub 최신 `main`을 읽는다.
+- 원본 변경 확인은 Vercel 재배포 없이 이루어진다.
+- 인증 전 직접 원본 URL이 보호된다.
+- HTML 상대경로의 CSS/JS/이미지/미디어도 gateway를 통한다.
+- 중앙 프로젝트 홈과 `/projects/` 링크는 검증된 live-read 운영주소를 가리킨다.

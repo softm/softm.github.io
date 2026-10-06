@@ -8,7 +8,7 @@
     "sourceOfTruth": "GitHub",
     "public": "기존 Public GitHub 저장소와 GitHub Pages 구조 재사용",
     "private": "기존 <project>-private Private GitHub와 Vercel 구조 재사용",
-    "privateDelivery": "Vercel 인증 후 Private GitHub 최신 원본 조회",
+    "privateDelivery": "Vercel Authentication + server-side GitHub API live-read; no static archive copies on Vercel",
     "media": "사진·영상·음성·문서·ZIP 등 확보 가능한 원본을 새 기록마다 실제 파일로 포함",
     "canonicalMetadata": "사건 실제 날짜 기준 date/title/slug/id를 단일 기준으로 사용",
     "sync": "프로젝트 서비스 홈 + 중앙 /projects/<project>/ + 최상위 /projects/를 같은 작업에서 갱신",
@@ -22,7 +22,19 @@
       "home-to-record-link",
       "media-live"
     ],
-    "projectHome": "Public GitHub Pages TOC; private bodies and media remain in the original private repository"
+    "projectHome": "Public GitHub Pages TOC; private bodies and media remain in the original private repository",
+    "privateSourceOfTruth": "Private GitHub only",
+    "privateStaticCopyForbidden": true,
+    "sharedTokenRule": "If Shared GITHUB_TOKEN is already linked/confirmed, reuse it. Do not infer absence from empty project env results and do not ask the user to recreate it.",
+    "privatePreflight": "Before any private archive write, compare an existing known-good private implementation and verify Vercel build targets only gateway/API/login code.",
+    "privateCompletionGate": [
+      "github-main-live-read",
+      "no-vercel-static-archive-copy",
+      "auth-protected-direct-files",
+      "relative-assets-through-gateway",
+      "private-no-store",
+      "central-project-links-live-read"
+    ]
   },
   "projects": [
     {
@@ -601,7 +613,7 @@
       "title": "광명",
       "description": "광명 주거·시설·계약·가전 관련 공개·비공개 기록 아카이브",
       "category": "생활·주거",
-      "deploymentStatus": "public-deployed-private-repo-ready",
+      "deploymentStatus": "deployed",
       "repoStatus": "available",
       "publicRepo": "gwangmyeong",
       "publicRepoUrl": "https://github.com/softm/gwangmyeong",
@@ -619,7 +631,7 @@
       "privatePageCount": 3,
       "latestTitle": "401호 계약갱신요구권 행사 갱신계약서",
       "mediaStatus": "공개 기록 사진 11장 배포. 비공개 저장소에는 수도 계량기·도시가스 배관 이미지와 계약 PDF/DOCX 원본 보존.",
-      "deploymentNote": "공개 ZIP은 HTML 원본 기준 GitHub Pages 배포 완료. 비공개 ZIP 3건은 archive 생성 완료했으나 Vercel GitHub 연동이 해당 private 저장소를 찾지 못해 운영 URL 연결 대기.",
+      "deploymentNote": "공개 ZIP HTML 원본은 GitHub Pages 배포 완료. 비공개 ZIP 3건은 Private GitHub archive 생성 완료; Vercel 연결만 대기.",
       "links": [
         {
           "visibility": "private",
@@ -848,8 +860,136 @@
       ],
       "previousHomeUrl": "https://softm.github.io/projects/ungdo/",
       "vercelAccountAuthVerified": true
+    },
+    {
+      "order": 6,
+      "repo": "onsuhill-private",
+      "title": "온수힐",
+      "description": "온수힐 주거·수선·임대차 계약 관련 비공개 기록 아카이브",
+      "category": "생활·주거",
+      "deploymentStatus": "deployed",
+      "repoStatus": "available",
+      "privateRepo": "onsuhill-private",
+      "privateRepoUrl": "https://github.com/softm/onsuhill-private",
+      "privateUrl": "https://onsuhill-private-softms-projects.vercel.app/",
+      "projectHomeUrl": "https://softm.github.io/projects/onsuhill/",
+      "homeUrl": "https://softm.github.io/projects/onsuhill/",
+      "publicHomeStatus": "github-pages-home-generated",
+      "privateEntryPolicy": "Vercel Authentication; direct deep links after authentication",
+      "homePublicListCount": 0,
+      "homePrivateListCount": 8,
+      "pageCount": 2,
+      "privatePageCount": 2,
+      "latestTitle": "온수힐스테이트 임대차 갱신계약 전체정리 문서모음",
+      "mediaStatus": "LED 수리 기록 사진 1장 및 원본 ZIP 1개, 임대차 계약 PDF/DOCX/MD 원본 보존.",
+      "deploymentNote": "Private GitHub archive와 Vercel production 배포 완료. 운영 URL 및 2개 상세페이지 HTTP 200 확인.",
+      "links": [
+        {
+          "visibility": "private",
+          "label": "20260904 LED 수리 기록",
+          "title": "20260904 LED 수리 기록",
+          "date": "2026-09-04",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://onsuhill-private-softms-projects.vercel.app/archive/20260904-led-repair/",
+          "repoUrl": "https://github.com/softm/onsuhill-private/tree/main/archive/20260904-led-repair",
+          "category": "수선",
+          "summary": "온수힐 804호 LED 방등 수리와 계좌이체 증빙. HTML 1 · MD 1 · 사진 1 · 원본 ZIP 1.",
+          "directory": "20260904-led-repair",
+          "recordPath": "archive/20260904-led-repair"
+        },
+        {
+          "visibility": "private",
+          "label": "온수힐스테이트 임대차 갱신계약 전체정리 문서모음",
+          "title": "온수힐스테이트 임대차 갱신계약 전체정리 문서모음",
+          "date": "2026-09-04",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://onsuhill-private-softms-projects.vercel.app/archive/20260904-onsuhill-lease-renewal/",
+          "repoUrl": "https://github.com/softm/onsuhill-private/tree/main/archive/20260904-onsuhill-lease-renewal",
+          "category": "임대차",
+          "summary": "임대차 갱신계약 관련 PDF 1 · DOCX 6 · MD 1 원본 문서 묶음.",
+          "directory": "20260904-onsuhill-lease-renewal",
+          "recordPath": "archive/20260904-onsuhill-lease-renewal"
+        }
+      ],
+      "vercelAccountAuthVerified": true,
+      "previousHomeUrl": "https://softm.github.io/projects/onsuhill/"
+    },
+    {
+      "order": 7,
+      "repo": "hwagok-land-permit-private",
+      "title": "화곡리 개간허가",
+      "description": "화곡리 개간허가·측량·수사·불기소·항고 관련 비공개 기록 아카이브",
+      "category": "토지·법률",
+      "deploymentStatus": "authenticated-github-live",
+      "repoStatus": "available",
+      "privateRepo": "hwagok-land-permit-private",
+      "privateRepoUrl": "https://github.com/softm/hwagok-land-permit-private",
+      "privateUrl": "https://hwagok-land-permit-private.vercel.app/",
+      "projectHomeUrl": "https://softm.github.io/projects/hwagok-land-permit/",
+      "homeUrl": "https://softm.github.io/projects/hwagok-land-permit/",
+      "publicHomeStatus": "github-pages-home-generated",
+      "privateEntryPolicy": "Vercel Authentication required; authenticated gateway live-reads Private GitHub main on each request",
+      "authProvider": "vercel-sso",
+      "homePublicListCount": 0,
+      "homePrivateListCount": 8,
+      "pageCount": 3,
+      "privatePageCount": 3,
+      "latestTitle": "항고장 제출 및 수사기록목록 정리",
+      "mediaStatus": "비공개 HTML·이미지·PDF·음성·문서 원본은 Private GitHub에만 보존하고 Vercel 함수가 요청 시 GitHub API로 실시간 스트리밍.",
+      "deploymentNote": "Vercel 배포물에는 아카이브 원본을 포함하지 않음. builds 대상은 API gateway뿐이며 zip/ 원본은 Private GitHub main에서 실시간 조회.",
+      "links": [
+        {
+          "visibility": "private",
+          "label": "항고장 제출 및 수사기록목록 정리",
+          "title": "항고장 제출 및 수사기록목록 정리",
+          "chatTitle": "항고장 제출 및 수사기록목록 정리",
+          "date": "2026-09-23",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://hwagok-land-permit-private.vercel.app/zip/20260923_항고장_및_수사기록목록_정리_MD_HTML/20260923_항고장_및_수사기록목록_정리.html",
+          "repoUrl": "https://github.com/softm/hwagok-land-permit-private/tree/main/zip/20260923_항고장_및_수사기록목록_정리_MD_HTML",
+          "category": "항고",
+          "summary": "항고 접수 이후 사건별 핵심 쟁점, 수사기록 목록, 추가증거 검토 여부와 향후 확인 우선순위를 정리한 비공개 기록.",
+          "directory": "20260923_항고장_및_수사기록목록_정리_MD_HTML",
+          "recordPath": "zip/20260923_항고장_및_수사기록목록_정리_MD_HTML"
+        },
+        {
+          "visibility": "private",
+          "label": "화곡리 항고 사건정리 · 모든 첨부이미지",
+          "title": "화곡리 항고 사건정리 · 모든 첨부이미지",
+          "chatTitle": "화곡리 항고 사건정리 · 모든 첨부이미지",
+          "date": "2026-09-23",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://hwagok-land-permit-private.vercel.app/zip/20260923_화곡리_항고_사건정리_모든첨부이미지/20260923_화곡리_항고_사건정리_모든첨부이미지.html",
+          "repoUrl": "https://github.com/softm/hwagok-land-permit-private/tree/main/zip/20260923_화곡리_항고_사건정리_모든첨부이미지",
+          "category": "항고",
+          "summary": "항고 사건 정리문과 첨부 이미지·미디어를 함께 보존한 비공개 아카이브.",
+          "directory": "20260923_화곡리_항고_사건정리_모든첨부이미지",
+          "recordPath": "zip/20260923_화곡리_항고_사건정리_모든첨부이미지"
+        },
+        {
+          "visibility": "private",
+          "label": "불기소처분 검토와 항고장 3건 · 전체자료",
+          "title": "불기소처분 검토와 항고장 3건 · 전체자료",
+          "chatTitle": "불기소처분 검토와 항고장 3건 · 전체자료",
+          "date": "2026-09-22",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://hwagok-land-permit-private.vercel.app/zip/20260922_화곡리_항고장3건_전체자료/index.html",
+          "repoUrl": "https://github.com/softm/hwagok-land-permit-private/tree/main/zip/20260922_화곡리_항고장3건_전체자료",
+          "category": "항고",
+          "summary": "5396호·6240호 관련 항고장 3건, 결정 이유, 증거자료, 전체 이미지·녹취·원본 파일을 묶은 비공개 상세 아카이브.",
+          "directory": "20260922_화곡리_항고장3건_전체자료",
+          "recordPath": "zip/20260922_화곡리_항고장3건_전체자료"
+        }
+      ],
+      "previousHomeUrl": "https://softm.github.io/projects/hwagok-land-permit/",
+      "vercelAccountAuthVerified": true
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
-  "homeVersion": "20261006-ungdo-v14"
+  "homeVersion": "20261007-private-live-read-v18"
 }

@@ -148,3 +148,92 @@ cleanup-inbox
 - [ ] 미디어/첨부파일 확인
 
 하나라도 빠지면 상태는 **미완료**이며 즉시 누락 단계를 수행한다.
+
+## 2026-10-07 필수 보완: 비공개 아카이브 오배포 방지 게이트
+
+비공개 아카이브에서는 아래 규칙을 **작업 시작 전 확인하는 강제 사전점검(preflight)** 으로 사용한다. 이 확인 없이 Vercel 설정, `vercel.json`, 프로젝트 루트, 빌드 대상 또는 중앙 링크를 수정하지 않는다.
+
+### 비공개 아카이브 절대 구조
+
+```text
+Private GitHub (<project>-private)
+  ├─ archive/ 또는 zip/ 원본 HTML·MD·PDF·이미지·영상·음성
+  └─ 유일한 Source of Truth
+          ↓ 요청 시
+Vercel server-side gateway
+  ├─ 인증
+  ├─ GitHub API
+  ├─ GITHUB_TOKEN (server-side only)
+  └─ no-store 스트리밍/렌더링
+          ↓
+인증된 브라우저
+```
+
+### 절대 금지
+
+- Private GitHub의 `zip/`, `archive/`, HTML, PDF, 이미지, 영상, 음성, 문서를 Vercel **정적 배포물에 복제하지 않는다**.
+- Vercel 프로젝트가 Private GitHub 저장소에 Git 연결되어 있다는 이유로 저장소 전체를 정적 사이트로 배포하지 않는다.
+- `index.html`을 프로젝트 루트에 두고 Vercel이 이를 직접 정적 제공하는 구조를 비공개 live-read 구조로 오인하지 않는다.
+- Vercel `READY`만 보고 비공개 아카이브 완료라고 보고하지 않는다.
+- Shared `GITHUB_TOKEN`이 이미 프로젝트에 연결되어 있다는 사용자 확인이 있으면 프로젝트 전용 `GITHUB_TOKEN`을 새로 만들거나 다시 요구하지 않는다.
+- 프로젝트 env 조회 결과에 Shared Environment Variable이 나타나지 않는다는 이유만으로 Shared token이 없다고 단정하지 않는다.
+- 사용자가 이미 완료한 설정을 근거 없이 다시 하도록 요구하지 않는다.
+
+### Vercel 역할 제한
+
+Vercel에는 원칙적으로 **게이트웨이/API/로그인 코드만 빌드 대상으로 포함**한다. 예:
+
+```json
+{
+  "builds": [
+    { "src": "api/render.js", "use": "@vercel/node" }
+  ]
+}
+```
+
+라우터는 요청 경로를 서버 함수로 보내고, 서버 함수가 Private GitHub `main`에서 최신 파일을 읽는다. HTML 내부 상대경로도 같은 게이트웨이를 통하도록 보정한다.
+
+### 작업 전 필수 preflight
+
+비공개 아카이브 작업은 먼저 아래를 확인한다.
+
+- [ ] 대상 저장소가 Private GitHub인지
+- [ ] 기존 Vercel 프로젝트가 어느 저장소에 연결되어 있는지
+- [ ] 기존 정상 비공개 프로젝트의 구현(`baksok-private`, `ungdo-private` 등)을 비교했는지
+- [ ] Shared `GITHUB_TOKEN` 연결 여부가 이미 확인됐는지
+- [ ] Vercel의 build 대상이 API/gateway만인지
+- [ ] `zip/`, `archive/` 원본이 정적 output에 들어가지 않는지
+- [ ] Vercel Authentication 또는 기존 프로젝트 인증이 유지되는지
+- [ ] 중앙 `projects.json` 링크가 인증된 live-read 주소를 가리키는지
+
+### 완료 검증
+
+다음 두 종류를 별도로 검증한다.
+
+1. **배포 구조 검증**
+   - Vercel 배포 타입에 서버 함수가 존재
+   - 운영 배포 커밋 SHA가 최신 게이트웨이 코드와 일치
+   - Vercel build 설정이 원본 디렉터리를 static build 대상으로 포함하지 않음
+
+2. **live-read 검증**
+   - GitHub `main`의 HTML이 운영 URL에서 조회됨
+   - 상세 HTML의 CSS/JS/이미지/PDF/음성 링크가 같은 gateway 경로로 정상 동작
+   - `Cache-Control: private, no-store`
+   - 인증 전 민감 원본 직접 접근 불가
+   - GitHub 원본 변경 후 Vercel 재배포 없이 최신 내용 조회 가능
+
+### 기준 위반 발견 시 처리
+
+오배포를 발견하면 설명만 하지 말고 다음 순서로 즉시 복구한다.
+
+```text
+직접 원본 노출 차단
+→ static build 대상 제거
+→ GitHub live-read gateway 적용
+→ 인증 유지 확인
+→ 운영 상세/미디어 검증
+→ 중앙 projects 링크/상태 교정
+→ 중앙 기준 문서와 CHANGELOG 갱신
+```
+
+이 게이트는 비공개 아카이브의 다른 일반 규칙보다 우선한다.
