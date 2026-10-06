@@ -2,7 +2,7 @@
 (function () {
 'use strict';
 const BASE='https://softm.github.io/projects/';
-const VERSION='20261006-ungdo-v14';
+const VERSION='20261006-hwagok-private-v15';
 const ROUTES={"hwagok-farm":[],"mine-private":[["진료 경과 정리","archive/20260806-right-index-laceration/"],["진료의뢰서 정리","archive/20260810-medical-referral/"],["농업인 안전보험 가입 정리","archive/20260812-farmer-safety-insurance/"],["내가 가진 것 정리","archive/20260819-all-i-have/"],["건강검진·보험 서류 정리","archive/20260903-health-checkup-insurance/"],["임대차 갱신 정리","archive/20260904-onsu-hill-renewal/"]],"onsuhill-private":[["임대차 갱신계약 정리","api/site?route=renewal"],["계약서·생성 문서 목록","api/site?route=documents"],["문자·전화 대응 정리","api/site?route=messages"],["시설 수선 검토","api/site?route=facilities"],["전세계약 갱신 검토","api/site?route=okgil"],["LED 수리 기록·증빙","api/site?route=led-repair"]],"hwagok-land-permit-private":[["사건 접수·증거 정리","case/appeal"],["사건 검토 기록","case/prosecution-outlook"],["처분·항고 정리","case/nonprosecution-appeal"],["사건·대화 타임라인","asset/archive-20260926.html"],["항고장 보관 기록","asset/appeals-20260922/staging.html"]],"baksok-public":[],"ungdo-private":[]};
 /* Summaries transcribed from softm/hwagok-farm archive/records.ts.
    Source-reported photo counts are deliberately NOT treated as uploaded files. */
