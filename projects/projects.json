@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-10-07",
+  "updatedAt": "2026-09-30",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -1005,7 +1005,13 @@
       "homeUrl": "https://softm.github.io/projects/father-hospital-treatment/",
       "authProvider": "vercel-sso",
       "deploymentNote": "Private GitHub zip/ 수집함을 HTML 우선 기준으로 archive/에 보존하고 Vercel 인증 배포를 사용한다.",
-      "links": []
+      "links": [],
+      "previousHomeUrl": "https://softm.github.io/projects/father-hospital-treatment/",
+      "publicHomeStatus": "github-pages-home-generated",
+      "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
+      "vercelAccountAuthVerified": false,
+      "homePublicListCount": 0,
+      "homePrivateListCount": 1
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",

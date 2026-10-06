@@ -1,6 +1,6 @@
 {
   "version": "20261007-private-live-read-v19",
-  "projectCount": 7,
+  "projectCount": 8,
   "projects": [
     {
       "repo": "hwagok-farm",
@@ -64,6 +64,15 @@
       "privateEntries": 8,
       "htmlSha256": "732dbf89baba22bd141d563498c0ba65602c2225eed66a1510d46cd8cc152f4c",
       "authenticatedContentVerified": false
+    },
+    {
+      "repo": "father-hospital-treatment-private",
+      "title": "아버지 병원 치료",
+      "homeUrl": "https://softm.github.io/projects/father-hospital-treatment/",
+      "publicEntries": 0,
+      "privateEntries": 1,
+      "htmlSha256": "b74fc62a44159154ef95884a0bf2a56ad9f4cedd21e38bdaf7a9dd7f997ea64a",
+      "authenticatedContentVerified": false
     }
   ],
   "files": [
@@ -74,6 +83,7 @@
     "projects/ungdo/index.html",
     "projects/onsuhill/index.html",
     "projects/hwagok-land-permit/index.html",
+    "projects/father-hospital-treatment/index.html",
     "projects/projects.json",
     "projects/index.html",
     "projects/README.md",
