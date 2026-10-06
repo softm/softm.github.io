@@ -64,3 +64,17 @@
 - 이 체크가 누락되면 설명만 하지 않고 즉시 중앙 반영까지 복구한다.
 
 핵심 문구: **Vercel READY ≠ 아카이브 배포 완료.**
+
+## 2026-10-07 · 비공개 아카이브 Vercel 역할 및 Shared Token 판정 강화
+
+화곡리 개간허가 비공개 아카이브 작업에서 Private GitHub의 `zip/` 원본을 Vercel 정적 배포물로 직접 제공한 오류를 계기로 다음 기준을 강제 규칙으로 확정했다.
+
+- 비공개 원본은 Private GitHub만 Source of Truth로 유지한다.
+- Vercel은 인증 + server-side GitHub live-read gateway 역할만 한다.
+- `zip/`, `archive/`, HTML/PDF/이미지/영상/음성 원본을 Vercel static output에 복제하지 않는다.
+- GitHub 저장소가 Vercel에 Git 연결되어 있어도 build 대상은 gateway/API 코드로 제한한다.
+- Shared `GITHUB_TOKEN`은 프로젝트 전용 env 조회에서 보이지 않을 수 있다. 빈 조회 결과만으로 token 부재를 단정하지 않는다.
+- 사용자가 Shared token 연결을 이미 확인했다면 token 재생성·재입력을 요구하지 않는다.
+- 비공개 작업 전 `baksok-private`, `ungdo-private` 등 기존 정상 구현과 비교하는 preflight를 필수화한다.
+- `READY`는 완료가 아니다. GitHub 최신 원본 live-read, 인증, 상대 미디어 경로, no-store, 중앙 링크를 실제 검증해야 한다.
+- 오배포 발견 시 직접 원본 노출 차단 → gateway 전환 → 인증/운영 검증 → 중앙 인덱스 교정 → 중앙 기준 갱신 순으로 즉시 복구한다.
