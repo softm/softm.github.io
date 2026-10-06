@@ -1,14 +1,14 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-10-06",
+  "updatedAt": "2026-10-07",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
     "sourceOfTruth": "GitHub",
     "public": "기존 Public GitHub 저장소와 GitHub Pages 구조 재사용",
     "private": "기존 <project>-private Private GitHub와 Vercel 구조 재사용",
-    "privateDelivery": "Vercel 인증 후 Private GitHub 최신 원본 조회",
+    "privateDelivery": "Vercel Authentication + server-side GitHub API live-read; no static archive copies on Vercel",
     "media": "사진·영상·음성·문서·ZIP 등 확보 가능한 원본을 새 기록마다 실제 파일로 포함",
     "canonicalMetadata": "사건 실제 날짜 기준 date/title/slug/id를 단일 기준으로 사용",
     "sync": "프로젝트 서비스 홈 + 중앙 /projects/<project>/ + 최상위 /projects/를 같은 작업에서 갱신",
@@ -22,7 +22,19 @@
       "home-to-record-link",
       "media-live"
     ],
-    "projectHome": "Public GitHub Pages TOC; private bodies and media remain in the original private repository"
+    "projectHome": "Public GitHub Pages TOC; private bodies and media remain in the original private repository",
+    "privateSourceOfTruth": "Private GitHub only",
+    "privateStaticCopyForbidden": true,
+    "sharedTokenRule": "If Shared GITHUB_TOKEN is already linked/confirmed, reuse it. Do not infer absence from empty project env results and do not ask the user to recreate it.",
+    "privatePreflight": "Before any private archive write, compare an existing known-good private implementation and verify Vercel build targets only gateway/API/login code.",
+    "privateCompletionGate": [
+      "github-main-live-read",
+      "no-vercel-static-archive-copy",
+      "auth-protected-direct-files",
+      "relative-assets-through-gateway",
+      "private-no-store",
+      "central-project-links-live-read"
+    ]
   },
   "projects": [
     {
@@ -978,5 +990,5 @@
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
-  "homeVersion": "20261006-hwagok-land-permit-live-v17"
+  "homeVersion": "20261007-private-live-read-policy-v18"
 }
