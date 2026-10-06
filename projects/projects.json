@@ -909,7 +909,7 @@
       "title": "화곡리 개간허가",
       "description": "화곡리 개간허가·측량·수사·불기소·항고 관련 비공개 기록 아카이브",
       "category": "토지·법률",
-      "deploymentStatus": "static-html-deployed",
+      "deploymentStatus": "authenticated-github-live",
       "repoStatus": "available",
       "privateRepo": "hwagok-land-permit-private",
       "privateRepoUrl": "https://github.com/softm/hwagok-land-permit-private",
@@ -917,15 +917,15 @@
       "projectHomeUrl": "https://softm.github.io/projects/hwagok-land-permit/",
       "homeUrl": "https://softm.github.io/projects/hwagok-land-permit/",
       "publicHomeStatus": "github-pages-home-generated",
-      "privateEntryPolicy": "Vercel Authentication required on all deployment targets; direct deep link after authentication",
+      "privateEntryPolicy": "Vercel Authentication required; authenticated gateway live-reads Private GitHub main on each request",
       "authProvider": "vercel-sso",
       "homePublicListCount": 0,
       "homePrivateListCount": 3,
       "pageCount": 3,
       "privatePageCount": 3,
       "latestTitle": "항고장 제출 및 수사기록목록 정리",
-      "mediaStatus": "Private GitHub zip 디렉터리의 HTML·이미지·문서 원본을 Vercel 인증 후 열람.",
-      "deploymentNote": "ZIP 디렉터리 내부 HTML을 기준으로 프로젝트 index를 구성하고 Vercel 운영 URL에서 직접 검증.",
+      "mediaStatus": "비공개 HTML·이미지·PDF·음성·문서 원본은 Private GitHub에만 보존하고 Vercel 함수가 요청 시 GitHub API로 실시간 스트리밍.",
+      "deploymentNote": "Vercel 배포물에는 아카이브 원본을 포함하지 않음. builds 대상은 API gateway뿐이며 zip/ 원본은 Private GitHub main에서 실시간 조회.",
       "links": [
         {
           "visibility": "private",
@@ -978,5 +978,5 @@
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
-  "homeVersion": "20261006-hwagok-land-permit-v16"
+  "homeVersion": "20261006-hwagok-land-permit-live-v17"
 }
