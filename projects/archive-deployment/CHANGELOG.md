@@ -46,3 +46,21 @@
 ### 구현 원칙
 
 공개 프로젝트의 배포 HTML에 `script#archive-data[type="application/json"]`가 있으면 이를 읽거나, 같은 빌드에서 생성한 공식 manifest를 읽을 수 있다. HTML 소스에서 메타데이터만 읽고 그 HTML의 스크립트를 실행하지 않는다. HTTPS·동일 공개 프로젝트 경로·고유 slug·예상 상세 URL·GitHub 원본 디렉터리를 검증한다. 캐시 때문에 오래된 목록을 사용하지 않도록 조회·배포 버전 관리를 포함한다.
+
+
+## 2026-10-06 · 개별 배포 성공 후 중앙 프로젝트 페이지 누락 방지
+
+### 발생한 문제
+
+`hwagok-farm-private` ZIP 아카이브 처리에서 개별 Private GitHub 반영과 Vercel `READY`까지 확인한 뒤 작업을 완료로 판단하여, 중앙 `projects/projects.json`, `/projects/hwagok-farm/`, 최상위 `/projects/` 반영이 작업 종료 시점에 누락되었다.
+
+### 확정 보완 기준
+
+- Vercel `READY`, Pages 성공, Git commit 성공은 **중간 성공 상태**다.
+- 아카이브 배포는 개별 기록 → 프로젝트 홈 → 중앙 프로젝트 홈 → 전체 프로젝트 인덱스 → 실제 링크/인증/미디어 검증까지 한 작업으로 수행한다.
+- 공개·비공개 기록 모두 중앙 프로젝트 메타데이터를 갱신한다.
+- 새 기록 추가 시 `projects/projects.json`의 공개/비공개 기록 수, 최신 기록, URL, 저장소 정보 등 관련 필드도 함께 갱신한다.
+- `/projects/<project>/`와 `/projects/`의 실제 운영 화면 반영 확인 전에는 완료로 보고하지 않는다.
+- 이 체크가 누락되면 설명만 하지 않고 즉시 중앙 반영까지 복구한다.
+
+핵심 문구: **Vercel READY ≠ 아카이브 배포 완료.**

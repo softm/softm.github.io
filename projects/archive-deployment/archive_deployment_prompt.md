@@ -724,3 +724,55 @@ ZIP 원본 보존
 
 하나라도 구현 불가능하면 **우회하지 않고 그 배포 작업 자체를 중단한다.**
 
+
+
+---
+
+## 24. 개별 배포 성공으로 완료 처리 금지 — 중앙 인덱스 누락 방지
+
+아카이브 배포 요청의 작업 범위를 개별 GitHub 저장소나 Vercel 프로젝트까지만으로 축소해서는 안 된다.
+
+특히 다음 상태는 **완료가 아니다.**
+
+```text
+GitHub commit 성공
+GitHub Pages 배포 성공
+Vercel READY
+개별 index.html 반영
+상세페이지 단독 접속 성공
+```
+
+위 상태는 모두 중간 단계다.
+
+아카이브 배포의 종료 조건은 반드시 아래 흐름 전체가 통과된 경우다.
+
+```text
+record/source
+  ↓
+repository commit
+  ↓
+Pages/Vercel deployment
+  ↓
+project local home/index
+  ↓
+projects/projects.json
+  ↓
+/projects/<project>/
+  ↓
+/projects/
+  ↓
+deep-link/auth/media/live verification
+  ↓
+COMPLETE
+```
+
+실행 강제 규칙:
+
+- 공개/비공개 여부와 관계없이 중앙 프로젝트 정보 갱신을 같은 작업에 포함한다.
+- 기존 프로젝트에 새 기록만 추가한 경우에도 `projects/projects.json`의 기록 수, 비공개/공개 수, 최신 기록, 배포 URL 등 관련 메타데이터를 갱신한다.
+- `/projects/<project>/`에서 새 기록이 실제 표시되는지 확인한다.
+- `/projects/`에서 해당 프로젝트의 최근 업데이트/상태가 실제 반영되는지 확인한다.
+- Vercel `READY`를 최종 성공 신호로 사용하지 않는다.
+- 중앙 반영을 생략한 사실을 나중에 발견하면 이유 설명으로 끝내지 않고 즉시 중앙 정보까지 수정·배포·검증한다.
+
+완료 보고서의 “프로젝트 홈 반영”과 “전체 projects 반영” 항목은 항상 포함하며, 둘 중 하나라도 확인되지 않으면 `배포 완료`라고 표현하지 않는다.
