@@ -902,8 +902,81 @@
         }
       ],
       "vercelAccountAuthVerified": false
+    },
+    {
+      "order": 7,
+      "repo": "hwagok-land-permit-private",
+      "title": "화곡리 개간허가",
+      "description": "화곡리 개간허가·측량·수사·불기소·항고 관련 비공개 기록 아카이브",
+      "category": "토지·법률",
+      "deploymentStatus": "static-html-deployed",
+      "repoStatus": "available",
+      "privateRepo": "hwagok-land-permit-private",
+      "privateRepoUrl": "https://github.com/softm/hwagok-land-permit-private",
+      "privateUrl": "https://hwagok-land-permit-private.vercel.app/",
+      "projectHomeUrl": "https://softm.github.io/projects/hwagok-land-permit/",
+      "homeUrl": "https://softm.github.io/projects/hwagok-land-permit/",
+      "publicHomeStatus": "github-pages-home-generated",
+      "privateEntryPolicy": "Vercel Authentication required on all deployment targets; direct deep link after authentication",
+      "authProvider": "vercel-sso",
+      "homePublicListCount": 0,
+      "homePrivateListCount": 3,
+      "pageCount": 3,
+      "privatePageCount": 3,
+      "latestTitle": "항고장 제출 및 수사기록목록 정리",
+      "mediaStatus": "Private GitHub zip 디렉터리의 HTML·이미지·문서 원본을 Vercel 인증 후 열람.",
+      "deploymentNote": "ZIP 디렉터리 내부 HTML을 기준으로 프로젝트 index를 구성하고 Vercel 운영 URL에서 직접 검증.",
+      "links": [
+        {
+          "visibility": "private",
+          "label": "항고장 제출 및 수사기록목록 정리",
+          "title": "항고장 제출 및 수사기록목록 정리",
+          "chatTitle": "항고장 제출 및 수사기록목록 정리",
+          "date": "2026-09-23",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://hwagok-land-permit-private.vercel.app/zip/20260923_항고장_및_수사기록목록_정리_MD_HTML/20260923_항고장_및_수사기록목록_정리.html",
+          "repoUrl": "https://github.com/softm/hwagok-land-permit-private/tree/main/zip/20260923_항고장_및_수사기록목록_정리_MD_HTML",
+          "category": "항고",
+          "summary": "항고 접수 이후 사건별 핵심 쟁점, 수사기록 목록, 추가증거 검토 여부와 향후 확인 우선순위를 정리한 비공개 기록.",
+          "directory": "20260923_항고장_및_수사기록목록_정리_MD_HTML",
+          "recordPath": "zip/20260923_항고장_및_수사기록목록_정리_MD_HTML"
+        },
+        {
+          "visibility": "private",
+          "label": "화곡리 항고 사건정리 · 모든 첨부이미지",
+          "title": "화곡리 항고 사건정리 · 모든 첨부이미지",
+          "chatTitle": "화곡리 항고 사건정리 · 모든 첨부이미지",
+          "date": "2026-09-23",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://hwagok-land-permit-private.vercel.app/zip/20260923_화곡리_항고_사건정리_모든첨부이미지/20260923_화곡리_항고_사건정리_모든첨부이미지.html",
+          "repoUrl": "https://github.com/softm/hwagok-land-permit-private/tree/main/zip/20260923_화곡리_항고_사건정리_모든첨부이미지",
+          "category": "항고",
+          "summary": "항고 사건 정리문과 첨부 이미지·미디어를 함께 보존한 비공개 아카이브.",
+          "directory": "20260923_화곡리_항고_사건정리_모든첨부이미지",
+          "recordPath": "zip/20260923_화곡리_항고_사건정리_모든첨부이미지"
+        },
+        {
+          "visibility": "private",
+          "label": "불기소처분 검토와 항고장 3건 · 전체자료",
+          "title": "불기소처분 검토와 항고장 3건 · 전체자료",
+          "chatTitle": "불기소처분 검토와 항고장 3건 · 전체자료",
+          "date": "2026-09-22",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://hwagok-land-permit-private.vercel.app/zip/20260922_화곡리_항고장3건_전체자료/index.html",
+          "repoUrl": "https://github.com/softm/hwagok-land-permit-private/tree/main/zip/20260922_화곡리_항고장3건_전체자료",
+          "category": "항고",
+          "summary": "5396호·6240호 관련 항고장 3건, 결정 이유, 증거자료, 전체 이미지·녹취·원본 파일을 묶은 비공개 상세 아카이브.",
+          "directory": "20260922_화곡리_항고장3건_전체자료",
+          "recordPath": "zip/20260922_화곡리_항고장3건_전체자료"
+        }
+      ],
+      "previousHomeUrl": "https://softm.github.io/projects/hwagok-land-permit/",
+      "vercelAccountAuthVerified": true
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
-  "homeVersion": "20261006-gwangmyeong-v15"
+  "homeVersion": "20261006-hwagok-land-permit-v16"
 }
