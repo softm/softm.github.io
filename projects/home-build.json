@@ -1,14 +1,14 @@
 {
   "version": "20261006-ungdo-v14",
-  "projectCount": 4,
+  "projectCount": 5,
   "projects": [
     {
       "repo": "hwagok-farm",
       "title": "화곡농장",
       "homeUrl": "https://softm.github.io/projects/hwagok-farm/",
       "publicEntries": 28,
-      "privateEntries": 0,
-      "htmlSha256": "0fab096c0e17c6f148745a3e80b8e0246513ad94ae4299b3c3256bdc173f285d",
+      "privateEntries": 1,
+      "htmlSha256": "98b9560270327358072d5db29b92f111ded17a0c54ca6653785abe4c956002d3",
       "authenticatedContentVerified": false
     },
     {
@@ -30,6 +30,15 @@
       "authenticatedContentVerified": false
     },
     {
+      "repo": "gwangmyeong",
+      "title": "광명",
+      "homeUrl": "https://softm.github.io/projects/gwangmyeong/",
+      "publicEntries": 1,
+      "privateEntries": 3,
+      "htmlSha256": "dbb39da9c40f8ba5c314530b7954eb7d0664e913a5ebcb1e6e71a5072438dc56",
+      "authenticatedContentVerified": false
+    },
+    {
       "repo": "ungdo-private",
       "title": "웅도",
       "homeUrl": "https://softm.github.io/projects/ungdo/",
@@ -43,6 +52,7 @@
     "projects/hwagok-farm/index.html",
     "projects/baksok/index.html",
     "projects/farmland-policy-map/index.html",
+    "projects/gwangmyeong/index.html",
     "projects/ungdo/index.html",
     "projects/projects.json",
     "projects/index.html",
