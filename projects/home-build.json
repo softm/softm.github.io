@@ -1,5 +1,5 @@
 {
-  "version": "20261007-private-live-read-v18",
+  "version": "20261007-private-live-read-v19",
   "projectCount": 7,
   "projects": [
     {
@@ -8,7 +8,7 @@
       "homeUrl": "https://softm.github.io/projects/hwagok-farm/",
       "publicEntries": 28,
       "privateEntries": 1,
-      "htmlSha256": "ab203c19a9b50ffc416b6714b23cd819254122edf7c6d3db609360537d183672",
+      "htmlSha256": "bd2bff78f1a67598af93e6c84b2c82bdfa1b1deccef209c7a7cb4d698068e6ff",
       "authenticatedContentVerified": false
     },
     {
@@ -17,7 +17,7 @@
       "homeUrl": "https://softm.github.io/projects/baksok/",
       "publicEntries": 1,
       "privateEntries": 1,
-      "htmlSha256": "16f3ef1e559ad0f7c5b2b2eac8a45a399cb4e86485ff22415d5d78e9acd3d8c8",
+      "htmlSha256": "b60fd3e817e0e8a8bab94a8a3d60b2e509854fb814df80a306f4a0f1cd897224",
       "authenticatedContentVerified": false
     },
     {
@@ -26,7 +26,7 @@
       "homeUrl": "https://softm.github.io/projects/farmland-policy-map/",
       "publicEntries": 1,
       "privateEntries": 0,
-      "htmlSha256": "c0dd537d1b2e21980b2499a12c1a9617a681ae757d60dbfb6b5ef9ccfc5b7e44",
+      "htmlSha256": "7c972a591c4af1c30593e0cf9f5137cc8325fd37c87537786bf9586e46a66f08",
       "authenticatedContentVerified": false
     },
     {
@@ -35,7 +35,7 @@
       "homeUrl": "https://softm.github.io/projects/gwangmyeong/",
       "publicEntries": 1,
       "privateEntries": 3,
-      "htmlSha256": "b6b0f5eec1e732b225f9e2483418a045bf599dce5041d7c2f9959eeb4d23b579",
+      "htmlSha256": "9668b0e180e107672d9431f0a1e6bcd0921f8f1e763e9ae87a93733d7553b726",
       "authenticatedContentVerified": false
     },
     {
@@ -44,7 +44,7 @@
       "homeUrl": "https://softm.github.io/projects/ungdo/",
       "publicEntries": 0,
       "privateEntries": 9,
-      "htmlSha256": "8afc84cc7886dbf715dd174ab06bc329231cd559606e5480a8354079ad53d5d3",
+      "htmlSha256": "031c63c92a523696698174ac2ebaf92bf55816062589590b1b0c499c151a341a",
       "authenticatedContentVerified": false
     },
     {
@@ -53,7 +53,7 @@
       "homeUrl": "https://softm.github.io/projects/onsuhill/",
       "publicEntries": 0,
       "privateEntries": 8,
-      "htmlSha256": "ae07801ae7bf8250ced0d87344cca3d6ad3ec099c52a09beb64e37c531df32be",
+      "htmlSha256": "7160374502720443c6a26ada0bd86f72f0394c79c8b7bf9d235188ed2f1e5397",
       "authenticatedContentVerified": false
     },
     {
@@ -62,7 +62,7 @@
       "homeUrl": "https://softm.github.io/projects/hwagok-land-permit/",
       "publicEntries": 0,
       "privateEntries": 8,
-      "htmlSha256": "894c188a1d44d5105ba59b6878c4827f8282ba7f308b975b5163a025f520eed8",
+      "htmlSha256": "732dbf89baba22bd141d563498c0ba65602c2225eed66a1510d46cd8cc152f4c",
       "authenticatedContentVerified": false
     }
   ],
