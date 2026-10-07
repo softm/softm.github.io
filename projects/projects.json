@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-09-30",
+  "updatedAt": "2026-10-07",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -1195,8 +1195,52 @@
         "recordCount": 1,
         "purpose": "build snapshot; browsers refresh from the deployed source on every page load"
       }
+    },
+    {
+      "order": 10,
+      "repo": "mine-private",
+      "title": "나",
+      "description": "개인 건강·생활 기록을 보관하는 비공개 아카이브",
+      "category": "개인 기록",
+      "deploymentStatus": "authenticated-github-live",
+      "repoStatus": "available",
+      "privateRepo": "mine-private",
+      "privateRepoUrl": "https://github.com/softm/mine-private",
+      "privateUrl": "https://mine-private-sigma.vercel.app/",
+      "projectHomeUrl": "https://softm.github.io/projects/mine/",
+      "homeUrl": "https://softm.github.io/projects/mine/",
+      "publicHomeStatus": "github-pages-home-generated",
+      "privateEntryPolicy": "서버 비밀번호 인증 후 Private GitHub main을 실시간 조회",
+      "authProvider": "server-password",
+      "homePublicListCount": 0,
+      "homePrivateListCount": 1,
+      "pageCount": 1,
+      "privatePageCount": 1,
+      "latestTitle": "비공개 개인 기록",
+      "mediaStatus": "민감한 원본·상세 제목·파일명은 Private GitHub에만 보존합니다.",
+      "deploymentNote": "Vercel 배포물에는 원본을 포함하지 않고 인증 게이트웨이가 Private GitHub main을 요청 시 실시간 조회합니다.",
+      "links": [
+        {
+          "visibility": "private",
+          "label": "비공개 개인 기록",
+          "title": "비공개 개인 기록",
+          "chatTitle": "비공개 개인 기록",
+          "date": "2026-09-03",
+          "dateSource": "archive-canonical",
+          "titleSource": "privacy-safe-alias",
+          "url": "https://mine-private-sigma.vercel.app/record/20260903-a1/",
+          "repoUrl": "https://github.com/softm/mine-private",
+          "category": "비공개",
+          "summary": "인증 후 열람할 수 있는 개인 기록.",
+          "directory": "20260903-private-record",
+          "recordPath": "private"
+        }
+      ],
+      "previousHomeUrl": "https://softm.github.io/projects/mine/",
+      "vercelAccountAuthVerified": true,
+      "privateDeliveryStatus": "authenticated-github-live"
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
-  "homeVersion": "20261007-private-route-fix-v20"
+  "homeVersion": "20261007-mine-private-v21"
 }
