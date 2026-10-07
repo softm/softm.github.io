@@ -883,9 +883,9 @@
       "homePrivateListCount": 2,
       "pageCount": 2,
       "privatePageCount": 2,
-      "latestTitle": "온수힐스테이트 임대차 갱신계약 전체정리 문서모음",
-      "mediaStatus": "LED 수리 기록 사진 1장 및 원본 ZIP 1개, 임대차 계약 PDF/DOCX/MD 원본 보존.",
-      "deploymentNote": "Private GitHub archive와 Vercel production 배포 완료. 운영 URL 및 2개 상세페이지 HTTP 200 확인.",
+      "latestTitle": "온수힐스테이트 임대차 갱신계약 전체 정리",
+      "mediaStatus": "원본 HTML 보존. MD-only 기록은 HTML 본문 제공. 임대차 원본 PDF 1·DOCX 7·MD 1 및 LED 수리 사진·ZIP 보존.",
+      "deploymentNote": "온수힐 MD 본문 변환 반영. 기존 Vercel 인증 배포 유지; GitHub live-read 전환은 공통 Shared GITHUB_TOKEN 연결 확인 전 보류.",
       "links": [
         {
           "visibility": "private",
@@ -903,21 +903,26 @@
         },
         {
           "visibility": "private",
-          "label": "온수힐스테이트 임대차 갱신계약 전체정리 문서모음",
-          "title": "온수힐스테이트 임대차 갱신계약 전체정리 문서모음",
+          "label": "온수힐스테이트 임대차 갱신계약 전체 정리",
+          "title": "온수힐스테이트 임대차 갱신계약 전체 정리",
           "date": "2026-09-04",
           "dateSource": "archive-canonical",
-          "titleSource": "archive-canonical",
+          "titleSource": "markdown-h1",
           "url": "https://onsuhill-private-softms-projects.vercel.app/archive/20260904-onsuhill-lease-renewal/",
           "repoUrl": "https://github.com/softm/onsuhill-private/tree/main/archive/20260904-onsuhill-lease-renewal",
           "category": "임대차",
-          "summary": "임대차 갱신계약 관련 PDF 1 · DOCX 6 · MD 1 원본 문서 묶음.",
+          "summary": "MD 전체 본문을 HTML로 표시하며 원본 PDF 1개·DOCX 7개·MD 1개를 함께 제공합니다.",
           "directory": "20260904-onsuhill-lease-renewal",
-          "recordPath": "archive/20260904-onsuhill-lease-renewal"
+          "recordPath": "archive/20260904-onsuhill-lease-renewal",
+          "chatTitle": "온수힐스테이트 임대차 갱신계약 전체 정리",
+          "entryType": "markdown-generated",
+          "media": "PDF 1 · DOCX 7 · MD 1",
+          "fileCount": 9
         }
       ],
       "vercelAccountAuthVerified": true,
-      "previousHomeUrl": "https://softm.github.io/projects/onsuhill/"
+      "previousHomeUrl": "https://softm.github.io/projects/onsuhill/",
+      "privateDeliveryStatus": "existing-protected-delivery; live-read-pending-shared-env-link"
     },
     {
       "order": 7,
