@@ -1,0 +1,52 @@
+name: Review archive viewer fixes
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/archive-viewer-review.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: main
+          sparse-checkout: projects/archive-deployment/viewer
+      - name: Apply reviewed lifecycle and test-server fixes
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          base=Path('projects/archive-deployment/viewer')
+          p=base/'viewer.js';s=p.read_text(encoding='utf-8')
+          s=s.replace('function onClose(){clear();','function onClose(){if(dialog.open)return;clear();')
+          s=s.replace('heic heif tif tiff\'','heic heif tif tiff psd\'')
+          s=s.replace("const VERSION = '1.0.0';","const VERSION = '1.0.1';")
+          s=s.replace('Viewer v1.0.0','Viewer v1.0.1')
+          s=s.replace('isEvalSupported:false,standardFontDataUrl:', 'isEvalSupported:false,enableScripting:false,standardFontDataUrl:')
+          p.write_text(s,encoding='utf-8')
+          p=base/'install.py';s=p.read_text(encoding='utf-8').replace("VERSION = '1.0.0'","VERSION = '1.0.1'")
+          p.write_text(s,encoding='utf-8')
+          p=base/'test_viewer.py';s=p.read_text(encoding='utf-8')
+          s=s.replace("server=socketserver.TCPServer(('127.0.0.1',0),handler)","server=socketserver.ThreadingTCPServer(('127.0.0.1',0),handler); server.daemon_threads=True")
+          s=s.replace("page=await browser.new_page(viewport={'width':1280,'height':900})", "page=await browser.new_page(viewport={'width':1280,'height':900}); page.set_default_timeout(12000)")
+          s=s.replace("                kind=file['kind']", "                kind=file['kind']; print(json.dumps({'testing':slug,'index':i,'kind':kind}),flush=True)")
+          s=s.replace("                    failures.append({'record':slug,'kind':kind,'error':type(e).__name__})", "                    diag=await page.evaluate(\"(()=>{const s=document.querySelector('[data-archive-viewer]')?.shadowRoot;return {error:s?.querySelector('.stage .error')?.textContent,status:s?.querySelector('.status')?.textContent,iframe:!!s?.querySelector('.stage iframe'),open:s?.querySelector('dialog')?.open}})()\")\n                    print(json.dumps({'failed':slug,'index':i,'kind':kind,'errorType':type(e).__name__,'diagnostic':diag},ensure_ascii=False),flush=True)\n                    failures.append({'record':slug,'kind':kind,'error':type(e).__name__,'diagnostic':diag})")
+          s=s.replace("            for i,f in enumerate(entries):\n                await page.evaluate", "            for i,f in enumerate(entries):\n                print(json.dumps({'fixture':f['name']}),flush=True)\n                await page.evaluate")
+          s=s.replace("                if f['name'].endswith(('.md','.html')):", "                if f['name'].endswith(('.md','.html')):\n                    print(await page.evaluate(\"(()=>{const s=document.querySelector('[data-archive-viewer]').shadowRoot;return {error:s.querySelector('.stage .error')?.textContent,status:s.querySelector('.status').textContent,iframe:!!s.querySelector('.stage iframe')}})()\"),flush=True)")
+          p.write_text(s,encoding='utf-8')
+          print('Lifecycle close guard, PSD preview routing, PDF script disable, threaded test server and failure diagnostics applied.')
+          PY
+          node --check projects/archive-deployment/viewer/viewer.js
+          python -m py_compile projects/archive-deployment/viewer/install.py projects/archive-deployment/viewer/test_viewer.py
+      - name: Commit reviewed implementation
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- projects/archive-deployment/viewer/*.js projects/archive-deployment/viewer/*.py
+          if ! git diff --cached --quiet; then
+            git commit -m 'fix(archive): stable dialog lifecycle, threaded tests and rendering diagnostics'
+            git push origin HEAD:main
+          fi
