@@ -1,0 +1,57 @@
+name: Sync onsuhill Markdown archive metadata
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/sync-onsuhill-md-metadata.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: onsuhill-md-metadata
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: main
+      - name: Align existing metadata without copying private content
+        run: |
+          python - <<'PY'
+          import json,re
+          from pathlib import Path
+          path=Path('projects/projects.json')
+          data=json.loads(path.read_text(encoding='utf-8'))
+          projects=[p for p in data['projects'] if p.get('repo')=='onsuhill-private']
+          assert len(projects)==1, 'Existing onsuhill project required'
+          project=projects[0]
+          records=[r for r in project.get('links',[]) if r.get('directory')=='20260904-onsuhill-lease-renewal' or r.get('recordPath')=='archive/20260904-onsuhill-lease-renewal']
+          assert len(records)==1, 'Existing lease archive record required'
+          record=records[0]
+          old=record.get('title')
+          title='온수힐스테이트 임대차 갱신계약 전체 정리'
+          record.update(title=title,label=title,chatTitle=title,titleSource='markdown-h1',entryType='markdown-generated',summary='MD 전체 본문을 HTML로 표시하며 원본 PDF 1개·DOCX 7개·MD 1개를 함께 제공합니다.',media='PDF 1 · DOCX 7 · MD 1',fileCount=9)
+          if project.get('latestTitle')==old: project['latestTitle']=title
+          project['mediaStatus']='원본 HTML 보존. MD-only 기록은 HTML 본문 제공. 임대차 원본 PDF 1·DOCX 7·MD 1 및 LED 수리 사진·ZIP 보존.'
+          project['deploymentNote']='온수힐 MD 본문 변환 반영. 기존 Vercel 인증 배포 유지; GitHub live-read 전환은 공통 Shared GITHUB_TOKEN 연결 확인 전 보류.'
+          project['privateDeliveryStatus']='existing-protected-delivery; live-read-pending-shared-env-link'
+          data['updatedAt']='2026-10-07'
+          path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          for filename in ['projects/index.html','projects/onsuhill/index.html']:
+              p=Path(filename)
+              text=p.read_text(encoding='utf-8')
+              text=re.sub(r'v=2026[0-9A-Za-z_-]+','v=20261007-onsuhill-md-v1',text)
+              text=re.sub(r'data-home-version="[^"]+"','data-home-version="20261007-onsuhill-md-v1"',text)
+              p.write_text(text,encoding='utf-8')
+          print('Canonical title aligned; original attachment count 9. Unrelated project records preserved.')
+          PY
+      - name: Commit metadata update
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- projects/projects.json projects/index.html projects/onsuhill/index.html
+          if ! git diff --cached --quiet; then
+            git commit -m 'archive(onsuhill): synchronize MD body title and attachment inventory'
+            git push origin HEAD:main
+          fi
