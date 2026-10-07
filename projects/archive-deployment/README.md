@@ -1,6 +1,6 @@
 # 아카이브 배포 — 기준 소스
 
-최종 갱신: 2026-10-07 · 통합 기준 버전: 2026-10-07.1
+최종 갱신: 2026-10-07 · 통합 기준 버전: 2026-10-07.2
 
 ## 먼저 읽을 실행 기준
 
@@ -11,7 +11,7 @@
 | 문서 | 역할 |
 |---|---|
 | [MD-HTML-ZIP-PROMPT.md](MD-HTML-ZIP-PROMPT.md) | 명령 실행에 사용하는 통합 프롬프트 |
-| [MD-HTML-ZIP-REQUIREMENTS.md](MD-HTML-ZIP-REQUIREMENTS.md) | 50개 요구사항의 반영 위치와 완료 검증 |
+| [MD-HTML-ZIP-REQUIREMENTS.md](MD-HTML-ZIP-REQUIREMENTS.md) | 51개 요구사항의 반영 위치와 완료 검증 |
 | [archive_deployment_prompt.md](archive_deployment_prompt.md) | 기존 파일명에서 접근하는 통합 기준 진입점 |
 | [OPERATIONS-POLICY.md](OPERATIONS-POLICY.md) | 이 변경 전 README의 누적 운영 기준 전체 보존본 |
 | [BASE-DEPLOYMENT-PROMPT.md](BASE-DEPLOYMENT-PROMPT.md) | 이 변경 전 통합 배포 프롬프트 전체 보존본 |
