@@ -78,3 +78,10 @@
 - 비공개 작업 전 `baksok-private`, `ungdo-private` 등 기존 정상 구현과 비교하는 preflight를 필수화한다.
 - `READY`는 완료가 아니다. GitHub 최신 원본 live-read, 인증, 상대 미디어 경로, no-store, 중앙 링크를 실제 검증해야 한다.
 - 오배포 발견 시 직접 원본 노출 차단 → gateway 전환 → 인증/운영 검증 → 중앙 인덱스 교정 → 중앙 기준 갱신 순으로 즉시 복구한다.
+
+## 2026-10-07 — HTML 없는 MD 기록의 본문 표시
+
+- 원본 HTML 우선 유지. HTML이 없고 MD가 있으면 전체 본문을 HTML로 변환하여 표시.
+- 파일목록 전용 임시 index를 원본 HTML로 오인하지 않도록 generated 메타데이터와 갱신 규칙 추가.
+- 원본 MD와 모든 첨부 보존, 실제 첨부 수 계산, 인증·운영 본문 검증.
+- [상세 기준](20261007_HTML우선_MD본문변환_기준.md), 공통 workflow `archive-markdown-fallback-reusable.yml`.
