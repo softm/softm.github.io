@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-10-07",
+  "updatedAt": "2026-09-30",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -53,8 +53,8 @@
       "publicRepo": "hwagok-farm",
       "publicRepoUrl": "https://github.com/softm/hwagok-farm",
       "publicUrl": "https://softm.github.io/hwagok-farm/",
-      "mediaStatus": "공개 홈 canonical 목록과 중앙 프로젝트 목록을 동기화했습니다. 이번 양파 구매처 기록은 HTML·MD·manifest를 포함합니다.",
-      "deploymentNote": "실제 콘텐츠는 softm/hwagok-farm에 보존하고 중앙 목록은 배포된 archive-data와 canonical 스냅샷을 함께 사용합니다.",
+      "mediaStatus": "공개 홈의 canonical 목록을 동기화했습니다. 첨부 수와 재생 가능 여부는 별도 점검 대상입니다.",
+      "deploymentNote": "실제 콘텐츠는 프로젝트 저장소에 보존하고 중앙 목록은 배포된 HTML의 archive-data를 직접 조회합니다.",
       "links": [
         {
           "visibility": "public",
@@ -539,7 +539,7 @@
       "publicIndexSnapshot": {
         "source": "https://softm.github.io/hwagok-farm/",
         "recordCount": 30,
-        "purpose": "same canonical public catalogue; private links preserved separately"
+        "purpose": "build snapshot; browsers refresh from the deployed source on every page load"
       },
       "privateRepo": "hwagok-farm-private",
       "privateRepoUrl": "https://github.com/softm/hwagok-farm-private",
@@ -1145,5 +1145,5 @@
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
-  "homeVersion": "20261007-sprinkler-20260809-v1"
+  "homeVersion": "20261007-private-route-fix-v20"
 }
