@@ -37,7 +37,9 @@
     ],
     "htmlFirstZipWorkflow": "모든 아카이브 프로젝트에 .github/workflows/archive-zip-inbox.yml 공통 적용: zip/ ZIP·폴더 입력, 기존 HTML 우선, 원본 전체 보존, archive/<slug>/index.html 및 manifest 생성, 검증 전 입력 삭제 금지",
     "htmlMarkdownPriority": "원본 HTML 우선 보존; 원본 HTML 없이 MD가 있으면 전체 본문을 HTML로 렌더링; 둘 다 없을 때만 자료목록 표시. 원본·첨부·인증 유지.",
-    "markdownFallbackPolicy": "projects/archive-deployment/20261007_HTML우선_MD본문변환_기준.md"
+    "markdownFallbackPolicy": "projects/archive-deployment/20261007_HTML우선_MD본문변환_기준.md",
+    "mediaViewerPolicy": "projects/archive-deployment/MEDIA-VIEWER-POLICY.md",
+    "mediaViewerRequirement": "가능한 모든 형식에 인라인 뷰어/플레이어; 미지원 형식·코덱은 명시; 원본 보존·인증 유지·외부 뷰어 전송 금지"
   },
   "projects": [
     {
