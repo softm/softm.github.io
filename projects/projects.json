@@ -328,6 +328,36 @@
         },
         {
           "visibility": "public",
+          "label": "서산 양파 구매처 조사",
+          "title": "서산 양파 구매처 조사",
+          "chatTitle": "서산 양파 구매처 조사",
+          "date": "2026-08-10",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/hwagok-farm/records/20260810-onion-sourcing/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260810-onion-sourcing",
+          "category": "구매처 조사",
+          "summary": "식당용 국산 양파 15kg 30망의 서산권 공급처·가격·연락 상태를 비교한 공개 아카이브 기록.",
+          "directory": "20260810-onion-sourcing",
+          "recordPath": "public/records/20260810-onion-sourcing"
+        },
+        {
+          "visibility": "public",
+          "label": "스프링클러·배관 계획 현재 작업 정리",
+          "title": "스프링클러·배관 계획 현재 작업 정리",
+          "chatTitle": "스프링클러·배관 계획 현재 작업 정리",
+          "date": "2026-08-09",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/hwagok-farm/records/20260809-sprinkler-piping-plan/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260809-sprinkler-piping-plan",
+          "category": "관수·배관",
+          "summary": "스프링클러·배관 계획도, 치수 보완 도면 및 연결부 심벌. HTML·MD와 images/·원본이미지/의 모든 원본 및 PDF 보존.",
+          "directory": "20260809-sprinkler-piping-plan",
+          "recordPath": "public/records/20260809-sprinkler-piping-plan"
+        },
+        {
+          "visibility": "public",
           "label": "화곡농장 농막 그늘막 예상설치 정리 이미지포함",
           "title": "화곡농장 농막 그늘막 예상설치 정리 이미지포함",
           "chatTitle": "화곡농장 농막 그늘막 예상설치 정리 이미지포함",
@@ -499,16 +529,16 @@
       "publicHomeStatus": "github-pages-home-generated",
       "privateEntryPolicy": "Vercel Authentication required; direct deep link after authentication",
       "vercelAccountAuthVerified": true,
-      "homePublicListCount": 28,
+      "homePublicListCount": 30,
       "homePrivateListCount": 1,
       "publicIndexSource": {
         "url": "https://softm.github.io/hwagok-farm/",
         "format": "html-archive-data"
       },
-      "pageCount": 28,
+      "pageCount": 30,
       "publicIndexSnapshot": {
         "source": "https://softm.github.io/hwagok-farm/",
-        "recordCount": 28,
+        "recordCount": 30,
         "purpose": "build snapshot; browsers refresh from the deployed source on every page load"
       },
       "privateRepo": "hwagok-farm-private",
@@ -516,7 +546,9 @@
       "privateUrl": "https://hwagok-farm-private.vercel.app/",
       "privatePageCount": 1,
       "latestTitle": "화곡농장 분무기 편사호스 사진정리",
-      "authProvider": "vercel-sso"
+      "authProvider": "vercel-sso",
+      "totalRecordCount": 31,
+      "archiveLastPublishedAt": "2026-10-07T13:23:41.343220+00:00"
     },
     {
       "order": 2,
