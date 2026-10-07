@@ -1,0 +1,136 @@
+name: Sync requested hwagok sprinkler archive
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/sync-hwagok-sprinkler-20260809.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: public-project-homes
+  cancel-in-progress: false
+jobs:
+  synchronize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+      - name: Wait for committed public record to be deployed
+        run: |
+          python3 - <<'PY'
+          import json,time
+          from urllib.request import Request,urlopen
+          for attempt in range(90):
+              try:
+                  req=Request('https://softm.github.io/hwagok-farm/records/20260809-sprinkler-piping-plan/archive.json?sync='+str(time.time_ns()),headers={'Cache-Control':'no-cache'})
+                  with urlopen(req,timeout=30) as r:m=json.load(r)
+                  assert m['id']=='20260809-sprinkler-piping-plan' and m['visibility']=='public'
+                  print('Requested public record is deployed.');break
+              except Exception as e:print('Waiting:',type(e).__name__)
+              time.sleep(10)
+          else:raise SystemExit('Source is not live; central catalogue left unchanged')
+          PY
+      - name: Refresh latest central revision and merge only public hwagok catalogue
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git pull --ff-only origin main
+          python3 - <<'PY'
+          import copy,json,re,time
+          from datetime import datetime,timezone
+          from pathlib import Path
+          from urllib.request import Request,urlopen
+          from urllib.parse import quote,urlsplit
+          home='https://softm.github.io/hwagok-farm/'
+          target=home+'records/20260809-sprinkler-piping-plan/'
+          def fetch(url):
+              with urlopen(Request(url,headers={'Cache-Control':'no-cache'}),timeout=60) as r:
+                  assert r.status==200
+                  return r.read().decode('utf-8')
+          text=fetch(home+'?sync='+str(time.time_ns()))
+          found=re.search(r'<script\b[^>]*id=[\"\x27]archive-data[\"\x27][^>]*>(.*?)</script>',text,re.S)
+          if not found:raise RuntimeError('Live canonical archive-data is missing')
+          rows=json.loads(found.group(1));assert isinstance(rows,list)
+          assert any(x.get('url')==target for x in rows)
+          f=Path('projects/projects.json');data=json.loads(f.read_text(encoding='utf-8'))
+          before=copy.deepcopy(data['projects'])
+          project=next(p for p in data['projects'] if p['repo']=='hwagok-farm')
+          private=copy.deepcopy([x for x in project.get('links',[]) if x.get('visibility')=='private'])
+          prior={x['url']:x for x in project.get('links',[]) if x.get('visibility')=='public'}
+          public=[];seen=set()
+          for row in rows:
+              slug=row['dir'];url=row['url'];repo=row['repoUrl']
+              assert url.startswith(home+'records/') and urlsplit(url).netloc=='softm.github.io'
+              assert repo.startswith('https://github.com/softm/hwagok-farm/tree/main/public/records/')
+              assert url not in seen;seen.add(url)
+              entry={**prior.get(url,{}),'visibility':'public','label':row['title'],'title':row['title'],'chatTitle':row['title'],'date':row['date'],'dateSource':'archive-canonical','titleSource':'archive-canonical','url':url,'repoUrl':repo,'category':row.get('kind','아카이브'),'summary':row.get('desc',''),'directory':slug,'recordPath':'public/records/'+slug}
+              public.append(entry)
+          project['links']=public+private
+          assert [x for x in project['links'] if x['visibility']=='private']==private
+          project['homePublicListCount']=len(public);project['homePrivateListCount']=len(private)
+          project['pageCount']=len(public);project['privatePageCount']=len(private);project['totalRecordCount']=len(public)+len(private)
+          project['publicIndexSource']={'url':home,'format':'html-archive-data'}
+          project['publicIndexSnapshot']={'source':home,'recordCount':len(public),'purpose':'same canonical public catalogue; private links preserved separately'}
+          project['latestTitle']=max(project['links'],key=lambda x:x.get('date',x.get('authoredAt',''))).get('title','')
+          project['archiveLastPublishedAt']=datetime.now(timezone.utc).isoformat()
+          for a,b in zip(before,data['projects']):
+              if a['repo']!='hwagok-farm':assert a==b,'Unrelated project modified'
+          version='20261007-sprinkler-20260809-v1'
+          data['homeVersion']=version;data['updatedAt']='2026-10-07'
+          f.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          js=Path('projects/project-home.js');s=js.read_text(encoding='utf-8')
+          s,n=re.subn(r"const VERSION\s*=\s*['\"][^'\"]+['\"]",lambda _:"const VERSION='"+version+"'",s,count=1)
+          assert n==1;js.write_text(s,encoding='utf-8')
+          for path in ['projects/index.html','projects/hwagok-farm/index.html']:
+              p=Path(path);s=p.read_text(encoding='utf-8')
+              s=re.sub(r'([?&]v=)[^\"\x27&<>\s]+',lambda m:m[1]+version,s)
+              s=re.sub(r'(data-home-version=[\"\x27])[^\"\x27]+',lambda m:m[1]+version,s)
+              p.write_text(s,encoding='utf-8')
+          print(json.dumps({'public':len(public),'private':len(private),'total':len(public)+len(private),'record':target,'otherProjectsUnchanged':True},ensure_ascii=False))
+          PY
+          node --check projects/project-home.js
+          node projects/project-home.test.cjs
+          node projects/archive-sync.test.cjs
+          git add -- projects/projects.json projects/index.html projects/hwagok-farm/index.html projects/project-home.js
+          if ! git diff --cached --quiet; then
+            git commit -m 'projects: register sprinkler archive from live canonical home; retain private records'
+            git push origin HEAD:main
+          fi
+      - name: Publish only changed catalogue files to existing Pages branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PAGE_WORKTREE: ${{ runner.temp }}/sprinkler-central-pages
+        run: |
+          set -euo pipefail
+          gh api "repos/$GITHUB_REPOSITORY/pages" > /tmp/sprinkler-pages.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/sprinkler-pages.json'))
+          assert d['build_type']=='legacy' and d['source']['branch']=='gh-pages' and d['source']['path']=='/','Existing Pages mode differs; do not alter protection or publishing settings'
+          PY
+          git fetch origin gh-pages
+          git worktree add "$PAGE_WORKTREE" origin/gh-pages
+          for f in projects/projects.json projects/index.html projects/hwagok-farm/index.html projects/project-home.js; do
+            mkdir -p "$PAGE_WORKTREE/$(dirname "$f")"
+            cp "$f" "$PAGE_WORKTREE/$f"
+          done
+          git -C "$PAGE_WORKTREE" add -- projects/projects.json projects/index.html projects/hwagok-farm/index.html projects/project-home.js
+          if ! git -C "$PAGE_WORKTREE" diff --cached --quiet; then
+            git -C "$PAGE_WORKTREE" commit -m 'projects: publish sprinkler public count and retained private entries'
+            git -C "$PAGE_WORKTREE" push origin HEAD:gh-pages
+          fi
+          gh api -X POST "repos/$GITHUB_REPOSITORY/pages/builds" > /tmp/sprinkler-build.json
+          BUILD_ID="$(python3 -c 'import json;print(json.load(open("/tmp/sprinkler-build.json"))["url"].rstrip("/").split("/")[-1])')"
+          for attempt in $(seq 1 60); do
+            STATUS="$(gh api "repos/$GITHUB_REPOSITORY/pages/builds/$BUILD_ID" --jq '.status')"
+            if [ "$STATUS" = built ]; then exit 0; fi
+            if [ "$STATUS" = errored ]; then exit 1; fi
+            sleep 10
+          done
+          exit 1
