@@ -1,6 +1,6 @@
 {
   "version": "20261007-private-route-fix-v20",
-  "projectCount": 9,
+  "projectCount": 10,
   "projects": [
     {
       "repo": "hwagok-farm",
@@ -82,6 +82,15 @@
       "privateEntries": 1,
       "htmlSha256": "5d8f83ab5ac1a8212bf8043680c87eb22af00c90e7cb5e3bc6e17e0ca0d337d3",
       "authenticatedContentVerified": false
+    },
+    {
+      "repo": "mine-private",
+      "title": "나",
+      "homeUrl": "https://softm.github.io/projects/mine/",
+      "publicEntries": 0,
+      "privateEntries": 1,
+      "htmlSha256": "9738d7a66c6924eee8195e7241b7926fdf0a337dc150a8bfdde8168298e0f114",
+      "authenticatedContentVerified": false
     }
   ],
   "files": [
@@ -94,6 +103,7 @@
     "projects/hwagok-land-permit/index.html",
     "projects/father-hospital-treatment/index.html",
     "projects/yeonseo/index.html",
+    "projects/mine/index.html",
     "projects/projects.json",
     "projects/index.html",
     "projects/README.md",
