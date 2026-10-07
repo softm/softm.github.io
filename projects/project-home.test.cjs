@@ -48,3 +48,18 @@ assert.equal(baksokReset.public.length,1);
 assert.equal(baksokReset.private.length,0);
 assert.equal(baksokReset.public[0].displayName,'새 기록');
 console.log('PASS: reset-safe baksok list uses only projects.json declared records');
+
+const canonicalPrivate=b.lists({
+  repo:'hwagok-land-permit-private',
+  category:'토지·법률',
+  deploymentStatus:'authenticated-github-live',
+  privateUrl:'https://hwagok-land-permit-private.vercel.app/',
+  links:[
+    {visibility:'private',label:'정상 1',url:'https://hwagok-land-permit-private.vercel.app/zip/a/index.html'},
+    {visibility:'private',label:'정상 2',url:'https://hwagok-land-permit-private.vercel.app/zip/b/index.html'},
+    {visibility:'private',label:'정상 3',url:'https://hwagok-land-permit-private.vercel.app/zip/c/index.html'}
+  ]
+});
+assert.equal(canonicalPrivate.private.length,3);
+assert.ok(canonicalPrivate.private.every(x=>x.url.includes('/zip/')));
+console.log('PASS: canonical private links override legacy ROUTES');
