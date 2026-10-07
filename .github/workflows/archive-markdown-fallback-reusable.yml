@@ -1,0 +1,216 @@
+name: HTML-first Markdown archive fallback
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/archive-markdown-fallback-reusable.yml']
+  workflow_dispatch:
+  workflow_call:
+permissions:
+  contents: write
+concurrency:
+  group: archive-markdown-fallback-${{ github.repository }}-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  policy:
+    if: github.repository == 'softm/softm.github.io'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Apply canonical policy supplement
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          root=Path('projects/archive-deployment')
+          name='20261007_HTML우선_MD본문변환_기준.md'
+          policy='''# HTML 우선 · Markdown 본문 변환 기준
+
+          확정일: 2026-10-07
+
+          이 보완 기준은 모든 공개·비공개 아카이브에 적용한다. 이전 문서의 "MD로 HTML을 생성하지 않는다"는 표현은 **사용 가능한 원본 HTML이 있는 경우에만** 적용한다. HTML이 없는데 MD가 있는 기록을 파일목록만으로 표시하지 않는다.
+
+          | 입력 상태 | 본문 표시 기준 |
+          | --- | --- |
+          | 원본 HTML 있음 | 기존 HTML을 우선 사용하고 내용·레이아웃·상대경로를 보존한다. MD로 기존 HTML을 덮어쓰지 않는다. |
+          | 원본 HTML 없음, MD 있음 | MD 전체 본문을 HTML로 렌더링하여 같은 기록의 index.html에 표시한다. MD 다운로드 링크나 첨부목록만으로 대체하지 않는다. |
+          | HTML·MD 모두 없음 | 확보된 TXT·미디어·문서로 가능한 자료목록과 미리보기를 제공하고, 본문 원자료 부재를 명시한다. 내용을 만들어내지 않는다. |
+
+          ## 원문과 첨부 보존
+
+          - 제목·문단·표·목록·인용·코드블록·링크·이미지 등 Markdown 구조를 보존한다. 요약·금액 변경·계약 문구 수정·날짜 추정으로 대체하지 않는다.
+          - 원본 MD는 바이트 그대로 보존하고 원본 다운로드를 제공한다.
+          - 여러 MD가 있으면 대표 본문을 정하고 나머지도 HTML 보기와 원본 링크로 연결한다. 기존 원본 HTML을 변경하지 않는다.
+          - 이미지·PDF·DOCX·영상·음성·기존 ZIP 등 실제 첨부파일을 빠뜨리지 않고 연결한다. 파일 개수는 실제 파일에서 계산한다.
+          - 상대경로·공백·한글 경로를 확인한다. 원본 링크는 공개 범위를 변경하지 않는다.
+          - 생성 HTML은 정제된 Markdown으로 만들고 script, 이벤트 속성, javascript URL을 실행하지 않는다.
+
+          ## 재생성·중복 방지
+
+          - 원본 HTML과 MD로 생성한 HTML을 구분한다. 파일목록 전용 임시 index.html은 원본 HTML로 보지 않는다.
+          - manifest에 entryType=markdown-generated, entrySource, sourceSha256, entrySha256, rendererVersion을 기록한다.
+          - MD 수정 시 기존 기록 경로의 생성 HTML을 다시 만든다. 생성된 HTML을 원본 HTML로 오인하여 재생성을 건너뛰지 않는다.
+          - 같은 기록에 slug를 새로 부여하거나 기록을 중복 생성하지 않는다.
+          - 목록·상세페이지·프로젝트 홈은 같은 canonical title을 사용한다. 변환 날짜를 사건 날짜로 바꾸지 않는다.
+
+          ## 공개·비공개 및 완료 기준
+
+          - HTML 변환은 공개 범위를 바꾸지 않는다. 비공개 MD·생성 HTML·첨부는 Private GitHub에만 원본으로 보존하고 Vercel 인증 후 GitHub live-read로 제공한다.
+          - 중앙 공개 기준 문서에는 규칙과 일반적인 구현 정보만 기록하며 계약 당사자·주소·금액·원문은 복사하지 않는다.
+          - GitHub 파일 생성/커밋/CI 성공만으로 완료하지 않는다. 운영 상세에서 실제 본문, 표·인용·링크, 원본 다운로드, 인증을 확인한다.
+          - 기존 파일목록 전용 페이지도 원본 MD가 있으면 이 기준에 맞게 보완한다. 원본 입력은 검증 완료 전 삭제하지 않는다.
+
+          ## 공통 구현
+
+          `.github/workflows/archive-markdown-fallback-reusable.yml`은 이미 존재하는 archive/ 기록의 원본 HTML을 보존하면서 MD-only 또는 기존 Markdown 생성본을 갱신한다. 각 프로젝트는 main의 MD 변경과 수동 실행에 연결하며 검증된 커밋 SHA로 고정한다.
+          '''
+          policy='\n'.join(line[10:] if line.startswith('          ') else line for line in policy.splitlines())+'\n'
+          (root/name).write_text(policy,encoding='utf-8')
+          notice=f'> **2026-10-07 최신 보완:** [HTML 우선 · MD 본문 변환 기준]({name}). 원본 HTML이 있으면 보존하고, HTML 없이 MD가 있으면 전체 본문을 HTML로 표시한다. 아래의 MD 변환 금지 표현은 원본 HTML이 있는 경우에만 적용한다.\n\n'
+          targets=['README.md','archive_deployment_prompt.md','20261005_아카이브배포_ZIP폴더_Workflow_처리기준.md']
+          for target in targets:
+              p=root/target
+              if not p.exists(): raise RuntimeError('Policy source missing: '+target)
+              text=p.read_text(encoding='utf-8')
+              if notice not in text:
+                  head,sep,tail=text.partition('\n')
+                  text=head+'\n\n'+notice+tail.lstrip('\n')
+              text=text.replace('3. Markdown을 HTML로 재생성하지 않는다.','3. 원본 HTML이 있으면 보존한다. 원본 HTML 없이 Markdown이 있으면 전체 본문을 HTML로 렌더링한다.')
+              text=text.replace('MD는 별도 원본으로 보존하며 HTML 재생성의 기준으로 삼지 않는다. HTML이 없는 입력은 누락 상태를 명시하고 별도 처리한다.','MD는 별도 원본으로 보존한다. 원본 HTML이 없는 경우에는 MD 전체 본문을 HTML로 렌더링한다. HTML과 MD가 모두 없을 때만 본문 원자료 부재를 명시한다.')
+              p.write_text(text,encoding='utf-8')
+          changelog=root/'CHANGELOG.md'
+          text=changelog.read_text(encoding='utf-8') if changelog.exists() else '# 변경 이력\n'
+          entry=f'\n## 2026-10-07 — HTML 없는 MD 기록의 본문 표시\n\n- 원본 HTML 우선 유지. HTML이 없고 MD가 있으면 전체 본문을 HTML로 변환하여 표시.\n- 파일목록 전용 임시 index를 원본 HTML로 오인하지 않도록 generated 메타데이터와 갱신 규칙 추가.\n- 원본 MD와 모든 첨부 보존, 실제 첨부 수 계산, 인증·운영 본문 검증.\n- [상세 기준]({name}), 공통 workflow `archive-markdown-fallback-reusable.yml`.\n'
+          if '## 2026-10-07 — HTML 없는 MD 기록의 본문 표시' not in text: changelog.write_text(text.rstrip()+'\n'+entry,encoding='utf-8')
+          p=Path('projects/projects.json'); data=json.loads(p.read_text(encoding='utf-8'))
+          data.setdefault('archivePolicy',{})['htmlMarkdownPriority']='원본 HTML 우선 보존; 원본 HTML 없이 MD가 있으면 전체 본문을 HTML로 렌더링; 둘 다 없을 때만 자료목록 표시. 원본·첨부·인증 유지.'
+          data['archivePolicy']['markdownFallbackPolicy']='projects/archive-deployment/'+name
+          data['updatedAt']='2026-10-07'
+          p.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          print('Updated central policy sources and machine-readable priority; no private record content copied.')
+          PY
+      - name: Commit central standards
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- projects/archive-deployment projects/projects.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'docs(archive): HTML-first with MD-only full-body fallback'
+            git push origin HEAD:main
+          fi
+  render:
+    if: github.repository != 'softm/softm.github.io'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: main
+      - name: Install pinned render dependencies
+        run: python -m pip install 'Markdown==3.8.2' 'bleach==6.2.0'
+      - name: Render existing Markdown-backed records
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from urllib.parse import urlsplit, urlunsplit, unquote, quote
+          import hashlib, html, json, os, re
+          import markdown, bleach
+          ROOT=Path.cwd(); ARCHIVE=ROOT/'archive'; VERSION='markdown-fallback-v1'
+          if not ARCHIVE.is_dir(): raise SystemExit('archive/ directory is required; no source was deleted')
+          TAGS=set(bleach.sanitizer.ALLOWED_TAGS)|{'h1','h2','h3','h4','h5','h6','p','br','hr','pre','div','span','table','thead','tbody','tr','th','td','img','video','audio','source','details','summary','del','s','sup','sub'}
+          ATTRS={'a':['href','title'],'img':['src','alt','title','width','height'],'video':['src','controls','poster','preload'],'audio':['src','controls','preload'],'source':['src','type'],'code':['class'],'th':['align'],'td':['align'],'ol':['start'],'*':['id']}
+          CSS='*{box-sizing:border-box}body{margin:0;background:#f5f6f8;color:#202b3c;font:16px/1.75 system-ui,-apple-system,"Apple SD Gothic Neo",sans-serif}main{max-width:980px;margin:0 auto;padding:24px 22px 48px;background:white}nav{display:flex;flex-wrap:wrap;gap:14px;font-size:14px;margin-bottom:12px}h1{font-size:26px;line-height:1.4;margin:12px 0 20px}h2{font-size:20px;margin:26px 0 10px}h3{font-size:17px}p,ul,ol{margin:8px 0}a{color:#245a91;overflow-wrap:anywhere}blockquote{margin:12px 0;padding:10px 16px;background:#f3f7fb;border-left:3px solid #527aa5}blockquote p{margin:0}table{border-collapse:collapse;width:100%;display:block;overflow-x:auto}th,td{border:1px solid #dce2e9;padding:8px 12px;text-align:left}th{background:#f3f6f9}pre{overflow:auto;padding:14px;background:#f4f6f8}code{overflow-wrap:anywhere}img,video{max-width:100%;height:auto}audio{width:100%}.meta{font-size:13px;color:#657084}.attachments{border-top:1px solid #dce2e9;margin-top:24px;padding-top:10px}.files{padding-left:22px}.files li{margin:5px 0}.media{margin:14px 0}figcaption{font-size:12px;overflow-wrap:anywhere}@media(max-width:600px){main{padding:18px 16px 36px}h1{font-size:23px}body{font-size:15px}}@media print{nav,.downloads{display:none}body{background:white}main{max-width:none;padding:0}}'
+          def digest(p): return hashlib.sha256(p.read_bytes()).hexdigest()
+          def useful(p): return p.is_file() and not p.is_symlink() and not any(x.startswith('.') or x in {'__MACOSX','legacy'} for x in p.relative_to(ARCHIVE).parts)
+          def generated(text): return f'name="archive-renderer" content="{VERSION}"' in text
+          def placeholder(text): return 'HTML이 없어 Markdown을 HTML 본문으로 재작성하지 않았습니다' in text or '원본 파일 목록만 제공합니다' in text
+          def render_body(text,source,output):
+              body=bleach.clean(markdown.markdown(text,extensions=['tables','fenced_code','sane_lists']),tags=TAGS,attributes=ATTRS,protocols={'http','https','mailto','tel'},strip=True)
+              def rewrite(m):
+                  val=html.unescape(m.group(2)); u=urlsplit(val)
+                  if u.scheme or u.netloc or not u.path or u.path.startswith('/'): return m.group(0)
+                  target=(source.parent/unquote(u.path)).resolve()
+                  if not target.is_relative_to(ROOT): return m.group(1)+'="#"'
+                  path=quote(os.path.relpath(target,output.parent).replace(os.sep,'/'),safe='/')
+                  value=urlunsplit(('', '',path,u.query,u.fragment))
+                  return m.group(1)+'="'+html.escape(value,quote=True)+'"'
+              return re.sub(r'(href|src)="([^"]*)"',rewrite,body)
+          def href(p,base): return html.escape(quote(os.path.relpath(p,base).replace(os.sep,'/'),safe='/'),quote=True)
+          def page(source,output,title,date,originals):
+              body=render_body(source.read_text(encoding='utf-8'),source,output)
+              mdlinks=[]; media=[]; rows=[]
+              for p in originals:
+                  rel=p.relative_to(source.parents[len(source.relative_to(ARCHIVE).parts)-2] if False else output.parent) if p.is_relative_to(output.parent) else p.name
+                  label=html.escape(p.name); url=href(p,output.parent); ext=p.suffix.lower()
+                  if ext=='.md':
+                      preview=p.with_name(p.name+'.html')
+                      rows.append(f'<li><a href="{href(preview,output.parent)}">{label} HTML 보기</a> · <a href="{url}" download>MD 원본</a></li>')
+                  else: rows.append(f'<li><a href="{url}">{label}</a></li>')
+                  if ext in {'.jpg','.jpeg','.png','.webp','.gif'}: media.append(f'<figure class="media"><img loading="lazy" src="{url}" alt="{label}"><figcaption>{label}</figcaption></figure>')
+                  elif ext in {'.mp4','.webm','.mov'}: media.append(f'<figure><video controls preload="metadata" src="{url}"></video><figcaption>{label}</figcaption></figure>')
+                  elif ext in {'.mp3','.m4a','.wav','.ogg'}: media.append(f'<figure><audio controls preload="metadata" src="{url}"></audio><figcaption>{label}</figcaption></figure>')
+              heading='' if re.search(r'<h1[ >]',body) else '<h1>'+html.escape(title)+'</h1>'
+              return '<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive"><meta name="archive-renderer" content="'+VERSION+'"><meta name="archive-source-sha256" content="'+digest(source)+'"><title>'+html.escape(title)+'</title><style>'+CSS+'</style></head><body><main><nav><a href="/">← 프로젝트 홈</a><a href="https://softm.github.io/projects/">전체 프로젝트</a><a href="'+href(source,output.parent)+'" download>MD 원본</a></nav><p class="meta">'+html.escape(date)+' · 원본 MD 본문</p>'+heading+'<article id="archive-body">'+body+'</article><section class="attachments"><h2>원본·첨부 자료</h2><ul class="files">'+''.join(rows)+'</ul>'+''.join(media)+'</section></main></body></html>\n'
+          # Regression: preserve Markdown tables, quotations and fenced code; neutralize scripts/handlers.
+          test=render_body('# 제목\n\n| A | B |\n|---|---|\n| 1 | 2 |\n\n> 인용\n\n```js\nconst n = 1;\n```\n\n<img src="photo.jpg" onerror="alert(1)"><script>alert(2)</script>',ARCHIVE/'fixture'/'source.md',ARCHIVE/'fixture'/'index.html')
+          assert all(x in test for x in ['<table>','<blockquote>','<pre><code'])
+          assert '<script' not in test and 'onerror=' not in test
+          catalog_path=ROOT/'archive-manifest.json'
+          catalog=json.loads(catalog_path.read_text(encoding='utf-8')) if catalog_path.exists() else {'schemaVersion':2,'records':[]}
+          home=ROOT/'index.html'; home_text=home.read_text(encoding='utf-8') if home.exists() else ''
+          changes=[]
+          for directory in sorted(ARCHIVE.iterdir()):
+              if not directory.is_dir() or directory.is_symlink(): continue
+              index=directory/'index.html'; current=index.read_text(encoding='utf-8') if index.exists() else ''
+              local_manifest=directory/'archive-manifest.json'
+              local=json.loads(local_manifest.read_text(encoding='utf-8')) if local_manifest.exists() else {}
+              record=next((r for r in catalog['records'] if r.get('path')==directory.relative_to(ROOT).as_posix() or r.get('slug')==directory.name),None)
+              meta=record or local
+              md=[p for p in sorted(directory.rglob('*')) if useful(p) and p.suffix.lower() in {'.md','.markdown'}]
+              if not md: continue
+              known_md=meta.get('entryType')=='markdown-generated' or local.get('entryType')=='markdown-generated'
+              raw_html=[p for p in directory.rglob('*') if useful(p) and p.suffix.lower() in {'.html','.htm'} and p!=index and not generated(p.read_text(encoding='utf-8',errors='replace'))]
+              if raw_html or (current and not generated(current) and not placeholder(current) and not known_md):
+                  print('Preserved original HTML:',directory.name); continue
+              source_name=meta.get('markdownSource') or meta.get('entrySource')
+              source=next((p for p in md if p.relative_to(directory).as_posix()==source_name),None)
+              if source is None: source=max(md,key=lambda p:(p.parent==directory,p.stem.lower() not in {'readme','license'},p.stat().st_size))
+              text=source.read_text(encoding='utf-8'); before=digest(source)
+              match=re.search(r'^#\s+(.+?)\s*#*$',text,re.M)
+              title=match.group(1) if match else meta.get('title',directory.name)
+              date=meta.get('date',local.get('date',''))
+              originals=[p for p in sorted(directory.rglob('*')) if useful(p) and p.name!='archive-manifest.json' and p!=index and not (p.suffix.lower()=='.html' and generated(p.read_text(encoding='utf-8',errors='replace')))]
+              for mdfile in md:
+                  md_title=re.search(r'^#\s+(.+?)\s*#*$',mdfile.read_text(encoding='utf-8'),re.M)
+                  out=mdfile.with_name(mdfile.name+'.html')
+                  out.write_text(page(mdfile,out,md_title.group(1) if md_title else mdfile.stem,date,originals),encoding='utf-8')
+              index.write_text(page(source,index,title,date,originals),encoding='utf-8')
+              assert digest(source)==before and '<article id="archive-body">' in index.read_text(encoding='utf-8')
+              info={'entryType':'markdown-generated','entrySource':source.relative_to(directory).as_posix(),'markdownSource':source.relative_to(directory).as_posix(),'sourceSha256':before,'entrySha256':digest(index),'rendererVersion':VERSION,'generatedHtml':True,'title':title}
+              old_title=meta.get('title','')
+              if record is not None:
+                  record.update(info); record['files']=len(originals); record.pop('note',None)
+              local.update(info); local.setdefault('slug',directory.name); local.setdefault('date',date)
+              local['files']=[{'path':p.relative_to(directory).as_posix(),'size':p.stat().st_size,'sha256':digest(p)} for p in originals]
+              local_manifest.write_text(json.dumps(local,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+              if old_title: home_text=home_text.replace(html.escape(old_title),html.escape(title))
+              docx=sum(p.suffix.lower()=='.docx' for p in originals)
+              if directory.name=='20260904-onsuhill-lease-renewal': home_text=home_text.replace('PDF 1 · DOCX 6 · MD 1',f'HTML 본문 · PDF 1 · DOCX {docx} · MD 1')
+              changes.append(directory.name)
+          if changes:
+              catalog['updatedAt']='2026-10-07'
+              catalog['renderPolicy']='original-html-first; markdown-full-body-fallback'
+              catalog_path.write_text(json.dumps(catalog,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+              if home.exists():
+                  home_text=home_text.replace('HTML이 없는 문서 묶음은 MD를 변환하지 않고 원본 파일 목록만 제공합니다.','원본 HTML이 없고 MD가 있으면 MD 전체 본문을 HTML로 표시하며 원본·첨부를 함께 제공합니다.')
+                  home.write_text(home_text,encoding='utf-8')
+          print(json.dumps({'rendered':changes,'sourceMDPreserved':True,'inboxDeleted':False},ensure_ascii=False))
+          PY
+      - name: Commit rendered pages and metadata
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- archive archive-manifest.json
+          if test -f index.html; then git add -- index.html; fi
+          if ! git diff --cached --quiet; then
+            git commit -m 'archive: render Markdown bodies; preserve source HTML and attachments'
+            git push origin HEAD:main
+          fi
