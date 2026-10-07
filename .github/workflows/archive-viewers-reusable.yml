@@ -47,7 +47,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: softm/softm.github.io
-          ref: 9f589182580e9c9eb5eb239bfc0b7d37df812b2a
+          ref: 3bbc7b85db1756e9f625ada675b22146127a8fc2
           path: viewer-source
           sparse-checkout: projects/archive-deployment/viewer
           persist-credentials: false
@@ -56,7 +56,8 @@ jobs:
           mkdir -p "$RUNNER_TEMP/av-vendor"
           cd "$RUNNER_TEMP/av-vendor"
           npm init -y >/dev/null
-          npm install --ignore-scripts --save-exact jszip@3.10.1 docx-preview@0.3.6 dompurify@3.3.1 marked@15.0.12 pdfjs-dist@5.4.149
+          npm install --ignore-scripts --save-exact jszip@3.10.1 docx-preview@0.3.6 dompurify@3.4.16 marked@15.0.12 pdfjs-dist@5.4.149
+          npm audit --omit=dev --audit-level=moderate
           curl --fail --location --retry 2 --proto '=https' 'https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js' -o xlsx.full.min.js
       - name: Install browser-test and optional image-preview tools
         run: |
@@ -68,7 +69,7 @@ jobs:
           python viewer-source/projects/archive-deployment/viewer/install.py --root "$GITHUB_WORKSPACE/target" --vendor "$RUNNER_TEMP/av-vendor"
       - name: Test real original files and isolated format fixtures
         working-directory: target
-        run: python ../viewer-source/projects/archive-deployment/viewer/test_viewer.py
+        run: python -u ../viewer-source/projects/archive-deployment/viewer/test_viewer.py
       - name: Commit tested viewer output only
         working-directory: target
         run: |
