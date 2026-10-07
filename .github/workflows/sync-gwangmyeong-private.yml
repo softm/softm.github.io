@@ -1,0 +1,95 @@
+name: Sync Gwangmyeong private catalog
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/sync-gwangmyeong-private.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: public-project-homes
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Update existing public metadata only
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from urllib.parse import quote
+          import json
+          path=Path('projects/projects.json')
+          data=json.loads(path.read_text(encoding='utf-8'))
+          before={p['repo']:json.dumps(p,ensure_ascii=False,sort_keys=True) for p in data['projects'] if p['repo']!='gwangmyeong'}
+          project=next(p for p in data['projects'] if p['repo']=='gwangmyeong')
+          origin='https://gwangmyeong-private.vercel.app'
+          project['privateUrl']=origin+'/'
+          project['privateEntryPolicy']='Vercel Authentication on all deployments; server-side GitHub main live-read; no static private archive copies'
+          project['privateDeploymentStatus']='authenticated-github-live'
+          project['privateSourceStatus']='repository-and-index-http-200'
+          project['privateVercelProject']='gwangmyeong-private'
+          project['privateGatewayRoot']='gateway'
+          project['deploymentNote']='공개 기록의 기존 배포를 유지합니다. 비공개 3건은 인증된 GitHub 원본 실시간 조회 주소로 연결하며 PDF/DOCX 기록도 포함합니다.'
+          project['mediaStatus']='비공개 원본 38개 파일을 해시 검증하여 보존했습니다. 이미지 30개(썸네일 13개 포함), PDF 1개, DOCX 1개, HTML/MD/TXT 6개. 원본 HTML 유지 및 전체 자료 뷰어 제공.'
+          for record in project.get('links',[]):
+              if record.get('visibility')!='private':continue
+              directory=record.get('directory','')
+              if directory.startswith('20260722-20260722-'):
+                  directory=directory.replace('20260722-20260722-','20260722-',1)
+              if directory not in {'20260805-401호-계약갱신요구권-행사-갱신계약서-1페이지','20260722-광명-도시가스-계량기-배관-구성','20260722-가족-광명수도계량기점검-상세정리'}:
+                  raise SystemExit('Unexpected private record; inspect rather than overwrite')
+              record['directory']=directory
+              record['recordPath']='archive/'+directory
+              record['url']=origin+'/archive/'+quote(directory,safe='')+'/'
+              record['repoUrl']='https://github.com/softm/gwangmyeong-private/tree/main/archive/'+quote(directory,safe='')
+              record['attachmentsUrl']=record['url']+'attachments.html'
+              record['delivery']='authenticated-github-live-read'
+          private=[x for x in project['links'] if x.get('visibility')=='private']
+          public=[x for x in project['links'] if x.get('visibility')=='public']
+          assert len(private)==3
+          project['homePrivateListCount']=len(private)
+          project['privatePageCount']=len(private)
+          project['homePublicListCount']=len(public)
+          project['pageCount']=len(project['links'])
+          data['updatedAt']='2026-10-07'
+          for p in data['projects']:
+              if p['repo']!='gwangmyeong':assert before[p['repo']]==json.dumps(p,ensure_ascii=False,sort_keys=True)
+          path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          note='''
+          ## 2026-10-07 보완: 신규 비공개 프로젝트 연결과 단일 처리 경로
+
+          기존 공용 GitHub 토큰을 새 비공개 프로젝트에 연결할 때는 세 항목을 따로 확인한다: Vercel GitHub App의 저장소 허용, Shared 환경변수의 프로젝트·운영 환경 연결, 기존 fine-grained 토큰의 대상 저장소·Contents 읽기 권한. 빈 프로젝트별 환경변수 목록만으로 공용변수 부재를 단정하거나 새 토큰 생성을 요구하지 않는다. 진단은 토큰 값 없이 원본 저장소와 진입 파일의 응답 상태로 확인한다.
+
+          동일 저장소의 구형 HTML-only 빌더와 최신 수집함 빌더를 동시에 실행하지 않는다. 기존 canonical 식별자를 재사용하고, 과거 주소를 보존해야 할 때는 aliasOf로 표시하여 목록에서 중복을 제외한다. 정상 HTML은 바이트 그대로 유지하며 PDF/DOCX-only 자료도 제외하지 않고 PDF 뷰어와 문서 원본 링크를 제공한다.
+
+          운영 홈페이지 정상 응답과 첨부 미디어·브라우저 검증은 별도 단계다. 비공개 원문이나 인증정보를 중앙 Public 저장소로 복사하지 않고, 이미 공개된 목록 메타데이터에 인증된 운영 링크만 연결한다. 최종 운영·미디어·중앙 목록 검증 전에는 zip/ 입력을 삭제하지 않는다.
+          '''
+          readme=Path('projects/archive-deployment/README.md')
+          text=readme.read_text(encoding='utf-8')
+          if '신규 비공개 프로젝트 연결과 단일 처리 경로' not in text:
+              readme.write_text(text.rstrip()+'\n\n'+note.strip()+'\n',encoding='utf-8')
+          changelog=Path('projects/archive-deployment/CHANGELOG.md')
+          text=changelog.read_text(encoding='utf-8')
+          heading='## 2026-10-07 — 비공개 연결 사전검증과 처리 경로 통합'
+          if heading not in text:
+              changelog.write_text(text.rstrip()+'\n\n'+heading+'\n\n- Vercel 앱 허용·공용 환경변수 연결·기존 PAT 읽기 권한을 구분하여 확인.\n- 구형/신형 빌더 충돌 방지, canonical 재사용과 alias 목록 제외.\n- PDF/DOCX-only 기록의 뷰어와 원본 링크 보존.\n- 광명 중앙 목록에 인증된 GitHub live-read 주소 연결. 원문·인증정보는 Public 저장소에 복사하지 않음.\n',encoding='utf-8')
+          print(json.dumps({'project':'gwangmyeong','privateRecords':len(private),'publicRecordsPreserved':len(public),'otherProjectsUnchanged':True,'privateBodiesCopied':False},ensure_ascii=False))
+          PY
+      - name: Validate and commit source catalog
+        run: |
+          node projects/project-home.test.cjs
+          node projects/test-title-parity.cjs
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- projects/projects.json projects/archive-deployment/README.md projects/archive-deployment/CHANGELOG.md
+          if ! git diff --cached --quiet; then
+            git commit -m 'archive: connect Gwangmyeong authenticated records and document preflight'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
