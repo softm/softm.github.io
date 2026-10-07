@@ -5,7 +5,7 @@ import argparse, hashlib, html, json, os, re, shutil, subprocess, tempfile, urll
 from pathlib import Path
 from urllib.parse import quote
 
-VERSION = '1.0.0'
+VERSION = '1.0.1'
 BASE = Path(__file__).resolve().parent
 POLICY = '''# 아카이브 미디어·문서 뷰어/플레이어 기준
 

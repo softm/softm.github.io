@@ -1,4 +1,4 @@
-/* SOFTM Archive Viewer v1.0.0 — original files stay in the current authenticated origin. */
+/* SOFTM Archive Viewer v1.0.1 — original files stay in the current authenticated origin. */
 (() => {
   'use strict';
   const script = document.currentScript;
@@ -6,9 +6,9 @@
   window.__softmArchiveViewer = true;
   const assetBase = new URL('.', script.src);
   const recordBase = new URL('.', document.baseURI);
-  const VERSION = '1.0.0';
+  const VERSION = '1.0.1';
   const types = {
-    image: 'jpg jpeg png webp gif avif svg bmp ico heic heif tif tiff',
+    image: 'jpg jpeg png webp gif avif svg bmp ico heic heif tif tiff psd',
     video: 'mp4 webm mov m4v ogv mkv avi mpg mpeg 3gp',
     audio: 'mp3 m4a wav wave ogg oga opus flac aac aif aiff wma',
     pdf: 'pdf', word: 'docx', sheet: 'xlsx xls xlsb ods csv tsv',
@@ -55,7 +55,7 @@
   head.append(title,nav,status);layout.append(head,controls,stage,note);dialog.append(layout);shadow.append(dialog);
   let files=[],selected=0,controller=null,cleanup=[],generation=0,lastFocus=null;
   function clear(){controller?.abort();controller=new AbortController();generation++;for(const f of cleanup){try{f();}catch{}}cleanup=[];stage.replaceChildren();controls.replaceChildren();status.textContent='';return generation;}
-  function onClose(){clear();document.body.style.overflow=previousOverflow;lastFocus?.focus?.();}
+  function onClose(){if(dialog.open)return;clear();document.body.style.overflow=previousOverflow;lastFocus?.focus?.();}
   let previousOverflow='';dialog.addEventListener('close',onClose);
   dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});
   dialog.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT')return;if(e.key==='ArrowLeft'&&files[selected]?.kind==='image'){e.preventDefault();show((selected-1+files.length)%files.length);}if(e.key==='ArrowRight'&&files[selected]?.kind==='image'){e.preventDefault();show((selected+1)%files.length);}});
@@ -113,7 +113,7 @@
     if(file.kind==='pdf'){
       let pdf;
       try{const lib=await import(new URL('vendor/pdf.mjs',assetBase));lib.GlobalWorkerOptions.workerSrc=new URL('vendor/pdf.worker.mjs',assetBase).href;
-        const task=lib.getDocument({data:await read(file,60*1048576),isEvalSupported:false,standardFontDataUrl:new URL('vendor/standard_fonts/',assetBase).href,cMapUrl:new URL('vendor/cmaps/',assetBase).href,cMapPacked:true,wasmUrl:new URL('vendor/wasm/',assetBase).href});cleanup.push(()=>task.destroy());pdf=await task.promise;
+        const task=lib.getDocument({data:await read(file,60*1048576),isEvalSupported:false,enableScripting:false,standardFontDataUrl:new URL('vendor/standard_fonts/',assetBase).href,cMapUrl:new URL('vendor/cmaps/',assetBase).href,cMapPacked:true,wasmUrl:new URL('vendor/wasm/',assetBase).href});cleanup.push(()=>task.destroy());pdf=await task.promise;
       }catch(e){if(g!==generation)return;stage.append(el('iframe',null,{src:file.url,title:'브라우저 PDF 뷰어'}));controls.append(el('span','브라우저 기본 PDF 뷰어',{class:'muted'}));return;}
       if(g!==generation)return;
       let page=1,scale=1,rotation=0,running=null;const count=el('span','',{class:'muted'}),canvas=el('canvas',null,{'aria-label':'PDF 페이지'});stage.append(canvas);

@@ -11,13 +11,13 @@ class Quiet(http.server.SimpleHTTPRequestHandler):
 
 async def run():
     handler=functools.partial(Quiet,directory=str(ROOT))
-    server=socketserver.TCPServer(('127.0.0.1',0),handler)
+    server=socketserver.ThreadingTCPServer(('127.0.0.1',0),handler); server.daemon_threads=True
     threading.Thread(target=server.serve_forever,daemon=True).start()
     origin=f'http://127.0.0.1:{server.server_address[1]}'
     results=[]; failures=[]
     async with async_playwright() as p:
         browser=await p.chromium.launch(headless=True,args=['--autoplay-policy=no-user-gesture-required'])
-        page=await browser.new_page(viewport={'width':1280,'height':900})
+        page=await browser.new_page(viewport={'width':1280,'height':900}); page.set_default_timeout(12000)
         external=[]
         async def guard(route):
             if not route.request.url.startswith((origin,'blob:','data:')):
@@ -34,7 +34,7 @@ async def run():
             known=await page.evaluate('SoftmArchiveViewer.getFiles()')
             assert len(known)==len(data['files'])
             for i,file in enumerate(known):
-                kind=file['kind']
+                kind=file['kind']; print(json.dumps({'testing':slug,'index':i,'kind':kind}),flush=True)
                 try:
                     await page.evaluate('(i)=>SoftmArchiveViewer.open(i)',i)
                     await page.wait_for_function("!document.querySelector('[data-archive-viewer]').shadowRoot.querySelector('.status').textContent.includes('읽는 중')",timeout=30000)
@@ -57,7 +57,9 @@ async def run():
                     assert response.ok,'source link failed'
                     results.append({'record':slug,'kind':kind,'ok':True})
                 except Exception as e:
-                    failures.append({'record':slug,'kind':kind,'error':type(e).__name__})
+                    diag=await page.evaluate("(()=>{const s=document.querySelector('[data-archive-viewer]')?.shadowRoot;return {error:s?.querySelector('.stage .error')?.textContent,status:s?.querySelector('.status')?.textContent,iframe:!!s?.querySelector('.stage iframe'),open:s?.querySelector('dialog')?.open}})()")
+                    print(json.dumps({'failed':slug,'index':i,'kind':kind,'errorType':type(e).__name__,'diagnostic':diag},ensure_ascii=False),flush=True)
+                    failures.append({'record':slug,'kind':kind,'error':type(e).__name__,'diagnostic':diag})
                     await page.goto(origin+'/archive/'+quote(slug)+'/viewer.html')
                     await page.wait_for_function('!!window.SoftmArchiveViewer')
             await page.set_viewport_size({'width':390,'height':844})
@@ -87,12 +89,14 @@ async def run():
             await page.goto(origin+'/.viewer-test-fixtures/')
             await page.wait_for_function('!!window.SoftmArchiveViewer')
             for i,f in enumerate(entries):
+                print(json.dumps({'fixture':f['name']}),flush=True)
                 await page.evaluate('(i)=>SoftmArchiveViewer.open(i)',i)
                 if f['name'].endswith(('.wav','.webm')):
                     await page.wait_for_function("(()=>{const m=document.querySelector('[data-archive-viewer]').shadowRoot.querySelector('audio,video');return m&&m.readyState>=2})()",timeout=15000)
                     await page.evaluate("document.querySelector('[data-archive-viewer]').shadowRoot.querySelector('audio,video').play()")
                     await page.wait_for_function("document.querySelector('[data-archive-viewer]').shadowRoot.querySelector('audio,video').currentTime>0")
                 if f['name'].endswith(('.md','.html')):
+                    print(await page.evaluate("(()=>{const s=document.querySelector('[data-archive-viewer]').shadowRoot;return {error:s.querySelector('.stage .error')?.textContent,status:s.querySelector('.status').textContent,iframe:!!s.querySelector('.stage iframe')}})()"),flush=True)
                     await page.wait_for_function("!!document.querySelector('[data-archive-viewer]').shadowRoot.querySelector('.stage iframe')")
                     assert not await page.evaluate('Boolean(window.__av_xss)')
                 if f['name'].endswith('.csv'):assert await page.locator('[data-archive-viewer] .stage table').count()==1
