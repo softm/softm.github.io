@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-09-30",
+  "updatedAt": "2026-10-07",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -1142,6 +1142,60 @@
       "vercelAccountAuthVerified": true,
       "homePublicListCount": 0,
       "homePrivateListCount": 5
+    },
+    {
+      "order": 9,
+      "repo": "yeonseo",
+      "title": "연서",
+      "description": "연서 교육·생활·활동 및 구매 기록 아카이브",
+      "category": "교육·생활",
+      "deploymentStatus": "deployed",
+      "repoStatus": "available",
+      "publicRepo": "yeonseo-public",
+      "publicRepoUrl": "https://github.com/softm/yeonseo-public",
+      "publicUrl": "https://softm.github.io/yeonseo-public/",
+      "privateRepo": "yeonseo",
+      "privateRepoUrl": "https://github.com/softm/yeonseo",
+      "projectHomeUrl": "https://softm.github.io/projects/yeonseo/",
+      "homeUrl": "https://softm.github.io/projects/yeonseo/",
+      "previousHomeUrl": "https://softm.github.io/projects/yeonseo/",
+      "publicHomeStatus": "github-pages-home-generated",
+      "privateEntryPolicy": "Private GitHub 원본 보존 · 인증된 웹 gateway 미연결",
+      "vercelAccountAuthVerified": false,
+      "homePublicListCount": 1,
+      "homePrivateListCount": 1,
+      "pageCount": 1,
+      "privatePageCount": 0,
+      "latestTitle": "2026-10-07 Casio LRW-200H-4B2 시계줄 규격 조사 및 색상별 3개 구매",
+      "mediaStatus": "공개 기록 1건 · 이미지 2개 · WEB ZIP 1개를 GitHub Pages에서 확인했습니다.",
+      "deploymentNote": "공개는 yeonseo-public → GitHub Pages. 중앙 프로젝트 홈은 공개 서비스의 archive-data를 실시간 동기화하고, 비공개 원본은 softm/yeonseo Private GitHub에 유지합니다.",
+      "links": [
+        {
+          "visibility": "public",
+          "label": "2026-10-07 Casio LRW-200H-4B2 시계줄 규격 조사 및 색상별 3개 구매",
+          "title": "2026-10-07 Casio LRW-200H-4B2 시계줄 규격 조사 및 색상별 3개 구매",
+          "chatTitle": "카시오 LRW-200H-4B2 연서 시계줄 구매 조사",
+          "date": "2026-10-07",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/yeonseo-public/records/20261007-casio-lrw200h-watch-band/",
+          "repoUrl": "https://github.com/softm/yeonseo-public/tree/main/public/records/20261007-casio-lrw200h-watch-band",
+          "category": "구매·생활",
+          "summary": "Casio LRW-200H-4B2 핑크 시계줄 러그 14 mm·어깨 18 mm 규격 확인과 AliExpress 색상별 3개 구매 기록.",
+          "directory": "20261007-casio-lrw200h-watch-band",
+          "recordPath": "public/records/20261007-casio-lrw200h-watch-band",
+          "media": "이미지 2 · ZIP 1 · HTML 1 · MD 1"
+        }
+      ],
+      "publicIndexSource": {
+        "url": "https://softm.github.io/yeonseo-public/",
+        "format": "html-archive-data"
+      },
+      "publicIndexSnapshot": {
+        "source": "https://softm.github.io/yeonseo-public/",
+        "recordCount": 1,
+        "purpose": "build snapshot; browsers refresh from the deployed source on every page load"
+      }
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",

@@ -1,6 +1,6 @@
 {
   "version": "20261007-private-route-fix-v20",
-  "projectCount": 8,
+  "projectCount": 9,
   "projects": [
     {
       "repo": "hwagok-farm",
@@ -73,6 +73,15 @@
       "privateEntries": 5,
       "htmlSha256": "d68bafd489d91f828770c51cc9dcc97fb28d08873c44c99608d43f6f55ef507d",
       "authenticatedContentVerified": false
+    },
+    {
+      "repo": "yeonseo",
+      "title": "연서",
+      "homeUrl": "https://softm.github.io/projects/yeonseo/",
+      "publicEntries": 1,
+      "privateEntries": 1,
+      "htmlSha256": "62cebd31ce7792437cb02acf973afae2339af1c8182bb3f8d6713656947a97a5",
+      "authenticatedContentVerified": false
     }
   ],
   "files": [
@@ -84,6 +93,7 @@
     "projects/onsuhill/index.html",
     "projects/hwagok-land-permit/index.html",
     "projects/father-hospital-treatment/index.html",
+    "projects/yeonseo/index.html",
     "projects/projects.json",
     "projects/index.html",
     "projects/README.md",
