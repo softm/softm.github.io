@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-10-07T13:14:56.150Z",
+  "updatedAt": "2026-10-07",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -118,21 +118,6 @@
         },
         {
           "visibility": "public",
-          "label": "화곡농장 벌초작업 공개",
-          "title": "화곡농장 벌초작업 공개",
-          "chatTitle": "화곡농장 벌초작업 공개",
-          "date": "2026-09-07",
-          "dateSource": "archive-canonical",
-          "titleSource": "archive-canonical",
-          "url": "https://softm.github.io/hwagok-farm/records/20260907-c1b184fc7d/",
-          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260907-c1b184fc7d",
-          "category": "아카이브",
-          "summary": "수집함 원본 9개 파일을 보존한 공개 아카이브 기록.",
-          "directory": "20260907-c1b184fc7d",
-          "recordPath": "public/records/20260907-c1b184fc7d"
-        },
-        {
-          "visibility": "public",
           "label": "화곡농장 화이트클로버 자동급수 정리",
           "title": "화곡농장 화이트클로버 자동급수 정리",
           "chatTitle": "화곡농장 화이트클로버 자동급수 정리",
@@ -145,6 +130,21 @@
           "summary": "수집함 원본 20개 파일을 보존한 공개 아카이브 기록.",
           "directory": "20260907-0b1c9f63ab",
           "recordPath": "public/records/20260907-0b1c9f63ab"
+        },
+        {
+          "visibility": "public",
+          "label": "화곡농장 벌초작업 공개",
+          "title": "화곡농장 벌초작업 공개",
+          "chatTitle": "화곡농장 벌초작업 공개",
+          "date": "2026-09-07",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/hwagok-farm/records/20260907-c1b184fc7d/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260907-c1b184fc7d",
+          "category": "아카이브",
+          "summary": "수집함 원본 9개 파일을 보존한 공개 아카이브 기록.",
+          "directory": "20260907-c1b184fc7d",
+          "recordPath": "public/records/20260907-c1b184fc7d"
         },
         {
           "visibility": "public",
@@ -253,21 +253,6 @@
         },
         {
           "visibility": "public",
-          "label": "화곡농장 농막아랫밭 나방노린채살포",
-          "title": "화곡농장 농막아랫밭 나방노린채살포",
-          "chatTitle": "화곡농장 농막아랫밭 나방노린채살포",
-          "date": "2026-08-13",
-          "dateSource": "archive-canonical",
-          "titleSource": "archive-canonical",
-          "url": "https://softm.github.io/hwagok-farm/records/20260813-998b5b2a19/",
-          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260813-998b5b2a19",
-          "category": "아카이브",
-          "summary": "수집함 원본 7개 파일을 보존한 공개 아카이브 기록.",
-          "directory": "20260813-998b5b2a19",
-          "recordPath": "public/records/20260813-998b5b2a19"
-        },
-        {
-          "visibility": "public",
           "label": "화곡농장 제초제 구입 보유 사용정리",
           "title": "화곡농장 제초제 구입 보유 사용정리",
           "chatTitle": "화곡농장 제초제 구입 보유 사용정리",
@@ -283,33 +268,18 @@
         },
         {
           "visibility": "public",
-          "label": "화곡농장 단골 농막아래농지 들깨밭 살포기록",
-          "title": "화곡농장 단골 농막아래농지 들깨밭 살포기록",
-          "chatTitle": "화곡농장 단골 농막아래농지 들깨밭 살포기록",
-          "date": "2026-08-11",
+          "label": "화곡농장 농막아랫밭 나방노린채살포",
+          "title": "화곡농장 농막아랫밭 나방노린채살포",
+          "chatTitle": "화곡농장 농막아랫밭 나방노린채살포",
+          "date": "2026-08-13",
           "dateSource": "archive-canonical",
           "titleSource": "archive-canonical",
-          "url": "https://softm.github.io/hwagok-farm/records/20260811-eff7eb781d/",
-          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260811-eff7eb781d",
+          "url": "https://softm.github.io/hwagok-farm/records/20260813-998b5b2a19/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260813-998b5b2a19",
           "category": "아카이브",
-          "summary": "수집함 원본 28개 파일을 보존한 공개 아카이브 기록.",
-          "directory": "20260811-eff7eb781d",
-          "recordPath": "public/records/20260811-eff7eb781d"
-        },
-        {
-          "visibility": "public",
-          "label": "화곡농장 박수확 작업정리",
-          "title": "화곡농장 박수확 작업정리",
-          "chatTitle": "화곡농장 박수확 작업정리",
-          "date": "2026-08-11",
-          "dateSource": "archive-canonical",
-          "titleSource": "archive-canonical",
-          "url": "https://softm.github.io/hwagok-farm/records/20260811-033011e15c/",
-          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260811-033011e15c",
-          "category": "아카이브",
-          "summary": "수집함 원본 108개 파일을 보존한 공개 아카이브 기록.",
-          "directory": "20260811-033011e15c",
-          "recordPath": "public/records/20260811-033011e15c"
+          "summary": "수집함 원본 7개 파일을 보존한 공개 아카이브 기록.",
+          "directory": "20260813-998b5b2a19",
+          "recordPath": "public/records/20260813-998b5b2a19"
         },
         {
           "visibility": "public",
@@ -328,6 +298,36 @@
         },
         {
           "visibility": "public",
+          "label": "화곡농장 박수확 작업정리",
+          "title": "화곡농장 박수확 작업정리",
+          "chatTitle": "화곡농장 박수확 작업정리",
+          "date": "2026-08-11",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/hwagok-farm/records/20260811-033011e15c/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260811-033011e15c",
+          "category": "아카이브",
+          "summary": "수집함 원본 108개 파일을 보존한 공개 아카이브 기록.",
+          "directory": "20260811-033011e15c",
+          "recordPath": "public/records/20260811-033011e15c"
+        },
+        {
+          "visibility": "public",
+          "label": "화곡농장 단골 농막아래농지 들깨밭 살포기록",
+          "title": "화곡농장 단골 농막아래농지 들깨밭 살포기록",
+          "chatTitle": "화곡농장 단골 농막아래농지 들깨밭 살포기록",
+          "date": "2026-08-11",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/hwagok-farm/records/20260811-eff7eb781d/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260811-eff7eb781d",
+          "category": "아카이브",
+          "summary": "수집함 원본 28개 파일을 보존한 공개 아카이브 기록.",
+          "directory": "20260811-eff7eb781d",
+          "recordPath": "public/records/20260811-eff7eb781d"
+        },
+        {
+          "visibility": "public",
           "label": "서산 양파 구매처 조사",
           "title": "서산 양파 구매처 조사",
           "chatTitle": "서산 양파 구매처 조사",
@@ -340,6 +340,21 @@
           "summary": "식당용 국산 양파 15kg 30망의 서산권 공급처·가격·연락 상태를 비교한 공개 아카이브 기록.",
           "directory": "20260810-onion-sourcing",
           "recordPath": "public/records/20260810-onion-sourcing"
+        },
+        {
+          "visibility": "public",
+          "label": "스프링클러·배관 계획 현재 작업 정리",
+          "title": "스프링클러·배관 계획 현재 작업 정리",
+          "chatTitle": "스프링클러·배관 계획 현재 작업 정리",
+          "date": "2026-08-09",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/hwagok-farm/records/20260809-sprinkler-piping-plan/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260809-sprinkler-piping-plan",
+          "category": "관수·배관",
+          "summary": "스프링클러·배관 계획도, 치수 보완 도면 및 연결부 심벌. HTML·MD와 images/·원본이미지/의 모든 원본 및 PDF 보존.",
+          "directory": "20260809-sprinkler-piping-plan",
+          "recordPath": "public/records/20260809-sprinkler-piping-plan"
         },
         {
           "visibility": "public",
@@ -373,21 +388,6 @@
         },
         {
           "visibility": "public",
-          "label": "농막 차양막 거치대 대각선보강 수리",
-          "title": "농막 차양막 거치대 대각선보강 수리",
-          "chatTitle": "농막 차양막 거치대 대각선보강 수리",
-          "date": "2026-07-11",
-          "dateSource": "archive-canonical",
-          "titleSource": "archive-canonical",
-          "url": "https://softm.github.io/hwagok-farm/records/20260711-19bcb05ed0/",
-          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260711-19bcb05ed0",
-          "category": "아카이브",
-          "summary": "수집함 원본 17개 파일을 보존한 공개 아카이브 기록.",
-          "directory": "20260711-19bcb05ed0",
-          "recordPath": "public/records/20260711-19bcb05ed0"
-        },
-        {
-          "visibility": "public",
           "label": "화곡농장 냉동고 전기증설 작업기록",
           "title": "화곡농장 냉동고 전기증설 작업기록",
           "chatTitle": "화곡농장 냉동고 전기증설 작업기록",
@@ -400,6 +400,21 @@
           "summary": "수집함 원본 12개 파일을 보존한 공개 아카이브 기록.",
           "directory": "20260711-9eef8f2458",
           "recordPath": "public/records/20260711-9eef8f2458"
+        },
+        {
+          "visibility": "public",
+          "label": "농막 차양막 거치대 대각선보강 수리",
+          "title": "농막 차양막 거치대 대각선보강 수리",
+          "chatTitle": "농막 차양막 거치대 대각선보강 수리",
+          "date": "2026-07-11",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/hwagok-farm/records/20260711-19bcb05ed0/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260711-19bcb05ed0",
+          "category": "아카이브",
+          "summary": "수집함 원본 17개 파일을 보존한 공개 아카이브 기록.",
+          "directory": "20260711-19bcb05ed0",
+          "recordPath": "public/records/20260711-19bcb05ed0"
         },
         {
           "visibility": "public",
@@ -418,21 +433,6 @@
         },
         {
           "visibility": "public",
-          "label": "서산화곡농장 감자밭가생이 카랑제초제살포",
-          "title": "서산화곡농장 감자밭가생이 카랑제초제살포",
-          "chatTitle": "서산화곡농장 감자밭가생이 카랑제초제살포",
-          "date": "2026-07-01",
-          "dateSource": "archive-canonical",
-          "titleSource": "archive-canonical",
-          "url": "https://softm.github.io/hwagok-farm/records/20260701-d652a25ec4/",
-          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260701-d652a25ec4",
-          "category": "아카이브",
-          "summary": "수집함 원본 7개 파일을 보존한 공개 아카이브 기록.",
-          "directory": "20260701-d652a25ec4",
-          "recordPath": "public/records/20260701-d652a25ec4"
-        },
-        {
-          "visibility": "public",
           "label": "화곡농장 냉동고 일등공조 4마력 컴프레서 교체 수리기록 v2",
           "title": "화곡농장 냉동고 일등공조 4마력 컴프레서 교체 수리기록 v2",
           "chatTitle": "화곡농장 냉동고 일등공조 4마력 컴프레서 교체 수리기록 v2",
@@ -445,6 +445,21 @@
           "summary": "수집함 원본 73개 파일을 보존한 공개 아카이브 기록.",
           "directory": "20260701-0702-4-v2",
           "recordPath": "public/records/20260701-0702-4-v2"
+        },
+        {
+          "visibility": "public",
+          "label": "서산화곡농장 감자밭가생이 카랑제초제살포",
+          "title": "서산화곡농장 감자밭가생이 카랑제초제살포",
+          "chatTitle": "서산화곡농장 감자밭가생이 카랑제초제살포",
+          "date": "2026-07-01",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/hwagok-farm/records/20260701-d652a25ec4/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260701-d652a25ec4",
+          "category": "아카이브",
+          "summary": "수집함 원본 7개 파일을 보존한 공개 아카이브 기록.",
+          "directory": "20260701-d652a25ec4",
+          "recordPath": "public/records/20260701-d652a25ec4"
         },
         {
           "visibility": "public",
@@ -463,21 +478,6 @@
         },
         {
           "visibility": "public",
-          "label": "2026-05-27 박 오이잎벌레 모스킬 방제 기록",
-          "title": "2026-05-27 박 오이잎벌레 모스킬 방제 기록",
-          "chatTitle": "2026-05-27 박 오이잎벌레 모스킬 방제 기록",
-          "date": "2026-05-27",
-          "dateSource": "archive-canonical",
-          "titleSource": "archive-canonical",
-          "url": "https://softm.github.io/hwagok-farm/records/20260527-moskill/",
-          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260527-moskill",
-          "category": "방제",
-          "summary": "박밭 3개 두둑에 모스킬 약 50L를 살포하고 오이잎벌레류 발생·약효 반응·강우 시점을 기록. 현장 사진 10장 포함.",
-          "directory": "20260527-moskill",
-          "recordPath": "public/records/20260527-moskill"
-        },
-        {
-          "visibility": "public",
           "label": "박 오이잎벌레 모스킬 방제기록 최종",
           "title": "박 오이잎벌레 모스킬 방제기록 최종",
           "chatTitle": "박 오이잎벌레 모스킬 방제기록 최종",
@@ -490,6 +490,21 @@
           "summary": "수집함 원본 23개 파일을 보존한 공개 아카이브 기록.",
           "directory": "20260527-b1cff9bdd4",
           "recordPath": "public/records/20260527-b1cff9bdd4"
+        },
+        {
+          "visibility": "public",
+          "label": "2026-05-27 박 오이잎벌레 모스킬 방제 기록",
+          "title": "2026-05-27 박 오이잎벌레 모스킬 방제 기록",
+          "chatTitle": "2026-05-27 박 오이잎벌레 모스킬 방제 기록",
+          "date": "2026-05-27",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/hwagok-farm/records/20260527-moskill/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260527-moskill",
+          "category": "방제",
+          "summary": "박밭 3개 두둑에 모스킬 약 50L를 살포하고 오이잎벌레류 발생·약효 반응·강우 시점을 기록. 현장 사진 10장 포함.",
+          "directory": "20260527-moskill",
+          "recordPath": "public/records/20260527-moskill"
         },
         {
           "visibility": "private",
@@ -514,24 +529,26 @@
       "publicHomeStatus": "github-pages-home-generated",
       "privateEntryPolicy": "Vercel Authentication required; direct deep link after authentication",
       "vercelAccountAuthVerified": true,
-      "homePublicListCount": 29,
+      "homePublicListCount": 30,
       "homePrivateListCount": 1,
       "publicIndexSource": {
         "url": "https://softm.github.io/hwagok-farm/",
         "format": "html-archive-data"
       },
-      "pageCount": 29,
+      "pageCount": 30,
       "publicIndexSnapshot": {
         "source": "https://softm.github.io/hwagok-farm/",
-        "recordCount": 29,
-        "purpose": "build snapshot; browsers refresh from the deployed source on every page load"
+        "recordCount": 30,
+        "purpose": "same canonical public catalogue; private links preserved separately"
       },
       "privateRepo": "hwagok-farm-private",
       "privateRepoUrl": "https://github.com/softm/hwagok-farm-private",
       "privateUrl": "https://hwagok-farm-private.vercel.app/",
       "privatePageCount": 1,
       "latestTitle": "화곡농장 분무기 편사호스 사진정리",
-      "authProvider": "vercel-sso"
+      "authProvider": "vercel-sso",
+      "totalRecordCount": 31,
+      "archiveLastPublishedAt": "2026-10-07T13:23:41.343220+00:00"
     },
     {
       "order": 2,
@@ -1128,5 +1145,5 @@
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
-  "homeVersion": "20261007-private-route-fix-v20"
+  "homeVersion": "20261007-sprinkler-20260809-v1"
 }
