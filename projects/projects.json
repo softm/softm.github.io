@@ -1170,9 +1170,9 @@
       "privateEntryPolicy": "Vercel Authentication on all deployments; server-side GitHub main live-read; no static private archive copies",
       "vercelAccountAuthVerified": true,
       "homePublicListCount": 1,
-      "homePrivateListCount": 2,
+      "homePrivateListCount": 8,
       "pageCount": 1,
-      "privatePageCount": 2,
+      "privatePageCount": 8,
       "latestTitle": "2026-10-07 Casio LRW-200H-4B2 시계줄 규격 조사 및 색상별 3개 구매",
       "mediaStatus": "공개 홈의 canonical 목록을 동기화했습니다. 첨부 수와 재생 가능 여부는 별도 점검 대상입니다.",
       "deploymentNote": "실제 콘텐츠는 프로젝트 저장소에 보존하고 중앙 목록은 배포된 HTML의 archive-data를 직접 조회합니다.",
@@ -1223,6 +1223,168 @@
           "directory": "analysis",
           "recordPath": "archive/20261007-school-life-record/analysis",
           "delivery": "authenticated-github-live-read"
+        },
+        {
+          "visibility": "private",
+          "label": "20130302_웨딩사진",
+          "title": "20130302_웨딩사진",
+          "chatTitle": "20130302_웨딩사진",
+          "listTitle": "20130302_웨딩사진",
+          "inputName": "20130302_웨딩사진",
+          "inputKind": "folder",
+          "date": "2013-03-02",
+          "dateSource": "input-name",
+          "titleSource": "inbox-name",
+          "url": "https://yeonseo-private.vercel.app/archive/20130302-wedding-photos/",
+          "repoUrl": "https://github.com/softm/yeonseo/tree/main/archive/20130302-wedding-photos",
+          "category": "교육·생활",
+          "summary": "사진 42 · 영상 0 · 음성 0",
+          "files": {
+            "images": 42,
+            "videos": 0,
+            "audio": 0,
+            "documents": 0
+          },
+          "count": 42,
+          "recordPath": "archive/20130302-wedding-photos",
+          "directory": "20130302-wedding-photos",
+          "delivery": "authenticated-github-live-read",
+          "publicMetadataApproved": true
+        },
+        {
+          "visibility": "private",
+          "label": "20240506_연서.노래",
+          "title": "20240506_연서.노래",
+          "chatTitle": "20240506_연서.노래",
+          "listTitle": "20240506_연서.노래",
+          "inputName": "20240506_연서.노래",
+          "inputKind": "folder",
+          "date": "2024-05-06",
+          "dateSource": "input-name",
+          "titleSource": "inbox-name",
+          "url": "https://yeonseo-private.vercel.app/archive/20240506-yeonseo-singing/",
+          "repoUrl": "https://github.com/softm/yeonseo/tree/main/archive/20240506-yeonseo-singing",
+          "category": "교육·생활",
+          "summary": "사진 0 · 영상 0 · 음성 2",
+          "files": {
+            "images": 0,
+            "videos": 0,
+            "audio": 2,
+            "documents": 0
+          },
+          "count": 2,
+          "recordPath": "archive/20240506-yeonseo-singing",
+          "directory": "20240506-yeonseo-singing",
+          "delivery": "authenticated-github-live-read",
+          "publicMetadataApproved": true
+        },
+        {
+          "visibility": "private",
+          "label": "어린적_연서",
+          "title": "어린적_연서",
+          "chatTitle": "어린적_연서",
+          "listTitle": "어린적_연서",
+          "inputName": "어린적_연서",
+          "inputKind": "folder",
+          "date": "",
+          "dateSource": "unknown",
+          "titleSource": "inbox-name",
+          "url": "https://yeonseo-private.vercel.app/archive/yeonseo-childhood/",
+          "repoUrl": "https://github.com/softm/yeonseo/tree/main/archive/yeonseo-childhood",
+          "category": "교육·생활",
+          "summary": "사진 1 · 영상 2 · 음성 0",
+          "files": {
+            "images": 1,
+            "videos": 2,
+            "audio": 0,
+            "documents": 0
+          },
+          "count": 3,
+          "recordPath": "archive/yeonseo-childhood",
+          "directory": "yeonseo-childhood",
+          "delivery": "authenticated-github-live-read",
+          "publicMetadataApproved": true
+        },
+        {
+          "visibility": "private",
+          "label": "연서.호두클래스",
+          "title": "연서.호두클래스",
+          "chatTitle": "연서.호두클래스",
+          "listTitle": "연서.호두클래스",
+          "inputName": "연서.호두클래스",
+          "inputKind": "folder",
+          "date": "",
+          "dateSource": "unknown",
+          "titleSource": "inbox-name",
+          "url": "https://yeonseo-private.vercel.app/archive/yeonseo-hodoo-class/",
+          "repoUrl": "https://github.com/softm/yeonseo/tree/main/archive/yeonseo-hodoo-class",
+          "category": "교육·생활",
+          "summary": "사진 1 · 영상 2 · 음성 0",
+          "files": {
+            "images": 1,
+            "videos": 2,
+            "audio": 0,
+            "documents": 0
+          },
+          "count": 3,
+          "recordPath": "archive/yeonseo-hodoo-class",
+          "directory": "yeonseo-hodoo-class",
+          "delivery": "authenticated-github-live-read",
+          "publicMetadataApproved": true
+        },
+        {
+          "visibility": "private",
+          "label": "연서_VLOG",
+          "title": "연서_VLOG",
+          "chatTitle": "연서_VLOG",
+          "listTitle": "연서_VLOG",
+          "inputName": "연서_VLOG",
+          "inputKind": "folder",
+          "date": "2026-05-23",
+          "dateSource": "source-filenames",
+          "titleSource": "inbox-name",
+          "url": "https://yeonseo-private.vercel.app/archive/yeonseo-vlog/",
+          "repoUrl": "https://github.com/softm/yeonseo/tree/main/archive/yeonseo-vlog",
+          "category": "교육·생활",
+          "summary": "사진 0 · 영상 14 · 음성 0",
+          "files": {
+            "images": 0,
+            "videos": 14,
+            "audio": 0,
+            "documents": 0
+          },
+          "count": 14,
+          "recordPath": "archive/yeonseo-vlog",
+          "directory": "yeonseo-vlog",
+          "delivery": "authenticated-github-live-read",
+          "publicMetadataApproved": true
+        },
+        {
+          "visibility": "private",
+          "label": "연서_동시_가을",
+          "title": "연서_동시_가을",
+          "chatTitle": "연서_동시_가을",
+          "listTitle": "연서_동시_가을",
+          "inputName": "연서_동시_가을",
+          "inputKind": "folder",
+          "date": "",
+          "dateSource": "unknown",
+          "titleSource": "inbox-name",
+          "url": "https://yeonseo-private.vercel.app/archive/yeonseo-autumn-poem/",
+          "repoUrl": "https://github.com/softm/yeonseo/tree/main/archive/yeonseo-autumn-poem",
+          "category": "교육·생활",
+          "summary": "사진 1 · 영상 0 · 음성 0",
+          "files": {
+            "images": 1,
+            "videos": 0,
+            "audio": 0,
+            "documents": 0
+          },
+          "count": 1,
+          "recordPath": "archive/yeonseo-autumn-poem",
+          "directory": "yeonseo-autumn-poem",
+          "delivery": "authenticated-github-live-read",
+          "publicMetadataApproved": true
         }
       ],
       "publicIndexSource": {
@@ -1239,11 +1401,12 @@
       "authModes": [
         "vercel-deployment-protection"
       ],
-      "totalRecordCount": 3,
+      "totalRecordCount": 9,
       "privateDeploymentStatus": "authenticated-github-live",
       "privateSourceStatus": "repository-and-index-http-200",
       "privateVercelProject": "yeonseo-private",
-      "privateGatewayRoot": "gateway"
+      "privateGatewayRoot": "gateway",
+      "privateVerificationStatus": "source-reflected-runtime-check-pending"
     },
     {
       "order": 10,
@@ -1515,5 +1678,5 @@
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
-  "homeVersion": "20261008-inbox-list-title-v22"
+  "homeVersion": "20261008-yeonseo-media-inbox"
 }
