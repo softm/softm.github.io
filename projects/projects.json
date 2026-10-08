@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-09-30",
+  "updatedAt": "2026-10-08",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -39,7 +39,10 @@
     "htmlMarkdownPriority": "원본 HTML 우선 보존; 원본 HTML 없이 MD가 있으면 전체 본문을 HTML로 렌더링; 둘 다 없을 때만 자료목록 표시. 원본·첨부·인증 유지.",
     "markdownFallbackPolicy": "projects/archive-deployment/20261007_HTML우선_MD본문변환_기준.md",
     "mediaViewerPolicy": "projects/archive-deployment/MEDIA-VIEWER-POLICY.md",
-    "mediaViewerRequirement": "가능한 모든 형식에 인라인 뷰어/플레이어; 미지원 형식·코덱은 명시; 원본 보존·인증 유지·외부 뷰어 전송 금지"
+    "mediaViewerRequirement": "가능한 모든 형식에 인라인 뷰어/플레이어; 미지원 형식·코덱은 명시; 원본 보존·인증 유지·외부 뷰어 전송 금지",
+    "listTitlePolicy": "projects/archive-deployment/INBOX-LIST-TITLE-POLICY.md",
+    "listTitleRule": "Input folder or ZIP filename verbatim; preserve original body titles separately",
+    "listTitleSource": "inbox-name"
   },
   "projects": [
     {
@@ -343,18 +346,22 @@
         },
         {
           "visibility": "public",
-          "label": "스프링클러·배관 계획 현재 작업 정리",
-          "title": "스프링클러·배관 계획 현재 작업 정리",
-          "chatTitle": "스프링클러·배관 계획 현재 작업 정리",
+          "label": "20260809_화곡농장_스프링클러_배관계획_작업정리",
+          "title": "20260809_화곡농장_스프링클러_배관계획_작업정리",
+          "chatTitle": "20260809_화곡농장_스프링클러_배관계획_작업정리",
           "date": "2026-08-09",
           "dateSource": "archive-canonical",
-          "titleSource": "archive-canonical",
+          "titleSource": "inbox-name",
           "url": "https://softm.github.io/hwagok-farm/records/20260809-sprinkler-piping-plan/",
           "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260809-sprinkler-piping-plan",
           "category": "관수·배관",
           "summary": "스프링클러·배관 계획도, 치수 보완 도면 및 연결부 심벌. HTML·MD와 images/·원본이미지/의 모든 원본 및 PDF 보존.",
           "directory": "20260809-sprinkler-piping-plan",
-          "recordPath": "public/records/20260809-sprinkler-piping-plan"
+          "recordPath": "public/records/20260809-sprinkler-piping-plan",
+          "inputName": "20260809_화곡농장_스프링클러_배관계획_작업정리",
+          "inputKind": "folder",
+          "listTitle": "20260809_화곡농장_스프링클러_배관계획_작업정리",
+          "sourceTitle": "스프링클러·배관 계획 현재 작업 정리"
         },
         {
           "visibility": "public",
@@ -1384,5 +1391,5 @@
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
-  "homeVersion": "20261008-yeonseo-private-v21"
+  "homeVersion": "20261008-inbox-list-title-v22"
 }
