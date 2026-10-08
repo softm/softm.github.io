@@ -11,13 +11,13 @@ function archiveRows(data,p){
  if(root.origin!==ORIGIN||root.pathname.startsWith('/projects/')||repo.hostname!=='github.com')throw new Error('공개 원본 오류');
  return data.map(row=>{
   if(!row||typeof row!=='object')throw new Error('기록 형식 오류');
-  const dir=text(row.dir),title=text(row.title),date=text(row.date);
+  const dir=text(row.dir),title=(typeof row.listTitle==='string'&&row.listTitle.length?row.listTitle:text(row.title)),date=text(row.date);
   if(!/^[A-Za-z0-9_-]+$/.test(dir)||!title||!validDate(date)||seen.has(dir))throw new Error('기록 메타데이터 오류: '+dir);
   const expected=new URL('records/'+dir+'/',root.href.replace(/\/?$/,'/')).href;
   const expectedRepo=repo.href.replace(/\/$/,'')+'/tree/main/public/records/'+dir;
   if(https(row.url).href!==expected||https(row.repoUrl).href!==expectedRepo)throw new Error('상세/원본 링크 오류: '+dir);
   seen.add(dir);
-  return {visibility:'public',label:title,title,chatTitle:title,date,dateSource:'archive-canonical',titleSource:'archive-canonical',url:row.url,repoUrl:row.repoUrl,category:text(row.kind)||'아카이브',summary:text(row.desc),directory:dir,recordPath:'public/records/'+dir};
+  return {...(typeof row.listTitle==='string'&&row.listTitle.length?{listTitle:row.listTitle,inputName:row.inputName,inputKind:row.inputKind,sourceTitle:row.sourceTitle}:{}),visibility:'public',label:title,title,chatTitle:title,date,dateSource:'archive-canonical',titleSource:row.listTitle?(row.titleSource||'inbox-name'):'archive-canonical',url:row.url,repoUrl:row.repoUrl,category:text(row.kind)||'아카이브',summary:text(row.desc),directory:dir,recordPath:'public/records/'+dir};
  });
 }
 async function syncPublishedArchive(p){
