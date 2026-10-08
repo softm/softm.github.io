@@ -19,6 +19,7 @@ class H1(HTMLParser):
     def handle_starttag(self,t,a):
         a=dict(a)
         if t=='h1':self.cur=[]
+        if t=='br' and self.cur is not None:self.cur.append(' ')
         if t=='meta' and a.get('http-equiv','').lower()=='refresh':self.refresh=a.get('content','')
     def handle_data(self,d):
         if self.cur is not None:self.cur.append(d)
@@ -65,7 +66,7 @@ def probe(item):
 entries=[]
 for p in records:
     for v in ['public','private']:
-        for row in p['rows'][v]:entries.append({'project':p['repo'],'visibility':v,'url':row.get('url',''),'name':row['displayName'],'authoredDate':row['displayDate'],'expected':row['displayTitle']})
+        for row in p['rows'][v]:entries.append({'project':p['repo'],'visibility':v,'url':row.get('url',''),'name':row['displayName'],'authoredDate':row['displayDate'],'expected':row.get('sourceTitle',row['displayTitle']) if row.get('listTitle') else row['displayTitle'],'listTitle':row.get('listTitle'),'inputName':row.get('inputName')})
 with ThreadPoolExecutor(max_workers=4) as pool:results=list(pool.map(probe,entries))
 projects=[]
 for p in records:

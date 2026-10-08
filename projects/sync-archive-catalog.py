@@ -11,7 +11,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '20261008-yeonseo-private-v21'
+VERSION = '20261008-inbox-list-title-v22'
 
 class ArchiveDataParser(HTMLParser):
     def __init__(self):
@@ -43,7 +43,7 @@ def patch_runtime():
         raise RuntimeError(f'Expected one runtime VERSION declaration, found {version_count}')
     replacements = [
         ("function authoredDate(row){", "function authoredDate(row){if(row.dateSource==='archive-canonical')return dateOnly(row.date);"),
-        ("function display(row){const date=authoredDate(row);", "function display(row){const date=authoredDate(row);if(row.dateSource==='archive-canonical'){const title=text(row.title)||text(row.label)||'기록';return {...row,displayDate:date,displayName:title,displayTitle:title,titleSource:'archive-canonical'}}"),
+        ("function display(row){const date=authoredDate(row);", "function display(row){const date=authoredDate(row);if(typeof row.listTitle==='string'&&row.listTitle.length){const title=row.listTitle;return {...row,displayDate:date,displayName:title,displayTitle:title,titleSource:row.titleSource||'inbox-name'}}if(row.dateSource==='archive-canonical'){const title=text(row.title)||text(row.label)||'기록';return {...row,displayDate:date,displayName:title,displayTitle:title,titleSource:'archive-canonical'}}"),
         ("return display({...metadata?.entries?.[key],...row,...p.chatMetadata?.[key]})", "return row.dateSource==='archive-canonical'?display(row):display({...metadata?.entries?.[key],...row,...p.chatMetadata?.[key]})"),
         ("const known=p.repo==='hwagok-farm'&&visibility==='public'?FARM[slug]:null;", "const known=p.repo==='hwagok-farm'&&visibility==='public'&&x.dateSource!=='archive-canonical'?FARM[slug]:null;"),
         ("${x.directory?dateHTML(x):''}", "${(x.directory||x.dateSource==='archive-canonical')?dateHTML(x):''}"),
