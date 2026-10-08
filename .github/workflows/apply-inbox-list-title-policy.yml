@@ -1,0 +1,145 @@
+name: Apply and verify archive input-name list titles
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/apply-inbox-list-title-policy.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: public-project-homes
+  cancel-in-progress: false
+jobs:
+  apply-and-verify:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: projects
+      - name: Update canonical policy documents and shared list-title handling
+        run: |
+          set -euo pipefail
+          git pull --ff-only origin main
+          python3 projects/archive-deployment/apply-inbox-title-policy.py policy
+          python3 -m py_compile projects/archive-deployment/apply-inbox-title-policy.py projects/sync-archive-catalog.py projects/audit-live-titles.py
+          node --check projects/project-home.js
+          node projects/project-home.test.cjs
+          node projects/archive-sync.test.cjs
+          node projects/inbox-list-title.test.cjs
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- projects/archive-deployment/README.md projects/archive-deployment/archive_deployment_prompt.md projects/archive-deployment/MD-HTML-ZIP-PROMPT.md projects/archive-deployment/MD-HTML-ZIP-REQUIREMENTS.md projects/archive-deployment/CHANGELOG.md 'projects/archive-deployment/20261005_아카이브배포_ZIP폴더_Workflow_처리기준.md' projects/project-home.js projects/archive-sync.js projects/home-generator.py projects/sync-archive-catalog.py projects/audit-live-titles.py projects/inbox-list-title.test.cjs projects/index.html projects/hwagok-farm/index.html
+          test -z "$(git diff --cached --name-only --diff-filter=D)"
+          if ! git diff --cached --quiet; then
+            git commit -m 'archive-policy: use folder and ZIP input names in lists; preserve original body titles'
+            git push origin HEAD:main
+          fi
+      - name: Synchronize requested record title from deployed source without changing counts
+        run: |
+          set -euo pipefail
+          python3 -u projects/archive-deployment/apply-inbox-title-policy.py catalog
+          node projects/inbox-list-title.test.cjs
+          git add -- projects/projects.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'projects: match sprinkler list title to input folder name, retain other records'
+            git push origin HEAD:main
+          fi
+      - name: Publish existing main-based GitHub Pages source without altering settings
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "repos/$GITHUB_REPOSITORY/pages" > /tmp/title-policy-pages.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/title-policy-pages.json'))
+          assert d['build_type']=='legacy' and d['source']['branch']=='main' and d['source']['path']=='/','Existing Pages source changed; no settings were altered'
+          PY
+          gh api -X POST "repos/$GITHUB_REPOSITORY/pages/builds" > /tmp/title-policy-build.json
+          BUILD_ID="$(python3 -c 'import json;print(json.load(open("/tmp/title-policy-build.json"))["url"].rstrip("/").split("/")[-1])')"
+          for attempt in $(seq 1 80); do
+            STATUS="$(gh api "repos/$GITHUB_REPOSITORY/pages/builds/$BUILD_ID" --jq '.status')"
+            echo "Pages $BUILD_ID: $STATUS"
+            if [ "$STATUS" = built ]; then exit 0; fi
+            if [ "$STATUS" = errored ]; then exit 1; fi
+            sleep 10
+          done
+          exit 1
+      - name: Install browser verification client
+        run: python3 -m pip install playwright==1.57.0
+      - name: Verify exact list titles and original HTML in actual browser
+        run: |
+          mkdir -p evidence
+          python3 - <<'PY'
+          import hashlib,json,re,subprocess,time
+          from pathlib import Path
+          from datetime import datetime,timezone
+          from urllib.request import Request,urlopen
+          from playwright.sync_api import sync_playwright
+          expected='20260809_화곡농장_스프링클러_배관계획_작업정리'
+          detail='https://softm.github.io/hwagok-farm/records/20260809-sprinkler-piping-plan/'
+          central='https://softm.github.io/projects/hwagok-farm/'
+          def fetch(url):
+              with urlopen(Request(url,headers={'Cache-Control':'no-cache'}),timeout=45) as r:
+                  assert r.status==200
+                  return r.read()
+          raw=fetch(detail+'index.html?title-policy='+str(time.time_ns()))
+          assert hashlib.sha256(raw).hexdigest()=='b71c27397a48b2e9b7ce7ff012bb6ceea090051abc838514ab8e3b129d8d71d5','Original HTML changed'
+          report={'passed':False,'listTitle':expected,'sourceHtmlUnchanged':True,'detailUrl':detail,'centralUrl':central,'sourceCommit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()}
+          with sync_playwright() as p:
+              browser=p.chromium.launch(channel='chrome')
+              page=browser.new_page(viewport={'width':1365,'height':900})
+              def visit(url):
+                  response=page.goto(url,wait_until='domcontentloaded',timeout=60000)
+                  assert response.status==200
+                  page.wait_for_timeout(4000)
+              def matching_link():
+                  links=page.locator('a[href="'+detail+'"]').all()
+                  return next((a for a in links if a.inner_text().strip()==expected),None)
+              visit('https://softm.github.io/hwagok-farm/')
+              assert matching_link() is not None,'Service list title mismatch'
+              page.screenshot(path='evidence/service-title.png',full_page=True)
+              report['serviceListTitleVerified']=True
+              visit(central)
+              page.locator('a[href="'+detail+'"]').first.wait_for(state='visible',timeout=45000)
+              assert matching_link() is not None,'Central list title mismatch'
+              page.screenshot(path='evidence/central-title.png',full_page=True)
+              report['centralListTitleVerified']=True
+              checked=[]
+              for view in ['cards','list','table','gallery']:
+                  button=page.locator('button[data-view="'+view+'"]')
+                  if button.count():
+                      button.first.click();page.wait_for_timeout(500)
+                      assert matching_link() is not None,'Wrong title in '+view
+                      checked.append(view)
+              report['checkedViews']=checked
+              matching_link().click();page.wait_for_url(detail,timeout=30000)
+              source=re.sub(r'\s+',' ',page.locator('h1').first.inner_text()).strip()
+              assert source=='스프링클러·배관 계획 현재 작업 정리'
+              report['originalBodyTitle']=source;report['deepLinkVerified']=True
+              visit('https://softm.github.io/projects/')
+              card=page.locator('[data-record="'+central+'"]');card.first.wait_for(state='visible',timeout=45000)
+              data=json.loads(fetch('https://softm.github.io/projects/projects.json?title-policy='+str(time.time_ns())))
+              project=next(p for p in data['projects'] if p['repo']=='hwagok-farm')
+              public=sum(x.get('visibility')=='public' for x in project['links'])
+              private=sum(x.get('visibility')=='private' for x in project['links'])
+              assert '공개 '+str(public) in card.first.inner_text() and '비공개 '+str(private) in card.first.inner_text()
+              page.screenshot(path='evidence/top-projects.png',full_page=True)
+              report.update(topProjectsVerified=True,publicCount=public,privateCount=private)
+              browser.close()
+          report.update(passed=True,verifiedAt=datetime.now(timezone.utc).isoformat())
+          Path('evidence/result.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
+          print(json.dumps(report,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: inbox-list-title-policy-evidence
+          path: evidence/
+          if-no-files-found: warn
