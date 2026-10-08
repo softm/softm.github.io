@@ -11,7 +11,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '20261007-private-route-fix-v20'
+VERSION = '20261008-yeonseo-private-v21'
 
 class ArchiveDataParser(HTMLParser):
     def __init__(self):
