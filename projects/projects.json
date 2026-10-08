@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-10-08",
+  "updatedAt": "2026-09-30",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -345,6 +345,10 @@
           "recordPath": "public/records/20260810-onion-sourcing"
         },
         {
+          "listTitle": "20260809_화곡농장_스프링클러_배관계획_작업정리",
+          "inputName": "20260809_화곡농장_스프링클러_배관계획_작업정리",
+          "inputKind": "folder",
+          "sourceTitle": "스프링클러·배관 계획 현재 작업 정리",
           "visibility": "public",
           "label": "20260809_화곡농장_스프링클러_배관계획_작업정리",
           "title": "20260809_화곡농장_스프링클러_배관계획_작업정리",
@@ -357,11 +361,7 @@
           "category": "관수·배관",
           "summary": "스프링클러·배관 계획도, 치수 보완 도면 및 연결부 심벌. HTML·MD와 images/·원본이미지/의 모든 원본 및 PDF 보존.",
           "directory": "20260809-sprinkler-piping-plan",
-          "recordPath": "public/records/20260809-sprinkler-piping-plan",
-          "inputName": "20260809_화곡농장_스프링클러_배관계획_작업정리",
-          "inputKind": "folder",
-          "listTitle": "20260809_화곡농장_스프링클러_배관계획_작업정리",
-          "sourceTitle": "스프링클러·배관 계획 현재 작업 정리"
+          "recordPath": "public/records/20260809-sprinkler-piping-plan"
         },
         {
           "visibility": "public",
@@ -1487,5 +1487,5 @@
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
-  "homeVersion": "20261008-private-list-metadata-v23"
+  "homeVersion": "20261008-inbox-list-title-v22"
 }
