@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-09-30",
+  "updatedAt": "2026-10-08",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -120,6 +120,66 @@
           "recordPath": "public/records/20260914-b0926d2def"
         },
         {
+          "listTitle": "20260913 쪽파 정식 로터리 12중 한줄 80구멍 약 1000개",
+          "inputName": "20260913 쪽파 정식 로터리 12중 한줄 80구멍 약 1000개",
+          "inputKind": "folder",
+          "sourceTitle": "20260913 쪽파 정식 로터리 12중 한줄 80구멍 약 1000개",
+          "visibility": "public",
+          "label": "20260913 쪽파 정식 로터리 12중 한줄 80구멍 약 1000개",
+          "title": "20260913 쪽파 정식 로터리 12중 한줄 80구멍 약 1000개",
+          "chatTitle": "20260913 쪽파 정식 로터리 12중 한줄 80구멍 약 1000개",
+          "date": "2026-09-13",
+          "dateSource": "archive-canonical",
+          "titleSource": "inbox-name",
+          "url": "https://softm.github.io/hwagok-farm/records/20260913-scallion-planting/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260913-scallion-planting",
+          "category": "영농 기록",
+          "summary": "입력 폴더 원본 사진 53개·영상 10개. 폴더명 그대로 제목을 사용하며 원본 파일을 보존합니다.",
+          "directory": "20260913-scallion-planting",
+          "recordPath": "public/records/20260913-scallion-planting",
+          "attachmentsUrl": "https://softm.github.io/hwagok-farm/records/20260913-scallion-planting/inbox-c76cf36930-viewer.html"
+        },
+        {
+          "listTitle": "20260913 열무왕무밭 물주고 이음 재배중",
+          "inputName": "20260913 열무왕무밭 물주고 이음 재배중",
+          "inputKind": "folder",
+          "sourceTitle": "20260913 열무왕무밭 물주고 이음 재배중",
+          "visibility": "public",
+          "label": "20260913 열무왕무밭 물주고 이음 재배중",
+          "title": "20260913 열무왕무밭 물주고 이음 재배중",
+          "chatTitle": "20260913 열무왕무밭 물주고 이음 재배중",
+          "date": "2026-09-13",
+          "dateSource": "archive-canonical",
+          "titleSource": "inbox-name",
+          "url": "https://softm.github.io/hwagok-farm/records/20260913-radish-irrigation/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260913-radish-irrigation",
+          "category": "영농 기록",
+          "summary": "입력 폴더 원본 사진 52개·영상 12개. 폴더명 그대로 제목을 사용하며 원본 파일을 보존합니다.",
+          "directory": "20260913-radish-irrigation",
+          "recordPath": "public/records/20260913-radish-irrigation",
+          "attachmentsUrl": "https://softm.github.io/hwagok-farm/records/20260913-radish-irrigation/inbox-94582b8d9e-viewer.html"
+        },
+        {
+          "listTitle": "20260913 씨박 수확",
+          "inputName": "20260913 씨박 수확",
+          "inputKind": "folder",
+          "sourceTitle": "20260913 씨박 수확",
+          "visibility": "public",
+          "label": "20260913 씨박 수확",
+          "title": "20260913 씨박 수확",
+          "chatTitle": "20260913 씨박 수확",
+          "date": "2026-09-13",
+          "dateSource": "archive-canonical",
+          "titleSource": "inbox-name",
+          "url": "https://softm.github.io/hwagok-farm/records/20260913-seed-gourd-harvest/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260913-seed-gourd-harvest",
+          "category": "영농 기록",
+          "summary": "입력 폴더 원본 사진 17개·영상 5개. 폴더명 그대로 제목을 사용하며 원본 파일을 보존합니다.",
+          "directory": "20260913-seed-gourd-harvest",
+          "recordPath": "public/records/20260913-seed-gourd-harvest",
+          "attachmentsUrl": "https://softm.github.io/hwagok-farm/records/20260913-seed-gourd-harvest/inbox-35db2f5c96-viewer.html"
+        },
+        {
           "visibility": "public",
           "label": "화곡농장 화이트클로버 자동급수 정리",
           "title": "화곡농장 화이트클로버 자동급수 정리",
@@ -178,6 +238,26 @@
           "summary": "수집함 원본 61개 파일을 보존한 공개 아카이브 기록.",
           "directory": "20260905-v2",
           "recordPath": "public/records/20260905-v2"
+        },
+        {
+          "listTitle": "20260905 무 열무 파종",
+          "inputName": "20260905 무 열무 파종",
+          "inputKind": "folder",
+          "sourceTitle": "20260905 무 열무 파종",
+          "visibility": "public",
+          "label": "20260905 무 열무 파종",
+          "title": "20260905 무 열무 파종",
+          "chatTitle": "20260905 무 열무 파종",
+          "date": "2026-09-05",
+          "dateSource": "archive-canonical",
+          "titleSource": "inbox-name",
+          "url": "https://softm.github.io/hwagok-farm/records/20260905-radish-sowing/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20260905-radish-sowing",
+          "category": "영농 기록",
+          "summary": "입력 폴더 원본 사진 23개·영상 8개. 폴더명 그대로 제목을 사용하며 원본 파일을 보존합니다.",
+          "directory": "20260905-radish-sowing",
+          "recordPath": "public/records/20260905-radish-sowing",
+          "attachmentsUrl": "https://softm.github.io/hwagok-farm/records/20260905-radish-sowing/inbox-7df15f1cdc-viewer.html"
         },
         {
           "visibility": "public",
@@ -536,17 +616,17 @@
       "publicHomeStatus": "github-pages-home-generated",
       "privateEntryPolicy": "Vercel Authentication required; direct deep link after authentication",
       "vercelAccountAuthVerified": true,
-      "homePublicListCount": 30,
+      "homePublicListCount": 34,
       "homePrivateListCount": 1,
       "publicIndexSource": {
         "url": "https://softm.github.io/hwagok-farm/",
         "format": "html-archive-data"
       },
-      "pageCount": 30,
+      "pageCount": 34,
       "publicIndexSnapshot": {
         "source": "https://softm.github.io/hwagok-farm/",
-        "recordCount": 30,
-        "purpose": "build snapshot; browsers refresh from the deployed source on every page load"
+        "recordCount": 34,
+        "purpose": "verified public input-folder batch; private metadata preserved"
       },
       "privateRepo": "hwagok-farm-private",
       "privateRepoUrl": "https://github.com/softm/hwagok-farm-private",
@@ -554,8 +634,9 @@
       "privatePageCount": 1,
       "latestTitle": "화곡농장 분무기 편사호스 사진정리",
       "authProvider": "vercel-sso",
-      "totalRecordCount": 31,
-      "archiveLastPublishedAt": "2026-10-07T13:23:41.343220+00:00"
+      "totalRecordCount": 35,
+      "archiveLastPublishedAt": "2026-10-07T13:23:41.343220+00:00",
+      "lastArchiveBatch": "20261008-hwagok-media-inbox"
     },
     {
       "order": 2,
