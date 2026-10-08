@@ -1160,15 +1160,15 @@
       "homeUrl": "https://softm.github.io/projects/yeonseo/",
       "previousHomeUrl": "https://softm.github.io/projects/yeonseo/",
       "publicHomeStatus": "github-pages-home-generated",
-      "privateEntryPolicy": "Private GitHub 원본 보존 · 인증된 웹 gateway 미연결",
-      "vercelAccountAuthVerified": false,
+      "privateEntryPolicy": "Vercel Authentication on all deployments; server-side GitHub main live-read; no static private archive copies",
+      "vercelAccountAuthVerified": true,
       "homePublicListCount": 1,
       "homePrivateListCount": 1,
-      "pageCount": 1,
-      "privatePageCount": 0,
+      "pageCount": 2,
+      "privatePageCount": 1,
       "latestTitle": "2026-10-07 Casio LRW-200H-4B2 시계줄 규격 조사 및 색상별 3개 구매",
-      "mediaStatus": "공개 홈의 canonical 목록을 동기화했습니다. 첨부 수와 재생 가능 여부는 별도 점검 대상입니다.",
-      "deploymentNote": "실제 콘텐츠는 프로젝트 저장소에 보존하고 중앙 목록은 배포된 HTML의 archive-data를 직접 조회합니다.",
+      "mediaStatus": "비공개 원본은 Private GitHub에 보존하고 인증된 Vercel gateway에서 열람합니다.",
+      "deploymentNote": "공개 기록은 기존 GitHub Pages 배포를 유지하고, 비공개 기록은 Vercel Authentication 뒤에서 Private GitHub main을 실시간 조회합니다.",
       "links": [
         {
           "visibility": "public",
@@ -1184,6 +1184,22 @@
           "summary": "Casio LRW-200H-4B2 시계줄 러그 14 mm·어깨 18 mm 규격 확인과 AliExpress 색상별 3개 구매 기록.",
           "directory": "20261007-casio-lrw200h-watch-band",
           "recordPath": "public/records/20261007-casio-lrw200h-watch-band"
+        },
+        {
+          "visibility": "private",
+          "label": "비공개 기록",
+          "title": "비공개 기록",
+          "chatTitle": "비공개 기록",
+          "date": "2026-10-07",
+          "dateSource": "archive-canonical",
+          "titleSource": "privacy-safe-alias",
+          "url": "https://yeonseo-private.vercel.app/",
+          "repoUrl": "https://github.com/softm/yeonseo",
+          "category": "비공개",
+          "summary": "인증 후 열람할 수 있는 비공개 기록.",
+          "directory": "private",
+          "recordPath": "private",
+          "delivery": "authenticated-github-live-read"
         }
       ],
       "publicIndexSource": {
@@ -1194,7 +1210,17 @@
         "source": "https://softm.github.io/yeonseo-public/",
         "recordCount": 1,
         "purpose": "build snapshot; browsers refresh from the deployed source on every page load"
-      }
+      },
+      "privateUrl": "https://yeonseo-private.vercel.app/",
+      "authProvider": "vercel-sso",
+      "authModes": [
+        "vercel-deployment-protection"
+      ],
+      "totalRecordCount": 2,
+      "privateDeploymentStatus": "authenticated-github-live",
+      "privateSourceStatus": "repository-and-index-http-200",
+      "privateVercelProject": "yeonseo-private",
+      "privateGatewayRoot": "gateway"
     },
     {
       "order": 10,
