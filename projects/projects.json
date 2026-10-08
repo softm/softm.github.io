@@ -1163,7 +1163,7 @@
       "privateEntryPolicy": "Vercel Authentication on all deployments; server-side GitHub main live-read; no static private archive copies",
       "vercelAccountAuthVerified": true,
       "homePublicListCount": 1,
-      "homePrivateListCount": 2,
+      "homePrivateListCount": 1,
       "pageCount": 1,
       "privatePageCount": 1,
       "latestTitle": "2026-10-07 Casio LRW-200H-4B2 시계줄 규격 조사 및 색상별 3개 구매",
@@ -1268,5 +1268,5 @@
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
-  "homeVersion": "20261007-private-route-fix-v20"
+  "homeVersion": "20261008-yeonseo-private-v21"
 }
