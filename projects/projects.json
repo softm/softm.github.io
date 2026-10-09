@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-09-30",
+  "updatedAt": "2026-10-09",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -1854,11 +1854,11 @@
         "url": "https://softm.github.io/farm/archive-index.json",
         "format": "json-archive-index"
       },
-      "mediaStatus": "도식 4개 공개 · 원본 사진 업로드 대기 · 미리보기 제공",
+      "mediaStatus": "공개 기록 2개 · 스프링클러 기록은 원본 이미지 2장·ZIP 바이너리 업로드 대기.",
       "deploymentNote": "공개 사이트의 archive-index.json에서 기록 목록과 원본 확보 상태를 직접 조회합니다.",
-      "homePublicListCount": 1,
+      "homePublicListCount": 2,
       "homePrivateListCount": 0,
-      "pageCount": 1,
+      "pageCount": 2,
       "links": [
         {
           "visibility": "public",
@@ -1879,13 +1879,34 @@
           "sourceIntegrityComplete": false,
           "originalPhotoCount": 0,
           "diagramCount": 4
+        },
+        {
+          "visibility": "public",
+          "label": "20261009-sprinkler-thread-guide.zip",
+          "listTitle": "20261009-sprinkler-thread-guide.zip",
+          "title": "20261009-sprinkler-thread-guide.zip",
+          "chatTitle": "20261009-sprinkler-thread-guide.zip",
+          "sourceTitle": "스프링클러 배관 나사 규격 정리",
+          "date": "2026-10-09",
+          "dateSource": "archive_created",
+          "titleSource": "inbox-name",
+          "url": "https://softm.github.io/farm/records/20261009-sprinkler-thread-guide/",
+          "repoUrl": "https://github.com/softm/farm/tree/main/records/20261009-sprinkler-thread-guide",
+          "category": "관수·부품",
+          "summary": "1/2″·3/4″·1″ 스프링클러 배관 나사 호칭과 수나사 외경 비교. 원본 이미지 2장·ZIP 바이너리 업로드 대기.",
+          "directory": "20261009-sprinkler-thread-guide",
+          "recordPath": "records/20261009-sprinkler-thread-guide",
+          "sourceIntegrityComplete": false,
+          "originalImageCount": 0,
+          "expectedOriginalImageCount": 2
         }
       ],
       "previousHomeUrl": "https://softm.github.io/projects/farm/",
       "projectHomeUrl": "https://softm.github.io/projects/farm/",
       "publicHomeStatus": "github-pages-home-generated",
       "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
-      "vercelAccountAuthVerified": false
+      "vercelAccountAuthVerified": false,
+      "totalRecordCount": 2
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
