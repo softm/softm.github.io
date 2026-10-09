@@ -1325,7 +1325,8 @@
             "audio": 0,
             "documents": 0
           },
-          "count": 11
+          "count": 11,
+          "publicSummary": "2026-10-07 발급 학교생활기록부 11쪽."
         },
         {
           "visibility": "private",
@@ -1344,7 +1345,8 @@
           "delivery": "authenticated-github-live-read",
           "listTitle": "연서 생활기록부 역량 분석 보고서",
           "sourceTitle": "연서 생활기록부 역량 분석 보고서",
-          "publicMetadataApproved": true
+          "publicMetadataApproved": true,
+          "publicSummary": "학교생활기록부를 바탕으로 정리한 역량 분석과 자기소개서 활용 보고서."
         },
         {
           "visibility": "private",
