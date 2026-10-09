@@ -1853,7 +1853,7 @@
       "title": "농업·농사",
       "description": "농업·농사 통합 공개 아카이브 — 재배 도식과 영농 기록",
       "category": "농업",
-      "deploymentStatus": "partial",
+      "deploymentStatus": "static-html-deployed",
       "repoStatus": "available",
       "publicRepo": "farm",
       "publicRepoUrl": "https://github.com/softm/farm",
@@ -1960,7 +1960,7 @@
       "privateUrl": "https://farm-private-softms-projects.vercel.app/",
       "privatePageCount": 1,
       "privateDeliveryStatus": "vercel-authenticated",
-      "privateVerificationStatus": "deployment-verification-in-progress"
+      "privateVerificationStatus": "authenticated-http-verified"
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
