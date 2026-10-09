@@ -96,9 +96,9 @@
       "repo": "farm",
       "title": "농업·농사",
       "homeUrl": "https://softm.github.io/projects/farm/",
-      "publicEntries": 2,
+      "publicEntries": 3,
       "privateEntries": 0,
-      "htmlSha256": "df75308857a490725b39af1b22e876c5aaddcfb49d43052c505cf3f0da1dc912",
+      "htmlSha256": "d82e25cd56ef59338667c4abb7e5b12e43217e033d5e0279851f39e887e65d62",
       "authenticatedContentVerified": false
     }
   ],
