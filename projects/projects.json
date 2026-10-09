@@ -61,42 +61,6 @@
       "links": [
         {
           "visibility": "public",
-          "label": "20261009 제초제 분류 및 사용 가이드",
-          "title": "20261009 제초제 분류 및 사용 가이드",
-          "date": "2026-10-09",
-          "url": "https://softm.github.io/hwagok-farm/records/20261009-herbicide-classification/",
-          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/records/20261009-herbicide-classification",
-          "category": "방제 · 농약 관리",
-          "summary": "선택성·비선택성·발아 전 토양처리 비교. 원본 사진 9장 업로드 대기.",
-          "directory": "20261009-herbicide-classification",
-          "recordPath": "records/20261009-herbicide-classification",
-          "files": {
-            "images": 0,
-            "videos": 0,
-            "audio": 0,
-            "documents": 2
-          }
-        },
-        {
-          "visibility": "public",
-          "label": "20261009 화곡농장 보유 농약 정리",
-          "title": "20261009 화곡농장 보유 농약 정리",
-          "date": "2026-10-09",
-          "url": "https://softm.github.io/hwagok-farm/records/20261009-herbicide-inventory/",
-          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20261009-herbicide-inventory",
-          "category": "방제 · 농약 관리",
-          "summary": "보유 제초제 4종 비교 및 농약사 상담. 원본 사진 8장 미게시로 보완 필요.",
-          "files": {
-            "images": 0,
-            "videos": 0,
-            "audio": 0,
-            "documents": 0
-          },
-          "directory": "20261009-herbicide-inventory",
-          "recordPath": "public/records/20261009-herbicide-inventory"
-        },
-        {
-          "visibility": "public",
           "label": "20261009 지주대 삽입기 구매기록",
           "title": "20261009 지주대 삽입기 구매기록",
           "chatTitle": "20261009 지주대 삽입기 구매기록",
@@ -684,13 +648,13 @@
       "publicHomeStatus": "github-pages-home-generated",
       "privateEntryPolicy": "Vercel Authentication required; direct deep link after authentication",
       "vercelAccountAuthVerified": true,
-      "homePublicListCount": 37,
+      "homePublicListCount": 35,
       "homePrivateListCount": 2,
       "publicIndexSource": {
         "url": "https://softm.github.io/hwagok-farm/",
         "format": "html-archive-data"
       },
-      "pageCount": 37,
+      "pageCount": 35,
       "publicIndexSnapshot": {
         "source": "https://softm.github.io/hwagok-farm/",
         "recordCount": 35,
