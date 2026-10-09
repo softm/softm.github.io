@@ -35,13 +35,13 @@ async function syncPublishedArchive(p){
   const raw=await response.text();if(raw.length>2500000)throw new Error('공개 목록 크기 초과');
   const data=JSON.parse(raw);if(data.repository!=='softm/farm'||!Array.isArray(data.records))throw new Error('농업 목록 형식 오류');
   const seen=new Set(),links=data.records.map(r=>{
-    const id=text(r.slug),title=r.listTitle,date=text(r.date);
-    if(!/^[A-Za-z0-9_-]+$/.test(id)||typeof title!=='string'||!title||!validDate(date)||seen.has(id))throw new Error('농업 기록 메타데이터 오류');
+    const id=text(r.slug),listTitle=text(r.listTitle),displayTitle=text(r.title)||text(r.sourceTitle)||listTitle,date=text(r.date);
+    if(!/^[A-Za-z0-9_-]+$/.test(id)||!listTitle||!displayTitle||!validDate(date)||seen.has(id))throw new Error('농업 기록 메타데이터 오류');
     if(r.visibility!=='public'||r.url!==root.href+'records/'+id+'/'||r.repoUrl!=='https://github.com/softm/farm/tree/main/records/'+id)throw new Error('농업 기록 링크 오류');seen.add(id);
-    return {visibility:'public',listTitle:title,label:title,title,chatTitle:title,sourceTitle:r.sourceTitle,date,dateSource:r.dateBasis,titleSource:'inbox-name',url:r.url,repoUrl:r.repoUrl,category:r.kind||'재배',summary:(r.description||'')+(r.sourceIntegrityComplete?'':' · 원본 사진 업로드 대기, 미리보기 제공'),directory:id,recordPath:'records/'+id,sourceIntegrityComplete:r.sourceIntegrityComplete,originalPhotoCount:r.originalPhotoCount,diagramCount:r.diagramCount};
+    return {visibility:'public',listTitle,label:displayTitle,title:displayTitle,chatTitle:displayTitle,sourceTitle:r.sourceTitle,date,dateSource:r.dateBasis,titleSource:r.titleSource||'archive-canonical',url:r.url,repoUrl:r.repoUrl,category:r.kind||'재배',summary:(r.description||'')+(r.sourceIntegrityComplete?'':' · 원본 자료 업로드 대기'),directory:id,recordPath:'records/'+id,sourceIntegrityComplete:r.sourceIntegrityComplete,originalPhotoCount:r.originalPhotoCount,originalImageCount:r.originalImageCount,uniqueOriginalImageCount:r.uniqueOriginalImageCount,diagramCount:r.diagramCount};
   });
   p.links=[...links,...(p.links||[]).filter(x=>x.visibility==='private')];p.homePublicListCount=links.length;p.pageCount=links.length;p.homePrivateListCount=p.links.filter(x=>x.visibility==='private').length;
-  p.mediaStatus=data.records.every(r=>r.sourceIntegrityComplete)?'원본 파일 해시 확인':'도식 4개 공개 · 원본 사진 업로드 대기 · 미리보기는 별도 구분';
+  p.mediaStatus=data.records.every(r=>r.sourceIntegrityComplete)?'공개 기록 원본 파일·해시 확인 완료':'일부 공개 기록의 원본 자료 확인 대기';
   p.archiveSync={status:'ok',source:expected,count:links.length};return;
  }
   const root=https(p.publicUrl),sourceUrl=https(source.url);
