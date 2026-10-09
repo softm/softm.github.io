@@ -61,6 +61,36 @@
       "links": [
         {
           "visibility": "public",
+          "label": "20261009 제초제 분류 및 사용 가이드",
+          "title": "20261009 제초제 분류 및 사용 가이드",
+          "chatTitle": "20261009 제초제 분류 및 사용 가이드",
+          "date": "2026-10-09",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/hwagok-farm/records/20261009-herbicide-classification/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/records/20261009-herbicide-classification",
+          "category": "방제 · 농약 관리",
+          "summary": "스톰프·라쏘·풀앤짱·푸리타 등 선택성·비선택성 비교. 사진 9장 웹 업로드 대기.",
+          "directory": "20261009-herbicide-classification",
+          "recordPath": "records/20261009-herbicide-classification"
+        },
+        {
+          "visibility": "public",
+          "label": "20261009 화곡농장 보유 농약 정리",
+          "title": "20261009 화곡농장 보유 농약 정리",
+          "chatTitle": "20261009 화곡농장 보유 농약 정리",
+          "date": "2026-10-09",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/hwagok-farm/records/20261009-herbicide-inventory/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20261009-herbicide-inventory",
+          "category": "방제 · 농약 관리",
+          "summary": "보유 제초제 큰사미·하늘아래·확타·타랑 비교와 농약사 상담 요약. 원본 사진 8장 배포 보완 중.",
+          "directory": "20261009-herbicide-inventory",
+          "recordPath": "public/records/20261009-herbicide-inventory"
+        },
+        {
+          "visibility": "public",
           "label": "20261009 지주대 삽입기 구매기록",
           "title": "20261009 지주대 삽입기 구매기록",
           "chatTitle": "20261009 지주대 삽입기 구매기록",
@@ -648,16 +678,16 @@
       "publicHomeStatus": "github-pages-home-generated",
       "privateEntryPolicy": "Vercel Authentication required; direct deep link after authentication",
       "vercelAccountAuthVerified": true,
-      "homePublicListCount": 35,
+      "homePublicListCount": 37,
       "homePrivateListCount": 2,
       "publicIndexSource": {
         "url": "https://softm.github.io/hwagok-farm/",
         "format": "html-archive-data"
       },
-      "pageCount": 35,
+      "pageCount": 37,
       "publicIndexSnapshot": {
         "source": "https://softm.github.io/hwagok-farm/",
-        "recordCount": 35,
+        "recordCount": 37,
         "purpose": "build snapshot; browsers refresh from the deployed source on every page load"
       },
       "privateRepo": "hwagok-farm-private",
