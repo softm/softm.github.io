@@ -1,14 +1,14 @@
 {
   "version": "20261008-inbox-list-title-v22",
-  "projectCount": 10,
+  "projectCount": 11,
   "projects": [
     {
       "repo": "hwagok-farm",
       "title": "화곡농장",
       "homeUrl": "https://softm.github.io/projects/hwagok-farm/",
-      "publicEntries": 34,
-      "privateEntries": 1,
-      "htmlSha256": "a4ad50a7b75d992a23acc3919356f5d200e37bfa89cea62ff867fbbf4e208b8a",
+      "publicEntries": 35,
+      "privateEntries": 2,
+      "htmlSha256": "18cad0441be944bca478f5f292b08650f5b18d7153dd1e92a06e25bf2a595883",
       "authenticatedContentVerified": false
     },
     {
@@ -91,6 +91,15 @@
       "privateEntries": 8,
       "htmlSha256": "cd7453c8f0ababe08e7f5d0ca918368049f476806393a4b8149fe1379e1ce32f",
       "authenticatedContentVerified": false
+    },
+    {
+      "repo": "farm",
+      "title": "농업·농사",
+      "homeUrl": "https://softm.github.io/projects/farm/",
+      "publicEntries": 1,
+      "privateEntries": 0,
+      "htmlSha256": "5dcedf2f4b89f94773f0bdaae3aec8da375aedf1d14c9561e563a4fc0743a041",
+      "authenticatedContentVerified": false
     }
   ],
   "files": [
@@ -104,6 +113,7 @@
     "projects/father-hospital-treatment/index.html",
     "projects/yeonseo/index.html",
     "projects/mine/index.html",
+    "projects/farm/index.html",
     "projects/projects.json",
     "projects/index.html",
     "projects/README.md",
