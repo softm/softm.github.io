@@ -1,0 +1,49 @@
+name: Publish compressed static site
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-compressed-site.yml'
+      - 'projects/projects.json'
+      - 'projects/archive-sync.js'
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: compressed-public-site
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment:
+      name: github-pages
+      url: https://softm.github.io/
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Verify archive list and project assignment
+        run: |
+          node projects/archive-sync.test.cjs
+          python3 - <<'PY'
+          import json
+          p=json.load(open('projects/projects.json'))['projects']
+          f=next(x for x in p if x['repo']=='farm')
+          h=next(x for x in p if x['repo']=='hwagok-farm')
+          assert any('20261009-temu-farm-supplies' in x['url'] for x in f['links'])
+          assert not any('20261009-temu-farm-supplies' in x['url'] for x in h['links'])
+          PY
+      - name: Package complete existing website
+        run: tar --dereference --hard-dereference --exclude=.git --exclude=.github -cf "${{ runner.temp }}/artifact.tar" .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: github-pages
+          path: ${{ runner.temp }}/artifact.tar
+          compression-level: 6
+          retention-days: 1
+      - uses: actions/deploy-pages@v4
+        with:
+          timeout: 1200000
