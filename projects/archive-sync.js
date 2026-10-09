@@ -14,10 +14,12 @@ function archiveRows(data,p){
   const dir=text(row.dir),title=(typeof row.listTitle==='string'&&row.listTitle.length?row.listTitle:text(row.title)),date=text(row.date);
   if(!/^[A-Za-z0-9_-]+$/.test(dir)||!title||!validDate(date)||seen.has(dir))throw new Error('기록 메타데이터 오류: '+dir);
   const expected=new URL('records/'+dir+'/',root.href.replace(/\/?$/,'/')).href;
-  const expectedRepo=repo.href.replace(/\/$/,'')+'/tree/main/public/records/'+dir;
-  if(https(row.url).href!==expected||https(row.repoUrl).href!==expectedRepo)throw new Error('상세/원본 링크 오류: '+dir);
+  const repoBase=repo.href.replace(/\/$/,'')+'/tree/main/';
+  const repoPaths=['public/records/'+dir,'records/'+dir];
+  const recordPath=repoPaths.find(path=>repoBase+path===https(row.repoUrl).href);
+  if(https(row.url).href!==expected||!recordPath)throw new Error('상세/원본 링크 오류: '+dir);
   seen.add(dir);
-  return {...(typeof row.listTitle==='string'&&row.listTitle.length?{listTitle:row.listTitle,inputName:row.inputName,inputKind:row.inputKind,sourceTitle:row.sourceTitle}:{}),visibility:'public',label:title,title,chatTitle:title,date,dateSource:'archive-canonical',titleSource:row.listTitle?(row.titleSource||'inbox-name'):'archive-canonical',url:row.url,repoUrl:row.repoUrl,category:text(row.kind)||'아카이브',summary:text(row.desc),directory:dir,recordPath:'public/records/'+dir};
+  return {...(typeof row.listTitle==='string'&&row.listTitle.length?{listTitle:row.listTitle,inputName:row.inputName,inputKind:row.inputKind,sourceTitle:row.sourceTitle}:{}),visibility:'public',label:title,title,chatTitle:title,date,dateSource:'archive-canonical',titleSource:row.listTitle?(row.titleSource||'inbox-name'):'archive-canonical',url:row.url,repoUrl:row.repoUrl,category:text(row.kind)||'아카이브',summary:text(row.desc),directory:dir,recordPath};
  });
 }
 async function syncPublishedArchive(p){
