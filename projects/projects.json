@@ -60,6 +60,26 @@
       "deploymentNote": "실제 콘텐츠는 프로젝트 저장소에 보존하고 중앙 목록은 배포된 HTML의 archive-data를 직접 조회합니다.",
       "links": [
         {
+          "visibility": "public",
+          "label": "20261009 지주대 삽입기 구매기록",
+          "title": "20261009 지주대 삽입기 구매기록",
+          "chatTitle": "20261009 지주대 삽입기 구매기록",
+          "date": "2026-10-09",
+          "url": "https://softm.github.io/hwagok-farm/records/20261009-stake-inserter-purchase/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20261009-stake-inserter-purchase",
+          "category": "농기구 구매",
+          "summary": "지주대 삽입기 주문 2건 · 표시금액 합계 26,300원 · 원본 이미지 2장. 선택 옵션·호환 규격 미확인.",
+          "files": {
+            "images": 2,
+            "videos": 0,
+            "audio": 0,
+            "documents": 0
+          },
+          "count": 2,
+          "directory": "20261009-stake-inserter-purchase",
+          "recordPath": "public/records/20261009-stake-inserter-purchase"
+        },
+        {
           "visibility": "private",
           "label": "20261009_Temu_농자재_구매내역",
           "title": "20261009_Temu_농자재_구매내역",
@@ -633,25 +653,25 @@
       "publicHomeStatus": "github-pages-home-generated",
       "privateEntryPolicy": "Vercel Authentication required; direct deep link after authentication",
       "vercelAccountAuthVerified": true,
-      "homePublicListCount": 34,
+      "homePublicListCount": 35,
       "homePrivateListCount": 2,
       "publicIndexSource": {
         "url": "https://softm.github.io/hwagok-farm/",
         "format": "html-archive-data"
       },
-      "pageCount": 34,
+      "pageCount": 35,
       "publicIndexSnapshot": {
         "source": "https://softm.github.io/hwagok-farm/",
-        "recordCount": 34,
+        "recordCount": 35,
         "purpose": "build snapshot; browsers refresh from the deployed source on every page load"
       },
       "privateRepo": "hwagok-farm-private",
       "privateRepoUrl": "https://github.com/softm/hwagok-farm-private",
       "privateUrl": "https://hwagok-farm-private.vercel.app/",
       "privatePageCount": 2,
-      "latestTitle": "화곡농장 분무기 편사호스 사진정리",
+      "latestTitle": "20261009 지주대 삽입기 구매기록",
       "authProvider": "vercel-sso",
-      "totalRecordCount": 36,
+      "totalRecordCount": 37,
       "archiveLastPublishedAt": "2026-10-07T13:23:41.343220+00:00",
       "lastArchiveBatch": "20261008-hwagok-media-inbox",
       "privateDeliveryStatus": "authenticated-github-live",
