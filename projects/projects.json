@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-10-09",
+  "updatedAt": "2026-09-30",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -60,25 +60,19 @@
       "deploymentNote": "실제 콘텐츠는 프로젝트 저장소에 보존하고 중앙 목록은 배포된 HTML의 archive-data를 직접 조회합니다.",
       "links": [
         {
-          "visibility": "private",
-          "label": "20261009_Temu_농자재_구매내역",
-          "title": "20261009_Temu_농자재_구매내역",
-          "listTitle": "20261009_Temu_농자재_구매내역",
+          "visibility": "public",
+          "label": "20261009 지주대 삽입기 구매기록",
+          "title": "20261009 지주대 삽입기 구매기록",
+          "chatTitle": "20261009 지주대 삽입기 구매기록",
           "date": "2026-10-09",
-          "url": "https://hwagok-farm-private.vercel.app/records/20261009-temu-farm-supplies/",
-          "repoUrl": "https://github.com/softm/hwagok-farm-private/tree/main/records/20261009-temu-farm-supplies",
-          "category": "농자재 구매",
-          "summary": "Temu 농자재·생활용품 7종 구매 기록. 원본 주문 이미지 1개는 인증 후 열람.",
-          "directory": "20261009-temu-farm-supplies",
-          "recordPath": "records/20261009-temu-farm-supplies",
-          "files": {
-            "images": 1,
-            "videos": 0,
-            "audio": 0,
-            "documents": 0
-          },
-          "delivery": "authenticated-github-live-read",
-          "publicMetadataApproved": true
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/hwagok-farm/records/20261009-stake-inserter-purchase/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20261009-stake-inserter-purchase",
+          "category": "농기구 구매",
+          "summary": "지주대 삽입기 주문 2건 · 표시금액 합계 26,300원 · 원본 이미지 2장. 선택 옵션·호환 규격 미확인.",
+          "directory": "20261009-stake-inserter-purchase",
+          "recordPath": "public/records/20261009-stake-inserter-purchase"
         },
         {
           "visibility": "public",
@@ -612,6 +606,27 @@
         },
         {
           "visibility": "private",
+          "label": "20261009_Temu_농자재_구매내역",
+          "title": "20261009_Temu_농자재_구매내역",
+          "listTitle": "20261009_Temu_농자재_구매내역",
+          "date": "2026-10-09",
+          "url": "https://hwagok-farm-private.vercel.app/records/20261009-temu-farm-supplies/",
+          "repoUrl": "https://github.com/softm/hwagok-farm-private/tree/main/records/20261009-temu-farm-supplies",
+          "category": "농자재 구매",
+          "summary": "Temu 농자재·생활용품 7종 구매 기록. 원본 주문 이미지 1개는 인증 후 열람.",
+          "directory": "20261009-temu-farm-supplies",
+          "recordPath": "records/20261009-temu-farm-supplies",
+          "files": {
+            "images": 1,
+            "videos": 0,
+            "audio": 0,
+            "documents": 0
+          },
+          "delivery": "authenticated-github-live-read",
+          "publicMetadataApproved": true
+        },
+        {
+          "visibility": "private",
           "label": "화곡농장 농지 증여·자경·농업경영체 검토 정리",
           "title": "화곡농장 농지 증여·자경·농업경영체 검토 정리",
           "chatTitle": "화곡농장 농지 증여·자경·농업경영체 검토 정리",
@@ -633,27 +648,29 @@
       "publicHomeStatus": "github-pages-home-generated",
       "privateEntryPolicy": "Vercel Authentication required; direct deep link after authentication",
       "vercelAccountAuthVerified": true,
-      "homePublicListCount": 34,
+      "homePublicListCount": 35,
       "homePrivateListCount": 2,
       "publicIndexSource": {
         "url": "https://softm.github.io/hwagok-farm/",
         "format": "html-archive-data"
       },
-      "pageCount": 34,
+      "pageCount": 35,
       "publicIndexSnapshot": {
         "source": "https://softm.github.io/hwagok-farm/",
-        "recordCount": 34,
+        "recordCount": 35,
         "purpose": "build snapshot; browsers refresh from the deployed source on every page load"
       },
       "privateRepo": "hwagok-farm-private",
       "privateRepoUrl": "https://github.com/softm/hwagok-farm-private",
       "privateUrl": "https://hwagok-farm-private.vercel.app/",
       "privatePageCount": 2,
-      "latestTitle": "화곡농장 분무기 편사호스 사진정리",
+      "latestTitle": "20261009 지주대 삽입기 구매기록",
       "authProvider": "vercel-sso",
-      "totalRecordCount": 36,
+      "totalRecordCount": 37,
       "archiveLastPublishedAt": "2026-10-07T13:23:41.343220+00:00",
-      "lastArchiveBatch": "20261008-hwagok-media-inbox"
+      "lastArchiveBatch": "20261008-hwagok-media-inbox",
+      "privateDeliveryStatus": "authenticated-github-live",
+      "privateVerificationStatus": "runtime-http-verified-browser-pending"
     },
     {
       "order": 2,
@@ -1863,7 +1880,12 @@
           "originalPhotoCount": 0,
           "diagramCount": 4
         }
-      ]
+      ],
+      "previousHomeUrl": "https://softm.github.io/projects/farm/",
+      "projectHomeUrl": "https://softm.github.io/projects/farm/",
+      "publicHomeStatus": "github-pages-home-generated",
+      "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
+      "vercelAccountAuthVerified": false
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
