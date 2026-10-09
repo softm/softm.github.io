@@ -1893,10 +1893,10 @@
         },
         {
           "visibility": "public",
-          "label": "herbicide-guide-20261009.zip",
+          "label": "제초제 분류와 제품 비교 — 대화 전체 재정리",
           "listTitle": "herbicide-guide-20261009.zip",
-          "title": "herbicide-guide-20261009.zip",
-          "sourceTitle": "제초제 분류 및 사용 가이드",
+          "title": "제초제 분류와 제품 비교 — 대화 전체 재정리",
+          "sourceTitle": "제초제 분류와 제품 비교 — 대화 전체 재정리",
           "date": "2026-10-09",
           "url": "https://softm.github.io/farm/records/20261009-herbicide-classification/",
           "repoUrl": "https://github.com/softm/farm/tree/main/records/20261009-herbicide-classification",
@@ -1906,7 +1906,11 @@
           "recordPath": "records/20261009-herbicide-classification",
           "sourceIntegrityComplete": false,
           "originalPhotoCount": 0,
-          "expectedOriginalPhotoCount": 9
+          "expectedOriginalPhotoCount": 9,
+          "chatTitle": "제초제 분류와 제품 비교 — 대화 전체 재정리",
+          "titleSource": "user-override",
+          "inputName": "herbicide-guide-20261009.zip",
+          "inputKind": "zip"
         },
         {
           "visibility": "public",
