@@ -61,6 +61,24 @@
       "links": [
         {
           "visibility": "public",
+          "label": "20261009 화곡농장 보유 농약 정리",
+          "title": "20261009 화곡농장 보유 농약 정리",
+          "date": "2026-10-09",
+          "url": "https://softm.github.io/hwagok-farm/records/20261009-herbicide-inventory/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20261009-herbicide-inventory",
+          "category": "방제 · 농약 관리",
+          "summary": "보유 제초제 4종 비교 및 농약사 상담. 원본 사진 8장 미게시로 보완 필요.",
+          "files": {
+            "images": 0,
+            "videos": 0,
+            "audio": 0,
+            "documents": 0
+          },
+          "directory": "20261009-herbicide-inventory",
+          "recordPath": "public/records/20261009-herbicide-inventory"
+        },
+        {
+          "visibility": "public",
           "label": "20261009 지주대 삽입기 구매기록",
           "title": "20261009 지주대 삽입기 구매기록",
           "chatTitle": "20261009 지주대 삽입기 구매기록",
