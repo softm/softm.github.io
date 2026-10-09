@@ -1,5 +1,5 @@
 {
-  "version": "20261008-inbox-list-title-v22",
+  "version": "20261010-partial-project-visible-v23",
   "projectCount": 11,
   "projects": [
     {
@@ -8,7 +8,7 @@
       "homeUrl": "https://softm.github.io/projects/hwagok-farm/",
       "publicEntries": 37,
       "privateEntries": 1,
-      "htmlSha256": "5ad10f11a73db9960076635b9cf0432f1cca1b2e4e110146cf4fab3acfb974dd",
+      "htmlSha256": "d38ef7e8f504d686a26636103ec54e6a6d85e6493090495d459ded6ce9aab8c8",
       "authenticatedContentVerified": false
     },
     {
@@ -17,7 +17,7 @@
       "homeUrl": "https://softm.github.io/projects/baksok/",
       "publicEntries": 1,
       "privateEntries": 2,
-      "htmlSha256": "9a8dbb628bf97eaee1a6250bda24acf29b17b79277c96022f2925f073ec1489e",
+      "htmlSha256": "9ffa33ba47a06b6215d9cf2cbdc93be70a44b34d523ab8199071ac25b3089710",
       "authenticatedContentVerified": false
     },
     {
@@ -26,7 +26,7 @@
       "homeUrl": "https://softm.github.io/projects/farmland-policy-map/",
       "publicEntries": 1,
       "privateEntries": 0,
-      "htmlSha256": "cc30b12f04ae2621b9952b47e0cc9f818dc42d2d36e4e0eb1fcf1649f71db66f",
+      "htmlSha256": "2c08b32d74761a40188f3c97631cd70922df2bff2822e5fd2d1ce2717883cd97",
       "authenticatedContentVerified": false
     },
     {
@@ -35,7 +35,7 @@
       "homeUrl": "https://softm.github.io/projects/gwangmyeong/",
       "publicEntries": 1,
       "privateEntries": 3,
-      "htmlSha256": "cbe31ab0e0ce74acd7244543f922a5678600423c3be79e856c693d4f81726eee",
+      "htmlSha256": "2334a1206a7b41c07cf945ba9859dea0bfeab0b01e79f02ea29052d4737538b1",
       "authenticatedContentVerified": false
     },
     {
@@ -44,7 +44,7 @@
       "homeUrl": "https://softm.github.io/projects/ungdo/",
       "publicEntries": 0,
       "privateEntries": 9,
-      "htmlSha256": "1852dca35743e94a6b08a7fb2ed0c7cdd55821dd739de1560df7ab7c8ee86bb4",
+      "htmlSha256": "52093a9ae40ab74d1d4c1712e6b831d55207a8136e35a9414b9fa8beaf205fcc",
       "authenticatedContentVerified": false
     },
     {
@@ -53,7 +53,7 @@
       "homeUrl": "https://softm.github.io/projects/onsuhill/",
       "publicEntries": 0,
       "privateEntries": 2,
-      "htmlSha256": "3aae613b1440f0985b38cca7dd679e7d927d8be33692a4521588b139e2c4823b",
+      "htmlSha256": "f6ee60205157d8c199803fca201092d512b5613beae3c4380da29ed0363e6531",
       "authenticatedContentVerified": false
     },
     {
@@ -62,7 +62,7 @@
       "homeUrl": "https://softm.github.io/projects/hwagok-land-permit/",
       "publicEntries": 0,
       "privateEntries": 3,
-      "htmlSha256": "53f46438ea1f275e37e2fcfbf5d1b030a1f2b4bf222f4df5fdc9e5c7b8b3f375",
+      "htmlSha256": "75fefa54edf09966bb11daeec622482e3633cd8383a4570b0f5a0b73d7827896",
       "authenticatedContentVerified": false
     },
     {
@@ -71,7 +71,7 @@
       "homeUrl": "https://softm.github.io/projects/father-hospital-treatment/",
       "publicEntries": 0,
       "privateEntries": 5,
-      "htmlSha256": "61f4cef0cb5807ed827c90750cf7d6eb66b404e828d94e49888e430b87ed5aa9",
+      "htmlSha256": "acf33f6dbdc5d4af99de03f028d4c96211ce1233992351ccb575d321e34140cd",
       "authenticatedContentVerified": false
     },
     {
@@ -80,7 +80,7 @@
       "homeUrl": "https://softm.github.io/projects/yeonseo/",
       "publicEntries": 1,
       "privateEntries": 8,
-      "htmlSha256": "10c350163a5515198917e9fe6628d148b8b1710bc7c03c1f9880dfed93334791",
+      "htmlSha256": "c38673369b47f68e4b01d60a544013391f565ea54c1bc485257788119b626422",
       "authenticatedContentVerified": false
     },
     {
@@ -89,7 +89,7 @@
       "homeUrl": "https://softm.github.io/projects/mine/",
       "publicEntries": 0,
       "privateEntries": 8,
-      "htmlSha256": "cd7453c8f0ababe08e7f5d0ca918368049f476806393a4b8149fe1379e1ce32f",
+      "htmlSha256": "c178248d8487650ad2de492781acaf1469e43c195dfdd183cee55c407aa9158c",
       "authenticatedContentVerified": false
     },
     {
@@ -98,7 +98,7 @@
       "homeUrl": "https://softm.github.io/projects/farm/",
       "publicEntries": 3,
       "privateEntries": 1,
-      "htmlSha256": "6d4f116414cd2aa9b1cd558edd73f63d5b01d323cba9698d6143ba5e1ce73ee2",
+      "htmlSha256": "f8ffc89c4675db70b2c91da67e65f507ef5cbca5e7e43f6756dcd034a123472a",
       "authenticatedContentVerified": false
     }
   ],
