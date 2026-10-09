@@ -75,17 +75,19 @@
           "recordPath": "public/records/20261009-herbicide-classification"
         },
         {
+          "listTitle": "20261009 화곡농장 보유 농약 정리",
+          "inputName": "20261009 화곡농장 보유 농약 정리",
           "visibility": "public",
           "label": "20261009 화곡농장 보유 농약 정리",
           "title": "20261009 화곡농장 보유 농약 정리",
           "chatTitle": "20261009 화곡농장 보유 농약 정리",
           "date": "2026-10-09",
           "dateSource": "archive-canonical",
-          "titleSource": "archive-canonical",
+          "titleSource": "inbox-name",
           "url": "https://softm.github.io/hwagok-farm/records/20261009-herbicide-inventory/",
           "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20261009-herbicide-inventory",
           "category": "방제 · 농약 관리",
-          "summary": "보유 제초제 큰사미·하늘아래·확타·타랑 비교와 농약사 상담 요약. 원본 사진 8장 배포 보완 중.",
+          "summary": "농약 보유목록·상담기록. 원본 이미지 8장 ZIP 준비, 웹 서버 미업로드",
           "directory": "20261009-herbicide-inventory",
           "recordPath": "public/records/20261009-herbicide-inventory"
         },
