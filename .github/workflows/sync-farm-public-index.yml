@@ -1,0 +1,112 @@
+name: Sync farm public archive index
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/sync-farm-public-index.yml']
+permissions:
+  contents: write
+concurrency:
+  group: farm-public-index-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Update only farm metadata and its public home
+        run: |
+          python - <<'PY'
+          import copy, json, os, pathlib, subprocess, tempfile, urllib.request
+          root = pathlib.Path.cwd()
+          url = 'https://softm.github.io/farm/archive-index.json'
+          with urllib.request.urlopen(url, timeout=30) as response:
+              catalog = json.load(response)
+          assert catalog['repository'] == 'softm/farm'
+          assert isinstance(catalog['records'], list) and catalog['records']
+          links = []
+          for r in catalog['records']:
+              assert r['visibility'] == 'public'
+              assert r['url'] == 'https://softm.github.io/farm/records/' + r['slug'] + '/'
+              assert r['repoUrl'] == 'https://github.com/softm/farm/tree/main/records/' + r['slug']
+              links.append({'visibility':'public','label':r['listTitle'],'listTitle':r['listTitle'],
+                  'title':r['listTitle'],'chatTitle':r['listTitle'],'sourceTitle':r['sourceTitle'],
+                  'date':r['date'],'dateSource':r['dateBasis'],'titleSource':'inbox-name',
+                  'url':r['url'],'repoUrl':r['repoUrl'],'category':r['kind'],
+                  'summary':r['description'],'directory':r['slug'],'recordPath':'records/'+r['slug'],
+                  'sourceIntegrityComplete':r['sourceIntegrityComplete'],
+                  'originalPhotoCount':r['originalPhotoCount'],'diagramCount':r['diagramCount']})
+          complete = all(r['sourceIntegrityComplete'] for r in catalog['records'])
+          patch = r'''  if(source.format==='json-archive-index' && p.repo==='farm'){
+            const root=https(p.publicUrl),expected=new URL('archive-index.json',root).href;
+            if(root.origin!==ORIGIN||root.pathname!=='/farm/'||source.url!==expected)throw new Error('농업 목록 원본 경로 오류');
+            const response=await fetch(expected+'?archive-sync='+Date.now(),{cache:'no-store',credentials:'omit',redirect:'error',signal:controller.signal});
+            if(!response.ok)throw new Error('HTTP '+response.status);
+            const raw=await response.text();if(raw.length>2500000)throw new Error('공개 목록 크기 초과');
+            const data=JSON.parse(raw);if(data.repository!=='softm/farm'||!Array.isArray(data.records))throw new Error('농업 목록 형식 오류');
+            const seen=new Set(),links=data.records.map(r=>{
+              const id=text(r.slug),title=r.listTitle,date=text(r.date);
+              if(!/^[A-Za-z0-9_-]+$/.test(id)||typeof title!=='string'||!title||!validDate(date)||seen.has(id))throw new Error('농업 기록 메타데이터 오류');
+              if(r.visibility!=='public'||r.url!==root.href+'records/'+id+'/'||r.repoUrl!=='https://github.com/softm/farm/tree/main/records/'+id)throw new Error('농업 기록 링크 오류');seen.add(id);
+              return {visibility:'public',listTitle:title,label:title,title,chatTitle:title,sourceTitle:r.sourceTitle,date,dateSource:r.dateBasis,titleSource:'inbox-name',url:r.url,repoUrl:r.repoUrl,category:r.kind||'재배',summary:(r.description||'')+(r.sourceIntegrityComplete?'':' · 원본 사진 업로드 대기, 미리보기 제공'),directory:id,recordPath:'records/'+id,sourceIntegrityComplete:r.sourceIntegrityComplete,originalPhotoCount:r.originalPhotoCount,diagramCount:r.diagramCount};
+            });
+            p.links=[...links,...(p.links||[]).filter(x=>x.visibility==='private')];p.homePublicListCount=links.length;p.pageCount=links.length;p.homePrivateListCount=p.links.filter(x=>x.visibility==='private').length;
+            p.mediaStatus=data.records.every(r=>r.sourceIntegrityComplete)?'원본 파일 해시 확인':'도식 4개 공개 · 원본 사진 업로드 대기 · 미리보기는 별도 구분';
+            p.archiveSync={status:'ok',source:expected,count:links.length};return;
+           }
+          '''
+          def update(base):
+              f=base/'projects/projects.json';data=json.loads(f.read_text())
+              before=[copy.deepcopy(p) for p in data['projects'] if p.get('repo')!='farm']
+              candidates=[p for p in data['projects'] if p.get('repo')=='farm']
+              assert len(candidates)<=1
+              if candidates: p=candidates[0]
+              else:
+                  p={'repo':'farm','order':max([x.get('order',0) for x in data['projects']]+[0])+1}
+                  data['projects'].append(p)
+              p.update({'title':'농업·농사','description':'농업·농사 통합 공개 아카이브 — 재배 도식과 영농 기록',
+                  'category':'농업','deploymentStatus':'deployed' if complete else 'partial','repoStatus':'available',
+                  'publicRepo':'farm','publicRepoUrl':'https://github.com/softm/farm',
+                  'publicUrl':'https://softm.github.io/farm/','homeUrl':'https://softm.github.io/projects/farm/',
+                  'publicIndexSource':{'url':url,'format':'json-archive-index'},
+                  'mediaStatus':'도식 4개 · 원본 사진 확인' if complete else '도식 4개 공개 · 원본 사진 업로드 대기 · 미리보기 제공',
+                  'deploymentNote':'공개 사이트의 archive-index.json에서 기록 목록과 원본 확보 상태를 직접 조회합니다.',
+                  'homePublicListCount':len(links),'homePrivateListCount':0,'pageCount':len(links),'links':links})
+              assert before==[p for p in data['projects'] if p.get('repo')!='farm']
+              data['updatedAt']='2026-10-09'
+              f.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+              home=base/'projects/farm/index.html';home.parent.mkdir(parents=True,exist_ok=True)
+              template=(base/'projects/index.html').read_text()
+              home.write_text(template.replace('data-project=""','data-project="farm"').replace('<title>전체 프로젝트 · SOFTM</title>','<title>농업·농사 · SOFTM</title>').replace('<h1 id="title">전체 프로젝트</h1>','<h1 id="title">농업·농사</h1>'))
+              js=base/'projects/archive-sync.js';text=js.read_text()
+              if "source.format==='json-archive-index' && p.repo==='farm'" not in text:
+                  anchor=' try{\n  const root=https(p.publicUrl),sourceUrl=https(source.url);'
+                  assert text.count(anchor)==1
+                  text=text.replace(anchor,' try{\n'+patch+'  const root=https(p.publicUrl),sourceUrl=https(source.url);')
+                  js.write_text(text)
+          def git(base,*args):
+              subprocess.run(['git','-C',str(base),*args],check=True)
+          def commit(base,branch):
+              git(base,'config','user.name','github-actions[bot]')
+              git(base,'config','user.email','41898282+github-actions[bot]@users.noreply.github.com')
+              git(base,'add','--','projects/projects.json','projects/farm/index.html','projects/archive-sync.js')
+              different=subprocess.run(['git','-C',str(base),'diff','--cached','--quiet']).returncode
+              if different:
+                  git(base,'commit','-m','Register farm public archive and live canonical catalog')
+                  git(base,'pull','--rebase','origin',branch)
+                  git(base,'push','origin','HEAD:'+branch)
+          update(root)
+          subprocess.run(['node','--check','projects/archive-sync.js'],check=True)
+          subprocess.run(['node','projects/archive-sync.test.cjs'],check=True)
+          commit(root,'main')
+          git(root,'fetch','origin','gh-pages')
+          target=pathlib.Path(tempfile.mkdtemp())/'pages'
+          git(root,'worktree','add',str(target),'origin/gh-pages')
+          update(target)
+          commit(target,'gh-pages')
+          print(json.dumps({'registered':'farm','publicRecords':len(links),'sourceIntegrityComplete':complete,'unrelatedProjectsChanged':False},ensure_ascii=False))
+          PY
