@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-10-09",
+  "updatedAt": "2026-09-30",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -136,8 +136,7 @@
           "category": "영농 기록",
           "summary": "입력 폴더 원본 사진 53개·영상 10개. 폴더명 그대로 제목을 사용하며 원본 파일을 보존합니다.",
           "directory": "20260913-scallion-planting",
-          "recordPath": "public/records/20260913-scallion-planting",
-          "attachmentsUrl": "https://softm.github.io/hwagok-farm/records/20260913-scallion-planting/inbox-c76cf36930-viewer.html"
+          "recordPath": "public/records/20260913-scallion-planting"
         },
         {
           "listTitle": "20260913 열무왕무밭 물주고 이음 재배중",
@@ -156,8 +155,7 @@
           "category": "영농 기록",
           "summary": "입력 폴더 원본 사진 52개·영상 12개. 폴더명 그대로 제목을 사용하며 원본 파일을 보존합니다.",
           "directory": "20260913-radish-irrigation",
-          "recordPath": "public/records/20260913-radish-irrigation",
-          "attachmentsUrl": "https://softm.github.io/hwagok-farm/records/20260913-radish-irrigation/inbox-94582b8d9e-viewer.html"
+          "recordPath": "public/records/20260913-radish-irrigation"
         },
         {
           "listTitle": "20260913 씨박 수확",
@@ -176,8 +174,7 @@
           "category": "영농 기록",
           "summary": "입력 폴더 원본 사진 17개·영상 5개. 폴더명 그대로 제목을 사용하며 원본 파일을 보존합니다.",
           "directory": "20260913-seed-gourd-harvest",
-          "recordPath": "public/records/20260913-seed-gourd-harvest",
-          "attachmentsUrl": "https://softm.github.io/hwagok-farm/records/20260913-seed-gourd-harvest/inbox-35db2f5c96-viewer.html"
+          "recordPath": "public/records/20260913-seed-gourd-harvest"
         },
         {
           "visibility": "public",
@@ -256,8 +253,7 @@
           "category": "영농 기록",
           "summary": "입력 폴더 원본 사진 23개·영상 8개. 폴더명 그대로 제목을 사용하며 원본 파일을 보존합니다.",
           "directory": "20260905-radish-sowing",
-          "recordPath": "public/records/20260905-radish-sowing",
-          "attachmentsUrl": "https://softm.github.io/hwagok-farm/records/20260905-radish-sowing/inbox-7df15f1cdc-viewer.html"
+          "recordPath": "public/records/20260905-radish-sowing"
         },
         {
           "visibility": "public",
@@ -626,7 +622,7 @@
       "publicIndexSnapshot": {
         "source": "https://softm.github.io/hwagok-farm/",
         "recordCount": 34,
-        "purpose": "verified public input-folder batch; private metadata preserved"
+        "purpose": "build snapshot; browsers refresh from the deployed source on every page load"
       },
       "privateRepo": "hwagok-farm-private",
       "privateRepoUrl": "https://github.com/softm/hwagok-farm-private",
