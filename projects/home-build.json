@@ -6,9 +6,9 @@
       "repo": "hwagok-farm",
       "title": "화곡농장",
       "homeUrl": "https://softm.github.io/projects/hwagok-farm/",
-      "publicEntries": 30,
+      "publicEntries": 34,
       "privateEntries": 1,
-      "htmlSha256": "f9f92b47c74835c6b8674aff8af79d1f030a586d4d962ab44d68790ee2c9f527",
+      "htmlSha256": "a4ad50a7b75d992a23acc3919356f5d200e37bfa89cea62ff867fbbf4e208b8a",
       "authenticatedContentVerified": false
     },
     {
@@ -16,8 +16,8 @@
       "title": "서해박속낙지",
       "homeUrl": "https://softm.github.io/projects/baksok/",
       "publicEntries": 1,
-      "privateEntries": 1,
-      "htmlSha256": "bc3f6309b06f42ff976c323a6db32b72c8c7d42b441dc78be596aea54a41557c",
+      "privateEntries": 2,
+      "htmlSha256": "9a8dbb628bf97eaee1a6250bda24acf29b17b79277c96022f2925f073ec1489e",
       "authenticatedContentVerified": false
     },
     {
