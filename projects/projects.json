@@ -1865,10 +1865,33 @@
       },
       "mediaStatus": "스프링클러 기록: 대화 첨부 이미지 3개(고유 2개)·원본 ZIP 보존 및 해시 확인. 박 기록 원본 사진은 별도 상태를 따름.",
       "deploymentNote": "공개 사이트의 archive-index.json에서 기록 목록과 원본 확보 상태를 직접 조회합니다.",
-      "homePublicListCount": 3,
+      "homePublicListCount": 4,
       "homePrivateListCount": 1,
       "pageCount": 4,
       "links": [
+        {
+          "visibility": "public",
+          "title": "지주대 삽입기 구매기록",
+          "label": "지주대 삽입기 구매기록",
+          "chatTitle": "지주대 삽입기 구매기록",
+          "listTitle": "20261009_지주대_삽입기_구매기록.zip",
+          "sourceTitle": "지주대 삽입기 구매기록",
+          "titleSource": "user-override",
+          "date": "2026-10-09",
+          "url": "https://softm.github.io/farm/records/20261009-stake-inserter-purchase/",
+          "repoUrl": "https://github.com/softm/farm/tree/main/records/20261009-stake-inserter-purchase",
+          "category": "농기구 구매",
+          "summary": "주문 2건 · 표시금액 합계 26,300원 · 원본 이미지 2장. 선택 옵션·호환 규격 미확인.",
+          "files": {
+            "images": 2,
+            "videos": 0,
+            "audio": 0,
+            "documents": 0
+          },
+          "count": 2,
+          "directory": "20261009-stake-inserter-purchase",
+          "recordPath": "records/20261009-stake-inserter-purchase"
+        },
         {
           "visibility": "private",
           "label": "20261009_Temu_농자재_구매내역",
@@ -1961,13 +1984,14 @@
       "publicHomeStatus": "github-pages-home-generated",
       "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
       "vercelAccountAuthVerified": false,
-      "totalRecordCount": 4,
+      "totalRecordCount": 5,
       "privateRepo": "farm-private",
       "privateRepoUrl": "https://github.com/softm/farm-private",
       "privateUrl": "https://farm-private-softms-projects.vercel.app/",
       "privatePageCount": 1,
       "privateDeliveryStatus": "vercel-authenticated",
-      "privateVerificationStatus": "authenticated-http-verified"
+      "privateVerificationStatus": "authenticated-http-verified",
+      "latestTitle": "지주대 삽입기 구매기록"
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
