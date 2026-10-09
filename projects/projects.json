@@ -1886,10 +1886,27 @@
       },
       "mediaStatus": "공개 기록 2개 · 스프링클러 기록은 원본 이미지 2장·ZIP 바이너리 업로드 대기.",
       "deploymentNote": "공개 사이트의 archive-index.json에서 기록 목록과 원본 확보 상태를 직접 조회합니다.",
-      "homePublicListCount": 2,
+      "homePublicListCount": 3,
       "homePrivateListCount": 0,
-      "pageCount": 2,
+      "pageCount": 3,
       "links": [
+        {
+          "visibility": "public",
+          "label": "herbicide-guide-20261009.zip",
+          "listTitle": "herbicide-guide-20261009.zip",
+          "title": "herbicide-guide-20261009.zip",
+          "sourceTitle": "제초제 분류 및 사용 가이드",
+          "date": "2026-10-09",
+          "url": "https://softm.github.io/farm/records/20261009-herbicide-classification/",
+          "repoUrl": "https://github.com/softm/farm/tree/main/records/20261009-herbicide-classification",
+          "category": "방제 · 농약 관리",
+          "summary": "제초제 분류 비교 및 원본 사진 9장 웹 업로드 대기",
+          "directory": "20261009-herbicide-classification",
+          "recordPath": "records/20261009-herbicide-classification",
+          "sourceIntegrityComplete": false,
+          "originalPhotoCount": 0,
+          "expectedOriginalPhotoCount": 9
+        },
         {
           "visibility": "public",
           "label": "20261009_박_적심도식_정리_MD_HTML_전체자료.zip",
@@ -1936,7 +1953,7 @@
       "publicHomeStatus": "github-pages-home-generated",
       "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
       "vercelAccountAuthVerified": false,
-      "totalRecordCount": 2
+      "totalRecordCount": 3
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
