@@ -636,27 +636,6 @@
         },
         {
           "visibility": "private",
-          "label": "20261009_Temu_농자재_구매내역",
-          "title": "20261009_Temu_농자재_구매내역",
-          "listTitle": "20261009_Temu_농자재_구매내역",
-          "date": "2026-10-09",
-          "url": "https://hwagok-farm-private.vercel.app/records/20261009-temu-farm-supplies/",
-          "repoUrl": "https://github.com/softm/hwagok-farm-private/tree/main/records/20261009-temu-farm-supplies",
-          "category": "농자재 구매",
-          "summary": "Temu 농자재·생활용품 7종 구매 기록. 원본 주문 이미지 1개는 인증 후 열람.",
-          "directory": "20261009-temu-farm-supplies",
-          "recordPath": "records/20261009-temu-farm-supplies",
-          "files": {
-            "images": 1,
-            "videos": 0,
-            "audio": 0,
-            "documents": 0
-          },
-          "delivery": "authenticated-github-live-read",
-          "publicMetadataApproved": true
-        },
-        {
-          "visibility": "private",
           "label": "화곡농장 농지 증여·자경·농업경영체 검토 정리",
           "title": "화곡농장 농지 증여·자경·농업경영체 검토 정리",
           "chatTitle": "화곡농장 농지 증여·자경·농업경영체 검토 정리",
@@ -679,7 +658,7 @@
       "privateEntryPolicy": "Vercel Authentication required; direct deep link after authentication",
       "vercelAccountAuthVerified": true,
       "homePublicListCount": 37,
-      "homePrivateListCount": 2,
+      "homePrivateListCount": 1,
       "publicIndexSource": {
         "url": "https://softm.github.io/hwagok-farm/",
         "format": "html-archive-data"
@@ -693,10 +672,10 @@
       "privateRepo": "hwagok-farm-private",
       "privateRepoUrl": "https://github.com/softm/hwagok-farm-private",
       "privateUrl": "https://hwagok-farm-private.vercel.app/",
-      "privatePageCount": 2,
+      "privatePageCount": 1,
       "latestTitle": "20261009 지주대 삽입기 구매기록",
       "authProvider": "vercel-sso",
-      "totalRecordCount": 39,
+      "totalRecordCount": 38,
       "archiveLastPublishedAt": "2026-10-07T13:23:41.343220+00:00",
       "lastArchiveBatch": "20261008-hwagok-media-inbox",
       "privateDeliveryStatus": "authenticated-github-live",
@@ -1887,9 +1866,31 @@
       "mediaStatus": "공개 기록 2개 · 스프링클러 기록은 원본 이미지 2장·ZIP 바이너리 업로드 대기.",
       "deploymentNote": "공개 사이트의 archive-index.json에서 기록 목록과 원본 확보 상태를 직접 조회합니다.",
       "homePublicListCount": 3,
-      "homePrivateListCount": 0,
+      "homePrivateListCount": 1,
       "pageCount": 3,
       "links": [
+        {
+          "visibility": "private",
+          "label": "20261009_Temu_농자재_구매내역",
+          "title": "20261009_Temu_농자재_구매내역",
+          "listTitle": "20261009_Temu_농자재_구매내역",
+          "date": "2026-10-09",
+          "url": "https://farm-private-softms-projects.vercel.app/records/20261009-temu-farm-supplies/",
+          "repoUrl": "https://github.com/softm/farm-private/tree/main/records/20261009-temu-farm-supplies",
+          "category": "농자재 구매",
+          "summary": "Temu 농자재·생활용품 7종 구매 기록. 원본 주문 이미지 1개는 인증 후 열람.",
+          "directory": "20261009-temu-farm-supplies",
+          "recordPath": "records/20261009-temu-farm-supplies",
+          "files": {
+            "images": 1,
+            "videos": 0,
+            "audio": 0,
+            "documents": 0
+          },
+          "delivery": "authenticated-vercel-static",
+          "publicMetadataApproved": true,
+          "project": "farm"
+        },
         {
           "visibility": "public",
           "label": "herbicide-guide-20261009.zip",
@@ -1953,7 +1954,13 @@
       "publicHomeStatus": "github-pages-home-generated",
       "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
       "vercelAccountAuthVerified": false,
-      "totalRecordCount": 3
+      "totalRecordCount": 4,
+      "privateRepo": "farm-private",
+      "privateRepoUrl": "https://github.com/softm/farm-private",
+      "privateUrl": "https://farm-private-softms-projects.vercel.app/",
+      "privatePageCount": 1,
+      "privateDeliveryStatus": "vercel-authenticated",
+      "privateVerificationStatus": "deployment-verification-in-progress"
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
