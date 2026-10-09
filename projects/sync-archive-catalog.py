@@ -78,6 +78,10 @@ def sync_catalog():
             continue
         url = source['url']
         parsed = urllib.parse.urlsplit(url)
+        # This source is validated and refreshed by archive-sync.js in the browser.
+        # Preserve its authored snapshot during the HTML-only build synchronizer.
+        if source.get('format') == 'json-archive-index' and project['repo'] == 'farm' and project['publicUrl'] == 'https://softm.github.io/farm/' and url == 'https://softm.github.io/farm/archive-index.json':
+            continue
         if source.get('format') != 'html-archive-data' or parsed.scheme != 'https' or parsed.netloc != 'softm.github.io' or parsed.username or parsed.password or parsed.path.startswith('/projects/') or url != project['publicUrl']:
             raise ValueError('Refusing a private, external or unexpected archive source')
         request_url = url + ('&' if parsed.query else '?') + 'archive-sync=' + str(time.time_ns())
