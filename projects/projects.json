@@ -61,6 +61,22 @@
       "links": [
         {
           "visibility": "public",
+          "label": "20261009 나리온 40mm 전지가위 구매 검토",
+          "title": "20261009 나리온 40mm 전지가위 구매 검토",
+          "chatTitle": "20261009 나리온 40mm 전지가위 구매 검토",
+          "date": "2026-10-09",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/hwagok-farm/records/20261009-narion-pruning-shears/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20261009-narion-pruning-shears",
+          "category": "농기계 · 구매 검토",
+          "summary": "나리온 40mm 베어툴 159,000원 선택 · 컷쏘 배터리 2개 재사용 검토 · 체인오일 제외. 결제 및 실물 배터리 규격 미확인; 첨부 PNG의 웹 배포 대기.",
+          "directory": "20261009-narion-pruning-shears",
+          "recordPath": "public/records/20261009-narion-pruning-shears",
+          "mediaPending": true
+        },
+        {
+          "visibility": "public",
           "label": "20261009 제초제 분류 및 사용 가이드",
           "title": "20261009 제초제 분류 및 사용 가이드",
           "chatTitle": "20261009 제초제 분류 및 사용 가이드",
