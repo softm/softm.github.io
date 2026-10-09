@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-09-30",
+  "updatedAt": "2026-10-09",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -1799,6 +1799,50 @@
       "totalRecordCount": 8,
       "privateSourceStatus": "seven-inbox-folders-preserved-and-indexed",
       "privateVerificationStatus": "authenticated-runtime-not-verified"
+    },
+    {
+      "repo": "farm",
+      "order": 11,
+      "title": "농업·농사",
+      "description": "농업·농사 통합 공개 아카이브 — 재배 도식과 영농 기록",
+      "category": "농업",
+      "deploymentStatus": "partial",
+      "repoStatus": "available",
+      "publicRepo": "farm",
+      "publicRepoUrl": "https://github.com/softm/farm",
+      "publicUrl": "https://softm.github.io/farm/",
+      "homeUrl": "https://softm.github.io/projects/farm/",
+      "publicIndexSource": {
+        "url": "https://softm.github.io/farm/archive-index.json",
+        "format": "json-archive-index"
+      },
+      "mediaStatus": "도식 4개 공개 · 원본 사진 업로드 대기 · 미리보기 제공",
+      "deploymentNote": "공개 사이트의 archive-index.json에서 기록 목록과 원본 확보 상태를 직접 조회합니다.",
+      "homePublicListCount": 1,
+      "homePrivateListCount": 0,
+      "pageCount": 1,
+      "links": [
+        {
+          "visibility": "public",
+          "label": "20261009_박_적심도식_정리_MD_HTML_전체자료.zip",
+          "listTitle": "20261009_박_적심도식_정리_MD_HTML_전체자료.zip",
+          "title": "20261009_박_적심도식_정리_MD_HTML_전체자료.zip",
+          "chatTitle": "20261009_박_적심도식_정리_MD_HTML_전체자료.zip",
+          "sourceTitle": "박 적심 도식화 정리",
+          "date": "2026-10-09",
+          "dateSource": "archive_created",
+          "titleSource": "inbox-name",
+          "url": "https://softm.github.io/farm/records/20261009-bak-cultivation/",
+          "repoUrl": "https://github.com/softm/farm/tree/main/records/20261009-bak-cultivation",
+          "category": "재배",
+          "summary": "적심 전 → 절단 위치 → 적심 후 아들줄기. 도식 4개 중심의 원본 정리.",
+          "directory": "20261009-bak-cultivation",
+          "recordPath": "records/20261009-bak-cultivation",
+          "sourceIntegrityComplete": false,
+          "originalPhotoCount": 0,
+          "diagramCount": 4
+        }
+      ]
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",

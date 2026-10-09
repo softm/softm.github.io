@@ -25,6 +25,23 @@ async function syncPublishedArchive(p){
  if(!source)return;
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
  try{
+  if(source.format==='json-archive-index' && p.repo==='farm'){
+  const root=https(p.publicUrl),expected=new URL('archive-index.json',root).href;
+  if(root.origin!==ORIGIN||root.pathname!=='/farm/'||source.url!==expected)throw new Error('농업 목록 원본 경로 오류');
+  const response=await fetch(expected+'?archive-sync='+Date.now(),{cache:'no-store',credentials:'omit',redirect:'error',signal:controller.signal});
+  if(!response.ok)throw new Error('HTTP '+response.status);
+  const raw=await response.text();if(raw.length>2500000)throw new Error('공개 목록 크기 초과');
+  const data=JSON.parse(raw);if(data.repository!=='softm/farm'||!Array.isArray(data.records))throw new Error('농업 목록 형식 오류');
+  const seen=new Set(),links=data.records.map(r=>{
+    const id=text(r.slug),title=r.listTitle,date=text(r.date);
+    if(!/^[A-Za-z0-9_-]+$/.test(id)||typeof title!=='string'||!title||!validDate(date)||seen.has(id))throw new Error('농업 기록 메타데이터 오류');
+    if(r.visibility!=='public'||r.url!==root.href+'records/'+id+'/'||r.repoUrl!=='https://github.com/softm/farm/tree/main/records/'+id)throw new Error('농업 기록 링크 오류');seen.add(id);
+    return {visibility:'public',listTitle:title,label:title,title,chatTitle:title,sourceTitle:r.sourceTitle,date,dateSource:r.dateBasis,titleSource:'inbox-name',url:r.url,repoUrl:r.repoUrl,category:r.kind||'재배',summary:(r.description||'')+(r.sourceIntegrityComplete?'':' · 원본 사진 업로드 대기, 미리보기 제공'),directory:id,recordPath:'records/'+id,sourceIntegrityComplete:r.sourceIntegrityComplete,originalPhotoCount:r.originalPhotoCount,diagramCount:r.diagramCount};
+  });
+  p.links=[...links,...(p.links||[]).filter(x=>x.visibility==='private')];p.homePublicListCount=links.length;p.pageCount=links.length;p.homePrivateListCount=p.links.filter(x=>x.visibility==='private').length;
+  p.mediaStatus=data.records.every(r=>r.sourceIntegrityComplete)?'원본 파일 해시 확인':'도식 4개 공개 · 원본 사진 업로드 대기 · 미리보기는 별도 구분';
+  p.archiveSync={status:'ok',source:expected,count:links.length};return;
+ }
   const root=https(p.publicUrl),sourceUrl=https(source.url);
   if(source.format!=='html-archive-data'||root.origin!==ORIGIN||sourceUrl.origin!==root.origin||sourceUrl.pathname!==root.pathname||root.pathname.startsWith('/projects/'))throw new Error('공개 목록 원본 경로 오류');
   sourceUrl.searchParams.set('archive-sync',String(Date.now()));
