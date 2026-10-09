@@ -675,7 +675,10 @@
           "directory": "20261009-menu-development",
           "label": "20261009_서해박속낙지_메뉴개발지원_상세정리_전체자료.zip",
           "chatTitle": "20261009_서해박속낙지_메뉴개발지원_상세정리_전체자료.zip",
-          "delivery": "authenticated-github-live-read"
+          "delivery": "authenticated-github-live-read",
+          "authoredAt": "2026-10-09",
+          "publicSummary": "메뉴개발 지원사업 신청 검토와 제출 자료 정리. 원본 20개 포함.",
+          "publicMetadataApproved": true
         },
         {
           "visibility": "private",
