@@ -7,8 +7,8 @@
       "title": "화곡농장",
       "homeUrl": "https://softm.github.io/projects/hwagok-farm/",
       "publicEntries": 37,
-      "privateEntries": 2,
-      "htmlSha256": "9cf3dcdf57f7638e77128198203d00ea5e45a9b2ae435394eab8816ca9904e70",
+      "privateEntries": 1,
+      "htmlSha256": "5ad10f11a73db9960076635b9cf0432f1cca1b2e4e110146cf4fab3acfb974dd",
       "authenticatedContentVerified": false
     },
     {
@@ -97,8 +97,8 @@
       "title": "농업·농사",
       "homeUrl": "https://softm.github.io/projects/farm/",
       "publicEntries": 3,
-      "privateEntries": 0,
-      "htmlSha256": "d82e25cd56ef59338667c4abb7e5b12e43217e033d5e0279851f39e887e65d62",
+      "privateEntries": 1,
+      "htmlSha256": "9ba7b7c4698249d514b212e1e085e07f686ccdf3bed6ae0a2687c9e036e7f662",
       "authenticatedContentVerified": false
     }
   ],
