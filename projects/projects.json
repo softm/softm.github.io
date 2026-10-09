@@ -68,11 +68,11 @@
           "dateSource": "archive-canonical",
           "titleSource": "archive-canonical",
           "url": "https://softm.github.io/hwagok-farm/records/20261009-herbicide-classification/",
-          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/records/20261009-herbicide-classification",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20261009-herbicide-classification",
           "category": "방제 · 농약 관리",
           "summary": "스톰프·라쏘·풀앤짱·푸리타 등 선택성·비선택성 비교. 사진 9장 웹 업로드 대기.",
           "directory": "20261009-herbicide-classification",
-          "recordPath": "records/20261009-herbicide-classification"
+          "recordPath": "public/records/20261009-herbicide-classification"
         },
         {
           "visibility": "public",
