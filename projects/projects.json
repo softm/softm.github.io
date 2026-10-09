@@ -41,8 +41,8 @@
     "mediaViewerPolicy": "projects/archive-deployment/MEDIA-VIEWER-POLICY.md",
     "mediaViewerRequirement": "가능한 모든 형식에 인라인 뷰어/플레이어; 미지원 형식·코덱은 명시; 원본 보존·인증 유지·외부 뷰어 전송 금지",
     "listTitlePolicy": "projects/archive-deployment/INBOX-LIST-TITLE-POLICY.md",
-    "listTitleRule": "Input folder or ZIP filename verbatim; preserve original body titles separately",
-    "listTitleSource": "inbox-name"
+    "listTitleRule": "For input ZIP/folder use recognizable basename, strip .zip file extension for display only; preserve original input filename and source title separately.",
+    "listTitleSource": "inbox-name-without-extension"
   },
   "projects": [
     {
@@ -1871,10 +1871,10 @@
       "links": [
         {
           "visibility": "public",
-          "title": "지주대 삽입기 구매기록",
-          "label": "지주대 삽입기 구매기록",
+          "title": "20261009 지주대 삽입기 구매기록",
+          "label": "20261009 지주대 삽입기 구매기록",
           "chatTitle": "지주대 삽입기 구매기록",
-          "listTitle": "20261009_지주대_삽입기_구매기록.zip",
+          "listTitle": "20261009 지주대 삽입기 구매기록",
           "sourceTitle": "지주대 삽입기 구매기록",
           "titleSource": "user-override",
           "date": "2026-10-09",
@@ -1894,9 +1894,9 @@
         },
         {
           "visibility": "private",
-          "label": "20261009_Temu_농자재_구매내역",
-          "title": "20261009_Temu_농자재_구매내역",
-          "listTitle": "20261009_Temu_농자재_구매내역",
+          "label": "20261009 Temu 농자재 구매내역",
+          "title": "20261009 Temu 농자재 구매내역",
+          "listTitle": "20261009 Temu 농자재 구매내역",
           "date": "2026-10-09",
           "url": "https://farm-private-softms-projects.vercel.app/records/20261009-temu-farm-supplies/",
           "repoUrl": "https://github.com/softm/farm-private/tree/main/records/20261009-temu-farm-supplies",
@@ -1916,9 +1916,9 @@
         },
         {
           "visibility": "public",
-          "label": "제초제 분류와 제품 비교 — 대화 전체 재정리",
-          "listTitle": "herbicide-guide-20261009.zip",
-          "title": "제초제 분류와 제품 비교 — 대화 전체 재정리",
+          "label": "herbicide-guide-20261009",
+          "listTitle": "herbicide-guide-20261009",
+          "title": "herbicide-guide-20261009",
           "sourceTitle": "제초제 분류와 제품 비교 — 대화 전체 재정리",
           "date": "2026-10-09",
           "url": "https://softm.github.io/farm/records/20261009-herbicide-classification/",
@@ -1937,9 +1937,9 @@
         },
         {
           "visibility": "public",
-          "label": "20261009_박_적심도식_정리_MD_HTML_전체자료.zip",
-          "listTitle": "20261009_박_적심도식_정리_MD_HTML_전체자료.zip",
-          "title": "20261009_박_적심도식_정리_MD_HTML_전체자료.zip",
+          "label": "20261009 박 적심도식 정리",
+          "listTitle": "20261009 박 적심도식 정리",
+          "title": "20261009 박 적심도식 정리",
           "chatTitle": "20261009_박_적심도식_정리_MD_HTML_전체자료.zip",
           "sourceTitle": "박 적심 도식화 정리",
           "date": "2026-10-09",
@@ -1957,9 +1957,9 @@
         },
         {
           "visibility": "public",
-          "label": "스프링클러 배관 나사 규격 정리",
-          "listTitle": "20261009_스프링클러_배관_나사_규격_정리_MD_HTML_전체자료.zip",
-          "title": "스프링클러 배관 나사 규격 정리",
+          "label": "20261009 스프링클러 배관 나사 규격 정리",
+          "listTitle": "20261009 스프링클러 배관 나사 규격 정리",
+          "title": "20261009 스프링클러 배관 나사 규격 정리",
           "chatTitle": "스프링클러 배관 나사 규격 정리",
           "sourceTitle": "스프링클러 배관 나사 규격 정리",
           "date": "2026-10-09",
