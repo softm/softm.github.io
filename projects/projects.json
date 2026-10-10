@@ -61,22 +61,18 @@
       "links": [
         {
           "visibility": "public",
-          "label": "20261009 나리온 40mm 전지가위 구매 · 20261010 주문완료",
-          "title": "20261009 나리온 40mm 전지가위 구매 · 20261010 주문완료",
-          "chatTitle": "20261009 나리온 40mm 전지가위 구매 · 20261010 주문완료",
+          "label": "20261009 나리온 40mm 전지가위 구매 검토",
+          "title": "20261009 나리온 40mm 전지가위 구매 검토",
+          "chatTitle": "20261009 나리온 40mm 전지가위 구매 검토",
           "date": "2026-10-09",
           "dateSource": "archive-canonical",
           "titleSource": "archive-canonical",
           "url": "https://softm.github.io/hwagok-farm/records/20261009-narion-pruning-shears/",
           "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20261009-narion-pruning-shears",
-          "category": "농기계 · 구매완료",
-          "summary": "2026-10-10 신용카드 159,000원 결제 완료 · 40mm 베어툴 1개 · 배터리 기존 2개 재사용 · 체인오일 제외 · 공개 요약 이미지 1개 / 원본 상품 PNG 웹 게시 대기",
+          "category": "농기계 · 구매 검토",
+          "summary": "나리온 40mm 베어툴 159,000원 선택 · 기존 컷쏘 배터리 2개 재사용 계획 · 체인오일 구매 제외. 결제·실물 호환 미확인. 원본 PNG 웹 업로드 대기.",
           "directory": "20261009-narion-pruning-shears",
-          "recordPath": "public/records/20261009-narion-pruning-shears",
-          "orderDate": "2026-10-10",
-          "paymentStatus": "paid",
-          "paymentKRW": 159000,
-          "originalMediaPending": true
+          "recordPath": "public/records/20261009-narion-pruning-shears"
         },
         {
           "visibility": "public",
