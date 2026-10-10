@@ -1,6 +1,6 @@
 {
   "version": "20261010-project-catalog-refresh-v24",
-  "projectCount": 11,
+  "projectCount": 12,
   "projects": [
     {
       "repo": "hwagok-farm",
@@ -100,6 +100,15 @@
       "privateEntries": 1,
       "htmlSha256": "3697c6868ce8437dd32da615fd0ada5d7b19ec4a5b2876d3bc9c8de1b7ce3175",
       "authenticatedContentVerified": false
+    },
+    {
+      "repo": "gyeongju-kim-private",
+      "title": "경주김씨",
+      "homeUrl": "https://softm.github.io/projects/gyeongju-kim/",
+      "publicEntries": 0,
+      "privateEntries": 1,
+      "htmlSha256": "237b608a9416988e7632278243ba30298c75d06b78c5d2c3351692a338e5129b",
+      "authenticatedContentVerified": false
     }
   ],
   "files": [
@@ -114,6 +123,7 @@
     "projects/yeonseo/index.html",
     "projects/mine/index.html",
     "projects/farm/index.html",
+    "projects/gyeongju-kim/index.html",
     "projects/projects.json",
     "projects/index.html",
     "projects/README.md",
