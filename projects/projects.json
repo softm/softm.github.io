@@ -2237,15 +2237,15 @@
       "projectHomeUrl": "https://softm.github.io/projects/gyeongju-kim/",
       "homeUrl": "https://softm.github.io/projects/gyeongju-kim/",
       "publicHomeStatus": "github-pages-home-generated",
-      "privateEntryPolicy": "프로젝트 비밀번호 인증 후 Private GitHub main을 요청 시 실시간 조회",
-      "authProvider": "server-password",
+      "privateEntryPolicy": "Vercel Authentication required on all deployment targets; authenticated gateway live-reads Private GitHub main on each request",
+      "authProvider": "vercel-sso",
       "homePublicListCount": 0,
       "homePrivateListCount": 1,
       "pageCount": 1,
       "privatePageCount": 1,
       "latestTitle": "2026_화곡2소종",
       "mediaStatus": "사진 원본 72장과 원본 ZIP 1개를 Private GitHub에서 실시간 제공하며 인증 후 이미지·ZIP 응답과 SHA-256 일치를 확인했습니다.",
-      "deploymentNote": "Vercel 배포물에는 원본을 포함하지 않고 프로젝트 비밀번호 인증 게이트웨이가 Private GitHub main을 요청 시 실시간 조회합니다. 운영 주소에서 비인증 차단, 로그인, 사진 원본, 26.3MB ZIP 다운로드를 검증했습니다.",
+      "deploymentNote": "Vercel Authentication이 미리보기와 운영 도메인을 모두 보호합니다. 배포물에는 원본을 포함하지 않고 인증 게이트웨이가 Private GitHub main을 요청 시 실시간 조회하며, Vercel 인증 후 사진 원본과 26.3MB ZIP 다운로드를 검증했습니다.",
       "vercelAccountAuthVerified": true,
       "privateDeliveryStatus": "authenticated-github-live",
       "privateVerificationStatus": "authenticated-runtime-verified",
@@ -2281,10 +2281,9 @@
       ],
       "previousHomeUrl": "https://softm.github.io/projects/gyeongju-kim/",
       "authModes": [
-        "project-password"
+        "vercel-deployment-protection"
       ],
-      "privateUrl": "https://gyeongju-kim-private.vercel.app/",
-      "passwordAuthUrl": "https://gyeongju-kim-private.vercel.app/login"
+      "privateUrl": "https://gyeongju-kim-private.vercel.app/"
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
