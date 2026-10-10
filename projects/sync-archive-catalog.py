@@ -11,7 +11,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '20261008-inbox-list-title-v22'
+VERSION = '20261010-project-catalog-refresh-v24'
 
 class ArchiveDataParser(HTMLParser):
     def __init__(self):
@@ -81,6 +81,29 @@ def sync_catalog():
         # This source is validated and refreshed by archive-sync.js in the browser.
         # Preserve its authored snapshot during the HTML-only build synchronizer.
         if source.get('format') == 'json-archive-index' and project['repo'] == 'farm' and project['publicUrl'] == 'https://softm.github.io/farm/' and url == 'https://softm.github.io/farm/archive-index.json':
+            continue
+        if source.get('format') == 'json-record-index':
+            expected = urllib.parse.urljoin(project['publicUrl'], 'records/index.json')
+            if parsed.scheme != 'https' or parsed.netloc != 'softm.github.io' or parsed.username or parsed.password or parsed.path.startswith('/projects/') or url != expected:
+                raise ValueError('Refusing an unexpected JSON archive source')
+            request_url = url + '?archive-sync=' + str(time.time_ns())
+            req = urllib.request.Request(request_url, headers={'Cache-Control': 'no-cache', 'User-Agent': 'SOFTM-Archive-Catalog/1.0'})
+            with urllib.request.urlopen(req, timeout=25) as response:
+                if response.geturl() != request_url or 'application/json' not in response.headers.get('Content-Type', ''):
+                    raise ValueError('Unexpected JSON archive redirect or content type')
+                raw = response.read(2_500_001)
+            if len(raw) > 2_500_000:
+                raise ValueError('Archive index exceeds size limit')
+            archive = json.loads(raw)
+            code = "const fs=require('node:fs');const a=require(process.argv[1]);const x=JSON.parse(fs.readFileSync(0,'utf8'));process.stdout.write(JSON.stringify(a.jsonArchiveRows(x.archive,x.project)));"
+            checked = subprocess.run(['node', '-e', code, str(ROOT / 'archive-sync.js')], input=json.dumps({'archive': archive, 'project': project}, ensure_ascii=False), text=True, encoding='utf-8', capture_output=True, check=True, timeout=30)
+            links = json.loads(checked.stdout)
+            project['links'] = links + [x for x in project.get('links', []) if x.get('visibility') == 'private']
+            project['homePublicListCount'] = project['pageCount'] = len(links)
+            project['homePrivateListCount'] = sum(x.get('visibility') == 'private' for x in project['links'])
+            project['publicIndexSnapshot'] = {'source': url, 'recordCount': len(links), 'purpose': 'build snapshot; browsers refresh from the deployed source on every page load'}
+            project['mediaStatus'] = f'공개 JSON 목록의 {len(links)}개 기록과 파일 메타데이터를 동기화했습니다.'
+            project['deploymentNote'] = '공개 records/index.json을 직접 읽었습니다. 상세 HTML과 원본 미디어는 프로젝트 저장소에 유지됩니다.'
             continue
         if source.get('format') != 'html-archive-data' or parsed.scheme != 'https' or parsed.netloc != 'softm.github.io' or parsed.username or parsed.password or parsed.path.startswith('/projects/') or url != project['publicUrl']:
             raise ValueError('Refusing a private, external or unexpected archive source')

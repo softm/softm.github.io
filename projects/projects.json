@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-09-30",
+  "updatedAt": "2026-10-10",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -709,9 +709,181 @@
       "publicRepo": "baksok-public",
       "publicRepoUrl": "https://github.com/softm/baksok-public",
       "publicUrl": "https://softm.github.io/baksok-public/",
-      "mediaStatus": "비공개 ZIP 원본의 HTML과 이미지/첨부를 인증 Vercel에서 실시간 제공; 공개 기록은 baksok-public 유지",
-      "deploymentNote": "공개는 baksok-public/GitHub Pages, 비공개는 baksok-private/Vercel 인증 구조. 중앙 프로젝트 홈에서 공개·비공개 기록을 함께 탐색합니다.",
+      "publicIndexSource": {
+        "url": "https://softm.github.io/baksok-public/records/index.json",
+        "format": "json-record-index"
+      },
+      "mediaStatus": "공개 JSON 목록의 7개 기록과 파일 메타데이터를 동기화했습니다.",
+      "deploymentNote": "공개 records/index.json을 직접 읽었습니다. 상세 HTML과 원본 미디어는 프로젝트 저장소에 유지됩니다.",
       "links": [
+        {
+          "visibility": "public",
+          "label": "서해박속낙지 전면 유리 박 배경 디자인 자료",
+          "title": "서해박속낙지 전면 유리 박 배경 디자인 자료",
+          "chatTitle": "서해박속낙지 전면 유리 박 배경 디자인 자료",
+          "sourceTitle": "2025_서해박속낙지_전면유리_박배경_디자인자료",
+          "date": "2025",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/baksok-public/records/2025-front-window-design/",
+          "repoUrl": "https://github.com/softm/baksok-public/tree/main/records/2025-front-window-design",
+          "category": "디자인",
+          "summary": "원본 자료 72개",
+          "count": 72,
+          "files": {
+            "images": 69,
+            "videos": 0,
+            "audio": 0,
+            "documents": 1,
+            "archives": 0
+          },
+          "directory": "2025-front-window-design",
+          "recordPath": "records/2025-front-window-design"
+        },
+        {
+          "visibility": "public",
+          "label": "서해박속낙지 여름 휴업 안내문",
+          "title": "서해박속낙지 여름 휴업 안내문",
+          "chatTitle": "서해박속낙지 여름 휴업 안내문",
+          "sourceTitle": "20260809_서해박속낙지_여름휴업_안내문_채팅정리",
+          "date": "2026-08-09",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/baksok-public/records/20260809-summer-closure-notice/",
+          "repoUrl": "https://github.com/softm/baksok-public/tree/main/records/20260809-summer-closure-notice",
+          "category": "운영 안내",
+          "summary": "원본 자료 13개",
+          "count": 13,
+          "files": {
+            "images": 5,
+            "videos": 0,
+            "audio": 0,
+            "documents": 7,
+            "archives": 0
+          },
+          "directory": "20260809-summer-closure-notice",
+          "recordPath": "records/20260809-summer-closure-notice"
+        },
+        {
+          "visibility": "public",
+          "label": "서해박속낙지 이가구·가스 설비 자료",
+          "title": "서해박속낙지 이가구·가스 설비 자료",
+          "chatTitle": "서해박속낙지 이가구·가스 설비 자료",
+          "sourceTitle": "20260909_서해박속낙지_이가구_가스설비_사진포함",
+          "date": "2026-09-09",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/baksok-public/records/20260909-furniture-gas-equipment/",
+          "repoUrl": "https://github.com/softm/baksok-public/tree/main/records/20260909-furniture-gas-equipment",
+          "category": "시설·인테리어",
+          "summary": "원본 자료 9개",
+          "count": 9,
+          "files": {
+            "images": 7,
+            "videos": 0,
+            "audio": 0,
+            "documents": 1,
+            "archives": 0
+          },
+          "directory": "20260909-furniture-gas-equipment",
+          "recordPath": "records/20260909-furniture-gas-equipment"
+        },
+        {
+          "visibility": "public",
+          "label": "서해박속낙지 RIR4000S 배송 통합 기록",
+          "title": "서해박속낙지 RIR4000S 배송 통합 기록",
+          "chatTitle": "서해박속낙지 RIR4000S 배송 통합 기록",
+          "sourceTitle": "20260911_서해박속낙지_RIR4000S_배송_배포_통합정리_모든이미지",
+          "date": "2026-09-11",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/baksok-public/records/20260911-rir4000s-delivery/",
+          "repoUrl": "https://github.com/softm/baksok-public/tree/main/records/20260911-rir4000s-delivery",
+          "category": "시설·인테리어",
+          "summary": "원본 자료 22개",
+          "count": 22,
+          "files": {
+            "images": 18,
+            "videos": 1,
+            "audio": 0,
+            "documents": 1,
+            "archives": 0
+          },
+          "directory": "20260911-rir4000s-delivery",
+          "recordPath": "records/20260911-rir4000s-delivery"
+        },
+        {
+          "visibility": "public",
+          "label": "서해박속낙지 가스레인지·식탁 설치 및 가스 재연결",
+          "title": "서해박속낙지 가스레인지·식탁 설치 및 가스 재연결",
+          "chatTitle": "서해박속낙지 가스레인지·식탁 설치 및 가스 재연결",
+          "sourceTitle": "20260918_서해박속낙지_가스렌지_식탁설치_가스재연결",
+          "date": "2026-09-18",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/baksok-public/records/20260918-gas-stove-table-installation/",
+          "repoUrl": "https://github.com/softm/baksok-public/tree/main/records/20260918-gas-stove-table-installation",
+          "category": "시설·인테리어",
+          "summary": "원본 자료 31개",
+          "count": 31,
+          "files": {
+            "images": 23,
+            "videos": 5,
+            "audio": 0,
+            "documents": 1,
+            "archives": 0
+          },
+          "directory": "20260918-gas-stove-table-installation",
+          "recordPath": "records/20260918-gas-stove-table-installation"
+        },
+        {
+          "visibility": "public",
+          "label": "서해박속낙지 광진소파 스툴 제작 완료",
+          "title": "서해박속낙지 광진소파 스툴 제작 완료",
+          "chatTitle": "서해박속낙지 광진소파 스툴 제작 완료",
+          "sourceTitle": "20260929_서해박속낙지_광진소파_스툴_제작완료",
+          "date": "2026-09-29",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/baksok-public/records/20260929-gwangjin-sofa-stool/",
+          "repoUrl": "https://github.com/softm/baksok-public/tree/main/records/20260929-gwangjin-sofa-stool",
+          "category": "시설·인테리어",
+          "summary": "원본 자료 12개",
+          "count": 12,
+          "files": {
+            "images": 4,
+            "videos": 4,
+            "audio": 0,
+            "documents": 1,
+            "archives": 0
+          },
+          "directory": "20260929-gwangjin-sofa-stool",
+          "recordPath": "records/20260929-gwangjin-sofa-stool"
+        },
+        {
+          "visibility": "public",
+          "label": "서해박속낙지 명함 디자인 정리",
+          "title": "서해박속낙지 명함 디자인 정리",
+          "chatTitle": "서해박속낙지 명함 디자인 정리",
+          "sourceTitle": "20261005_서해박속낙지_명함디자인_정리_모든이미지포함",
+          "date": "2026-10-05",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/baksok-public/records/20261005-business-card-design/",
+          "repoUrl": "https://github.com/softm/baksok-public/tree/main/records/20261005-business-card-design",
+          "category": "디자인",
+          "summary": "원본 자료 19개",
+          "count": 19,
+          "files": {
+            "images": 16,
+            "videos": 0,
+            "audio": 0,
+            "documents": 1,
+            "archives": 0
+          },
+          "directory": "20261005-business-card-design",
+          "recordPath": "records/20261005-business-card-design"
+        },
         {
           "id": "20261009-menu-development",
           "slug": "20261009-menu-development",
@@ -765,33 +937,24 @@
           "summary": "서해박속낙지 세무·매출 분석 전체자료 비공개 아카이브. Private GitHub의 압축 해제본을 Vercel 인증 후 실시간 조회합니다.",
           "directory": "20261005-tax-sales-analysis",
           "recordPath": "archive/20261005-tax-sales-analysis"
-        },
-        {
-          "visibility": "public",
-          "label": "2026-09-29 신당동 광진소파 스툴 제작 완료",
-          "userTitle": "20260929 서해박속낙지 신당동 광진소파 스툴 제작완료 500×500×450",
-          "chatTitle": "서해박속낙지 광진소파 스툴 제작 완료",
-          "authoredAt": "2026-09-29",
-          "dateSource": "user-specified",
-          "url": "https://softm.github.io/baksok-public/records/20260929-gwangjin-sofa-stool/",
-          "repoUrl": "https://github.com/softm/baksok-public/tree/main/public/records/20260929-gwangjin-sofa-stool",
-          "category": "시설·인테리어",
-          "summary": "신당동 광진소파에서 제작한 서해박속낙지 매장용 스툴(500 × 500 × 450 mm) 제작 완료 기록. 사진 4장과 동영상 2개 포함.",
-          "directory": "20260929-gwangjin-sofa-stool",
-          "recordPath": "public/records/20260929-gwangjin-sofa-stool"
         }
       ],
       "homeUrl": "https://softm.github.io/projects/baksok/",
       "projectHomeUrl": "https://softm.github.io/projects/baksok/",
-      "pageCount": 1,
+      "pageCount": 7,
       "privatePageCount": 2,
       "latestTitle": "20261009_서해박속낙지_메뉴개발지원_상세정리_전체자료.zip",
       "publicHomeStatus": "github-pages-home-generated",
       "previousHomeUrl": "https://softm.github.io/projects/baksok/",
       "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
       "vercelAccountAuthVerified": false,
-      "homePublicListCount": 1,
-      "homePrivateListCount": 2
+      "homePublicListCount": 7,
+      "homePrivateListCount": 2,
+      "publicIndexSnapshot": {
+        "source": "https://softm.github.io/baksok-public/records/index.json",
+        "recordCount": 7,
+        "purpose": "build snapshot; browsers refresh from the deployed source on every page load"
+      }
     },
     {
       "order": 3,
@@ -2063,5 +2226,5 @@
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
-  "homeVersion": "20261010-partial-project-visible-v23"
+  "homeVersion": "20261010-project-catalog-refresh-v24"
 }

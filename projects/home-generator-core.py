@@ -8,6 +8,7 @@ from urllib.parse import urlsplit
 ROOT=Path('projects')
 BASE='https://softm.github.io/projects/'
 VERSION='20260930-project-homes-v2'
+UPDATED_AT='2026-10-10'
 E=lambda value: html.escape(str(value or ''), quote=True)
 # Public-safe labels only. No private document bodies, credentials, or media bytes.
 CHAT_PATHS={
@@ -127,7 +128,7 @@ def build():
         if not p.get('publicRepoUrl'): missing+='<span class="muted">프로젝트별 공개 저장소 미연결 · 이 안내 홈은 공개 softm.github.io 저장소에서 제공합니다.</span>'
         status=E(p.get('deploymentNote') or '기존 배포 상태를 확인해야 합니다.')
         notice='홈과 채팅 목록은 공개입니다. 비공개 항목은 선택한 채팅의 주소로 이동하며 해당 서버에서 인증합니다. 별도의 Vercel 계정 선택 로그인 활성화는 아직 확인되지 않았습니다.'
-        body=f'''<header class="hero"><div class="wrap"><a href="{BASE}">← 전체 프로젝트</a><p class="eyebrow">PUBLIC PROJECT HOME / GITHUB PAGES</p><h1>{E(p['title'])}</h1><p class="lead">{E(p.get('description'))}</p></div></header><main class="wrap"><nav class="tabs" aria-label="채팅 목록"><a class="button" href="#public">공개 목록 {len(pub)}</a><a class="button" href="#private">비공개 목록 {len(pri)}</a></nav><div class="actions repo">{repolinks}</div>{missing}<div class="note">{notice}</div><label class="toolbar"><span>채팅 제목 검색</span><input id="search" type="search" placeholder="채팅 제목으로 찾기"></label>{section('공개 채팅·자료 목록',pub)}{section('비공개 채팅·자료 목록',pri,True)}<details><summary>배포·미디어 점검 상태</summary><p>{status}</p><p>{E(p.get('mediaStatus') or '미디어 전체 검증 전')}</p></details><footer>기존 HTML·Markdown·사진·영상·음성·문서 원본은 각 프로젝트 저장소에 유지합니다. 이 홈은 원본을 대체하지 않는 공개 목차입니다.<br>홈 구성 갱신: 2026-09-30 · 인증 후 본문·재생 검증과 홈 생성은 별도입니다.</footer></main>'''
+        body=f'''<header class="hero"><div class="wrap"><a href="{BASE}">← 전체 프로젝트</a><p class="eyebrow">PUBLIC PROJECT HOME / GITHUB PAGES</p><h1>{E(p['title'])}</h1><p class="lead">{E(p.get('description'))}</p></div></header><main class="wrap"><nav class="tabs" aria-label="채팅 목록"><a class="button" href="#public">공개 목록 {len(pub)}</a><a class="button" href="#private">비공개 목록 {len(pri)}</a></nav><div class="actions repo">{repolinks}</div>{missing}<div class="note">{notice}</div><label class="toolbar"><span>채팅 제목 검색</span><input id="search" type="search" placeholder="채팅 제목으로 찾기"></label>{section('공개 채팅·자료 목록',pub)}{section('비공개 채팅·자료 목록',pri,True)}<details><summary>배포·미디어 점검 상태</summary><p>{status}</p><p>{E(p.get('mediaStatus') or '미디어 전체 검증 전')}</p></details><footer>기존 HTML·Markdown·사진·영상·음성·문서 원본은 각 프로젝트 저장소에 유지합니다. 이 홈은 원본을 대체하지 않는 공개 목차입니다.<br>홈 구성 갱신: {UPDATED_AT} · 인증 후 본문·재생 검증과 홈 생성은 별도입니다.</footer></main>'''
         dest=ROOT/slug/'index.html'; dest.parent.mkdir(parents=True,exist_ok=True)
         text=frame(p['title'],body,home);dest.write_text(text,encoding='utf-8'); generated.append(str(dest))
         assert 'id="public"' in text and 'id="private"' in text
@@ -137,14 +138,14 @@ def build():
         assert p.get('links',[])==old.get('links',[])
         report.append({'repo':repo,'title':p['title'],'homeUrl':home,'publicEntries':len(pub),'privateEntries':len(pri),'htmlSha256':hashlib.sha256(text.encode()).hexdigest(),'authenticatedContentVerified':False})
     data['projectClickRule']='프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.'
-    data['updatedAt']='2026-09-30';data['homeVersion']=VERSION
+    data['updatedAt']=UPDATED_AT;data['homeVersion']=VERSION
     data['archivePolicy']['projectHome']='Public GitHub Pages TOC; private bodies and media remain in the original private repository'
     source.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8');generated.append(str(source))
     cards=[]
     for p in sorted(data['projects'],key=lambda p:p.get('order',0)):
         h=p['projectHomeUrl'];repos=anchor(p.get('publicRepoUrl'),'GitHub 공개 저장소')+anchor(p.get('privateRepoUrl'),'🔒 GitHub 비공개 저장소')
         cards.append(f'''<article class="card" data-search="{E(p['title']+' '+p.get('category',''))}"><span class="badge">{E(p.get('category'))}</span><h2><a href="{E(h)}">{E(p['title'])}</a></h2><p>{E(p.get('description'))}</p><p class="muted">홈 목록: 공개 {p['homePublicListCount']} · 비공개 {p['homePrivateListCount']}</p><div class="actions">{anchor(h,'프로젝트 홈 · 채팅 목록','primary')}</div><div class="actions repo">{repos}</div><details><summary>기존 배포·미디어 상태</summary><p>{E(p.get('mediaStatus'))}</p><p>{E(p.get('deploymentNote'))}</p></details></article>''')
-    body=f'''<header class="hero"><div class="wrap"><p class="eyebrow">SOFTM / PROJECT DIRECTORY</p><h1>전체 프로젝트</h1><p>프로젝트 홈에서 공개·비공개 채팅 정리 목록을 확인합니다.</p><p>전체 프로젝트 → 공개 프로젝트 홈 → 채팅 선택 → 비공개인 경우 인증 → 기존 상세 원문</p></div></header><main class="wrap"><div class="stats"><span class="badge">프로젝트 {len(cards)}개</span><span class="badge">프로젝트 홈: 공개 GitHub Pages</span></div><div class="note">홈과 목록은 공개이며 비공개 원문·첨부는 인증된 기존 사이트에서 열립니다. 기존 상세자료를 요약문으로 대체하지 않습니다.</div><div class="toolbar"><label>프로젝트 검색<input id="search" type="search" placeholder="프로젝트명 또는 분야"></label></div><div class="grid">{''.join(cards)}</div><footer><a href="https://github.com/softm/softm.github.io/blob/main/projects/README.md">아카이브 배포 규칙</a> · 갱신 2026-09-30<br>프로젝트 홈 생성은 비공개 운영 배포·원본 복구 완료를 의미하지 않습니다.</footer></main>'''
+    body=f'''<header class="hero"><div class="wrap"><p class="eyebrow">SOFTM / PROJECT DIRECTORY</p><h1>전체 프로젝트</h1><p>프로젝트 홈에서 공개·비공개 채팅 정리 목록을 확인합니다.</p><p>전체 프로젝트 → 공개 프로젝트 홈 → 채팅 선택 → 비공개인 경우 인증 → 기존 상세 원문</p></div></header><main class="wrap"><div class="stats"><span class="badge">프로젝트 {len(cards)}개</span><span class="badge">프로젝트 홈: 공개 GitHub Pages</span></div><div class="note">홈과 목록은 공개이며 비공개 원문·첨부는 인증된 기존 사이트에서 열립니다. 기존 상세자료를 요약문으로 대체하지 않습니다.</div><div class="toolbar"><label>프로젝트 검색<input id="search" type="search" placeholder="프로젝트명 또는 분야"></label></div><div class="grid">{''.join(cards)}</div><footer><a href="https://github.com/softm/softm.github.io/blob/main/projects/README.md">아카이브 배포 규칙</a> · 갱신 {UPDATED_AT}<br>프로젝트 홈 생성은 비공개 운영 배포·원본 복구 완료를 의미하지 않습니다.</footer></main>'''
     (ROOT/'index.html').write_text(frame('전체 프로젝트',body,BASE),encoding='utf-8');generated.append('projects/index.html')
     policy='''\n\n## 프로젝트 홈 탐색 규칙 (2026-09-30 확정)\n\n전체 프로젝트 → 공개 GitHub Pages 프로젝트 홈 → 공개·비공개 채팅 목록 → 선택한 채팅.\n프로젝트 홈은 로그인 없이 열리는 공개 목차이며 각 원본 저장소 링크를 함께 표시한다.\n비공개 목록은 제목·안전한 안내·접근 주소만 공개한다. 비공개 본문과 미디어는 원래 Private 저장소에서 유지한다.\n비공개 항목은 개별 원문 주소로 연결하여 서버 인증 후 해당 채팅으로 돌아간다.\n동일 URL에 서로 다른 인증 이름을 붙이는 것만으로 두 인증 방식을 구현했다고 간주하지 않는다.\nVercel 계정 인증 활성화와 프로젝트 자체 비밀번호 인증은 별도로 검증한다. 선택형 인증 요청을 임의로 필수 이중 인증으로 바꾸지 않는다.\n프로젝트 홈의 기본 주소는 https://softm.github.io/projects/<project>/ 이며 기존 서비스 URL과 구분한다.\n'''
     readme=ROOT/'README.md';old=readme.read_text(encoding='utf-8')

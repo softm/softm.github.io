@@ -9,7 +9,7 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '20261010-partial-project-visible-v23'
+VERSION = '20261010-project-catalog-refresh-v24'
 
 def frame(title: str, canonical: str, project: str = '') -> str:
     e = lambda value: html.escape(str(value), quote=True)
@@ -78,7 +78,7 @@ process.stdout.write(JSON.stringify(out));"""
                           'privateContentFetched': False,
                           'archiveDeploymentHub': True,
                           'projectHomesRequired': True,
-                          'liveArchiveSource': 'published HTML archive-data; no manual duplicate list'}
+                          'liveArchiveSource': 'published HTML/JSON archive metadata; no manual duplicate list'}
     report['files'] = list(dict.fromkeys(report['files'] + homes + [
         'projects/index.html', 'projects/chat-metadata.json', 'projects/project-home.js',
         'projects/project-home.css', 'projects/home-generator.py',
