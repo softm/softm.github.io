@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-10-10",
+  "updatedAt": "2026-09-30",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -1361,13 +1361,28 @@
       "privateEntryPolicy": "Vercel Authentication on all deployments; server-side GitHub main live-read; no static private archive copies",
       "vercelAccountAuthVerified": true,
       "homePublicListCount": 1,
-      "homePrivateListCount": 8,
+      "homePrivateListCount": 9,
       "pageCount": 1,
       "privatePageCount": 8,
       "latestTitle": "20261010 옥길새길중학교 신입생 자기소개서 준비",
       "mediaStatus": "공개 홈의 canonical 목록을 동기화했습니다. 첨부 수와 재생 가능 여부는 별도 점검 대상입니다.",
       "deploymentNote": "실제 콘텐츠는 프로젝트 저장소에 보존하고 중앙 목록은 배포된 HTML의 archive-data를 직접 조회합니다.",
       "links": [
+        {
+          "visibility": "public",
+          "label": "2026-10-07 Casio LRW-200H-4B2 시계줄 규격 조사 및 색상별 3개 구매",
+          "title": "2026-10-07 Casio LRW-200H-4B2 시계줄 규격 조사 및 색상별 3개 구매",
+          "chatTitle": "2026-10-07 Casio LRW-200H-4B2 시계줄 규격 조사 및 색상별 3개 구매",
+          "date": "2026-10-07",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/yeonseo-public/records/20261007-casio-lrw200h-watch-band/",
+          "repoUrl": "https://github.com/softm/yeonseo-public/tree/main/public/records/20261007-casio-lrw200h-watch-band",
+          "category": "구매·생활",
+          "summary": "Casio LRW-200H-4B2 시계줄 러그 14 mm·어깨 18 mm 규격 확인과 AliExpress 색상별 3개 구매 기록.",
+          "directory": "20261007-casio-lrw200h-watch-band",
+          "recordPath": "public/records/20261007-casio-lrw200h-watch-band"
+        },
         {
           "visibility": "private",
           "label": "20261010 옥길새길중학교 신입생 자기소개서 준비",
@@ -1394,21 +1409,6 @@
           "delivery": "authenticated-github-live-read",
           "publicMetadataApproved": true,
           "webBinaryStatus": "partial-11-existing-images-linked-27-new-binaries-pending"
-        },
-        {
-          "visibility": "public",
-          "label": "2026-10-07 Casio LRW-200H-4B2 시계줄 규격 조사 및 색상별 3개 구매",
-          "title": "2026-10-07 Casio LRW-200H-4B2 시계줄 규격 조사 및 색상별 3개 구매",
-          "chatTitle": "2026-10-07 Casio LRW-200H-4B2 시계줄 규격 조사 및 색상별 3개 구매",
-          "date": "2026-10-07",
-          "dateSource": "archive-canonical",
-          "titleSource": "archive-canonical",
-          "url": "https://softm.github.io/yeonseo-public/records/20261007-casio-lrw200h-watch-band/",
-          "repoUrl": "https://github.com/softm/yeonseo-public/tree/main/public/records/20261007-casio-lrw200h-watch-band",
-          "category": "구매·생활",
-          "summary": "Casio LRW-200H-4B2 시계줄 러그 14 mm·어깨 18 mm 규격 확인과 AliExpress 색상별 3개 구매 기록.",
-          "directory": "20261007-casio-lrw200h-watch-band",
-          "recordPath": "public/records/20261007-casio-lrw200h-watch-band"
         },
         {
           "visibility": "private",
@@ -2057,5 +2057,5 @@
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
-  "homeVersion": "20261010-yeonseo-okgilsaegil-v24"
+  "homeVersion": "20261010-partial-project-visible-v23"
 }
