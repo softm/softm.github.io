@@ -2278,7 +2278,8 @@
           "directory": "2026-hwagok-2-sojong",
           "recordPath": "archive/2026-hwagok-2-sojong"
         }
-      ]
+      ],
+      "previousHomeUrl": "https://softm.github.io/projects/gyeongju-kim/"
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
