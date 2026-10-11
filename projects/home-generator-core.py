@@ -8,7 +8,7 @@ from urllib.parse import urlsplit
 ROOT=Path('projects')
 BASE='https://softm.github.io/projects/'
 VERSION='20260930-project-homes-v2'
-UPDATED_AT='2026-10-10'
+UPDATED_AT='2026-10-11'
 E=lambda value: html.escape(str(value or ''), quote=True)
 # Public-safe labels only. No private document bodies, credentials, or media bytes.
 CHAT_PATHS={
