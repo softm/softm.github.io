@@ -8,7 +8,7 @@
       "homeUrl": "https://softm.github.io/projects/hwagok-farm/",
       "publicEntries": 38,
       "privateEntries": 1,
-      "htmlSha256": "5d0c780714b0ab95014da3b07a2e98684efed096c647670cb6d82fd9d1311ce6",
+      "htmlSha256": "fb3c2ef423db69ada091d9e516fd330d8c3f53775d3bd60c8c62d9a059dde494",
       "authenticatedContentVerified": false
     },
     {
@@ -17,7 +17,7 @@
       "homeUrl": "https://softm.github.io/projects/baksok/",
       "publicEntries": 7,
       "privateEntries": 2,
-      "htmlSha256": "08b4c6184599d0b801e29acea0eb30fd8dbdeb07b839bd07d2931f80b8705375",
+      "htmlSha256": "436b66e16f832ca19e55468eac801b3c07aaca6bb03625fc9b4fc7fb567595d4",
       "authenticatedContentVerified": false
     },
     {
@@ -26,7 +26,7 @@
       "homeUrl": "https://softm.github.io/projects/farmland-policy-map/",
       "publicEntries": 1,
       "privateEntries": 0,
-      "htmlSha256": "23b9944b2e62b90f9508b7a1954951c718c158e7061118fa0cb9f51744db836b",
+      "htmlSha256": "38d2406038359f904c628b7894cdf0a57e28fdc5714b9a8de38fd5c86ca7681f",
       "authenticatedContentVerified": false
     },
     {
@@ -35,7 +35,7 @@
       "homeUrl": "https://softm.github.io/projects/gwangmyeong/",
       "publicEntries": 1,
       "privateEntries": 3,
-      "htmlSha256": "f4705d0004e9ca9514c958259f5a9bb51047a1175c9d4afd8feec887221697a6",
+      "htmlSha256": "4d7b204f501aa3258d26cdef295ec12dc69616b4316fecec51f20bb192092fc0",
       "authenticatedContentVerified": false
     },
     {
@@ -44,7 +44,7 @@
       "homeUrl": "https://softm.github.io/projects/ungdo/",
       "publicEntries": 0,
       "privateEntries": 9,
-      "htmlSha256": "b07e07ea4be981a3a64a65bc89bab96c5b798b92a4900041b006b032df5a20c5",
+      "htmlSha256": "a670001380e48840539d653b7a4559aaeb5f2a05b35711f2f08e50f7e41ead0d",
       "authenticatedContentVerified": false
     },
     {
@@ -53,7 +53,7 @@
       "homeUrl": "https://softm.github.io/projects/onsuhill/",
       "publicEntries": 0,
       "privateEntries": 2,
-      "htmlSha256": "7b372da6c8029d27e9291a13511e0740f8d34bc703ae8c3b2c58f2ea3351252a",
+      "htmlSha256": "16384903a0b274cefdbdd8f42e9c491bea04c31eb5440f7b2957e5b8f26c8cb5",
       "authenticatedContentVerified": false
     },
     {
@@ -62,7 +62,7 @@
       "homeUrl": "https://softm.github.io/projects/hwagok-land-permit/",
       "publicEntries": 0,
       "privateEntries": 4,
-      "htmlSha256": "f134d0d9987b6a12730f847adfe5033e3ee15670e2023959664a7213bf17f09c",
+      "htmlSha256": "8eafa8dfe57e5052046055e8ea471aa99eed96eaf22b4e9c24ad4f637349848b",
       "authenticatedContentVerified": false
     },
     {
@@ -71,7 +71,7 @@
       "homeUrl": "https://softm.github.io/projects/father-hospital-treatment/",
       "publicEntries": 0,
       "privateEntries": 5,
-      "htmlSha256": "969be008dd620d73e59055949fb041fff1dbe136304b5c21d76473b371f441b6",
+      "htmlSha256": "9f6e638d74b6c75fa980b1a7705d516feb62ab549c5eacab92c041ea21f71e50",
       "authenticatedContentVerified": false
     },
     {
@@ -80,7 +80,7 @@
       "homeUrl": "https://softm.github.io/projects/yeonseo/",
       "publicEntries": 1,
       "privateEntries": 9,
-      "htmlSha256": "107fcb1fd9083be12046cb18ad51a5bbb9114d41ca99ce66d63f1cdca481403f",
+      "htmlSha256": "c85f7d4a7d6ddf936a531c29f45ed04c5cfadeebf3f9d9b6b6db93841acb66b7",
       "authenticatedContentVerified": false
     },
     {
@@ -89,7 +89,7 @@
       "homeUrl": "https://softm.github.io/projects/mine/",
       "publicEntries": 0,
       "privateEntries": 8,
-      "htmlSha256": "1edea4ae9456ac44a8ad42ad25f25546e1c0e29384d9298a20054b568be8c3b6",
+      "htmlSha256": "518aca264539dffe5d16e7901eb50d2cc3c5d0d4bd53431dae8a250cc5d67d80",
       "authenticatedContentVerified": false
     },
     {
@@ -98,16 +98,16 @@
       "homeUrl": "https://softm.github.io/projects/farm/",
       "publicEntries": 4,
       "privateEntries": 1,
-      "htmlSha256": "3697c6868ce8437dd32da615fd0ada5d7b19ec4a5b2876d3bc9c8de1b7ce3175",
+      "htmlSha256": "2e8c73cc97595679f8e22dc2911fe3b2d3a4c48606ad6453048c6cf6152334ef",
       "authenticatedContentVerified": false
     },
     {
       "repo": "gyeongju-kim-private",
       "title": "경주김씨",
       "homeUrl": "https://softm.github.io/projects/gyeongju-kim/",
-      "publicEntries": 0,
+      "publicEntries": 1,
       "privateEntries": 1,
-      "htmlSha256": "16f12537daea0b98886fcfb44c8df398584e875ba2d3508f897e7699e8c365f6",
+      "htmlSha256": "d756c7f18df269c0237d22c1358f7fbc8be9b379e92998a496fc4a2fbb8e6268",
       "authenticatedContentVerified": false
     }
   ],
