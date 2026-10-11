@@ -2247,8 +2247,8 @@
       "publicPageCount": 1,
       "privatePageCount": 1,
       "latestTitle": "2026_화곡2소종",
-      "mediaStatus": "공개 GitHub 수집함에 이미지 8개·문서 6개(총 14개)를 보존했습니다. 비공개 자료는 사진 원본 72장과 원본 ZIP 1개를 Private GitHub에서 실시간 제공합니다.",
-      "deploymentNote": "공개 자료 본문은 softm.github.io/664/에서 열람하며 원본은 softm/gyeongju-kim main의 zip 폴더에 보존합니다. 비공개 자료는 Vercel Authentication 후 Private GitHub main을 실시간 조회합니다.",
+      "mediaStatus": "공개 GitHub 수집함에 이미지 8개·문서 6개(총 14개)를 보존하고 원본 ZIP 다운로드를 제공합니다. 비공개 자료는 사진 원본 72장과 원본 ZIP 1개를 Private GitHub에서 실시간 제공합니다.",
+      "deploymentNote": "공개 자료 본문은 softm.github.io/664/에서 열람하고 전용 GitHub 릴리스에서 원본 ZIP을 다운로드합니다. 비공개 자료는 Vercel Authentication 후 Private GitHub main을 실시간 조회합니다.",
       "vercelAccountAuthVerified": true,
       "privateDeliveryStatus": "authenticated-github-live",
       "privateVerificationStatus": "authenticated-runtime-verified",
@@ -2267,15 +2267,16 @@
           "titleSource": "inbox-name",
           "url": "https://softm.github.io/664/",
           "repoUrl": "https://github.com/softm/gyeongju-kim/tree/main/zip/20260308_%ED%99%94%EA%B3%A1%EB%A6%AC664_%EA%B9%80%EC%9D%B8%EC%A7%91%ED%95%A0%EC%95%84%EB%B2%84%EC%A7%80",
+          "archiveUrl": "https://github.com/softm/gyeongju-kim/releases/download/archive-20260308-hwagokri-664/20260308-hwagokri-664-original.zip",
           "category": "가족·문중 기록",
-          "summary": "화곡리 664 관련 공개 자료. 웹사이트에서 기록을 열람하고 GitHub에서 이미지 8개와 문서 6개 원본을 확인할 수 있습니다.",
-          "count": 14,
+          "summary": "화곡리 664 관련 공개 자료. 웹사이트에서 기록을 열람하고 이미지 8개·문서 6개 원본을 ZIP으로 내려받을 수 있습니다.",
+          "count": 15,
           "files": {
             "images": 8,
             "videos": 0,
             "audio": 0,
             "documents": 6,
-            "archives": 0
+            "archives": 1
           },
           "directory": "20260308_화곡리664_김인집할아버지",
           "recordPath": "zip/20260308_화곡리664_김인집할아버지"
@@ -2317,5 +2318,5 @@
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
-  "homeVersion": "20261010-project-catalog-refresh-v24"
+  "homeVersion": "20261012-project-catalog-refresh-v25"
 }
