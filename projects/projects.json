@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-10-11",
+  "updatedAt": "2026-10-15",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -2094,12 +2094,43 @@
         "url": "https://softm.github.io/farm/archive-index.json",
         "format": "json-archive-index"
       },
-      "mediaStatus": "스프링클러 기록: 대화 첨부 이미지 3개(고유 2개)·원본 ZIP 보존 및 해시 확인. 박 기록 원본 사진은 별도 상태를 따름.",
+      "mediaStatus": "감나무 접수·접목 기록의 원본 PNG 146장·웹 썸네일 146장과 매니페스트 해시를 확인했습니다. 일부 기존 공개 기록의 원본 자료는 별도 상태를 따릅니다.",
       "deploymentNote": "공개 사이트의 archive-index.json에서 기록 목록과 원본 확보 상태를 직접 조회합니다.",
-      "homePublicListCount": 4,
+      "homePublicListCount": 5,
       "homePrivateListCount": 1,
-      "pageCount": 4,
+      "pageCount": 5,
       "links": [
+        {
+          "visibility": "public",
+          "title": "20261015 감나무 접수·접목 방법",
+          "label": "20261015 감나무 접수·접목 방법",
+          "chatTitle": "20261015 감나무 접수·접목 방법",
+          "listTitle": "20261015 감나무 접수·접목 방법",
+          "sourceTitle": "2026-10-15 감나무 접수·접목 방법",
+          "titleSource": "inbox-name",
+          "inputName": "20261015_감나무_접수_접목방법",
+          "inputKind": "folder",
+          "date": "2026-10-15",
+          "dateSource": "source-directory-name",
+          "url": "https://softm.github.io/farm/records/20261015-persimmon-grafting-guide/",
+          "repoUrl": "https://github.com/softm/farm/tree/main/records/20261015-persimmon-grafting-guide",
+          "category": "재배 · 접목",
+          "summary": "접수 채취 시기·선별·0~5℃ 저장·조제·접목·야생동물 피해 방지를 원본 화면 146장으로 정리한 공개 아카이브.",
+          "files": {
+            "images": 146,
+            "videos": 0,
+            "audio": 0,
+            "documents": 5
+          },
+          "count": 146,
+          "directory": "20261015-persimmon-grafting-guide",
+          "recordPath": "records/20261015-persimmon-grafting-guide",
+          "sourceIntegrityComplete": true,
+          "originalPhotoCount": 146,
+          "originalImageCount": 146,
+          "previewCount": 146,
+          "sourceUrl": "https://www.youtube.com/watch?v=0GeX_SlVFo8&t=1s"
+        },
         {
           "visibility": "public",
           "title": "20261009 지주대 삽입기 구매기록",
@@ -2215,14 +2246,14 @@
       "publicHomeStatus": "github-pages-home-generated",
       "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
       "vercelAccountAuthVerified": false,
-      "totalRecordCount": 5,
+      "totalRecordCount": 6,
       "privateRepo": "farm-private",
       "privateRepoUrl": "https://github.com/softm/farm-private",
       "privateUrl": "https://farm-private-softms-projects.vercel.app/",
       "privatePageCount": 1,
       "privateDeliveryStatus": "vercel-authenticated",
       "privateVerificationStatus": "authenticated-http-verified",
-      "latestTitle": "지주대 삽입기 구매기록"
+      "latestTitle": "20261015 감나무 접수·접목 방법"
     },
     {
       "order": 12,
