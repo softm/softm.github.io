@@ -14,6 +14,11 @@ assert.equal(canonical.dateSource,'archive-canonical');
 assert.deepEqual(archiveRows([],project),[]);
 const rootRow={...row,repoUrl:project.publicRepoUrl+'/tree/main/records/'+row.dir};
 assert.equal(archiveRows([rootRow],project)[0].recordPath,'records/'+row.dir);
+// SOFTM-unicode-archive-slug-test START: 안전한 한글 슬러그와 GitHub URL 정규화 검증 (2026-10-15)
+const unicodeDir='20261009-화곡농장-보유-농약-정리';
+const unicodeRow={...row,dir:unicodeDir,url:project.publicUrl+'records/'+unicodeDir+'/',repoUrl:project.publicRepoUrl+'/tree/main/public/records/'+unicodeDir};
+assert.equal(archiveRows([unicodeRow],project)[0].recordPath,'public/records/'+unicodeDir);
+// SOFTM-unicode-archive-slug-test END: 안전한 한글 슬러그와 GitHub URL 정규화 검증 (2026-10-15)
 const jsonProject={repo:'baksok-public',publicUrl:'https://softm.github.io/baksok-public/',publicRepoUrl:'https://github.com/softm/baksok-public'};
 const jsonData={errors:[],records:[{slug:'2025-front-window-design',date:'2025',title:'전면 유리 디자인',category:'디자인',input:'2025_전면유리',files:[{path:'images/a.jpg',size:10},{path:'index.html',size:20},{path:'notes.md',size:30}]}]};
 const jsonRow=jsonArchiveRows(jsonData,jsonProject)[0];
@@ -61,6 +66,15 @@ async function run(){
  p={...jsonProject,publicIndexSource:{url:jsonProject.publicUrl+'records/index.json',format:'json-record-index'},links:[privateLink]};await syncProjects([p]);
  assert.equal(p.archiveSync.status,'ok');assert.equal(p.homePublicListCount,1);
  assert.deepEqual(p.links.map(x=>x.url),[jsonRow.url,privateLink.url]);
+ // SOFTM-persimmon-central-sync START: farm 공개 인덱스의 감나무 기록 제목·집계 동기화 검증 (2026-10-15)
+ const farmProject={repo:'farm',publicUrl:'https://softm.github.io/farm/',publicRepoUrl:'https://github.com/softm/farm',publicIndexSource:{url:'https://softm.github.io/farm/archive-index.json',format:'json-archive-index'},links:[privateLink]};
+ const farmRecord={slug:'20261015-persimmon-grafting-guide',listTitle:'20261015_감나무_접수_접목방법',sourceTitle:'2026-10-15 감나무 접수·접목 방법',titleSource:'inbox-name',date:'2026-10-15',dateBasis:'source-directory-name',kind:'재배 · 접목',visibility:'public',url:farmProject.publicUrl+'records/20261015-persimmon-grafting-guide/',repoUrl:farmProject.publicRepoUrl+'/tree/main/records/20261015-persimmon-grafting-guide',description:'원본 화면 146장',sourceIntegrityComplete:true,originalImageCount:146};
+ global.fetch=async()=>({ok:true,text:async()=>JSON.stringify({repository:'softm/farm',records:[farmRecord]})});
+ p={...farmProject};await syncProjects([p]);
+ assert.equal(p.archiveSync.status,'ok');assert.equal(p.homePublicListCount,1);
+ assert.equal(p.links[0].title,'20261015 감나무 접수·접목 방법');assert.equal(p.links[0].originalImageCount,146);
+ assert.equal(p.links[1].url,privateLink.url);
+ // SOFTM-persimmon-central-sync END: farm 공개 인덱스의 감나무 기록 제목·집계 동기화 검증 (2026-10-15)
  calls=[];global.fetch=async()=>{calls.push('UNEXPECTED');throw new Error('Unexpected request')};
  p={...input(),publicIndexSource:{url:'https://private.vercel.app/',format:'html-archive-data'}};await syncProjects([p]);
  assert.equal(p.archiveSync.status,'error');assert.equal(calls.length,0);

@@ -6,9 +6,9 @@
       "repo": "hwagok-farm",
       "title": "화곡농장",
       "homeUrl": "https://softm.github.io/projects/hwagok-farm/",
-      "publicEntries": 38,
+      "publicEntries": 40,
       "privateEntries": 1,
-      "htmlSha256": "fb3c2ef423db69ada091d9e516fd330d8c3f53775d3bd60c8c62d9a059dde494",
+      "htmlSha256": "fbddd041444d6cc0e2ac38b789412143032509d1d30545870614084a7780af3c",
       "authenticatedContentVerified": false
     },
     {
@@ -96,9 +96,9 @@
       "repo": "farm",
       "title": "농업·농사",
       "homeUrl": "https://softm.github.io/projects/farm/",
-      "publicEntries": 4,
+      "publicEntries": 5,
       "privateEntries": 1,
-      "htmlSha256": "2e8c73cc97595679f8e22dc2911fe3b2d3a4c48606ad6453048c6cf6152334ef",
+      "htmlSha256": "82fc0fef0b3fddc3cd28399cfec385b6fbb37744716453c11aac052d1bf5718e",
       "authenticatedContentVerified": false
     },
     {
