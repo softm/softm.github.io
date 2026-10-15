@@ -14,6 +14,11 @@ assert.equal(canonical.dateSource,'archive-canonical');
 assert.deepEqual(archiveRows([],project),[]);
 const rootRow={...row,repoUrl:project.publicRepoUrl+'/tree/main/records/'+row.dir};
 assert.equal(archiveRows([rootRow],project)[0].recordPath,'records/'+row.dir);
+// SOFTM-unicode-archive-slug-test START: 안전한 한글 슬러그와 GitHub URL 정규화 검증 (2026-10-15)
+const unicodeDir='20261009-화곡농장-보유-농약-정리';
+const unicodeRow={...row,dir:unicodeDir,url:project.publicUrl+'records/'+unicodeDir+'/',repoUrl:project.publicRepoUrl+'/tree/main/public/records/'+unicodeDir};
+assert.equal(archiveRows([unicodeRow],project)[0].recordPath,'public/records/'+unicodeDir);
+// SOFTM-unicode-archive-slug-test END: 안전한 한글 슬러그와 GitHub URL 정규화 검증 (2026-10-15)
 const jsonProject={repo:'baksok-public',publicUrl:'https://softm.github.io/baksok-public/',publicRepoUrl:'https://github.com/softm/baksok-public'};
 const jsonData={errors:[],records:[{slug:'2025-front-window-design',date:'2025',title:'전면 유리 디자인',category:'디자인',input:'2025_전면유리',files:[{path:'images/a.jpg',size:10},{path:'index.html',size:20},{path:'notes.md',size:30}]}]};
 const jsonRow=jsonArchiveRows(jsonData,jsonProject)[0];

@@ -12,11 +12,14 @@ function archiveRows(data,p){
  return data.map(row=>{
   if(!row||typeof row!=='object')throw new Error('기록 형식 오류');
   const dir=text(row.dir),title=(typeof row.listTitle==='string'&&row.listTitle.length?row.listTitle:text(row.title)),date=text(row.date);
-  if(!/^[A-Za-z0-9_-]+$/.test(dir)||!title||!validDate(date)||seen.has(dir))throw new Error('기록 메타데이터 오류: '+dir);
+  // SOFTM-unicode-archive-slug START: 경로 구분자·상위 경로는 막고 한글 아카이브 슬러그는 허용 (2026-10-15)
+  const safeDir=/^[\p{L}\p{N}][\p{L}\p{N}._-]*$/u.test(dir)&&!dir.includes('..');
+  if(!safeDir||!title||!validDate(date)||seen.has(dir))throw new Error('기록 메타데이터 오류: '+dir);
   const expected=new URL('records/'+dir+'/',root.href.replace(/\/?$/,'/')).href;
   const repoBase=repo.href.replace(/\/$/,'')+'/tree/main/';
   const repoPaths=['public/records/'+dir,'records/'+dir];
-  const recordPath=repoPaths.find(path=>repoBase+path===https(row.repoUrl).href);
+  const recordPath=repoPaths.find(path=>https(repoBase+path).href===https(row.repoUrl).href);
+  // SOFTM-unicode-archive-slug END: 경로 구분자·상위 경로는 막고 한글 아카이브 슬러그는 허용 (2026-10-15)
   if(https(row.url).href!==expected||!recordPath)throw new Error('상세/원본 링크 오류: '+dir);
   seen.add(dir);
   return {...(typeof row.listTitle==='string'&&row.listTitle.length?{listTitle:row.listTitle,inputName:row.inputName,inputKind:row.inputKind,sourceTitle:row.sourceTitle}:{}),visibility:'public',label:title,title,chatTitle:title,date,dateSource:'archive-canonical',titleSource:row.listTitle?(row.titleSource||'inbox-name'):'archive-canonical',url:row.url,repoUrl:row.repoUrl,category:text(row.kind)||'아카이브',summary:text(row.desc),directory:dir,recordPath};
