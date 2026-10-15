@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-10-15",
+  "updatedAt": "2026-10-11",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -60,34 +60,23 @@
       "deploymentNote": "실제 콘텐츠는 프로젝트 저장소에 보존하고 중앙 목록은 배포된 HTML의 archive-data를 직접 조회합니다.",
       "links": [
         {
+          "listTitle": "20261015_감나무_접수_접목방법",
+          "inputName": "20261015_감나무_접수_접목방법",
+          "inputKind": "folder",
+          "sourceTitle": "2026-10-15 감나무 접수·접목 방법",
           "visibility": "public",
-          "label": "20261009 나리온 40mm 전지가위 구매 · 20261010 주문완료",
-          "title": "20261009 나리온 40mm 전지가위 구매 · 20261010 주문완료",
-          "chatTitle": "20261009 나리온 40mm 전지가위 구매 · 20261010 주문완료",
-          "date": "2026-10-09",
+          "label": "20261015_감나무_접수_접목방법",
+          "title": "20261015_감나무_접수_접목방법",
+          "chatTitle": "20261015_감나무_접수_접목방법",
+          "date": "2026-10-15",
           "dateSource": "archive-canonical",
-          "titleSource": "archive-canonical",
-          "url": "https://softm.github.io/hwagok-farm/records/20261009-narion-pruning-shears/",
-          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20261009-narion-pruning-shears",
-          "category": "농기계 · 구매완료",
-          "summary": "2026-10-10 신용카드 159,000원 결제 완료 · 40mm 베어툴 1개 · 배터리 기존 2개 재사용 · 체인오일 제외 · 공개 요약 이미지 1개 / 원본 상품 PNG 웹 게시 대기",
-          "directory": "20261009-narion-pruning-shears",
-          "recordPath": "public/records/20261009-narion-pruning-shears"
-        },
-        {
-          "visibility": "public",
-          "label": "20261009 제초제 분류 및 사용 가이드",
-          "title": "20261009 제초제 분류 및 사용 가이드",
-          "chatTitle": "20261009 제초제 분류 및 사용 가이드",
-          "date": "2026-10-09",
-          "dateSource": "archive-canonical",
-          "titleSource": "archive-canonical",
-          "url": "https://softm.github.io/hwagok-farm/records/20261009-herbicide-classification/",
-          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20261009-herbicide-classification",
-          "category": "방제 · 농약 관리",
-          "summary": "스톰프·라쏘·풀앤짱·푸리타 등 선택성·비선택성 비교. 사진 9장 웹 업로드 대기.",
-          "directory": "20261009-herbicide-classification",
-          "recordPath": "public/records/20261009-herbicide-classification"
+          "titleSource": "user-list-title",
+          "url": "https://softm.github.io/hwagok-farm/records/20261015-persimmon-grafting-guide/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20261015-persimmon-grafting-guide",
+          "category": "재배 · 접목",
+          "summary": "접수 채취 시기·선별·0~5℃ 저장·조제·접목·야생동물 피해 방지를 원본 화면 146장으로 정리한 공개 아카이브.",
+          "directory": "20261015-persimmon-grafting-guide",
+          "recordPath": "public/records/20261015-persimmon-grafting-guide"
         },
         {
           "listTitle": "20261009 화곡농장 보유 농약 정리",
@@ -107,6 +96,25 @@
           "recordPath": "public/records/20261009-herbicide-inventory"
         },
         {
+          "listTitle": "20261009 화곡농장 보유 농약 정리",
+          "inputName": "20261009 화곡농장 보유 농약 정리",
+          "inputKind": "folder",
+          "sourceTitle": "🌿 화곡농장 보유 농약 관리대장",
+          "visibility": "public",
+          "label": "20261009 화곡농장 보유 농약 정리",
+          "title": "20261009 화곡농장 보유 농약 정리",
+          "chatTitle": "20261009 화곡농장 보유 농약 정리",
+          "date": "2026-10-09",
+          "dateSource": "archive-canonical",
+          "titleSource": "inbox-name",
+          "url": "https://softm.github.io/hwagok-farm/records/20261009-%ED%99%94%EA%B3%A1%EB%86%8D%EC%9E%A5-%EB%B3%B4%EC%9C%A0-%EB%86%8D%EC%95%BD-%EC%A0%95%EB%A6%AC/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20261009-%ED%99%94%EA%B3%A1%EB%86%8D%EC%9E%A5-%EB%B3%B4%EC%9C%A0-%EB%86%8D%EC%95%BD-%EC%A0%95%EB%A6%AC",
+          "category": "아카이브",
+          "summary": "",
+          "directory": "20261009-화곡농장-보유-농약-정리",
+          "recordPath": "public/records/20261009-화곡농장-보유-농약-정리"
+        },
+        {
           "visibility": "public",
           "label": "20261009 지주대 삽입기 구매기록",
           "title": "20261009 지주대 삽입기 구매기록",
@@ -120,6 +128,36 @@
           "summary": "지주대 삽입기 주문 2건 · 표시금액 합계 26,300원 · 원본 이미지 2장. 선택 옵션·호환 규격 미확인.",
           "directory": "20261009-stake-inserter-purchase",
           "recordPath": "public/records/20261009-stake-inserter-purchase"
+        },
+        {
+          "visibility": "public",
+          "label": "20261009 제초제 분류 및 사용 가이드",
+          "title": "20261009 제초제 분류 및 사용 가이드",
+          "chatTitle": "20261009 제초제 분류 및 사용 가이드",
+          "date": "2026-10-09",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/hwagok-farm/records/20261009-herbicide-classification/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20261009-herbicide-classification",
+          "category": "방제 · 농약 관리",
+          "summary": "스톰프·라쏘·풀앤짱·푸리타 등 선택성·비선택성 비교. 사진 9장 웹 업로드 대기.",
+          "directory": "20261009-herbicide-classification",
+          "recordPath": "public/records/20261009-herbicide-classification"
+        },
+        {
+          "visibility": "public",
+          "label": "20261009 나리온 40mm 전지가위 구매 · 20261010 주문완료",
+          "title": "20261009 나리온 40mm 전지가위 구매 · 20261010 주문완료",
+          "chatTitle": "20261009 나리온 40mm 전지가위 구매 · 20261010 주문완료",
+          "date": "2026-10-09",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/hwagok-farm/records/20261009-narion-pruning-shears/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20261009-narion-pruning-shears",
+          "category": "농기계 · 구매완료",
+          "summary": "2026-10-10 신용카드 159,000원 결제 완료 · 40mm 베어툴 1개 · 배터리 기존 2개 재사용 · 체인오일 제외 · 공개 요약 이미지 1개 / 원본 상품 PNG 웹 게시 대기",
+          "directory": "20261009-narion-pruning-shears",
+          "recordPath": "public/records/20261009-narion-pruning-shears"
         },
         {
           "visibility": "public",
@@ -674,16 +712,16 @@
       "publicHomeStatus": "github-pages-home-generated",
       "privateEntryPolicy": "Vercel Authentication required; direct deep link after authentication",
       "vercelAccountAuthVerified": true,
-      "homePublicListCount": 38,
+      "homePublicListCount": 40,
       "homePrivateListCount": 1,
       "publicIndexSource": {
         "url": "https://softm.github.io/hwagok-farm/",
         "format": "html-archive-data"
       },
-      "pageCount": 38,
+      "pageCount": 40,
       "publicIndexSnapshot": {
         "source": "https://softm.github.io/hwagok-farm/",
-        "recordCount": 38,
+        "recordCount": 40,
         "purpose": "build snapshot; browsers refresh from the deployed source on every page load"
       },
       "privateRepo": "hwagok-farm-private",
