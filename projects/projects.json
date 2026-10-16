@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-10-15",
+  "updatedAt": "2026-10-16",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -1446,6 +1446,21 @@
       "authProvider": "vercel-sso",
       "deploymentNote": "Private GitHub zip/ 수집함을 HTML 우선 기준으로 archive/에 보존하고 Vercel 인증 배포를 사용한다.",
       "links": [
+        {
+          "visibility": "private",
+          "label": "20261016 주간보호센터 변경 기록",
+          "title": "20261016 주간보호센터 변경 기록",
+          "chatTitle": "주간보호센터 변경",
+          "date": "2026-10-16",
+          "dateSource": "archive-canonical",
+          "titleSource": "privacy-minimal",
+          "url": "https://father-hospital-treatment-private.vercel.app/archive/20261016-daycare-transfer-gwangmyeong-jeil/",
+          "repoUrl": "https://github.com/softm/father-hospital-treatment-private/tree/main/archive/20261016-daycare-transfer-gwangmyeong-jeil",
+          "category": "장기요양",
+          "summary": "2026년 10월의 주간보호센터 변경 경과를 기록한 비공개 문서. 원문과 첨부 열람은 인증 필요.",
+          "directory": "20261016-daycare-transfer-gwangmyeong-jeil",
+          "recordPath": "archive/20261016-daycare-transfer-gwangmyeong-jeil"
+        },
         {
           "visibility": "private",
           "label": "교직원공제회 ADL·진단서 요청 관련 채팅 정리",
