@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-10-16",
+  "updatedAt": "2026-10-15",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -1542,7 +1542,7 @@
       "privateEntryPolicy": "Vercel SSO protected deep links to private archive records",
       "vercelAccountAuthVerified": true,
       "homePublicListCount": 0,
-      "homePrivateListCount": 5
+      "homePrivateListCount": 6
     },
     {
       "order": 9,
