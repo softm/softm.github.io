@@ -1448,6 +1448,21 @@
       "links": [
         {
           "visibility": "private",
+          "label": "20261016 주간보호센터 변경 기록",
+          "title": "20261016 주간보호센터 변경 기록",
+          "chatTitle": "주간보호센터 변경",
+          "date": "2026-10-16",
+          "dateSource": "archive-canonical",
+          "titleSource": "privacy-minimal",
+          "url": "https://father-hospital-treatment-private.vercel.app/archive/20261016-daycare-transfer-gwangmyeong-jeil/",
+          "repoUrl": "https://github.com/softm/father-hospital-treatment-private/tree/main/archive/20261016-daycare-transfer-gwangmyeong-jeil",
+          "category": "장기요양",
+          "summary": "2026년 10월의 주간보호센터 변경 경과를 기록한 비공개 문서. 원문과 첨부 열람은 인증 필요.",
+          "directory": "20261016-daycare-transfer-gwangmyeong-jeil",
+          "recordPath": "archive/20261016-daycare-transfer-gwangmyeong-jeil"
+        },
+        {
+          "visibility": "private",
           "label": "교직원공제회 ADL·진단서 요청 관련 채팅 정리",
           "title": "교직원공제회 ADL·진단서 요청 관련 채팅 정리",
           "chatTitle": "교직원공제회 ADL·진단서 요청 관련 채팅 정리",
@@ -1527,7 +1542,7 @@
       "privateEntryPolicy": "Vercel SSO protected deep links to private archive records",
       "vercelAccountAuthVerified": true,
       "homePublicListCount": 0,
-      "homePrivateListCount": 5
+      "homePrivateListCount": 6
     },
     {
       "order": 9,
