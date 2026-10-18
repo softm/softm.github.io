@@ -2116,7 +2116,7 @@
       "repo": "farm",
       "order": 11,
       "title": "농업·농사",
-      "description": "농업·농사 통합 공개 아카이브 — 재배 도식과 영농 기록",
+      "description": "농업·농사 통합 공개 아카이브 — 재배 도식·영농 기록·이미지 자막 검색",
       "category": "농업",
       "deploymentStatus": "partial",
       "repoStatus": "available",
@@ -2128,7 +2128,7 @@
         "url": "https://softm.github.io/farm/archive-index.json",
         "format": "json-archive-index"
       },
-      "mediaStatus": "감나무 접수·접목 기록의 원본 PNG 146장·웹 썸네일 146장과 매니페스트 해시를 확인했습니다. 일부 기존 공개 기록의 원본 자료는 별도 상태를 따릅니다.",
+      "mediaStatus": "감나무 접수·접목 기록의 원본 PNG 146장·웹 썸네일 146장·교정 자막 130건·자막 없음 16장과 매니페스트 해시를 확인했습니다. 일부 기존 공개 기록의 원본 자료는 별도 상태를 따릅니다.",
       "deploymentNote": "공개 사이트의 archive-index.json에서 기록 목록과 원본 확보 상태를 직접 조회합니다.",
       "homePublicListCount": 5,
       "homePrivateListCount": 1,
@@ -2149,12 +2149,12 @@
           "url": "https://softm.github.io/farm/records/20261015-persimmon-grafting-guide/",
           "repoUrl": "https://github.com/softm/farm/tree/main/records/20261015-persimmon-grafting-guide",
           "category": "재배 · 접목",
-          "summary": "접수 채취 시기·선별·0~5℃ 저장·조제·접목·야생동물 피해 방지를 원본 화면 146장으로 정리한 공개 아카이브.",
+          "summary": "접수 채취·저장·조제·접목·피해 방지를 원본 화면 146장과 교정 자막 130건(자막 없음 16장)으로 정리한 검색형 공개 아카이브.",
           "files": {
             "images": 146,
             "videos": 0,
             "audio": 0,
-            "documents": 5
+            "documents": 7
           },
           "count": 146,
           "directory": "20261015-persimmon-grafting-guide",
