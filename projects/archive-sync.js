@@ -5,6 +5,12 @@ const ORIGIN='https://softm.github.io';
 const text=v=>typeof v==='string'?v.trim():'';
 function https(value){const u=new URL(value);if(u.protocol!=='https:'||u.username||u.password)throw new Error('HTTPS 원본 경로 오류');return u}
 function validDate(s){if(!s)return true;if(/^\d{4}$/.test(s))return Number(s)>=1000;if(!/^\d{4}-\d{2}-\d{2}$/.test(s))return false;const d=new Date(s+'T00:00:00Z');return Number.isFinite(d.getTime())&&d.toISOString().slice(0,10)===s}
+function archiveDateMetadata(row){
+ const metadata={dateSource:'archive-canonical'};
+ if(text(row.dateBasis))metadata.dateBasis=text(row.dateBasis);
+ if(Object.prototype.hasOwnProperty.call(row,'eventDate'))metadata.eventDate=row.eventDate;
+ return metadata;
+}
 function archiveRows(data,p){
  if(!Array.isArray(data))throw new Error('공개 목록 형식 오류');
  const root=https(p.publicUrl),repo=https(p.publicRepoUrl),seen=new Set();
@@ -22,7 +28,7 @@ function archiveRows(data,p){
   // SOFTM-unicode-archive-slug END: 경로 구분자·상위 경로는 막고 한글 아카이브 슬러그는 허용 (2026-10-15)
   if(https(row.url).href!==expected||!recordPath)throw new Error('상세/원본 링크 오류: '+dir);
   seen.add(dir);
-  return {...(typeof row.listTitle==='string'&&row.listTitle.length?{listTitle:row.listTitle,inputName:row.inputName,inputKind:row.inputKind,sourceTitle:row.sourceTitle}:{}),visibility:'public',label:title,title,chatTitle:title,date,dateSource:'archive-canonical',titleSource:row.listTitle?(row.titleSource||'inbox-name'):'archive-canonical',url:row.url,repoUrl:row.repoUrl,category:text(row.kind)||'아카이브',summary:text(row.desc),directory:dir,recordPath};
+  return {...(typeof row.listTitle==='string'&&row.listTitle.length?{listTitle:row.listTitle,inputName:row.inputName,inputKind:row.inputKind,sourceTitle:row.sourceTitle}:{}),visibility:'public',label:title,title,chatTitle:title,date,...archiveDateMetadata(row),titleSource:row.listTitle?(row.titleSource||'inbox-name'):'archive-canonical',url:row.url,repoUrl:row.repoUrl,category:text(row.kind)||'아카이브',summary:text(row.desc),directory:dir,recordPath};
  });
 }
 function jsonArchiveRows(data,p){
@@ -45,7 +51,7 @@ function jsonArchiveRows(data,p){
    else if(/\.(zip|7z)$/.test(path))files.archives++;
   }
   seen.add(dir);
-  return {visibility:'public',label:title,title,chatTitle:title,sourceTitle:text(row.input),date,dateSource:'archive-canonical',titleSource:'archive-canonical',url,repoUrl,category:text(row.category)||'아카이브',summary:'원본 자료 '+row.files.length+'개',count:row.files.length,files,directory:dir,recordPath:'records/'+dir};
+  return {visibility:'public',label:title,title,chatTitle:title,sourceTitle:text(row.input),date,...archiveDateMetadata(row),titleSource:'archive-canonical',url,repoUrl,category:text(row.category)||'아카이브',summary:'원본 자료 '+row.files.length+'개',count:row.files.length,files,directory:dir,recordPath:'records/'+dir};
  });
 }
 async function syncPublishedArchive(p){
@@ -64,7 +70,7 @@ async function syncPublishedArchive(p){
     const id=text(r.slug),rawListTitle=text(r.listTitle),cleanName=v=>text(v).replace(/\.zip$/i,'').replace(/_MD_HTML_전체자료$/i,'').replace(/_/g,' ').trim(),overrides={'20261009-bak-cultivation':'20261009 박 적심도식 정리','20261009-sprinkler-thread-guide':'20261009 스프링클러 배관 나사 규격 정리','20261009-stake-inserter-purchase':'20261009 지주대 삽입기 구매기록','20261009-herbicide-classification':'20261009 제초제 분류 및 사용 가이드','20261015-persimmon-grafting-guide':'20261015 감나무 접수·접목 방법'},listTitle=overrides[id]||cleanName(rawListTitle),displayTitle=listTitle,date=text(r.date); // SOFTM-persimmon-central-title: 전체 프로젝트에서 감나무 기록 제목을 동일하게 표시 (2026-10-15)
     if(!/^[A-Za-z0-9_-]+$/.test(id)||!listTitle||!displayTitle||!validDate(date)||seen.has(id))throw new Error('농업 기록 메타데이터 오류');
     if(r.visibility!=='public'||r.url!==root.href+'records/'+id+'/'||r.repoUrl!=='https://github.com/softm/farm/tree/main/records/'+id)throw new Error('농업 기록 링크 오류');seen.add(id);
-    return {visibility:'public',listTitle,label:displayTitle,title:displayTitle,chatTitle:displayTitle,sourceTitle:r.sourceTitle,date,dateSource:r.dateBasis,titleSource:r.titleSource||'archive-canonical',url:r.url,repoUrl:r.repoUrl,category:r.kind||'재배',summary:(r.description||'')+(r.sourceIntegrityComplete?'':' · 원본 자료 업로드 대기'),directory:id,recordPath:'records/'+id,sourceIntegrityComplete:r.sourceIntegrityComplete,originalPhotoCount:r.originalPhotoCount,originalImageCount:r.originalImageCount,uniqueOriginalImageCount:r.uniqueOriginalImageCount,diagramCount:r.diagramCount};
+    return {visibility:'public',listTitle,label:displayTitle,title:displayTitle,chatTitle:displayTitle,sourceTitle:r.sourceTitle,date,...archiveDateMetadata(r),titleSource:r.titleSource||'archive-canonical',url:r.url,repoUrl:r.repoUrl,category:r.kind||'재배',summary:(r.description||'')+(r.sourceIntegrityComplete?'':' · 원본 자료 업로드 대기'),directory:id,recordPath:'records/'+id,sourceIntegrityComplete:r.sourceIntegrityComplete,originalPhotoCount:r.originalPhotoCount,originalImageCount:r.originalImageCount,uniqueOriginalImageCount:r.uniqueOriginalImageCount,diagramCount:r.diagramCount};
   });
   p.links=[...links,...(p.links||[]).filter(x=>x.visibility==='private')];p.homePublicListCount=links.length;p.pageCount=links.length;p.homePrivateListCount=p.links.filter(x=>x.visibility==='private').length;
   p.mediaStatus=data.records.every(r=>r.sourceIntegrityComplete)?'공개 기록 원본 파일·해시 확인 완료':'일부 공개 기록의 원본 자료 확인 대기';
@@ -113,3 +119,4 @@ const api={archiveRows,jsonArchiveRows,syncPublishedArchive,syncProjects};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;
 else global.SoftmArchiveSync=api;
 })(typeof window!=='undefined'?window:globalThis);
+
