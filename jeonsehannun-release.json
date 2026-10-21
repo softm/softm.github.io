@@ -1,0 +1,7 @@
+{
+  "sourceRepository": "softm/jeonsehannun",
+  "sourceCommit": "4b82182e61d4d486ae1b2f50bc61559eac857d10",
+  "publicPath": "/jeonsehannun/",
+  "verificationRun": "https://github.com/softm/jeonsehannun/actions/runs/39688829953",
+  "note": "Publish only the tested static application. Preserve existing website and archives; never copy user contract documents."
+}
