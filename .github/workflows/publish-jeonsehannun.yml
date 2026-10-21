@@ -1,0 +1,158 @@
+name: Publish Jeonse Hannun on existing Pages
+on:
+  push:
+    branches: [main]
+    paths: [jeonsehannun-release.json]
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: compressed-public-site
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: github-pages
+      url: https://softm.github.io/jeonsehannun/
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          path: public-site
+          fetch-depth: 1
+      - name: Read pinned public source revision
+        id: source
+        working-directory: public-site
+        run: |
+          SHA=$(python3 -c "import json;print(json.load(open('jeonsehannun-release.json'))['sourceCommit'])")
+          [[ "$SHA" =~ ^[a-f0-9]{40}$ ]] || exit 1
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+        with:
+          repository: softm/jeonsehannun
+          ref: ${{ steps.source.outputs.sha }}
+          path: jeonsehannun
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate application source
+        working-directory: jeonsehannun
+        run: npm ci --ignore-scripts --no-audit --no-fund && npm run check && npm test
+      - name: Copy only public application files and save source provenance
+        env:
+          SOURCE_SHA: ${{ steps.source.outputs.sha }}
+        run: |
+          python3 - <<'PY'
+          import json, hashlib, os, shutil
+          from pathlib import Path
+          from datetime import datetime, timezone
+          src=Path('jeonsehannun'); dst=Path('public-site/jeonsehannun')
+          if (dst/'index.html').exists() and not (dst/'release.json').exists():
+              raise SystemExit('Destination already contains an untracked app; refusing to overwrite')
+          dst.mkdir(parents=True,exist_ok=True)
+          names=['index.html','styles.css','app.js','model.js','store.js','data.js','data-status.html','privacy.html','.nojekyll']
+          hashes={}
+          for name in names:
+              path=src/name
+              assert path.is_file() and not path.is_symlink()
+              shutil.copyfile(path,dst/name)
+              hashes[name]=hashlib.sha256(path.read_bytes()).hexdigest()
+          release={'sourceRepository':'softm/jeonsehannun','sourceCommit':os.environ['SOURCE_SHA'],'hostingRepository':'softm/softm.github.io','publicPath':'/jeonsehannun/','builtAt':datetime.now(timezone.utc).isoformat(),'filesSha256':hashes}
+          (dst/'release.json').write_text(json.dumps(release,ensure_ascii=False,indent=2)+'\n')
+          PY
+      - name: Persist app folder on main and existing publishing branch
+        working-directory: public-site
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- jeonsehannun
+          git diff --cached --name-only | grep -v '^jeonsehannun/' && exit 1 || true
+          if ! git diff --cached --quiet; then
+            git commit -m 'Publish verified Jeonse Hannun static application'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+          if git ls-remote --exit-code --heads origin gh-pages > /dev/null; then
+            git fetch --depth=1 origin gh-pages
+            git worktree add --detach "$RUNNER_TEMP/jeonsehannun-pages" FETCH_HEAD
+            mkdir -p "$RUNNER_TEMP/jeonsehannun-pages/jeonsehannun"
+            cp -a jeonsehannun/. "$RUNNER_TEMP/jeonsehannun-pages/jeonsehannun/"
+            git -C "$RUNNER_TEMP/jeonsehannun-pages" add -- jeonsehannun
+            if ! git -C "$RUNNER_TEMP/jeonsehannun-pages" diff --cached --quiet; then
+              git -C "$RUNNER_TEMP/jeonsehannun-pages" commit -m 'Mirror Jeonse Hannun public application without changing existing projects'
+              git -C "$RUNNER_TEMP/jeonsehannun-pages" push origin HEAD:gh-pages
+            fi
+          fi
+      - name: Package full existing website with the additional app
+        working-directory: public-site
+        run: tar --dereference --hard-dereference --exclude=.git --exclude=.github -cf "$RUNNER_TEMP/artifact.tar" .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: github-pages
+          path: ${{ runner.temp }}/artifact.tar
+          compression-level: 6
+          retention-days: 1
+      - uses: actions/deploy-pages@v4
+        id: deployment
+        with:
+          timeout: 1200000
+      - name: Verify live release and byte hashes
+        env:
+          SOURCE_SHA: ${{ steps.source.outputs.sha }}
+        run: |
+          python3 - <<'PY'
+          import json,os,time,hashlib,urllib.request
+          base='https://softm.github.io/jeonsehannun/'
+          sha=os.environ['SOURCE_SHA']
+          def get(name):
+              req=urllib.request.Request(base+name+'?verify='+sha,headers={'Cache-Control':'no-cache','User-Agent':'JeonseHannun-Deploy-Verification'})
+              with urllib.request.urlopen(req,timeout=30) as r:
+                  assert r.status==200
+                  return r.read()
+          for attempt in range(12):
+              try:
+                  release=json.loads(get('release.json'))
+                  assert release['sourceCommit']==sha
+                  for name,wanted in release['filesSha256'].items():
+                      if name.startswith('.'): continue
+                      assert hashlib.sha256(get(name)).hexdigest()==wanted,name
+                  print('LIVE_VERIFIED',base,sha)
+                  break
+              except Exception:
+                  if attempt==11:raise
+                  time.sleep(5)
+          PY
+      - name: Install browser for live functional checks
+        working-directory: jeonsehannun
+        run: npx playwright install --with-deps chromium
+      - name: Verify actual deployed app in desktop and mobile browsers
+        working-directory: jeonsehannun
+        run: |
+          cat > playwright.live.config.js <<'JS'
+          import config from './playwright.config.js';
+          export default {...config,webServer:undefined,use:{...config.use,baseURL:'https://softm.github.io/jeonsehannun/'}};
+          JS
+          npx playwright test -c playwright.live.config.js
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jeonsehannun-live-browser-verification
+          path: |
+            jeonsehannun/test-results/
+            jeonsehannun/playwright-report/
+          retention-days: 14
+      - name: Record publication outcome
+        env:
+          SOURCE_SHA: ${{ steps.source.outputs.sha }}
+        run: |
+          echo '### Jeonse Hannun deployment verified' >> "$GITHUB_STEP_SUMMARY"
+          echo 'URL: https://softm.github.io/jeonsehannun/' >> "$GITHUB_STEP_SUMMARY"
+          echo "Source: softm/jeonsehannun@$SOURCE_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo 'Hosting: existing softm/softm.github.io Pages; independent project Pages remains separate.' >> "$GITHUB_STEP_SUMMARY"
