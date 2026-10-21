@@ -1,0 +1,18 @@
+{
+  "sourceRepository": "softm/jeonsehannun",
+  "sourceCommit": "4b82182e61d4d486ae1b2f50bc61559eac857d10",
+  "hostingRepository": "softm/softm.github.io",
+  "publicPath": "/jeonsehannun/",
+  "builtAt": "2026-10-21T22:49:29.134705+00:00",
+  "filesSha256": {
+    "index.html": "2598033f18685299fbe9f4339c58f4ae6491f5574f0fc2792e2792c5aa9166c4",
+    "styles.css": "b45eda0fa16f8e2bbf60522f1495f3af24b32e87d131821a7d5ba79a7f9c9535",
+    "app.js": "f6d73a07163bac746c7628bde450ba5d4df62d9c992a5e63ea45741aca3e05da",
+    "model.js": "4cf9e8486e20368dd58cdaed3fe5ea3634c9073f9f8616dca8c4830a2bdaba5c",
+    "store.js": "a4d68b4888db635d6af7c24dd8eaa8639eca92989c6e1a72f98c01e12060c59a",
+    "data.js": "c63bfcaf959e72ac58d79650d661926e4568b5454858183b064457548959012c",
+    "data-status.html": "437a146cd0cea16e2b5c19ba6912e669ba8b602a89a4ded19f376b28a025b716",
+    "privacy.html": "6196f7c05cfb6842edf52340c29df840c3916c2db59e5a9e4ffe0c2d8f6cea42",
+    ".nojekyll": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}
