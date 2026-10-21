@@ -1,6 +1,6 @@
 # 아카이브 배포 — 기준 소스
 
-최종 갱신: 2026-10-07 · 통합 기준 버전: 2026-10-07.2
+최종 갱신: 2026-10-22 · 통합 기준 버전: 2026-10-22.1
 
 ## 먼저 읽을 실행 기준
 
@@ -8,10 +8,12 @@
 
 사용자가 명시한 범위 제한이 우선한다. 프롬프트나 기준 문서 작성 요청을 개인 기록 공개나 전체 프로젝트 재배포 요청으로 확대하지 않는다.
 
+최신순 공통 기준은 통합 프롬프트 27절에 정의한다. 확인된 기록일을 보존하고, 기록일이 없는 자료는 명시된 등록일로 정렬하되 등록일로 표시한다. 전체 프로젝트는 하위 기록의 가장 최근 기준일을 사용하며 실제 정렬 순서까지 운영에서 확인한다 (2026-10-22 확정).
+
 | 문서 | 역할 |
 |---|---|
 | [MD-HTML-ZIP-PROMPT.md](MD-HTML-ZIP-PROMPT.md) | 명령 실행에 사용하는 통합 프롬프트 |
-| [MD-HTML-ZIP-REQUIREMENTS.md](MD-HTML-ZIP-REQUIREMENTS.md) | 52개 요구사항의 반영 위치와 완료 검증 |
+| [MD-HTML-ZIP-REQUIREMENTS.md](MD-HTML-ZIP-REQUIREMENTS.md) | 56개 요구사항의 반영 위치와 완료 검증 |
 | [archive_deployment_prompt.md](archive_deployment_prompt.md) | 기존 파일명에서 접근하는 통합 기준 진입점 |
 | [OPERATIONS-POLICY.md](OPERATIONS-POLICY.md) | 이 변경 전 README의 누적 운영 기준 전체 보존본 |
 | [BASE-DEPLOYMENT-PROMPT.md](BASE-DEPLOYMENT-PROMPT.md) | 이 변경 전 통합 배포 프롬프트 전체 보존본 |
@@ -138,3 +140,4 @@ PDF는 가능하면 상세페이지 안에서 바로 볼 수 있게 한다.
 정상 원본 HTML/MD는 변경하지 않는다. `listTitle`(입력 이름)과 `sourceTitle`(본문 제목)을 분리하며, 기존 제목 일치 규칙보다 이 ZIP·폴더 목록 제목 예외를 우선한다. 기존 URL·slug·사건일·기록 수·공개 범위는 유지하고 프로젝트 자체 목록, 중앙 프로젝트 홈, 전체 projects의 관련 기록 정보에 같은 목록 제목을 사용한다.
 
 상세 기준: [ZIP·폴더 목록 제목 기준](INBOX-LIST-TITLE-POLICY.md). 정책 저장·개별 적용·운영 검증·전역 메모리 저장은 서로 다른 결과로 보고한다.
+

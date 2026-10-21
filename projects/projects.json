@@ -2142,7 +2142,7 @@
           "chatTitle": "농기계·굴착기면허·소형건설기계조종면허",
           "sourceTitle": "농기계·굴착기면허·소형건설기계조종면허",
           "date": "2026-10-22",
-          "dateSource": "archive_created",
+          "dateSource": "archive-canonical",
           "titleSource": "user-provided",
           "url": "https://softm.github.io/farm/records/20261022-farm-excavator-license/",
           "repoUrl": "https://github.com/softm/farm/tree/main/records/20261022-farm-excavator-license",
@@ -2160,7 +2160,8 @@
             "documents": 1
           },
           "pdfPageCount": 2,
-          "eventDate": null
+          "eventDate": null,
+          "dateBasis": "archive_created"
         },
         {
           "visibility": "public",
@@ -2170,7 +2171,7 @@
           "chatTitle": "20261015 감나무 접수·접목 방법",
           "sourceTitle": "2026-10-15 감나무 접수·접목 방법",
           "date": "2026-10-15",
-          "dateSource": "source-directory-name",
+          "dateSource": "archive-canonical",
           "titleSource": "inbox-name",
           "url": "https://softm.github.io/farm/records/20261015-persimmon-grafting-guide/",
           "repoUrl": "https://github.com/softm/farm/tree/main/records/20261015-persimmon-grafting-guide",
@@ -2192,7 +2193,8 @@
             "audio": 0,
             "documents": 7
           },
-          "sourceUrl": "https://www.youtube.com/watch?v=0GeX_SlVFo8&t=1s"
+          "sourceUrl": "https://www.youtube.com/watch?v=0GeX_SlVFo8&t=1s",
+          "dateBasis": "source-directory-name"
         },
         {
           "visibility": "public",
@@ -2202,7 +2204,7 @@
           "chatTitle": "20261009 제초제 분류 및 사용 가이드",
           "sourceTitle": "제초제 분류와 제품 비교 — 대화 전체 재정리",
           "date": "2026-10-09",
-          "dateSource": "archive_created",
+          "dateSource": "archive-canonical",
           "titleSource": "user-override",
           "url": "https://softm.github.io/farm/records/20261009-herbicide-classification/",
           "repoUrl": "https://github.com/softm/farm/tree/main/records/20261009-herbicide-classification",
@@ -2223,7 +2225,8 @@
             "audio": 0,
             "documents": 4
           },
-          "eventDate": null
+          "eventDate": null,
+          "dateBasis": "archive_created"
         },
         {
           "visibility": "public",
@@ -2233,7 +2236,7 @@
           "chatTitle": "20261009 박 적심도식 정리",
           "sourceTitle": "박 적심 도식화 정리",
           "date": "2026-10-09",
-          "dateSource": "archive_created",
+          "dateSource": "archive-canonical",
           "titleSource": "archive-canonical",
           "url": "https://softm.github.io/farm/records/20261009-bak-cultivation/",
           "repoUrl": "https://github.com/softm/farm/tree/main/records/20261009-bak-cultivation",
@@ -2248,7 +2251,8 @@
           "sourceFileCount": 8,
           "expectedSourceFileCount": 9,
           "expectedOriginalPhotoCount": 1,
-          "eventDate": null
+          "eventDate": null,
+          "dateBasis": "archive_created"
         },
         {
           "visibility": "public",
@@ -2258,7 +2262,7 @@
           "chatTitle": "20261009 스프링클러 배관 나사 규격 정리",
           "sourceTitle": "스프링클러 배관 나사 규격 정리",
           "date": "2026-10-09",
-          "dateSource": "archive_created",
+          "dateSource": "archive-canonical",
           "titleSource": "user-override",
           "url": "https://softm.github.io/farm/records/20261009-sprinkler-thread-guide/",
           "repoUrl": "https://github.com/softm/farm/tree/main/records/20261009-sprinkler-thread-guide",
@@ -2273,7 +2277,8 @@
           "sourceFileCount": 8,
           "expectedSourceFileCount": 8,
           "expectedOriginalImageCount": 3,
-          "eventDate": null
+          "eventDate": null,
+          "dateBasis": "archive_created"
         },
         {
           "visibility": "public",
@@ -2283,7 +2288,7 @@
           "chatTitle": "20261009 지주대 삽입기 구매기록",
           "sourceTitle": "지주대 삽입기 구매기록",
           "date": "2026-10-09",
-          "dateSource": "order-date",
+          "dateSource": "archive-canonical",
           "titleSource": "user-override",
           "url": "https://softm.github.io/farm/records/20261009-stake-inserter-purchase/",
           "repoUrl": "https://github.com/softm/farm/tree/main/records/20261009-stake-inserter-purchase",
@@ -2299,7 +2304,8 @@
             "videos": 0,
             "audio": 0,
             "documents": 0
-          }
+          },
+          "dateBasis": "order-date"
         },
         {
           "visibility": "public",
@@ -2309,7 +2315,7 @@
           "chatTitle": "20261006 무·시래기무·시금치 종자 구입 및 늦가을 파종 기록",
           "sourceTitle": "20261006 무·시래기무·시금치 종자 구입 및 늦가을 파종 기록",
           "date": "2026-10-06",
-          "dateSource": "purchase-receipt",
+          "dateSource": "archive-canonical",
           "titleSource": "archive-canonical",
           "url": "https://softm.github.io/farm/records/20261006-autumn-seed-purchase/",
           "repoUrl": "https://github.com/softm/farm/tree/main/records/20261006-autumn-seed-purchase",
@@ -2325,7 +2331,8 @@
             "videos": 0,
             "audio": 0,
             "documents": 4
-          }
+          },
+          "dateBasis": "purchase-receipt"
         },
         {
           "visibility": "private",
@@ -2464,5 +2471,5 @@
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
-  "homeVersion": "20261015-farm-archive-v25"
+  "homeVersion": "20261022-archive-date-sort-v26"
 }

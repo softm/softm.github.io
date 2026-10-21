@@ -11,7 +11,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '20261015-farm-archive-v25'  # SOFTM-project-asset-cache: 감나무·한글 경로 동기화 수정의 즉시 반영용 자산 버전 갱신 (2026-10-15)
+VERSION = '20261022-archive-date-sort-v26'  # Refresh canonical archive date sorting in every generated home.
 
 class ArchiveDataParser(HTMLParser):
     def __init__(self):
@@ -141,3 +141,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
