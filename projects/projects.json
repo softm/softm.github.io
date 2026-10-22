@@ -47,6 +47,41 @@
   "projects": [
     {
       "order": 1,
+      "repo": "weatherhannun",
+      "title": "날씨한눈",
+      "description": "예보를 행동으로 — 실시간 날씨·시간별/주간 예보·활동별 추천 시간대·대기질·전국 지도",
+      "category": "생활·기상",
+      "deploymentStatus": "deployed",
+      "repoStatus": "available",
+      "publicRepo": "weatherhannun",
+      "publicRepoUrl": "https://github.com/softm/weatherhannun",
+      "publicUrl": "https://softm.github.io/projects/weatherhannun/",
+      "homeUrl": "https://softm.github.io/projects/weatherhannun/",
+      "projectHomeUrl": "https://softm.github.io/projects/weatherhannun/",
+      "archiveLastPublishedAt": "2026-10-22T14:22:47+00:00",
+      "latestTitle": "20261022 날씨한눈 웹앱 첫 버전",
+      "homePublicListCount": 1,
+      "homePrivateListCount": 0,
+      "links": [
+        {
+          "visibility": "public",
+          "date": "2026-10-22",
+          "dateSource": "release-date",
+          "title": "20261022 날씨한눈 웹앱 첫 버전",
+          "label": "20261022 날씨한눈 웹앱 첫 버전",
+          "url": "https://softm.github.io/projects/weatherhannun/",
+          "repoUrl": "https://github.com/softm/weatherhannun",
+          "category": "생활·기상",
+          "summary": "오늘 예보, 시간별 36시간, 7일 주간예보, 48시간 활동 적합시간, 대기질, 전국날씨 지도 및 모바일 집중모드"
+        }
+      ],
+      "previousHomeUrl": "https://softm.github.io/projects/weatherhannun/",
+      "publicHomeStatus": "github-pages-home-generated",
+      "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
+      "vercelAccountAuthVerified": false
+    },
+    {
+      "order": 2,
       "repo": "hwagok-farm",
       "title": "화곡농장",
       "description": "화곡농장 영농·재배·방제·시설·농기계 기록 아카이브",
@@ -718,7 +753,7 @@
       "privateVerificationStatus": "runtime-http-verified-browser-pending"
     },
     {
-      "order": 2,
+      "order": 3,
       "repo": "baksok-public",
       "title": "서해박속낙지",
       "description": "서해박속낙지 매장 운영·시설·메뉴·작업 기록 아카이브",
@@ -976,7 +1011,7 @@
       }
     },
     {
-      "order": 3,
+      "order": 4,
       "repo": "farmland-policy-map",
       "title": "농지안심맵",
       "description": "지도 기반 농지관리·전수조사 사전점검·정책/활용기회·증빙 관리 앱",
@@ -1013,7 +1048,7 @@
       "vercelAccountAuthVerified": false
     },
     {
-      "order": 4,
+      "order": 5,
       "repo": "gwangmyeong",
       "title": "광명",
       "description": "광명 주거·시설·계약·가전 관련 공개·비공개 기록 아카이브",
@@ -1108,7 +1143,7 @@
       "privateGatewayRoot": "gateway"
     },
     {
-      "order": 5,
+      "order": 6,
       "repo": "ungdo-private",
       "title": "웅도",
       "description": "웅도 토지·현장·원상복구·합의 및 관련 자료의 비공개 아카이브",
@@ -1280,7 +1315,7 @@
       "vercelAccountAuthVerified": true
     },
     {
-      "order": 6,
+      "order": 7,
       "repo": "onsuhill-private",
       "title": "온수힐",
       "description": "온수힐 주거·수선·임대차 계약 관련 비공개 기록 아카이브",
@@ -1340,7 +1375,7 @@
       "privateDeliveryStatus": "existing-protected-delivery; live-read-pending-shared-env-link"
     },
     {
-      "order": 7,
+      "order": 8,
       "repo": "hwagok-land-permit-private",
       "title": "화곡리 개간허가",
       "description": "화곡리 개간허가·측량·수사·불기소·항고 관련 비공개 기록 아카이브",
@@ -1431,7 +1466,7 @@
       "vercelAccountAuthVerified": true
     },
     {
-      "order": 8,
+      "order": 9,
       "repo": "father-hospital-treatment-private",
       "title": "아버지 병원 치료",
       "description": "아버지 병원 치료·보험·의무기록·재활 관련 비공개 기록 아카이브",
@@ -1545,7 +1580,7 @@
       "homePrivateListCount": 6
     },
     {
-      "order": 9,
+      "order": 10,
       "repo": "yeonseo",
       "title": "연서",
       "description": "연서 교육·생활·활동 및 구매 기록 아카이브",
@@ -1845,7 +1880,7 @@
       "privateVerificationStatus": "partial-binary-web-upload"
     },
     {
-      "order": 10,
+      "order": 11,
       "repo": "mine-private",
       "title": "나",
       "description": "개인 건강·생활 기록을 보관하는 비공개 아카이브",
@@ -2114,7 +2149,7 @@
     },
     {
       "repo": "farm",
-      "order": 11,
+      "order": 12,
       "title": "농업·농사",
       "description": "농업·농사 통합 공개 아카이브 — 재배 도식·영농 기록·이미지 자막 검색",
       "category": "농업",
@@ -2378,7 +2413,7 @@
       }
     },
     {
-      "order": 12,
+      "order": 13,
       "repo": "gyeongju-kim-private",
       "title": "경주김씨",
       "description": "경주김씨 문중·묘역·회의·족보와 가족 경조사 관련 공개·비공개 기록 아카이브",

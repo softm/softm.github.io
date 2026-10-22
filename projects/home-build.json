@@ -1,7 +1,16 @@
 {
   "version": "20261022-archive-date-sort-v26",
-  "projectCount": 12,
+  "projectCount": 13,
   "projects": [
+    {
+      "repo": "weatherhannun",
+      "title": "날씨한눈",
+      "homeUrl": "https://softm.github.io/projects/weatherhannun/",
+      "publicEntries": 1,
+      "privateEntries": 0,
+      "htmlSha256": "3a350f6bb244f4691ace4fd232589ea72a5b44279cc00578ae23bc96689282ad",
+      "authenticatedContentVerified": false
+    },
     {
       "repo": "hwagok-farm",
       "title": "화곡농장",
@@ -112,6 +121,7 @@
     }
   ],
   "files": [
+    "projects/weatherhannun/index.html",
     "projects/hwagok-farm/index.html",
     "projects/baksok/index.html",
     "projects/farmland-policy-map/index.html",
