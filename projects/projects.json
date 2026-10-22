@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-10-22",
+  "updatedAt": "2026-10-15",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -74,7 +74,11 @@
           "category": "생활·기상",
           "summary": "오늘 예보, 시간별 36시간, 7일 주간예보, 48시간 활동 적합시간, 대기질, 전국날씨 지도 및 모바일 집중모드"
         }
-      ]
+      ],
+      "previousHomeUrl": "https://softm.github.io/projects/weatherhannun/",
+      "publicHomeStatus": "github-pages-home-generated",
+      "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
+      "vercelAccountAuthVerified": false
     },
     {
       "order": 2,
