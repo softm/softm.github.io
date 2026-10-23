@@ -519,3 +519,5 @@ jobs:
           echo "- App: $APP_NAME" >> "$GITHUB_STEP_SUMMARY"
           echo "- Package: $PACKAGE_NAME" >> "$GITHUB_STEP_SUMMARY"
           echo "- Web URL: $WEB_URL" >> "$GITHUB_STEP_SUMMARY"
+
+# bootstrap trigger: evchargingstation.android
