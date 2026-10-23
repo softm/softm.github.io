@@ -1,0 +1,521 @@
+name: Bootstrap Android Hybrid Repository
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/bootstrap-android-hybrid-repo.yml'
+  workflow_dispatch:
+    inputs:
+      repository_name:
+        description: 'Target repository name'
+        required: true
+        default: 'evchargingstation.android'
+      app_name:
+        description: 'Android app display name'
+        required: true
+        default: '충전한눈'
+      package_name:
+        description: 'Android applicationId / Java package'
+        required: true
+        default: 'net.softm.evchargingstation'
+      web_url:
+        description: 'Web app URL loaded by WebView'
+        required: true
+        default: 'https://softm.github.io/evchargingstation/'
+
+permissions:
+  contents: read
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    env:
+      REPO_NAME: ${{ inputs.repository_name || 'evchargingstation.android' }}
+      APP_NAME: ${{ inputs.app_name || '충전한눈' }}
+      PACKAGE_NAME: ${{ inputs.package_name || 'net.softm.evchargingstation' }}
+      WEB_URL: ${{ inputs.web_url || 'https://softm.github.io/evchargingstation/' }}
+      GH_TOKEN: ${{ secrets.REPO_CREATOR_TOKEN }}
+
+    steps:
+      - name: Validate repository creator token
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::Missing REPO_CREATOR_TOKEN repository secret."
+            echo "::error::Create a fine-grained PAT with repository creation permission and save it as REPO_CREATOR_TOKEN."
+            exit 1
+          fi
+
+      - name: Create private repository if missing
+        shell: bash
+        run: |
+          set -euo pipefail
+          if gh api "repos/softm/$REPO_NAME" >/dev/null 2>&1; then
+            echo "Repository softm/$REPO_NAME already exists."
+          else
+            gh api --method POST /user/repos \
+              -f name="$REPO_NAME" \
+              -f description="$APP_NAME Android hybrid application" \
+              -F private=true \
+              -F has_issues=true \
+              -F has_projects=false \
+              -F has_wiki=false \
+              -F auto_init=true
+            echo "Created private repository softm/$REPO_NAME."
+          fi
+
+      - name: Clone target repository
+        run: |
+          git clone "https://x-access-token:$GH_TOKEN@github.com/softm/$REPO_NAME.git" target
+          cd target
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Generate Android hybrid project
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd target
+
+          PACKAGE_PATH="$(echo "$PACKAGE_NAME" | tr '.' '/')"
+          mkdir -p "app/src/main/java/$PACKAGE_PATH"
+          mkdir -p app/src/main/res/values
+          mkdir -p .github/workflows
+
+          cat > settings.gradle.kts <<'EOF'
+          pluginManagement {
+              repositories {
+                  google()
+                  mavenCentral()
+                  gradlePluginPortal()
+              }
+          }
+          dependencyResolutionManagement {
+              repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+          }
+          rootProject.name = "evchargingstation.android"
+          include(":app")
+          EOF
+
+          cat > build.gradle.kts <<'EOF'
+          plugins {
+              id("com.android.application") version "9.4.1" apply false
+          }
+          EOF
+
+          cat > gradle.properties <<'EOF'
+          org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
+          android.useAndroidX=true
+          android.nonTransitiveRClass=true
+          EOF
+
+          cat > app/build.gradle.kts <<EOF
+          plugins {
+              id("com.android.application")
+          }
+
+          android {
+              namespace = "$PACKAGE_NAME"
+              compileSdk = 36
+
+              defaultConfig {
+                  applicationId = "$PACKAGE_NAME"
+                  minSdk = 24
+                  targetSdk = 36
+                  versionCode = 1
+                  versionName = "1.0.0"
+              }
+
+              buildTypes {
+                  release {
+                      isMinifyEnabled = false
+                      proguardFiles(
+                          getDefaultProguardFile("proguard-android-optimize.txt"),
+                          "proguard-rules.pro"
+                      )
+                  }
+              }
+
+              compileOptions {
+                  sourceCompatibility = JavaVersion.VERSION_17
+                  targetCompatibility = JavaVersion.VERSION_17
+              }
+          }
+          EOF
+
+          : > app/proguard-rules.pro
+
+          cat > app/src/main/res/values/strings.xml <<EOF
+          <resources>
+              <string name="app_name">$APP_NAME</string>
+          </resources>
+          EOF
+
+          cat > app/src/main/AndroidManifest.xml <<EOF
+          <?xml version="1.0" encoding="utf-8"?>
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+              <uses-permission android:name="android.permission.INTERNET" />
+              <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+              <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+              <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+              <application
+                  android:allowBackup="true"
+                  android:label="@string/app_name"
+                  android:usesCleartextTraffic="false"
+                  android:theme="@style/AppTheme">
+                  <activity
+                      android:name=".MainActivity"
+                      android:exported="true">
+                      <intent-filter>
+                          <action android:name="android.intent.action.MAIN" />
+                          <category android:name="android.intent.category.LAUNCHER" />
+                      </intent-filter>
+                  </activity>
+              </application>
+          </manifest>
+          EOF
+
+          cat > app/src/main/res/values/styles.xml <<'EOF'
+          <resources>
+              <style name="AppTheme" parent="android:style/Theme.Material.Light.NoActionBar">
+                  <item name="android:fontFamily">sans</item>
+                  <item name="android:windowLightStatusBar">true</item>
+                  <item name="android:navigationBarColor">#FFFFFF</item>
+                  <item name="android:statusBarColor">#FFFFFF</item>
+              </style>
+          </resources>
+          EOF
+
+          cat > "app/src/main/java/$PACKAGE_PATH/MainActivity.java" <<EOF
+          package $PACKAGE_NAME;
+
+          import android.Manifest;
+          import android.app.Activity;
+          import android.content.ActivityNotFoundException;
+          import android.content.Intent;
+          import android.content.pm.PackageManager;
+          import android.net.Uri;
+          import android.os.Bundle;
+          import android.provider.Settings;
+          import android.webkit.GeolocationPermissions;
+          import android.webkit.ValueCallback;
+          import android.webkit.WebChromeClient;
+          import android.webkit.WebResourceRequest;
+          import android.webkit.WebSettings;
+          import android.webkit.WebView;
+          import android.webkit.WebViewClient;
+
+          public class MainActivity extends Activity {
+              private static final int LOCATION_REQUEST = 1001;
+              private static final int FILE_REQUEST = 1002;
+              private static final String HOME_URL = "$WEB_URL";
+              private WebView webView;
+              private GeolocationPermissions.Callback geoCallback;
+              private String geoOrigin;
+              private ValueCallback<Uri[]> fileCallback;
+
+              @Override
+              protected void onCreate(Bundle savedInstanceState) {
+                  super.onCreate(savedInstanceState);
+
+                  webView = new WebView(this);
+                  setContentView(webView);
+
+                  WebSettings settings = webView.getSettings();
+                  settings.setJavaScriptEnabled(true);
+                  settings.setDomStorageEnabled(true);
+                  settings.setDatabaseEnabled(true);
+                  settings.setGeolocationEnabled(true);
+                  settings.setLoadWithOverviewMode(true);
+                  settings.setUseWideViewPort(true);
+                  settings.setMediaPlaybackRequiresUserGesture(false);
+
+                  webView.setWebViewClient(new WebViewClient() {
+                      @Override
+                      public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                          Uri uri = request.getUrl();
+                          String scheme = uri.getScheme();
+                          if ("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme)) {
+                              return false;
+                          }
+                          try {
+                              startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                          } catch (ActivityNotFoundException ignored) {
+                          }
+                          return true;
+                      }
+                  });
+
+                  webView.setWebChromeClient(new WebChromeClient() {
+                      @Override
+                      public void onGeolocationPermissionsShowPrompt(
+                              String origin,
+                              GeolocationPermissions.Callback callback
+                      ) {
+                          geoOrigin = origin;
+                          geoCallback = callback;
+                          if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                                  == PackageManager.PERMISSION_GRANTED) {
+                              callback.invoke(origin, true, false);
+                          } else {
+                              requestPermissions(
+                                  new String[] {
+                                      Manifest.permission.ACCESS_FINE_LOCATION,
+                                      Manifest.permission.ACCESS_COARSE_LOCATION
+                                  },
+                                  LOCATION_REQUEST
+                              );
+                          }
+                      }
+
+                      @Override
+                      public boolean onShowFileChooser(
+                              WebView webView,
+                              ValueCallback<Uri[]> filePathCallback,
+                              FileChooserParams fileChooserParams
+                      ) {
+                          if (fileCallback != null) {
+                              fileCallback.onReceiveValue(null);
+                          }
+                          fileCallback = filePathCallback;
+                          Intent intent = fileChooserParams.createIntent();
+                          try {
+                              startActivityForResult(intent, FILE_REQUEST);
+                              return true;
+                          } catch (ActivityNotFoundException e) {
+                              fileCallback = null;
+                              return false;
+                          }
+                      }
+                  });
+
+                  if (savedInstanceState == null) {
+                      webView.loadUrl(HOME_URL);
+                  } else {
+                      webView.restoreState(savedInstanceState);
+                  }
+              }
+
+              @Override
+              public void onRequestPermissionsResult(
+                      int requestCode,
+                      String[] permissions,
+                      int[] grantResults
+              ) {
+                  super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                  if (requestCode == LOCATION_REQUEST && geoCallback != null) {
+                      boolean granted = grantResults.length > 0
+                          && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                      geoCallback.invoke(geoOrigin, granted, false);
+                      geoCallback = null;
+                      geoOrigin = null;
+                  }
+              }
+
+              @Override
+              protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+                  super.onActivityResult(requestCode, resultCode, data);
+                  if (requestCode == FILE_REQUEST && fileCallback != null) {
+                      Uri[] result = WebChromeClient.FileChooserParams.parseResult(resultCode, data);
+                      fileCallback.onReceiveValue(result);
+                      fileCallback = null;
+                  }
+              }
+
+              @Override
+              public void onBackPressed() {
+                  if (webView != null && webView.canGoBack()) {
+                      webView.goBack();
+                  } else {
+                      super.onBackPressed();
+                  }
+              }
+
+              @Override
+              protected void onSaveInstanceState(Bundle outState) {
+                  webView.saveState(outState);
+                  super.onSaveInstanceState(outState);
+              }
+          }
+          EOF
+
+          cat > .gitignore <<'EOF'
+          .gradle/
+          .idea/
+          local.properties
+          build/
+          app/build/
+          *.iml
+          *.jks
+          *.keystore
+          EOF
+
+          cat > README.md <<EOF
+          # $APP_NAME Android
+
+          Hybrid Android application for the existing web service.
+
+          - Repository: `softm/$REPO_NAME`
+          - Package: `$PACKAGE_NAME`
+          - Web app: $WEB_URL
+          - compileSdk / targetSdk: 36
+          - minSdk: 24
+          - Android Gradle Plugin: 9.4.1
+          - Gradle: 9.6.0
+          - JDK: 17
+
+          ## CI/CD
+
+          Pushes and pull requests run Android build validation.
+          Manual Play deployment is defined in `.github/workflows/play-deploy.yml`.
+
+          Required Play deployment secrets:
+          - `ANDROID_KEYSTORE_BASE64`
+          - `ANDROID_KEYSTORE_PASSWORD`
+          - `ANDROID_KEY_ALIAS`
+          - `ANDROID_KEY_PASSWORD`
+          - `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON`
+          EOF
+
+          cat > .github/workflows/android-ci.yml <<'EOF'
+          name: Android CI
+
+          on:
+            push:
+              branches: [main]
+            pull_request:
+              branches: [main]
+            workflow_dispatch:
+
+          permissions:
+            contents: read
+
+          jobs:
+            build:
+              runs-on: ubuntu-latest
+              steps:
+                - uses: actions/checkout@v4
+                - uses: actions/setup-java@v4
+                  with:
+                    distribution: temurin
+                    java-version: '17'
+                - uses: android-actions/setup-android@v3
+                - run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+                - uses: gradle/actions/setup-gradle@v4
+                  with:
+                    gradle-version: '9.6.0'
+                - run: gradle assembleDebug bundleRelease
+                - uses: actions/upload-artifact@v4
+                  with:
+                    name: android-build
+                    path: |
+                      app/build/outputs/apk/debug/*.apk
+                      app/build/outputs/bundle/release/*.aab
+          EOF
+
+          cat > .github/workflows/play-deploy.yml <<'EOF'
+          name: Google Play Internal Deploy
+
+          on:
+            workflow_dispatch:
+
+          permissions:
+            contents: read
+
+          jobs:
+            deploy:
+              runs-on: ubuntu-latest
+              steps:
+                - uses: actions/checkout@v4
+                - uses: actions/setup-java@v4
+                  with:
+                    distribution: temurin
+                    java-version: '17'
+                - uses: android-actions/setup-android@v3
+                - run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+                - uses: gradle/actions/setup-gradle@v4
+                  with:
+                    gradle-version: '9.6.0'
+
+                - name: Validate deployment secrets
+                  env:
+                    KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+                    KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+                    KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+                    KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+                    PLAY_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+                  run: |
+                    test -n "$KEYSTORE"
+                    test -n "$KEYSTORE_PASSWORD"
+                    test -n "$KEY_ALIAS"
+                    test -n "$KEY_PASSWORD"
+                    test -n "$PLAY_JSON"
+
+                - name: Restore signing keystore
+                  env:
+                    KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+                  run: echo "$KEYSTORE" | base64 --decode > app/release.keystore
+
+                - name: Configure signing
+                  env:
+                    STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+                    KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+                    KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+                  run: |
+                    cat >> app/build.gradle.kts <<EOF2
+
+                    android {
+                        signingConfigs {
+                            create("playRelease") {
+                                storeFile = file("release.keystore")
+                                storePassword = System.getenv("STORE_PASSWORD")
+                                keyAlias = System.getenv("KEY_ALIAS")
+                                keyPassword = System.getenv("KEY_PASSWORD")
+                            }
+                        }
+                        buildTypes {
+                            getByName("release") {
+                                signingConfig = signingConfigs.getByName("playRelease")
+                            }
+                        }
+                    }
+                    EOF2
+
+                - run: gradle bundleRelease
+
+                - name: Upload to Google Play internal track
+                  uses: r0adkll/upload-google-play@v1
+                  with:
+                    serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+                    packageName: net.softm.evchargingstation
+                    releaseFiles: app/build/outputs/bundle/release/app-release.aab
+                    track: internal
+                    status: completed
+          EOF
+
+      - name: Commit and push generated project
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd target
+          git add .
+          if git diff --cached --quiet; then
+            echo "No bootstrap changes to commit."
+          else
+            git commit -m "chore: bootstrap Android hybrid app"
+            git push origin main
+          fi
+
+      - name: Summary
+        run: |
+          echo "### Android repository bootstrap" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Repository: https://github.com/softm/$REPO_NAME" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Visibility: private" >> "$GITHUB_STEP_SUMMARY"
+          echo "- App: $APP_NAME" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Package: $PACKAGE_NAME" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Web URL: $WEB_URL" >> "$GITHUB_STEP_SUMMARY"
