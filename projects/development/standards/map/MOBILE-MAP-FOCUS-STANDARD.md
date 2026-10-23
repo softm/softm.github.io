@@ -536,3 +536,61 @@ GitHub 저장소 전반에 재사용할 개발/운영 기준은 개별 프로젝
 - compact와 expanded의 컨트롤 노출 차이가 없음
 - 드래그 핸들이 장식만 하고 실제 snap이 없음
 - expanded에서 지도유형/전체지도 버튼이 실제 기능과 연결되지 않음
+
+
+## 19. 2026-10-23 5단계 토글 상태 표준
+
+지도 집중모드의 모바일 토글은 다음 5개 사용자 상태를 독립 상태로 다룬다.
+
+| 단계 | 상태명 | 핵심 동작 |
+|---|---|---|
+| 1 | `focus-detail` | 마커 선택 직후 상세 sheet 표시 |
+| 2 | `map-browse` | 상세 X로 닫은 뒤 선택 마커를 유지한 전체지도 탐색 상태 |
+| 3 | `expanded-tools` | 상세 상태에서 `상세 크게`를 눌러 검색/필터/레이어/전체지도 도구까지 표시 |
+| 4 | `list-sheet` | map-browse 하단 메뉴의 목록 버튼으로 목록 bottom sheet를 연 상태 |
+| 5 | `list-sheet-expanded` | 목록 sheet 핸들을 위로 끌어 목록 영역을 크게 확장한 상태 |
+
+### 19.1 상세 닫기 규칙
+- 상세 sheet의 X는 기본 페이지로 복귀시키지 않는다.
+- X를 누르면 선택 마커/선택 callout/지도 중심/zoom/filter를 유지하고 `map-browse`로 이동한다.
+- `map-browse`에는 검색/필터/지도유형/전체화면 도구와 하단 메뉴 그룹을 표시할 수 있다.
+- 브라우저 뒤로가기 또는 명시적 집중모드 종료에서만 기본 `default` 레이아웃으로 복원한다.
+
+### 19.2 map-browse 하단 메뉴 그룹
+권장 기본 구성:
+- `목록 N`
+- `비교/담은 항목 N`
+- `더보기`
+
+목록 수와 비교 수는 현재 필터/선택 상태와 실시간 동기화한다.
+필요 시 하단 메뉴 위에 `이 지역 재검색` floating button을 둔다.
+
+### 19.3 목록 sheet
+- 목록은 기존 페이지 전체 레이아웃으로 복귀하지 않고 현재 지도 위 bottom sheet로 연다.
+- compact list sheet는 화면 높이 약 35~50%를 권장한다.
+- expanded list sheet는 약 70~85%를 권장한다.
+- 검색/상세와 독립적인 drag handle을 가진다.
+- compact에서 위 drag → expanded.
+- expanded에서 아래 drag → compact.
+- compact에서 충분히 아래 drag → map-browse로 닫기.
+- 목록에서 항목 선택 → 해당 항목의 `focus-detail`로 전환한다.
+
+### 19.4 지도 인스턴스 유지
+5단계 전환 동안 지도 객체를 재생성하지 않는다.
+- 선택 ID 유지
+- callout 유지
+- map center/zoom 유지
+- filter 유지
+- 목록 스크롤 유지
+- sheet snap 후에만 resize/invalidate를 호출한다.
+
+### 19.5 완료 판정
+다음이 실제로 연속 동작해야 한다.
+1. 마커 선택 → 상세
+2. X → 상세만 닫히고 map-browse 유지
+3. 상세 다시 열기/상세 크게 → expanded-tools
+4. map-browse 하단 목록 버튼 → list-sheet
+5. 목록 핸들 위 drag → list-sheet-expanded
+6. 목록 핸들 아래 drag → list-sheet
+7. 목록에서 주유소 선택 → focus-detail
+8. 뒤로가기 → 집중모드 종료 및 원래 기본 레이아웃 복구
