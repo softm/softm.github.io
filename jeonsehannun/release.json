@@ -2,20 +2,17 @@
   "sourceRepository": "softm/jeonsehannun",
   "sourceCommit": "96a8813100b851017d58a12069ead033902a26af",
   "hostingRepository": "softm/softm.github.io",
-  "hostingBranch": "gh-pages",
   "publicPath": "/jeonsehannun/",
-  "release": "v0.3",
-  "builtAt": "2026-10-23T07:26:00Z",
-  "integrity": "Published files were synchronized from source main through the GitHub connector.",
-  "publishedFiles": [
-    "index.html",
-    "styles.css",
-    "app.js",
-    "model.js",
-    "store.js",
-    "data.js",
-    "data-status.html",
-    "privacy.html",
-    ".nojekyll"
-  ]
+  "builtAt": "2026-10-23T07:29:26.640370+00:00",
+  "filesSha256": {
+    "index.html": "05bc2f787cf2ec7566ba60a8a47908773dc9237052dbac4d38cb9accd6b62c2e",
+    "styles.css": "0753ec0c53f246babe644de8a88fb93e634d59943d6791197dfa50f626558ded",
+    "app.js": "beccf75da132e751a6b93acfdcfd193d97902296f3d466d41324ee9ccf41c186",
+    "model.js": "11d8c53b719609c06f76c05bf2ae42bf924ce4b622ddd57fe5c446e70b79b8db",
+    "store.js": "a4d68b4888db635d6af7c24dd8eaa8639eca92989c6e1a72f98c01e12060c59a",
+    "data.js": "1574c10e2816e5df49bcadc196e9af9405d77902a3bbd07aa32a24b5c1c6b32c",
+    "data-status.html": "d525af2274842ac761d911b7aa8bf336666e62ea717eb41667f1eb62e641c9ee",
+    "privacy.html": "a1b205e74d2d834a24b3c6680bdd2d67741a6cf2e17b48e28c2bf6bbef70b4d1",
+    ".nojekyll": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
 }
