@@ -1,18 +1,20 @@
 {
   "sourceRepository": "softm/jeonsehannun",
-  "sourceCommit": "ad0f9a424d167fb21278b6d08ad243341cf8cc60",
+  "sourceCommit": "96a8813100b851017d58a12069ead033902a26af",
   "hostingRepository": "softm/softm.github.io",
   "publicPath": "/jeonsehannun/",
-  "builtAt": "2026-10-21T23:16:44.801592+00:00",
-  "filesSha256": {
-    "index.html": "bd65b9a93c282bef0f090a4cec7ab4d840561b9aa74541b8550793dba50889c6",
-    "styles.css": "d6d364b36d32563f2e505ec4db0d83038bb7eccf69ae3c44e481ceb23191baeb",
-    "app.js": "f12d32b73f4e48f4cb1e40e442e0b0891f6174872fd67cdd034b182f26f54184",
-    "model.js": "11d8c53b719609c06f76c05bf2ae42bf924ce4b622ddd57fe5c446e70b79b8db",
-    "store.js": "a4d68b4888db635d6af7c24dd8eaa8639eca92989c6e1a72f98c01e12060c59a",
-    "data.js": "c63bfcaf959e72ac58d79650d661926e4568b5454858183b064457548959012c",
-    "data-status.html": "88a221b200b745a565a74c0dba1ef65eb564c243af72a27aea59aecbfa37bdd9",
-    "privacy.html": "fa961b9418bcab98a8a6f462899279d99120d9cf88d8df0bc2d99dba7eff15e4",
-    ".nojekyll": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-  }
+  "release": "v0.3",
+  "builtAt": "2026-10-23T07:22:00Z",
+  "integrity": "Publish files were byte-compared with source main through the GitHub connector before this release record was written.",
+  "publishedFiles": [
+    "index.html",
+    "styles.css",
+    "app.js",
+    "model.js",
+    "store.js",
+    "data.js",
+    "data-status.html",
+    "privacy.html",
+    ".nojekyll"
+  ]
 }
