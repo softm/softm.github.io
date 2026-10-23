@@ -1,6 +1,6 @@
 {
   "version": "20261022-archive-date-sort-v26",
-  "projectCount": 13,
+  "projectCount": 14,
   "projects": [
     {
       "repo": "weatherhannun",
@@ -118,6 +118,15 @@
       "privateEntries": 1,
       "htmlSha256": "6b722c57f51449ae1be0b51ba8d205741bbb810ff4454067a62b106b44c76bda",
       "authenticatedContentVerified": false
+    },
+    {
+      "repo": "car",
+      "title": "자동차",
+      "homeUrl": "https://softm.github.io/projects/car/",
+      "publicEntries": 0,
+      "privateEntries": 1,
+      "htmlSha256": "4d4210072d85bd3e25dd18d29dcb43b91440319984d46b1f3fa6dee7d13e9979",
+      "authenticatedContentVerified": false
     }
   ],
   "files": [
@@ -134,6 +143,7 @@
     "projects/mine/index.html",
     "projects/farm/index.html",
     "projects/gyeongju-kim/index.html",
+    "projects/car/index.html",
     "projects/projects.json",
     "projects/index.html",
     "projects/README.md",
