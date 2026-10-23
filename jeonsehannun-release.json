@@ -1,7 +1,6 @@
 {
   "sourceRepository": "softm/jeonsehannun",
-  "sourceCommit": "ad0f9a424d167fb21278b6d08ad243341cf8cc60",
+  "sourceCommit": "96a8813100b851017d58a12069ead033902a26af",
   "publicPath": "/jeonsehannun/",
-  "verificationRun": "https://github.com/softm/jeonsehannun/actions/runs/39692041814",
-  "note": "House-first entry, read-only guide without setup, and per-home notes. All unit and browser tests passed before publication. Preserve existing website, archives and all user browser records."
+  "note": "v0.3 official prevention flow: HUG price/risk diagnosis, landlord information lookup, habitual debtor public list, and registry handoff. Deployment workflow must validate source, publish the existing Pages site without replacing other projects, and verify the live app."
 }
