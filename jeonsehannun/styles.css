@@ -12,3 +12,13 @@
 .house-actions{margin-bottom:24px;background:#fafff8}.house-actions .subheading{margin-bottom:5px}.house-actions .hint{margin:14px 0 0}.house-note-text{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;max-height:180px;overflow:auto;border-left:3px solid #b4d0b9;padding:8px 14px;background:white}
 .guide-phase{margin-bottom:24px}.guide-phase details{border-bottom:1px solid var(--border)}.guide-phase h3{color:var(--green)}
 @media(max-width:700px){.house-welcome{padding:22px 18px}.house-welcome h2{font-size:22px}.welcome-flow{grid-template-columns:1fr;gap:12px}.welcome-flow article{padding:12px 0;border-bottom:1px solid var(--border)}.welcome-flow p{margin:0}.welcome-secondary{gap:4px}.welcome-secondary button{width:100%;text-align:left}#start-house-form .primary{width:100%}.house-actions .inline{gap:8px}.house-actions .inline button{font-size:13px}.shell.no-homes main{padding-top:24px}}
+
+
+.official-actions{margin-bottom:24px;background:linear-gradient(180deg,#fff 0%,#fbfdf9 100%)}
+.official-actions h2{margin:0}.official-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.official-action{display:block;border:1px solid var(--border);border-radius:12px;padding:15px 16px;text-decoration:none;background:#fff;color:var(--text);min-height:92px}
+.official-action:hover{border-color:#9bc5ae;background:#f5faf5}
+.official-action strong{display:block;color:var(--dark);font-size:14px;margin-bottom:5px}
+.official-action small{display:block;color:var(--muted);font-size:11px;line-height:1.6}
+.official-actions>.hint{margin:14px 0 0}
+@media(max-width:700px){.official-grid{grid-template-columns:1fr}.official-action{min-height:0;padding:14px}}
