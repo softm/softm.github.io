@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-10-15",
+  "updatedAt": "2026-10-23",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -2503,6 +2503,58 @@
         "vercel-deployment-protection"
       ],
       "privateUrl": "https://gyeongju-kim-private.vercel.app/"
+    },
+    {
+      "order": 14,
+      "repo": "car",
+      "title": "자동차",
+      "description": "벤츠·팰리세이드 등 차량 구매·판매·정비 기록을 공개/비공개로 분리한 자동차 프로젝트",
+      "category": "자동차",
+      "deploymentStatus": "partial",
+      "repoStatus": "available",
+      "publicRepo": "car",
+      "publicRepoUrl": "https://github.com/softm/car",
+      "publicUrl": "https://softm.github.io/projects/car/",
+      "privateRepo": "car-private",
+      "privateRepoUrl": "https://github.com/softm/car-private",
+      "privateUrl": "https://car-private.vercel.app/",
+      "homeUrl": "https://softm.github.io/projects/car/",
+      "projectHomeUrl": "https://softm.github.io/projects/car/",
+      "authProvider": "vercel-sso",
+      "deploymentNote": "자동차 루트는 프로젝트 인덱스, 벤츠 매각 기록은 날짜별 하위 아카이브. 원본·사진은 비공개 저장소에만 보관",
+      "latestTitle": "20261023 벤츠 헤이딜러 매각 694만원",
+      "pageCount": 0,
+      "privatePageCount": 1,
+      "homePublicListCount": 0,
+      "homePrivateListCount": 1,
+      "vercelAccountAuthVerified": false,
+      "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
+      "links": [
+        {
+          "visibility": "private",
+          "label": "20261023 벤츠 헤이딜러 매각 694만원",
+          "title": "20261023 벤츠 헤이딜러 매각 694만원",
+          "chatTitle": "20261023 벤츠 헤이딜러 매각 694만원",
+          "date": "2026-10-23",
+          "dateSource": "archive-canonical",
+          "titleSource": "user",
+          "category": "자동차 매각",
+          "url": "https://car-private.vercel.app/archive/20261023-benz-heydiller-sale/",
+          "repoUrl": "https://github.com/softm/car-private/tree/main/archive/20261023-benz-heydiller-sale",
+          "directory": "20261023-benz-heydiller-sale",
+          "recordPath": "archive/20261023-benz-heydiller-sale",
+          "summary": "벤츠 E220 CDI 매각 과정과 헤이딜러 최종 견적·인계 기록. 원본 사진과 증빙서류는 비공개 인증 후 열람.",
+          "publicSummary": "벤츠 매각 견적·인계 기록. 비공개 상세 열람은 인증 필요.",
+          "count": 22,
+          "files": {
+            "images": 22,
+            "videos": 0,
+            "audio": 0,
+            "documents": 1,
+            "archives": 0
+          }
+        }
+      ]
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
