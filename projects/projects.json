@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-10-15",
+  "updatedAt": "2026-10-26",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -55,7 +55,7 @@
       "repoStatus": "available",
       "publicRepo": "weatherhannun",
       "publicRepoUrl": "https://github.com/softm/weatherhannun",
-      "publicUrl": "https://weatherhannun.vercel.app/",
+      "publicUrl": "https://softm.github.io/weatherhannun/",
       "homeUrl": "https://softm.github.io/projects/weatherhannun/",
       "projectHomeUrl": "https://softm.github.io/projects/weatherhannun/",
       "archiveLastPublishedAt": "2026-10-22T14:22:47+00:00",
@@ -69,7 +69,7 @@
           "dateSource": "archive-canonical",
           "title": "20261022 날씨한눈 · 웹앱과 농업 날씨",
           "label": "20261022 날씨한눈 · 웹앱과 농업 날씨",
-          "url": "https://weatherhannun.vercel.app/",
+          "url": "https://softm.github.io/weatherhannun/",
           "repoUrl": "https://github.com/softm/weatherhannun",
           "category": "생활·기상",
           "summary": "실행 가능한 웹앱: 강수 시간대, 맑은 시간대, 시간별·주간예보, 농업 날씨, 조건부 앱 열림 알림"
@@ -77,8 +77,7 @@
       ],
       "previousHomeUrl": "https://softm.github.io/projects/weatherhannun/",
       "publicHomeStatus": "github-pages-home-generated",
-      "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
-      "vercelAccountAuthVerified": false
+      "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat"
     },
     {
       "order": 2,
