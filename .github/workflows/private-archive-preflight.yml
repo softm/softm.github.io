@@ -28,8 +28,14 @@ jobs:
       - name: Run private archive completion gate
         env:
           ARCHIVE_GITHUB_TOKEN: ${{ secrets.ARCHIVE_GITHUB_TOKEN }}
+          PROJECT_KEY: ${{ inputs.project }}
+          PRIVATE_REPO: ${{ inputs.private_repo }}
+          RECORD_SLUG: ${{ inputs.record }}
+        shell: bash
         run: |
-          node projects/development/workflows/private-archive-guard.mjs \
-            --project "${{ inputs.project }}" \
-            --repo "${{ inputs.private_repo }}" \
-            --record "${{ inputs.record }}"
+          set -euo pipefail
+          args=(--project "$PROJECT_KEY" --repo "$PRIVATE_REPO")
+          if [ -n "$RECORD_SLUG" ]; then
+            args+=(--record "$RECORD_SLUG")
+          fi
+          node projects/development/workflows/private-archive-guard.mjs "${args[@]}"
