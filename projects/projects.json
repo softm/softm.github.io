@@ -2510,7 +2510,7 @@
       "title": "자동차",
       "description": "벤츠·팰리세이드 등 차량 구매·판매·정비 기록을 공개/비공개로 분리한 자동차 프로젝트",
       "category": "자동차",
-      "deploymentStatus": "partial",
+      "deploymentStatus": "deployed",
       "repoStatus": "available",
       "publicRepo": "car",
       "publicRepoUrl": "https://github.com/softm/car",
@@ -2521,15 +2521,39 @@
       "homeUrl": "https://softm.github.io/projects/car/",
       "projectHomeUrl": "https://softm.github.io/projects/car/",
       "authProvider": "vercel-sso",
-      "deploymentNote": "자동차 루트는 프로젝트 인덱스, 벤츠 매각 기록은 날짜별 하위 아카이브. 원본·사진은 비공개 저장소에만 보관",
-      "latestTitle": "20261023 벤츠 헤이딜러 매각 694만원",
+      "deploymentNote": "자동차 비공개 기록은 Private GitHub 원본 + Vercel 인증 live-read gateway로 제공. 원본·사진·문서는 공개 저장소에 복제하지 않음.",
+      "latestTitle": "20261025 자동차보험 2024~2026 가입·견적·주행거리 이력",
       "pageCount": 0,
-      "privatePageCount": 1,
+      "privatePageCount": 2,
       "homePublicListCount": 0,
-      "homePrivateListCount": 1,
+      "homePrivateListCount": 2,
       "vercelAccountAuthVerified": false,
       "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
       "links": [
+        {
+          "visibility": "private",
+          "label": "20261025 자동차보험 2024~2026 가입·견적·주행거리 이력",
+          "title": "20261025 자동차보험 2024~2026 가입·견적·주행거리 이력",
+          "chatTitle": "20261025 자동차보험 2024~2026 가입·견적·주행거리 이력",
+          "date": "2026-10-25",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "category": "자동차보험",
+          "url": "https://car-private.vercel.app/archive/20261025-car-insurance-history/",
+          "repoUrl": "https://github.com/softm/car-private/tree/main/archive/20261025-car-insurance-history",
+          "directory": "20261025-car-insurance-history",
+          "recordPath": "archive/20261025-car-insurance-history",
+          "summary": "골프 DB손해보험 2024~2026 가입 이력과 팰리세이드 삼성화재 2024~2026 보험료·견적·주행거리 기록. 비공개 상세 열람은 인증 필요.",
+          "publicSummary": "골프·팰리세이드 자동차보험 연도별 기록. 비공개 상세 열람은 인증 필요.",
+          "count": 0,
+          "files": {
+            "images": 0,
+            "videos": 0,
+            "audio": 0,
+            "documents": 0,
+            "archives": 0
+          }
+        },
         {
           "visibility": "private",
           "label": "20261023 벤츠 헤이딜러 매각 694만원",
@@ -2556,7 +2580,8 @@
         }
       ],
       "previousHomeUrl": "https://softm.github.io/projects/car/",
-      "publicHomeStatus": "github-pages-home-generated"
+      "publicHomeStatus": "github-pages-home-generated",
+      "archiveLastPublishedAt": "2026-10-25T14:14:00+09:00"
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
