@@ -1,0 +1,35 @@
+name: Private archive preflight
+
+on:
+  workflow_dispatch:
+    inputs:
+      project:
+        description: Central project key, e.g. car
+        required: true
+        type: string
+      private_repo:
+        description: Private source repo, e.g. softm/car-private
+        required: true
+        type: string
+      record:
+        description: Optional archive record slug
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run private archive completion gate
+        env:
+          ARCHIVE_GITHUB_TOKEN: ${{ secrets.ARCHIVE_GITHUB_TOKEN }}
+        run: |
+          node projects/development/workflows/private-archive-guard.mjs \
+            --project "${{ inputs.project }}" \
+            --repo "${{ inputs.private_repo }}" \
+            --record "${{ inputs.record }}"
