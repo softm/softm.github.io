@@ -27,6 +27,17 @@
 
 정상 HTML이 있으면 우선 보존한다. HTML이 없으면 MD/TXT/미디어/문서에서 HTML을 만든다. Markdown 덤프형 HTML은 원본을 보존하면서 정상 렌더링 HTML로 정규화한다. 따라서 과거의 포괄적 MD 변환 금지·HTML 없으면 중단 문구는 그대로 적용하지 않는다.
 
+## 실행 강제 도구
+
+비공개 아카이브는 기준 문서를 읽는 것만으로 완료 판정하지 않는다.
+
+- 중앙 목록 반영: `projects/development/workflows/private-archive-sync.mjs`
+- 완료 사전점검/종료 게이트: `projects/development/workflows/private-archive-guard.mjs`
+- GitHub Actions 수동 검사: `.github/workflows/private-archive-preflight.yml`
+
+**비공개 아카이브는 guard 결과가 `PASS`가 아니면 완료라고 보고하지 않는다.**
+검사에는 Private GitHub 원본, `main`, server-side gateway, `GITHUB_TOKEN`, `no-store`, Vercel 정적 원본 제외, 중앙 `projects.json`, deep-link 및 익명 접근 보호가 포함된다.
+
 ## 중앙 기준 갱신 의무
 
 데이터 수집형 앱·사이트에는 별도 [데이터 수집 현황 공통 개발 기준](../development/DATA-STATUS-STANDARD.md)을 적용한다. 실제 수집 결과를 표시하는 루트 `data-status.html`과 메인 화면 연결을 필수로 제공한다 (2026-10-20 확정).
