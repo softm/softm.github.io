@@ -59,7 +59,11 @@ async function handler(req,res){
       const transaction=await db.runTransaction(async tx=>{const snap=await tx.get(ref),v=snap.data();if(!v||v.state!=='pending'||v.expiresAt.toMillis()<Date.now())fail('invalid-oauth-state',401);tx.update(ref,{state:'processing'});return v;});
       const p=providers[transaction.provider],params=new URLSearchParams({grant_type:'authorization_code',client_id:p.client(),client_secret:p.secret(),redirect_uri:base+'/oauth/callback',code,state});
       const tokens=await jsonFetch(p.token,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:params.toString()});
-      if(typeof tokens.access_token!=='string')fail('provider-login-failed',401);
+      if(typeof tokens.access_token!=='string'){
+        const safeCodes=new Set(['invalid_request','invalid_client','invalid_grant','unauthorized_client','unsupported_grant_type','server_error','temporarily_unavailable']);
+        console.error('suite-provider-failure',{provider:transaction.provider,code:safeCodes.has(tokens.error)?tokens.error:'unknown'});
+        fail('provider-login-failed',401);
+      }
       // Provider access/refresh tokens are used transiently, never logged or retained.
       const profile=await jsonFetch(p.profile,{headers:{Authorization:'Bearer '+tokens.access_token}});
       const subject=transaction.provider==='kakao'?String(profile.id||''):profile.response?.id;
