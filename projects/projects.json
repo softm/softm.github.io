@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-10-15",
+  "updatedAt": "2026-10-26",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -1885,7 +1885,7 @@
       "title": "나",
       "description": "개인 건강·생활 기록을 보관하는 비공개 아카이브",
       "category": "개인 기록",
-      "deploymentStatus": "authenticated-github-live",
+      "deploymentStatus": "deployed",
       "repoStatus": "available",
       "privateRepo": "mine-private",
       "privateRepoUrl": "https://github.com/softm/mine-private",
@@ -1896,13 +1896,41 @@
       "privateEntryPolicy": "서버 비밀번호 인증 후 Private GitHub main을 실시간 조회",
       "authProvider": "server-password",
       "homePublicListCount": 0,
-      "homePrivateListCount": 8,
-      "pageCount": 8,
-      "privatePageCount": 8,
-      "latestTitle": "20261005_mine_all_assets_archive",
+      "homePrivateListCount": 9,
+      "pageCount": 9,
+      "privatePageCount": 9,
+      "latestTitle": "20261026_SK정수기_SK다온리더스_렌탈",
       "mediaStatus": "목록에 제목·날짜·요약·자료 수를 표시하며 본문·원본 미디어는 인증 후 열람합니다.",
       "deploymentNote": "Vercel 배포물에는 원본을 포함하지 않고 인증 게이트웨이가 Private GitHub main을 요청 시 실시간 조회합니다.",
       "links": [
+        {
+          "visibility": "private",
+          "label": "20261026_SK정수기_SK다온리더스_렌탈",
+          "title": "20261026_SK정수기_SK다온리더스_렌탈",
+          "chatTitle": "20261026_SK정수기_SK다온리더스_렌탈",
+          "date": "2026-10-26",
+          "dateSource": "archive-canonical",
+          "titleSource": "user",
+          "category": "생활 기록",
+          "url": "https://mine-private-sigma.vercel.app/archive/20261026-sk-water-purifier-daonleaders/",
+          "repoUrl": "https://github.com/softm/mine-private/tree/main/archive/20261026-sk-water-purifier-daonleaders",
+          "directory": "20261026-sk-water-purifier-daonleaders",
+          "recordPath": "archive/20261026-sk-water-purifier-daonleaders",
+          "summary": "비공개 상세 열람은 인증 필요.",
+          "publicSummary": "정수기 렌탈 기록. 사진·증빙 원본 5개는 인증 후 열람.",
+          "listTitle": "20261026_SK정수기_SK다온리더스_렌탈",
+          "inputName": "20261026_SK정수기_SK다온리더스_렌탈",
+          "publicMetadataApproved": true,
+          "delivery": "authenticated-github-live-read",
+          "files": {
+            "images": 5,
+            "documents": 2,
+            "videos": 0,
+            "audio": 0,
+            "archives": 0
+          },
+          "count": 7
+        },
         {
           "visibility": "private",
           "label": "20261005_mine_all_assets_archive",
@@ -2143,9 +2171,10 @@
       "previousHomeUrl": "https://softm.github.io/projects/mine/",
       "vercelAccountAuthVerified": true,
       "privateDeliveryStatus": "authenticated-github-live",
-      "totalRecordCount": 8,
+      "totalRecordCount": 9,
       "privateSourceStatus": "seven-inbox-folders-preserved-and-indexed",
-      "privateVerificationStatus": "authenticated-runtime-not-verified"
+      "privateVerificationStatus": "authenticated-runtime-not-verified",
+      "archiveLastPublishedAt": "2026-10-26T15:20:39.350Z"
     },
     {
       "repo": "farm",
