@@ -15,10 +15,10 @@
   "providers": {
     "google": true,
     "kakao": true,
-    "naver": true
+    "naver": false
   },
   "socialApiBase": "https://asia-northeast3-softm-hannun-api.cloudfunctions.net/suiteSocialAuth",
   "providerStatus": {
-    "naver": "review-required"
+    "naver": "setup-required"
   }
 }
