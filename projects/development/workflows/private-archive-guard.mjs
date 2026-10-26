@@ -78,8 +78,30 @@ for(const p of ["api/site.js","vercel.json",".vercelignore"]){
   }
 }
 if(record){
-  const f=await textFile(`archive/${record}/index.html`);
-  add("record detail exists in private GitHub",f.ok,`HTTP ${f.status}`);
+  const detail=await textFile(`archive/${record}/index.html`);
+  add("record detail exists in private GitHub",detail.ok,`HTTP ${detail.status}`);
+
+  const manifest=await textFile(`archive/${record}/archive-manifest.json`);
+  add("archive manifest exists",manifest.ok,`HTTP ${manifest.status}`);
+  if(manifest.ok){
+    try{
+      const m=JSON.parse(manifest.text);
+      const sources=Array.isArray(m.sources)?m.sources:[];
+      add("archive manifest declares source files",sources.length>0,`sources=${sources.length}`);
+      for(const source of sources){
+        const p=String(source.path||"");
+        if(!p){ add("manifest source path valid",false,"missing path"); continue; }
+        const rf=await gh(`contents/${p.split("/").map(encodeURIComponent).join("/")}?ref=main`);
+        add(`source file exists: ${p}`,rf.ok,`HTTP ${rf.status}`);
+        if(rf.ok){
+          const meta=await rf.json();
+          if(source.bytes!=null) add(`source byte size matches: ${p}`,Number(meta.size)===Number(source.bytes),`expected=${source.bytes}, actual=${meta.size}`);
+        }
+      }
+    }catch(e){
+      add("archive manifest parses",false,e?.message||"invalid JSON");
+    }
+  }
 }
 
 if(project?.privateUrl){
