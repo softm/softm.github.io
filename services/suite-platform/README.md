@@ -69,7 +69,7 @@ bash services/suite-platform/deploy-core.sh
 | 네이버 | 로그인 앱 Client ID `SUITE_NAVER_CLIENT_ID` | `SUITE_NAVER_CLIENT_SECRET` |
 | 공통 callback | `https://asia-northeast3-softm-hannun-api.cloudfunctions.net/suiteSocialAuth/oauth/callback` | URL에 비밀키를 넣지 않음 |
 
-제공자 Client ID는 `functions/.env.softm-hannun-api`에서, Secret은 Firebase Secret Manager에서 설정한다. 값 등록 후 `functions:suite-platform:suiteSocialAuth`만 배포한다. `/oauth/start`→제공자 인증→callback→허브 PKCE exchange 순서로 실계정 검증한 뒤에만 공개 config의 해당 provider를 true로 바꾼다. 개발자 앱의 서비스 URL·동의항목·공개 심사도 확인해야 한다. 키가 없으면 버튼은 준비 중 상태를 유지한다.
+제공자 Client ID는 `functions/.env.softm-hannun-api`에서, Secret은 Firebase Secret Manager에서 설정한다. 값 등록 후 같은 환경 파일에 `SUITE_ENABLE_SOCIAL=true`를 설정하고 `functions:suite-platform:suiteSocialAuth`만 배포한다. 코어 배포는 이 플래그 없이 수행하므로 미등록 SNS 비밀값을 요구하지 않는다. `/oauth/start`→제공자 인증→callback→허브 PKCE exchange 순서로 실계정 검증한 뒤에만 공개 config의 해당 provider를 true로 바꾼다. 개발자 앱의 서비스 URL·동의항목·공개 심사도 확인해야 한다. 키가 없으면 버튼은 준비 중 상태를 유지한다.
 
 일회용 코드 두 컬렉션은 `expiresAt` TTL 정책을 운영에서 설정해 누적을 방지한다(만료된 코드는 TTL 삭제 전에도 사용할 수 없다). HTTP 요청당 최대 크기, 40req/min/인스턴스별 IP hash 제한, maxInstances=2를 적용했다. IP는 메모리에서만 hash로 사용하며 분산형 전역 요율 제한은 아니다. 공개 운영 확대 전 App Check·정교한 남용 제한·비용 모니터링을 검토한다.
 

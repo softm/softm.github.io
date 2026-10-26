@@ -10,7 +10,8 @@ const db=getFirestore('suite-v1'),auth=getAuth();
 const registry=JSON.parse(readFileSync(new URL('./registry.json',import.meta.url),'utf8'));
 const hub=new URL(registry.hub),project=process.env.GCLOUD_PROJECT||'softm-hannun-api';
 const base=process.env.SUITE_API_BASE||`https://asia-northeast3-${project}.cloudfunctions.net/suiteSocialAuth`;
-const kakaoSecret=defineSecret('SUITE_KAKAO_CLIENT_SECRET'),naverSecret=defineSecret('SUITE_NAVER_CLIENT_SECRET');
+const socialEnabled=process.env.SUITE_ENABLE_SOCIAL==='true';
+const kakaoSecret=socialEnabled?defineSecret('SUITE_KAKAO_CLIENT_SECRET'):null,naverSecret=socialEnabled?defineSecret('SUITE_NAVER_CLIENT_SECRET'):null;
 const providers={
   kakao:{authorize:'https://kauth.kakao.com/oauth/authorize',token:'https://kauth.kakao.com/oauth/token',profile:'https://kapi.kakao.com/v2/user/me',client:()=>process.env.SUITE_KAKAO_CLIENT_ID,secret:()=>kakaoSecret.value()},
   naver:{authorize:'https://nid.naver.com/oauth2.0/authorize',token:'https://nid.naver.com/oauth2.0/token',profile:'https://openapi.naver.com/v1/nid/me',client:()=>process.env.SUITE_NAVER_CLIENT_ID,secret:()=>naverSecret.value()}
@@ -101,5 +102,5 @@ async function handler(req,res){
 }
 const options={region:'asia-northeast3',maxInstances:2,concurrency:20,timeoutSeconds:60,memory:'256MiB'};
 export const suiteAuth=onRequest(options,(req,res)=>req.path.startsWith('/oauth/')?res.status(404).json({message:'SNS 전용 인증 서버를 사용해 주세요.'}):handler(req,res));
-export const suiteSocialAuth=onRequest({...options,secrets:[kakaoSecret,naverSecret]},handler);
+export const suiteSocialAuth=socialEnabled?onRequest({...options,secrets:[kakaoSecret,naverSecret]},handler):undefined;
 export {handler};
