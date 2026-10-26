@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "enabled": false,
+  "enabled": true,
   "databaseId": "suite-v1",
   "apiBase": "https://asia-northeast3-softm-hannun-api.cloudfunctions.net/suiteAuth",
   "hubUrl": "https://softm.github.io/account/",
@@ -13,7 +13,7 @@
     "appId": "1:166232180116:web:47b28bd6d560640d62bb81"
   },
   "providers": {
-    "google": false,
+    "google": true,
     "kakao": false,
     "naver": false
   },
