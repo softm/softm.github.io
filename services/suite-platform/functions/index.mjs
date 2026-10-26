@@ -96,6 +96,7 @@ async function handler(req,res){
     }
     return res.status(404).json({message:'지원하지 않는 기능입니다.'});
   }catch(error){
+    if(!error.status)console.error('suite-auth-failure',{code:String(error.code||'unknown').slice(0,80),route});
     // Never echo provider responses, tokens, UID, request body or OAuth codes.
     return res.status(error.status||500).json({code:error.status?error.message:'service-error',message:error.status===409?'이미 다른 계정에 연결된 로그인입니다. 기존 계정으로 로그인해 주세요.':error.status===503?'이 로그인 제공자는 아직 운영 설정 중입니다.':'로그인을 완료하지 못했습니다. 계정 화면에서 다시 시도해 주세요.'});
   }
