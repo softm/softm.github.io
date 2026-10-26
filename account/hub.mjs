@@ -25,7 +25,7 @@ async function loadItems(){if(!currentClient)throw Error('사이트 보관소를
 const vaultStatus=m=>{$('#vault-status').textContent=m;};
 async function initialize(){
   registry=await (await fetch('../shared/platform/v1/registry.json')).json();renderSites();config=await loadPlatformConfig();
-  for(const button of document.querySelectorAll('[data-provider],[data-link]')){const provider=button.dataset.provider||button.dataset.link;button.disabled=!config.enabled||!config.providers[provider];if(button.disabled)button.title='운영 설정 중입니다.';button.addEventListener('click',guarded(()=>providerLogin(provider,!!button.dataset.link)));}
+  for(const button of document.querySelectorAll('[data-provider],[data-link]')){const provider=button.dataset.provider||button.dataset.link;button.disabled=!config.enabled||!config.providers[provider];if(button.disabled)button.title='운영 설정 중입니다.';if(config.providerStatus?.[provider]==='review-required'){button.textContent+=' (개발회원)';button.title='네이버 검수 전에는 등록된 개발회원만 로그인할 수 있습니다.';}button.addEventListener('click',guarded(()=>providerLogin(provider,!!button.dataset.link)));}
   if(!config.enabled){$('#user').textContent='공통 계정 서비스 연결 준비 중';status('공통 모듈과 사이트별 보관소 화면이 준비되었습니다. 인증 서버 활성화 후 로그인할 수 있습니다.');return;}
   auth=getAuth(initializeApp(config.firebase,'softm-account-hub'));await auth.authStateReady();await completeOAuth();
   onAuthStateChanged(auth,user=>{$('#user').textContent=user?(user.displayName||'나의 공통 계정')+' · 로그인됨':'사용할 로그인 방법을 선택해 주세요.';$('#logout').hidden=!user;$('#link-section').hidden=!user;$('#grant').hidden=!targetValid();$('#continue').disabled=!user;if(targetValid()){$('#grant-title').textContent=registry.sites[target.siteId].name+' 연결';$('#grant-description').textContent=target.origin+'에서 계정 연결을 요청했습니다.';}});

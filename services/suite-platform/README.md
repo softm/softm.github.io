@@ -1,6 +1,6 @@
 # 한눈·해요 공통 계정과 사이트별 보관소
 
-2026-10-27 구현. Firestore DB·보안 규칙·코어 인증 함수 운영 배포 완료. Google 제공자 활성화 및 허브 허용 도메인 등록 완료. 카카오·네이버는 서버 코드가 준비되어 있으며 제공자 앱 키·비밀키 등록 전에는 비활성화한다. 중앙 소스: `softm/softm.github.io`.
+2026-10-27 구현. Firestore DB·보안 규칙·코어 인증 함수 운영 배포 완료. Google 제공자 활성화 및 허브 허용 도메인 등록 완료. 카카오 앱 `1623631`과 네이버 앱 `1AcaWJFyKMeyhjgEtW8g` 등록, callback·비밀키의 Secret Manager 저장, SNS 인증 서버 배포 완료. 네이버는 개발 중 상태이므로 등록된 개발회원만 사용할 수 있고 일반 사용자 공개 검수가 남아 있다. 실계정·보관소 동작 검증 결과는 아래 운영 검증에 기록한다. 중앙 소스: `softm/softm.github.io`.
 
 | 구성 | 위치 |
 |---|---|
@@ -87,3 +87,9 @@ I've set up prototype Security Rules to keep the data in Firestore safe. They ar
 NORN·경매한눈의 기존 Firebase 프로젝트/UID/기록은 자동 이전하지 않는다. 기존 인증 사용자와 새 UID 연결을 증명한 후에만 가져오는 마이그레이션이 필요하다. 사이트별 즐겨찾기·메모 저장 이벤트 연결도 각 사이트 구현에서 수행해야 한다. 위로해요 앱이 종료된 동안의 자동 위로 알림·백그라운드 분석은 이 공통 인증/보관소 모듈과 별개의 남은 앱 작업이다.
 
 공식 참고: [Firebase custom auth](https://firebase.google.com/docs/auth/web/custom-auth), [Google](https://firebase.google.com/docs/auth/web/google-signin), [카카오](https://developers.kakao.com/docs/ko/kakaologin/rest-api), [네이버](https://developers.naver.com/docs/login/api/api.md).
+
+## 2026-10-27 운영 검증
+
+- Google 로그인 성공. 사이트 세션 교환의 `auth/insufficient-permission` 원인은 런타임 자체 서명 권한 누락이었다. 기본 Compute 서비스 계정 자체 리소스에만 Token Creator 역할을 적용했다. 프로젝트 전체 IAM 역할은 추가하지 않았다.
+- 카카오·네이버 비밀키는 Secret Manager에만 저장했다. 공개 저장소와 웹 설정에는 포함하지 않는다.
+- 네이버 로고·실제 로그인 화면을 첨부하는 공개 검수 절차가 남아 있다. 공개 검수 완료로 표시하지 않는다.

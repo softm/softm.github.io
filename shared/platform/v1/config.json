@@ -14,8 +14,11 @@
   },
   "providers": {
     "google": true,
-    "kakao": false,
-    "naver": false
+    "kakao": true,
+    "naver": true
   },
-  "socialApiBase": "https://asia-northeast3-softm-hannun-api.cloudfunctions.net/suiteSocialAuth"
+  "socialApiBase": "https://asia-northeast3-softm-hannun-api.cloudfunctions.net/suiteSocialAuth",
+  "providerStatus": {
+    "naver": "review-required"
+  }
 }
