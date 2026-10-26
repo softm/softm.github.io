@@ -1,0 +1,64 @@
+// Prototype schema (all private):
+// users/{uid}: uid immutable; displayName string <=80; version=1; createdAt
+// immutable timestamp; updatedAt=request.time. No email, roles, or public profile.
+// users/{uid}/sites/{siteId}: uid/siteId/version immutable; timestamps.
+// items/{id}: uid/siteId/version, encoding='encrypted', payload string <=180000,
+// revision positive int, createdAt immutable, updatedAt=request.time.
+// backups/{id}: uid/siteId/version, format enum, checksum hex64, totalChars <=80MiB,
+// chunkCount 1..600, state uploading->complete, timestamps (immutable createdAt).
+// chunks/{0..599}: uid/siteId/index immutable, payload string <=160000, create-only.
+// _suiteOAuth/_suiteCodes/_suiteIdentities: Admin SDK only; never client readable.
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAuthenticated(){return request.auth != null && request.auth.token.firebase.sign_in_provider != 'anonymous';}
+    function isOwner(uid){return isAuthenticated() && request.auth.uid == uid;}
+    function inSite(uid,siteId){return isOwner(uid) && request.auth.token.suite_site == siteId;}
+    function parentExists(uid,siteId){return exists(/databases/$(database)/documents/users/$(uid)/sites/$(siteId));}
+    function validSiteId(siteId){return siteId is string && siteId.size() <=80 && siteId.matches('^[a-z0-9_-]+$');}
+    function validIdentity(d,uid,siteId){return d.uid == uid && d.siteId == siteId && d.version == 1;}
+    function validTimes(d){return d.createdAt is timestamp && d.updatedAt == request.time;}
+    function createdNow(d){return d.createdAt == request.time;}
+    function immutableIdentity(d){return d.uid == resource.data.uid && d.siteId == resource.data.siteId && d.createdAt == resource.data.createdAt && d.version == resource.data.version;}
+    function validUser(d,uid){return d.keys().hasAll(['uid','displayName','version','createdAt','updatedAt']) && d.keys().hasOnly(['uid','displayName','version','createdAt','updatedAt']) && d.uid == uid && d.version == 1 && d.displayName is string && d.displayName.size() <=80 && validTimes(d);}
+    function validSite(d,uid,siteId){return d.keys().hasAll(['uid','siteId','version','createdAt','updatedAt']) && d.keys().hasOnly(['uid','siteId','version','createdAt','updatedAt']) && validIdentity(d,uid,siteId) && validSiteId(siteId) && validTimes(d);}
+    function validItem(d,uid,siteId){return d.keys().hasAll(['uid','siteId','version','encoding','payload','revision','createdAt','updatedAt']) && d.keys().hasOnly(['uid','siteId','version','encoding','payload','revision','createdAt','updatedAt']) && validIdentity(d,uid,siteId) && d.encoding == 'encrypted' && d.payload is string && d.payload.size()>0 && d.payload.size()<=180000 && d.revision is int && d.revision>0 && d.revision<=2147483647 && validTimes(d);}
+    function validBackup(d,uid,siteId){return d.keys().hasAll(['uid','siteId','version','format','checksum','totalChars','chunkCount','state','createdAt','updatedAt']) && d.keys().hasOnly(['uid','siteId','version','format','checksum','totalChars','chunkCount','state','createdAt','updatedAt']) && validIdentity(d,uid,siteId) && d.format in ['encrypted-json','wirohaeyo-encrypted-backup'] && d.checksum is string && d.checksum.size()==64 && d.checksum.matches('^[a-f0-9]+$') && d.totalChars is int && d.totalChars>0 && d.totalChars<=83886080 && d.chunkCount is int && d.chunkCount>0 && d.chunkCount<=600 && d.state in ['uploading','complete'] && validTimes(d);}
+    function validChunk(d,uid,siteId,index){return d.keys().hasAll(['uid','siteId','index','payload']) && d.keys().hasOnly(['uid','siteId','index','payload']) && d.uid==uid && d.siteId==siteId && d.index is int && d.index>=0 && d.index<600 && index==string(d.index) && d.payload is string && d.payload.size()>0 && d.payload.size()<=160000;}
+    match /users/{uid} {
+      allow read: if isOwner(uid);
+      allow create: if isOwner(uid) && validUser(request.resource.data,uid) && createdNow(request.resource.data);
+      allow update: if isOwner(uid) && validUser(request.resource.data,uid) && request.resource.data.createdAt==resource.data.createdAt;
+      allow delete: if isOwner(uid);
+      match /sites/{siteId} {
+        // Hub can list only membership metadata; payload access requires site claim.
+        allow read: if isOwner(uid);
+        allow create: if inSite(uid,siteId) && validSite(request.resource.data,uid,siteId) && createdNow(request.resource.data);
+        allow update: if inSite(uid,siteId) && validSite(request.resource.data,uid,siteId) && immutableIdentity(request.resource.data);
+        // Do not orphan subcollections. Account erasure requires a server recursive-delete workflow.
+        allow delete: if false;
+        match /items/{itemId} {
+          allow read: if inSite(uid,siteId) && parentExists(uid,siteId);
+          allow create: if inSite(uid,siteId) && parentExists(uid,siteId) && validItem(request.resource.data,uid,siteId) && createdNow(request.resource.data) && request.resource.data.revision==1;
+          allow update: if inSite(uid,siteId) && parentExists(uid,siteId) && validItem(request.resource.data,uid,siteId) && immutableIdentity(request.resource.data) && request.resource.data.revision==resource.data.revision+1;
+          allow delete: if inSite(uid,siteId) && parentExists(uid,siteId);
+        }
+        match /backups/{backupId} {
+          allow read: if inSite(uid,siteId) && parentExists(uid,siteId);
+          allow create: if inSite(uid,siteId) && parentExists(uid,siteId) && validBackup(request.resource.data,uid,siteId) && createdNow(request.resource.data) && request.resource.data.state=='uploading';
+          allow update: if inSite(uid,siteId) && parentExists(uid,siteId) && validBackup(request.resource.data,uid,siteId) && immutableIdentity(request.resource.data) && resource.data.state=='uploading' && request.resource.data.state=='complete' && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['state','updatedAt']);
+          allow delete: if inSite(uid,siteId) && parentExists(uid,siteId);
+          match /chunks/{index} {
+            function backupExists(){return exists(/databases/$(database)/documents/users/$(uid)/sites/$(siteId)/backups/$(backupId));}
+            function manifest(){return get(/databases/$(database)/documents/users/$(uid)/sites/$(siteId)/backups/$(backupId)).data;}
+            allow read: if inSite(uid,siteId) && parentExists(uid,siteId) && backupExists();
+            allow create: if inSite(uid,siteId) && parentExists(uid,siteId) && backupExists() && validChunk(request.resource.data,uid,siteId,index) && manifest().state=='uploading' && request.resource.data.index<manifest().chunkCount;
+            allow update: if false;
+            allow delete: if inSite(uid,siteId) && parentExists(uid,siteId);
+          }
+        }
+      }
+    }
+    match /{document=**} {allow read, write: if false;}
+  }
+}

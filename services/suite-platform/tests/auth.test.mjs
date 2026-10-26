@@ -1,0 +1,5 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';
+import {random,challenge,verifyProof,checkTicket,requireSite} from '../functions/security.mjs';
+test('PKCE accepts matching proof; rejects other sessions and malformed proofs',()=>{const v=random();assert.equal(verifyProof(v,challenge(v)),true);assert.equal(verifyProof(random(),challenge(v)),false);assert.equal(verifyProof('abc',challenge(v)),false);});
+test('tickets expire and cannot be replayed',()=>{const v=random(),t={used:false,challenge:challenge(v),expiresAt:{toMillis:()=>500}};assert.doesNotThrow(()=>checkTicket(t,v,499));assert.throws(()=>checkTicket(t,v,500));assert.throws(()=>checkTicket({...t,used:true},v,100));assert.throws(()=>checkTicket(t,random(),100));});
+test('site allowlist uses exact origins (no suffix or prefix bypass)',()=>{const r={sites:{a:{origins:['https://a.example']}}};assert.doesNotThrow(()=>requireSite(r,'a','https://a.example'));for(const origin of ['https://a.example.evil.test','https://evil.test','null','http://a.example'])assert.throws(()=>requireSite(r,'a',origin));assert.throws(()=>requireSite(r,'missing','https://a.example'));});

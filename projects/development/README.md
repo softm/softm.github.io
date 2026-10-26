@@ -18,3 +18,5 @@
 
 현재 지도 집중모드 원본:
 - `standards/map/MOBILE-MAP-FOCUS-STANDARD.md`
+
+- 공통 계정·SNS 로그인·사이트별 보관소: `standards/COMMON-ACCOUNT-VAULT.md` (구현 원본 `/shared/platform/v1/`, `/services/suite-platform/`)

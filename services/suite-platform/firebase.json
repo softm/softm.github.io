@@ -1,0 +1,5 @@
+{
+  "functions":[{"source":"functions","codebase":"suite-platform","runtime":"nodejs22","ignore":["node_modules",".git","*.log",".env*","tests"]}],
+  "firestore":[{"database":"suite-v1","location":"asia-northeast3","edition":"enterprise","rules":"firestore.rules","indexes":"firestore.indexes.json"}],
+  "emulators":{"firestore":{"port":8088},"auth":{"port":9099},"ui":{"enabled":false},"singleProjectMode":true}
+}

@@ -11,3 +11,5 @@
 Android 앱에 Google AdMob 네이티브 광고를 새로 적용하거나 수정할 때는 [AdMob 네이티브 광고 공통 기준](ADMOB-NATIVE-COMMON-STANDARD.md)을 먼저 따른다. 광고 UI·동의 흐름·수명주기·테스트 방식만 공통으로 재사용하고, AdMob 앱 ID와 광고 단위 ID는 앱·지면별로 별도 발급한다. 시간만으로 자동 노출하는 전면광고는 공통 구현으로 복사하지 않으며, 전면광고는 사용자가 예상할 수 있는 자연스러운 콘텐츠 전환에서만 검토한다.
 
 돌봄한눈·주유한눈의 네이버 자동차 길찾기는 [Firebase 공용 Directions 규칙](rule/FIREBASE-DIRECTIONS.md)을 따른다. 브라우저에는 공용 함수 URL만 두고 `NAVER_MAPS_API_SECRET`은 Google Secret Manager에만 저장하며, API 응답 계약과 허용 Origin을 바꿀 때 두 서비스를 함께 검증한다. <!-- SOFTM-FIREBASE-DIRECTIONS 날짜:20261026 : 공용 런타임의 비밀값·호환성 기준 연결 -->
+
+공통 계정·SNS 로그인·개인 정보 보관소 작업은 [공통 계정·사이트별 보관소 기준](projects/development/standards/COMMON-ACCOUNT-VAULT.md)과 `services/suite-platform/README.md`를 따른다. 공통 모듈·설정 등록과 각 사이트의 실제 적용·실계정 검증을 구분해서 보고한다.
