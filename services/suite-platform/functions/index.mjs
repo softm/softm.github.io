@@ -5,6 +5,7 @@ import {getAuth} from 'firebase-admin/auth';
 import {getFirestore,Timestamp,FieldValue} from 'firebase-admin/firestore';
 import {readFileSync} from 'node:fs';
 import {hash,random,validProof,requireSite,checkTicket,fail} from './security.mjs';
+import {exchangeProviderToken,oauthFailureUrl} from './provider.mjs';
 initializeApp();
 const db=getFirestore('suite-v1'),auth=getAuth();
 const registry=JSON.parse(readFileSync(new URL('./registry.json',import.meta.url),'utf8'));
@@ -54,24 +55,29 @@ async function handler(req,res){
   try{
     if(route==='/health'&&req.method==='GET')return res.json({ok:true,version:1,databaseId:'suite-v1',providers:{google:true,kakao:!!providers.kakao.client(),naver:!!providers.naver.client()}});
     if(route==='/oauth/callback'&&req.method==='GET'){
-      const state=req.query.state,code=req.query.code;if(!validProof(state)||typeof code!=='string'||code.length>2048)return callbackPage(res,'로그인을 완료하지 못했습니다. 계정 화면에서 다시 시도해 주세요.');
+      const state=req.query.state,code=req.query.code;if(!validProof(state))return callbackPage(res,'로그인을 완료하지 못했습니다. 계정 화면에서 다시 시도해 주세요.');
       const ref=db.collection('_suiteOAuth').doc(hash(state));
       const transaction=await db.runTransaction(async tx=>{const snap=await tx.get(ref),v=snap.data();if(!v||v.state!=='pending'||v.expiresAt.toMillis()<Date.now())fail('invalid-oauth-state',401);tx.update(ref,{state:'processing'});return v;});
-      const p=providers[transaction.provider],params=new URLSearchParams({grant_type:'authorization_code',client_id:p.client(),client_secret:p.secret(),redirect_uri:base+'/oauth/callback',code,state});
-      const tokens=await jsonFetch(p.token,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:params.toString()});
-      if(typeof tokens.access_token!=='string'){
-        const safeCodes=new Set(['invalid_request','invalid_client','invalid_grant','unauthorized_client','unsupported_grant_type','server_error','temporarily_unavailable']);
-        console.error('suite-provider-failure',{provider:transaction.provider,code:safeCodes.has(tokens.error)?tokens.error:'unknown'});
-        fail('provider-login-failed',401);
-      }
+      try{
+      if(req.query.error==='access_denied')fail('provider-cancelled',401);
+      if(typeof code!=='string'||!code||code.length>2048||req.query.error)fail('provider-login-failed',401);
+      const p=providers[transaction.provider];
+      const accessToken=await exchangeProviderToken(transaction.provider,p,{code,state,redirectUri:base+'/oauth/callback'});
       // Provider access/refresh tokens are used transiently, never logged or retained.
-      const profile=await jsonFetch(p.profile,{headers:{Authorization:'Bearer '+tokens.access_token}});
+      const profile=await jsonFetch(p.profile,{headers:{Authorization:'Bearer '+accessToken}});
       const subject=transaction.provider==='kakao'?String(profile.id||''):profile.response?.id;
       if(typeof subject!=='string'||!subject||subject.length>256)fail('invalid-provider-user',401);
       const uid=await providerIdentity(transaction.provider,subject,transaction.linkUid);
       try{await auth.getUser(uid);}catch(e){if(e.code!=='auth/user-not-found')throw e;await auth.createUser({uid});}
       await ref.update({state:'complete',uid,expiresAt:expires(60000)});
       const redirect=new URL(hub);redirect.hash=new URLSearchParams({oauth:state}).toString();return res.redirect(303,redirect.href);
+      }catch(error){
+        // The state was claimed above. A failed request cannot later be exchanged
+        // for a login token; the existing hub session remains untouched.
+        try{await ref.update({state:'failed',expiresAt:expires(60000)});}catch{console.error('suite-oauth-state-update-failed');}
+        if(!error.status)console.error('suite-oauth-callback-failed');
+        return res.redirect(303,oauthFailureUrl(hub,state,error));
+      }
     }
     if(req.method!=='POST')return res.status(405).json({message:'지원하지 않는 요청입니다.'});
     if(!origin)fail('origin-required',403);

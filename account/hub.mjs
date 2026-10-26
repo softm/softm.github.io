@@ -2,9 +2,11 @@ import {initializeApp} from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-
 import {getAuth,GoogleAuthProvider,signInWithPopup,signInWithCustomToken,linkWithPopup,onAuthStateChanged,signOut} from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js';
 import {loadPlatformConfig,createSiteClient} from '../shared/platform/v1/sdk.mjs';
 import {randomSecret,challengeFor} from '../shared/platform/v1/crypto.mjs';
+import {readOAuthReturn} from './oauth-return.mjs';
 const $=s=>document.querySelector(s),status=message=>{$('#status').textContent=message;};
 let config,auth,registry,currentClient,selectedSite,revision=0,loadedId=null;
-const query=new URLSearchParams(location.search),target={siteId:query.get('site'),origin:query.get('origin'),challenge:query.get('challenge'),requestId:query.get('request')};
+function readTarget(){const query=new URLSearchParams(location.search);return {siteId:query.get('site'),origin:query.get('origin'),challenge:query.get('challenge'),requestId:query.get('request')};}
+const target=readTarget();
 async function post(path,body,withToken=false){const response=await fetch((path.startsWith('/oauth/')?config.socialApiBase:config.apiBase)+path,{method:'POST',headers:{'Content-Type':'application/json',...(withToken?{Authorization:'Bearer '+await auth.currentUser.getIdToken()}:{})},body:JSON.stringify(body),signal:AbortSignal.timeout(20000)});const value=await response.json();if(!response.ok)throw Error(value.message||'연결하지 못했습니다.');return value;}
 function targetValid(){const site=registry.sites[target.siteId];return site&&site.origins.includes(target.origin)&&/^[A-Za-z0-9_-]{43}$/.test(target.challenge||'')&&/^[A-Za-z0-9_-]{43}$/.test(target.requestId||'')&&window.opener;}
 async function providerLogin(provider,link=false){
@@ -16,7 +18,18 @@ async function providerLogin(provider,link=false){
   sessionStorage.setItem('softm-oauth',JSON.stringify({verifier,state:result.state,targetQuery:location.search}));
   location.assign(result.url);
 }
-async function completeOAuth(){const state=new URLSearchParams(location.hash.slice(1)).get('oauth');if(!state)return;history.replaceState(null,'',location.pathname+location.search);const saved=JSON.parse(sessionStorage.getItem('softm-oauth')||'null');sessionStorage.removeItem('softm-oauth');if(!saved||saved.state!==state)throw Error('로그인 요청이 일치하지 않습니다. 다시 시도해 주세요.');const result=await post('/oauth/exchange',{state,verifier:saved.verifier});await signInWithCustomToken(auth,result.token);location.replace(location.pathname+saved.targetQuery);}
+async function completeOAuth(){
+  if(!new URLSearchParams(location.hash.slice(1)).has('oauth'))return;
+  const fragment=location.hash,saved=sessionStorage.getItem('softm-oauth');
+  history.replaceState(null,'',location.pathname+location.search);sessionStorage.removeItem('softm-oauth');
+  try{
+    const result=readOAuthReturn(fragment,saved);
+    history.replaceState(null,'',location.pathname+result.targetQuery);Object.assign(target,readTarget());
+    if(result.errorMessage){status(result.errorMessage);return;}
+    const session=await post('/oauth/exchange',{state:result.state,verifier:result.verifier});
+    await signInWithCustomToken(auth,session.token);status('로그인했습니다.');
+  }catch(error){status(error.message||'로그인을 완료하지 못했습니다. 다시 시도해 주세요.');}
+}
 async function authorize(){if(!targetValid()||!auth.currentUser)throw Error('유효한 사이트 연결 요청이 필요합니다.');const result=await post('/session/authorize',target,true);window.opener.postMessage({type:'softm:authorization',requestId:target.requestId,code:result.code},target.origin);status('사이트에 연결했습니다. 이 창을 닫아도 됩니다.');}
 async function showLinkedProviders(user){
   const output=$('#linked-providers');output.textContent='연결된 로그인 수단을 확인하고 있어요.';
