@@ -87,7 +87,7 @@ export const SITE_INTEGRATIONS=Object.freeze({
     "name": "돌봄한눈",
     "keys": [],
     "label": "유형별 담은 기관과 방문 순서",
-    "target": ".stitch-app-header",
+    "target": ".care-navigation-menu nav", // SOFTM-HOMECARE-VAULT 날짜:20261028 : 지도 전환 도구에 가리지 않고 PC·모바일 전체 메뉴에서 접근
     "sessionKeys": [
       "careCompare:v1:facility",
       "careCompare:v1:daycare",
