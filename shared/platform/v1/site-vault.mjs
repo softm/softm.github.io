@@ -1,7 +1,7 @@
 import {createLocalStateAdapter} from './local-state.mjs';
 import {createVaultSession} from './vault-session.mjs';
 
-export function mountSiteVault({siteId,name,keys=[],label='개인 메모',target='header',adapter:appAdapter,sdkLoader=()=>import('./sdk.mjs'),cryptoLoader=()=>import('./crypto.mjs')}={}) {
+export function mountSiteVault({siteId,name,keys=[],label='개인 메모',target='header',adapter:appAdapter,account,hideLauncher=false,sdkLoader=()=>import('./sdk.mjs'),cryptoLoader=()=>import('./crypto.mjs')}={}) {
   if(document.querySelector('softm-site-vault[data-site="'+siteId+'"]'))return null;
   const noteKey='softm-site-note-v1:'+siteId;
   let storage;try{storage=window.localStorage;}catch{}
@@ -33,6 +33,7 @@ export function mountSiteVault({siteId,name,keys=[],label='개인 메모',target
     '</dialog>';
   const $=id=>shadow.getElementById(id),dialog=shadow.querySelector('dialog'),launcher=shadow.querySelector('.launch');
   $('title').textContent=name+' 보관소';$('scope').textContent='저장 범위: '+label+' · 다른 사이트의 기록과 분리합니다.';
+  if(hideLauncher)launcher.hidden=true;
   let client,session,unsubscribe,uid=null,loading=false,autoTimer=null,destroyed=false;
   const status=m=>{$('status').textContent=m;};
   function stopAuto(){clearInterval(autoTimer);autoTimer=null;$('auto').checked=false;}
@@ -67,6 +68,12 @@ export function mountSiteVault({siteId,name,keys=[],label='개인 메모',target
         status('로그인했습니다. 보관소 암호를 입력하고 저장본을 확인해 주세요.');
       }catch(error){popup.close();throw error;}
     });
+  }
+  async function prepareAccount(){
+    if(!account)return;
+    client=await account.ready();const c=await cryptoLoader();
+    const update=user=>{const next=user?.uid||null;if(uid!==next){lock();session=null;uid=next;}if(user&&!session)session=createVaultSession({siteId,client,adapter,seal:c.seal,unseal:c.unseal,onStatus:status});$('account').textContent=user?'로그인된 계정의 선택적 백업·복원 관리입니다.':'사이트 상단의 로그인 또는 회원가입을 이용해 주세요.';$('connect').hidden=true;$('logout').hidden=true;status(user?'필요할 때 암호를 입력해 백업·복원을 이용하세요.':'보관소를 사용하려면 사이트에서 로그인해 주세요.');};
+    if(!unsubscribe)unsubscribe=account.subscribe(update);update(account.currentUser);
   }
   launcher.addEventListener('click',()=>{showNote();dialog.showModal();});
   $('close').onclick=()=>dialog.close();
@@ -105,6 +112,7 @@ export function mountSiteVault({siteId,name,keys=[],label='개인 메모',target
     if(host.parentElement!==anchor)anchor.append(host);
   };
   place();const observer=new MutationObserver(()=>{place();});observer.observe(document.body,{childList:true,subtree:true});
-  return {element:host,open(){showNote();if(!dialog.open)dialog.showModal();},destroy(){destroyed=true;stopAuto();session?.reset();unsubscribe?.();observer.disconnect();window.removeEventListener('pagehide',pagehide);$('password').value='';host.remove();}};
+  return {element:host,open(){showNote();if(!dialog.open)dialog.showModal();prepareAccount().catch(error=>status(error.message));},destroy(){destroyed=true;stopAuto();session?.reset();unsubscribe?.();observer.disconnect();window.removeEventListener('pagehide',pagehide);$('password').value='';host.remove();}};
 }
+
 

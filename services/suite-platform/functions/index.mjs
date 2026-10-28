@@ -6,6 +6,7 @@ import {getFirestore,Timestamp,FieldValue} from 'firebase-admin/firestore';
 import {readFileSync} from 'node:fs';
 import {hash,random,validProof,requireSite,checkTicket,fail} from './security.mjs';
 import {exchangeProviderToken,oauthFailureUrl} from './provider.mjs';
+import {registerMembership} from './membership.mjs';
 initializeApp();
 const db=getFirestore('suite-v1'),auth=getAuth();
 const registry=JSON.parse(readFileSync(new URL('./registry.json',import.meta.url),'utf8'));
@@ -92,9 +93,20 @@ async function handler(req,res){
       const value=await consume(db.collection('_suiteOAuth').doc(hash(body.state)),body.verifier,v=>{if(v.state!=='complete')fail('oauth-not-complete',401);});
       const token=await auth.createCustomToken(value.uid);return res.json({token});
     }
+    if(route==='/membership/status'){
+      if(origin!==hub.origin)fail('use-account-hub',403);
+      const claims=await identity(req,{hubOnly:true}),member=await db.collection('_suiteMemberships').doc(claims.uid).get();
+      return res.json({registered:member.exists,version:member.exists?member.data().version:null});
+    }
+    if(route==='/membership/register'){
+      if(origin!==hub.origin)fail('use-account-hub',403);
+      const claims=await identity(req,{hubOnly:true});
+      const profile=await auth.getUser(claims.uid);
+      return res.json(await registerMembership({db,uid:claims.uid,displayName:profile.displayName||'',version:body.version,accepted:body.accepted,timestamp:()=>FieldValue.serverTimestamp()}));
+    }
     if(route==='/session/authorize'){
       if(origin!==hub.origin)fail('use-account-hub',403);requireSite(registry,body.siteId,body.origin);if(!validProof(body.challenge))fail('invalid-proof');
-      const claims=await identity(req,{hubOnly:true});const code=random();await db.collection('_suiteCodes').doc(hash(code)).create({uid:claims.uid,siteId:body.siteId,origin:body.origin,challenge:body.challenge,used:false,expiresAt:expires(60000)});return res.json({code});
+      const claims=await identity(req,{hubOnly:true});if(!(await db.collection('_suiteMemberships').doc(claims.uid).get()).exists)fail('membership-required',403);const code=random();await db.collection('_suiteCodes').doc(hash(code)).create({uid:claims.uid,siteId:body.siteId,origin:body.origin,challenge:body.challenge,used:false,expiresAt:expires(60000)});return res.json({code});
     }
     if(route==='/session/exchange'){
       requireSite(registry,body.siteId,origin);if(origin!==body.origin||!validProof(body.code))fail('invalid-exchange');
@@ -108,10 +120,11 @@ async function handler(req,res){
   }catch(error){
     if(!error.status)console.error('suite-auth-failure',{code:String(error.code||'unknown').slice(0,80),route});
     // Never echo provider responses, tokens, UID, request body or OAuth codes.
-    return res.status(error.status||500).json({code:error.status?error.message:'service-error',message:error.status===409?'이미 다른 계정에 연결된 로그인입니다. 기존 계정으로 로그인해 주세요.':error.status===503?'이 로그인 제공자는 아직 운영 설정 중입니다.':'로그인을 완료하지 못했습니다. 계정 화면에서 다시 시도해 주세요.'});
+    return res.status(error.status||500).json({code:error.status?error.message:'service-error',message:error.message==='membership-required'?'회원가입을 완료해 주세요.':error.status===409?'이미 다른 계정에 연결된 로그인입니다. 기존 계정으로 로그인해 주세요.':error.status===503?'이 로그인 제공자는 아직 운영 설정 중입니다.':'로그인을 완료하지 못했습니다. 계정 화면에서 다시 시도해 주세요.'});
   }
 }
 const options={region:'asia-northeast3',maxInstances:2,concurrency:20,timeoutSeconds:60,memory:'256MiB'};
 export const suiteAuth=onRequest(options,(req,res)=>req.path.startsWith('/oauth/')?res.status(404).json({message:'SNS 전용 인증 서버를 사용해 주세요.'}):handler(req,res));
 export const suiteSocialAuth=socialEnabled?onRequest({...options,secrets:[kakaoSecret,naverSecret]},handler):undefined;
 export {handler};
+

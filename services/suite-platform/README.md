@@ -1,4 +1,4 @@
-# 한눈·해요 공통 계정과 사이트별 보관소
+# 한눈·해요 공통 회원가입·로그인과 사이트 데이터
 
 2026-10-28 현재: Firestore `suite-v1`·보안 규칙·코어/SNS 인증 서버를 운영한다. Google·카카오·네이버가 동일 공통 계정에 연결되는 것을 실계정으로 확인했다. 네이버 일반 사용자 공개 검수는 미완료다. 사이트별 실제 기기 데이터의 암호화 저장·복원·현재 창 자동 저장을 추가했으며 [적용 계약과 이용 절차](INTEGRATIONS.md)를 따른다. 소스 구현·CI·운영 배포·실계정 검증은 각각 구분한다. 아래 날짜별 기록은 당시의 상태이며 현재 상태를 대신하지 않는다.
 
@@ -11,6 +11,12 @@
 | 인증 서버·보안 규칙 | `/services/suite-platform/` |
 | Firebase 프로젝트 | `softm-hannun-api` (기존 Directions와 다른 코드베이스) |
 | Firestore | `suite-v1`, Enterprise Native, `asia-northeast3`, 실시간 업데이트 |
+
+## 2026-10-29 인증과 데이터 관리 분리
+
+사이트 상단의 로그인·회원가입은 `site-account.mjs`가 제공한다. 보관소는 별도 링크이며 로그인 완료에 암호화 암호를 요구하지 않는다. 최초 SNS 인증은 인증 자격만 만든다. 허브의 필수 약관 동의 후 `/membership/register`가 공통 회원 프로필과 서버 전용 `_suiteMemberships`의 동의 버전·시각을 멱등 생성한다. `/session/authorize`는 가입 완료 여부를 확인한다. 이전 SNS 계정의 UID는 유지하고 첫 재로그인에서 가입 안내를 완료한다.
+
+사이트 정책 API와 현재 전송 범위는 [INTEGRATIONS.md](INTEGRATIONS.md)를 따른다. 로그인 이벤트는 자료 저장·복원 명령이 아니다. 기존 SDK의 암호화 저장 계약과 위로해요 백업 형식은 유지한다.
 
 ## 계정과 데이터 범위
 
@@ -140,3 +146,4 @@ I've set up prototype Security Rules to keep the data in Firestore safe. They ar
 네이버는 공개 승인 전이므로 일반 화면에서 `네이버 로그인 · 승인 대기`로 표시하고 사용할 수 없게 한다. 등록된 테스트 계정의 점검은 `https://softm.github.io/account/?naver-test=1`에서 수행한다. 이 옵션은 테스트용 화면만 열며 NAVER Developers의 테스트 계정 제한이나 서버의 인증·연결 검증을 해제하지 않는다. 공개 승인 완료 상태로 보고하지 않는다.
 
 `tests/account-handoff-ui.cjs`는 서로 다른 Origin의 실제 허브·SDK·보관소를 열어 연결 버튼의 첫 화면 노출, 취소 후 재시도, Google 로그인 후 자동 연결, 기존 계정의 명시적 동의, 카카오 OAuth 복귀, PKCE 교환, 잘못된 Origin 거부를 검사한다. 인증·DB 응답만 합성하며 실제 사용자 계정은 사용하지 않는다.
+

@@ -25,7 +25,7 @@ export const writeBatch=()=>({set(){},update(){},delete(){},commit:async()=>{}})
 `;
 (async()=>{
  let hubOrigin,siteOrigin,browser;
- const state={grants:0,exchanges:0,codes:new Map(),oauth:new Map()};
+ const state={registered:true,registrations:0,grants:0,exchanges:0,codes:new Map(),oauth:new Map()};
  const json=(res,value,code=200)=>{res.writeHead(code,{'Content-Type':'application/json'});res.end(JSON.stringify(value));};
  const body=async req=>{let value='';for await(const chunk of req)value+=chunk;return JSON.parse(value||'{}');};
  const serve=async(req,res)=>{
@@ -34,9 +34,12 @@ export const writeBatch=()=>({set(){},update(){},delete(){},commit:async()=>{}})
    res.setHeader('Access-Control-Allow-Headers','Content-Type,Authorization');res.setHeader('Access-Control-Allow-Methods','GET,POST,OPTIONS');
    if(req.method==='OPTIONS'){res.writeHead(204);res.end();return;}
    const url=new URL(req.url,hubOrigin),pathname=url.pathname;
+   if(pathname==='/independent'){res.setHeader('Content-Type','text/html');res.end('<!doctype html><html lang="ko"><meta name="viewport" content="width=device-width,initial-scale=1"><body><h1>인증 분리 검사</h1><script type="module">import {mountSiteVault} from "/shared/platform/v1/site-vault.mjs";import {createAccountContext,mountSiteAccount} from "/shared/platform/v1/site-account.mjs";const account=createAccountContext({siteId:"goldsignal"});const vault=mountSiteVault({siteId:"goldsignal",name:"금시그널",keys:[],target:"body",account,hideLauncher:true});mountSiteAccount({siteId:"goldsignal",name:"금시그널",target:"body",account,vault});window.testAccount=account;</script></body></html>');return;}
    if(pathname==='/'){res.setHeader('Content-Type','text/html');res.end('<!doctype html><html lang="ko"><meta name="viewport" content="width=device-width,initial-scale=1"><body><h1>합성 사이트</h1><script type="module">import {mountSiteVault} from "/shared/platform/v1/site-vault.mjs";mountSiteVault({siteId:"goldsignal",name:"금시그널",keys:[],label:"합성 검사",target:"body"});</script></body></html>');return;}
    if(pathname==='/shared/platform/v1/config.json'){json(res,{enabled:true,hubUrl:hubOrigin+'/account/',apiBase:hubOrigin+'/api',socialApiBase:hubOrigin+'/api',databaseId:'fixture',firebase:{apiKey:'fixture-only',appId:'fixture-only'},providers:{google:true,kakao:true,naver:true},providerStatus:{naver:'review-required'}});return;}
    if(pathname==='/shared/platform/v1/registry.json'){json(res,{sites:{goldsignal:{name:'금시그널',url:siteOrigin,origins:[siteOrigin],integration:'snapshot-adapter'}}});return;}
+   if(pathname==='/api/membership/status'){json(res,{registered:state.registered});return;}
+   if(pathname==='/api/membership/register'){const value=await body(req);assert.equal(value.version,'20261029-1');assert.equal(value.accepted,true);state.registered=true;state.registrations++;json(res,{registered:true});return;}
    if(pathname==='/api/providers'){json(res,{providers:['google.com']});return;}
    if(pathname==='/api/session/authorize'){
     const value=await body(req);assert.equal(value.origin,siteOrigin);assert.equal(value.siteId,'goldsignal');assert.match(value.challenge,/^[A-Za-z0-9_-]{43}$/);
@@ -95,7 +98,25 @@ export const writeBatch=()=>({set(){},update(){},delete(){},commit:async()=>{}})
   await invalid.locator('#grant').waitFor({state:'visible'});assert.equal(await invalid.locator('#continue').isVisible(),false);assert.equal(await invalid.locator('#login-card').isVisible(),false);assert.equal(state.grants,3);await invalid.close();
   const tester=await context.newPage();await tester.goto(hubOrigin+'/account/?naver-test=1');
   await tester.waitForFunction(()=>!document.getElementById('naver').disabled);assert.equal(await tester.locator('#naver').innerText(),'네이버 테스트 로그인');
+  state.registered=false;
+  const independent=await context.newPage();await independent.goto(siteOrigin+'/independent');
+  await independent.getByRole('button',{name:'로그인',exact:true}).waitFor();
+  assert.equal(await independent.getByRole('dialog').count(),0,'login must be available without opening the vault');
+  const signupPopup=independent.waitForEvent('popup');await independent.getByRole('button',{name:'회원가입',exact:true}).click();const signup=await signupPopup;
+  await signup.locator('#google').waitFor({state:'visible'});await signup.locator('#google').click();await signup.waitForFunction(()=>!!handoffFixture.completeGoogle);await signup.evaluate(()=>handoffFixture.completeGoogle());
+  await signup.locator('#signup-card').waitFor({state:'visible'});assert.equal(state.grants,3,'unregistered SNS identity must not receive a site session');
+  await signup.locator('#signup-submit').click();await signup.locator('#signup-status').filter({hasText:'필수 안내'}).waitFor();assert.equal(state.registrations,0);
+  await signup.locator('#signup-terms').check();await signup.locator('#signup-privacy').check();await signup.screenshot({path:path.join(output,'membership-signup.png')});
+  const signupClosed=signup.waitForEvent('close');await signup.locator('#signup-submit').click();await signupClosed;
+  await independent.getByRole('button',{name:'테스트 계정',exact:true}).waitFor();assert.equal(state.registrations,1);assert.equal(state.exchanges,4);
+  assert.equal(await independent.getByRole('dialog').count(),0,'successful signup must not open or require a vault');
+  await independent.getByRole('link',{name:'내 보관소',exact:true}).click();await independent.getByRole('dialog').waitFor();
+  await independent.getByRole('dialog').getByText('로그인된 계정의 선택적 백업·복원 관리입니다.').waitFor();
+  assert.equal(await independent.getByLabel('보관소 암호 · 10자 이상').inputValue(),'');
+  await independent.getByRole('button',{name:'보관소 닫기',exact:true}).click();
+  await independent.getByRole('button',{name:'테스트 계정',exact:true}).click();await independent.getByRole('button',{name:'로그아웃',exact:true}).click();await independent.getByRole('button',{name:'로그인',exact:true}).waitFor();
   assert.deepEqual(errors,[]);
   console.log('Cross-origin handoff: visible grant, cancelled-popup retry, Google auto-connect, existing-account consent, Kakao OAuth return, PKCE exchange, origin rejection and honest Naver availability passed.');
  }finally{await browser?.close();await Promise.all([new Promise(resolve=>hub.close(resolve)),new Promise(resolve=>site.close(resolve))]);}
 })().catch(error=>{console.error(error);process.exitCode=1;});
+
