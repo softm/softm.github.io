@@ -25,3 +25,6 @@ body.connection-view main{max-width:560px;padding:20px 16px}body.connection-view
 
 
 .connection-view #signup-card{display:block}.connection-view #signup-card[hidden]{display:none}#signup-card input[type=checkbox]{width:20px;height:20px;vertical-align:middle;margin-right:6px}#signup-card label{margin:16px 0}#signup-status[data-state=error]{color:#8c332b}
+
+
+.connection-view #withdrawal{display:none}#withdrawal table{width:100%;border-collapse:collapse;font-size:14px}#withdrawal th,#withdrawal td{padding:10px;border:1px solid #dce5dd;text-align:left;vertical-align:top}#withdrawal input[type=checkbox]{width:20px;height:20px;vertical-align:middle}#withdraw-confirmation{display:block;width:100%;padding:12px;border:1px solid #b9cbbf;border-radius:10px;font:inherit;margin:8px 0 16px}.danger{background:#9a352c;color:#fff;border-color:#9a352c}#withdraw-status[data-state=error]{color:#9a352c}#withdraw-status[data-state=success]{padding:12px;background:#e9f3eb;border-radius:10px}

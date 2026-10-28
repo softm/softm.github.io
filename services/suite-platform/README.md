@@ -147,3 +147,16 @@ I've set up prototype Security Rules to keep the data in Firestore safe. They ar
 
 `tests/account-handoff-ui.cjs`는 서로 다른 Origin의 실제 허브·SDK·보관소를 열어 연결 버튼의 첫 화면 노출, 취소 후 재시도, Google 로그인 후 자동 연결, 기존 계정의 명시적 동의, 카카오 OAuth 복귀, PKCE 교환, 잘못된 Origin 거부를 검사한다. 인증·DB 응답만 합성하며 실제 사용자 계정은 사용하지 않는다.
 
+
+
+## 공통 회원탈퇴
+
+각 사이트의 계정 메뉴 → 회원탈퇴 또는 `/account/#withdrawal`에서 이용한다. 최근 5분 이내 SNS 로그인, 삭제 범위 확인, `회원탈퇴` 입력과 최종 확인을 거친다. 클라이언트가 전달한 UID가 아닌 검증된 허브 계정 UID만 서버 삭제 대상으로 삼는다.
+
+`POST /membership/withdraw`는 서버 전용 `_suiteDeletions/{uid}`를 멱등 생성한다. 접수 즉시 Firestore 규칙 및 인증 API에서 해당 UID를 차단한다. `suiteDeleteAccount`는 suite-v1의 해당 문서 생성 이벤트로 실행되며 실패를 최대 24시간 재시도한다. Auth 비활성화·세션 폐기, 일회용 코드·OAuth·매핑 정리, users 하위 전체 재귀 삭제, 회원가입 기록 및 Auth 사용자 삭제 후에만 complete로 전환한다. 처리 결과를 잃어도 탭에 보관한 임의 receipt로 상태를 다시 확인한다. receipt는 상태 확인에만 사용하며 개인 기록을 반환하지 않는다. 서버 로그에는 UID·receipt·토큰·삭제한 기록을 남기지 않는다.
+
+최소 처리 문서는 완료 후 48시간 만료로 설정하며 `_suiteDeletions.purgeAfter` TTL을 활성화해야 한다. 삭제 중인 문서에는 TTL을 붙이지 않아 미완료 삭제가 자동 해제되지 않는다. 반복 실패는 `_suiteDeletions`의 retrying 상태와 함수 오류로 운영자가 확인하며, 완료되지 않은 요청을 완료로 보고하지 않는다. 완료 후 재가입한 SNS 사용자는 새 UID를 받고 이전 저장 자료를 복구·병합하지 않는다. 기존 위로해요 기기 기록과 별도 Firebase/ChatGPT 계정은 삭제하지 않는다. SNS 원본 계정 및 제공자 측 앱 동의 삭제는 범위 밖이다.
+
+배포 순서: 검사 → suiteDeleteAccount 및 suite-v1 규칙 → TTL → suiteAuth/suiteSocialAuth → 계정 UI. 트리거가 게시되기 전에 요청 API를 활성화하지 않는다. 검사에는 실제 Firestore/Auth 에뮬레이터의 합성 계정을 사용한다. 운영자의 실제 계정을 삭제하는 확인은 실행하지 않는다.
+
+참고: [Enterprise triggers](https://firebase.google.com/docs/firestore/enterprise/extend-with-functions-2nd-gen), [retry](https://firebase.google.com/docs/functions/retries), [recursive deletion](https://docs.cloud.google.com/nodejs/docs/reference/firestore/latest/firestore/firestore), [session revocation](https://firebase.google.com/docs/auth/admin/manage-sessions).

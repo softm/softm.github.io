@@ -35,7 +35,7 @@ jobs:
           for file in ../../account/*.mjs; do node --check "$file"; done
           node --check functions/index.mjs
           npm test
-      - run: npx -y firebase-tools@latest emulators:exec --project demo-softm-suite --only firestore 'npm run test:rules'
+      - run: npx -y firebase-tools@latest emulators:exec --project demo-softm-suite --only firestore,auth 'npm run test:rules'
 
       - name: Install isolated browser verification runtime
         run: |
@@ -50,10 +50,12 @@ jobs:
           node tests/site-vault-ui.cjs
           node tests/account-feedback-ui.cjs
           node tests/account-handoff-ui.cjs
+          node tests/account-withdrawal-ui.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: suite-vault-browser-verification
           path: '${{ runner.temp }}/suite-ui-results'
+
 
 
