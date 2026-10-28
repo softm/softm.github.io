@@ -19,7 +19,7 @@ export function mountSiteVault({siteId,name,keys=[],label='개인 메모',target
     '</style><button type="button" class="launch" aria-haspopup="dialog">내 보관소</button><dialog aria-labelledby="title">'+
     '<div class="head"><h2 id="title"></h2><button type="button" id="close" aria-label="보관소 닫기">닫기</button></div>'+
     '<p id="scope"></p><p class="account" id="account">공통 계정에 연결하면 다른 기기에서도 이어갈 수 있습니다.</p>'+
-    '<div class="actions"><button type="button" class="primary" id="connect">Google · 카카오 · 네이버 로그인</button><button type="button" id="logout" hidden>이 사이트 로그아웃</button></div>'+
+    '<div class="actions"><button type="button" class="primary" id="connect">Google · 카카오 로그인</button><button type="button" id="logout" hidden>이 사이트 로그아웃</button></div>'+
     '<label for="note">이 사이트의 개인 메모</label><textarea id="note" maxlength="30000" placeholder="기억할 내용을 적어 두세요."></textarea><small id="note-status">기기 저장소에 보관합니다. 아래 저장 버튼을 눌러야 원격 보관소로 전송합니다.</small>'+
     '<h3>암호화 보관소</h3><label for="password">보관소 암호 · 10자 이상</label><input id="password" type="password" minlength="10" maxlength="256" autocomplete="off" placeholder="로그인 비밀번호와 별도의 암호">'+
     '<small>암호는 서버에 보내거나 기기에 저장하지 않습니다. 암호를 잊으면 저장본을 복호화할 수 없습니다.</small>'+
@@ -29,7 +29,7 @@ export function mountSiteVault({siteId,name,keys=[],label='개인 메모',target
     '<label class="auto"><input id="auto" type="checkbox"><span>이 창에서 변경한 자료 자동 저장<small>먼저 저장 또는 복원을 마친 뒤 사용합니다. 창을 닫거나 계정이 바뀌면 꺼집니다.</small></span></label>'+
     '<p id="status" class="status" role="status" aria-live="polite">로그인 후 암호를 입력하고 저장본을 확인해 주세요.</p>'+
     '<div class="actions"><button type="button" id="lock">암호 지우고 잠그기</button><button type="button" class="danger" id="erase">원격 저장본 삭제</button></div>'+
-    '<p><small>네이버는 공개 검수 전 등록된 개발회원만 이용할 수 있습니다. SNS 게시글·사진은 수집하지 않습니다. <a href="https://softm.github.io/account/privacy.html" target="_blank" rel="noopener noreferrer">공통 계정 개인정보 안내</a></small></p>'+
+    '<p><small>네이버 로그인은 서비스 승인 대기 중입니다. SNS 게시글·사진은 수집하지 않습니다. <a href="https://softm.github.io/account/privacy.html" target="_blank" rel="noopener noreferrer">공통 계정 개인정보 안내</a></small></p>'+
     '</dialog>';
   const $=id=>shadow.getElementById(id),dialog=shadow.querySelector('dialog'),launcher=shadow.querySelector('.launch');
   $('title').textContent=name+' 보관소';$('scope').textContent='저장 범위: '+label+' · 다른 사이트의 기록과 분리합니다.';
@@ -48,6 +48,7 @@ export function mountSiteVault({siteId,name,keys=[],label='개인 메모',target
   function requireSession(){if(!client?.currentUser||!session)throw Error('먼저 공통 계정에 로그인해 주세요.');return session;}
   async function connect(){
     if(loading)return;
+    status('로그인 창에서 계정을 선택해 주세요. 연결이 끝나면 이 사이트로 돌아옵니다.');
     const popup=window.open('about:blank','_blank','popup,width=520,height=760');
     if(!popup){status('로그인 팝업을 허용한 뒤 다시 눌러 주세요.');return;}
     await run(async()=>{
@@ -55,9 +56,9 @@ export function mountSiteVault({siteId,name,keys=[],label='개인 메모',target
         const sdk=await sdkLoader();client ||= await sdk.createSiteClient({siteId});
         if(!unsubscribe)unsubscribe=client.onUser(user=>{
           const next=user?.uid||null;
-          if(uid!==next){uid=next;lock();}
+          if(uid!==next){uid=next;lock();if(loading)status('계정 연결을 확인하고 있습니다. 완료되면 로그인 창이 닫힙니다.');}
           $('account').textContent=user?'이 사이트의 공통 계정에 로그인했습니다.':'공통 계정에 로그인해 주세요.';
-          $('logout').hidden=!user;
+          $('logout').hidden=!user;$('connect').textContent=user?'로그인 계정 바꾸기':'Google · 카카오 로그인';
         });
         await client.login({popup});
         const c=await cryptoLoader();
@@ -106,3 +107,4 @@ export function mountSiteVault({siteId,name,keys=[],label='개인 메모',target
   place();const observer=new MutationObserver(()=>{place();});observer.observe(document.body,{childList:true,subtree:true});
   return {element:host,open(){showNote();if(!dialog.open)dialog.showModal();},destroy(){destroyed=true;stopAuto();session?.reset();unsubscribe?.();observer.disconnect();window.removeEventListener('pagehide',pagehide);$('password').value='';host.remove();}};
 }
+

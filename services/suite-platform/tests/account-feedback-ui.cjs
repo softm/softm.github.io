@@ -75,12 +75,12 @@ export async function createSiteClient(){throw Error('합성 검사에는 실제
    assert.equal(await google.getAttribute('aria-busy'),null);
    assert.match(await page.locator('#status').innerText(),/취소됐습니다/);
    assert.equal(await page.locator('#status').getAttribute('data-state'),'error');
-   assert.equal(await page.locator('#naver').innerText(),'네이버로 계속하기 (개발회원)');
+   assert.equal(await page.locator('#naver').innerText(),'네이버 로그인 · 승인 대기');
    assert.equal(await page.locator('#kakao').isEnabled(),true);
    await google.click();await page.evaluate(()=>feedbackFixture.succeed());
    await page.waitForFunction(()=>document.getElementById('status').dataset.state==='success');
    assert.equal(await google.isEnabled(),true);
-   assert.equal(await page.locator('[data-link="naver"]').isEnabled(),true);
+   assert.equal(await page.locator('[data-link="naver"]').isEnabled(),false);
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
   }
   await page.emulateMedia({reducedMotion:'reduce'});
@@ -99,3 +99,4 @@ export async function createSiteClient(){throw Error('합성 검사에는 실제
   console.log('Account feedback: pointer press, progress, duplicate prevention, cancellation, success, popup retry, keyboard, reduced motion and vault recovery passed at 320/390/1280px.');
  }finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);process.exitCode=1;});
+
