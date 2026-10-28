@@ -2,20 +2,146 @@
   "version": 1,
   "hub": "https://softm.github.io/account/",
   "sites": {
-    "wirohaeyo": {"name":"위로해요","url":"https://softm.github.io/wirohaeyo/","origins":["https://softm.github.io"],"storage":"encrypted-only","integration":"adapter"},
-    "weatherhannun": {"name":"날씨한눈","url":"https://softm.github.io/weatherhannun/","origins":["https://softm.github.io"],"storage":"encrypted-only","integration":"ready"},
-    "juyuhannun": {"name":"주유한눈","url":"https://softm.github.io/juyuhannun/","origins":["https://softm.github.io"],"storage":"encrypted-only","integration":"ready"},
-    "evchargingstation": {"name":"충전한눈","url":"https://softm.github.io/evchargingstation/","origins":["https://softm.github.io"],"storage":"encrypted-only","integration":"ready"},
-    "hydrogenstation": {"name":"수소충전한눈","url":"https://softm.github.io/hydrogenstation/","origins":["https://softm.github.io"],"storage":"encrypted-only","integration":"ready"},
-    "policyfundfinder": {"name":"지원한눈","url":"https://policyfundfinder.designboard.net/","origins":["https://policyfundfinder.designboard.net","https://softm.github.io"],"storage":"encrypted-only","integration":"ready"},
-    "auctionhannun": {"name":"경매한눈","url":"https://auctionhannun.designboard.net/","origins":["https://auctionhannun.designboard.net","https://softm.github.io"],"storage":"encrypted-only","integration":"migration-required"},
-    "homecare": {"name":"돌봄한눈","url":"https://homecare.designboard.net/","origins":["https://homecare.designboard.net","https://softm.github.io"],"storage":"encrypted-only","integration":"ready"},
-    "foodhannun": {"name":"음식한눈","url":"https://softm.github.io/foodhannun/","origins":["https://softm.github.io"],"storage":"encrypted-only","integration":"ready"},
-    "matjiphannun": {"name":"맛집한눈","url":"https://softm.github.io/matjiphannun/","origins":["https://softm.github.io"],"storage":"encrypted-only","integration":"ready"},
-    "goldsignal": {"name":"금시그널","url":"https://goldsignal.designboard.net/","origins":["https://goldsignal.designboard.net","https://softm.github.io"],"storage":"encrypted-only","integration":"ready"},
-    "bizhannun": {"name":"사업자한눈","url":"https://softm.github.io/bizhannun/","origins":["https://softm.github.io"],"storage":"encrypted-only","integration":"ready"},
-    "calc": {"name":"계산기","url":"https://softm.github.io/calc/","origins":["https://softm.github.io"],"storage":"encrypted-only","integration":"ready"},
-    "seolgyehaeyo": {"name":"설계해요","url":"https://softm.github.io/seolgyehaeyo/","origins":["https://softm.github.io"],"storage":"encrypted-only","integration":"ready"},
-    "norn": {"name":"노른","url":"https://softm.github.io/norn/","origins":["https://softm.github.io"],"storage":"encrypted-only","integration":"migration-required"}
+    "wirohaeyo": {
+      "name": "위로해요",
+      "url": "https://softm.github.io/wirohaeyo/",
+      "origins": [
+        "https://softm.github.io"
+      ],
+      "storage": "encrypted-only",
+      "integration": "adapter"
+    },
+    "weatherhannun": {
+      "name": "날씨한눈",
+      "url": "https://softm.github.io/weatherhannun/",
+      "origins": [
+        "https://softm.github.io"
+      ],
+      "storage": "encrypted-only",
+      "integration": "snapshot-adapter"
+    },
+    "juyuhannun": {
+      "name": "주유한눈",
+      "url": "https://softm.github.io/juyuhannun/",
+      "origins": [
+        "https://softm.github.io"
+      ],
+      "storage": "encrypted-only",
+      "integration": "snapshot-adapter"
+    },
+    "evchargingstation": {
+      "name": "충전한눈",
+      "url": "https://softm.github.io/evchargingstation/",
+      "origins": [
+        "https://softm.github.io"
+      ],
+      "storage": "encrypted-only",
+      "integration": "snapshot-adapter"
+    },
+    "hydrogenstation": {
+      "name": "수소충전한눈",
+      "url": "https://softm.github.io/hydrogenstation/",
+      "origins": [
+        "https://softm.github.io"
+      ],
+      "storage": "encrypted-only",
+      "integration": "snapshot-adapter"
+    },
+    "policyfundfinder": {
+      "name": "지원한눈",
+      "url": "https://policyfundfinder.designboard.net/",
+      "origins": [
+        "https://policyfundfinder.designboard.net",
+        "https://softm.github.io"
+      ],
+      "storage": "encrypted-only",
+      "integration": "snapshot-adapter"
+    },
+    "auctionhannun": {
+      "name": "경매한눈",
+      "url": "https://auctionhannun.designboard.net/",
+      "origins": [
+        "https://auctionhannun.designboard.net",
+        "https://softm.github.io"
+      ],
+      "storage": "encrypted-only",
+      "integration": "snapshot-adapter"
+    },
+    "homecare": {
+      "name": "돌봄한눈",
+      "url": "https://homecare.designboard.net/",
+      "origins": [
+        "https://homecare.designboard.net",
+        "https://softm.github.io"
+      ],
+      "storage": "encrypted-only",
+      "integration": "snapshot-adapter"
+    },
+    "foodhannun": {
+      "name": "음식한눈",
+      "url": "https://softm.github.io/foodhannun/",
+      "origins": [
+        "https://softm.github.io"
+      ],
+      "storage": "encrypted-only",
+      "integration": "snapshot-adapter"
+    },
+    "matjiphannun": {
+      "name": "맛집한눈",
+      "url": "https://softm.github.io/matjiphannun/",
+      "origins": [
+        "https://softm.github.io"
+      ],
+      "storage": "encrypted-only",
+      "integration": "snapshot-adapter"
+    },
+    "goldsignal": {
+      "name": "금시그널",
+      "url": "https://goldsignal.designboard.net/",
+      "origins": [
+        "https://goldsignal.designboard.net",
+        "https://softm.github.io"
+      ],
+      "storage": "encrypted-only",
+      "integration": "snapshot-adapter"
+    },
+    "bizhannun": {
+      "name": "사업자한눈",
+      "url": "https://softm.github.io/bizhannun/",
+      "origins": [
+        "https://softm.github.io"
+      ],
+      "storage": "encrypted-only",
+      "integration": "snapshot-adapter"
+    },
+    "calc": {
+      "name": "계산기",
+      "url": "https://softm.github.io/calc/",
+      "origins": [
+        "https://softm.github.io"
+      ],
+      "storage": "encrypted-only",
+      "integration": "snapshot-adapter"
+    },
+    "seolgyehaeyo": {
+      "name": "설계해요",
+      "url": "https://seolgyehaeyo.softm.chatgpt.site",
+      "origins": [
+        "https://seolgyehaeyo.softm.chatgpt.site",
+        "https://softm.github.io"
+      ],
+      "storage": "encrypted-only",
+      "integration": "source-only"
+    },
+    "norn": {
+      "name": "노른",
+      "url": "https://norn.designboard.net/",
+      "origins": [
+        "https://norn.designboard.net",
+        "https://softm.github.io"
+      ],
+      "storage": "encrypted-only",
+      "integration": "adapter-review"
+    }
   }
 }
