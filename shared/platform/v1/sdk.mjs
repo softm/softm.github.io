@@ -33,7 +33,7 @@ export async function createSiteClient({siteId,config}) {
       const receive=async event=>{
         if(event.origin!==url.origin||event.source!==popup||event.data?.type!=='softm:authorization'||event.data.requestId!==requestId)return;
         if(event.data.error){cleanup();reject(Error('로그인을 취소했습니다.'));return;}
-        window.removeEventListener('message',receive);
+        window.removeEventListener('message',receive);clearInterval(closed);
         try{const result=await api(config,'/session/exchange',{code:event.data.code,verifier,siteId,origin:location.origin});await signInWithCustomToken(auth,result.token);await ensureSite();cleanup();resolve(auth.currentUser);}catch(error){cleanup();reject(error);}
       };
       window.addEventListener('message',receive);timer=setTimeout(()=>{cleanup();reject(Error('로그인 시간이 만료되었습니다.'));},300000);
@@ -47,9 +47,9 @@ export async function createSiteClient({siteId,config}) {
       if(revision!==expectedRevision)throw Error('다른 기기에서 변경한 자료입니다. 다시 불러온 후 저장해 주세요.');
       tx.set(ref,{uid,siteId,version:1,encoding:'encrypted',payload,revision:revision+1,createdAt:old.exists()?old.data().createdAt:serverTimestamp(),updatedAt:serverTimestamp()});return revision+1;});
   }
-  async function get(itemId,{password}={}){const {uid,path}=await root();id(itemId);const snap=await getDoc(doc(db,...path,'items',itemId));if(!snap.exists())return null;const d=snap.data();return {id:snap.id,revision:d.revision,value:await unseal(JSON.parse(d.payload),password,uid+'/'+siteId+'/'+itemId)};}
+  async function get(itemId,{password}={}){const {uid,path}=await root();id(itemId);const snap=await getDocFromServer(doc(db,...path,'items',itemId));if(!snap.exists())return null;const d=snap.data();return {id:snap.id,revision:d.revision,value:await unseal(JSON.parse(d.payload),password,uid+'/'+siteId+'/'+itemId)};}
   async function list({pageSize=30,cursor}={}){const {path}=await root();const clauses=[orderBy('updatedAt','desc'),limit(Math.max(1,Math.min(100,pageSize)))];if(cursor)clauses.push(startAfter(cursor));const snap=await getDocs(query(collection(db,...path,'items'),...clauses));return {items:snap.docs.map(d=>({id:d.id,revision:d.data().revision,updatedAt:d.data().updatedAt})),cursor:snap.docs.at(-1)};}
-  async function remove(itemId){const {path}=await root();await deleteDoc(doc(db,...path,'items',id(itemId)));}
+  async function remove(itemId,{expectedRevision}={}){const {path}=await root();const ref=doc(db,...path,'items',id(itemId));await runTransaction(db,async tx=>{const snap=await tx.get(ref);if(expectedRevision!==undefined&&(snap.exists()?snap.data().revision:0)!==expectedRevision)throw Error('다른 기기에서 변경한 자료입니다. 다시 확인해 주세요.');if(snap.exists())tx.delete(ref);});}
   async function uploadEncryptedBackup(encryptedJson,{format='encrypted-json'}={}){
     // Caller must supply an already encrypted export. Plain record objects are never accepted.
     if(typeof encryptedJson!=='string'||encryptedJson.length<2||new TextEncoder().encode(encryptedJson).length>80*1024*1024)throw Error('암호화 백업은 80MB 이하여야 합니다.');
