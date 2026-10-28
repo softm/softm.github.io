@@ -61,6 +61,30 @@ const root=path.resolve(__dirname,'../../..'),output=process.env.SUITE_UI_OUTPUT
  }
  await page.getByRole('button',{name:'이 사이트 로그아웃',exact:true}).click();
  await page.waitForFunction(()=>document.querySelector('softm-site-vault').shadowRoot.getElementById('password').value==='');
+ // SOFTM-HOMECARE-VAULT START 날짜:20261028 : 고정 지도 도구가 헤더를 덮는 사이트에서도 실제 메뉴와 중첩 보관소를 조작
+ await page.getByRole('button',{name:'보관소 닫기',exact:true}).click();
+ await page.evaluate(async()=>{
+  const {mountSiteVault}=await import('/shared/platform/v1/site-vault.mjs');
+  const {SITE_INTEGRATIONS}=await import('/shared/platform/v1/site-integrations.mjs');
+  document.body.insertAdjacentHTML('beforeend','<button id="fixture-menu-toggle">전체 메뉴 열기</button><dialog class="care-navigation-menu" aria-label="돌봄한눈 메뉴"><nav aria-label="보조 탐색"></nav></dialog>');
+  const menu=document.querySelector('.care-navigation-menu');
+  document.getElementById('fixture-menu-toggle').onclick=()=>menu.showModal();
+  mountSiteVault({siteId:'homecare',...SITE_INTEGRATIONS.homecare});
+ });
+ for(const width of [320,390,1280]){
+  await page.setViewportSize({width,height:900});
+  await page.getByRole('button',{name:'전체 메뉴 열기',exact:true}).click();
+  const menu=page.getByRole('dialog',{name:'돌봄한눈 메뉴',exact:true});
+  await menu.getByRole('button',{name:'내 보관소',exact:true}).press('Enter');
+  const vault=page.getByRole('dialog',{name:'돌봄한눈 보관소',exact:true});
+  await vault.waitFor({state:'visible'});
+  const box=await vault.boundingBox();assert.ok(box.x>=0&&box.x+box.width<=width+1);
+  await page.screenshot({path:path.join(output,'homecare-menu-vault-'+width+'.png')});
+  await vault.getByRole('button',{name:'보관소 닫기',exact:true}).click();
+  assert.equal(await menu.isVisible(),true);
+  await page.keyboard.press('Escape');await menu.waitFor({state:'hidden'});
+ }
+ // SOFTM-HOMECARE-VAULT END
  assert.deepEqual(errors,[]);
  console.log('Fixture UI: login handoff, encrypted save, cancellation, restore, auto-off, logout, 320/390/1280 widths passed. Real SNS accounts were not used.');
  }finally{await browser.close();await new Promise(r=>server.close(r));}

@@ -4,7 +4,7 @@
 
 ## 이용 순서
 
-1. 사이트의 **내 보관소**를 열고 Google·카카오·네이버 중 로그인 수단을 선택한다.
+1. 사이트의 **내 보관소**를 연다. 돌봄한눈은 **전체 메뉴 → 내 보관소**로 진입한다. Google·카카오·네이버 중 로그인 수단을 선택한다.
 2. 10자 이상의 별도 보관소 암호를 입력하고 **저장본 확인**을 누른다.
 3. 첫 기기는 **현재 자료 저장**, 다른 기기는 **선택한 자료 복원**을 사용한다. 기존 원격 자료는 첫 연결에서 자동 덮어쓰지 않는다.
 4. 복원 후 **복원한 사이트 새로 열기**로 기존 앱 메모리 상태를 다시 읽는다.
@@ -60,7 +60,7 @@ Enterprise `suite-v1`의 Core 트랜잭션과 기존 QuerySnapshot 계약을 유
 |금시그널|[PR 1](https://github.com/softm/goldsignal/pull/1)|소스 병합 및 Pages 배포 확인|
 |계산기|[PR 1](https://github.com/softm/calc/pull/1)|소스 병합 및 Pages 배포 확인|
 |지원한눈|[PR 1](https://github.com/softm/softm.policyfundfinder/pull/1)|소스 병합 및 Pages 배포 확인|
-|돌봄한눈|[PR 1](https://github.com/softm/homecare-nationwide-care-services-map/pull/1)|소스 병합 및 Pages 배포 확인|
+|돌봄한눈|[PR 1](https://github.com/softm/homecare-nationwide-care-services-map/pull/1)|소스 병합 및 Pages 배포 확인. 전체 메뉴 안의 내 보관소 사용|
 |경매한눈|[PR 28](https://github.com/softm/softm.auctionhannun/pull/28)|소스 병합 및 Pages 배포 확인|
 |사업자한눈|[PR 3](https://github.com/softm/bizhannun/pull/3)|소스 병합 및 Pages 배포 확인|
 |노른|[PR 28](https://github.com/softm/norn/pull/28)|[main 검사·배포 40670136122](https://github.com/softm/norn/actions/runs/40670136122) 성공. 최초 영상 길이 타이밍 실패는 동일 코드 재검사에서 통과|
