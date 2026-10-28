@@ -131,7 +131,7 @@
         "https://softm.github.io"
       ],
       "storage": "encrypted-only",
-      "integration": "source-only"
+      "integration": "snapshot-adapter"
     },
     "norn": {
       "name": "노른",
