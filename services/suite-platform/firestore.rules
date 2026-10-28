@@ -7,12 +7,13 @@
 // backups/{id}: uid/siteId/version, format enum, checksum hex64, totalChars <=80MiB,
 // chunkCount 1..600, state uploading->complete, timestamps (immutable createdAt).
 // chunks/{0..599}: uid/siteId/index immutable, payload string <=160000, create-only.
+// _suiteDeletions/{uid}: server-only deletion state + receipt hash; blocks stale tokens.
 // _suiteOAuth/_suiteCodes/_suiteIdentities: Admin SDK only; never client readable.
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     function isAuthenticated(){return request.auth != null && request.auth.token.firebase.sign_in_provider != 'anonymous';}
-    function isOwner(uid){return isAuthenticated() && request.auth.uid == uid;}
+    function isOwner(uid){return isAuthenticated() && request.auth.uid == uid && !exists(/databases/$(database)/documents/_suiteDeletions/$(uid));}
     function inSite(uid,siteId){return isOwner(uid) && request.auth.token.suite_site == siteId;}
     function parentExists(uid,siteId){return exists(/databases/$(database)/documents/users/$(uid)/sites/$(siteId));}
     function validSiteId(siteId){return siteId is string && siteId.size() <=80 && siteId.matches('^[a-z0-9_-]+$');}
@@ -62,3 +63,4 @@ service cloud.firestore {
     match /{document=**} {allow read, write: if false;}
   }
 }
+

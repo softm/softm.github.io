@@ -1,4 +1,6 @@
 import {onRequest} from 'firebase-functions/v2/https';
+import {onDocumentCreated} from 'firebase-functions/v2/firestore';
+import {assertAccountActive,requestWithdrawal,withdrawalStatus,processWithdrawal} from './withdrawal.mjs';
 import {defineSecret} from 'firebase-functions/params';
 import {initializeApp} from 'firebase-admin/app';
 import {getAuth} from 'firebase-admin/auth';
@@ -25,15 +27,15 @@ async function identity(req,{recent=false,hubOnly=false}={}){
   if(claims.firebase?.sign_in_provider==='anonymous')fail('registered-login-required',401);
   if(hubOnly&&claims.suite_site)fail('use-account-hub',403);
   if(recent&&Date.now()/1000-claims.auth_time>300)fail('recent-login-required',401);
-  return claims;
+  await assertAccountActive(db,claims.uid);return claims;
 }
 async function consume(ref,verifier,extra=()=>{}){
   return db.runTransaction(async tx=>{const snap=await tx.get(ref);const value=snap.data();checkTicket(value,verifier);extra(value);tx.update(ref,{used:true});return value;});
 }
 async function providerIdentity(provider,subject,linkUid){
   const ref=db.collection('_suiteIdentities').doc(hash(provider+':'+subject));
-  return db.runTransaction(async tx=>{const existing=await tx.get(ref);if(existing.exists){const uid=existing.data().uid;if(linkUid&&linkUid!==uid)fail('provider-already-linked',409);return uid;}
-    const uid=linkUid||('sns_'+hash(provider+':'+subject).slice(0,48));tx.create(ref,{uid,provider,createdAt:FieldValue.serverTimestamp()});return uid;});
+  return db.runTransaction(async tx=>{const existing=await tx.get(ref);if(existing.exists){const uid=existing.data().uid;if((await tx.get(db.collection('_suiteDeletions').doc(uid))).exists)fail('account-withdrawn',403);if(linkUid&&linkUid!==uid)fail('provider-already-linked',409);return uid;}
+    const uid=linkUid||('sns_'+random());if((await tx.get(db.collection('_suiteDeletions').doc(uid))).exists)fail('account-withdrawn',403);tx.create(ref,{uid,provider,createdAt:FieldValue.serverTimestamp()});return uid;});
 }
 async function jsonFetch(url,options){const response=await fetch(url,{...options,signal:AbortSignal.timeout(12000)});const body=await response.json();if(!response.ok)fail('provider-request-failed',502);return body;}
 function callbackPage(res,message){res.status(400).set('Content-Type','text/plain; charset=utf-8').send(message);}
@@ -69,7 +71,7 @@ async function handler(req,res){
       const subject=transaction.provider==='kakao'?String(profile.id||''):profile.response?.id;
       if(typeof subject!=='string'||!subject||subject.length>256)fail('invalid-provider-user',401);
       const uid=await providerIdentity(transaction.provider,subject,transaction.linkUid);
-      try{await auth.getUser(uid);}catch(e){if(e.code!=='auth/user-not-found')throw e;await auth.createUser({uid});}
+      await assertAccountActive(db,uid);try{await auth.getUser(uid);}catch(e){if(e.code!=='auth/user-not-found')throw e;await assertAccountActive(db,uid);await auth.createUser({uid});}
       await ref.update({state:'complete',uid,expiresAt:expires(60000)});
       const redirect=new URL(hub);redirect.hash=new URLSearchParams({oauth:state}).toString();return res.redirect(303,redirect.href);
       }catch(error){
@@ -91,7 +93,16 @@ async function handler(req,res){
     if(route==='/oauth/exchange'){
       if(origin!==hub.origin||!validProof(body.state))fail('invalid-oauth-request',403);
       const value=await consume(db.collection('_suiteOAuth').doc(hash(body.state)),body.verifier,v=>{if(v.state!=='complete')fail('oauth-not-complete',401);});
-      const token=await auth.createCustomToken(value.uid);return res.json({token});
+      await assertAccountActive(db,value.uid);const token=await auth.createCustomToken(value.uid);return res.json({token});
+    }
+    if(route==='/membership/withdraw/status'){
+      if(origin!==hub.origin)fail('use-account-hub',403);
+      return res.json(await withdrawalStatus({db,uid:body.uid,receipt:body.receipt}));
+    }
+    if(route==='/membership/withdraw'){
+      if(origin!==hub.origin)fail('use-account-hub',403);
+      const claims=await identity(req,{recent:true,hubOnly:true});
+      return res.status(202).json(await requestWithdrawal({db,uid:claims.uid,body,timestamp:()=>FieldValue.serverTimestamp(),expires}));
     }
     if(route==='/membership/status'){
       if(origin!==hub.origin)fail('use-account-hub',403);
@@ -111,7 +122,7 @@ async function handler(req,res){
     if(route==='/session/exchange'){
       requireSite(registry,body.siteId,origin);if(origin!==body.origin||!validProof(body.code))fail('invalid-exchange');
       const value=await consume(db.collection('_suiteCodes').doc(hash(body.code)),body.verifier,v=>{if(v.siteId!==body.siteId||v.origin!==origin)fail('wrong-site',403);});
-      return res.json({token:await auth.createCustomToken(value.uid,{suite_site:value.siteId})});
+      await assertAccountActive(db,value.uid);return res.json({token:await auth.createCustomToken(value.uid,{suite_site:value.siteId})});
     }
     if(route==='/providers'){
       const claims=await identity(req,{hubOnly:true});const snap=await db.collection('_suiteIdentities').where('uid','==',claims.uid).limit(10).get();const user=await auth.getUser(claims.uid);return res.json({providers:[...new Set([...user.providerData.map(p=>p.providerId),...snap.docs.map(d=>d.data().provider)])]});
@@ -120,7 +131,7 @@ async function handler(req,res){
   }catch(error){
     if(!error.status)console.error('suite-auth-failure',{code:String(error.code||'unknown').slice(0,80),route});
     // Never echo provider responses, tokens, UID, request body or OAuth codes.
-    return res.status(error.status||500).json({code:error.status?error.message:'service-error',message:error.message==='membership-required'?'회원가입을 완료해 주세요.':error.status===409?'이미 다른 계정에 연결된 로그인입니다. 기존 계정으로 로그인해 주세요.':error.status===503?'이 로그인 제공자는 아직 운영 설정 중입니다.':'로그인을 완료하지 못했습니다. 계정 화면에서 다시 시도해 주세요.'});
+    return res.status(error.status||500).json({code:error.status?error.message:'service-error',message:error.message==='recent-login-required'?'본인 확인을 위해 같은 SNS 계정으로 다시 로그인한 뒤 탈퇴해 주세요.':error.message==='account-withdrawn'?'탈퇴 처리 중이거나 탈퇴한 계정입니다.':error.message==='withdrawal-confirmation-required'?'삭제 범위를 확인하고 회원탈퇴를 정확히 입력해 주세요.':error.message==='withdrawal-receipt-invalid'?'탈퇴 처리 내역을 확인할 수 없습니다.':error.message==='withdrawal-in-progress'?'이미 탈퇴 처리가 진행 중입니다.':error.message==='membership-required'?'회원가입을 완료해 주세요.':error.status===409?'이미 다른 계정에 연결된 로그인입니다. 기존 계정으로 로그인해 주세요.':error.status===503?'이 로그인 제공자는 아직 운영 설정 중입니다.':'로그인을 완료하지 못했습니다. 계정 화면에서 다시 시도해 주세요.'});
   }
 }
 const options={region:'asia-northeast3',maxInstances:2,concurrency:20,timeoutSeconds:60,memory:'256MiB'};
@@ -128,3 +139,6 @@ export const suiteAuth=onRequest(options,(req,res)=>req.path.startsWith('/oauth/
 export const suiteSocialAuth=socialEnabled?onRequest({...options,secrets:[kakaoSecret,naverSecret]},handler):undefined;
 export {handler};
 
+
+
+export const suiteDeleteAccount=onDocumentCreated({document:'_suiteDeletions/{uid}',database:'suite-v1',region:'asia-northeast3',retry:true,maxInstances:2,concurrency:1,timeoutSeconds:540,memory:'512MiB'},event=>processWithdrawal({db,auth,uid:event.params.uid,timestamp:()=>FieldValue.serverTimestamp(),expires}));
