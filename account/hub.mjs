@@ -84,7 +84,7 @@ async function completeOAuth(){
 async function ensureMembership(){
   const user=auth.currentUser;if(!user)return false;
   if(memberUid===user.uid)return true;
-  if(!membershipPending)membershipPending=post('/membership/status',{},true).then(result=>{if(auth.currentUser?.uid!==user.uid)return false;if(result.registered){memberUid=user.uid;$('#signup-card').hidden=true;return true;}$('#signup-card').hidden=false;$('#signup-terms').checked=false;$('#signup-privacy').checked=false;$('#signup-status').textContent='안내를 확인하고 회원가입을 완료해 주세요.';status('SNS 인증이 완료됐습니다. 회원가입을 완료해 주세요.');return false;}).finally(()=>{membershipPending=null;});
+  if(!membershipPending)membershipPending=post('/membership/status',{},true).then(result=>{if(auth.currentUser?.uid!==user.uid)return false;if(result.registered){memberUid=user.uid;$('#signup-card').hidden=true;return true;}$('#signup-card').hidden=false;$('#grant').before($('#signup-card'));$('#signup-card').scrollIntoView({block:'start'});$('#signup-terms').checked=false;$('#signup-privacy').checked=false;$('#signup-status').textContent='안내를 확인하고 회원가입을 완료해 주세요.';status('SNS 인증이 완료됐습니다. 회원가입을 완료해 주세요.');return false;}).finally(()=>{membershipPending=null;});
   return membershipPending;
 }
 async function authorize(){

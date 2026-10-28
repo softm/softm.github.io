@@ -106,7 +106,7 @@ export const writeBatch=()=>({set(){},update(){},delete(){},commit:async()=>{}})
   await signup.locator('#google').waitFor({state:'visible'});await signup.locator('#google').click();await signup.waitForFunction(()=>!!handoffFixture.completeGoogle);await signup.evaluate(()=>handoffFixture.completeGoogle());
   await signup.locator('#signup-card').waitFor({state:'visible'});assert.equal(state.grants,3,'unregistered SNS identity must not receive a site session');
   await signup.locator('#signup-submit').click();await signup.locator('#signup-status').filter({hasText:'필수 안내'}).waitFor();assert.equal(state.registrations,0);
-  await signup.locator('#signup-terms').check();await signup.locator('#signup-privacy').check();await signup.screenshot({path:path.join(output,'membership-signup.png')});
+  await signup.locator('#signup-terms').check();await signup.locator('#signup-privacy').check();const submit=await signup.locator('#signup-submit').boundingBox();assert.ok(submit.y>=0&&submit.y+submit.height<=900,'signup consent must be visible without a hidden second step');await signup.screenshot({path:path.join(output,'membership-signup.png')});
   const signupClosed=signup.waitForEvent('close');await signup.locator('#signup-submit').click();await signupClosed;
   await independent.getByRole('button',{name:'테스트 계정',exact:true}).waitFor();assert.equal(state.registrations,1);assert.equal(state.exchanges,4);
   assert.equal(await independent.getByRole('dialog').count(),0,'successful signup must not open or require a vault');
