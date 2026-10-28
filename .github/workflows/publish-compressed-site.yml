@@ -6,6 +6,8 @@ on:
       - '.github/workflows/publish-compressed-site.yml'
       - 'projects/projects.json'
       - 'projects/archive-sync.js'
+      - 'shared/platform/**'
+      - 'account/**'
   workflow_dispatch:
 permissions:
   contents: read
