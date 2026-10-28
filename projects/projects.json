@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "owner": "softm",
-  "updatedAt": "2026-10-15",
+  "updatedAt": "2026-10-28",
   "resetBaseline": "2026-10-05",
   "archivePolicy": {
     "name": "아카이브 배포",
@@ -767,7 +767,7 @@
         "url": "https://softm.github.io/baksok-public/records/index.json",
         "format": "json-record-index"
       },
-      "mediaStatus": "공개 JSON 목록의 7개 기록과 파일 메타데이터를 동기화했습니다.",
+      "mediaStatus": "공개 JSON 목록의 8개 기록과 파일 메타데이터를 동기화했습니다.",
       "deploymentNote": "공개 records/index.json을 직접 읽었습니다. 상세 HTML과 원본 미디어는 프로젝트 저장소에 유지됩니다.",
       "links": [
         {
@@ -939,6 +939,30 @@
           "recordPath": "records/20261005-business-card-design"
         },
         {
+          "visibility": "public",
+          "label": "서해박속낙지 어리굴젓·들기름 광고판 제작",
+          "title": "서해박속낙지 어리굴젓·들기름 광고판 제작",
+          "chatTitle": "서해박속낙지 어리굴젓·들기름 광고판 제작",
+          "sourceTitle": "20261028_광고판_아카이브",
+          "date": "2026-10-28",
+          "dateSource": "archive-canonical",
+          "titleSource": "archive-canonical",
+          "url": "https://softm.github.io/baksok-public/records/20261028-eoriguljeot-perilla-oil-posters/",
+          "repoUrl": "https://github.com/softm/baksok-public/tree/main/records/20261028-eoriguljeot-perilla-oil-posters",
+          "category": "디자인",
+          "summary": "원본 자료 4개",
+          "count": 4,
+          "files": {
+            "images": 2,
+            "videos": 0,
+            "audio": 0,
+            "documents": 1,
+            "archives": 0
+          },
+          "directory": "20261028-eoriguljeot-perilla-oil-posters",
+          "recordPath": "records/20261028-eoriguljeot-perilla-oil-posters"
+        },
+        {
           "id": "20261009-menu-development",
           "slug": "20261009-menu-development",
           "date": "2026-10-09",
@@ -995,18 +1019,18 @@
       ],
       "homeUrl": "https://softm.github.io/projects/baksok/",
       "projectHomeUrl": "https://softm.github.io/projects/baksok/",
-      "pageCount": 7,
+      "pageCount": 8,
       "privatePageCount": 2,
-      "latestTitle": "20261009_서해박속낙지_메뉴개발지원_상세정리_전체자료.zip",
+      "latestTitle": "서해박속낙지 어리굴젓·들기름 광고판 제작",
       "publicHomeStatus": "github-pages-home-generated",
       "previousHomeUrl": "https://softm.github.io/projects/baksok/",
       "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
       "vercelAccountAuthVerified": false,
-      "homePublicListCount": 7,
+      "homePublicListCount": 8,
       "homePrivateListCount": 2,
       "publicIndexSnapshot": {
         "source": "https://softm.github.io/baksok-public/records/index.json",
-        "recordCount": 7,
+        "recordCount": 8,
         "purpose": "build snapshot; browsers refresh from the deployed source on every page load"
       }
     },
