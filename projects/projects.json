@@ -1941,19 +1941,19 @@
           "directory": "20261026-sk-water-purifier-daonleaders",
           "recordPath": "archive/20261026-sk-water-purifier-daonleaders",
           "summary": "비공개 상세 열람은 인증 필요.",
-          "publicSummary": "정수기 렌탈 기록. 사진·증빙 원본 5개는 인증 후 열람.",
+          "publicSummary": "정수기 렌탈 기록. 사진 7개·계약서 PDF 1개·상담 메모 1개는 인증 후 열람.",
           "listTitle": "20261026_SK정수기_SK다온리더스_렌탈",
           "inputName": "20261026_SK정수기_SK다온리더스_렌탈",
           "publicMetadataApproved": true,
           "delivery": "authenticated-github-live-read",
           "files": {
-            "images": 5,
+            "images": 7,
             "documents": 2,
             "videos": 0,
             "audio": 0,
             "archives": 0
           },
-          "count": 7
+          "count": 9
         },
         {
           "visibility": "private",
