@@ -141,7 +141,7 @@
         "https://softm.github.io"
       ],
       "storage": "encrypted-only",
-      "integration": "adapter-review"
+      "integration": "snapshot-adapter"
     }
   }
 }

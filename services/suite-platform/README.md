@@ -82,9 +82,9 @@ I've set up prototype Security Rules to keep the data in Firestore safe. They ar
 
 ## 적용 범위와 남은 작업
 
-사이트 registry는 공통 모듈의 연결 계약이며 전 사이트 기능 적용 완료 목록이 아니다. 위로해요 웹에는 선택적 암호화 백업·복원·이번 세션 중 자동 백업 어댑터를 연결했다. Android 현재 패키지는 인터넷 권한 없는 오프라인 앱이므로 원격 SDK를 임의로 허용하지 않는다. Android 공통 로그인은 외부 브라우저 인증 + 안전한 앱 링크 + 네이티브 Firebase bridge 작업이 별도로 필요하다.
+현재 웹 적용 현황과 각 저장소 PR·배포·실계정 검증 근거는 [INTEGRATIONS.md](INTEGRATIONS.md)에 기록한다. 새 어댑터 13개와 기존 위로해요 웹 어댑터는 운영에 반영했고, 설계해요는 소스와 검사 완료 후 실제 Sites 배포가 남아 있다. 위로해요 웹의 선택적 암호화 백업·복원·이번 세션 중 자동 백업 어댑터는 유지한다. Android 현재 패키지는 인터넷 권한 없는 오프라인 앱이므로 원격 SDK를 임의로 허용하지 않는다. Android 공통 로그인은 외부 브라우저 인증 + 안전한 앱 링크 + 네이티브 Firebase bridge 작업이 별도로 필요하다.
 
-NORN·경매한눈의 기존 Firebase 프로젝트/UID/기록은 자동 이전하지 않는다. 기존 인증 사용자와 새 UID 연결을 증명한 후에만 가져오는 마이그레이션이 필요하다. 사이트별 즐겨찾기·메모 저장 이벤트 연결도 각 사이트 구현에서 수행해야 한다. 위로해요 앱이 종료된 동안의 자동 위로 알림·백그라운드 분석은 이 공통 인증/보관소 모듈과 별개의 남은 앱 작업이다.
+노른·경매한눈·사업자한눈의 기존 계정과 UID는 자동 합치지 않는다. 현재 작업공간을 명시적으로 열어 암호화 백업한 뒤 기기 모드의 새 사본으로 복원한다. 계정 자체를 합치는 마이그레이션은 포함하지 않는다. 사이트별 즐겨찾기·메모·설정의 저장 범위와 선택적 현재 창 자동 저장은 각 어댑터에 연결했다. 위로해요 앱이 종료된 동안의 자동 위로 알림·백그라운드 분석은 이 공통 인증/보관소 모듈과 별개의 남은 앱 작업이다.
 
 공식 참고: [Firebase custom auth](https://firebase.google.com/docs/auth/web/custom-auth), [Google](https://firebase.google.com/docs/auth/web/google-signin), [카카오](https://developers.kakao.com/docs/ko/kakaologin/rest-api), [네이버](https://developers.naver.com/docs/login/api/api.md).
 
