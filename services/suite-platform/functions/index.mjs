@@ -131,7 +131,7 @@ async function handler(req,res){
   }catch(error){
     if(!error.status)console.error('suite-auth-failure',{code:String(error.code||'unknown').slice(0,80),route});
     // Never echo provider responses, tokens, UID, request body or OAuth codes.
-    return res.status(error.status||500).json({code:error.status?error.message:'service-error',message:error.message==='recent-login-required'?'본인 확인을 위해 같은 SNS 계정으로 다시 로그인한 뒤 탈퇴해 주세요.':error.message==='account-withdrawn'?'탈퇴 처리 중이거나 탈퇴한 계정입니다.':error.message==='withdrawal-confirmation-required'?'삭제 범위를 확인하고 회원탈퇴를 정확히 입력해 주세요.':error.message==='withdrawal-receipt-invalid'?'탈퇴 처리 내역을 확인할 수 없습니다.':error.message==='withdrawal-in-progress'?'이미 탈퇴 처리가 진행 중입니다.':error.message==='membership-required'?'회원가입을 완료해 주세요.':error.status===409?'이미 다른 계정에 연결된 로그인입니다. 기존 계정으로 로그인해 주세요.':error.status===503?'이 로그인 제공자는 아직 운영 설정 중입니다.':'로그인을 완료하지 못했습니다. 계정 화면에서 다시 시도해 주세요.'});
+    return res.status(error.status||500).json({code:error.status?error.message:'service-error',message:error.message==='recent-login-required'?(route==='/membership/withdraw'?'본인 확인을 위해 같은 SNS 계정으로 다시 로그인한 뒤 탈퇴해 주세요.':'다른 SNS를 연결하려면 먼저 같은 계정으로 다시 로그인해 주세요.'):error.message==='account-withdrawn'?'탈퇴 처리 중이거나 탈퇴한 계정입니다.':error.message==='withdrawal-confirmation-required'?'삭제 범위를 확인하고 회원탈퇴를 정확히 입력해 주세요.':error.message==='withdrawal-receipt-invalid'?'탈퇴 처리 내역을 확인할 수 없습니다.':error.message==='withdrawal-in-progress'?'이미 탈퇴 처리가 진행 중입니다.':error.message==='membership-required'?'회원가입을 완료해 주세요.':error.status===409?'이미 다른 계정에 연결된 로그인입니다. 기존 계정으로 로그인해 주세요.':error.status===503?'이 로그인 제공자는 아직 운영 설정 중입니다.':'로그인을 완료하지 못했습니다. 계정 화면에서 다시 시도해 주세요.'});
   }
 }
 const options={region:'asia-northeast3',maxInstances:2,concurrency:20,timeoutSeconds:60,memory:'256MiB'};
