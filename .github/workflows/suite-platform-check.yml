@@ -49,9 +49,11 @@ jobs:
           mkdir -p "$SUITE_UI_OUTPUT"
           node tests/site-vault-ui.cjs
           node tests/account-feedback-ui.cjs
+          node tests/account-handoff-ui.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: suite-vault-browser-verification
           path: '${{ runner.temp }}/suite-ui-results'
+
 

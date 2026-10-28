@@ -31,7 +31,7 @@ const root=path.resolve(__dirname,'../../..'),output=process.env.SUITE_UI_OUTPUT
  });
  await page.getByRole('button',{name:'내 보관소',exact:true}).click();
  await page.getByRole('textbox',{name:'이 사이트의 개인 메모'}).fill('테스트 메모');
- await page.getByRole('button',{name:'Google · 카카오 · 네이버 로그인',exact:true}).click();
+ await page.getByRole('button',{name:'Google · 카카오 로그인',exact:true}).click();
  await page.getByLabel('보관소 암호 · 10자 이상').fill('fixture-password-123');
  await page.getByRole('button',{name:'저장본 확인',exact:true}).click();
  await page.getByRole('button',{name:'현재 자료 저장',exact:true}).click();
@@ -89,3 +89,4 @@ const root=path.resolve(__dirname,'../../..'),output=process.env.SUITE_UI_OUTPUT
  console.log('Fixture UI: login handoff, encrypted save, cancellation, restore, auto-off, logout, 320/390/1280 widths passed. Real SNS accounts were not used.');
  }finally{await browser.close();await new Promise(r=>server.close(r));}
 })().catch(error=>{console.error(error);process.exitCode=1;});
+
