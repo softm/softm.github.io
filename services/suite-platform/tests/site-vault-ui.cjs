@@ -41,11 +41,14 @@ const root=path.resolve(__dirname,'../../..'),output=process.env.SUITE_UI_OUTPUT
  await page.getByLabel('이 창에서 변경한 자료 자동 저장').uncheck();
  assert.equal(await page.getByLabel('이 창에서 변경한 자료 자동 저장').isChecked(),false);
  await page.getByRole('textbox',{name:'이 사이트의 개인 메모'}).fill('변경 중인 메모');
- page.once('dialog',d=>d.dismiss());
+ const cancelledDialog=page.waitForEvent('dialog');
  await page.getByRole('button',{name:'선택한 자료 복원',exact:true}).click();
+ await (await cancelledDialog).dismiss();
+ await page.waitForFunction(()=>!document.querySelector('softm-site-vault').shadowRoot.getElementById('restore').disabled);
  assert.equal(await page.getByRole('textbox',{name:'이 사이트의 개인 메모'}).inputValue(),'변경 중인 메모');
- page.once('dialog',d=>d.accept());
+ const acceptedDialog=page.waitForEvent('dialog');
  await page.getByRole('button',{name:'선택한 자료 복원',exact:true}).click();
+ await (await acceptedDialog).accept();
  await page.getByRole('button',{name:'복원한 사이트 새로 열기'}).waitFor();
  assert.equal(await page.getByRole('textbox',{name:'이 사이트의 개인 메모'}).inputValue(),'테스트 메모');
  assert.equal(await page.evaluate(()=>localStorage.getItem('auth-token')),'never-export');
