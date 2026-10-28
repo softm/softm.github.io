@@ -22,3 +22,6 @@ button[aria-busy=true]::before{content:"";width:1em;height:1em;flex:0 0 1em;bord
 /* SOFTM-SITE-CONNECTION START 날짜:20261028 : 팝업 첫 화면에서 계정과 연결 대상을 확인 */
 body.connection-view main{max-width:560px;padding:20px 16px}body.connection-view .brand{font-size:18px}body.connection-view header,body.connection-view #sites-card,body.connection-view #link-section,body.connection-view #vault,body.connection-view footer{display:none!important}body.connection-view .card{padding:20px;margin:16px 0}body.connection-view #grant{margin-top:22px}body.connection-view #grant h2{font-size:24px}body.connection-view #grant-origin{overflow-wrap:anywhere;margin:4px 0;color:#60766a}body.connection-view #grant-user{font-weight:650;margin:12px 0}body.connection-view .grant-actions{display:flex;flex-direction:column;gap:8px;margin-top:16px}body.connection-view #continue{width:100%;min-height:50px}body.connection-view #login-card h2{font-size:18px}
 /* SOFTM-SITE-CONNECTION END */
+
+
+.connection-view #signup-card{display:block}.connection-view #signup-card[hidden]{display:none}#signup-card input[type=checkbox]{width:20px;height:20px;vertical-align:middle;margin-right:6px}#signup-card label{margin:16px 0}#signup-status[data-state=error]{color:#8c332b}

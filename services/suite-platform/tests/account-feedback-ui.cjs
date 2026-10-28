@@ -30,6 +30,7 @@ export async function createSiteClient(){throw Error('합성 검사에는 실제
    if(pathname==='/shared/platform/v1/registry.json'){res.setHeader('Content-Type','application/json');res.end(JSON.stringify({sites:{fixture:{name:'검사 사이트',url:'#',origins:[],integration:'snapshot-adapter'}}}));return;}
    if(pathname==='/shared/platform/v1/sdk.mjs'){res.setHeader('Content-Type','text/javascript');res.end(sdkModule);return;}
    if(pathname==='/shared/platform/v1/crypto.mjs'){res.setHeader('Content-Type','text/javascript');res.end("export const randomSecret=()=>'',challengeFor=async()=>'';");return;}
+   if(pathname==='/api/membership/status'){res.setHeader('Content-Type','application/json');res.end('{"registered":true}');return;}
    if(pathname==='/api/providers'){res.setHeader('Content-Type','application/json');res.end('{"providers":["google.com","kakao","naver"]}');return;}
    const file=path.resolve(root,'.'+(pathname.endsWith('/')?pathname+'index.html':pathname));
    if(!file.startsWith(root+path.sep))throw Error('path');
@@ -99,4 +100,5 @@ export async function createSiteClient(){throw Error('합성 검사에는 실제
   console.log('Account feedback: pointer press, progress, duplicate prevention, cancellation, success, popup retry, keyboard, reduced motion and vault recovery passed at 320/390/1280px.');
  }finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);process.exitCode=1;});
+
 

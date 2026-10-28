@@ -22,12 +22,12 @@ export async function createSiteClient({siteId,config}) {
   async function user(){await auth.authStateReady();if(!auth.currentUser)throw Error('먼저 공통 계정에 로그인해 주세요.');const claims=(await auth.currentUser.getIdTokenResult()).claims;if(claims.suite_site!==siteId)throw Error('사이트 인증 범위가 다릅니다. 다시 로그인해 주세요.');return auth.currentUser;}
   async function root(){const u=await user();return {uid:u.uid,path:['users',u.uid,'sites',siteId]};}
   async function ensureSite(){const {uid,path}=await root();await runTransaction(db,async tx=>{const ref=doc(db,...path),snap=await tx.get(ref);if(!snap.exists())tx.set(ref,{uid,siteId,version:1,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});});}
-  async function login({popup:providedPopup}={}) {
+  async function login({popup:providedPopup,mode='login'}={}) {
     // Open synchronously, before crypto/network awaits, to preserve browser user gesture.
     const popup=providedPopup||window.open('about:blank','_blank','popup,width=520,height=760');
     if(!popup)throw Error('로그인 창을 열 수 없습니다. 팝업 허용 후 다시 눌러 주세요.');
     const verifier=randomSecret(),challenge=await challengeFor(verifier),requestId=randomSecret();
-    const url=new URL(config.hubUrl);url.searchParams.set('site',siteId);url.searchParams.set('origin',location.origin);url.searchParams.set('challenge',challenge);url.searchParams.set('request',requestId);
+    const url=new URL(config.hubUrl);url.searchParams.set('mode',mode==='signup'?'signup':'login');url.searchParams.set('site',siteId);url.searchParams.set('origin',location.origin);url.searchParams.set('challenge',challenge);url.searchParams.set('request',requestId);
     return new Promise((resolve,reject)=>{
       let timer,closed; const cleanup=()=>{window.removeEventListener('message',receive);clearTimeout(timer);clearInterval(closed);popup.close();};
       const receive=async event=>{
@@ -71,3 +71,4 @@ export async function createSiteClient({siteId,config}) {
   async function deleteBackup(backupId){const {path}=await root();const ref=doc(db,...path,'backups',id(backupId));const snap=await getDocFromServer(ref);if(!snap.exists())return;for(let first=0;first<snap.data().chunkCount;first+=100){const batch=writeBatch(db);for(let i=first;i<Math.min(first+100,snap.data().chunkCount);i++)batch.delete(doc(ref,'chunks',String(i)));await batch.commit();}await deleteDoc(ref);}
   return Object.freeze({siteId,login,logout:()=>signOut(auth),get currentUser(){return auth.currentUser;},onUser:fn=>onAuthStateChanged(auth,fn),put,get,list,remove,uploadEncryptedBackup,listBackups,downloadBackup,deleteBackup});
 }
+

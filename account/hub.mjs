@@ -7,7 +7,7 @@ import {runButtonAction} from './button-feedback.mjs?v=20261028-1';
 const $=s=>document.querySelector(s),status=(message,state='info')=>{
   const element=$(connectionView?'#connection-status':'#status');if(element){element.textContent=message;element.dataset.state=state;}
 };
-let config,auth,registry,currentClient,selectedSite,revision=0,loadedId=null,authBusy=false,handoffSubmitted=false;
+let config,auth,registry,currentClient,selectedSite,revision=0,loadedId=null,authBusy=false,handoffSubmitted=false,memberUid=null,membershipPending=null,pendingAuthorize=false;
 const query=new URLSearchParams(location.search);
 let connectionView=query.has('site'),naverTest=query.get('naver-test')==='1';
 function providerRestricted(provider){return config?.providerStatus?.[provider]==='setup-required'||config?.providerStatus?.[provider]==='review-required'&&!naverTest;}
@@ -32,7 +32,7 @@ function refreshAuthButtons(){
     button.disabled=authBusy||handoffSubmitted||!auth||!config?.enabled||!config.providers[provider]||providerRestricted(provider)||!!button.dataset.link&&!auth.currentUser;
   }
   $('#continue').disabled=authBusy||handoffSubmitted||!auth?.currentUser||!targetValid();
-  $('#logout').disabled=authBusy||handoffSubmitted||!auth?.currentUser;
+  $('#logout').disabled=authBusy||handoffSubmitted||!auth?.currentUser;$('#signup-submit').disabled=authBusy||handoffSubmitted||!auth?.currentUser;
 }
 function readTarget(){const query=new URLSearchParams(location.search);return {siteId:query.get('site'),origin:query.get('origin'),challenge:query.get('challenge'),requestId:query.get('request')};}
 const target=readTarget();
@@ -45,7 +45,7 @@ function renderConnection(){
   $('#login-card').before($('#grant'));$('#grant').hidden=false;
   const valid=targetValid(),site=registry.sites[target.siteId],user=auth?.currentUser;
   $('#grant-title').textContent=site?site.name+' 로그인':'사이트 연결';
-  $('#grant-description').textContent=valid?site.name+'의 내 보관소로 연결합니다.':'연결 요청이 만료됐거나 원래 사이트와 연결이 끊겼습니다. 원래 사이트에서 로그인 버튼을 다시 눌러 주세요.';
+  $('#grant-description').textContent=valid?site.name+'에 로그인합니다. 자료 동기화는 사이트 정책에 따릅니다.':'연결 요청이 만료됐거나 원래 사이트와 연결이 끊겼습니다. 원래 사이트에서 로그인 버튼을 다시 눌러 주세요.';
   $('#grant-origin').textContent=valid?target.origin:'';
   $('#grant-user').textContent=valid&&user?(user.displayName||'현재 계정')+' 계정으로 연결할 수 있습니다.':valid?'로그인하면 이 사이트 연결까지 이어집니다.':'';
   $('#continue').hidden=!valid||!user;$('#continue').textContent=site?'이 계정으로 '+site.name+' 연결':'이 계정으로 연결';
@@ -56,7 +56,7 @@ async function providerLogin(provider,link=false){
   if(!auth||!config.providers[provider]||providerRestricted(provider))throw Error('이 로그인은 공개 승인 대기 중입니다. Google 또는 카카오로 로그인해 주세요.');
   if(provider==='google'){
     if(link)await linkWithPopup(auth.currentUser,new GoogleAuthProvider());else await signInWithPopup(auth,new GoogleAuthProvider());
-    if(!link&&targetValid())await authorize();else status(link?'현재 계정에 Google을 연결했습니다.':'로그인했습니다.','success');
+    if(!link){if(targetValid())await authorize();else if(await ensureMembership())status('로그인했습니다.','success');}else status('현재 계정에 Google을 연결했습니다.','success');
     return;
   }
   if(link&&!auth.currentUser)throw Error('먼저 로그인해 주세요.');
@@ -77,14 +77,21 @@ async function completeOAuth(){
     status('로그인을 마무리하고 있어요.','busy');
     const session=await post('/oauth/exchange',{state:result.state,verifier:result.verifier});
     await signInWithCustomToken(auth,session.token);
-    if(JSON.parse(saved).connectSite===true&&targetValid())await authorize();else status('로그인했습니다.','success');
+    if(JSON.parse(saved).connectSite===true&&targetValid())await authorize();else if(await ensureMembership())status('로그인했습니다.','success');
   }catch(error){status(error.message||'로그인을 완료하지 못했습니다. 다시 시도해 주세요.','error');}
   finally{authBusy=false;refreshAuthButtons();}
+}
+async function ensureMembership(){
+  const user=auth.currentUser;if(!user)return false;
+  if(memberUid===user.uid)return true;
+  if(!membershipPending)membershipPending=post('/membership/status',{},true).then(result=>{if(auth.currentUser?.uid!==user.uid)return false;if(result.registered){memberUid=user.uid;$('#signup-card').hidden=true;return true;}$('#signup-card').hidden=false;$('#signup-terms').checked=false;$('#signup-privacy').checked=false;$('#signup-status').textContent='안내를 확인하고 회원가입을 완료해 주세요.';status('SNS 인증이 완료됐습니다. 회원가입을 완료해 주세요.');return false;}).finally(()=>{membershipPending=null;});
+  return membershipPending;
 }
 async function authorize(){
   if(handoffSubmitted)return;
   if(!targetValid()||!auth.currentUser)throw Error('연결 요청을 다시 시작해 주세요. 원래 사이트에서 로그인 버튼을 누르면 됩니다.');
-  const result=await post('/session/authorize',target,true);
+  if(!await ensureMembership()){pendingAuthorize=true;return;}
+  pendingAuthorize=false;const result=await post('/session/authorize',target,true);
   window.opener.postMessage({type:'softm:authorization',requestId:target.requestId,code:result.code},target.origin);
   handoffSubmitted=true;refreshAuthButtons();
   status(registry.sites[target.siteId].name+'에 연결하고 있습니다. 완료되면 이 창이 닫힙니다.','busy');
@@ -97,7 +104,7 @@ function renderSites(){const root=$('#sites');root.replaceChildren();for(const [
 function guarded(fn,output=status,{label,pending='처리하고 있어요.',authAction=false,success}={}){
   return event=>{
     if(event.currentTarget.disabled||authAction&&authBusy)return;
-    const group=authAction?document.querySelectorAll('[data-provider],[data-link],#continue,#logout'):document.querySelectorAll('#vault button,#sites button');
+    const group=authAction?document.querySelectorAll('[data-provider],[data-link],#continue,#logout,#signup-submit'):document.querySelectorAll('#vault button,#sites button');
     if(authAction)authBusy=true;
     return runButtonAction(event.currentTarget,async()=>{await fn();if(success)output(success,'success');},{label,pending,output,group,settled:()=>{if(authAction){authBusy=false;refreshAuthButtons();}}});
   };
@@ -119,12 +126,18 @@ async function initialize(){
   }
   if(!config.enabled){$('#user').textContent='공통 계정 서비스 연결 준비 중';status('공통 모듈과 사이트별 보관소 화면이 준비되었습니다. 인증 서버 활성화 후 로그인할 수 있습니다.');return;}
   auth=getAuth(initializeApp(config.firebase,'softm-account-hub'));await auth.authStateReady();await completeOAuth();
-  onAuthStateChanged(auth,user=>{$('#user').textContent=user?(user.displayName||'나의 공통 계정')+' · 로그인됨':'사용할 로그인 방법을 선택해 주세요.';$('#logout').hidden=!user;$('#link-section').hidden=!user||connectionView;renderConnection();refreshAuthButtons();if(user&&!connectionView)showLinkedProviders(user);else $('#linked-providers').textContent='';});
-  $('#logout').addEventListener('click',guarded(async()=>{await signOut(auth);status('공통 계정에서 로그아웃했습니다. 다른 사이트에서 열린 세션은 해당 사이트에서 로그아웃해 주세요.','success');},status,{label:'로그아웃 중…',pending:'공통 계정에서 로그아웃하고 있어요.',authAction:true}));
+  onAuthStateChanged(auth,user=>{$('#user').textContent=user?(user.displayName||'나의 공통 계정')+' · 로그인됨':'사용할 로그인 방법을 선택해 주세요.';$('#logout').hidden=!user;$('#link-section').hidden=!user||connectionView;renderConnection();refreshAuthButtons();if(user&&!connectionView){showLinkedProviders(user);ensureMembership().catch(error=>status(error.message,'error'));}else $('#linked-providers').textContent='';});
+  $('#signup-submit').addEventListener('click',guarded(async()=>{
+    if(!$('#signup-terms').checked||!$('#signup-privacy').checked)throw Error('필수 안내 두 항목을 확인해 주세요.');
+    await post('/membership/register',{version:'20261029-1',accepted:true},true);memberUid=auth.currentUser.uid;$('#signup-card').hidden=true;
+    if(targetValid()&&(pendingAuthorize||connectionView))await authorize();else status('회원가입을 완료했습니다.','success');
+  },(message,state)=>{$('#signup-status').textContent=message;$('#signup-status').dataset.state=state;},{label:'가입 중…',pending:'회원가입을 완료하고 있어요.',authAction:true}));
+  $('#logout').addEventListener('click',guarded(async()=>{await signOut(auth);memberUid=null;$('#signup-card').hidden=true;status('공통 계정에서 로그아웃했습니다. 다른 사이트에서 열린 세션은 해당 사이트에서 로그아웃해 주세요.','success');},status,{label:'로그아웃 중…',pending:'공통 계정에서 로그아웃하고 있어요.',authAction:true}));
   $('#continue').addEventListener('click',guarded(authorize,status,{label:'사이트 연결 중…',pending:'선택한 사이트에 계정을 연결하고 있어요.',authAction:true}));$('#cancel').addEventListener('click',()=>{if(targetValid())window.opener.postMessage({type:'softm:authorization',requestId:target.requestId,error:'cancelled'},target.origin);window.close();});
 }
 $('#vault-connect').addEventListener('click',guarded(connectVault,vaultStatus,{label:'연결 중…',pending:'보관소 로그인 창을 연결하고 있어요.'}));$('#vault-load').addEventListener('click',guarded(loadItems,vaultStatus,{label:'불러오는 중…',pending:'보관된 메모 목록을 불러오고 있어요.'}));
 $('#item-save').addEventListener('click',guarded(async()=>{if(!currentClient)throw Error('사이트 보관소를 먼저 연결해 주세요.');const itemId=$('#item-id').value.trim();if(itemId==='site-state-v1')throw Error('사이트 자동 저장 항목은 해당 사이트의 내 보관소에서 관리해 주세요.');revision=await currentClient.put(itemId,{body:$('#item-body').value},{password:$('#vault-password').value,expectedRevision:loadedId===itemId?revision:0});loadedId=itemId;vaultStatus('암호화해 저장했습니다.','success');},vaultStatus,{label:'암호화 저장 중…',pending:'메모를 암호화해 저장하고 있어요.'}));
 initialize().catch(error=>{status(error.message,'error');$('#user').textContent='연결을 확인해 주세요.';});
+
 
 
