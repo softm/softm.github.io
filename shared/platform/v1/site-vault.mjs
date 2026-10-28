@@ -104,5 +104,5 @@ export function mountSiteVault({siteId,name,keys=[],label='개인 메모',target
     if(host.parentElement!==anchor)anchor.append(host);
   };
   place();const observer=new MutationObserver(()=>{place();});observer.observe(document.body,{childList:true,subtree:true});
-  return {element:host,destroy(){destroyed=true;stopAuto();session?.reset();unsubscribe?.();observer.disconnect();window.removeEventListener('pagehide',pagehide);$('password').value='';host.remove();}};
+  return {element:host,open(){showNote();if(!dialog.open)dialog.showModal();},destroy(){destroyed=true;stopAuto();session?.reset();unsubscribe?.();observer.disconnect();window.removeEventListener('pagehide',pagehide);$('password').value='';host.remove();}};
 }
