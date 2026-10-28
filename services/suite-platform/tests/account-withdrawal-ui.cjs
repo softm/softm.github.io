@@ -5,7 +5,7 @@ const root=path.resolve(__dirname,'../../..'),output=process.env.SUITE_UI_OUTPUT
  const html=await fs.readFile(path.join(root,'account/index.html'),'utf8'),section=html.slice(html.indexOf('<section id="withdrawal"'),html.indexOf('<footer>'));
  const server=http.createServer(async(req,res)=>{try{
   const url=new URL(req.url,'http://localhost');
-  if(url.pathname==='/'){res.setHeader('Content-Type','text/html');res.end('<!doctype html><html lang="ko"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/account/style.css"><body><main><section id="login-card">합성 로그인 화면</section>'+section+`<script type="module">
+  if(url.pathname==='/'){res.setHeader('Content-Type','text/html');res.end('<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/account/style.css"><body><main><section id="login-card">합성 로그인 화면</section>'+section+`<script type="module">
 import {mountWithdrawal} from '/account/withdrawal.mjs';
 window.fixture={user:{uid:'synthetic-user',displayName:'검사 계정'},mode:'recent',calls:0,logouts:0,complete:false,accepted:false};
 const post=async(url,body)=>{
@@ -24,10 +24,10 @@ controller.onUser(fixture.user);await controller.resume();window.controller=cont
   await page.goto('http://127.0.0.1:'+server.address().port);await page.locator('#withdrawal').waitFor({state:'visible'});
   assert.equal(await page.locator('#withdraw-submit').isDisabled(),true);
   await page.locator('#withdraw-ack').check();await page.locator('#withdraw-confirmation').fill('회원탈퇴');assert.equal(await page.locator('#withdraw-submit').isEnabled(),true);
-  let dialog=page.waitForEvent('dialog');await page.locator('#withdraw-submit').click();await (await dialog).dismiss();assert.equal(await page.evaluate(()=>fixture.calls),0);
-  dialog=page.waitForEvent('dialog');await page.locator('#withdraw-submit').click();await (await dialog).accept();await page.locator('#withdraw-status').filter({hasText:'다시 로그인'}).waitFor();
+  page.once('dialog',dialog=>dialog.dismiss());await page.locator('#withdraw-submit').click();assert.equal(await page.evaluate(()=>fixture.calls),0);
+  page.once('dialog',dialog=>dialog.accept());await page.locator('#withdraw-submit').click();await page.locator('#withdraw-status').filter({hasText:'다시 로그인'}).waitFor();
   assert.equal(await page.evaluate(()=>fixture.logouts),0);assert.equal(await page.evaluate(()=>fixture.locked),false);assert.equal(await page.evaluate(()=>sessionStorage.getItem('softm-withdrawal-receipt-v1')),null);
-  await page.evaluate(()=>{fixture.mode='lost';});dialog=page.waitForEvent('dialog');await page.locator('#withdraw-submit').click();await (await dialog).accept();
+  await page.evaluate(()=>{fixture.mode='lost';});page.once('dialog',dialog=>dialog.accept());await page.locator('#withdraw-submit').click();
   await page.locator('#withdraw-status').filter({hasText:'처리 중'}).waitFor();assert.equal(await page.evaluate(()=>fixture.logouts),1);assert.equal(await page.evaluate(()=>fixture.locked),true);assert.equal(await page.locator('#withdraw-submit').isDisabled(),true);
   const body=await page.evaluate(()=>fixture.lastBody);assert.equal(body.uid,'synthetic-user');assert.equal(body.confirmation,'회원탈퇴');assert.equal(body.acknowledged,true);assert.match(body.receipt,/^[A-Za-z0-9_-]{43}$/);
   await page.evaluate(()=>{fixture.complete=true;});await page.locator('#withdraw-recheck').click();await page.locator('#withdraw-status').filter({hasText:'회원탈퇴가 완료'}).waitFor();assert.equal(await page.evaluate(()=>sessionStorage.getItem('softm-withdrawal-receipt-v1')),null);
