@@ -32,7 +32,7 @@ jobs:
       - run: |
           cmp ../../shared/platform/v1/registry.json functions/registry.json
           for file in ../../shared/platform/v1/*.mjs; do node --check "$file"; done
-          node --check ../../account/hub.mjs
+          for file in ../../account/*.mjs; do node --check "$file"; done
           node --check functions/index.mjs
           npm test
       - run: npx -y firebase-tools@latest emulators:exec --project demo-softm-suite --only firestore 'npm run test:rules'
@@ -48,8 +48,10 @@ jobs:
         run: |
           mkdir -p "$SUITE_UI_OUTPUT"
           node tests/site-vault-ui.cjs
+          node tests/account-feedback-ui.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: suite-vault-browser-verification
           path: '${{ runner.temp }}/suite-ui-results'
+
