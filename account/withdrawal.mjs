@@ -2,7 +2,7 @@ const KEY='softm-withdrawal-receipt-v1';
 export function mountWithdrawal({root=document,post,getUser,logout,randomSecret,setLocked=()=>{}}){
   const $=id=>root.getElementById(id);let uid=null,pending=null,busy=false,timer=null,stopped=false;
   const status=(message,state='info')=>{$('withdraw-status').textContent=message;$('withdraw-status').dataset.state=state;};
-  const remember=value=>{pending=value;try{if(value)sessionStorage.setItem(KEY,JSON.stringify(value));else sessionStorage.removeItem(KEY);}catch{}};
+  const remember=value=>{pending=value;$('withdraw-recheck').hidden=!value;try{if(value)sessionStorage.setItem(KEY,JSON.stringify(value));else sessionStorage.removeItem(KEY);}catch{}};
   const form=()=>{$('withdraw-submit').disabled=busy||!!pending||!getUser()||!$('withdraw-ack').checked||$('withdraw-confirmation').value.trim()!=='회원탈퇴';};
   function onUser(user){const next=user?.uid||null;if(next!==uid){uid=next;$('withdraw-ack').checked=false;$('withdraw-confirmation').value='';}$('withdraw-user').textContent=user?(user.displayName||'현재 로그인 계정'):'로그인 후 탈퇴할 수 있습니다.';$('withdrawal').hidden=!user&&!pending;form();}
   async function poll(){
@@ -34,6 +34,6 @@ export function mountWithdrawal({root=document,post,getUser,logout,randomSecret,
   $('withdraw-form').addEventListener('submit',submit);$('withdraw-ack').addEventListener('change',form);$('withdraw-confirmation').addEventListener('input',form);
   $('withdraw-recheck').onclick=()=>poll();
   $('withdraw-reauth').onclick=()=>{$('login-card').scrollIntoView({block:'start',behavior:'smooth'});status('상단에서 탈퇴할 계정과 같은 SNS로 다시 로그인한 뒤 진행해 주세요.');};
-  async function resume(){try{const saved=JSON.parse(sessionStorage.getItem(KEY)||'null');if(saved?.expiresAt&&saved.expiresAt<Date.now()){remember(null);status('탈퇴 상태의 조회 기간이 지났습니다. 확인이 필요하면 운영자에게 문의해 주세요.');return;}if(saved&&typeof saved.uid==='string'&&/^[A-Za-z0-9_-]{43}$/.test(saved.receipt||'')){pending=saved;setLocked(true);$('withdrawal').hidden=false;if(getUser()?.uid===saved.uid)await logout().catch(()=>{});await poll();}}catch{}form();}
+  async function resume(){try{const saved=JSON.parse(sessionStorage.getItem(KEY)||'null');if(saved?.expiresAt&&saved.expiresAt<Date.now()){remember(null);status('탈퇴 상태의 조회 기간이 지났습니다. 확인이 필요하면 운영자에게 문의해 주세요.');return;}if(saved&&typeof saved.uid==='string'&&/^[A-Za-z0-9_-]{43}$/.test(saved.receipt||'')){remember(saved);setLocked(true);$('withdrawal').hidden=false;if(getUser()?.uid===saved.uid)await logout().catch(()=>{});await poll();}}catch{}form();}
   return {onUser,resume,destroy(){stopped=true;clearTimeout(timer);}};
 }
