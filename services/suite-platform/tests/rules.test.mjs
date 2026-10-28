@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 import {test,before,after,beforeEach} from 'node:test';import {readFileSync} from 'node:fs';
 import {initializeTestEnvironment,assertSucceeds,assertFails} from '@firebase/rules-unit-testing';
 import {doc,setDoc,updateDoc,getDoc,getDocs,collection,query,orderBy,limit,deleteDoc,serverTimestamp,Timestamp} from 'firebase/firestore';
