@@ -31,8 +31,25 @@ jobs:
       - run: npm ci --prefix functions --ignore-scripts --no-audit --no-fund
       - run: |
           cmp ../../shared/platform/v1/registry.json functions/registry.json
-          node --check ../../shared/platform/v1/sdk.mjs
+          for file in ../../shared/platform/v1/*.mjs; do node --check "$file"; done
           node --check ../../account/hub.mjs
           node --check functions/index.mjs
           npm test
       - run: npx -y firebase-tools@latest emulators:exec --project demo-softm-suite --only firestore 'npm run test:rules'
+
+      - name: Install isolated browser verification runtime
+        run: |
+          npm install --prefix "$RUNNER_TEMP/suite-ui" --no-save --ignore-scripts --no-audit --no-fund playwright
+          "$RUNNER_TEMP/suite-ui/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Verify browser vault with synthetic data
+        env:
+          SUITE_UI_RUNTIME: '${{ runner.temp }}/suite-ui'
+          SUITE_UI_OUTPUT: '${{ runner.temp }}/suite-ui-results'
+        run: |
+          mkdir -p "$SUITE_UI_OUTPUT"
+          node tests/site-vault-ui.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: suite-vault-browser-verification
+          path: '${{ runner.temp }}/suite-ui-results'

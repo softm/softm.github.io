@@ -1,1 +1,13 @@
-{"name":"softm-suite-platform-tests","private":true,"type":"module","scripts":{"test":"node --test tests/auth.test.mjs tests/crypto.test.mjs tests/oauth.test.mjs","test:rules":"node --test tests/rules.test.mjs"},"devDependencies":{"@firebase/rules-unit-testing":"6.0.0","firebase":"13.1.0"}}
+{
+  "name": "softm-suite-platform-tests",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/auth.test.mjs tests/crypto.test.mjs tests/oauth.test.mjs tests/site-state.test.mjs",
+    "test:rules": "node --test tests/rules.test.mjs"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "6.0.0",
+    "firebase": "13.1.0"
+  }
+}
