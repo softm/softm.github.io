@@ -8,6 +8,7 @@ import {getFirestore,Timestamp,FieldValue} from 'firebase-admin/firestore';
 import {readFileSync} from 'node:fs';
 import {hash,random,validProof,requireSite,checkTicket,fail} from './security.mjs';
 import {exchangeProviderToken,oauthFailureUrl} from './provider.mjs';
+import {syncProviderProfile} from './provider-profile.mjs';
 import {registerMembership} from './membership.mjs';
 initializeApp();
 const db=getFirestore('suite-v1'),auth=getAuth();
@@ -50,13 +51,13 @@ async function handler(req,res){
   res.set('Cache-Control','no-store');res.set('Referrer-Policy','no-referrer');res.set('X-Content-Type-Options','nosniff');
   const origin=req.get('Origin');const allowed=new Set([hub.origin,...Object.values(registry.sites).flatMap(s=>s.origins)]);
   if(origin&&!allowed.has(origin))return res.status(403).json({message:'허용되지 않은 사이트입니다.'});
-  if(origin){res.set('Access-Control-Allow-Origin',origin);res.set('Vary','Origin');res.set('Access-Control-Allow-Headers','Content-Type, Authorization');res.set('Access-Control-Allow-Methods','POST, GET, OPTIONS');}
+  if(origin){res.set('Access-Control-Allow-Origin',origin);res.set('Vary','Origin');res.set('Access-Control-Allow-Headers','Content-Type, Authorization');res.set('Access-Control-Allow-Methods','GET, POST, OPTIONS');}
   if(req.method==='OPTIONS')return res.status(204).end();
   if(!allowRequest(req))return res.status(429).json({message:'잠시 후 다시 시도해 주세요.'});
   if((Number(req.get('Content-Length'))||0)>10000)return res.status(413).json({message:'요청이 너무 큽니다.'});
   const route=req.path.replace(/\/$/,'');const body=req.body||{};
   try{
-    if(route==='/health'&&req.method==='GET')return res.json({ok:true,version:1,databaseId:'suite-v1',providers:{google:true,kakao:!!providers.kakao.client(),naver:!!providers.naver.client()}});
+    if(route==='/health'&&req.method==='GET')return res.json({ok:true,version:1,profileVersion:'20261030-1',databaseId:'suite-v1',providers:{google:true,kakao:!!providers.kakao.client(),naver:!!providers.naver.client()}});
     if(route==='/oauth/callback'&&req.method==='GET'){
       const state=req.query.state,code=req.query.code;if(!validProof(state))return callbackPage(res,'로그인을 완료하지 못했습니다. 계정 화면에서 다시 시도해 주세요.');
       const ref=db.collection('_suiteOAuth').doc(hash(state));
@@ -72,6 +73,7 @@ async function handler(req,res){
       if(typeof subject!=='string'||!subject||subject.length>256)fail('invalid-provider-user',401);
       const uid=await providerIdentity(transaction.provider,subject,transaction.linkUid);
       await assertAccountActive(db,uid);try{await auth.getUser(uid);}catch(e){if(e.code!=='auth/user-not-found')throw e;await assertAccountActive(db,uid);await auth.createUser({uid});}
+      await syncProviderProfile(auth,uid,transaction.provider,profile,{linking:!!transaction.linkUid});
       await ref.update({state:'complete',uid,expiresAt:expires(60000)});
       const redirect=new URL(hub);redirect.hash=new URLSearchParams({oauth:state}).toString();return res.redirect(303,redirect.href);
       }catch(error){
