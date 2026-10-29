@@ -2,7 +2,7 @@ name: Verify deployed account menus
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: ['pages build and deployment']
+    workflows: ['Publish compressed static site', 'pages build and deployment']
     types: [completed]
     branches: [main]
 permissions:
