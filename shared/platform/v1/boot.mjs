@@ -1,5 +1,5 @@
 import {mountSiteVault} from './site-vault.mjs?v=20261029-account-1';
-import {createAccountContext,mountSiteAccount} from './site-account.mjs?v=20261029-withdrawal-1';
+import {createAccountContext,mountSiteAccount} from './site-account.mjs?v=20261030-menu-1';
 import {createLocalStateAdapter} from './local-state.mjs';
 import {SITE_INTEGRATIONS} from './site-integrations.mjs';
 const siteId=new URL(import.meta.url).searchParams.get('site');
@@ -31,6 +31,3 @@ if(siteId) {
   const mount=()=>{try{mountRegisteredSite();}catch(error){console.warn('공통 보관소를 준비하지 못했습니다. 기존 기기 기능은 계속 사용할 수 있습니다.');}};
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 }
-
-
-

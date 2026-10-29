@@ -100,23 +100,25 @@ export const writeBatch=()=>({set(){},update(){},delete(){},commit:async()=>{}})
   await tester.waitForFunction(()=>!document.getElementById('naver').disabled);assert.equal(await tester.locator('#naver').innerText(),'네이버 테스트 로그인');
   state.registered=false;
   const independent=await context.newPage();await independent.goto(siteOrigin+'/independent');
+  await independent.getByRole('button',{name:'로그인 및 회원가입 메뉴 열기',exact:true}).click();
   await independent.getByRole('button',{name:'로그인',exact:true}).waitFor();
-  assert.equal(await independent.getByRole('dialog').count(),0,'login must be available without opening the vault');
+  assert.equal(await independent.locator('softm-site-vault').getByRole('dialog').count(),0,'login menu must not open the vault');
   const signupPopup=independent.waitForEvent('popup');await independent.getByRole('button',{name:'회원가입',exact:true}).click();const signup=await signupPopup;
   await signup.locator('#google').waitFor({state:'visible'});await signup.locator('#google').click();await signup.waitForFunction(()=>!!handoffFixture.completeGoogle);await signup.evaluate(()=>handoffFixture.completeGoogle());
   await signup.locator('#signup-card').waitFor({state:'visible'});assert.equal(state.grants,3,'unregistered SNS identity must not receive a site session');
   await signup.locator('#signup-submit').click();await signup.locator('#signup-status').filter({hasText:'필수 안내'}).waitFor();assert.equal(state.registrations,0);
   await signup.locator('#signup-terms').check();await signup.locator('#signup-privacy').check();const submit=await signup.locator('#signup-submit').boundingBox();assert.ok(submit.y>=0&&submit.y+submit.height<=900,'signup consent must be visible without a hidden second step');await signup.screenshot({path:path.join(output,'membership-signup.png')});
   const signupClosed=signup.waitForEvent('close');await signup.locator('#signup-submit').click();await signupClosed;
-  await independent.getByRole('button',{name:'테스트 계정',exact:true}).waitFor();assert.equal(state.registrations,1);assert.equal(state.exchanges,4);
+  await independent.getByRole('button',{name:'테스트 계정님의 계정 메뉴 열기',exact:true}).waitFor();assert.equal(state.registrations,1);assert.equal(state.exchanges,4);
   assert.equal(await independent.getByRole('dialog').count(),0,'successful signup must not open or require a vault');
-  await independent.getByRole('link',{name:'내 보관소',exact:true}).click();await independent.getByRole('dialog').waitFor();
+  await independent.getByRole('button',{name:'테스트 계정님의 계정 메뉴 열기',exact:true}).click();
+  await independent.getByRole('button',{name:'내 보관소',exact:true}).click();await independent.locator('softm-site-vault').getByRole('dialog').waitFor();
   await independent.getByRole('dialog').getByText('로그인된 계정의 선택적 백업·복원 관리입니다.').waitFor();
   assert.equal(await independent.getByLabel('보관소 암호 · 10자 이상').inputValue(),'');
   await independent.getByRole('button',{name:'보관소 닫기',exact:true}).click();
-  await independent.getByRole('button',{name:'테스트 계정',exact:true}).click();await independent.getByRole('button',{name:'로그아웃',exact:true}).click();await independent.getByRole('button',{name:'로그인',exact:true}).waitFor();
+  await independent.getByRole('button',{name:'테스트 계정님의 계정 메뉴 열기',exact:true}).click();await independent.getByRole('button',{name:'로그아웃',exact:true}).click();
+  await independent.getByRole('button',{name:'로그인 및 회원가입 메뉴 열기',exact:true}).click();await independent.getByRole('button',{name:'로그인',exact:true}).waitFor();
   assert.deepEqual(errors,[]);
   console.log('Cross-origin handoff: visible grant, cancelled-popup retry, Google auto-connect, existing-account consent, Kakao OAuth return, PKCE exchange, origin rejection and honest Naver availability passed.');
  }finally{await browser?.close();await Promise.all([new Promise(resolve=>hub.close(resolve)),new Promise(resolve=>site.close(resolve))]);}
 })().catch(error=>{console.error(error);process.exitCode=1;});
-
