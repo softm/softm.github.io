@@ -1,0 +1,36 @@
+name: Verify deployed account menus
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'services/suite-platform/tests/account-menu-live.cjs'
+      - '.github/workflows/account-menu-live.yml'
+permissions:
+  contents: read
+jobs:
+  live-menu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: services/suite-platform/tests
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated browser runtime
+        run: |
+          npm install --prefix "$RUNNER_TEMP/suite-ui" --no-save --ignore-scripts --no-audit --no-fund playwright
+          "$RUNNER_TEMP/suite-ui/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Verify public guest account menus without logging in
+        env:
+          SUITE_UI_RUNTIME: '${{ runner.temp }}/suite-ui'
+          SUITE_UI_OUTPUT: '${{ runner.temp }}/account-menu-live'
+        run: node services/suite-platform/tests/account-menu-live.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: deployed-account-menu-verification
+          path: '${{ runner.temp }}/account-menu-live'
+          retention-days: 7
