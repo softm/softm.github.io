@@ -33,14 +33,21 @@ const sites=[
   async function worker(){
    while(queue.length){const [siteId,url]=queue.shift(),page=await context.newPage(),entry={siteId,url,viewports:[],ok:false};
     try{
+     if(siteId==='weatherhannun'){
+      // Weather data can finish loading after either viewport check starts.
+      // Close the real briefing UI; never hide it with JS or force clicks.
+      await page.addLocatorHandler(page.locator('#startupWeatherBriefing[open]'),async dialog=>{
+       await dialog.getByRole('button',{name:'지금은 닫기',exact:true}).click();
+       entry.briefingDismissed=true;
+      });
+     }
      await page.goto(url,{waitUntil:'domcontentloaded',timeout:45000});
      const selector=`softm-site-account[data-site="${siteId}"][data-account-ui="icon-menu-v2"]`;
      const host=page.locator(selector),trigger=host.locator('#profile');
      await host.waitFor({state:'visible',timeout:20000});
      await page.waitForFunction(selector=>document.querySelectorAll(selector).length===1,selector,{timeout:10000});
      if(siteId==='weatherhannun'){
-      // A new browser gets a legitimate location-consent dialog. Use its real
-      // defer action, never force clicks through it or grant device location.
+      // Use the actual defer action; no device location is granted.
       const later=page.getByRole('button',{name:'다음에 설정할게요',exact:true});
       let visible=false;
       try{await later.waitFor({state:'visible',timeout:8000});visible=true;}catch(error){if(error.name!=='TimeoutError')throw error;}
