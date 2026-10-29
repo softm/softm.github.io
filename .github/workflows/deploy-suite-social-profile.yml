@@ -1,0 +1,75 @@
+name: Deploy SNS profile updates to Firebase (scoped)
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/deploy-suite-social-profile.yml'
+permissions:
+  contents: read
+concurrency:
+  group: suite-social-profile-production
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: production
+    defaults:
+      run:
+        working-directory: services/suite-platform
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check existing deployment credentials and SNS configuration
+        env:
+          DEPLOY_SA_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SOFTM_HANNUN_API || secrets.FIREBASE_DEPLOY_SERVICE_ACCOUNT_JSON || secrets.FIREBASE_SERVICE_ACCOUNT || secrets.GCP_SA_KEY }}
+          KAKAO_ID: ${{ vars.SUITE_KAKAO_CLIENT_ID || secrets.SUITE_KAKAO_CLIENT_ID }}
+          NAVER_ID: ${{ vars.SUITE_NAVER_CLIENT_ID || secrets.SUITE_NAVER_CLIENT_ID }}
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          const secret=process.env.DEPLOY_SA_JSON;
+          const kakao=process.env.KAKAO_ID;
+          const naver=process.env.NAVER_ID;
+          if(!secret || !kakao || !naver) {
+            console.error('::error::Cannot deploy: GitHub Actions has no existing Firebase deployment service account and/or SNS client IDs. No Firebase resources were changed.');
+            process.exit(1);
+          }
+          let account;
+          try { account=JSON.parse(secret); }
+          catch { console.error('::error::Existing deployment credential is not valid service account JSON. Nothing deployed.'); process.exit(1); }
+          if(account.project_id!=='softm-hannun-api' || account.type!=='service_account' || !account.client_email || !account.private_key) {
+            console.error('::error::Deployment credential does not belong to softm-hannun-api service account. Nothing deployed.');
+            process.exit(1);
+          }
+          for(const [key,value] of [['SUITE_KAKAO_CLIENT_ID',kakao],['SUITE_NAVER_CLIENT_ID',naver]]) {
+            if(!/^[A-Za-z0-9_-]{4,200}$/.test(value)) {
+              console.error('::error::Missing or malformed existing '+key+'. No changes made.');
+              process.exit(1);
+            }
+          }
+          const target='functions/.env.softm-hannun-api';
+          fs.writeFileSync(target,[
+            'SUITE_ENABLE_SOCIAL=true',
+            'SUITE_KAKAO_CLIENT_ID='+JSON.stringify(kakao),
+            'SUITE_NAVER_CLIENT_ID='+JSON.stringify(naver),
+            ''
+          ].join('\n'),{mode:0o600});
+          console.log('Existing deployment project and SNS client ID presence verified; no secret values printed.');
+          JS
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SOFTM_HANNUN_API || secrets.FIREBASE_DEPLOY_SERVICE_ACCOUNT_JSON || secrets.FIREBASE_SERVICE_ACCOUNT || secrets.GCP_SA_KEY }}
+          project_id: softm-hannun-api
+      - name: Deploy ONLY suiteSocialAuth and verify profile version
+        run: bash ./deploy-social-profile.sh --deploy
+      - name: Record sanitized result
+        if: always()
+        run: |
+          echo "Deployment target: softm-hannun-api / functions:suite-platform:suiteSocialAuth" >> "$GITHUB_STEP_SUMMARY"
+          echo "Only a completed deploy step and profileVersion 20261030-1 verify success." >> "$GITHUB_STEP_SUMMARY"
