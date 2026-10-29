@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<!-- SOFTM-GOOGLE START: Google 지도 기반 집/회사/즐겨찾기 화면 신규 구성. 2026-05-16 -->
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title data-i18n="title.home_company">집/회사</title> <!-- SOFTM-I18N: Google 집/회사 화면 제목을 다국어 키로 연결. 2026-05-19 -->
+  <link rel="stylesheet" href="lib/material-components-web.min.css">
+  <link rel="stylesheet" href="lib/icon.css">
+  <link rel="stylesheet" href="lib/common.css?a=6">
+  <link rel="stylesheet" href="lib/google_navi_style.css?a=3"> <!-- SOFTM-READABILITY: 삭제 버튼 대비 개선 스타일 캐시 갱신. 2026-05-19 -->
+</head>
+<body>
+  <div class="i18n google-navi-shell">
+    <!-- SOFTM-HEADER START: 기존 home_company.html 헤더와 동일한 MDC 상단바 적용. 2026-05-19 -->
+    <header class="mdc-top-app-bar mdc-top-app-bar--fixed">
+      <div class="mdc-top-app-bar__row">
+        <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+          <button type="button" id="btnHome"
+            class="none mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded">home</button>
+          <button type="button" id="btnBack"
+            class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded">arrow_back_ios</button>
+          <span class="mdc-top-app-bar__title" data-i18n="title.home_company">집/회사</span> <!-- SOFTM-I18N: Google 집/회사 헤더 제목을 다국어 키로 연결. 2026-05-19 -->
+        </section>
+        <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+          <!-- SOFTM-MAPSWITCH START: home_company_google 화면에서 티맵지도 화면으로 전환하는 헤더 버튼 추가. 2026-05-19 -->
+          <button type="button" id="btnSwitchMapMode" onclick="return fn_SwitchMapMode();"
+            class="mdc-icon-button mdc-top-app-bar__action-item--unbounded map-mode-switch-button">
+            <span class="material-icons map-mode-switch-icon" aria-hidden="true">swap_horiz</span>
+            <span class="map-mode-switch-label" data-i18n="google_navi.switch_to_tmap">티맵지도 보기</span>
+          </button>
+          <!-- SOFTM-MAPSWITCH END -->
+          <button type="button" id="btnSettings" class="none mdc-icon-button material-icons mdc-top-app-bar__action-item--unbounded"
+            aria-label="Print this page">settings</button>
+        </section>
+      </div>
+    </header>
+    <!-- SOFTM-HEADER END -->
+
+    <div class="google-navi-page google-navi-home-page google-navi-page--with-top-app-bar">
+      <button type="button" id="btnMyLocation" class="icon-button" title="현재 위치" data-i18n="[title]google_navi.current_location;[aria-label]google_navi.current_location">◎</button>
+
+    <!-- SOFTM-GOOGLE START: 집/회사 화면 탭도 search_google과 같은 아이콘+텍스트+하단 활성 라인 구조로 정리. 2026-05-17 -->
+    <nav class="google-navi-tabs" aria-label="목적지 유형" data-i18n="[aria-label]google_navi.destination_type">
+      <button type="button" class="google-navi-tab" data-mode="home"><span class="material-icons google-navi-tab-icon" aria-hidden="true">home</span><span class="google-navi-tab-label" data-i18n="label.home">집</span></button>
+      <button type="button" class="google-navi-tab" data-mode="company"><span class="material-icons google-navi-tab-icon" aria-hidden="true">business</span><span class="google-navi-tab-label" data-i18n="label.company">회사</span></button>
+      <button type="button" class="google-navi-tab" data-mode="favorite"><span class="material-icons google-navi-tab-icon" aria-hidden="true">place</span><span class="google-navi-tab-label" data-i18n="label.favorite">즐겨찾기</span></button>
+      <button type="button" class="google-navi-tab" data-mode="recent"><span class="material-icons google-navi-tab-icon" aria-hidden="true">schedule</span><span class="google-navi-tab-label" data-i18n="label.recent">최근</span></button>
+    </nav>
+    <!-- SOFTM-GOOGLE END -->
+
+    <section id="guidePanel" class="google-navi-guide"></section>
+
+    <section id="searchPanel" class="google-navi-search">
+      <input id="keyword" type="search" autocomplete="off" placeholder="장소명 또는 주소" data-i18n="[placeholder]google_navi.place_or_address">
+      <button type="button" id="btnSearch" class="google-navi-button" data-i18n="label.search">검색</button>
+    </section>
+
+    <div id="statusText" class="google-navi-status" data-i18n="google_navi.initializing">초기화 중입니다...</div>
+
+    <main class="google-navi-content">
+      <section id="poiList" class="google-navi-list empty" aria-label="목적지 목록" data-i18n="[aria-label]google_navi.destination_list"></section>
+      <section id="googleMap" class="google-navi-map" aria-label="Google 지도" data-i18n="[aria-label]google_navi.google_map"></section>
+    </main>
+
+    <div id="placeAddress" class="google-navi-address-overlay"></div>
+    <div id="googleNaviSnackbar" class="google-navi-snackbar"></div>
+
+    <footer class="google-navi-footer">
+      <button type="button" id="btnNavi" class="google-navi-button" data-i18n="google_navi.start_navi">내비 시작</button>
+      <button type="button" id="btnDelete" class="google-navi-button danger" data-i18n="google_navi.delete">삭제</button>
+      <button type="button" id="btnPrimary" class="google-navi-button primary" data-i18n="google_navi.save">저장</button>
+    </footer>
+    </div>
+  </div>
+
+  <!-- SOFTM-I18N START: Google 단독 페이지에서 기존 lng 설정을 공유하는 다국어 헬퍼 로드. 2026-05-19 -->
+  <script src="lib/i18n_messages.js?a=1"></script> <!-- SOFTM-I18N-MESSAGES 날짜:20260521 : 공용 다국어 메시지 로드 -->
+  <script src="lib/google_navi_i18n.js?a=3"></script>
+  <!-- SOFTM-I18N END -->
+  <script src="lib/interface.js?a=5"></script> <!-- SOFTM-BRIDGE-GUARD 날짜:20260521: 지도 전환/브릿지 안전 호출 로직 캐시 갱신 -->
+  <script src="lib/db.js"></script>
+  <script src="lib/map_point.js"></script>
+  <script src="lib/google_navi_map.js?a=2"></script> <!-- SOFTM-GOOGLE-LOCALE 날짜:20260521 : Google Maps API 로케일 파라미터 적용 파일 캐시 갱신 -->
+  <script src="lib/google_navi_pages.js?a=4"></script> <!-- SOFTM-MAPSWITCH-OVERLAY-HIDE: 구글지도 진입 시 안전 오버레이 제거 로직 캐시 갱신. 2026-05-21 -->
+  <script>
+    initGoogleNaviPage("home");
+  </script>
+</body>
+</html>
+<!-- SOFTM-GOOGLE END -->
