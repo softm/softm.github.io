@@ -1,0 +1,1002 @@
+
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+  <title>티</title>
+  <link rel="shortcut icon" href="#">
+  
+  <!-- <link href="./lib/material-components-web.min.css" rel="stylesheet"> -->
+  <link href="./lib/material-components-web.min.new.css" rel="stylesheet">
+  <!-- <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"> -->
+
+  <!-- <script src="./lib/material-components-web.min.js"></script> -->
+  <script src="./lib/material-components-web.min.new.js"></script>
+  <!-- <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script> -->
+  
+  <link rel="stylesheet" href="./lib/icon.css">
+  <link rel="stylesheet" href="./lib/common.css?a=4">
+  <script src="./lib/hangul.js"></script>
+
+ </head>
+
+<!--  using - default i18next-->
+<!--
+<script src="https://unpkg.com/i18next/i18next.js"></script>
+<script src="https://unpkg.com/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+<script src="https://unpkg.com/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.js"></script>
+-->
+
+<!-- using - jquery i18next -->
+<!-- -->
+   <script src="./lib/jquery-3.6.4.min.js"></script>
+<!--<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>-->
+  <script src="./lib/i18next.min.js"></script>
+  <script src="./lib/common.js?a=1"></script>
+  <script src="./lib/interface.js"></script>
+  <script src="./lib/db.js"></script>
+  <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xx2c3bc6b282ed46c9805c99db13f56149"></script>
+
+<script>
+var drawer = null;
+var topAppBar = null;
+var drawerListEl = null;
+
+var btnHome = null;
+var btnBack = null;
+var btnSettings = null;
+// var btnSwitch = null;
+var chipSetPopup = null;
+var chipSetNaviAutoStart = null;
+var overlayWaitTime = null;
+var renaviPreventTime = null;
+var fenceDistance = null;
+var chipPopupSelectedIndex = -1;
+var chipNaviModeSelectedIndex = -1;
+var chipNaviAutoStartSelectedIndex = -1;
+
+var btnSwitchNotiIcon = null;
+var btnSwitchGotoOffWorkTime = null;
+
+$( document ).ready(function() {
+  
+    btnHome    = new mdc.ripple.MDCRipple(document.querySelector("#btnHome"));
+    btnBack    = new mdc.ripple.MDCRipple(document.querySelector("#btnBack"));
+    btnSettings    = new mdc.ripple.MDCRipple(document.querySelector("#btnSettings"));
+    // btnSwitch = new mdc.switchControl.MDCSwitch(document.querySelector('.mdc-switch'));
+    chipSetPopup = new mdc.chips.MDCChipSet(document.querySelector('#chip_popup_mode'));
+    chipSetNaviAutoStart = new mdc.chips.MDCChipSet(document.querySelector('#chip_navi_auto_start'));
+
+    
+    overlayWaitTime = new mdc.textField.MDCTextField(document.querySelector('#overlay_wait_time'));
+    renaviPreventTime = new mdc.textField.MDCTextField(document.querySelector('#renavi_prevent_time'));
+    fenceDistance = new mdc.textField.MDCTextField(document.querySelector('#fence_distance'));
+
+    btnSettings.listen("click", function (event) {
+          //        window.open("setting.html","_blank","");
+          // window.open("search.html?idx=2","_blank","");
+          windowOpen("search.html?idx=1");
+          // fn_OpenPop("search.html");
+          // fn_OpenPop("setting.html");
+    });
+
+    btnSwitchNotiIcon = new mdc.switchControl.MDCSwitch(document.querySelector('.noti_icon.mdc-switch'));
+
+    btnSwitchGotoOffWorkTime = new mdc.switchControl.MDCSwitch(document.querySelector('.work_goto_off_time.mdc-switch'));
+
+    btnSwitchNotiIcon.listen("mousedown", function (event) {
+      // btnSwitchNotiIcon.foundation_.setChecked(!btnSwitchNotiIcon.checked);
+      var st = btnSwitchNotiIcon.selected;
+      var granted = null;
+      if (!st) {
+        setTimeout(function () { btnSwitchNotiIcon.selected = st; }, 1000);
+        fn_StartSetting("notification_setting", "changeNotiIconSettingCallback");
+
+      } else {
+        window.fnChk1 = function (grant, ok) {
+          if (ok == "ok") {
+            window.fnChk2 = function (grant, ok) {
+              if (ok == "ok") {
+                setTimeout(function () { btnSwitchNotiIcon.selected = st; }, 1000);
+                fn_StartSetting("notification_setting", "changeNotiIconSettingCallback");  // 최종선택
+              } else {
+                confirm(t("message.disable_noti_icon_2"), function () {
+                  btnSwitchNotiIcon.selected = true;
+                  fn_OpenUrl("permission.html?p_check_mode=accessibility");
+                }, function () {
+                  btnSwitchNotiIcon.selected = true;
+                });
+              }
+            }
+            fn_CheckGrant("ignore_battery", "fnChk2"); // 2차권한
+          } else {
+            confirm(t("message.disable_noti_icon_1"), function () {
+              if (st) {
+                btnSwitchNotiIcon.selected = true;
+                fn_OpenUrl("permission.html?p_check_mode=accessibility");
+              }
+            }, function () {
+              btnSwitchNotiIcon.selected = true;
+            });
+          }
+        }
+      }
+      fn_CheckGrant("accessibility", "fnChk1"); // 1차권한
+
+    });
+
+    function changeNotiIconSettingCallback(grant, ok) {
+      // if (grant == "notification_setting") {
+      // debugger;
+      // fn_GoMain(true);
+      fn_OpenUrl("setting.html");
+      // }
+    }
+
+    btnSwitchGotoOffWorkTime.listen("mousedown", function (event) {
+      snackbar(t("message.save"));
+      document.querySelector("#work_goto_off_time_status").innerHTML = t("label.work_goto_off_time_status");
+      if (!btnSwitchGotoOffWorkTime.selected) { // true
+        fn_DeviceSaveData("_WORK_GOTO_OFF_TIME", "1"); // 1 : 시작, 0 : 중지
+        //			btnSwitchGotoOffWorkTime.foundation_.setChecked(true);
+        $("input[type='time'].work_goto_off_time").removeAttr("disabled");
+      } else { // false
+        //			btnSwitchGotoOffWorkTime.foundation_.setChecked(false);
+        fn_DeviceSaveData("_WORK_GOTO_OFF_TIME", "0"); // 1 : 시작, 0 : 중지
+        //			btnSwitchGotoOffWorkTime.foundation_.setChecked(false);
+        $("input[type='time'].work_goto_off_time").attr("disabled", "disabled");
+      }
+    });
+
+    footerNavigationIndex = footerNavigationUrl.indexOf(location.pathname.split("/")[2]);
+    // $(footerNavigation[0]).trigger("click");
+    footerNavigation[footerNavigationIndex].emit("click",footerNavigationIndex);
+
+    fenceDistance.listen("focus", function(event) {
+		fenceDistance.input.select();
+
+	});
+
+    $(fenceDistance.input).blur(function(event) {
+		var v = fenceDistance.input.value;
+		if ( !v ) {
+			fenceDistance.input.value = window.tmpFenceDistance;
+		}
+		  var event = new MouseEvent('keyup', {view: window,bubbles: true,cancelable: true});
+		  var cb =$("#fence_distance")[0];
+		  var cancelled = !cb.dispatchEvent(event);
+	});
+
+    fenceDistance.listen("keydown", function(event) {
+		if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+			if ( fenceDistance.input.value ) {
+				window.tmpFenceDistance = fenceDistance.input.value;
+			}
+		}
+	});
+    fenceDistance.listen("keyup", function(event) {
+		if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+			var v = fenceDistance.input.value;
+			var max = parseFloat(fenceDistance.input.max);
+			var min = parseFloat(fenceDistance.input.min);
+			if ( v > max || v < min ) v = "";
+console.info( v, (/^[0-9]+$/).test(""+v) );
+			fenceDistance.input.value = 0;
+			fenceDistance.input.value = !v?"":parseFloat(v&&(/^[0-9]+$/).test(""+v)?v:window.tmpFenceDistance);
+			if ( v ) {
+				window.tmpFenceDistance = fenceDistance.input.value;
+			}
+			fn_DeviceSaveData("_NAVI_GEOFENCE_RADIUS", window.tmpFenceDistance);
+		}
+    });
+
+    overlayWaitTime.listen("focus", function(event) {
+		overlayWaitTime.input.select();
+	});
+
+    $(overlayWaitTime.input_).blur(function(event) {
+		var v = overlayWaitTime.input.value;
+		if ( !v ) {
+			overlayWaitTime.input.value = window.tmpOverlayWaitTime;
+		}
+		  var event = new MouseEvent('keyup', {view: window,bubbles: true,cancelable: true});
+		  var cb =$("#overlay_wait_time")[0];
+		  var cancelled = !cb.dispatchEvent(event);
+	});
+
+    overlayWaitTime.listen("keydown", function(event) {
+		if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+			if ( overlayWaitTime.input.value ) {
+				window.tmpOverlayWaitTime = overlayWaitTime.input.value;
+			}
+		}
+	});
+    overlayWaitTime.listen("keyup", function(event) {
+		if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+			var v = overlayWaitTime.input.value;
+			var max = parseFloat(overlayWaitTime.input.max);
+			var min = parseFloat(overlayWaitTime.input.min);
+			if ( v > max || v < min ) v = "";
+			overlayWaitTime.input.value = 0;
+			overlayWaitTime.input.value = !v?"":parseFloat(v&&(/^[0-9]+$/).test(""+v)?v:window.tmpOverlayWaitTime);
+			if ( v ) {
+				window.tmpOverlayWaitTime = overlayWaitTime.input.value;
+			}
+			fn_DeviceSaveData("_NAVI_OVERLAY_WAIT_TIME", window.tmpOverlayWaitTime);
+		}
+    });
+
+    renaviPreventTime.listen("focus", function(event) {
+		renaviPreventTime.input.select();
+	});
+
+    $(renaviPreventTime.input_).blur(function(event) {
+		var v = renaviPreventTime.input.value;
+		if ( !v ) {
+			renaviPreventTime.input.value = window.tmprenaviPreventTime;
+		}
+		  var event = new MouseEvent('keyup', {view: window,bubbles: true,cancelable: true});
+		  var cb =$("#renavi_prevent_time")[0];
+		  var cancelled = !cb.dispatchEvent(event);
+	});
+
+    renaviPreventTime.listen("keydown", function(event) {
+		if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+			if ( renaviPreventTime.input.value ) {
+				window.tmprenaviPreventTime = renaviPreventTime.input.value;
+			}
+		}
+	});
+    renaviPreventTime.listen("keyup", function(event) {
+		if ( event.keyCode != 9 && event.keyCode != 37 && event.keyCode != 39 ) {
+			var v = renaviPreventTime.input.value;
+			var max = parseFloat(renaviPreventTime.input.max);
+			var min = parseFloat(renaviPreventTime.input.min);
+			if ( v > max || v < min ) v = "";
+			renaviPreventTime.input.value = 0;
+			renaviPreventTime.input.value = !v?"":parseFloat(v&&(/^[0-9]+$/).test(""+v)?v:window.tmprenaviPreventTime);
+			if ( v ) {
+				window.tmprenaviPreventTime = v;
+			}
+			fn_DeviceSaveData("_NAVI_RENAVI_PREVENT_TIME", window.tmprenaviPreventTime);
+		}
+    });
+
+  btnHome.listen("click", function(event) {
+	//	self.close();
+		// fn_ClosePopData();
+    fn_OpenUrl("index.html");
+	});
+
+	btnBack.listen("click", function(event) {
+	//	self.close();
+		// fn_ClosePopData();
+    // fn_OpenUrl("search.html");
+    fn_OpenPop("search.html");
+	});
+
+    /**
+     *  팝업(오버레이)
+     *  1 : 팝업유지, 0 : 팝업닫기
+     */
+    var popupGuideModeNames = [
+         ""
+        ,"팝업유지"
+        ,"팝업닫기"
+    ];
+    chipSetPopup.listen("click",function(e){
+        var seq = e.srcElement.offsetParent.id.replace(/[^0-9]/g,"");
+       var adapter =  chipSetPopup.getDefaultFoundation().adapter;
+       var selectId = chipSetPopup.selectedChipIds[0];
+       var index  = adapter.getIndexOfChipById(selectId);
+       if ( index == -1 ) {
+         if ( selectId ) {
+          chipSetPopup.chips[seq-1].selected = true;
+         } else { // error
+          chipSetPopup.chips[chipPopupSelectedIndex].selected = true;
+		  index = chipPopupSelectedIndex;
+         }
+       }  else {
+         chipPopupSelectedIndex = index;
+       }
+       if ( index == 0 ){ // 1 : 팝업유지
+          document.querySelector('#popup_guide').innerHTML = t("message.popup_enable");
+			if ( !e.onlySelect ) {
+				snackbar(t("message.save"));
+				fn_DeviceSaveData("_NAVI_POPUP_MODE", "1");
+			}
+       } else if ( index == 1 ) { //  0 : 팝업닫기
+          document.querySelector('#popup_guide').innerHTML = t("message.popup_disable");
+			if ( !e.onlySelect ) {
+				snackbar(t("message.save"));
+				fn_DeviceSaveData("_NAVI_POPUP_MODE", "0");
+			}
+       }
+
+    });
+
+    chipSetNaviAutoStart.listen("click",function(e){
+        var seq = e.srcElement.offsetParent.id.replace(/[^0-9]/g,"");
+       var adapter =  chipSetNaviAutoStart.getDefaultFoundation().adapter;
+       var selectId = chipSetNaviAutoStart.selectedChipIds[0];
+       var index  = adapter.getIndexOfChipById(selectId);
+       if ( index == -1 ) {
+         if ( selectId ) {
+          chipSetNaviAutoStart.chips[seq-1].selected = true;
+         } else { // error
+          chipSetNaviAutoStart.chips[chipNaviAutoStartSelectedIndex].selected = true;
+		  index = chipNaviAutoStartSelectedIndex;
+         }
+       }  else {
+         chipNaviAutoStartSelectedIndex = index;
+       }
+       if ( index == 0 ){ // 1 : 실행
+          document.querySelector('#navi_auto_start').innerHTML = t("message.navi_auto_start_enable");
+			if ( !e.onlySelect ) {
+				snackbar(t("message.save"));
+				fn_DeviceSaveData("_NAVI_AUTO_START", "1");
+			}
+       } else if ( index == 1 ) { // 0 : 안함
+          document.querySelector('#navi_auto_start').innerHTML = t("message.navi_auto_start_disable");
+			if ( !e.onlySelect ) {
+				snackbar(t("message.save"));
+				fn_DeviceSaveData("_NAVI_AUTO_START", "0");
+			}
+       }
+    });
+
+  window.getInfoCallBack = function (data) {
+    if (isWeb) {
+      window.info = {
+            "appPackage": "com.skt.tmap.ku",
+            "chargingMode": "1",
+            "startWifi": true,
+            "usingRegHome": true,
+            "wifi": {
+                "bssid": "00:0D:18:00:00:01",
+                "ssid": "SoftmWifi",
+                "connected": true
+            },
+            "workGotoOffTime": false,
+            "startPower": true,
+            "naviGeofenceRadius": 200,
+            "naviDestination": "1",
+            "workOffTimeFrom": "17:30",
+            "naviMode": "1",
+            "workGotoTimeTo": "08:50",
+            "naviOverlayWaitTime": 3,
+            "naviPopupMode": true,
+            "bluetooth": {
+                "bondState": 12,
+                "address": "00:0D:18:00:00:01",
+                "name": "OBDII",
+                "type": 1,
+                "diassembled": "OBDII"
+            },
+            "startBluetooth": false,
+            "workGotoTimeFrom": "06:00",
+            "naviRenaviPreventTime": 3,
+            "naviAutoStart": true,
+            "workOffTimeTo": "19:00",
+            "notiIcon": true,
+            "btnSwitchIndependenceCondition": true,
+            "startStopOnOff":{
+              bluetooth:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              wifi:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              tethering:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              airplane_mode:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              screen_on:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              lock:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              completed_lock:{start:{use_yn:true,onoff:"off"},stop:{use_yn:true,onoff:"on"}},
+              play_music:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              home_screen:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+              power_off:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+            },
+            "startMode":"1",
+            "stopMode":"1",
+            "onlyStopAfterNaving":true,
+            serverHost:location.origin,
+            pathName:location.pathname.split("/")[1],
+            versionCode:11,
+            versionName:"0.0.0.1",
+            // + "http://www.softm.net/tdev"
+        }
+    } else {
+      window.info = (JSON.parse(data));
+    }
+
+    var v = window.info;
+    
+    $(".version-name").text(v.versionName);
+    $(".app_name").text(v.versionName);
+
+    $("#divPopupMode").show();
+	//		snackbar(modeNames[v] + "으로 설정 되어 있습니다.");
+  // 팝업 : 1 : 팝업유지, 0 : 팝업닫기
+		var idx =v.naviPopupMode?0:1;
+		chipPopupSelectedIndex = idx;
+		// chipSetPopup.chips[chipSelectIndex].selected = true;
+		  var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
+		  event.onlySelect=true; // pass data custom 
+//		  var cb =document.querySelector("#mdc-chip-" + (chipPopupSelectedIndex+1));
+		  var cb =$("#chip_popup_mode").find(".mdc-chip:eq(" + chipPopupSelectedIndex+")")[0];
+		  var cancelled = !cb.dispatchEvent(event);
+		  cb.focus();
+
+      $("#divNaviAutoStart").show();
+	//		snackbar(modeNames[v] + "으로 설정 되어 있습니다.");
+  // 내비 자동실행 : 1 : 실행, 0 : 안함
+		var idx =v.naviAutoStart?0:1;
+		chipNaviAutoStartSelectedIndex = idx;
+		// chipSetPopup.chips[chipSelectIndex].selected = true;
+		  var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
+		  event.onlySelect=true; // pass data custom 
+//		  var cb =document.querySelector("#mdc-chip-" + (chipNaviAutoStartSelectedIndex+1));
+		  var cb =$("#chip_navi_auto_start").find(".mdc-chip:eq(" + chipNaviAutoStartSelectedIndex+")")[0];
+		  var cancelled = !cb.dispatchEvent(event);
+		  cb.focus();
+
+    window.tmpFenceDistance = parseInt(v.naviGeofenceRadius,10);
+    fenceDistance.input.value = window.tmpFenceDistance;
+
+    window.tmpOverlayWaitTime = parseInt(v.naviOverlayWaitTime,10);
+    overlayWaitTime.input.value = window.tmpOverlayWaitTime;
+    
+    window.tmprenaviPreventTime = parseInt(v.naviRenaviPreventTime,10);
+    renaviPreventTime.input.value = window.tmprenaviPreventTime;
+
+
+    console.info("_NOTI_ICON", v.notiIcon);
+            // v = v!="null"&&v?v:"1";
+            // var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
+            // event.onlySelect=true; // pass data custom 
+            // 알림바 아이콘
+            if (!v.notiIcon) { // off
+                document.querySelector(".noti_icon #status").innerHTML = t("label.noti_icon_status_off");
+                btnSwitchNotiIcon.selected = false;
+                // btnSwitchNotiIcon.foundation_.setChecked(false);
+            } else { // on
+                document.querySelector(".noti_icon #status").innerHTML = t("label.noti_icon_status_on");
+                btnSwitchNotiIcon.selected = true;
+                // btnSwitchNotiIcon.foundation_.setChecked(true);
+            }
+
+            console.info("_WORK_GOTO_OFF_TIME", v.workGotoOffTime);
+            // v = v!="null"&&v?v:"0";
+            // var event = new MouseEvent('click', {view: window,bubbles: true,cancelable: true});
+            // event.onlySelect=true; // pass data custom 
+            document.querySelector("#work_goto_off_time_status").innerHTML = t("label.work_goto_off_time_status");
+            // 출/퇴근 시간
+            if (!v.workGotoOffTime) { // stop
+                btnSwitchGotoOffWorkTime.selected = false;
+                // btnSwitchGotoOffWorkTime.foundation_.setChecked(false);
+                $("input[type='time'].work_goto_off_time").attr("disabled", "disabled");
+            } else { // start
+                btnSwitchGotoOffWorkTime.selected = true;
+                // btnSwitchGotoOffWorkTime.foundation_.setChecked(true);
+                $("input[type='time'].work_goto_off_time").removeAttr("disabled");
+            }
+
+            console.info("_WORK_GOTO_TIME_FROM", v.workGotoTimeFrom);
+            // v = v!="null"&&v?v:"06:00";
+            // 출근시작시간
+            window.workGotoTimeFrom = v.workGotoTimeFrom;
+            $("#work_goto_time_from").val(v.workGotoTimeFrom);
+
+            console.info("_WORK_GOTO_TIME_TO", v.workGotoTimeFrom);
+            // v = v!="null"&&v?v:"08:50";
+            // 출근종료시간
+            window.workGotoTimeTo = v.workGotoTimeTo;
+            $("#work_goto_time_to").val(v.workGotoTimeTo);
+
+            console.info("_WORK_OFF_TIME_FROM", v.workGotoTimeTo);
+            // v = v!="null"&&v?v:"17:30";
+            // 퇴근시작시간
+            window.workOffTimeFrom = v.workOffTimeFrom;
+            $("#work_off_time_from").val(v.workOffTimeFrom);
+
+            console.info("_WORK_OFF_TIME_TO", v.workOffTimeFrom);
+            // v = v!="null"&&v?v:"19:00";
+            // 퇴근종료시간
+            window.workOffTimeTo = v.workOffTimeTo;
+            $("#work_off_time_to").val(v.workOffTimeTo);
+
+
+  }
+        
+  fn_GetInfo("", "getInfoCallBack");
+
+  // drawer.open = true;
+});
+
+  function fn_StartServiceCallback(ok) {
+//      alert("startCallback");
+      snackbar( t("toast.start") );
+	fn_DeviceSaveData("_START_POWER", "1"); // 1 : 시작, 0 : 중지
+      document.querySelector("#status").innerHTML = t("label.status_start");
+      btnSwitch.foundation.setChecked(true);
+//      btnSwitch.root_.disabled = true;
+  }
+  function fn_StopServiceCallback(ok) {
+//      alert("stopCallback");
+      snackbar( t("toast.stop") );
+	fn_DeviceSaveData("_START_POWER", "0"); // 1 : 시작, 0 : 중지
+      document.querySelector("#status").innerHTML = t("label.status_stop");
+      btnSwitch.foundation.setChecked(false);
+//      btnSwitch.root_.disabled = false;
+  }
+
+</script>
+</head>
+<body>
+<div class="i18n drawer-frame-root">
+	<!--
+    !-->
+    <div class="mdc-drawer-app-content">
+        <header class="mdc-top-app-bar app-bar" id="app-bar">
+            <div class="mdc-top-app-bar__row">
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+<!--                     
+  <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button">menu</button>
+-->
+                    <button class="material-icons  mdc-top-app-bar__navigation-icon mdc-icon-button">menu</button>
+                    <button id="btnHome"
+                        class="none mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded">home</button>
+                        <button id="btnBack"
+                        class="none mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded">arrow_back_ios</button>
+               
+                        <span class="mdc-top-app-bar__title" data-i18n="label.top_bar">티맵실행</span>
+                    </section>
+                    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+                        <button id="btnSettings" class="mdc-icon-button material-icons mdc-top-app-bar__action-item--unbounded"
+                            aria-label="Print this page">search</button> <!---->
+                    </section>
+            </div>
+        </header>
+<!--         
+-->
+        <main class="main-content" id="main-content">
+            <div class="mdc-top-app-bar--fixed-adjust">
+            </div>
+        </main>
+    </div>
+
+    <aside class="mdc-drawer mdc-drawer--modal">
+       
+      <div class="mdc-drawer__header app_info">
+          <img src="./images/logo_100.svg" width="50" style="margin-top: 10px;"/>
+          <!-- style="height:55px" -->
+          <div class="mdc-dramdc-drawer__contentwer__title" data-i18n="[html]label.app_name">블루투스 연결 & 음악</div>
+          <h6 class="mdc-drawer__subtitle" >Ver.<span class="version-name">00.00</span></h6>
+        </div>
+        <div class="mdc-drawer__content">
+          <a class="clone none mdc-deprecated-list-item mdc-deprecated-list-item--activated">
+              <span class="mdc-deprecated-list-item__ripple"></span>
+              <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home</i>
+              <span class="mdc-deprecated-list-item__text" data-i18n="label.home_page">Home</span>
+          </a>
+
+          <div class="mdc-deprecated-list">
+              <a class="mdc-deprecated-list-item mdc-deprecated-list-item--activated" href="#" aria-current="page">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="label.home_page">Home</span>
+              </a>
+
+              <a class="none mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">settings</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_setting">설정</span>
+              </a>
+
+              <a class="none mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">toggle_on</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_start_stop">시작/종료</span>
+              </a>
+
+              <a class="mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">link</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="title.run_options">실행옵션</span>
+              </a>
+              <a class="mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home_work</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="title.home_company">집/회사</span>
+              </a>
+              <a class="mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">star</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="title.favorite">즐겨찾기</span>
+              </a>
+              <a class="mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">forum</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="title.contact_us">문의하기</span>
+              </a>
+
+              <a class="none mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">card_membership</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_membership">멤버쉽</span>
+              </a>
+
+              <a class="mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">thumb_up</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="label.rate_the_app">어플 평가하기</span>
+              </a>
+
+          </div>
+      </div>
+    </aside>
+    <div class="mdc-drawer-scrim"></div>
+    <div class="drawer-frame-app-content">
+
+        <div class="main drawer-main-content i18n margin_top_15">
+            <a name="move_point" id="move_point" />
+            <!-- <hr class="main"/> -->
+            <div class="row">
+                <legend align="left" class="title"><strong data-i18n="title.setting">설정</strong></legend>
+            </div>
+            <hr class="main"/>
+
+            <div class="row none">
+              <div style="text-align:left;margin:10px"><!--fieldset-->
+                <label for="basic-switch" class="basic_font_medium2" style=""><strong data-i18n="label.run_on_charge">충전시
+                    실행</strong></label>
+                <div class="mdc-switch" style="position: absolute;right: 5%;">
+                  <div class="mdc-switch__track"></div>
+                  <div class="mdc-switch__thumb-underlay">
+                    <div class="mdc-switch__thumb"></div>
+                    <input type="checkbox" id="basic-switch" class="mdc-switch__native-control" role="switch"
+                      aria-checked="false">
+                  </div>
+                </div>
+              </div><!--fieldset-->
+        
+              <div class="row basic_font_small2"
+                style="text-align:right;padding-right:25px;marign-top:5px;margin-top: 10px !important;">
+                <span id="status" style="opacity: 0.7;">충전시 티맵실행이 [<span id="spnState"><span
+                      style="color:var(--softm-stop);font-weight:bold">중지</span></span>]됨.</span>
+              </div>
+              <hr class="sub" />
+            </div>
+        
+            <div class="none" id="divNaviAutoStart">
+              <div class="row sub"><!--fieldset-->
+                <div class="flex">
+                  <label class="title" style="display:inline;"><span class="mdc-chip__text"><strong
+                        data-i18n="label.navi_auto_start">내비 자동실행</strong></span></label>
+                  <div id="chip_navi_auto_start" class="flex-grow justify-content-right mdc-chip-set mdc-chip-set--choice">
+                    <div class="mdc-chip mdc-chip--selected mdc-ripple-upgraded" role="row" style="">
+                      <div class="mdc-chip__ripple"></div>
+                      <span role="gridcell">
+                        <span role="button" tabindex="0" class="mdc-chip__primary-action">
+                          <span class="mdc-chip__text" data-i18n="label.navi_auto_start_enable">실행</span>
+                        </span>
+                      </span>
+                    </div>
+                    <div class="mdc-chip" role="row" style="">
+                      <div class="mdc-chip__ripple"></div>
+                      <span role="gridcell">
+                        <span role="button" tabindex="-1" class="mdc-chip__primary-action">
+                          <span class="mdc-chip__text" data-i18n="label.navi_auto_start_disable">안함</span>
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="row comment">
+                <span id="navi_auto_start" style="opacity: 0.7;">충전시 티맵실행이 [<span id="spnState"><span
+                  style="color:var(--softm-stop);font-weight:bold">중지</span></span>]됨.</span>
+                </div>
+              </div>
+              <hr class="sub" />
+        
+            <div class="row sub">
+              <div class="flex"><!--fieldset-->
+                <label class="title"><span class="mdc-chip__text"><strong data-i18n="label.renavi_prevent_time">재실행 방지시간</strong></span></label>
+                <!-- <div style="position: absolute;display: inline;margin-top: -15px;"> -->
+                <div class="flex-grow right">
+                  <label id="renavi_prevent_time"
+                  class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon "
+                  style="width:40%;">
+                  <div class="mdc-text-field__ripple"></div>
+                  <input class="mdc-text-field__input" type="number" aria-labelledby="my-label-id" aria-controls="my-helper-id"
+                  aria-describedby="my-helper-id" value="10" style="padding: 10px 10px 10px 10px !important;" maxlength="2" min="0" max="999" pattern="[0-9]*">
+                    <!-- <span id="label" class="mdc-floating-label">대기시간</span> -->
+                    <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                    style="right:80px;display:none" id="search_clear">clear</i>
+                    <div class="mdc-line-ripple"></div>
+                    <!-- <button class="btnSearch mdc-button mdc-button--raised  material-icons " style="top:10px;"> <span
+                      class="mdc-button__ripple"></span>search</button> -->
+                      <div class="" data-i18n="label.sec">초</div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <hr class="sub" />
+            
+            <div class="row sub none">
+                <div class="flex"><!--fieldset-->
+                  <label class="title"><span
+                      class="mdc-chip__text"><strong data-i18n="label.navi_popupx">목적지 진입 반경</strong></span></label>
+                  <div class="flex-grow right">
+                    <label id="fence_distance" class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon "
+                      style="width:40%">
+                      <div class="mdc-text-field__ripple"></div>
+                      <input class="mdc-text-field__input" type="number" aria-labelledby="my-label-id" aria-controls="my-helper-id"
+                        aria-describedby="my-helper-id" value="200" style="padding: 10px 10px 10px 10px !important" maxlength="3"
+                        min="1" max="10000">
+                      <!-- <span id="label" class="mdc-floating-label">대기시간</span> -->
+                      <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                        style="right:80px;display:none" id="search_clear">clear</i>
+                      <div class="mdc-line-ripple"></div>
+                      <!--                     <button class="btnSearch mdc-button mdc-button--raised  material-icons " style="top:10px;"> <span
+                                    class="mdc-button__ripple"></span>search</button> -->
+                      <div class="" style="top:25px;">m</div>
+            
+                    </label>
+                  </div>
+              </div>
+            </div>
+            <hr class="sub none" />
+
+            <div class="row sub" id="divPopupMode">
+              <div class="flex"><!--fieldset-->
+                <label class="title" style="display:inline;"><span class="mdc-chip__text"><strong
+                      data-i18n="label.navi_popup">안내아이콘</strong></span></label>
+                <div id="chip_popup_mode" class="flex-grow justify-content-right mdc-chip-set mdc-chip-set--choice">
+                  <div class="mdc-chip mdc-chip--selected mdc-ripple-upgraded" role="row" style="">
+                    <div class="mdc-chip__ripple"></div>
+                    <span role="gridcell">
+                      <span role="button" tabindex="0" class="mdc-chip__primary-action">
+                        <span class="mdc-chip__text" data-i18n="label.popup_enable">유지</span>
+                      </span>
+                    </span>
+                  </div>
+                  <div class="mdc-chip" role="row" style="">
+                    <div class="mdc-chip__ripple"></div>
+                    <span role="gridcell">
+                      <span role="button" tabindex="-1" class="mdc-chip__primary-action">
+                        <span class="mdc-chip__text" data-i18n="label.popup_disable">닫기</span>
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+        
+              <div class="row comment">
+                <span id="popup_guide" style="opacity: 0.7;">충전시 티맵실행이 [<span id="spnState"><span
+                      style="color:var(--softm-stop);font-weight:bold">중지</span></span>]됨.</span>
+              </div>
+            </div>
+            <hr class="sub" />
+        
+            <div class="row sub">
+              <div class="flex"><!--fieldset-->
+                <label class="title"><span
+                    class="mdc-chip__text"><strong data-i18n="label.overlay_wait_time">대기시간</strong></span></label>
+                <div class="flex-grow right">
+                  <!-- <div style="position: absolute;display: inline;margin-top: -15px;"> -->
+                  <label id="overlay_wait_time"
+                    class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon "
+                    style="width:35%;">
+                    <div class="mdc-text-field__ripple"></div>
+                    <input class="mdc-text-field__input" type="number" aria-labelledby="my-label-id" aria-controls="my-helper-id"
+                      aria-describedby="my-helper-id" value="10" style="padding: 10px 10px 10px 10px !important;" maxlength="2" min="0" max="999" pattern="[0-9]*">
+                    <!-- <span id="label" class="mdc-floating-label">대기시간</span> -->
+                    <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button"
+                      style="right:80px;display:none" id="search_clear">clear</i>
+                    <div class="mdc-line-ripple"></div>
+                    <!--                     <button class="btnSearch mdc-button mdc-button--raised  material-icons " style="top:10px;"> <span
+                                  class="mdc-button__ripple"></span>search</button> -->
+                    <div class="" style="top:5px;" data-i18n="label.sec">초</div>
+          
+                  </label>
+                </div>
+              </div>
+            </div>
+            <hr class="sub" />
+            
+            <div class="row sub">
+              <div class="flex"><!--fieldset-->
+                <label for="" class="title" style=""><strong
+                    data-i18n="label.notification_icon">알림바</strong></label>
+                <div class="flex-grow right">
+                  <button class="noti_icon mdc-switch mdc-switch--unselected" type="button" role="switch" aria-checked="false">
+                    <div class="mdc-switch__track"></div>
+                    <div class="mdc-switch__handle-track">
+                      <div class="mdc-switch__handle">
+                        <div class="mdc-switch__shadow">
+                          <div class="mdc-elevation-overlay"></div>
+                        </div>
+                        <div class="mdc-switch__ripple"></div>
+                        <div class="mdc-switch__icons">
+                          <svg class="mdc-switch__icon mdc-switch__icon--on" viewBox="0 0 24 24">
+                            <path d="M19.69,5.23L8.96,15.96l-4.23-4.23L2.96,13.5l6,6L21.46,7L19.69,5.23z" />
+                          </svg>
+                          <svg class="mdc-switch__icon mdc-switch__icon--off" viewBox="0 0 24 24">
+                            <path d="M20 13H4v-2h16v2z" />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                    <span class="mdc-switch__focus-ring-wrapper">
+                      <div class="mdc-switch__focus-ring"></div>
+                    </span>
+                  </button>
+                </div>
+              </div>
+        
+              <div class="noti_icon row comment"
+                style="text-align:right;padding-right:25px;marign-top:5px;margin-top: 10px !important;">
+                <span id="status" style="opacity: 0.7;">알림바 아이콘 [<span id="spnState"><span
+                      style="color:var(--softm-stop);font-weight:bold">중지</span></span>]됨.</span>
+              </div>
+            </div>
+            <hr class="sub"/>
+        
+            <div class="row sub">
+              <div class="flex"><!--fieldset-->
+                <label for="" class="title" style=""><strong data-i18n="label.work_goto_off_time">출/퇴근 시간</strong></label>
+                <div class="flex-grow right">
+                  <button class="work_goto_off_time mdc-switch mdc-switch--unselected" type="button" role="switch"
+                    aria-checked="false">
+                    <div class="mdc-switch__track"></div>
+                    <div class="mdc-switch__handle-track">
+                      <div class="mdc-switch__handle">
+                        <div class="mdc-switch__shadow">
+                          <div class="mdc-elevation-overlay"></div>
+                        </div>
+                        <div class="mdc-switch__ripple"></div>
+                        <div class="mdc-switch__icons">
+                          <svg class="mdc-switch__icon mdc-switch__icon--on" viewBox="0 0 24 24">
+                            <path d="M19.69,5.23L8.96,15.96l-4.23-4.23L2.96,13.5l6,6L21.46,7L19.69,5.23z" />
+                          </svg>
+                          <svg class="mdc-switch__icon mdc-switch__icon--off" viewBox="0 0 24 24">
+                            <path d="M20 13H4v-2h16v2z" />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                    <span class="mdc-switch__focus-ring-wrapper">
+                      <div class="mdc-switch__focus-ring"></div>
+                    </span>
+                  </button>
+                </div>
+              </div><!--fieldset-->
+        
+              <div class="row comment">
+                <span id="work_goto_off_time_status" style="opacity: 0.7;">설정된 시간에만 동작합니다.</span>
+              </div>
+            </div>
+        
+            <div class="row ">
+              <div class="row sub flex"><!--fieldset-->
+                <label for="basic-switch" class="title"><strong
+                    data-i18n="label.work_goto_time">출근시간</strong></label>
+                <div class="flex-grow right">
+                  <input class="work_goto_off_time" id="work_goto_time_from" type="time" name="work_goto_time_from" min="12:00"
+                    max="18:00" value="06:00" style="width:95px"> ~
+                  <input class="work_goto_off_time" id="work_goto_time_to" type="time" name="work_goto_time_to" min="12:00"
+                    max="18:00" value="08:50" style="width:95px">
+                </div>
+              </div><!--fieldset-->
+              <div class="row sub flex"><!--fieldset-->
+                <label for="basic-switch" class="title" ><strong
+                    data-i18n="label.work_off_time">퇴근시간</strong></label>
+                <div class="flex-grow right">
+                  <input class="work_goto_off_time" id="work_off_time_from" type="time" name="work_off_time_from" min="12:00"
+                    max="18:00" value="17:30" style="width:95px"> ~
+                  <input class="work_goto_off_time" id="work_off_time_to" type="time" name="work_off_time_to" min="12:00"
+                    max="18:00" value="19:00" style="width:95px">
+                </div>
+              </div><!--fieldset-->
+            </div>
+            <hr class="sub"/>
+
+
+
+            <div style="height: 56px;"></div>
+            
+            <div class="mdc-snackbar">
+                <div class="mdc-snackbar__surface">
+                    <div class="mdc-snackbar__label" role="status" aria-live="polite">~~</div>
+                    <!--     <div class="mdc-snackbar__actions"><button_default type="button_default" class="mdc-button_default mdc-snackbar__action"><button_default
+                          class="mdc-icon-button_default mdc-snackbar__dismiss material-icons" title="Dismiss">close</button_default></div> -->
+                </div>
+            </div>
+    
+            <div class="basic mdc-dialog">
+                <div class="mdc-dialog__container">
+                    <div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" aria-labelledby="my-dialog-title"
+                        aria-describedby="my-dialog-content">
+                        <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+                        <h2 class="mdc-dialog__title" id="my-dialog-title">
+                            <!--
+                     -->Choose a Ringtone
+                            <!--
+                   -->
+                        </h2>
+                        <div class="mdc-dialog__content" id="my-dialog-content">
+                        </div>
+                        <footer class="mdc-dialog__actions">
+                            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+                                <div class="mdc-button__ripple"></div>
+                                <span class="mdc-button__label" data-i18n="label.cancel">Cancel</span>
+                            </button>
+                            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="accept"
+                                data-mdc-dialog-button-default>
+                                <div class="mdc-button__ripple"></div>
+                                <span class="mdc-button__label" data-i18n="label.ok">OK</span>
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+                <div class="mdc-dialog__scrim"></div>
+            </div>
+    
+        </div>
+
+
+
+    </div>
+
+    <footer>
+        <div class="mdc-bottom-navigation">
+            <nav class="mdc-bottom-navigation__list">
+              <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                  data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                  <span class="material-icons mdc-bottom-navigation__list-item__icon">home</span>
+                  <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_home">홈</span>
+              </span>
+
+              <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                  data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                  <span class="material-icons mdc-bottom-navigation__list-item__icon">settings</span>
+                  <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_setting">설정</span>
+              </span>
+
+              <span
+                  class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                  data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                  <span class="material-icons mdc-bottom-navigation__list-item__icon">toggle_on</span>
+                  <!-- <span class="material-icons mdc-bottom-navigation__list-item__icon">directions_walk</span>
+                  <span class="material-icons mdc-bottom-navigation__list-item__icon">directions_run</span> -->
+                  <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_start_stop">시작/종료</span>
+              </span>
+
+              <span style="display:none" class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                  data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                  <span class="material-icons mdc-bottom-navigation__list-item__icon">card_membership</span>
+                  <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_membership">멤버쉽</span>
+              </span>
+
+              <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                  data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                  <span class="material-icons mdc-bottom-navigation__list-item__icon">forum</span>
+                  <span class="mdc-bottom-navigation__list-item__text" data-i18n="title.contact_us">문의하기</span>
+              </span>
+
+              <!-- <span class="mdc-bottom-navigation__list-item mdc-ripple-surface mdc-ripple-surface--primary"
+                  data-mdc-auto-init="MDCRipple" data-mdc-ripple-is-unbounded>
+                  <span class="material-icons mdc-bottom-navigation__list-item__icon">lock</span>
+                  <span class="mdc-bottom-navigation__list-item__text" data-i18n="label.menu_permission">권한</span>
+              </span> -->
+              
+            </nav>
+        </div>
+    </footer>
+  
+
+</div>
+</body>
+
+
+</html>
