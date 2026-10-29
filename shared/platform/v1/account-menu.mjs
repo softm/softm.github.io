@@ -4,6 +4,8 @@ const USER_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" st
 const TARGETS = {
   weatherhannun: '#siteAccountSlot, .topbar .header-actions, .topbar .top-inner, .topbar',
   matjiphannun: '.map-topbar, .panel-head .brand-title',
+  hydrogenstation: '.topbar, .mobile-map-side-actions, .map-top',
+  bizhannun: '.top-tools, header',
   homecare: '.care-header-actions, .head-row, .map-head, header',
   wirohaeyo: '[data-account-anchor], .topbar-actions, .header-actions, header'
 };
@@ -41,7 +43,7 @@ export function mountSiteAccount({siteId, name = '이 서비스', target = 'head
   const host = document.createElement('softm-site-account');
   host.dataset.site = siteId;
   host.dataset.accountUi = 'icon-menu-v2';
-  host.style.cssText = 'display:inline-flex;flex:0 0 auto;align-items:center;vertical-align:middle;min-width:0;max-width:100%;margin-inline-start:6px';
+  host.style.cssText = 'display:inline-flex;flex:0 0 auto;align-items:center;vertical-align:middle;min-width:0;max-width:100%;margin-inline-start:6px;pointer-events:auto;position:relative';
   const root = host.attachShadow({mode:'open'});
   root.innerHTML = `<button type="button" id="profile" class="trigger" aria-haspopup="dialog" aria-expanded="false"><span class="avatar" aria-hidden="true"></span><span class="dot" hidden aria-hidden="true"></span></button>`;
   attachStyles(root);
@@ -144,7 +146,12 @@ export function mountSiteAccount({siteId, name = '이 서비스', target = 'head
     const choices=items();if(!choices.length)return;event.preventDefault();let index=choices.indexOf(ui.activeElement);
     index=event.key==='Home'?0:event.key==='End'?choices.length-1:(index+(event.key==='ArrowDown'?1:-1)+choices.length)%choices.length;choices[index].focus();
   });
-  function visible(element) {return element && element.getClientRects().length>0 && getComputedStyle(element).visibility!=='hidden';}
+  function visible(element) {
+    if(!element || !element.getClientRects().length || getComputedStyle(element).visibility==='hidden')return false;
+    const r=element.getBoundingClientRect();
+    const emptyAnchor=r.width===0 && r.height===0 && element.children.length===0;
+    return (emptyAnchor || r.width>0 && r.height>0) && r.bottom>=0 && r.right>=0 && r.top<innerHeight && r.left<innerWidth;
+  }
   function place() {
     if (destroyed) return;
     const selectors=(accountTarget || TARGETS[siteId] || target).split(',').map(s=>s.trim()).filter(Boolean);
@@ -152,7 +159,13 @@ export function mountSiteAccount({siteId, name = '이 서비스', target = 'head
     for (const selector of selectors) {anchor=[...document.querySelectorAll(selector)].find(visible);if(anchor)break;}
     if (!anchor) anchor=[...document.querySelectorAll('header .header-actions,header .topbar-actions,header')].find(visible);
     host.dataset.floating=String(!anchor); anchor ||= document.body;
-    if (host.parentElement!==anchor) anchor.append(host);
+    if (host.parentElement!==anchor) {
+      if(siteId==='hydrogenstation' && anchor.classList.contains('mobile-map-side-actions'))anchor.prepend(host);
+      else anchor.append(host);
+    }
+    // Legacy workspace identity remains reachable from the app's Account
+    // navigation; avoid showing a second login button beside the common menu.
+    if(siteId==='bizhannun'){const legacy=anchor.querySelector('.account-trigger[data-nav="account"]');if(legacy){legacy.hidden=true;legacy.style.display='none';}}
     const overlayParent=document.fullscreenElement||document.body;
     if (portal.parentElement!==overlayParent) overlayParent.append(portal);
     position();
@@ -160,9 +173,17 @@ export function mountSiteAccount({siteId, name = '이 서비스', target = 'head
   function schedulePlace() {if(!frame&&!destroyed)frame=requestAnimationFrame(()=>{frame=0;place();});}
   listen(window,'resize',schedulePlace);listen(window,'scroll',position,true);listen(document,'fullscreenchange',schedulePlace);
   if(window.visualViewport){listen(window.visualViewport,'resize',schedulePlace);listen(window.visualViewport,'scroll',position);}
-  const observer=new MutationObserver(()=>{if(!host.isConnected||!portal.isConnected||host.dataset.floating==='true')schedulePlace();});
+  const observer=new MutationObserver(()=>{
+    if(!host.isConnected || !portal.isConnected)place();
+    else if(host.dataset.floating==='true' || !visible(host.parentElement))schedulePlace();
+  });
+  const layoutObserver=new ResizeObserver(schedulePlace);
+  const modeObserver=new MutationObserver(schedulePlace);
   place();observer.observe(document.body,{childList:true,subtree:true});
+  layoutObserver.observe(host);
+  modeObserver.observe(document.body,{attributes:true,attributeFilter:['class']});
+  modeObserver.observe(document.documentElement,{attributes:true,attributeFilter:['class']});
   const off=account.subscribe(user=>{if(lastUid!==user?.uid){setOpen(false);lastUid=user?.uid;}render(user);});
   Promise.resolve().then(()=>account.ready()).then(()=>{if(!destroyed){restoring=false;render(account.currentUser);}}).catch(()=>{if(!destroyed){restoring=false;render();notice('로그인 연결을 확인해 주세요. 로그인 버튼을 누르면 재시도합니다.');}});
-  return {element:host,open:()=>setOpen(true),close:()=>setOpen(false),destroy(){if(destroyed)return;destroyed=true;generation++;off?.();observer.disconnect();cleanups.forEach(fn=>fn());cancelAnimationFrame(frame);clearTimeout(noticeTimer);host.remove();portal.remove();}};
+  return {element:host,open:()=>setOpen(true),close:()=>setOpen(false),destroy(){if(destroyed)return;destroyed=true;generation++;off?.();observer.disconnect();layoutObserver.disconnect();modeObserver.disconnect();cleanups.forEach(fn=>fn());cancelAnimationFrame(frame);clearTimeout(noticeTimer);host.remove();portal.remove();}};
 }
