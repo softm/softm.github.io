@@ -1,6 +1,11 @@
 name: Verify deployed account menus
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'services/suite-platform/tests/account-menu-live.cjs'
+      - '.github/workflows/account-menu-live.yml'
   workflow_run:
     workflows: ['Publish compressed static site', 'pages build and deployment']
     types: [completed]
@@ -12,7 +17,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   live-menu:
-    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_repository.full_name == github.repository)
+    if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_repository.full_name == github.repository)
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
