@@ -1,10 +1,6 @@
 name: Deploy SNS profile updates to Firebase (scoped)
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/deploy-suite-social-profile.yml'
 permissions:
   contents: read
 concurrency:
