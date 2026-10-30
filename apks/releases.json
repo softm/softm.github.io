@@ -7,19 +7,20 @@
       "package": "net.softm.juyuhannun",
       "releases": [
         {
-          "version": "1.0.2",
-          "code": 3,
-          "label": "juyuhannun-3",
+          "version": "1.0.3",
+          "code": 4,
+          "label": "juyuhannun-4",
           "date": "2026-10-30",
           "type": "release",
           "minAndroid": "8.0",
-          "file": "juyuhannun/juyuhannun-3-release.apk",
-          "bytes": 2401249,
-          "sha256": "b0a688c44bd4bf75621e942b8aac1c993533addb36b449ea2314feb6b2fe4a15",
+          "file": "juyuhannun/juyuhannun-4-release.apk",
+          "bytes": 2440869,
+          "sha256": "01fb05a02ae1863a87ba16dceff7e24e4580f05c161d9d84ae0587350f77111a",
           "notes": [
             "주행 중 주변 주유소를 보여주는 투명 레이더 오버레이 추가",
             "레이더 마커에 남은 거리와 가격 표시",
-            "주행모드 재진입 시 위치·마커 표시 안정성 개선"
+            "주행모드 재진입 시 위치·마커 표시 안정성 개선",
+            "릴리스 빌드 실행 직후 종료되는 문제 수정"
           ]
         }
       ]
