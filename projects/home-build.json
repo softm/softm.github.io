@@ -1,6 +1,6 @@
 {
   "version": "20261022-archive-date-sort-v26",
-  "projectCount": 14,
+  "projectCount": 15,
   "projects": [
     {
       "repo": "weatherhannun",
@@ -127,6 +127,15 @@
       "privateEntries": 2,
       "htmlSha256": "e913345ea6d36d34388e1f61a64e5b1a1236f2ae00523d3bc9194d6ccd4b20e3",
       "authenticatedContentVerified": false
+    },
+    {
+      "repo": "gz3r",
+      "title": "광명3구역 재개발",
+      "homeUrl": "https://softm.github.io/projects/gz3r/",
+      "publicEntries": 1,
+      "privateEntries": 0,
+      "htmlSha256": "e35c71dc67fda09febdad626486371f53bb0320632f9a901d88bd8db14c01a49",
+      "authenticatedContentVerified": false
     }
   ],
   "files": [
@@ -144,6 +153,7 @@
     "projects/farm/index.html",
     "projects/gyeongju-kim/index.html",
     "projects/car/index.html",
+    "projects/gz3r/index.html",
     "projects/projects.json",
     "projects/index.html",
     "projects/README.md",
