@@ -1,0 +1,28 @@
+{
+  "apps": [
+    {
+      "id": "poweron",
+      "name": "티맵 자동실행",
+      "description": "차 타면 바로, 내비게이션 자동실행",
+      "package": "net.softm.startnavi.poweron",
+      "releases": [
+        {
+          "version": "1.4.0.000",
+          "code": 151,
+          "label": "bt151",
+          "date": "2026-10-30",
+          "type": "release",
+          "minAndroid": "7.0",
+          "file": "poweron/poweron-151-release.apk",
+          "bytes": 31608885,
+          "sha256": "e56688f922f9555fa76826366aece56be55bca9d36d514d5a72321edee8ca6e9",
+          "notes": [
+            "Android 16 호환성 개선",
+            "결제 및 보안 라이브러리 업데이트",
+            "목적지 오버레이와 내비게이션 알림 처리 안정성 개선"
+          ]
+        }
+      ]
+    }
+  ]
+}
