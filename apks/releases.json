@@ -33,6 +33,24 @@
       "package": "net.softm.juyuhannun",
       "releases": [
         {
+          "version": "1.1.7",
+          "code": 12,
+          "label": "juyuhannun-12",
+          "date": "2026-10-31",
+          "registeredAt": "2026-10-31T05:11:20+09:00",
+          "type": "release",
+          "minAndroid": "8.0",
+          "file": "juyuhannun/juyuhannun-12-release.apk",
+          "bytes": 17863209,
+          "sha256": "56fe0ad79251cb776edaf2c28cf680288e07d799dc1e4e30fb6f67275c62c49b",
+          "notes": [
+            "One UI가 표시하는 시스템 앱 아이콘만 남겨 레이더 알림의 중복 아이콘 제거",
+            "접힌 알림의 큰 레이더 켜기·끄기 버튼 유지",
+            "알림 토글 후 알림 패널이 즉시 접히도록 전용 투명 액션 화면 연결",
+            "앱 화면을 불필요하게 열지 않고 레이더 서비스만 전환"
+          ]
+        },
+        {
           "version": "1.1.6",
           "code": 11,
           "label": "juyuhannun-11",
