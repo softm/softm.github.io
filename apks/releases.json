@@ -1,6 +1,30 @@
 {
   "apps": [
     {
+      "id": "juyuhannun",
+      "name": "주유한눈",
+      "description": "주변 주유소 가격과 가는 길 주유소를 한눈에",
+      "package": "net.softm.juyuhannun",
+      "releases": [
+        {
+          "version": "1.0.2",
+          "code": 3,
+          "label": "juyuhannun-3",
+          "date": "2026-10-30",
+          "type": "release",
+          "minAndroid": "8.0",
+          "file": "juyuhannun/juyuhannun-3-release.apk",
+          "bytes": 2401249,
+          "sha256": "b0a688c44bd4bf75621e942b8aac1c993533addb36b449ea2314feb6b2fe4a15",
+          "notes": [
+            "주행 중 주변 주유소를 보여주는 투명 레이더 오버레이 추가",
+            "레이더 마커에 남은 거리와 가격 표시",
+            "주행모드 재진입 시 위치·마커 표시 안정성 개선"
+          ]
+        }
+      ]
+    },
+    {
       "id": "poweron",
       "name": "티맵 자동실행",
       "description": "차 타면 바로, 내비게이션 자동실행",
