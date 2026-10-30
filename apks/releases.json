@@ -10,18 +10,18 @@
           "version": "1.1.4",
           "code": 9,
           "label": "juyuhannun-9",
-          "date": "2026-10-30",
-          "registeredAt": "2026-10-30T23:47:34+09:00",
+          "date": "2026-10-31",
+          "registeredAt": "2026-10-31T00:04:43+09:00",
           "type": "release",
           "minAndroid": "8.0",
           "file": "juyuhannun/juyuhannun-9-release.apk",
           "bytes": 17861353,
-          "sha256": "d8b4827f018df921b3e30ce1d0e3161eec9cec1294ea448ad1f3a192784bfc88",
+          "sha256": "db1cd9ed9cefdca725435516dfbeec6cfaafd66beb3a5f08166adf6023f96490",
           "notes": [
-            "로고 원형과 정보 라벨을 하나의 외곽 영역으로 통합",
-            "분리된 연결선과 방향 칩을 제거해 단일 폴사인으로 개선",
-            "거리·주유소명·유종·가격 글자 크기 확대",
-            "HUD 정보 서체를 굵은 Bold 스타일로 통일"
+            "HUD 브랜드 로고와 가격 표시를 더 크고 선명하게 개선",
+            "확대된 정보에 맞춰 레이더 라벨 영역과 거리 표시 조정",
+            "레이더 실행 중 노티바에서 즉시 끄기 가능",
+            "노티바 종료 시 투명 레이더 오버레이와 알림을 함께 정리"
           ]
         },
         {
