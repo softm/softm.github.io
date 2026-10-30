@@ -7,6 +7,24 @@
       "package": "net.softm.juyuhannun",
       "releases": [
         {
+          "version": "1.1.6",
+          "code": 11,
+          "label": "juyuhannun-11",
+          "date": "2026-10-31",
+          "registeredAt": "2026-10-31T00:50:38+09:00",
+          "type": "release",
+          "minAndroid": "8.0",
+          "file": "juyuhannun/juyuhannun-11-release.apk",
+          "bytes": 17863277,
+          "sha256": "d27ec86f502e4c8dfe31abc94eca3432945b9fb992a4ed6cbbdb7c1df4838aec",
+          "notes": [
+            "접힌 알림에서도 레이더 켜기·끄기 버튼을 바로 표시",
+            "앱 아이콘·레이더 상태·큰 파란색 토글 버튼의 한 줄 알림 레이아웃 적용",
+            "레이더 종료 버튼을 하단 도크에 가깝게 이동",
+            "마커 터치 레이어 갱신 후에도 종료 버튼의 최상위 표시·클릭 유지"
+          ]
+        },
+        {
           "version": "1.1.5",
           "code": 10,
           "label": "juyuhannun-10",
