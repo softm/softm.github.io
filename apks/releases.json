@@ -7,6 +7,24 @@
       "package": "net.softm.juyuhannun",
       "releases": [
         {
+          "version": "1.1.0",
+          "code": 5,
+          "label": "juyuhannun-5",
+          "date": "2026-10-30",
+          "registeredAt": "2026-10-30T19:23:30+09:00",
+          "type": "release",
+          "minAndroid": "8.0",
+          "file": "juyuhannun/juyuhannun-5-release.apk",
+          "bytes": 17801533,
+          "sha256": "bd6ecc1046468d9f2a14fca3721bc45c5de958661b80c6d6343088ce0151a2dd",
+          "notes": [
+            "외부 내비게이션 위 2.5D 투명 레이더와 원근 도로 HUD",
+            "주유한눈 자체 3D 지도 주행 모드",
+            "ARCore 카메라 AR 주유소 방향·거리·가격 표시",
+            "세 가지 주행 시각화 선택 메뉴와 안전한 종료 처리"
+          ]
+        },
+        {
           "version": "1.0.3",
           "code": 4,
           "label": "juyuhannun-4",
