@@ -351,7 +351,13 @@ function initPermission(v,cb) {
             granted.some(grant=>{
                 if ( !grant.value ) {
                     console.log(grant.name, grant.value);
-                    fn_StartSetting(grant.name,"startSettingCallback")
+                    /** SOFTM-ACCESSIBILITY-GUIDE START 날짜:20261030 : 홈에서도 접근성 사용 안내를 확인한 뒤 시스템 설정으로 이동 */
+                    if (grant.name === "accessibility") {
+                        fn_GoPermission("accessibility","MAIN");
+                    } else {
+                        fn_StartSetting(grant.name,"startSettingCallback");
+                    }
+                    /** SOFTM-ACCESSIBILITY-GUIDE END */
                     // fn_CheckGrant(grant.name,"checkGrantCallBack")
                 }
                 return !grant.value ;
