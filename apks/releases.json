@@ -7,6 +7,24 @@
       "package": "net.softm.juyuhannun",
       "releases": [
         {
+          "version": "1.1.1",
+          "code": 6,
+          "label": "juyuhannun-6",
+          "date": "2026-10-30",
+          "registeredAt": "2026-10-30T20:04:23+09:00",
+          "type": "release",
+          "minAndroid": "8.0",
+          "file": "juyuhannun/juyuhannun-6-release.apk",
+          "bytes": 17817917,
+          "sha256": "00cca0444e3d8e10b500ad760780336711f0667c3c9b518a089db6968125e41d",
+          "notes": [
+            "Google 로그인 팝업의 OAuth 초기 상태 유실 문제 수정",
+            "Firebase 로그인용 다중 WebView 창과 쿠키·DOM 저장소 연결",
+            "2.5D 레이더에 브랜드 폴사인·거리·가격·지면 위치 표시",
+            "차량 진행 방향을 나타내는 원근 경로·화살표·차량 기준점 추가"
+          ]
+        },
+        {
           "version": "1.1.0",
           "code": 5,
           "label": "juyuhannun-5",
