@@ -33,6 +33,24 @@
       "package": "net.softm.juyuhannun",
       "releases": [
         {
+          "version": "1.1.9",
+          "code": 14,
+          "label": "juyuhannun-14",
+          "date": "2026-10-31",
+          "registeredAt": "2026-10-31T07:11:24+09:00",
+          "type": "release",
+          "minAndroid": "8.0",
+          "file": "juyuhannun/juyuhannun-14-release.apk",
+          "bytes": 17863209,
+          "sha256": "b9c4510b94e54ccda9ec3aebc8cc1e358db60374f4dd5b076f6de7871e6deabd",
+          "notes": [
+            "바닥 진행 방향선을 회전·굴곡 없는 안정적인 고정 직선형으로 복원",
+            "실제 경로 정보처럼 오인될 수 있는 임의 굴곡 표현 제거",
+            "주유소 마커 내부 방향 화살표를 약 두 배 확대",
+            "방향 화살표에 굵은 서체를 적용해 주행 중 식별성 개선"
+          ]
+        },
+        {
           "version": "1.1.8",
           "code": 13,
           "label": "juyuhannun-13",
