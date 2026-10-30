@@ -2635,6 +2635,42 @@
       "previousHomeUrl": "https://softm.github.io/projects/car/",
       "publicHomeStatus": "github-pages-home-generated",
       "archiveLastPublishedAt": "2026-10-25T14:14:00+09:00"
+    },
+    {
+      "order": 15,
+      "repo": "gz3r",
+      "title": "광명3구역 재개발",
+      "description": "오리로 상가 제척·구역계 및 공개 민원 근거 분석",
+      "category": "재개발·민원",
+      "deploymentStatus": "deployed",
+      "repoStatus": "available",
+      "publicRepo": "gz3r",
+      "publicRepoUrl": "https://github.com/softm/gz3r",
+      "publicUrl": "https://softm.github.io/gz3r/",
+      "homeUrl": "https://softm.github.io/projects/gz3r/",
+      "projectHomeUrl": "https://softm.github.io/projects/gz3r/",
+      "latestTitle": "159번지 민원 전수 목록·공개본문 분석",
+      "archiveLastPublishedAt": "2026-10-30T20:30:00+09:00",
+      "homePublicListCount": 1,
+      "homePrivateListCount": 0,
+      "links": [
+        {
+          "visibility": "public",
+          "date": "2026-10-30",
+          "dateSource": "archive-canonical",
+          "title": "159번지 민원 전수 목록·공개본문 분석",
+          "label": "159번지 민원 전수 목록·공개본문 분석",
+          "url": "https://softm.github.io/gz3r/archive/20261030-159-petitions/",
+          "repoUrl": "https://github.com/softm/gz3r/tree/main/archive/20261030-159-petitions",
+          "summary": "검색 94건, 공개본문 75건, 관련 67건. 워드클라우드·원문·시 답변·CSV·ZIP",
+          "category": "민원 분석",
+          "recordPath": "archive/20261030-159-petitions"
+        }
+      ],
+      "previousHomeUrl": "https://softm.github.io/projects/gz3r/",
+      "publicHomeStatus": "github-pages-home-generated",
+      "privateEntryPolicy": "direct-deep-link; server authentication; return to requested chat",
+      "vercelAccountAuthVerified": false
     }
   ],
   "projectClickRule": "프로젝트명과 프로젝트 홈 버튼은 공개 GitHub Pages 프로젝트 홈으로 연결한다. 홈에는 공개·비공개 채팅 목록을 표시하고 비공개 원문은 서버 인증 후 열람한다.",
