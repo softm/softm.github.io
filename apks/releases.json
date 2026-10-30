@@ -7,6 +7,24 @@
       "package": "net.softm.juyuhannun",
       "releases": [
         {
+          "version": "1.1.3",
+          "code": 8,
+          "label": "juyuhannun-8",
+          "date": "2026-10-30",
+          "registeredAt": "2026-10-30T22:54:21+09:00",
+          "type": "release",
+          "minAndroid": "8.0",
+          "file": "juyuhannun/juyuhannun-8-release.apk",
+          "bytes": 17861353,
+          "sha256": "2f3c333c83d55cf677ff4176b8c4cb74193469ee0d24c393c18966c625ec9992",
+          "notes": [
+            "지면 앵커부터 로고·라벨까지 연결된 네온 폴사인 HUD",
+            "브랜드 색상의 발광 노드·기둥·정보 카드 적용",
+            "웹 마커 방식으로 실제 브랜드 심벌을 크게 크롭해 표시",
+            "방향 화살표를 라벨과 연결된 네온 칩으로 개선"
+          ]
+        },
+        {
           "version": "1.1.2",
           "code": 7,
           "label": "juyuhannun-7",
