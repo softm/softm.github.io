@@ -7,6 +7,24 @@
       "package": "net.softm.juyuhannun",
       "releases": [
         {
+          "version": "1.1.5",
+          "code": 10,
+          "label": "juyuhannun-10",
+          "date": "2026-10-31",
+          "registeredAt": "2026-10-31T00:25:59+09:00",
+          "type": "release",
+          "minAndroid": "8.0",
+          "file": "juyuhannun/juyuhannun-10-release.apk",
+          "bytes": 17861353,
+          "sha256": "80c116030d2d6edb083f2bad908c9de0908a9b7ce9fb4eb804c814011f3c1adb",
+          "notes": [
+            "노티바에서 투명 레이더를 바로 켜고 끄는 상시 컨트롤 추가",
+            "Android 13 이상 알림 권한과 레이더 상태별 알림 액션 처리",
+            "시스템 오버레이 레이더 종료 버튼을 하단 안전 영역으로 이동",
+            "앱 내 활성 레이더 종료 아이콘을 우측 도구 열 맨 아래로 배치"
+          ]
+        },
+        {
           "version": "1.1.4",
           "code": 9,
           "label": "juyuhannun-9",
