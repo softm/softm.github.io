@@ -33,6 +33,24 @@
       "package": "net.softm.juyuhannun",
       "releases": [
         {
+          "version": "1.1.8",
+          "code": 13,
+          "label": "juyuhannun-13",
+          "date": "2026-10-31",
+          "registeredAt": "2026-10-31T06:41:57+09:00",
+          "type": "release",
+          "minAndroid": "8.0",
+          "file": "juyuhannun/juyuhannun-13-release.apk",
+          "bytes": 17863209,
+          "sha256": "bcb1b8eda447c0b20f11f624498d9d3394fc0d9b7486e6244875f82924aa5f7a",
+          "notes": [
+            "HUD 주유소 지면 앵커는 실제 방향에 유지하고 정보 카드만 빈 공간으로 분산",
+            "가까운 주유소와 선택 마커를 우선 배치하는 화면 좌표 충돌 회피 추가",
+            "좌우·상하 후보 영역을 평가해 겹침과 화면 밖 이탈을 최소화",
+            "실제 위치 앵커와 이동한 카드를 네온 연결선으로 표시"
+          ]
+        },
+        {
           "version": "1.1.7",
           "code": 12,
           "label": "juyuhannun-12",
