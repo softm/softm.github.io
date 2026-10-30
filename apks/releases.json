@@ -7,6 +7,24 @@
       "package": "net.softm.juyuhannun",
       "releases": [
         {
+          "version": "1.1.2",
+          "code": 7,
+          "label": "juyuhannun-7",
+          "date": "2026-10-30",
+          "registeredAt": "2026-10-30T21:53:00+09:00",
+          "type": "release",
+          "minAndroid": "8.0",
+          "file": "juyuhannun/juyuhannun-7-release.apk",
+          "bytes": 17861353,
+          "sha256": "cf08378c4d5ee5bf9a56d6a241695dc8d08aa3975cf9ba5874f485cbbc2fdd06",
+          "notes": [
+            "HUD 원거리 주유소 마커를 거리에 비례해 축소",
+            "실제 정유사 브랜드 로고와 거리·유종·가격 표시",
+            "주유소 터치 또는 접근 시 주유소명과 주요 정보를 크게 표시",
+            "마커 옆 진행 방향 표시와 선택 터치 영역 개선"
+          ]
+        },
+        {
           "version": "1.1.1",
           "code": 6,
           "label": "juyuhannun-6",
