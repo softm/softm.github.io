@@ -49,7 +49,7 @@
 
   window.SOFTM_GOOGLE_MAPS_API_KEY = window.SOFTM_GOOGLE_MAPS_API_KEY ||
     (getParam("google_key") || getParam("key")) ||
-    "AIzaSyDP-j4QyoIYCQIQgvP7V_mFeD4rqSWfmac";
+    "AIzaSyDniUOLnoMUueAw3d_J_7EKoL9JvjMXCXw";
 
   function initGoogleNaviPage(pageType) {
     if (typeof fn_StopOverlaySafely === "function") fn_StopOverlaySafely(); // SOFTM-MAPSWITCH-OVERLAY-HIDE 날짜:20260521: 구글지도 화면 직접 진입 시 오버레이 제거 실패가 초기화를 막지 않도록 안전 호출
