@@ -119,11 +119,11 @@ export function mountSiteAccount({siteId, name = '이 서비스', target = 'head
   async function login(mode) {
     if (busy || restoring || destroyed) return;
     // Must precede all awaits so mobile browsers retain the user gesture.
-    const popup=window.open('about:blank','_blank','popup,width=520,height=760');
-    if (!popup) { notice('팝업을 허용한 뒤 다시 눌러 주세요.'); return; }
+    const popup=account.externalBrowser ? null : window.open('about:blank','_blank','popup,width=520,height=760');
+    if (!account.externalBrowser && !popup) { notice('팝업을 허용한 뒤 다시 눌러 주세요.'); return; }
     busy=true; render(); notice(mode==='signup'?'회원가입 화면을 열고 있습니다.':'로그인 화면을 열고 있습니다.',true);
     try { await account.login({popup,mode}); if (!destroyed) {render(account.currentUser);setOpen(false,true);notice(name+'에 로그인했습니다.');} }
-    catch (error) {try{popup.close();}catch{} notice(error?.message||'로그인을 완료하지 못했습니다. 다시 시도해 주세요.');}
+    catch (error) {try{popup?.close();}catch{} notice(error?.message||'로그인을 완료하지 못했습니다. 다시 시도해 주세요.');}
     finally {busy=false;render();}
   }
   async function logout() {
