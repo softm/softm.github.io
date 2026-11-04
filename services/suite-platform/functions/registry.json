@@ -142,6 +142,20 @@
       ],
       "storage": "encrypted-only",
       "integration": "snapshot-adapter"
+    },
+    "gagyebu": {
+      "name": "가계부",
+      "url": "https://softm.github.io/account/android/gagyebu/",
+      "origins": [
+        "https://appassets.androidplatform.net"
+      ],
+      "storage": "encrypted-only",
+      "integration": "identity-only",
+      "android": {
+        "packageName": "softm.android.gagyebu",
+        "origin": "https://appassets.androidplatform.net",
+        "returnUrl": "https://softm.github.io/account/android/gagyebu/"
+      }
     }
   }
 }
