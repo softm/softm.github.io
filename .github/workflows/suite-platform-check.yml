@@ -49,6 +49,7 @@ jobs:
           node tests/site-vault-ui.cjs
           node tests/account-feedback-ui.cjs
           node tests/account-handoff-ui.cjs
+          node tests/native-handoff-ui.cjs
           node tests/account-withdrawal-ui.cjs
           node tests/account-menu-ui.cjs
       - uses: actions/upload-artifact@v4

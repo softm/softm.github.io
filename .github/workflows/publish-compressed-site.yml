@@ -8,6 +8,7 @@ on:
       - 'projects/archive-sync.js'
       - 'shared/platform/**'
       - 'account/**'
+      - '.well-known/assetlinks.json'
   workflow_dispatch:
 permissions:
   contents: read
