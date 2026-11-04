@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+  <title>티</title>
+  <link rel="shortcut icon" href="#">
+  
+  <!-- <link href="./lib/material-components-web.min.css" rel="stylesheet"> -->
+  <link href="./lib/material-components-web.min.new.css" rel="stylesheet">
+  <!-- <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"> -->
+
+  <!-- <script src="./lib/material-components-web.min.js"></script> -->
+  <script src="./lib/material-components-web.min.new.js"></script>
+  <!-- <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script> -->
+  
+  <link rel="stylesheet" href="./lib/icon.css">
+  <link rel="stylesheet" href="./lib/common.css?a=4">
+  <script src="./lib/hangul.js"></script>
+
+ </head>
+
+<!--  using - default i18next-->
+<!--
+<script src="https://unpkg.com/i18next/i18next.js"></script>
+<script src="https://unpkg.com/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+<script src="https://unpkg.com/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.js"></script>
+-->
+
+<!-- using - jquery i18next -->
+<!-- -->
+   <script src="./lib/jquery-3.6.4.min.js"></script>
+<!--<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>-->
+  <script src="./lib/i18next.min.js"></script>
+  <script src="./lib/common.js?a=1"></script>
+  <script src="./lib/interface.js"></script>
+  <script src="./lib/db.js"></script>
+  <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xx2c3bc6b282ed46c9805c99db13f56149"></script>
+
+<script>
+var btnBack = null;
+var btnHome;
+var btnSettings;
+var btnEmail;
+var btnCopyemail;
+var btnCopyEmailBody;
+var btnCopySubsOrderId;
+var btnCopyLifeTimeOrderId;
+
+var firstLoad = true;
+$( document ).ready(function() {
+        btnHome    = new mdc.ripple.MDCRipple(document.querySelector("#btnHome"));
+        btnSettings    = new mdc.ripple.MDCRipple(document.querySelector("#btnSettings"));
+        btnEmail    = new mdc.ripple.MDCRipple(document.querySelector("#btnEmail"));
+        btnCopyemail    = new mdc.ripple.MDCRipple(document.querySelector("#btnCopyemail"));
+        btnCopyEmailBody    = new mdc.ripple.MDCRipple(document.querySelector("#btnCopyEmailBody"));
+        btnCopySubsOrderId    = new mdc.ripple.MDCRipple(document.querySelector("#btnCopySubsOrderId"));
+        btnCopyLifeTimeOrderId    = new mdc.ripple.MDCRipple(document.querySelector("#btnCopyLifeTimeOrderId"));
+
+        btnHome.listen("click", function(event) {
+	        //	self.close();
+            // fn_ClosePopData();
+            fn_OpenUrl("index.html");
+        });
+
+        btnSettings.listen("click", function (event) {
+            windowOpen("search.html?idx=1");
+        });
+
+        btnEmail.listen("click", function (event) { //     
+            var dateStr = (new Date()).toLocaleDateString() + (new Date()).toLocaleTimeString();
+            var sub = encodeURIComponent("블루투스 연결 & 음악 문의[" + dateStr + "]");
+            var mailBody = encodeURIComponent($("#deviceInfo").text().trim());
+            var link = "mailto:autorunnavi@gmail.com?subject="+ sub
+                                                 + "&body="+ mailBody;
+            window.location.href = link;
+        });
+
+        btnCopyemail.listen("click", function (event) {
+            fn_CopyClipboard("autorunnavi@gmail.com");
+            snackbar("Copied");
+        });
+
+        btnCopyEmailBody.listen("click", function (event) {
+            fn_CopyClipboard($("#deviceInfo").text());
+            snackbar("Copied");
+        });
+
+        btnCopySubsOrderId.listen("click", function (event) {
+            fn_CopyClipboard(info.purchaseSubsOriginaljson.orderId);
+            snackbar("Copied");
+        });
+
+        btnCopyLifeTimeOrderId.listen("click", function (event) {
+            fn_CopyClipboard(info.purchaseLifetimeOriginaljson.orderId);
+            snackbar("Copied");
+        });
+        
+
+        btnBack = new mdc.ripple.MDCRipple(document.querySelector("#btnBack"));
+        btnBack.listen("click", function (event) {
+            if ( !document.referrer ) windowClose();
+            else history.back();
+        });
+        
+        // footerNavigationIndex = footerNavigationUrl.indexOf(location.pathname.split("/")[2]);
+        // // $(footerNavigation[0]).trigger("click");
+        // footerNavigation[footerNavigationIndex].emit("click", footerNavigationIndex);
+
+        window.getInfoCallBack = function (data) {
+            if (isWeb) {
+                window.info = {
+                    "appPackage": "com.skt.tmap.ku",
+                    "chargingMode": "1",
+                    "startWifi": true,
+                    "usingRegHome": true,
+                    "wifi": {
+                        "bssid": "00:0D:18:00:00:01",
+                        "ssid": "SoftmWifi",
+                        "connected": true
+                    },
+                    "workGotoOffTime": false,
+                    "startPower": true,
+                    "naviGeofenceRadius": 200,
+                    "naviDestination": "1",
+                    "workOffTimeFrom": "17:30",
+                    "naviMode": "1",
+                    "workGotoTimeTo": "08:50",
+                    "naviOverlayWaitTime": 3,
+                    "naviPopupMode": true,
+                    "bluetooth": {
+                        "bondState": 12,
+                        "address": "00:0D:18:00:00:01",
+                        "name": "OBDII",
+                        "type": 1,
+                        "diassembled": "OBDII"
+                    },
+                    "startBluetooth": false,
+                    "workGotoTimeFrom": "06:00",
+                    "naviRenaviPreventTime": 3,
+                    "naviAutoStart": true,
+                    "workOffTimeTo": "19:00",
+                    "notiIcon": true,
+                    "btnSwitchIndependenceCondition": true,
+                    "startStopOnOff":{
+                        bluetooth:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                        wifi:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                        tethering:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                        airplane_mode:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                        screen_on:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                        lock:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                        completed_lock:{start:{use_yn:true,onoff:"off"},stop:{use_yn:true,onoff:"on"}},
+                        play_music:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                        home_screen:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                        power_off:{start:{use_yn:true,onoff:"on"},stop:{use_yn:false,onoff:"off"}},
+                    },
+                    "startMode":"1",
+                    "stopMode":"1",
+                    "onlyStopAfterNaving":true,
+                    serverHost:location.origin,
+                    pathName:location.pathname.split("/")[1],
+                    versionCode:11,
+                    versionName:"0.0.0.1",
+                    // + "http://www.softm.net/tdev"
+
+                    device: {
+                        "country": "KR",
+                        "versionId": 14,
+                        "sdkInt": 34,
+                        "displayCountry": "대한민국",
+                        "model": "sdk_gphone64_arm64",
+                        "language": "ko",
+                        "versionName": "1.3.1.0006",
+                        "uuid": "ecb6c1732c4b3f0f",
+                        "brand": "google",
+                        "versionCode": 103
+                    }
+                }
+            } else {
+                window.info = (JSON.parse(data));
+            }
+
+            if ( firstLoad ) {
+                pageInit();
+                firstLoad = false;
+            }
+        }
+
+        getInfo();
+
+
+});
+
+function getInfo() {
+    fn_GetInfo("", "getInfoCallBack");
+}
+
+function pageInit() {
+    $(".version-name").text(window.info.versionName);
+    $(".app_name").text(window.info.app_name);
+    $(".country").text(window.info.device.country);
+    $(".versionId").text(window.info.device.versionId);
+    $(".sdkInt").text(window.info.device.sdkInt);
+    $(".displayCountry").text(window.info.device.displayCountry);
+    $(".model").text(window.info.device.model);
+    $(".language").text(window.info.device.language);
+    $(".versionName").text(window.info.device.versionName);
+    $(".uuid").text(window.info.device.uuid);
+    $(".brand").text(window.info.device.brand);
+    $(".versionCode").text(window.info.device.versionCode);
+    $(".versionCode").text(window.info.device.versionCode);
+    
+    if (info.isSubsLicense ) {
+        var info1 = $('<div>8. ' + t("label.subs_user") + ' : <span>' + info.purchaseSubsOriginaljson.orderId + '</span></div>');
+        $("#deviceInfo").append(info1);
+    }
+
+    if (info.isLifeTimeLicense ) {
+        var info2 = $('<div>8. ' + t("label.lifetime_user") + ' : <span>' + info.purchaseLifetimeOriginaljson.orderId + '</span></div>');
+        $("#deviceInfo").append(info2);
+    }
+
+    initBasicInfo();
+} 
+
+window.fn_BackKeyPressedCallBack = function () {
+    btnBack.emit("click");
+}
+
+</script>
+</head>
+<body>
+<div class="i18n drawer-frame-root">
+	<!--
+    !-->
+    <div class="mdc-drawer-app-content">
+        <header class="mdc-top-app-bar app-bar" id="app-bar">
+            <div class="mdc-top-app-bar__row">
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+<!--                     
+    <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button">menu</button>
+-->
+<button id="btnBack"
+class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded">arrow_back_ios</button>
+
+
+
+                    <!-- <button class="material-icons  mdc-top-app-bar__navigation-icon mdc-icon-button">menu</button> -->
+                    <button id="btnHome"
+                        class="none mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded">home</button> 
+                        <span class="mdc-top-app-bar__title" data-i18n="label.top_bar">티맵실행</span>
+                    </section>
+                    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+                        <button id="btnSettings" class="none mdc-icon-button material-icons mdc-top-app-bar__action-item--unbounded"
+                            aria-label="Print this page">search</button> <!--settings-->
+                    </section>
+            </div>
+        </header>
+<!--         
+-->
+        <main class="main-content" id="main-content">
+            <div class="mdc-top-app-bar--fixed-adjust">
+            </div>
+        </main>
+    </div>
+    <aside class="mdc-drawer mdc-drawer--modal">
+       
+      <div class="mdc-drawer__header app_info">
+          <img src="./images/logo_100.svg" width="50" style="margin-top: 10px;"/>
+          <!-- style="height:55px" -->
+          <div class="mdc-dramdc-drawer__contentwer__title" data-i18n="[html]label.app_name">블루투스 연결 & 음악</div>
+        </div>
+        <hr class="sub"/>
+        <div class="row sub flex left bold " >
+            <label for="" class="flex-grow title" style="">
+                <h6 class="mdc-drawer__subtitle" ><span class="version-name">00.00</span></h6>    
+            </label>
+            <div class="flex-grow margin_right_7 middle right basic_font_medium2"  style="align-content: space-evenly;">
+                <span class="paidUser">
+                    <img src="images/vip.png" width="30" align="absmiddle"/>
+                </span>
+                <span class=" bold underline cursor_pointer"><span class="user_level link_dev_support">광고보기 사용자</span></span>
+            </div> 
+        </div>
+      <div class="mdc-drawer__content">
+          <a class="clone none mdc-deprecated-list-item mdc-deprecated-list-item--activated">
+              <span class="mdc-deprecated-list-item__ripple"></span>
+              <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home</i>
+              <span class="mdc-deprecated-list-item__text" data-i18n="label.home_page">Home</span>
+          </a>
+
+          <div class="mdc-deprecated-list">
+              <a class="mdc-deprecated-list-item mdc-deprecated-list-item--activated" href="#" aria-current="page">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="label.home_page">Home</span>
+              </a>
+
+              <a class="none mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">settings</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_setting">설정</span>
+              </a>
+
+              <a class="none mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">toggle_on</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_start_stop">시작/종료</span>
+              </a>
+
+              <a class="mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">link</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="title.run_options">실행옵션</span>
+              </a>
+              <a class="mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home_work</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="title.home_company">집/회사</span>
+              </a>
+              <a class="mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">star</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="title.favorite">즐겨찾기</span>
+              </a>
+              <a class="mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">forum</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="title.contact_us">문의하기</span>
+              </a>
+
+              <a class="none mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">card_membership</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="label.menu_membership">멤버쉽</span>
+              </a>
+
+              <a class="mdc-deprecated-list-item" href="#">
+                  <span class="mdc-deprecated-list-item__ripple"></span>
+                  <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">thumb_up</i>
+                  <span class="mdc-deprecated-list-item__text" data-i18n="label.rate_the_app">어플 평가하기</span>
+              </a>
+
+          </div>
+      </div>
+    </aside>
+    <div class="mdc-drawer-scrim"></div>
+    <div class="drawer-frame-app-content">
+
+        <div class="main drawer-main-content i18n margin_top_15">
+            <a name="move_point" id="move_point" />
+<!-- 문의하기 -->
+            <div class="row flex">
+                <legend align="left" class="title"><strong data-i18n="title.contact_us">문의하기</strong></legend>
+            </div>
+            <hr class="main"/>
+
+<!-- 상단 메시지 -->
+            <div class="row padding_top_0 padding_bottom_3">
+                <div class="row sub flex bold basic_font_medium1" data-i18n="[html]label.qna_top_message" style="margin: 10px !important;">
+                    앱 사용에 불편한점이나, 궁금한 점을 알려주세요.<br/> 빠르게 확인 후 답변 드리도록 하겠습니다. :)
+                </div>
+            </div>
+            <!-- <hr class="main"/> -->
+
+            <hr class="sub subsUser"/>
+            <!-- paidUser -->
+            <span class="subsUser">
+            <div class="row sub flex left bold ">
+                <div class="margin_right_7 basic_font_medium2"  style="align-content: space-evenly;">
+                    <span class="">
+                        <img src="images/vip.png" width="25" align="absmiddle"/>
+                    </span>
+                </div>
+                <label for="" class="title" style=""><strong class="basic_font_small4" data-i18n="label.subs_user">구독 사용자</strong></label>
+                <div class="flex-grow  basic_font_medium2 align-self-center right ">
+                    <div class="">                                       <!-- bg_orange white -->
+                        <button id="btnCopySubsOrderId" type="button" class="mdc-button mdc-button--raised padding_10 bg_orange" data-mdc-dialog-action="close"
+                        style="height:30px;"
+                        >
+                            <i class="material-icons mdc-button__icon" style="top: 0px;" aria-hidden="true"
+                            >content_copy</i>
+                            <span class="mdc-button__label bold margin_right_5 basic_font_small2" data-i18n="label.watch_the_ad_and_cheer11">주문번호 복사</span>
+                            <div class="mdc-button__ripple "></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            </span>
+            
+            <hr class="sub lifeTimeUser"/>
+            <span class="lifeTimeUser">
+            <div class="row sub flex left bold ">
+                <div class="margin_right_7 basic_font_medium2"  style="align-content: space-evenly;">
+                    <span class="">
+                        <img src="images/vip.png" width="25" align="absmiddle"/>
+                    </span>
+                </div>
+                <label for="" class="basic_font_small1 title" style=""><strong class="basic_font_small4" data-i18n="label.lifetime_user">평생 사용자</strong></label>
+                <div class="flex-grow align-self-center right ">
+                    <div class="">                                       <!-- bg_orange white -->
+                        <button id="btnCopyLifeTimeOrderId" type="button" class="mdc-button mdc-button--raised padding_10 bg_orange" data-mdc-dialog-action="close"
+                        style="height:30px;"
+                        >
+                            <i class="material-icons mdc-button__icon" style="top: 0px;" aria-hidden="true"
+                            >content_copy</i>
+                            <span class="mdc-button__label bold margin_right_5 basic_font_small2" data-i18n="label.copy_order_id">주문번호 복사</span>
+                            <div class="mdc-button__ripple "></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            </span>
+            <hr class="sub"/>
+<!-- 설명 메시지 -->
+            <div class="row padding_top_10  padding_bottom_10 padding_left_10  padding_right_10" style="background-color: #DFECF8;">
+                <div class="row sub flex basic_font_medium2" style="color:#4181b8;margin: 0px !important;">
+                    <span data-i18n="[html]label.qna_comment_message" class="align-self-center">아래 내용과 증상을 함께 보내주세요.</span>
+                    <button id="btnCopyEmailBody" type="button" class="mdc-button" style="align-items: normal;">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="material-icons mdc-bottom-navigation__list-item__icon">content_copy</span>
+                    </button>
+                </div>
+                <ol id="deviceInfo" class="left basic_font_medium1 padding_left_0" style="margin: 0px;padding-top: 10px;">
+<div>1. <span class="" data-i18n="label.qna_comment_detail_message3">기종 이름</span> : <span class="brand bold">-</span> / <span class="bold model">-</span></d>
+<div>2. <span class="" data-i18n="label.qna_comment_detail_message4">기기 시스템(OS) 버전</span> : <span class="bold sdkInt">-</span> / Android <span class="bold versionId">-</span></div>
+<div>3. <span class="" data-i18n="label.qna_comment_detail_message5">앱 버전</span> : <span class="bold versionName">-</span> / <span class="bold versionCode">-</span></div>
+<div>4. <span class="">UUID</span> : <span class="uuid bold">-</span></div>
+<div>5. <span class="" data-i18n="label.qna_comment_detail_message6">국가/언어</span> : <span class="bold displayCountry">-</span> / <span class="country">-</span> /  <span class="language">-</span></div>
+<div>6. <span data-i18n="label.qna_comment_detail_message1">관련 스크린샷 또는 비디오.</span></div>
+<div>7. <span data-i18n="label.qna_comment_detail_message2">문제 증상 설명</span></div>
+                </ol>
+</span>
+                <hr class="sub"/>
+            </div>
+            <div class="margin_top_15">
+                
+            </div>
+
+<!-- 메일 주소 -->
+            <div class="row padding_top_0  padding_top_0 padding_left_10  padding_right_10" style="background-color: #F1F1F1;">
+                <div class="row basic_font_medium4 align-self-center bold black" data-i18n="[html]label.app_name!" style="color:#F1F1F1;margin: 0px !important;">
+                    <a href="mailto:autorunnavi@gmail.com" class="black">autorunnavi@gmail.com</a>
+                    <button id="btnCopyemail" type="button" class="mdc-button" style="align-items: normal;">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="material-icons mdc-bottom-navigation__list-item__icon">content_copy</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="margin_top_15">
+                
+            </div>
+
+
+            <div class="row right">
+                <span>
+                    <a href="javascript:fn_OutsideSite('https://pf.kakao.com/_FCaCn/chat');"><img src="./images/kakao01.jpg" width="100%"></a>
+                    <!-- <a href="https://pf.kakao.com/_FCaCn"><img src="./assets/kakao02.png" width="70"></a> -->
+                </span>
+                <button id="btnEmail" type="button" class="mdc-button mdc-button--raised w_full" data-mdc-dialog-action="close">
+                    <div class="mdc-button__ripple"></div>
+                    <span class="mdc-button__label" data-i18n="label.mail_qna">메일 문의하기</span>
+                </button>
+                
+            </div>
+
+            <div class="row" style="height:55px"></div>
+
+            <div class="mdc-snackbar">
+                <div class="mdc-snackbar__surface">
+                    <div class="mdc-snackbar__label" role="status" aria-live="polite">~~</div>
+                    <!--     <div class="mdc-snackbar__actions"><button_default type="button_default" class="mdc-button_default mdc-snackbar__action"><button_default
+                          class="mdc-icon-button_default mdc-snackbar__dismiss material-icons" title="Dismiss">close</button_default></div> -->
+                </div>
+            </div>
+    
+            <div class="basic mdc-dialog">
+                <div class="mdc-dialog__container">
+                    <div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" aria-labelledby="my-dialog-title"
+                        aria-describedby="my-dialog-content">
+                        <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+                        <h2 class="mdc-dialog__title" id="my-dialog-title">
+                            <!--
+                     -->Choose a Ringtone
+                            <!--
+                   -->
+                        </h2>
+                        <div class="mdc-dialog__content" id="my-dialog-content">
+                        </div>
+                        <footer class="mdc-dialog__actions">
+                            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+                                <div class="mdc-button__ripple"></div>
+                                <span class="mdc-button__label" data-i18n="label.cancel">Cancel</span>
+                            </button>
+                            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="accept"
+                                data-mdc-dialog-button-default>
+                                <div class="mdc-button__ripple"></div>
+                                <span class="mdc-button__label" data-i18n="label.ok">OK</span>
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+                <div class="mdc-dialog__scrim"></div>
+            </div>
+    
+        </div>
+    </div>
+
+    <footer>
+    </footer>
+
+</div>
+</body>
+
+
+</html>
