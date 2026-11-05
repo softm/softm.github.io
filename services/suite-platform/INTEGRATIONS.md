@@ -112,10 +112,12 @@ Enterprise `suite-v1`의 Core 트랜잭션과 기존 QuerySnapshot 계약을 유
 가입·로그인·독립 관리 흐름은 합성 브라우저로 검증했다. 실계정의 새 약관 수락은 대신 수행하지 않았다. 최초 이용자는 가입 안내를 직접 확인하고 동의해야 한다. 네이버 일반 공개 승인은 여전히 별도 대기다.
 
 
-## 2026-11-05 가계부 Android 공통 계정 연결 — 운영 반영 대기
+## 2026-11-05 가계부 Android 공통 계정 연결
 
 - 공통 프로젝트 `softm-hannun-api`에 `softm.android.gagyebu` Android 앱을 등록했다. 계정 아이콘은 공통 메뉴를 번들로 재사용한다.
 - 시스템 브라우저 허브 → 고정 App Link → 네이티브 PKCE 교환 및 Firebase Auth로 연결한다. 토큰은 웹 브리지와 URL에 전달하지 않는다. 허용 Origin은 `https://appassets.androidplatform.net`, 사이트 claim은 `gagyebu`이다.
 - 로그인·로그아웃은 장부를 교체하거나 백업하지 않는다. 가계부 항목은 Android 계정 연결만 표시하며 웹 보관소 기능을 활성화하지 않는다.
 - 로컬 원본과 Android 메뉴 사본을 함께 변경했다. 공통 기존 웹 로그인·메뉴 회귀 검사와 Android용 합성 허브·계정 메뉴·기기 장부 보존 검사를 통과했다.
-- 공통 정적 배포, `suiteAuth`의 registry 배포, 실제 제공자 계정 로그인은 아직 완료하지 않았다. 해당 단계를 마치기 전 운영 적용 완료로 간주하지 않는다. `suiteSocialAuth`와 Firestore 규칙 변경은 필요하지 않다.
+- Android 공통 웹([배포](https://github.com/softm/softm.github.io/actions/runs/41882627890))과 `suiteAuth` 운영 반영 완료. 실제 제공자 계정 로그인은 별도 확인 대상이다.
+
+PC 가계부는 같은 사이트 ID와 별도 웹 Origin을 사용하고, 계정 복원 시 장부를 교체하지 않는다. 원격 보관소 삭제는 최근 인증된 허브 계정의 가계부 하위 경로만 삭제한다. 이 PC 변경의 운영 배포 및 실계정 검증은 별도다.
