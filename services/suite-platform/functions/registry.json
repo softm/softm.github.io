@@ -151,7 +151,7 @@
         "https://softm.github.io"
       ],
       "storage": "encrypted-only",
-      "integration": "identity-only",
+      "integration": "account-ledger",
       "android": {
         "packageName": "softm.android.gagyebu",
         "origin": "https://appassets.androidplatform.net",

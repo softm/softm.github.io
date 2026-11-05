@@ -1,3 +1,4 @@
+import {ledgerExchange} from './gagyebu-ledger.mjs';
 import {onRequest} from 'firebase-functions/v2/https';
 import {onDocumentCreated} from 'firebase-functions/v2/firestore';
 import {assertAccountActive,requestWithdrawal,withdrawalStatus,processWithdrawal} from './withdrawal.mjs';
@@ -16,6 +17,7 @@ const registry=JSON.parse(readFileSync(new URL('./registry.json',import.meta.url
 const hub=new URL(registry.hub),project=process.env.GCLOUD_PROJECT||'softm-hannun-api';
 const base=process.env.SUITE_API_BASE||`https://asia-northeast3-${project}.cloudfunctions.net/suiteSocialAuth`;
 const socialEnabled=process.env.SUITE_ENABLE_SOCIAL==='true';
+const ledgerKey=defineSecret('GAGYEBU_LEDGER_KEY_V1');
 const kakaoSecret=socialEnabled?defineSecret('SUITE_KAKAO_CLIENT_SECRET'):null,naverSecret=socialEnabled?defineSecret('SUITE_NAVER_CLIENT_SECRET'):null;
 const providers={
   kakao:{authorize:'https://kauth.kakao.com/oauth/authorize',token:'https://kauth.kakao.com/oauth/token',profile:'https://kapi.kakao.com/v2/user/me',client:()=>process.env.SUITE_KAKAO_CLIENT_ID,secret:()=>kakaoSecret.value()},
@@ -54,7 +56,7 @@ async function handler(req,res){
   if(origin){res.set('Access-Control-Allow-Origin',origin);res.set('Vary','Origin');res.set('Access-Control-Allow-Headers','Content-Type, Authorization');res.set('Access-Control-Allow-Methods','GET, POST, OPTIONS');}
   if(req.method==='OPTIONS')return res.status(204).end();
   if(!allowRequest(req))return res.status(429).json({message:'잠시 후 다시 시도해 주세요.'});
-  if((Number(req.get('Content-Length'))||0)>10000)return res.status(413).json({message:'요청이 너무 큽니다.'});
+  if((Number(req.get('Content-Length'))||0)>(req.path==='/gagyebu/ledger'?4*1024*1024:10000))return res.status(413).json({message:'요청이 너무 큽니다.'});
   const route=req.path.replace(/\/$/,'');const body=req.body||{};
   try{
     if(route==='/health'&&req.method==='GET')return res.json({ok:true,version:1,profileVersion:'20261030-1',databaseId:'suite-v1',providers:{google:true,kakao:!!providers.kakao.client(),naver:!!providers.naver.client()}});
@@ -97,11 +99,19 @@ async function handler(req,res){
       const value=await consume(db.collection('_suiteOAuth').doc(hash(body.state)),body.verifier,v=>{if(v.state!=='complete')fail('oauth-not-complete',401);});
       await assertAccountActive(db,value.uid);const token=await auth.createCustomToken(value.uid);return res.json({token});
     }
+    if(route==='/gagyebu/ledger'){
+      requireSite(registry,'gagyebu',origin);const claims=await identity(req);
+      if(claims.suite_site!=='gagyebu'||claims.uid!==body.uid)fail('wrong-site',403);
+      return res.json(await ledgerExchange(db,claims.uid,body,ledgerKey.value(),claims.auth_time));
+    }
     if(route==='/gagyebu/vault/delete'){
       if(origin!==hub.origin)fail('use-account-hub',403);
       const claims=await identity(req,{recent:true,hubOnly:true});
       if(body.expectedUid!==claims.uid||body.confirm!=='내 보관소 삭제')fail('confirmation-required',403);
+      const marker=db.collection('users').doc(claims.uid).collection('privateSync').doc('gagyebu'),epoch=random();
+      await marker.set({epoch,locked:true,cutoff:Math.floor(Date.now()/1000)});
       await db.recursiveDelete(db.collection('users').doc(claims.uid).collection('sites').doc('gagyebu'));
+      await db.runTransaction(async tx=>{if((await tx.get(marker)).data()?.epoch===epoch)tx.update(marker,{locked:false});});
       return res.json({deleted:true});
     }
     if(route==='/membership/withdraw/status'){
@@ -144,7 +154,7 @@ async function handler(req,res){
   }
 }
 const options={region:'asia-northeast3',maxInstances:2,concurrency:20,timeoutSeconds:60,memory:'256MiB'};
-export const suiteAuth=onRequest(options,(req,res)=>req.path.startsWith('/oauth/')?res.status(404).json({message:'SNS 전용 인증 서버를 사용해 주세요.'}):handler(req,res));
+export const suiteAuth=onRequest({...options,secrets:[ledgerKey]},(req,res)=>req.path.startsWith('/oauth/')?res.status(404).json({message:'SNS 전용 인증 서버를 사용해 주세요.'}):handler(req,res));
 export const suiteSocialAuth=socialEnabled?onRequest({...options,secrets:[kakaoSecret,naverSecret]},handler):undefined;
 export {handler};
 
