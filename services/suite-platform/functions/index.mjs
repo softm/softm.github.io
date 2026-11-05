@@ -97,6 +97,13 @@ async function handler(req,res){
       const value=await consume(db.collection('_suiteOAuth').doc(hash(body.state)),body.verifier,v=>{if(v.state!=='complete')fail('oauth-not-complete',401);});
       await assertAccountActive(db,value.uid);const token=await auth.createCustomToken(value.uid);return res.json({token});
     }
+    if(route==='/gagyebu/vault/delete'){
+      if(origin!==hub.origin)fail('use-account-hub',403);
+      const claims=await identity(req,{recent:true,hubOnly:true});
+      if(body.expectedUid!==claims.uid||body.confirm!=='내 보관소 삭제')fail('confirmation-required',403);
+      await db.recursiveDelete(db.collection('users').doc(claims.uid).collection('sites').doc('gagyebu'));
+      return res.json({deleted:true});
+    }
     if(route==='/membership/withdraw/status'){
       if(origin!==hub.origin)fail('use-account-hub',403);
       return res.json(await withdrawalStatus({db,uid:body.uid,receipt:body.receipt}));
