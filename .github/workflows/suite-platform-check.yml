@@ -35,7 +35,7 @@ jobs:
           for file in ../../account/*.mjs; do node --check "$file"; done
           node --check functions/index.mjs
           npm test
-      - run: npx -y firebase-tools@latest emulators:exec --project demo-softm-suite --only firestore,auth 'npm run test:rules'
+      - run: npx -y firebase-tools@latest emulators:exec --project demo-softm-suite --only firestore,auth 'npm run test:rules && node tests/gagyebu-vault-emulator.mjs'
       - name: Install isolated browser verification runtime
         run: |
           npm install --prefix "$RUNNER_TEMP/suite-ui" --no-save --ignore-scripts --no-audit --no-fund playwright
