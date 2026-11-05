@@ -121,3 +121,11 @@ Enterprise `suite-v1`의 Core 트랜잭션과 기존 QuerySnapshot 계약을 유
 - Android 공통 웹([배포](https://github.com/softm/softm.github.io/actions/runs/41882627890))과 `suiteAuth` 운영 반영 완료. 실제 제공자 계정 로그인은 별도 확인 대상이다.
 
 PC 가계부는 같은 사이트 ID와 별도 웹 Origin을 사용하고, 계정 복원 시 장부를 교체하지 않는다. 원격 보관소 삭제는 최근 인증된 허브 계정의 가계부 하위 경로만 삭제한다. 이 PC 변경의 운영 배포 및 실계정 검증은 별도다.
+
+## 가계부 계정 장부
+
+승인된 PC·Android 클라이언트는 공통 계정의 가계부 인증 토큰으로 `/gagyebu/ledger`를 사용한다. 원본 첨부, Android 감지 원문·확인 대기 후보는 전송하지 않는다. 사용자별 Firestore 경로에 AES-GCM으로 암호화한 장부를 분할 보관한다. 서버에서 복호화할 수 있는 방식이며 종단간 암호화가 아니다.
+
+운영 `suiteAuth`에는 Secret Manager의 `GAGYEBU_LEDGER_KEY_V1`이 필요하다. 최초에만 무작위 32바이트의 base64 값을 생성하고 이후 배포에는 같은 버전을 유지한다. 키 교체는 기존 암호문 이전 절차 없이는 수행하지 않는다. 한 장부의 공유 데이터 한도는 UTF-8 JSON 3MiB이며, 초과하면 기기 기록을 유지하고 설정에 표시한다.
+
+원격 revision 확인 후 쓰며, 충돌한 같은 필드는 사용자 선택 전까지 덮어쓰지 않는다. 보관소 삭제 중에는 쓰기를 막고, 삭제 이전 세션의 재업로드를 거절한다. 에뮬레이터 검증: `tests/gagyebu-vault-emulator.mjs` (PC·Android 두 인증 세션, 양방향 수정, 오래된 revision 거부, 삭제 범위).
