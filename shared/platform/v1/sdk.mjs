@@ -13,7 +13,7 @@ async function api(config,path,body,token) {
   const res=await fetch(config.apiBase+path,{method:'POST',headers:{'Content-Type':'application/json',...(token?{Authorization:'Bearer '+token}:{})},body:JSON.stringify(body),signal:AbortSignal.timeout(20000)});
   const result=await res.json();if(!res.ok)throw Error(result.message||'계정 연결을 완료하지 못했습니다.');return result;
 }
-export async function createSiteClient({siteId,config}) {
+export async function createSiteClient({siteId,config,identityOnly=false}) {
   id(siteId); config ||= await loadPlatformConfig();
   if(!config.enabled || !config.firebase?.apiKey || !config.firebase?.appId)throw Error('공통 계정 서비스 연결 준비 중입니다. 기기 내 기능은 계속 사용할 수 있습니다.');
   // Separate Auth persistence per site, including same-origin GitHub Pages paths.
@@ -34,7 +34,7 @@ export async function createSiteClient({siteId,config}) {
         if(event.origin!==url.origin||event.source!==popup||event.data?.type!=='softm:authorization'||event.data.requestId!==requestId)return;
         if(event.data.error){cleanup();reject(Error('로그인을 취소했습니다.'));return;}
         window.removeEventListener('message',receive);clearInterval(closed);
-        try{const result=await api(config,'/session/exchange',{code:event.data.code,verifier,siteId,origin:location.origin});await signInWithCustomToken(auth,result.token);await ensureSite();cleanup();resolve(auth.currentUser);}catch(error){cleanup();reject(error);}
+        try{const result=await api(config,'/session/exchange',{code:event.data.code,verifier,siteId,origin:location.origin});await signInWithCustomToken(auth,result.token);if(!identityOnly)await ensureSite();cleanup();resolve(auth.currentUser);}catch(error){cleanup();reject(error);}
       };
       window.addEventListener('message',receive);timer=setTimeout(()=>{cleanup();reject(Error('로그인 시간이 만료되었습니다.'));},300000);
       closed=setInterval(()=>{if(popup.closed){cleanup();reject(Error('로그인 창이 닫혔습니다.'));}},700);popup.location.href=url.href;

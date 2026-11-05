@@ -145,9 +145,10 @@
     },
     "gagyebu": {
       "name": "가계부",
-      "url": "https://softm.github.io/account/android/gagyebu/",
+      "url": "https://softm.github.io/gagyebu/",
       "origins": [
-        "https://appassets.androidplatform.net"
+        "https://appassets.androidplatform.net",
+        "https://softm.github.io"
       ],
       "storage": "encrypted-only",
       "integration": "identity-only",
