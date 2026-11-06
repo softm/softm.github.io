@@ -33,6 +33,21 @@
       "package": "net.softm.juyuhannun",
       "releases": [
         {
+          "version": "1.1.18",
+          "code": 23,
+          "label": "juyuhannun-23",
+          "date": "2026-11-07",
+          "registeredAt": "2026-11-07T00:44:36+09:00",
+          "type": "release",
+          "minAndroid": "8.0",
+          "file": "juyuhannun/juyuhannun-23-release.apk",
+          "bytes": 17879753,
+          "sha256": "14861d2a06fb9db1cb763371c9a71afb4ad169853f4430369a92225807ae99a6",
+          "notes": [
+            "주유한눈 1.1.18 Release APK 등록"
+          ]
+        },
+        {
           "version": "1.1.17",
           "code": 22,
           "label": "juyuhannun-22",
