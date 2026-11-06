@@ -33,6 +33,24 @@
       "package": "net.softm.juyuhannun",
       "releases": [
         {
+          "version": "1.1.16",
+          "code": 21,
+          "label": "juyuhannun-21",
+          "date": "2026-11-06",
+          "registeredAt": "2026-11-06T18:29:53+09:00",
+          "type": "release",
+          "minAndroid": "8.0",
+          "file": "juyuhannun/juyuhannun-21-release.apk",
+          "bytes": 17879597,
+          "sha256": "0fd0b964f097c21376854d7f730d3bc8f4859e4a9b58b923697205c2f7ea383f",
+          "notes": [
+            "2.5D 레이더에서 500m·1·2·3·5km 탐색 반경을 선택합니다. 기본 2km.",
+            "추천만·전체 표시 전환과 방향·브랜드·가격·직선거리 마커를 제공합니다. 밀집 주유소는 묶음 표시됩니다.",
+            "목록과 브랜드 선택은 필요할 때 펼치고, 고정한 주유소는 범위 밖에서도 유지합니다.",
+            "추천은 선택 반경 내 가격 기준입니다. 실제 도로 경로·도착 시간·회전 가능 여부는 계산하지 않습니다."
+          ]
+        },
+        {
           "version": "1.1.15",
           "code": 20,
           "label": "juyuhannun-20",
