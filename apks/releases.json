@@ -33,6 +33,25 @@
       "package": "net.softm.juyuhannun",
       "releases": [
         {
+          "version": "1.1.17",
+          "code": 22,
+          "label": "juyuhannun-22",
+          "date": "2026-11-06",
+          "registeredAt": "2026-11-06T19:13:17+09:00",
+          "type": "release",
+          "minAndroid": "8.0",
+          "file": "juyuhannun/juyuhannun-22-release.apk",
+          "bytes": 17879601,
+          "sha256": "535af913f75598bff478056fabb620ef2de0a7df2cd32350ef0e7bf378756f3d",
+          "notes": [
+            "주유소 패널을 접어도 주유소 마커와 레이더 종료 버튼은 계속 표시됩니다.",
+            "주행 모드 진입 시 주유한눈을 뒤로 보내 이전 화면 또는 홈 위에 HUD를 표시합니다.",
+            "반경·표시·목록·브랜드 선택 패널을 간결하게 정리했습니다.",
+            "마커를 기본 지도 느낌의 선명한 캡슐·원형 로고·흰 테두리·아래쪽 꼬리로 변경했습니다. 마커를 누르면 해당 주유소를 고정합니다.",
+            "실제 경로·도착 시간은 계산하지 않으며 방향과 거리는 위치 기준 참고 정보입니다."
+          ]
+        },
+        {
           "version": "1.1.16",
           "code": 21,
           "label": "juyuhannun-21",
