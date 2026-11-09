@@ -706,6 +706,23 @@
           "recordPath": "public/records/20260527-moskill"
         },
         {
+          "listTitle": "20261109 화곡농장 제초매트·고정핀 구매기록",
+          "sourceTitle": "20261109 화곡농장 제초매트·고정핀 구매기록",
+          "visibility": "private",
+          "label": "20261109 화곡농장 제초매트·고정핀 구매기록",
+          "title": "20261109 화곡농장 제초매트·고정핀 구매기록",
+          "date": "2026-11-09",
+          "dateSource": "purchase-date",
+          "titleSource": "archive-canonical",
+          "url": "https://hwagok-farm-private.vercel.app/records/20261109-hwagok-weed-mat-purchase/",
+          "repoUrl": "https://github.com/softm/hwagok-farm-private/tree/main/records/20261109-hwagok-weed-mat-purchase",
+          "category": "영농자재 구매",
+          "summary": "2026-11-09 구매기록. 주문 상세·증빙 자료는 비공개. 이미지 원본 2장은 ZIP 보관, 비공개 GitHub 원격 미업로드.",
+          "directory": "20261109-hwagok-weed-mat-purchase",
+          "recordPath": "records/20261109-hwagok-weed-mat-purchase",
+          "media": "HTML·MD 원격 반영 · 원본 이미지 2장 로컬 ZIP"
+        },
+        {
           "visibility": "private",
           "label": "화곡농장 농지 증여·자경·농업경영체 검토 정리",
           "title": "화곡농장 농지 증여·자경·농업경영체 검토 정리",
@@ -729,7 +746,7 @@
       "privateEntryPolicy": "Vercel Authentication required; direct deep link after authentication",
       "vercelAccountAuthVerified": true,
       "homePublicListCount": 39,
-      "homePrivateListCount": 1,
+      "homePrivateListCount": 2,
       "publicIndexSource": {
         "url": "https://softm.github.io/hwagok-farm/",
         "format": "html-archive-data"
@@ -743,14 +760,14 @@
       "privateRepo": "hwagok-farm-private",
       "privateRepoUrl": "https://github.com/softm/hwagok-farm-private",
       "privateUrl": "https://hwagok-farm-private.vercel.app/",
-      "privatePageCount": 1,
-      "latestTitle": "20261009 지주대 삽입기 구매기록",
+      "privatePageCount": 2,
+      "latestTitle": "20261109 화곡농장 제초매트·고정핀 구매기록",
       "authProvider": "vercel-sso",
       "totalRecordCount": 38,
       "archiveLastPublishedAt": "2026-10-07T13:23:41.343220+00:00",
       "lastArchiveBatch": "20261008-hwagok-media-inbox",
       "privateDeliveryStatus": "authenticated-github-live",
-      "privateVerificationStatus": "runtime-http-verified-browser-pending"
+      "privateVerificationStatus": "vercel-sso-configured; content-authenticated-and-media-pending"
     },
     {
       "order": 3,
