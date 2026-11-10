@@ -95,6 +95,20 @@
       "deploymentNote": "실제 콘텐츠는 프로젝트 저장소에 보존하고 중앙 목록은 배포된 HTML의 archive-data를 직접 조회합니다.",
       "links": [
         {
+          "listTitle": "20261110 화곡농장 봄동·하루나 종자 구매 및 월동 파종 계획",
+          "visibility": "public",
+          "label": "20261110 화곡농장 봄동·하루나 종자 구매 및 월동 파종 계획",
+          "title": "20261110 화곡농장 봄동·하루나 종자 구매 및 월동 파종 계획",
+          "date": "2026-11-10",
+          "dateSource": "archive-canonical",
+          "url": "https://softm.github.io/hwagok-farm/records/20261110-spring-greens-seeds/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20261110-spring-greens-seeds",
+          "category": "영농 · 종자 구매",
+          "summary": "봄동·춘채(하루나) 종자 구매 및 11월 파종·월동 계획. 첨부 원본 4장 ZIP 별도 제공",
+          "directory": "20261110-spring-greens-seeds",
+          "recordPath": "public/records/20261110-spring-greens-seeds"
+        },
+        {
           "listTitle": "20261009 화곡농장 보유 농약 정리",
           "inputName": "20261009 화곡농장 보유 농약 정리",
           "visibility": "public",
