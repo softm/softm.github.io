@@ -95,6 +95,25 @@
       "deploymentNote": "실제 콘텐츠는 프로젝트 저장소에 보존하고 중앙 목록은 배포된 HTML의 archive-data를 직접 조회합니다.",
       "links": [
         {
+          "listTitle": "20261110_hwagok_spring_greens_archive_viewer",
+          "inputName": "20261110_hwagok_spring_greens_archive_viewer",
+          "inputKind": "folder",
+          "sourceTitle": "20261110 봄동·하루나 구매 및 월동 재배",
+          "visibility": "public",
+          "label": "20261110_hwagok_spring_greens_archive_viewer",
+          "title": "20261110_hwagok_spring_greens_archive_viewer",
+          "chatTitle": "20261110 봄동·하루나 구매 및 월동 재배",
+          "date": "2026-11-10",
+          "dateSource": "inbox-name",
+          "titleSource": "inbox-name",
+          "url": "https://softm.github.io/hwagok-farm/records/20261110-hwagok-spring-greens-archive-viewer/",
+          "repoUrl": "https://github.com/softm/hwagok-farm/tree/main/public/records/20261110-hwagok-spring-greens-archive-viewer",
+          "category": "영농 · 월동 파종",
+          "summary": "ZIP 원본 기반 온실 3가지 방식 비교·파종·관수·월동 가이드, 종자 사진 4장·도식 1장·확대 뷰어",
+          "directory": "20261110-hwagok-spring-greens-archive-viewer",
+          "recordPath": "public/records/20261110-hwagok-spring-greens-archive-viewer"
+        },
+        {
           "listTitle": "20261009 화곡농장 보유 농약 정리",
           "inputName": "20261009 화곡농장 보유 농약 정리",
           "visibility": "public",
@@ -745,7 +764,7 @@
       "publicHomeStatus": "github-pages-home-generated",
       "privateEntryPolicy": "Vercel Authentication required; direct deep link after authentication",
       "vercelAccountAuthVerified": true,
-      "homePublicListCount": 39,
+      "homePublicListCount": 40,
       "homePrivateListCount": 2,
       "publicIndexSource": {
         "url": "https://softm.github.io/hwagok-farm/",
@@ -761,7 +780,7 @@
       "privateRepoUrl": "https://github.com/softm/hwagok-farm-private",
       "privateUrl": "https://hwagok-farm-private.vercel.app/",
       "privatePageCount": 2,
-      "latestTitle": "20261109 화곡농장 제초매트·고정핀 구매기록",
+      "latestTitle": "20261110 봄동·하루나 구매 및 월동 재배",
       "authProvider": "vercel-sso",
       "totalRecordCount": 38,
       "archiveLastPublishedAt": "2026-10-07T13:23:41.343220+00:00",
