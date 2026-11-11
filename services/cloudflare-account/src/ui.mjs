@@ -41,7 +41,13 @@ async function refresh(){
 }
 async function init(){
  if(SITE){try{intent=await call('/api/connect/info');$('#connect-name').textContent=intent.name+'에 로그인합니다.';}catch(e){status(e.message);}}
- for(const b of document.querySelectorAll('[data-provider]')){if(b.dataset.provider==='naver'&&!((await call('/health')).naverPublic)){b.disabled=true;b.textContent='네이버 · 승인 대기';}else b.addEventListener('click',()=>location.assign('/auth/'+b.dataset.provider));}
+ const health=await call('/health');
+ for(const b of document.querySelectorAll('[data-provider]')){
+  const id=b.dataset.provider;
+  if(!health.providers?.[id]){b.disabled=true;b.textContent=({google:'Google',kakao:'카카오',naver:'네이버'}[id])+(id==='naver'&&!health.naverPublic?' · 승인 대기':' · 연결 준비 중');}
+  else b.addEventListener('click',()=>location.assign('/auth/'+id));
+ }
+ if(health.registrationLocked)status('기존 계정 이전 검증 중입니다. 등록되지 않은 새 계정은 아직 이용할 수 없습니다.');
  action($('#logout'),async()=>{await call('/api/logout','POST',{});await refresh();status('로그아웃했습니다.');});
  action($('#accept'),async()=>{if(!$('#t1').checked||!$('#t2').checked)throw Error('필수 약관 두 항목을 확인해 주세요.');await call('/api/consent','POST',{version:'2026-11-11',accepted:true});await refresh();status('가입이 완료됐습니다.');});
  action($('#withdraw'),async()=>{if(!confirm('회원탈퇴하면 복구할 수 없습니다. 계속하시겠습니까?'))return;const v=prompt('확인을 위해 회원탈퇴를 입력해 주세요.');if(v!=='회원탈퇴')return;await call('/api/account/delete','POST',{confirmation:v});await refresh();status('탈퇴가 완료됐습니다.');});
