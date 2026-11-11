@@ -21,12 +21,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Install Wrangler
+        run: npm install --no-audit --no-fund
       - name: Syntax checks
         run: npm run check
       - name: Unit and security smoke tests
         run: npm test
       - name: Validate migration preparation syntax
         run: node --check scripts/prepare-migration.mjs
+      - name: Real local Workers + D1 integration
+        run: node scripts/local-smoke.mjs
       - name: Verify secrets never committed
         run: |
           test ! -f .dev.vars
