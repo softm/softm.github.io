@@ -23,8 +23,8 @@ function action(el,fn){el.addEventListener('click',async()=>{if(busy)return;busy
 async function refresh(){
  const result=await call('/api/me');user=result.user;
  $('#login').hidden=!!user;$('#profile').hidden=!user;
- $('#terms').hidden=!user||!!user.consentVersion;
- $('#connect').hidden=!SITE||!intent||!user||!user.consentVersion;
+ $('#terms').hidden=!user||user.consentVersion==='2026-11-11';
+ $('#connect').hidden=!SITE||!intent||!user||user.consentVersion!=='2026-11-11';
  if(!user)return;
  $('#name').textContent=user.name||'나의 한눈 계정';
  const ava=$('#avatar');ava.replaceChildren();
