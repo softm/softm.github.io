@@ -34,7 +34,7 @@ test('minimal UI contains consent, account linking, no vault editor',()=>{
   const html=page();
   assert.match(html,/회원탈퇴/);assert.match(html,/카카오/);
   assert.doesNotMatch(html,/보관소 암호/);
-  assert.match(clientScript,/postMessage/);assert.match(clientScript,/connect\/exchange/);
+  assert.match(clientScript,/postMessage/);assert.match(clientScript,/connect\/authorize/);
 });
 const env={DB:{prepare:()=>({bind:()=>({first:async()=>null})})},NAVER_PUBLIC_ENABLED:'false'};
 test('health is public and omits secrets',async()=>{
