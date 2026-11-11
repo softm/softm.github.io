@@ -69,6 +69,11 @@ async function run(){
   check(await put(0),409,'revision conflict');
   r=await result('/api/apps/weatherhannun/items/favorite',{headers:appHeader(access)});check(r,200,'read encrypted');
   assert.equal(r.body.payload,encrypted);
+  const listed=await result('/api/apps/weatherhannun/items?limit=1',{headers:appHeader(access)});
+  check(listed,200,'encrypted item list');assert.equal(listed.body.items.length,1);
+  assert.equal(listed.body.items[0].id,'favorite');assert.equal(listed.body.items[0].revision,1);
+  assert.equal(Object.hasOwn(listed.body.items[0],'payload'),false,'metadata-only listing');
+  check(await result('/api/apps/weatherhannun/items?limit=101',{headers:appHeader(access)}),400,'invalid pagination size');
   const decrypted=await unseal(JSON.parse(r.body.payload),'sample-password-123',uid+'/weatherhannun/favorite');
   assert.equal(decrypted.message,'test only');
   check(await result('/api/apps/gagyebu/items/favorite',{headers:appHeader(access)}),401,'site-scoped bearer not valid for another app');
