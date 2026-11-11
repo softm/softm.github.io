@@ -1,4 +1,4 @@
-import {PROOF, ITEM_ID, CONSENT_VERSION, now, random, sha256, challenge, equal, cookies, cookie, json, error, sameOrigin, readJSON} from './crypto.mjs';
+import {PROOF, ITEM_ID, CONSENT_VERSION, now, random, sha256, challenge, equal, cookies, cookie, json, error, sameOrigin, readJSON,base64url,from64} from './crypto.mjs';
 import {providerConfig, authorizeUrlWithPkce, exchangeProfile} from './oauth.mjs';
 import {page, clientScript} from './ui.mjs';
 
@@ -217,6 +217,30 @@ function validatePayload(data){
   let p;try{p=JSON.parse(data.payload)}catch{error('invalid-encrypted-payload');}
   if(!p||p.v!==1||p.algorithm!=='AES-GCM'||p.iterations!==310000||typeof p.ct!=='string'||typeof p.iv!=='string'||typeof p.salt!=='string')error('invalid-encrypted-payload');
 }
+async function listItems(request,env,url){
+  const m=url.pathname.match(/^\\/api\\/apps\\/([a-z0-9_-]+)\\/items$/);
+  if(!m||request.method!=='GET')error('not-found',404);
+  const site=m[1],uid=await requireApp(request,env,site);
+  const limitValue=url.searchParams.get('limit');
+  const limit=limitValue===null?30:Number(limitValue);
+  if(!Number.isSafeInteger(limit)||limit<1||limit>100)error('invalid-page-size');
+  const cursor=url.searchParams.get('cursor');
+  let rows;
+  if(cursor!==null){
+    if(!/^[A-Za-z0-9_-]{1,256}$/.test(cursor))error('invalid-cursor');
+    let c;try{c=JSON.parse(new TextDecoder().decode(from64(cursor)));}catch{error('invalid-cursor');}
+    if(!c||!Number.isSafeInteger(c.t)||c.t<0||typeof c.i!=='string'||!ITEM_ID.test(c.i))error('invalid-cursor');
+    rows=await env.DB.prepare('SELECT item_id,revision,updated_at FROM items WHERE user_id=? AND site=? AND (updated_at<? OR (updated_at=? AND item_id<?)) ORDER BY updated_at DESC,item_id DESC LIMIT ?')
+      .bind(uid,site,c.t,c.t,c.i,limit+1).all();
+  }else{
+    rows=await env.DB.prepare('SELECT item_id,revision,updated_at FROM items WHERE user_id=? AND site=? ORDER BY updated_at DESC,item_id DESC LIMIT ?')
+      .bind(uid,site,limit+1).all();
+  }
+  const all=rows.results||[], page=all.slice(0,limit);
+  const last=page.at(-1);
+  const next=all.length>limit&&last?base64url(new TextEncoder().encode(JSON.stringify({t:last.updated_at,i:last.item_id}))):null;
+  return json({items:page.map(row=>({id:row.item_id,revision:row.revision,updatedAt:row.updated_at})),cursor:next});
+}
 async function revokeApp(request,env,url){
   const m=url.pathname.match(/^\/api\/apps\/([a-z0-9_-]+)\/logout$/);
   if(!m||request.method!=='POST')error('not-found',404);
@@ -287,6 +311,7 @@ async function route(request,env){
   if(path.startsWith('/auth/')&&request.method==='GET')return startOAuth(request,env,path.split('/')[2]);
   if(path==='/api/connect/exchange'&&request.method==='POST')return exchangeConnect(request,env);
   if(path.startsWith('/api/apps/')&&path.endsWith('/logout'))return revokeApp(request,env,url);
+  if(/^\\/api\\/apps\\/[a-z0-9_-]+\\/items$/.test(path))return listItems(request,env,url);
   if(path.startsWith('/api/apps/'))return itemsAPI(request,env,url);
   if(path.startsWith('/api/'))return accountAPI(request,env,path);
   error('not-found',404);
