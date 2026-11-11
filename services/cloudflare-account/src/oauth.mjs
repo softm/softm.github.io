@@ -37,7 +37,7 @@ async function verifyGoogleIdToken(token,{audience,nonce}){
   let head,claims;try{head=JSON.parse(new TextDecoder().decode(from64(parts[0])));claims=JSON.parse(new TextDecoder().decode(from64(parts[1])));}catch{error('invalid-id-token',401)}
   if(head.alg!=='RS256'||typeof head.kid!=='string'||!['accounts.google.com','https://accounts.google.com'].includes(claims.iss)||claims.aud!==audience||claims.nonce!==nonce||!Number.isSafeInteger(claims.exp)||claims.exp<=now()||typeof claims.sub!=='string'||!claims.sub)error('invalid-id-token',401);
   const keys=await fetchBounded('https://www.googleapis.com/oauth2/v3/certs');
-  const key=keys.keys?.find(k=>k.kid===head.kid&&k.kty==='RSA'&&(k.use===undefined||k.use==='sig')&&k.alg==='RS256');
+  const key=keys.keys?.find(k=>k.kid===head.kid&&k.kty==='RSA'&&(k.use===undefined||k.use==='sig')&&(!k.alg||k.alg==='RS256'));
   if(!key)error('invalid-id-token',401);
   const pub=await crypto.subtle.importKey('jwk',key,{name:'RSASSA-PKCS1-v1_5',hash:'SHA-256'},false,['verify']);
   const okay=await crypto.subtle.verify('RSASSA-PKCS1-v1_5',pub,from64(parts[2]),new TextEncoder().encode(parts[0]+'.'+parts[1]));
