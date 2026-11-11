@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS identities (
   created_at INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS ix_identities_user ON identities(user_id);
+CREATE UNIQUE INDEX IF NOT EXISTS ux_identities_user_provider ON identities(user_id, provider);
 CREATE TABLE IF NOT EXISTS web_sessions (
   token_hash TEXT PRIMARY KEY,
   user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
