@@ -60,6 +60,15 @@ async function session(request,env){
     .bind(await sha256(token),now()).first();
 }
 async function requireSession(request,env){const u=await session(request,env);if(!u)error('login-required',401);return u;}
+async function rateLimit(request,env,scope,maxPerMinute){
+  const ip=request.headers.get('CF-Connecting-IP')||'local-test';
+  const windowStart=Math.floor(now()/60)*60;
+  // A one-way digest is retained briefly; never log client IP addresses.
+  const key=await sha256((env.RATE_LIMIT_SALT||'softm-rate-buckets')+':'+scope+':'+ip+':'+windowStart);
+  const r=await env.DB.prepare('INSERT INTO request_buckets(bucket_hash,count,expires_at) VALUES(?,1,?) ON CONFLICT(bucket_hash) DO UPDATE SET count=count+1 WHERE count<?')
+    .bind(key,windowStart+120,maxPerMinute).run();
+  if(r.meta?.changes!==1)error('rate-limited',429);
+}
 function cookieClear(name){return cookie(name,'',0);}
 async function context(request,env){
   const token=cookies(request)['__Host-sh_connect'];if(!token||!PROOF.test(token))error('connect-request-required',401);
@@ -309,12 +318,21 @@ async function route(request,env){
   }
   if(path==='/client.js')return new Response(clientScript,{headers:{'Content-Type':'text/javascript; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
   if(path==='/account'||path==='/connect'&&!url.searchParams.has('site'))return html();
-  if(path==='/connect'&&request.method==='GET')return registerConnect(request,env);
+  if(path==='/connect'&&request.method==='GET'){
+    await rateLimit(request,env,'connect',20);
+    return registerConnect(request,env);
+  }
   if(path.startsWith('/auth/callback/')&&request.method==='GET'){
     const provider=path.split('/')[3];return finishOAuth(request,env,provider);
   }
-  if(path.startsWith('/auth/')&&request.method==='GET')return startOAuth(request,env,path.split('/')[2]);
-  if(path==='/api/connect/exchange'&&request.method==='POST')return exchangeConnect(request,env);
+  if(path.startsWith('/auth/')&&request.method==='GET'){
+    await rateLimit(request,env,'oauth-start',10);
+    return startOAuth(request,env,path.split('/')[2]);
+  }
+  if(path==='/api/connect/exchange'&&request.method==='POST'){
+    await rateLimit(request,env,'site-exchange',40);
+    return exchangeConnect(request,env);
+  }
   if(path.startsWith('/api/apps/')&&path.endsWith('/logout'))return revokeApp(request,env,url);
   if(/^\/api\/apps\/[a-z0-9_-]+\/items$/.test(path))return listItems(request,env,url);
   if(path.startsWith('/api/apps/'))return itemsAPI(request,env,url);
@@ -352,7 +370,7 @@ export default {
   },
   async scheduled(event,env){
     const t=now();
-    for(const table of ['oauth_attempts','connect_intents','auth_codes','app_sessions','web_sessions']){
+    for(const table of ['oauth_attempts','connect_intents','auth_codes','app_sessions','web_sessions','request_buckets']){
       await env.DB.prepare('DELETE FROM '+table+' WHERE expires_at<?').bind(t).run();
     }
   }
