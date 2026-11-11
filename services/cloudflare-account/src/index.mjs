@@ -218,7 +218,7 @@ function validatePayload(data){
   if(!p||p.v!==1||p.algorithm!=='AES-GCM'||p.iterations!==310000||typeof p.ct!=='string'||typeof p.iv!=='string'||typeof p.salt!=='string')error('invalid-encrypted-payload');
 }
 async function listItems(request,env,url){
-  const m=url.pathname.match(/^\\/api\\/apps\\/([a-z0-9_-]+)\\/items$/);
+  const m=url.pathname.match(/^\/api\/apps\/([a-z0-9_-]+)\/items$/);
   if(!m||request.method!=='GET')error('not-found',404);
   const site=m[1],uid=await requireApp(request,env,site);
   const limitValue=url.searchParams.get('limit');
@@ -311,7 +311,7 @@ async function route(request,env){
   if(path.startsWith('/auth/')&&request.method==='GET')return startOAuth(request,env,path.split('/')[2]);
   if(path==='/api/connect/exchange'&&request.method==='POST')return exchangeConnect(request,env);
   if(path.startsWith('/api/apps/')&&path.endsWith('/logout'))return revokeApp(request,env,url);
-  if(/^\\/api\\/apps\\/[a-z0-9_-]+\\/items$/.test(path))return listItems(request,env,url);
+  if(/^\/api\/apps\/[a-z0-9_-]+\/items$/.test(path))return listItems(request,env,url);
   if(path.startsWith('/api/apps/'))return itemsAPI(request,env,url);
   if(path.startsWith('/api/'))return accountAPI(request,env,path);
   error('not-found',404);
