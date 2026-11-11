@@ -1,5 +1,9 @@
 name: Deploy isolated Cloudflare account Worker
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'services/cloudflare-account/**'
   workflow_dispatch:
     inputs:
       confirmation:
@@ -10,7 +14,7 @@ permissions:
   contents: read
 jobs:
   deploy:
-    if: ${{ github.event.inputs.confirmation == 'DEPLOY_STAGING' }}
+    if: ${{ github.event_name == 'push' || github.event.inputs.confirmation == 'DEPLOY_STAGING' }}
     runs-on: ubuntu-latest
     environment: cloudflare-account-staging
     defaults:
@@ -25,26 +29,40 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Validate required deployment configuration
+      - name: Check staging deployment settings
+        id: settings
         run: |
-          test -n "$CLOUDFLARE_API_TOKEN"
-          test -n "$CLOUDFLARE_ACCOUNT_ID"
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ] || [ -z "$PUBLIC_BASE_URL" ]; then
+            if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+              echo "Missing Cloudflare staging credentials or public URL"; exit 1
+            fi
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Staging is not connected yet; Cloudflare deployment skipped safely."
+            exit 0
+          fi
           case "$PUBLIC_BASE_URL" in
             https://*.workers.dev|https://*.designboard.net) ;;
             *) echo "Invalid Worker URL setting"; exit 1 ;;
           esac
+          echo "ready=true" >> "$GITHUB_OUTPUT"
       - name: Install Wrangler
+        if: steps.settings.outputs.ready == 'true'
         run: npm install --no-audit --no-fund
       - name: Verify implementation
+        if: steps.settings.outputs.ready == 'true'
         run: npm run check && npm test
       - name: Pin exact Worker URL in local config
+        if: steps.settings.outputs.ready == 'true'
         run: |
           node -e 'const fs=require("fs");const p="wrangler.jsonc";const c=JSON.parse(fs.readFileSync(p,"utf8"));c.vars.PUBLIC_BASE_URL=process.env.PUBLIC_BASE_URL;fs.writeFileSync(p,JSON.stringify(c,null,2));'
       - name: Deploy isolated Worker and provision D1
+        if: steps.settings.outputs.ready == 'true'
         run: npx wrangler deploy
       - name: Create database schema
+        if: steps.settings.outputs.ready == 'true'
         run: npx wrangler d1 execute softm-hannun-account --remote --file=schema.sql --yes
       - name: Check Worker health
+        if: steps.settings.outputs.ready == 'true'
         run: curl --fail --silent --show-error "$PUBLIC_BASE_URL/health"
 # OAuth provider client secrets and callback registrations must be set separately.
 # This workflow does not switch existing apps, Firebase, or Android clients.
