@@ -69,10 +69,16 @@ async function run(){
   check(await put(0),409,'revision conflict');
   r=await result('/api/apps/weatherhannun/items/favorite',{headers:appHeader(access)});check(r,200,'read encrypted');
   assert.equal(r.body.payload,encrypted);
+  const another=JSON.stringify(await seal({message:'second'},'sample-password-123',uid+'/weatherhannun/second'));
+  check(await result('/api/apps/weatherhannun/items/second',{method:'PUT',headers:{...appHeader(access),'Content-Type':'application/json'},body:JSON.stringify({payload:another,expectedRevision:0})}),200,'second encrypted record');
   const listed=await result('/api/apps/weatherhannun/items?limit=1',{headers:appHeader(access)});
   check(listed,200,'encrypted item list');assert.equal(listed.body.items.length,1);
-  assert.equal(listed.body.items[0].id,'favorite');assert.equal(listed.body.items[0].revision,1);
   assert.equal(Object.hasOwn(listed.body.items[0],'payload'),false,'metadata-only listing');
+  assert.ok(listed.body.cursor,'paginated list must return continuation');
+  const secondPage=await result('/api/apps/weatherhannun/items?limit=1&cursor='+encodeURIComponent(listed.body.cursor),{headers:appHeader(access)});
+  check(secondPage,200,'second metadata page');assert.equal(secondPage.body.items.length,1);
+  assert.notEqual(secondPage.body.items[0].id,listed.body.items[0].id);
+  assert.equal(secondPage.body.cursor,null,'last page cursor');
   check(await result('/api/apps/weatherhannun/items?limit=101',{headers:appHeader(access)}),400,'invalid pagination size');
   const decrypted=await unseal(JSON.parse(r.body.payload),'sample-password-123',uid+'/weatherhannun/favorite');
   assert.equal(decrypted.message,'test only');
