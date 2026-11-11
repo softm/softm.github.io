@@ -133,13 +133,13 @@ async function me(request,env){
     naverPublic:env.NAVER_PUBLIC_ENABLED==='true',deletionEnabled:env.ENABLE_ACCOUNT_DELETION==='true'});
 }
 async function accountAPI(request,env,path){
-  sameOrigin(request);
   if(path==='/api/me'&&request.method==='GET')return me(request,env);
   if(path==='/api/connect/info'&&request.method==='GET'){
     const ctx=await context(request,env);
     return json({site:ctx.site,origin:ctx.origin,name:validSite(env,ctx.site,ctx.origin).name});
   }
   if(request.method!=='POST')error('method-not-allowed',405);
+  sameOrigin(request);
   if(path==='/api/logout'){
     const token=cookies(request)['__Host-sh_session'];
     if(token&&PROOF.test(token))await env.DB.prepare('DELETE FROM web_sessions WHERE token_hash=?').bind(await sha256(token)).run();
