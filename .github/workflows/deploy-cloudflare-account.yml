@@ -55,12 +55,15 @@ jobs:
         if: steps.settings.outputs.ready == 'true'
         run: |
           node -e 'const fs=require("fs");const p="wrangler.jsonc";const c=JSON.parse(fs.readFileSync(p,"utf8"));c.vars.PUBLIC_BASE_URL=process.env.PUBLIC_BASE_URL;fs.writeFileSync(p,JSON.stringify(c,null,2));'
-      - name: Deploy isolated Worker and provision D1
+      - name: Verify existing D1 database access
         if: steps.settings.outputs.ready == 'true'
-        run: npx wrangler deploy
+        run: npx wrangler d1 info softm-hannun-account
       - name: Create database schema
         if: steps.settings.outputs.ready == 'true'
         run: npx wrangler d1 execute softm-hannun-account --remote --file=schema.sql --yes
+      - name: Deploy isolated Worker with existing D1 binding
+        if: steps.settings.outputs.ready == 'true'
+        run: npx wrangler deploy
       - name: Check Worker health
         if: steps.settings.outputs.ready == 'true'
         run: curl --fail --silent --show-error "$PUBLIC_BASE_URL/health"
