@@ -33,7 +33,6 @@ jobs:
         run: node scripts/local-smoke.mjs
       - name: Verify secrets never committed
         run: |
+          test -z "$(git ls-files -- '.dev.vars' '.dev.vars.*' 'node_modules/**' 'migration-*.sql' 'migration-*.json')"
           test ! -f .dev.vars
-          test ! -d node_modules
-          test ! -f migration-private.sql
 # No production deployment from this workflow: controlled manual cutover only.
