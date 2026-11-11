@@ -67,3 +67,11 @@ CREATE TABLE IF NOT EXISTS items (
   PRIMARY KEY(user_id, site, item_id)
 );
 CREATE INDEX IF NOT EXISTS ix_items_site ON items(user_id,site,updated_at);
+
+-- Short-lived hashed rate buckets. Raw IP addresses are never stored.
+CREATE TABLE IF NOT EXISTS request_buckets (
+  bucket_hash TEXT PRIMARY KEY,
+  count INTEGER NOT NULL DEFAULT 1,
+  expires_at INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS ix_request_buckets_exp ON request_buckets(expires_at);
