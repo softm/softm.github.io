@@ -59,11 +59,18 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
     const u=uid(),payload=JSON.stringify(await seal(value,password,u+'/'+siteId+'/'+itemId));
     return (await api('/api/apps/'+siteId+'/items/'+encodeURIComponent(itemId),'PUT',{payload,expectedRevision})).revision;
   }
+  async function list({pageSize=30,cursor=null}={}){
+    uid();
+    if(!Number.isSafeInteger(pageSize)||pageSize<1||pageSize>100)throw Error('잘못된 목록 크기입니다.');
+    const params=new URLSearchParams({limit:String(pageSize)});
+    if(cursor)params.set('cursor',cursor);
+    return api('/api/apps/'+siteId+'/items?'+params,'GET');
+  }
   async function remove(itemId,{expectedRevision}={}){
     uid();return api('/api/apps/'+siteId+'/items/'+encodeURIComponent(itemId),'DELETE',{expectedRevision});
   }
   async function logout(){
     if(auth){try{await api('/api/apps/'+siteId+'/logout','POST',{});}finally{auth=null;}}
   }
-  return {login,get,put,remove,logout,get currentUser(){return auth&&auth.expiresAt>Date.now()?{uid:auth.uid}:null;}};
+  return {login,get,put,list,remove,logout,get currentUser(){return auth&&auth.expiresAt>Date.now()?{uid:auth.uid}:null;}};
 }
