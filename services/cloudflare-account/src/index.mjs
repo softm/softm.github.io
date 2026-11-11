@@ -41,7 +41,7 @@ function publicBase(request,env){
   const base=new URL(value);
   const requestOrigin=new URL(request.url).origin;
   if(base.origin!==requestOrigin||base.pathname!=='/'||base.search||base.hash)error('public-url-mismatch',503);
-  if(base.protocol!=='https:' && !(base.protocol==='http:'&&base.hostname==='localhost'))error('public-url-not-https',503);
+  if(base.protocol!=='https:' && !(base.protocol==='http:'&&['localhost','127.0.0.1'].includes(base.hostname)))error('public-url-not-https',503);
   return base.origin;
 }
 function setHeaders(res){
