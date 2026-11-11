@@ -87,7 +87,10 @@ async function run(){
   check(await result('/api/account/delete',{method:'POST',headers:{Cookie:sessionCookie,Origin:host,'Content-Type':'application/json'},body:'{"confirmation":"회원탈퇴"}'}),503,'delete locked');
   check(await result('/api/apps/weatherhannun/logout',{method:'POST',headers:appHeader(access)}),200,'app logout');
   check(await result('/api/apps/weatherhannun/items/favorite',{headers:appHeader(access)}),401,'revoked app session');
-  console.log('PASS local D1: health, login session, allowlisted origin, PKCE, replay, AES-GCM, revision lock, logout, cross-system delete safety');
+  for(let i=0;i<19;i++){const allowed=await request(target.pathname+target.search);assert.equal(allowed.status,303,'allowed connection attempt '+i);}
+  const limited=await request(target.pathname+target.search);
+  assert.equal(limited.status,429,'central per-IP connection limit must stop excess requests');
+  console.log('PASS local D1: health, login session, allowlisted origin, PKCE, replay, AES-GCM, revision lock, pagination, logout, deletion lock, rate limiting');
 }
 try{await run();}catch(e){console.error(e.stack||String(e));console.error('Wrangler output:',log.slice(-4000));process.exitCode=1;}
 finally{if(child&&child.exitCode===null){child.kill('SIGTERM');await sleep(750);if(child.exitCode===null)child.kill('SIGKILL');}}
