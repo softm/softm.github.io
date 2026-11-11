@@ -41,5 +41,12 @@ npx wrangler dev --var PUBLIC_BASE_URL:http://localhost:8787
 - 실 SNS OAuth: 개발자 콘솔 등록 + 실제 제공자 계정으로 성공·취소·동일 UID·공개 승인 범위를 수동 검증해야 한다. 자동화된 가짜 제공자 검사를 운영 실계정 테스트로 보고하지 않는다.
 - GitHub Actions 스테이징 배포는 Cloudflare 자격증명과 Worker URL이 갖춰지면 실행된다. 이전 Firebase 배포 구성·기존 가입자·Android는 전혀 건드리지 않는다.
 
+## 2026-11-11 D1 최초 배포 진단
+
+- Cloudflare D1 `softm-hannun-account` 생성 확인. `wrangler.jsonc`에 실제 `database_id`와 `softm.workers.dev` 계정 주소를 반영했다.
+- 최초 자동 배포는 인증정보·소스 테스트까지 통과했으나 Worker 생성 시 `binding DB of type d1 failed to generate [10021]`을 반환했다. D1 존재·계정 권한·일시적 플랫폼 오류 여부는 확인이 필요하다.
+- 배포 워크플로를 `wrangler d1 info` → `schema.sql --remote` → `wrangler deploy` → `/health` 순서로 수정해 오류 위치를 분리했다.
+- 스키마와 Worker가 실제 배포되고 `/health`가 200을 반환하기 전까지 배포 완료라고 보고하지 않는다.
+
 ## 상태
 코드 구현 단계. Cloudflare 배포/도메인 등록/실제 SNS 로그인/운영 Firebase 데이터 이전은 **미완료**. 현재 Firebase용 공통 SDK와 Android 앱은 이 신규 서버를 자동 사용하지 않는다. 기존 앱을 일괄 전환하면 안 된다.
