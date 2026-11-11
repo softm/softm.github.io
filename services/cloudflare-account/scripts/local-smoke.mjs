@@ -71,7 +71,7 @@ async function run(){
   assert.equal(r.body.payload,encrypted);
   const decrypted=await unseal(JSON.parse(r.body.payload),'sample-password-123',uid+'/weatherhannun/favorite');
   assert.equal(decrypted.message,'test only');
-  check(await result('/api/apps/gagyebu/items/favorite',{headers:appHeader(access)}),403,'site isolation');
+  check(await result('/api/apps/gagyebu/items/favorite',{headers:appHeader(access)}),401,'site-scoped bearer not valid for another app');
   check(await result('/api/apps/weatherhannun/items/favorite',{headers:{Origin:'https://evil.example',Authorization:'Bearer '+access}}),403,'origin isolation');
   check(await result('/api/account/delete',{method:'POST',headers:{Cookie:sessionCookie,Origin:host,'Content-Type':'application/json'},body:'{"confirmation":"회원탈퇴"}'}),503,'delete locked');
   check(await result('/api/apps/weatherhannun/logout',{method:'POST',headers:appHeader(access)}),200,'app logout');
