@@ -99,6 +99,8 @@ async function finishOAuth(request,env,provider){
     const current=await env.DB.prepare('SELECT id FROM users WHERE id=? AND disabled_at IS NULL').bind(row.link_uid).first();
     if(!current)error('link-session-expired',401);
     if(existing&&existing.user_id!==current.id)error('provider-already-linked',409);
+    const assigned=await env.DB.prepare('SELECT subject_hash FROM identities WHERE user_id=? AND provider=?').bind(current.id,provider).first();
+    if(assigned&&assigned.subject_hash!==digest)error('provider-slot-already-linked',409);
     if(!existing)await env.DB.prepare('INSERT INTO identities(subject_hash,user_id,provider,created_at) VALUES(?,?,?,?)').bind(digest,current.id,provider,now()).run();
     uid=current.id;
   }else if(existing){
@@ -122,8 +124,11 @@ async function finishOAuth(request,env,provider){
   const user=await env.DB.prepare('SELECT id,display_name,avatar_url FROM users WHERE id=? AND disabled_at IS NULL').bind(uid).first();
   if(!user)error('account-disabled',403);
   if(profile.name||profile.photo){
-    await env.DB.prepare("UPDATE users SET display_name=CASE WHEN ?='' THEN display_name ELSE ? END, avatar_url=CASE WHEN ?='' THEN avatar_url ELSE ? END WHERE id=?")
-      .bind(profile.name,profile.name,profile.photo,profile.photo,uid).run();
+    // A secondary provider must not overwrite the member's chosen primary profile.
+    const nextName=row.mode==='link'&&user.display_name?'':profile.name;
+    const nextPhoto=row.mode==='link'&&user.avatar_url?'':profile.photo;
+    if(nextName||nextPhoto)await env.DB.prepare("UPDATE users SET display_name=CASE WHEN ?='' THEN display_name ELSE ? END, avatar_url=CASE WHEN ?='' THEN avatar_url ELSE ? END WHERE id=?")
+      .bind(nextName,nextName,nextPhoto,nextPhoto,uid).run();
   }
   const sessionToken=random();
   await env.DB.prepare('INSERT INTO web_sessions(token_hash,user_id,authenticated_at,expires_at) VALUES(?,?,?,?)')
