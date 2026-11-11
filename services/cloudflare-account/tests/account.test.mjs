@@ -36,7 +36,7 @@ test('minimal UI contains consent, account linking, no vault editor',()=>{
   assert.doesNotMatch(html,/보관소 암호/);
   assert.match(clientScript,/postMessage/);assert.match(clientScript,/connect\/authorize/);
 });
-const env={DB:{prepare:()=>({bind:()=>({first:async()=>null})})},NAVER_PUBLIC_ENABLED:'false'};
+const env={DB:{prepare:()=>({first:async()=>null,bind:()=>({first:async()=>null})})},NAVER_PUBLIC_ENABLED:'false'};
 test('health is public and omits secrets',async()=>{
   const res=await worker.fetch(new Request('https://worker.example/health'),env);
   const data=await res.json();assert.equal(res.status,200);assert.equal(data.ok,true);assert.equal(data.naverPublic,false);
