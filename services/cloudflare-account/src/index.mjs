@@ -190,7 +190,7 @@ async function exchangeConnect(request,env){
   const token=random();
   await env.DB.prepare('INSERT INTO app_sessions(token_hash,user_id,site,expires_at) VALUES(?,?,?,?)')
     .bind(await sha256(token),code.user_id,code.site,now()+3600).run();
-  return json({accessToken:token,tokenType:'Bearer',expiresIn:3600});
+  return json({accessToken:token,tokenType:'Bearer',expiresIn:3600,uid:code.user_id});
 }
 async function requireApp(request,env,site){
   const origin=request.headers.get('Origin');
@@ -205,6 +205,14 @@ function validatePayload(data){
   if(typeof data.payload!=='string'||data.payload.length>180000)error('invalid-encrypted-payload');
   let p;try{p=JSON.parse(data.payload)}catch{error('invalid-encrypted-payload');}
   if(!p||p.v!==1||p.algorithm!=='AES-GCM'||typeof p.ct!=='string'||typeof p.iv!=='string'||typeof p.salt!=='string')error('invalid-encrypted-payload');
+}
+async function revokeApp(request,env,url){
+  const m=url.pathname.match(/^\/api\/apps\/([a-z0-9_-]+)\/logout$/);
+  if(!m||request.method!=='POST')error('not-found',404);
+  const site=m[1];await requireApp(request,env,site);
+  const token=request.headers.get('Authorization').slice(7);
+  await env.DB.prepare('DELETE FROM app_sessions WHERE token_hash=? AND site=?').bind(await sha256(token),site).run();
+  return json({ok:true});
 }
 async function itemsAPI(request,env,url){
   const m=url.pathname.match(/^\/api\/apps\/([a-z0-9_-]+)\/items\/([A-Za-z0-9_-]{1,80})$/);
@@ -263,6 +271,7 @@ async function route(request,env){
   }
   if(path.startsWith('/auth/')&&request.method==='GET')return startOAuth(request,env,path.split('/')[2]);
   if(path==='/api/connect/exchange'&&request.method==='POST')return exchangeConnect(request,env);
+  if(path.startsWith('/api/apps/')&&path.endsWith('/logout'))return revokeApp(request,env,url);
   if(path.startsWith('/api/apps/'))return itemsAPI(request,env,url);
   if(path.startsWith('/api/'))return accountAPI(request,env,path);
   error('not-found',404);
