@@ -4,6 +4,7 @@
   "main": "src/index.mjs",
   "compatibility_date": "2026-11-10",
   "workers_dev": true,
+  "triggers": { "crons": ["0 2 * * *"] },
   "vars": {
     "PUBLIC_BASE_URL": "https://softm-hannun-account.<your-subdomain>.workers.dev",
     "ALLOW_NEW_REGISTRATIONS": "false",
