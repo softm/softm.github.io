@@ -1,0 +1,35 @@
+name: Cloudflare account implementation checks
+on:
+  push:
+    paths:
+      - "services/cloudflare-account/**"
+      - ".github/workflows/cloudflare-account-check.yml"
+  pull_request:
+    paths:
+      - "services/cloudflare-account/**"
+      - ".github/workflows/cloudflare-account-check.yml"
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/cloudflare-account
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Syntax checks
+        run: npm run check
+      - name: Unit and security smoke tests
+        run: npm test
+      - name: Validate migration preparation syntax
+        run: node --check scripts/prepare-migration.mjs
+      - name: Verify secrets never committed
+        run: |
+          test ! -f .dev.vars
+          test ! -d node_modules
+          test ! -f migration-private.sql
+# No production deployment from this workflow: controlled manual cutover only.
