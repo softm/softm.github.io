@@ -1,0 +1,16 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "softm-hannun-account",
+  "main": "src/index.mjs",
+  "compatibility_date": "2026-11-10",
+  "workers_dev": true,
+  "vars": {
+    "PUBLIC_BASE_URL": "https://softm-hannun-account.<your-subdomain>.workers.dev",
+    "ALLOW_NEW_REGISTRATIONS": "false",
+    "NAVER_PUBLIC_ENABLED": "false",
+    "ENABLE_ACCOUNT_DELETION": "false"
+  },
+  "d1_databases": [
+    { "binding": "DB", "database_name": "softm-hannun-account" }
+  ]
+}
