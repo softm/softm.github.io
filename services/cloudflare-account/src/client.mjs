@@ -11,7 +11,7 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
     if(!auth)throw Error('로그인해 주세요.');
     const response=await fetch(base.origin+path,{method,headers:{Authorization:'Bearer '+auth.token,...(body?{'Content-Type':'application/json'}:{})},body:body?JSON.stringify(body):undefined,cache:'no-store'});
     const data=await response.json();
-    if(!response.ok)throw Error(data.message||data.error||'계정 서버에 연결하지 못했습니다.');
+    if(!response.ok){const e=Error(data.message||data.error||'계정 서버에 연결하지 못했습니다.');e.code=data.error;e.status=response.status;throw e;}
     return data;
   }
   async function login(){
@@ -50,7 +50,9 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
   function uid(){if(!auth||auth.expiresAt<=Date.now())throw Error('로그인을 다시 해 주세요.');return auth.uid;}
   async function get(itemId,{password}={}){
     const id=encodeURIComponent(itemId),u=uid();
-    const result=await api('/api/apps/'+siteId+'/items/'+id,'GET');
+    let result;
+    try{result=await api('/api/apps/'+siteId+'/items/'+id,'GET');}
+    catch(e){if(e.code==='item-not-found')return null;throw e;}
     return {id:itemId,revision:result.revision,value:await unseal(JSON.parse(result.payload),password,u+'/'+siteId+'/'+itemId)};
   }
   async function put(itemId,value,{password,expectedRevision=0}={}){
