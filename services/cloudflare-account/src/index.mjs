@@ -39,9 +39,9 @@ function publicBase(request,env){
   const value=env.PUBLIC_BASE_URL;
   if(typeof value!=='string'||value.includes('<')||value.includes('your-subdomain'))error('public-url-not-configured',503);
   const base=new URL(value);
-  if(base.origin!==new URL(request.url).origin||base.pathname!=='/'||base.protocol!=='https:'){
-    if(!(new URL(request.url).hostname==='localhost'&&base.origin==='http://localhost:8787'))error('public-url-mismatch',503);
-  }
+  const requestOrigin=new URL(request.url).origin;
+  if(base.origin!==requestOrigin||base.pathname!=='/'||base.search||base.hash)error('public-url-mismatch',503);
+  if(base.protocol!=='https:' && !(base.protocol==='http:'&&base.hostname==='localhost'))error('public-url-not-https',503);
   return base.origin;
 }
 function setHeaders(res){
@@ -104,7 +104,15 @@ async function finishOAuth(request,env,provider){
   }else if(existing){
     uid=existing.user_id;
   }else{
-    if(env.ALLOW_NEW_REGISTRATIONS!=='true')error('migration-registration-locked',503);
+    // Optional test-user allowlist permits staging sign-in without opening
+    // registration for existing Firebase users that have not been migrated.
+    let testIdentityAllowed=false;
+    if(env.ALLOWED_TEST_IDENTITY_HASHES_JSON){
+      let allowed;try{allowed=JSON.parse(env.ALLOWED_TEST_IDENTITY_HASHES_JSON);}catch{error('invalid-test-identity-allowlist',503);}
+      if(!Array.isArray(allowed)||allowed.some(x=>typeof x!=='string'||!/^[a-f0-9]{64}$/.test(x)))error('invalid-test-identity-allowlist',503);
+      testIdentityAllowed=allowed.includes(digest);
+    }
+    if(env.ALLOW_NEW_REGISTRATIONS!=='true'&&!testIdentityAllowed)error('migration-registration-locked',503);
     uid='sh_'+crypto.randomUUID().replace(/-/g,'');
     await env.DB.batch([
       env.DB.prepare('INSERT INTO users(id,display_name,avatar_url,created_at) VALUES(?,?,?,?)').bind(uid,profile.name,profile.photo,now()),
@@ -130,7 +138,7 @@ async function me(request,env){
   if(!user)return json({user:null,naverPublic:env.NAVER_PUBLIC_ENABLED==='true',deletionEnabled:false});
   const providers=await env.DB.prepare('SELECT provider FROM identities WHERE user_id=? ORDER BY provider').bind(user.id).all();
   return json({user:{id:user.id,name:user.display_name||'',avatar:user.avatar_url||'',consentVersion:user.consent_version||null,providers:(providers.results||[]).map(x=>x.provider)},
-    naverPublic:env.NAVER_PUBLIC_ENABLED==='true',deletionEnabled:env.ENABLE_ACCOUNT_DELETION==='true'});
+    naverPublic:env.NAVER_PUBLIC_ENABLED==='true',deletionEnabled:false});
 }
 async function accountAPI(request,env,path){
   if(path==='/api/me'&&request.method==='GET')return me(request,env);
@@ -160,11 +168,10 @@ async function accountAPI(request,env,path){
     return json({code,site:ctx.site,origin:ctx.origin,request:ctx.request_id});
   }
   if(path==='/api/account/delete'){
-    if(env.ENABLE_ACCOUNT_DELETION!=='true')error('migration-not-complete',503);
-    if(now()-user.authenticated_at>300)error('recent-login-required',401);
-    const b=await readJSON(request,2000);if(b.confirmation!=='회원탈퇴')error('confirmation-required',400);
-    await env.DB.prepare('DELETE FROM users WHERE id=?').bind(user.id).run();
-    return json({deleted:true},200,{'Set-Cookie':cookieClear('session')});
+    // Never delete only D1 while the corresponding Firebase account, ledger,
+    // backups and inherited services may still exist. This endpoint is locked
+    // until a verified cross-system deletion job is implemented.
+    error('migration-not-complete',503);
   }
   error('not-found',404);
 }
@@ -184,9 +191,13 @@ async function exchangeConnect(request,env){
   if(!origin||body.origin!==origin||!PROOF.test(body.code||'')||!PROOF.test(body.verifier||''))error('invalid-exchange',403);
   validSite(env,body.site,origin);
   const hash=await sha256(body.code);
-  const code=await env.DB.prepare('UPDATE auth_codes SET used=1 WHERE code_hash=? AND used=0 AND expires_at>? RETURNING user_id,site,origin,challenge')
+  const code=await env.DB.prepare('SELECT user_id,site,origin,challenge FROM auth_codes WHERE code_hash=? AND used=0 AND expires_at>?')
     .bind(hash,now()).first();
   if(!code||code.site!==body.site||code.origin!==origin||!equal(await challenge(body.verifier),code.challenge))error('invalid-or-expired-code',401);
+  // Consume exactly once AFTER checking the proof and the target.
+  const consumed=await env.DB.prepare('UPDATE auth_codes SET used=1 WHERE code_hash=? AND used=0 AND expires_at>?')
+    .bind(hash,now()).run();
+  if(consumed.meta?.changes!==1)error('invalid-or-expired-code',401);
   const token=random();
   await env.DB.prepare('INSERT INTO app_sessions(token_hash,user_id,site,expires_at) VALUES(?,?,?,?)')
     .bind(await sha256(token),code.user_id,code.site,now()+3600).run();
