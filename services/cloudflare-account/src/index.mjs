@@ -261,8 +261,12 @@ function cors(request,env,response){
 }
 async function route(request,env){
   const url=new URL(request.url),path=url.pathname;
-  if(path==='/health')return json({ok:true,service:'softm-hannun-account',version:1,naverPublic:env.NAVER_PUBLIC_ENABLED==='true'});
   if(!env.DB)error('database-not-configured',503);
+  if(path==='/health'){
+    if(request.method!=='GET')error('method-not-allowed',405);
+    await env.DB.prepare('SELECT id FROM users LIMIT 1').first();
+    return json({ok:true,service:'softm-hannun-account',version:1,naverPublic:env.NAVER_PUBLIC_ENABLED==='true'});
+  }
   if(path==='/client.js')return new Response(clientScript,{headers:{'Content-Type':'text/javascript; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
   if(path==='/account'||path==='/connect'&&!url.searchParams.has('site'))return html();
   if(path==='/connect'&&request.method==='GET')return registerConnect(request,env);
