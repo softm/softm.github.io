@@ -11,7 +11,7 @@
 ## API
 | 메서드/경로 | 인증 | 입력 | 반환/작용 |
 |---|---|---|---|
-| GET /health | 없음 | - | {ok, service, version}, 비밀 미출력 |
+| GET /health | 없음 | - | {ok, service, version, registrationLocked, providers:{google,kakao,naver}}, 비밀값 미출력 |
 | GET /account | 쿠키 선택 | - | 계정 UI |
 | GET /connect | 없음 | site, origin, challenge, request | 연결 요청 등록 + 쿠키/UI |
 | GET /auth/:provider | 쿠키 선택 | mode=login/link | OAuth state 생성 및 공급자 이동 |
