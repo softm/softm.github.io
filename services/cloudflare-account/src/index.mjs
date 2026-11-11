@@ -204,7 +204,7 @@ async function requireApp(request,env,site){
 function validatePayload(data){
   if(typeof data.payload!=='string'||data.payload.length>180000)error('invalid-encrypted-payload');
   let p;try{p=JSON.parse(data.payload)}catch{error('invalid-encrypted-payload');}
-  if(!p||p.v!==1||p.algorithm!=='AES-GCM'||typeof p.ct!=='string'||typeof p.iv!=='string'||typeof p.salt!=='string')error('invalid-encrypted-payload');
+  if(!p||p.v!==1||p.algorithm!=='AES-GCM'||p.iterations!==310000||typeof p.ct!=='string'||typeof p.iv!=='string'||typeof p.salt!=='string')error('invalid-encrypted-payload');
 }
 async function revokeApp(request,env,url){
   const m=url.pathname.match(/^\/api\/apps\/([a-z0-9_-]+)\/logout$/);
