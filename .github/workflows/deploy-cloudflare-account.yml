@@ -1,0 +1,50 @@
+name: Deploy isolated Cloudflare account Worker
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: "Type DEPLOY_STAGING to deploy the isolated Worker (never modifies Firebase)"
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  deploy:
+    if: ${{ github.event.inputs.confirmation == 'DEPLOY_STAGING' }}
+    runs-on: ubuntu-latest
+    environment: cloudflare-account-staging
+    defaults:
+      run:
+        working-directory: services/cloudflare-account
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      PUBLIC_BASE_URL: ${{ vars.SOFTM_ACCOUNT_PUBLIC_BASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate required deployment configuration
+        run: |
+          test -n "$CLOUDFLARE_API_TOKEN"
+          test -n "$CLOUDFLARE_ACCOUNT_ID"
+          case "$PUBLIC_BASE_URL" in
+            https://*.workers.dev|https://*.designboard.net) ;;
+            *) echo "Invalid Worker URL setting"; exit 1 ;;
+          esac
+      - name: Install Wrangler
+        run: npm install --no-audit --no-fund
+      - name: Verify implementation
+        run: npm run check && npm test
+      - name: Pin exact Worker URL in local config
+        run: |
+          node -e 'const fs=require("fs");const p="wrangler.jsonc";const c=JSON.parse(fs.readFileSync(p,"utf8"));c.vars.PUBLIC_BASE_URL=process.env.PUBLIC_BASE_URL;fs.writeFileSync(p,JSON.stringify(c,null,2));'
+      - name: Deploy isolated Worker and provision D1
+        run: npx wrangler deploy
+      - name: Create database schema
+        run: npx wrangler d1 execute softm-hannun-account --remote --file=schema.sql --yes
+      - name: Check Worker health
+        run: curl --fail --silent --show-error "$PUBLIC_BASE_URL/health"
+# OAuth provider client secrets and callback registrations must be set separately.
+# This workflow does not switch existing apps, Firebase, or Android clients.
