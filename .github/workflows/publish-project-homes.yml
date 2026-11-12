@@ -114,6 +114,7 @@ jobs:
         with:
           name: project-home-build-report
           path: projects/home-build.json
+          retention-days: 1
   verify-live:
     needs: generate
     runs-on: ubuntu-latest
@@ -138,3 +139,5 @@ jobs:
           path: |
             ${{ runner.temp }}/title-parity-live.json
             projects/title-audit/live-titles.json
+
+          retention-days: 1
