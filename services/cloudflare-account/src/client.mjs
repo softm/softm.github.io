@@ -21,7 +21,8 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
     if(!response.ok){const e=Error(data.message||data.error||'계정 서버에 연결하지 못했습니다.');e.code=data.error;e.status=response.status;throw e;}
     return data;
   }
-  async function login(){
+  async function login(provider=null){
+    if(provider!==null&&!['google','kakao','naver'].includes(provider))throw Error('지원하지 않는 SNS 로그인입니다.');
     // Must open synchronously in the button's click event to avoid popup blockers.
     const popup=window.open('about:blank','_blank','popup,width=480,height=780');
     if(!popup)throw Error('로그인 팝업을 허용해 주세요.');
@@ -33,6 +34,7 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
       url.searchParams.set('origin',location.origin);
       url.searchParams.set('challenge',challenge);
       url.searchParams.set('request',request);
+      if(provider)url.searchParams.set('provider',provider);
       return await new Promise((resolve,reject)=>{
         let timer,watch,settled=false;
         const clean=()=>{window.removeEventListener('message',receive);clearTimeout(timer);clearInterval(watch);};
@@ -43,9 +45,9 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
           try{
             const response=await fetch(base.origin+'/api/connect/exchange',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({site:siteId,origin:location.origin,code:event.data.code,verifier})});
             const value=await response.json();if(!response.ok)throw Error(value.message||'앱 로그인을 완료하지 못했습니다.');
-            auth={token:value.accessToken,uid:value.uid,expiresAt:Date.now()+value.expiresIn*1000};
+            auth={token:value.accessToken,uid:value.uid,provider:provider||null,expiresAt:Date.now()+value.expiresIn*1000};
             try{sessionStorage.setItem(sessionKey,JSON.stringify(auth));}catch{}
-            settled=true;popup.close();resolve({uid:auth.uid});
+            settled=true;popup.close();resolve({uid:auth.uid,provider:auth.provider});
           }catch(e){stop(e);}
         };
         window.addEventListener('message',receive);
@@ -86,5 +88,5 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
     try{if(auth&&auth.expiresAt>Date.now())await api('/api/apps/'+siteId+'/logout','POST',{});}
     finally{auth=null;try{sessionStorage.removeItem(sessionKey);}catch{}}
   }
-  return {login,get,put,list,remove,logout,exchangeLedger,get currentUser(){return auth&&auth.expiresAt>Date.now()?{uid:auth.uid}:null;}};
+  return {login,get,put,list,remove,logout,exchangeLedger,get currentUser(){return auth&&auth.expiresAt>Date.now()?{uid:auth.uid,provider:auth.provider||null}:null;}};
 }
