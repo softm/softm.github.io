@@ -1,6 +1,7 @@
 import {PROOF, ITEM_ID, CONSENT_VERSION, now, random, sha256, challenge, equal, cookies, cookie, json, error, sameOrigin, readJSON,base64url,from64} from './crypto.mjs';
 import {providerConfig, authorizeUrlWithPkce, exchangeProfile} from './oauth.mjs';
 import {page, clientScript} from './ui.mjs';
+import {ledgerExchange} from './gagyebu-ledger.mjs';
 
 const DEFAULT_SITES={
   weatherhannun:{name:'날씨한눈',origins:['https://softm.github.io']},
@@ -321,7 +322,8 @@ async function route(request,env){
         kakao:!!(env.KAKAO_CLIENT_ID&&env.KAKAO_CLIENT_SECRET),
         naver:env.NAVER_PUBLIC_ENABLED==='true'&&!!(env.NAVER_CLIENT_ID&&env.NAVER_CLIENT_SECRET)
       },
-      naverPublic:env.NAVER_PUBLIC_ENABLED==='true'});
+      naverPublic:env.NAVER_PUBLIC_ENABLED==='true',
+      features:{gagyebuLedger:!!env.GAGYEBU_LEDGER_KEY_V1}});
   }
   if(path==='/client.js')return new Response(clientScript,{headers:{'Content-Type':'text/javascript; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
   if(path==='/account'||path==='/connect'&&!url.searchParams.has('site'))return html();
@@ -339,6 +341,12 @@ async function route(request,env){
   if(path==='/api/connect/exchange'&&request.method==='POST'){
     await rateLimit(request,env,'site-exchange',40);
     return exchangeConnect(request,env);
+  }
+  if(path==='/api/apps/gagyebu/ledger'){
+    if(request.method!=='POST')error('method-not-allowed',405);
+    const uid=await requireApp(request,env,'gagyebu');
+    const payload=await readJSON(request,3400000);
+    return json(await ledgerExchange(env,uid,payload));
   }
   if(path.startsWith('/api/apps/')&&path.endsWith('/logout'))return revokeApp(request,env,url);
   if(/^\/api\/apps\/[a-z0-9_-]+\/items$/.test(path))return listItems(request,env,url);
