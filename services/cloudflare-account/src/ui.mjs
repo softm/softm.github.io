@@ -1,7 +1,7 @@
 export function page(){
   return `<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><title>한눈과 해요 · 내 계정</title>
 <style>
-:root{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",system-ui,sans-serif;color:#192638;background:#f5f7fb}*{box-sizing:border-box}body{margin:0}main{max-width:480px;margin:28px auto;padding:20px}.logo{font-size:14px;font-weight:800;color:#53627a;letter-spacing:.02em}.heading{margin:20px 0 6px;font-size:29px;line-height:1.24}p{color:#627184;line-height:1.65}.card{margin:18px 0;padding:22px;border:1px solid #e4e9f0;border-radius:18px;background:#fff;box-shadow:0 9px 28px #1b2a4810}.btn{display:block;width:100%;cursor:pointer;border:1px solid #dce2eb;border-radius:12px;background:#fff;padding:13px;margin:10px 0;font:600 15px inherit;text-align:left;color:#192638}.btn:focus-visible{outline:3px solid #4b7ed9}.btn:disabled{opacity:.5;cursor:not-allowed}.btn.primary{background:#1d344e;color:#fff;text-align:center}.btn.subtle{border:0;background:#f3f6f9;text-align:center}.btn.danger{color:#b33636}.muted{font-size:13px}.user{display:flex;align-items:center;gap:12px}.avatar{height:46px;width:46px;object-fit:cover;border-radius:100%;background:#e5eaf1}.circle{height:46px;width:46px;border-radius:50%;background:#e5eaf1;display:grid;place-items:center;font-weight:700}.username{font-weight:750}.provider-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:10px 0}.tag{padding:4px 7px;background:#eaf5ed;border-radius:7px;font-size:12px;color:#246639}.notice{padding:10px 12px;border-radius:10px;background:#fff5e9;color:#8f520c}.small-link{font-size:13px;color:#586878}label{display:block;margin:11px 0;color:#435369;font-size:13px}label input{margin-right:7px}#status{min-height:20px;font-size:13px}footer{margin:25px 0;color:#8792a2;font-size:12px;text-align:center}
+:root{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",system-ui,sans-serif;color:#192638;background:#f5f7fb}*{box-sizing:border-box}body{margin:0}main{max-width:480px;margin:28px auto;padding:20px}.logo{font-size:14px;font-weight:800;color:#53627a;letter-spacing:.02em}.heading{margin:20px 0 6px;font-size:29px;line-height:1.24}p{color:#627184;line-height:1.65}.card{margin:18px 0;padding:22px;border:1px solid #e4e9f0;border-radius:18px;background:#fff;box-shadow:0 9px 28px #1b2a4810}.btn{display:block;width:100%;cursor:pointer;border:1px solid #dce2eb;border-radius:12px;background:#fff;padding:13px;margin:10px 0;font:600 15px inherit;text-align:left;color:#192638}.btn:focus-visible{outline:3px solid #4b7ed9}.btn:disabled{opacity:.5;cursor:not-allowed}.btn.primary{background:#1d344e;color:#fff;text-align:center}.btn.subtle{border:0;background:#f3f6f9;text-align:center}.btn.danger{color:#b33636}.muted{font-size:13px}.user{display:flex;align-items:center;gap:12px}.avatar{height:46px;width:46px;object-fit:cover;border-radius:100%;background:#e5eaf1}.circle{height:46px;width:46px;border-radius:50%;background:#e5eaf1;display:grid;place-items:center;font-weight:700}.username{font-weight:750}.provider-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:10px 0}.tag{padding:4px 7px;background:#eaf5ed;border-radius:7px;font-size:12px;color:#246639}.notice{padding:10px 12px;border-radius:10px;background:#fff5e9;color:#8f520c}.small-link{font-size:13px;color:#586878}.btn[data-provider]{position:relative;min-height:50px;text-align:center;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:12px}.btn[data-provider]::before{font-weight:900;font-size:19px;line-height:1}.btn[data-provider="google"]{background:#fff;border:1px solid #dadce0;color:#202124}.btn[data-provider="google"]::before{content:"G";color:#4285f4}.btn[data-provider="kakao"]{background:#fee500;border-color:#fee500;color:#191919}.btn[data-provider="kakao"]::before{content:"●";color:#191919}.btn[data-provider="naver"]{background:#03c75a;border-color:#03c75a;color:#fff}.btn[data-provider="naver"]::before{content:"N";color:#fff}.btn[data-provider]:disabled{opacity:.6;filter:saturate(.65)}label{display:block;margin:11px 0;color:#435369;font-size:13px}label input{margin-right:7px}#status{min-height:20px;font-size:13px}footer{margin:25px 0;color:#8792a2;font-size:12px;text-align:center}
 </style></head><body><main><div class="logo">한눈과 해요 · SOFTM ACCOUNT</div><h1 class="heading">내 계정, 간편하게.</h1><p>Google·카카오·네이버로 로그인하고 여러 한눈 서비스를 하나의 계정으로 이용하세요.</p>
 <section class="card" id="login" hidden><h2>간편 로그인</h2><button class="btn" data-provider="google">Google로 계속하기</button><button class="btn" data-provider="kakao">카카오로 계속하기</button><button class="btn" data-provider="naver">네이버로 계속하기</button><p class="muted">로그인은 신원 확인에만 사용하며 SNS 게시글은 읽지 않습니다.</p></section>
 <section class="card" id="profile" hidden><div class="user"><div id="avatar" class="circle">나</div><div><div id="name" class="username"></div><div class="muted">로그인됨</div></div></div>
@@ -9,22 +9,44 @@ export function page(){
 <p class="muted">다른 SNS를 연결하면 다음부터 같은 계정으로 로그인할 수 있습니다. 이메일이 같다고 자동으로 합치지는 않습니다.</p>
 <button id="logout" class="btn subtle">로그아웃</button><button id="withdraw" class="btn danger" disabled title="기존 Firebase 계정 이전 검증 후 활성화">회원탈퇴 (이전 준비 중)</button></section>
 <section class="card" id="terms" hidden><h2>회원가입 완료</h2><p>SNS 인증이 완료되었습니다. 아래 약관에 동의하면 회원가입이 완료됩니다.</p><label><input id="t1" type="checkbox"> <a href="https://softm.github.io/account/terms.html" target="_blank" rel="noopener">이용약관</a>에 동의합니다.</label><label><input id="t2" type="checkbox"> <a href="https://softm.github.io/account/privacy.html" target="_blank" rel="noopener">개인정보 처리 안내</a>를 확인했습니다.</label><button id="accept" class="btn primary">동의하고 가입 완료</button><button id="signup-cancel" class="btn subtle" type="button">가입 취소하고 로그아웃</button></section>
-<section class="card" id="connect" hidden><h2>서비스 연결</h2><p id="connect-name"></p><button id="connect-button" class="btn primary">이 계정으로 연결하기</button><button id="cancel" class="btn subtle">연결 취소</button><p class="muted">로그인만으로 기기 데이터를 업로드하지 않습니다.</p></section>
+<section class="card" id="connect" hidden><h2 id="connect-heading">가계부에 로그인하는 중…</h2><p id="connect-name"></p><p class="muted" id="connect-detail">인증이 완료되면 원래 앱으로 자동 돌아갑니다. 별도 연결 버튼을 누를 필요가 없습니다.</p><button id="connect-button" class="btn primary" hidden>다시 연결하기</button><button id="cancel" class="btn subtle">취소</button></section>
 <p id="status" role="status" aria-live="polite"></p><footer>회원 기록은 계정에, 앱 데이터 관리는 각 서비스에</footer></main><script src="/client.js" defer></script></body></html>`;
 }
 export const clientScript=String.raw`
-const $=x=>document.querySelector(x),SITE=location.pathname==='/connect';let user=null,intent=null,busy=false;
+const $=x=>document.querySelector(x),SITE=location.pathname==='/connect';let user=null,intent=null,busy=false,autoConnecting=false,connectionSent=false;
 function status(s){$('#status').textContent=s;}
 async function call(path,method='GET',body){
  const r=await fetch(path,{method,credentials:'same-origin',headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify(body):undefined,cache:'no-store'});
  let data={};try{data=await r.json();}catch{}if(!r.ok)throw Error(data.message||data.error||'요청을 완료하지 못했습니다.');return data;
 }
 function action(el,fn){el.addEventListener('click',async()=>{if(busy)return;busy=true;status('처리 중입니다…');try{await fn();}catch(e){status(e.message)}finally{busy=false;}});}
+async function finishConnection(){
+ if(!SITE||!intent||!user||user.consentVersion!=='2026-11-11'||autoConnecting||connectionSent)return;
+ autoConnecting=true;
+ $('#connect-button').hidden=true;
+ $('#connect-heading').textContent=intent.name+' 로그인 완료 중…';
+ $('#connect-detail').textContent='원래 앱으로 자동 돌아갑니다.';
+ status('');
+ try{
+  if(!window.opener||window.opener.closed)throw Error('가계부에서 로그인 창을 다시 열어 주세요.');
+  const v=await call('/api/connect/authorize','POST',{});
+  window.opener.postMessage({type:'softm:authorization',requestId:v.request,code:v.code},v.origin);
+  connectionSent=true;
+  $('#connect-heading').textContent='연결 요청을 전달했습니다';
+  $('#connect-detail').textContent='가계부로 돌아가고 있습니다.';
+  setTimeout(()=>window.close(),1100);
+ }catch(e){
+  $('#connect-heading').textContent='자동 로그인을 완료하지 못했습니다';
+  $('#connect-detail').textContent=e.message||'가계부에서 다시 시도해 주세요.';
+  $('#connect-button').hidden=false;
+  status(e.message||'연결이 실패했습니다.');
+ }finally{autoConnecting=false;}
+}
 async function refresh(){
  const result=await call('/api/me');user=result.user;
  const member=!!user&&user.consentVersion==='2026-11-11';
  $('#login').hidden=!!user;
- $('#profile').hidden=!member;
+ $('#profile').hidden=!member||SITE;
  $('#terms').hidden=!user||member;
  $('#connect').hidden=!SITE||!intent||!member;
  if(!user)return;
@@ -45,9 +67,10 @@ async function refresh(){
  }
  $('#withdraw').disabled=!result.deletionEnabled;
  $('#withdraw').textContent=result.deletionEnabled?'회원탈퇴':'회원탈퇴 (이전 준비 중)';
+ if(SITE&&intent)await finishConnection();
 }
 async function init(){
- if(SITE){try{intent=await call('/api/connect/info');$('#connect-name').textContent=intent.name+'에 로그인합니다.';}catch(e){status(e.message);}}
+ if(SITE){try{intent=await call('/api/connect/info');$('#connect-name').textContent=intent.name+' 계정을 연결하고 있습니다.';}catch(e){status(e.message);}}
  const health=await call('/health');
  for(const b of document.querySelectorAll('[data-provider]')){
   const id=b.dataset.provider;
@@ -59,7 +82,7 @@ async function init(){
  action($('#signup-cancel'),async()=>{await call('/api/logout','POST',{});await refresh();status('회원가입을 완료하지 않고 로그아웃했습니다.');});
  action($('#accept'),async()=>{if(!$('#t1').checked||!$('#t2').checked)throw Error('필수 약관 두 항목을 확인해 주세요.');await call('/api/consent','POST',{version:'2026-11-11',accepted:true});await refresh();status('가입이 완료됐습니다.');});
  action($('#withdraw'),async()=>{if(!confirm('회원탈퇴하면 복구할 수 없습니다. 계속하시겠습니까?'))return;const v=prompt('확인을 위해 회원탈퇴를 입력해 주세요.');if(v!=='회원탈퇴')return;await call('/api/account/delete','POST',{confirmation:v});await refresh();status('탈퇴가 완료됐습니다.');});
- action($('#connect-button'),async()=>{if(!window.opener||window.opener.closed)throw Error('원래 앱에서 연결 창을 다시 열어 주세요.');const v=await call('/api/connect/authorize','POST',{});window.opener.postMessage({type:'softm:authorization',requestId:v.request,code:v.code},v.origin);status('앱에 연결 요청을 전달했습니다.');setTimeout(()=>window.close(),600);});
+ action($('#connect-button'),async()=>finishConnection());
  $('#cancel').addEventListener('click',()=>window.close());
  await refresh();
  const reason=new URLSearchParams(location.search).get('error');if(reason)status('SNS 연결을 마치지 못했습니다. 다시 시도해 주세요.');
