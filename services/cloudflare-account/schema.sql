@@ -92,3 +92,11 @@ CREATE TABLE IF NOT EXISTS gagyebu_ledger_chunks (
   PRIMARY KEY(user_id,revision,part)
 );
 CREATE INDEX IF NOT EXISTS idx_gagyebu_chunks_user ON gagyebu_ledger_chunks(user_id);
+CREATE TABLE IF NOT EXISTS gagyebu_ledger_versions (
+  user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  revision TEXT NOT NULL,
+  created_at INTEGER NOT NULL,
+  PRIMARY KEY(user_id,revision)
+);
+CREATE INDEX IF NOT EXISTS idx_gagyebu_versions_old ON gagyebu_ledger_versions(created_at);
+
