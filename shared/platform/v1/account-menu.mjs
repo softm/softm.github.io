@@ -160,7 +160,10 @@ export function mountSiteAccount({siteId, name = '이 서비스', target = 'head
     if (destroyed) return;
     const selectors=(accountTarget || TARGETS[siteId] || target).split(',').map(s=>s.trim()).filter(Boolean);
     let anchor;
-    for (const selector of selectors) {anchor=[...document.querySelectorAll(selector)].find(visible);if(anchor)break;}
+    // An empty, explicitly reserved account slot has zero dimensions before
+    // mounting; it must still win over broad fallbacks such as .topbar.
+    if(siteId==='weatherhannun')anchor=document.getElementById('siteAccountSlot');
+    if(!anchor)for (const selector of selectors) {anchor=[...document.querySelectorAll(selector)].find(visible);if(anchor)break;}
     if (!anchor) anchor=[...document.querySelectorAll('header .header-actions,header .topbar-actions,header')].find(visible);
     host.dataset.floating=String(!anchor); anchor ||= document.body;
     if (host.parentElement!==anchor) {
