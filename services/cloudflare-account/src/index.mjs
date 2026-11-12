@@ -370,6 +370,13 @@ async function route(request,env){
     const uid=await requireApp(request,env,'weatherhannun');
     return json({uid,site:'weatherhannun'});
   }
+  // Identity-only token validation for the isolated gagyebu-api Worker.
+  // This route never reads or writes a service ledger.
+  if(path==='/api/apps/gagyebu/session'){
+    if(request.method!=='GET')error('method-not-allowed',405);
+    const uid=await requireApp(request,env,'gagyebu');
+    return json({uid,site:'gagyebu'});
+  }
   if(path==='/api/apps/gagyebu/ledger'){
     if(request.method!=='POST')error('method-not-allowed',405);
     const uid=await requireApp(request,env,'gagyebu');
