@@ -25,3 +25,5 @@ jobs:
         with:
           name: project-chat-link-audit
           path: projects/link-audit/latest.json
+
+          retention-days: 1
