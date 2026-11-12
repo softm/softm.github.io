@@ -1,5 +1,10 @@
 name: Deploy dedicated gagyebu API (manual, guarded)
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'services/gagyebu-api/**'
+      - 'services/cloudflare-account/src/gagyebu-ledger.mjs'
   workflow_dispatch:
     inputs:
       confirmation:
@@ -10,7 +15,7 @@ permissions:
   contents: read
 jobs:
   deploy:
-    if: ${{ github.event.inputs.confirmation == 'DEPLOY_GAGYEBU_API' }}
+    if: ${{ github.event_name == 'push' || github.event.inputs.confirmation == 'DEPLOY_GAGYEBU_API' }}
     runs-on: ubuntu-latest
     environment: cloudflare-account-staging
     defaults:
