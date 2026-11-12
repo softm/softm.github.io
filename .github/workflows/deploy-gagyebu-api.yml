@@ -1,0 +1,43 @@
+name: Deploy dedicated gagyebu API (manual, guarded)
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: 'Type DEPLOY_GAGYEBU_API after configuring the original encryption secret'
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  deploy:
+    if: ${{ github.event.inputs.confirmation == 'DEPLOY_GAGYEBU_API' }}
+    runs-on: ubuntu-latest
+    environment: cloudflare-account-staging
+    defaults:
+      run:
+        working-directory: services/gagyebu-api
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      GAGYEBU_LEDGER_KEY_V1: ${{ secrets.GAGYEBU_LEDGER_KEY_V1 }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Require credentials and existing encryption key
+        run: |
+          test -n "$CLOUDFLARE_API_TOKEN" && test -n "$CLOUDFLARE_ACCOUNT_ID" && test -n "$GAGYEBU_LEDGER_KEY_V1" || {
+            echo "::error::Cloudflare credentials or existing GAGYEBU_LEDGER_KEY_V1 missing; no deployment"; exit 1;
+          }
+          node -e 'const s=Buffer.from(process.env.GAGYEBU_LEDGER_KEY_V1,"base64");if(s.length!==32)process.exit(1)'
+      - name: Install Wrangler
+        run: npm install --no-audit --no-fund --no-save wrangler@4
+      - name: Verify D1
+        run: npx wrangler d1 info gagyebu-db
+      - name: Deploy Worker
+        run: npx wrangler deploy
+      - name: Set existing encryption key as Worker secret
+        run: printf '%s' "$GAGYEBU_LEDGER_KEY_V1" | npx wrangler secret put GAGYEBU_LEDGER_KEY_V1
+      - name: Verify Worker
+        run: curl --fail --silent --show-error https://gagyebu-api.softm.workers.dev/health
