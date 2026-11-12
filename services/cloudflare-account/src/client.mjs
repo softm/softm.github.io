@@ -22,46 +22,76 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
     return data;
   }
   async function login(providerOrOptions=null){
-    // Preserve the provider-string API while accepting the already-opened
-    // popup from the shared site menu; never open a second blank window.
     const options=providerOrOptions&&typeof providerOrOptions==='object'?providerOrOptions:{provider:providerOrOptions};
     const provider=options.provider??null;
     if(provider!==null&&!['google','kakao','naver'].includes(provider))throw Error('지원하지 않는 SNS 로그인입니다.');
-    const popup=options.popup||window.open('about:blank','_blank','popup,width=480,height=780');
-    if(!popup)throw Error('로그인 팝업을 허용해 주세요.');
+    // Android must use its system browser. Embedded Google OAuth/WebView popups are unsupported.
+    const nativeBridge=siteId==='weatherhannun'&&typeof window.WeatherHannunAndroid?.startCloudflareLogin==='function'
+      ?window.WeatherHannunAndroid:null;
+    const popup=nativeBridge?null:options.popup||window.open('about:blank','_blank','popup,width=480,height=780');
+    if(!nativeBridge&&!popup)throw Error('로그인 팝업을 허용해 주세요.');
     try{
-      const verifier=random(),challenge=await digest(verifier),request=random();
-      if(!PROOF.test(verifier)||!PROOF.test(challenge)||!PROOF.test(request))throw Error('보안 난수 생성 오류');
+      const verifier=random(),proof=await digest(verifier),request=random();
+      if(!PROOF.test(verifier)||!PROOF.test(proof)||!PROOF.test(request))throw Error('보안 난수 생성 오류');
       const url=new URL('/connect',base);
       url.searchParams.set('site',siteId);
       url.searchParams.set('origin',location.origin);
-      url.searchParams.set('challenge',challenge);
+      url.searchParams.set('challenge',proof);
       url.searchParams.set('request',request);
       if(provider)url.searchParams.set('provider',provider);
       return await new Promise((resolve,reject)=>{
         let timer,watch,settled=false;
-        const clean=()=>{window.removeEventListener('message',receive);clearTimeout(timer);clearInterval(watch);};
-        const stop=err=>{if(settled)return;settled=true;clean();popup.close();reject(err);};
-        const receive=async event=>{
-          if(event.source!==popup||event.origin!==base.origin||event.data?.type!=='softm:authorization'||event.data?.requestId!==request)return;
-          clean();
+        const closePopup=()=>{try{popup?.close();}catch{}};
+        const clean=()=>{
+          window.removeEventListener('message',receive);
+          window.removeEventListener('weatherhannun:auth-return',receiveNative);
+          clearTimeout(timer);clearInterval(watch);
+        };
+        const stop=err=>{if(settled)return;settled=true;clean();closePopup();reject(err);};
+        const accept=async code=>{
+          if(settled)return;
+          if(!PROOF.test(code))return stop(Error('잘못된 인증 응답입니다.'));
+          settled=true;clean();
           try{
-            const response=await fetch(base.origin+'/api/connect/exchange',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({site:siteId,origin:location.origin,code:event.data.code,verifier})});
-            const value=await response.json();if(!response.ok)throw Error(value.message||'앱 로그인을 완료하지 못했습니다.');
+            const response=await fetch(base.origin+'/api/connect/exchange',{method:'POST',headers:{'Content-Type':'application/json'},
+              body:JSON.stringify({site:siteId,origin:location.origin,code,verifier})});
+            const value=await response.json();
+            if(!response.ok)throw Error(value.message||'앱 로그인을 완료하지 못했습니다.');
             auth={token:value.accessToken,uid:value.uid,provider:provider||null,expiresAt:Date.now()+value.expiresIn*1000,
               displayName:typeof value.displayName==='string'?value.displayName.slice(0,120):'',
               photoURL:typeof value.photoURL==='string'?value.photoURL.slice(0,4096):'',
               providers:Array.isArray(value.providers)?value.providers.filter(v=>['google','kakao','naver'].includes(v)):[]};
             try{sessionStorage.setItem(sessionKey,JSON.stringify(auth));}catch{}
-            settled=true;popup.close();resolve({uid:auth.uid,provider:auth.provider});
-          }catch(e){stop(e);}
+            closePopup();resolve({uid:auth.uid,provider:auth.provider});
+          }catch(e){closePopup();reject(e);}
+        };
+        const receive=event=>{
+          if(event.source!==popup||event.origin!==base.origin||event.data?.type!=='softm:authorization'||event.data?.requestId!==request)return;
+          void accept(event.data.code);
+        };
+        const receiveNative=event=>{
+          if(!nativeBridge||event.detail?.request!==request)return;
+          try{nativeBridge.takeCloudflareLoginResult?.();}catch{}
+          void accept(event.detail?.code);
         };
         window.addEventListener('message',receive);
+        if(nativeBridge)window.addEventListener('weatherhannun:auth-return',receiveNative);
         timer=setTimeout(()=>stop(Error('로그인 시간이 만료됐습니다.')),300000);
-        watch=setInterval(()=>{if(popup.closed)stop(Error('로그인 창이 닫혔습니다.'));},700);
-        popup.location.assign(url.href);
+        if(nativeBridge){
+          try{
+            if(nativeBridge.startCloudflareLogin(url.href)!==true)throw Error('Android 앱에서 브라우저를 열 수 없습니다. 앱을 업데이트해 주세요.');
+            const waiting=nativeBridge.takeCloudflareLoginResult?.();
+            if(waiting){
+              const result=JSON.parse(waiting);
+              if(result.request===request)void accept(result.code);
+            }
+          }catch(e){stop(e);}
+        }else{
+          watch=setInterval(()=>{if(popup.closed)stop(Error('로그인 창이 닫혔습니다.'));},700);
+          popup.location.assign(url.href);
+        }
       });
-    }catch(e){popup.close();throw e;}
+    }catch(e){try{popup?.close();}catch{}throw e;}
   }
   function uid(){if(!auth||auth.expiresAt<=Date.now())throw Error('로그인을 다시 해 주세요.');return auth.uid;}
   async function get(itemId,{password}={}){
