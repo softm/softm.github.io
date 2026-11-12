@@ -7,6 +7,7 @@ on:
       - 'projects/projects.json'
       - 'projects/archive-sync.js'
       - 'shared/platform/**'
+      - 'services/cloudflare-account/src/client.mjs'
       - 'account/**'
       - '.well-known/assetlinks.json'
   workflow_dispatch:
@@ -28,6 +29,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
+      - name: Validate public Cloudflare login module syntax
+        run: |
+          node --check services/cloudflare-account/src/client.mjs
+          node --check shared/platform/v1/cloudflare-weather-sdk.mjs
+          node --check shared/platform/v1/cloudflare-weather-boot.mjs
+          node --check shared/platform/v1/site-account.mjs
       - name: Verify archive list and project assignment
         run: |
           node projects/archive-sync.test.cjs
