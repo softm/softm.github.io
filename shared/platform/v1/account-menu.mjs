@@ -52,7 +52,7 @@ export function mountSiteAccount({siteId, name = '이 서비스', target = 'head
   portal.dataset.site = siteId;
   portal.style.cssText = 'position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:block';
   const ui = portal.attachShadow({mode:'open'});
-  ui.innerHTML = `<section class="menu" id="menu" role="dialog" aria-labelledby="account-name" hidden><div class="identity"><span class="avatar" aria-hidden="true"></span><div class="identity-text"><h2 class="name" id="account-name"></h2><p class="subtitle"></p></div></div><button type="button" id="login" class="action primary">로그인</button><button type="button" id="signup" class="action">회원가입</button><a id="manage" class="action" href="https://softm.github.io/account/" target="_blank" rel="noopener noreferrer" hidden>계정 관리</a><button type="button" id="logout" class="action" hidden>로그아웃</button><div class="optional" id="vault-group"><button type="button" id="vault" class="action">내 보관소</button><p class="hint">백업·복원은 별도 관리 기능입니다.</p></div><div class="optional" id="withdraw-group" hidden><a class="action danger" href="https://softm.github.io/account/#withdrawal" target="_blank" rel="noopener noreferrer">회원탈퇴</a></div><p class="hint" id="feedback" role="status" aria-live="polite"></p></section><p class="status" role="status" aria-live="polite" aria-atomic="true"></p>`;
+  ui.innerHTML = `<section class="menu" id="menu" role="dialog" aria-labelledby="account-name" hidden><div class="identity"><span class="avatar" aria-hidden="true"></span><div class="identity-text"><h2 class="name" id="account-name"></h2><p class="subtitle"></p></div></div><button type="button" id="login" class="action primary">로그인</button><button type="button" id="signup" class="action">회원가입</button><a id="manage" class="action" href="https://softm.github.io/account/" target="_blank" rel="noopener noreferrer" hidden>계정 관리</a><a id="legacy-vault" class="action" href="#" hidden>이전 보관소 확인 (Firebase)</a><button type="button" id="logout" class="action" hidden>로그아웃</button><div class="optional" id="vault-group"><button type="button" id="vault" class="action">내 보관소</button><p class="hint">백업·복원은 별도 관리 기능입니다.</p></div><div class="optional" id="withdraw-group" hidden><a class="action danger" href="https://softm.github.io/account/#withdrawal" target="_blank" rel="noopener noreferrer">회원탈퇴</a></div><p class="hint" id="feedback" role="status" aria-live="polite"></p></section><p class="status" role="status" aria-live="polite" aria-atomic="true"></p>`;
   attachStyles(ui);
   const $ = id => ui.getElementById(id);
   const trigger = root.getElementById('profile'), menu = $('menu'), toast = ui.querySelector('.status');
@@ -89,7 +89,11 @@ export function mountSiteAccount({siteId, name = '이 서비스', target = 'head
     $('account-name').textContent = view.displayName;
     ui.querySelector('.subtitle').textContent = restoring ? '로그인 상태를 확인하고 있습니다.' : view.subtitle;
     $('login').hidden = $('signup').hidden = view.signedIn;
-    $('manage').hidden = $('logout').hidden = $('withdraw-group').hidden = !view.signedIn;
+    $('manage').hidden = $('logout').hidden = !view.signedIn;
+    $('manage').href = account.accountPageUrl || 'https://softm.github.io/account/';
+    $('withdraw-group').hidden = !view.signedIn || Boolean(account.accountPageUrl);
+    $('legacy-vault').hidden = !account.legacyVaultUrl;
+    if(account.legacyVaultUrl)$('legacy-vault').href=account.legacyVaultUrl;
     $('vault-group').hidden = typeof vault?.open !== 'function';
     for (const id of ['login','signup','logout']) $(id).disabled = busy || restoring;
     const key = JSON.stringify([user?.uid, view.displayName, view.photoURL, view.signedIn]);
