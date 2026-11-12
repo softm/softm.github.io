@@ -1,7 +1,7 @@
 // WeatherHannun-only bridge to the existing Cloudflare account OAuth client.
 // This module is opt-in and never imports Firebase Auth/Firestore.
 // Remote Firebase backups are deliberately not mounted here until migrated.
-import {createCloudflareAccountClient} from '../../../services/cloudflare-account/src/client.mjs';
+import {createCloudflareAccountClient} from '../../../services/cloudflare-account/src/client.mjs?v=20261113-regex-fixed-2';
 
 export const WEATHER_ACCOUNT_BASE='https://softm-hannun-account.softm.workers.dev';
 export function createSiteClient({siteId}={}){
