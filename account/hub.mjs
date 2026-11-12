@@ -33,11 +33,14 @@ function refreshAuthButtons(){
     const provider=button.dataset.provider||button.dataset.link;
     button.disabled=authBusy||withdrawalBusy||handoffSubmitted||!auth||!config?.enabled||!config.providers[provider]||providerRestricted(provider)||!!button.dataset.link&&!auth.currentUser;
   }
-  $('#continue').disabled=authBusy||withdrawalBusy||handoffSubmitted||!auth?.currentUser||!targetValid();
+  $('#continue').disabled=authBusy||withdrawalBusy||handoffSubmitted||!auth?.currentUser||!targetValid()||legacyAndroidGagyebu();
   $('#logout').disabled=authBusy||withdrawalBusy||handoffSubmitted||!auth?.currentUser;$('#signup-submit').disabled=authBusy||withdrawalBusy||handoffSubmitted||!auth?.currentUser;
 }
 function readTarget(){const query=new URLSearchParams(location.search);return {siteId:query.get('site'),origin:query.get('origin'),challenge:query.get('challenge'),requestId:query.get('request'),transport:query.get('transport')};}
 const target=readTarget();
+// Older Android APKs open this retired Firebase login hub. Never try to
+// exchange those credentials with the new Cloudflare app session protocol.
+const legacyAndroidGagyebu=()=>target.siteId==='gagyebu'&&target.transport==='android';
 async function post(path,body,withToken=false){const response=await fetch((path.startsWith('/oauth/')?config.socialApiBase:config.apiBase)+path,{method:'POST',headers:{'Content-Type':'application/json',...(withToken?{Authorization:'Bearer '+await auth.currentUser.getIdToken()}:{})},body:JSON.stringify(body),signal:AbortSignal.timeout(20000)});const value=await response.json();if(!response.ok){const error=Error(value.message||'연결하지 못했습니다.');error.code=value.code;error.httpStatus=response.status;throw error;}return value;}
 function targetValid(){const site=registry?.sites[target.siteId];try{if(target.transport==='android')return !!nativeReturnUrl(registry,target);return !!(site&&site.origins.includes(target.origin)&&/^[A-Za-z0-9_-]{43}$/.test(target.challenge||'')&&/^[A-Za-z0-9_-]{43}$/.test(target.requestId||'')&&window.opener&&!window.opener.closed);}catch{return false;}}
 function replyToTarget(response){if(target.transport==='android'){location.assign(nativeReplyUrl(registry,target,response));}else{window.opener.postMessage({type:'softm:authorization',requestId:target.requestId,...response},target.origin);}}
@@ -53,6 +56,13 @@ function renderConnection(){
   $('#grant-user').textContent=valid&&user?(user.displayName||'현재 계정')+' 계정으로 연결할 수 있습니다.':valid?'로그인하면 이 사이트 연결까지 이어집니다.':'';
   $('#continue').hidden=!valid||!user;$('#continue').textContent=site?'이 계정으로 '+site.name+' 연결':'이 계정으로 연결';
   $('#login-card').hidden=!valid;$('#login-title').textContent=user?'다른 계정으로 연결':'로그인 방법 선택';
+  if(legacyAndroidGagyebu()){
+    $('#grant-description').textContent='이전에 설치한 가계부 앱의 Firebase 로그인 연결은 더 이상 지원되지 않습니다. Cloudflare 로그인 기능이 포함된 Android 1.0.6 이상으로 업데이트해야 합니다.';
+    $('#grant-user').textContent='기존 앱을 삭제하거나 앱 데이터를 지우지 마세요. 설치된 앱의 장부 기록을 먼저 보존해야 합니다.';
+    $('#continue').hidden=true;
+    $('#login-card').hidden=true;
+    status('앱 업데이트 필요 · 기존 기록은 앱에 그대로 보관됩니다.','error');
+  }
   refreshAuthButtons();
 }
 async function providerLogin(provider,link=false){
@@ -92,6 +102,7 @@ async function ensureMembership(){
 }
 async function authorize(){
   if(handoffSubmitted)return;
+  if(legacyAndroidGagyebu())throw Error('기존 가계부 Android 앱은 Cloudflare 계정 연결을 지원하지 않습니다. 앱 1.0.6 이상으로 업데이트하세요.');
   if(!targetValid()||!auth.currentUser)throw Error('연결 요청을 다시 시작해 주세요. 원래 사이트에서 로그인 버튼을 누르면 됩니다.');
   if(!await ensureMembership()){pendingAuthorize=true;return;}
   pendingAuthorize=false;const result=await post('/session/authorize',target,true);
