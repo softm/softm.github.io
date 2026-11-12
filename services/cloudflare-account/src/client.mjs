@@ -98,7 +98,8 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
   }
   async function requestPersonal(path,method='GET',body){
     uid();
-    if(siteId!=='weatherhannun'||!new RegExp('^/api/personal/(preferences|places)(/[A-Za-z0-9_-]{1,80})?
+    const allowedPath = /^\/api\/personal\/(?:preferences|places)(?:\/[A-Za-z0-9_-]{1,80})?$/.test(path);
+    if(siteId !== 'weatherhannun' || !allowedPath) throw Error('허용되지 않은 개인화 요청입니다.');
     const response=await fetch('https://weatherhannun-personal.softm.workers.dev'+path,{
       method,headers:{Authorization:'Bearer '+auth.token,...(body?{'Content-Type':'application/json'}:{})},
       body:body?JSON.stringify(body):undefined,cache:'no-store'
