@@ -53,6 +53,19 @@ const sites=[
       try{await later.waitFor({state:'visible',timeout:8000});visible=true;}catch(error){if(error.name!=='TimeoutError')throw error;}
       if(visible){await later.click();await later.waitFor({state:'hidden'});entry.onboarding='location deferred through visible UI';}
      }
+     if(siteId==='weatherhannun'){
+      // Authenticate nothing: ensure every nested deployed Cloudflare SDK module parses.
+      // Catches browser-only SyntaxErrors that a repository-only node --check misses.
+      const guestSdk=await page.evaluate(async()=>{
+       const account=window.SoftmAccounts?.get('weatherhannun');
+       if(!account)throw Error('Weather Cloudflare account context is missing');
+       const client=await account.ready();
+       return {siteId:client.siteId,signedIn:!!client.currentUser};
+      });
+      assert.equal(guestSdk.siteId,'weatherhannun','deployed Cloudflare SDK must load for weatherhannun');
+      assert.equal(guestSdk.signedIn,false,'guest smoke check must not sign in');
+      entry.cloudflareSdkLoaded=true;
+     }
      for(const width of [390,1280]){
       await page.setViewportSize({width,height:844});await page.waitForTimeout(400);
       const rect=await trigger.boundingBox();assert.ok(rect&&rect.x>=0&&rect.x+rect.width<=width&&rect.y>=0&&rect.y<220,'account trigger must be in the top viewport');
