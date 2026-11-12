@@ -75,3 +75,20 @@ CREATE TABLE IF NOT EXISTS request_buckets (
   expires_at INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS ix_request_buckets_exp ON request_buckets(expires_at);
+
+-- Gagyebu encrypted, versioned snapshots; no raw receipts or SMS text.
+CREATE TABLE IF NOT EXISTS gagyebu_ledger_heads (
+  user_id TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  revision TEXT NOT NULL,
+  iv TEXT NOT NULL,
+  chunk_count INTEGER NOT NULL CHECK(chunk_count BETWEEN 1 AND 40),
+  updated_at INTEGER NOT NULL
+);
+CREATE TABLE IF NOT EXISTS gagyebu_ledger_chunks (
+  user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  revision TEXT NOT NULL,
+  part INTEGER NOT NULL,
+  data TEXT NOT NULL,
+  PRIMARY KEY(user_id,revision,part)
+);
+CREATE INDEX IF NOT EXISTS idx_gagyebu_chunks_user ON gagyebu_ledger_chunks(user_id);
