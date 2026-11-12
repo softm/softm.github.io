@@ -95,14 +95,14 @@
       "deploymentNote": "실제 콘텐츠는 프로젝트 저장소에 보존하고 중앙 목록은 배포된 HTML의 archive-data를 직접 조회합니다.",
       "links": [
         {
-          "listTitle": "20261110_hwagok_spring_greens_archive_viewer",
+          "listTitle": "20261110 봄동·하루나 구매 및 월동 재배",
           "inputName": "20261110_hwagok_spring_greens_archive_viewer",
           "inputKind": "folder",
           "sourceTitle": "20261110 봄동·하루나 구매 및 월동 재배",
           "visibility": "public",
-          "label": "20261110_hwagok_spring_greens_archive_viewer",
-          "title": "20261110_hwagok_spring_greens_archive_viewer",
-          "chatTitle": "20261110_hwagok_spring_greens_archive_viewer",
+          "label": "20261110 봄동·하루나 구매 및 월동 재배",
+          "title": "20261110 봄동·하루나 구매 및 월동 재배",
+          "chatTitle": "20261110 봄동·하루나 구매 및 월동 재배",
           "date": "2026-11-10",
           "dateSource": "archive-canonical",
           "titleSource": "inbox-name",
