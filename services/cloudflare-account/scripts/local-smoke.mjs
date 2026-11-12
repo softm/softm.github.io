@@ -90,7 +90,7 @@ async function run(){
   check(await result('/api/apps/weatherhannun/items/favorite',{headers:appHeader(access)}),401,'revoked app session');
 
   // Gagyebu ledger tests run in services/gagyebu-api, not the identity Worker.
-  for(let i=0;i<18;i++){const allowed=await request(target.pathname+target.search);assert.equal(allowed.status,303,'allowed connection attempt '+i);}
+  for(let i=0;i<19;i++){const allowed=await request(target.pathname+target.search);assert.equal(allowed.status,303,'allowed connection attempt '+i);}
   const limited=await request(target.pathname+target.search);
   assert.equal(limited.status,429,'central per-IP connection limit must stop excess requests');
   console.log('PASS local D1: health, login session, allowlisted origin, PKCE, replay, AES-GCM, revision lock, pagination, logout, deletion lock, rate limiting');
