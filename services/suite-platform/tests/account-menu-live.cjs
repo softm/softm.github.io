@@ -79,6 +79,26 @@ const sites=[
      entry.ok=true;
     }catch(error){
      entry.error=String(error.message).slice(0,1600);
+     if(siteId==='weatherhannun'){
+      entry.moduleDiagnostics=await page.evaluate(async()=>{
+       const paths=['/services/cloudflare-account/src/client.mjs','/shared/platform/v1/cloudflare-weather-sdk.mjs','/shared/platform/v1/site-account.mjs'];
+       const results=[];
+       for(const p of paths){
+        const diagnosticUrl=p+'?live-diagnostic='+Date.now();
+        try{
+         const response=await fetch(diagnosticUrl,{cache:'no-store'});
+         const body=await response.text();
+         let moduleError=null;
+         try{await import(diagnosticUrl);}catch(e){moduleError=String(e.message||e);}
+         results.push({path:p,status:response.status,bytes:body.length,moduleError,
+          hasOriginalBrokenRegex:body.includes(').test(path))throw'),
+          sourceExcerpt:p.includes('/client.mjs')?body.split('\\n').slice(96,109).join('\\n'):body.slice(0,180)});
+        }catch(e){results.push({path:p,error:String(e.message||e)});}
+       }
+       return results;
+      }).catch(e=>[{error:String(e.message||e)}]);
+     }
+
      entry.dom=await page.evaluate(()=>[...document.querySelectorAll('softm-site-account')].map(el=>{
       const ancestors=[];for(let n=el;n&&ancestors.length<5;n=n.parentElement){const r=n.getBoundingClientRect(),s=getComputedStyle(n);ancestors.push({tag:n.tagName,class:n.className,rect:{x:r.x,y:r.y,width:r.width,height:r.height},display:s.display,visibility:s.visibility,pointerEvents:s.pointerEvents});}
       return {site:el.dataset.site,ancestors};
