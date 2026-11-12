@@ -6,7 +6,14 @@ async function digest(v){const b=new Uint8Array(await crypto.subtle.digest('SHA-
 export function createCloudflareAccountClient({baseUrl,siteId}){
   if(typeof baseUrl!=='string'||!/^https:\/\//.test(baseUrl)||typeof siteId!=='string'||!/^[a-z0-9_-]+$/.test(siteId))throw Error('잘못된 계정 설정입니다.');
   const base=new URL(baseUrl);if(base.pathname!=='/'||base.search||base.hash)throw Error('Worker 원본 URL만 사용해 주세요.');
+  // Session-scoped, 1h maximum; never persist tokens to permanent localStorage.
+  const sessionKey='softm-cloudflare:'+siteId+':'+base.hostname;
   let auth=null;
+  try{
+    const saved=JSON.parse(sessionStorage.getItem(sessionKey)||'null');
+    if(saved&&typeof saved.uid==='string'&&typeof saved.token==='string'&&PROOF.test(saved.token)&&saved.expiresAt>Date.now())auth=saved;
+    else sessionStorage.removeItem(sessionKey);
+  }catch{try{sessionStorage.removeItem(sessionKey);}catch{}}
   async function api(path,method,body){
     if(!auth)throw Error('로그인해 주세요.');
     const response=await fetch(base.origin+path,{method,headers:{Authorization:'Bearer '+auth.token,...(body?{'Content-Type':'application/json'}:{})},body:body?JSON.stringify(body):undefined,cache:'no-store'});
@@ -37,6 +44,7 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
             const response=await fetch(base.origin+'/api/connect/exchange',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({site:siteId,origin:location.origin,code:event.data.code,verifier})});
             const value=await response.json();if(!response.ok)throw Error(value.message||'앱 로그인을 완료하지 못했습니다.');
             auth={token:value.accessToken,uid:value.uid,expiresAt:Date.now()+value.expiresIn*1000};
+            try{sessionStorage.setItem(sessionKey,JSON.stringify(auth));}catch{}
             settled=true;popup.close();resolve({uid:auth.uid});
           }catch(e){stop(e);}
         };
@@ -69,8 +77,14 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
   async function remove(itemId,{expectedRevision}={}){
     uid();return api('/api/apps/'+siteId+'/items/'+encodeURIComponent(itemId),'DELETE',{expectedRevision});
   }
-  async function logout(){
-    if(auth){try{await api('/api/apps/'+siteId+'/logout','POST',{});}finally{auth=null;}}
+  async function exchangeLedger(payload){
+    if(siteId!=='gagyebu')throw Error('가계부 전용 API입니다.');
+    if(!payload||payload.uid!==uid())throw Error('계정이 변경됐습니다. 다시 로그인해 주세요.');
+    return api('/api/apps/gagyebu/ledger','POST',payload);
   }
-  return {login,get,put,list,remove,logout,get currentUser(){return auth&&auth.expiresAt>Date.now()?{uid:auth.uid}:null;}};
+  async function logout(){
+    try{if(auth&&auth.expiresAt>Date.now())await api('/api/apps/'+siteId+'/logout','POST',{});}
+    finally{auth=null;try{sessionStorage.removeItem(sessionKey);}catch{}}
+  }
+  return {login,get,put,list,remove,logout,exchangeLedger,get currentUser(){return auth&&auth.expiresAt>Date.now()?{uid:auth.uid}:null;}};
 }
