@@ -57,3 +57,5 @@ jobs:
         with:
           name: suite-vault-browser-verification
           path: '${{ runner.temp }}/suite-ui-results'
+
+          retention-days: 1
