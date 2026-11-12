@@ -18,6 +18,7 @@ export function createSiteClient({siteId}={}){
       emit();
       return user;
     },
+    requestPersonal:(path,method,body)=>client.requestPersonal(path,method,body),
     async logout(){
       try{await client.logout();}
       finally{emit();}
