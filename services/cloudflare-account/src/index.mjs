@@ -218,7 +218,15 @@ async function exchangeConnect(request,env){
   const token=random();
   await env.DB.prepare('INSERT INTO app_sessions(token_hash,user_id,site,expires_at) VALUES(?,?,?,?)')
     .bind(await sha256(token),code.user_id,code.site,now()+3600).run();
-  return json({accessToken:token,tokenType:'Bearer',expiresIn:3600,uid:code.user_id});
+  // Return a display-only profile with the site-bound exchange. No OAuth
+  // provider tokens, Firebase credentials or private email are exposed.
+  const profile=await env.DB.prepare('SELECT display_name,avatar_url FROM users WHERE id=? AND disabled_at IS NULL')
+    .bind(code.user_id).first();
+  const identities=await env.DB.prepare('SELECT provider FROM identities WHERE user_id=?')
+    .bind(code.user_id).all();
+  return json({accessToken:token,tokenType:'Bearer',expiresIn:3600,uid:code.user_id,
+    displayName:profile?.display_name||'',photoURL:profile?.avatar_url||'',
+    providers:(identities.results||[]).map(row=>row.provider)});
 }
 async function requireApp(request,env,site){
   const origin=request.headers.get('Origin');
