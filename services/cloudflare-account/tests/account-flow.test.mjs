@@ -25,7 +25,10 @@ function harness({consented=true}={}){
    if(url==='/api/connect/authorize')return response({code:'one-time-code',request:'request-123',origin:'https://softm.github.io'});
    return response({error:'not-found'},404);
  };
- const doc={querySelector:id=>element(id),querySelectorAll:()=>[]};
+ const doc={querySelector:id=>element(id),querySelectorAll:()=>[],
+   createElement:tag=>({tagName:tag.toUpperCase(),textContent:'',style:{},disabled:false,
+     addEventListener(){},append(){},replaceChildren(){},setAttribute(){}})
+ };
  const opener={closed:false,postMessage:(msg,origin)=>sent.push({msg,origin})};
  const window={opener,close(){},};
  const location={pathname:'/connect',search:'',assign(){}};
