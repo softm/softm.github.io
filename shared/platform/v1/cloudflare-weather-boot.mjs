@@ -1,5 +1,5 @@
 // WeatherHannun Cloudflare account entrypoint. Do not load Firebase by default.
-import {createAccountContext} from './site-account.mjs?v=20261112-weather-cloudflare-2';
+import {createAccountContext} from './site-account.mjs?v=20261113-weather-android-browser-1';
 import {mountSiteAccount} from './account-menu.mjs?v=20261112-header-slot-1';
 
 const siteId=new URL(import.meta.url).searchParams.get('site');
@@ -15,7 +15,7 @@ function mount(){
   }
   const account=createAccountContext({
     siteId,
-    sdkLoader:()=>import('./cloudflare-weather-sdk.mjs?v=20261113-cloudflare-3'),
+    sdkLoader:()=>import('./cloudflare-weather-sdk.mjs?v=20261113-weather-android-browser-1'),
     accountPageUrl:'https://softm-hannun-account.softm.workers.dev/account',
     legacyVaultUrl:null
   });
