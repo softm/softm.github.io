@@ -30,7 +30,7 @@ jobs:
             echo "::error::Cloudflare credentials are missing"; exit 1;
           }
       - name: Install Wrangler
-        run: npm ci --no-audit --no-fund
+        run: npm install --no-audit --no-fund
       - name: Provision independent database if missing
         run: |
           if npx wrangler d1 info gagyebu-db >/dev/null 2>&1; then
