@@ -363,6 +363,13 @@ async function route(request,env){
     await rateLimit(request,env,'site-exchange',40);
     return exchangeConnect(request,env);
   }
+  // Authenticated, site-scoped identity lookup for the separate weather personalization D1.
+  // No client-supplied UID is accepted; the bearer is checked against app_sessions.
+  if(path==='/api/apps/weatherhannun/session'){
+    if(request.method!=='GET')error('method-not-allowed',405);
+    const uid=await requireApp(request,env,'weatherhannun');
+    return json({uid,site:'weatherhannun'});
+  }
   if(path==='/api/apps/gagyebu/ledger'){
     if(request.method!=='POST')error('method-not-allowed',405);
     const uid=await requireApp(request,env,'gagyebu');
