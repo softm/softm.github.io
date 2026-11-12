@@ -367,7 +367,8 @@ async function route(request,env){
     if(request.method!=='POST')error('method-not-allowed',405);
     const uid=await requireApp(request,env,'gagyebu');
     const payload=await readJSON(request,3400000);
-    return json(await ledgerExchange(env,uid,payload));
+    if(!env.LEDGER_DB)error('gagyebu-database-not-configured',503);
+    return json(await ledgerExchange({...env,DB:env.LEDGER_DB},uid,payload));
   }
   if(path.startsWith('/api/apps/')&&path.endsWith('/logout'))return revokeApp(request,env,url);
   if(/^\/api\/apps\/[a-z0-9_-]+\/items$/.test(path))return listItems(request,env,url);
@@ -409,6 +410,6 @@ export default {
     for(const table of ['oauth_attempts','connect_intents','auth_codes','app_sessions','web_sessions','request_buckets']){
       await env.DB.prepare('DELETE FROM '+table+' WHERE expires_at<?').bind(t).run();
     }
-    await cleanupOldLedgerVersions(env.DB,t-7200);
+    if(env.LEDGER_DB)await cleanupOldLedgerVersions(env.LEDGER_DB,t-7200);
   }
 };
