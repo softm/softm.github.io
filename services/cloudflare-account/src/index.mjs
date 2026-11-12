@@ -1,7 +1,7 @@
 import {PROOF, ITEM_ID, CONSENT_VERSION, now, random, sha256, challenge, equal, cookies, cookie, json, error, sameOrigin, readJSON,base64url,from64} from './crypto.mjs';
 import {providerConfig, authorizeUrlWithPkce, exchangeProfile} from './oauth.mjs';
 import {page, clientScript} from './ui.mjs';
-import {ledgerExchange} from './gagyebu-ledger.mjs';
+import {ledgerExchange,cleanupOldLedgerVersions} from './gagyebu-ledger.mjs';
 
 const DEFAULT_SITES={
   weatherhannun:{name:'날씨한눈',origins:['https://softm.github.io']},
@@ -388,5 +388,6 @@ export default {
     for(const table of ['oauth_attempts','connect_intents','auth_codes','app_sessions','web_sessions','request_buckets']){
       await env.DB.prepare('DELETE FROM '+table+' WHERE expires_at<?').bind(t).run();
     }
+    await cleanupOldLedgerVersions(env.DB,t-7200);
   }
 };
