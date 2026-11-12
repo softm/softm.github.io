@@ -21,10 +21,13 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
     if(!response.ok){const e=Error(data.message||data.error||'계정 서버에 연결하지 못했습니다.');e.code=data.error;e.status=response.status;throw e;}
     return data;
   }
-  async function login(provider=null){
+  async function login(providerOrOptions=null){
+    // Preserve the provider-string API while accepting the already-opened
+    // popup from the shared site menu; never open a second blank window.
+    const options=providerOrOptions&&typeof providerOrOptions==='object'?providerOrOptions:{provider:providerOrOptions};
+    const provider=options.provider??null;
     if(provider!==null&&!['google','kakao','naver'].includes(provider))throw Error('지원하지 않는 SNS 로그인입니다.');
-    // Must open synchronously in the button's click event to avoid popup blockers.
-    const popup=window.open('about:blank','_blank','popup,width=480,height=780');
+    const popup=options.popup||window.open('about:blank','_blank','popup,width=480,height=780');
     if(!popup)throw Error('로그인 팝업을 허용해 주세요.');
     try{
       const verifier=random(),challenge=await digest(verifier),request=random();
@@ -45,7 +48,10 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
           try{
             const response=await fetch(base.origin+'/api/connect/exchange',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({site:siteId,origin:location.origin,code:event.data.code,verifier})});
             const value=await response.json();if(!response.ok)throw Error(value.message||'앱 로그인을 완료하지 못했습니다.');
-            auth={token:value.accessToken,uid:value.uid,provider:provider||null,expiresAt:Date.now()+value.expiresIn*1000};
+            auth={token:value.accessToken,uid:value.uid,provider:provider||null,expiresAt:Date.now()+value.expiresIn*1000,
+              displayName:typeof value.displayName==='string'?value.displayName.slice(0,120):'',
+              photoURL:typeof value.photoURL==='string'?value.photoURL.slice(0,4096):'',
+              providers:Array.isArray(value.providers)?value.providers.filter(v=>['google','kakao','naver'].includes(v)):[]};
             try{sessionStorage.setItem(sessionKey,JSON.stringify(auth));}catch{}
             settled=true;popup.close();resolve({uid:auth.uid,provider:auth.provider});
           }catch(e){stop(e);}
@@ -88,5 +94,10 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
     try{if(auth&&auth.expiresAt>Date.now())await api('/api/apps/'+siteId+'/logout','POST',{});}
     finally{auth=null;try{sessionStorage.removeItem(sessionKey);}catch{}}
   }
-  return {login,get,put,list,remove,logout,exchangeLedger,get currentUser(){return auth&&auth.expiresAt>Date.now()?{uid:auth.uid,provider:auth.provider||null}:null;}};
+  return {login,get,put,list,remove,logout,exchangeLedger,
+    get currentUser(){return auth&&auth.expiresAt>Date.now()?{
+      uid:auth.uid,provider:auth.provider||null,displayName:auth.displayName||'',photoURL:auth.photoURL||'',
+      providerData:(auth.providers||[]).map(provider=>({providerId:provider==='google'?'google.com':provider}))
+    }:null;}
+  };
 }
