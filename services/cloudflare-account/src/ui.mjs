@@ -8,7 +8,7 @@ export function page(){
 <h3>연결된 로그인 수단</h3><div id="providers"></div>
 <p class="muted">다른 SNS를 연결하면 다음부터 같은 계정으로 로그인할 수 있습니다. 이메일이 같다고 자동으로 합치지는 않습니다.</p>
 <button id="logout" class="btn subtle">로그아웃</button><button id="withdraw" class="btn danger" disabled title="기존 Firebase 계정 이전 검증 후 활성화">회원탈퇴 (이전 준비 중)</button></section>
-<section class="card" id="terms" hidden><h2>회원가입 완료</h2><p>SNS 인증이 완료되었습니다. 아래 약관에 동의하면 회원가입이 완료됩니다.</p><label><input id="t1" type="checkbox"> <a href="https://softm.github.io/account/terms.html" target="_blank" rel="noopener">이용약관</a>에 동의합니다.</label><label><input id="t2" type="checkbox"> <a href="https://softm.github.io/account/privacy.html" target="_blank" rel="noopener">개인정보 처리 안내</a>를 확인했습니다.</label><button id="accept" class="btn primary">동의하고 가입 완료</button></section>
+<section class="card" id="terms" hidden><h2>회원가입 완료</h2><p>SNS 인증이 완료되었습니다. 아래 약관에 동의하면 회원가입이 완료됩니다.</p><label><input id="t1" type="checkbox"> <a href="https://softm.github.io/account/terms.html" target="_blank" rel="noopener">이용약관</a>에 동의합니다.</label><label><input id="t2" type="checkbox"> <a href="https://softm.github.io/account/privacy.html" target="_blank" rel="noopener">개인정보 처리 안내</a>를 확인했습니다.</label><button id="accept" class="btn primary">동의하고 가입 완료</button><button id="signup-cancel" class="btn subtle" type="button">가입 취소하고 로그아웃</button></section>
 <section class="card" id="connect" hidden><h2>서비스 연결</h2><p id="connect-name"></p><button id="connect-button" class="btn primary">이 계정으로 연결하기</button><button id="cancel" class="btn subtle">연결 취소</button><p class="muted">로그인만으로 기기 데이터를 업로드하지 않습니다.</p></section>
 <p id="status" role="status" aria-live="polite"></p><footer>회원 기록은 계정에, 앱 데이터 관리는 각 서비스에</footer></main><script src="/client.js" defer></script></body></html>`;
 }
@@ -56,6 +56,7 @@ async function init(){
  }
  if(health.registrationLocked)status('기존 계정 이전 검증 중입니다. 등록되지 않은 새 계정은 아직 이용할 수 없습니다.');
  action($('#logout'),async()=>{await call('/api/logout','POST',{});await refresh();status('로그아웃했습니다.');});
+ action($('#signup-cancel'),async()=>{await call('/api/logout','POST',{});await refresh();status('회원가입을 완료하지 않고 로그아웃했습니다.');});
  action($('#accept'),async()=>{if(!$('#t1').checked||!$('#t2').checked)throw Error('필수 약관 두 항목을 확인해 주세요.');await call('/api/consent','POST',{version:'2026-11-11',accepted:true});await refresh();status('가입이 완료됐습니다.');});
  action($('#withdraw'),async()=>{if(!confirm('회원탈퇴하면 복구할 수 없습니다. 계속하시겠습니까?'))return;const v=prompt('확인을 위해 회원탈퇴를 입력해 주세요.');if(v!=='회원탈퇴')return;await call('/api/account/delete','POST',{confirmation:v});await refresh();status('탈퇴가 완료됐습니다.');});
  action($('#connect-button'),async()=>{if(!window.opener||window.opener.closed)throw Error('원래 앱에서 연결 창을 다시 열어 주세요.');const v=await call('/api/connect/authorize','POST',{});window.opener.postMessage({type:'softm:authorization',requestId:v.request,code:v.code},v.origin);status('앱에 연결 요청을 전달했습니다.');setTimeout(()=>window.close(),600);});
