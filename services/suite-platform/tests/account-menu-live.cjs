@@ -92,7 +92,7 @@ const sites=[
          try{await import(diagnosticUrl);}catch(e){moduleError=String(e.message||e);}
          results.push({path:p,status:response.status,bytes:body.length,moduleError,
           hasOriginalBrokenRegex:body.includes(').test(path))throw'),
-          sourceExcerpt:p.includes('/client.mjs')?body.split('\\n').slice(96,109).join('\\n'):body.slice(0,180)});
+          sourceExcerpt:p.includes('/client.mjs')?body.split(String.fromCharCode(10)).slice(96,109).join(' | '):body.slice(0,180)});
         }catch(e){results.push({path:p,error:String(e.message||e)});}
        }
        return results;
