@@ -1,5 +1,5 @@
 // WeatherHannun Cloudflare account entrypoint. Do not load Firebase by default.
-import {createAccountContext,mountSiteAccount} from './site-account.mjs?v=20261112-weather-cloudflare-1';
+import {createAccountContext,mountSiteAccount} from './site-account.mjs?v=20261112-weather-cloudflare-2';
 
 const siteId=new URL(import.meta.url).searchParams.get('site');
 function mount(){
