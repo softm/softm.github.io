@@ -25,6 +25,7 @@
 | GET /api/apps/:site/items/:id | 앱 Bearer | - | {id,revision,payload} 또는 404 |
 | PUT /api/apps/:site/items/:id | 앱 Bearer | {payload,expectedRevision} | {revision} |
 | DELETE /api/apps/:site/items/:id | 앱 Bearer | {expectedRevision} | {deleted:true} |
+| POST /api/apps/gagyebu/ledger | gagyebu 앱 Bearer | {op:'read',uid,known} 또는 {op:'write',uid,ledger,expected,epoch:null} | revision·epoch·ledger / conflict; 사용자별 암호화 D1 장부 |
 | POST /api/account/delete | 쿠키 + Origin | {confirmation:'회원탈퇴'} | 기존 Firebase 전체 삭제가 구현되지 않아 서버에서 항상 503 잠금 |
 
 ## 계약
@@ -45,6 +46,18 @@
 - D1 요청 제한(일반 인증 API와 별도): 1분/IP당 /connect 20회, /auth/:provider 10회, /api/connect/exchange 40회. 초과 429, 해시 버킷은 주기적 TTL 정리. Cloudflare WAF/rate limiting 추가 설정 권장.
 - 로그인 허브 이전 가입 동의 버전(예: 20261029-1)을 그대로 복사해도 신규 동의 버전(2026-11-11)을 명시적으로 수락해야 사이트 인증을 발급한다.
 - 로컬 개발의 127.0.0.1/localhost만 HTTP 허용하며 운영 PUBLIC_BASE_URL은 HTTPS와 실제 Worker Origin이 동일해야 한다.
+
+## 가계부 전용 Cloudflare 서버 장부
+
+- **활성화 조건:** Worker Secret `GAGYEBU_LEDGER_KEY_V1` = Base64 32바이트 원본 키. 미설정이면 해당 API 503, `GET /health`의 `features.gagyebuLedger=false`.
+- 등록된 `gagyebu` 앱 토큰과 정확한 Origin `https://softm.github.io`가 모두 필요하다. 타 사이트 토큰 사용 금지.
+- `read`: `{op:'read',uid,known:null|string}` → `{revision:string|null,epoch:null,ledger?:object}`. 알려진 revision과 같으면 ledger 미반환.
+- `write`: `{op:'write',uid,ledger,expected:null|string,epoch:null}` → `{revision,epoch:null}` 또는 `{conflict:true,revision}`.
+- `ledger`는 version 1, accounts/categories/transactions/events 배열, settings/budgets 객체. 3MiB 이하. SMS 원문, 영수증 이미지, 첨부경로와 Android 미확정 원문은 거부한다.
+- HKDF(SHA-256, salt=UID, info='gagyebu-ledger-v1')로 계정별 AES-256-GCM 키를 생성한다. IV는 매 기록 시 난수, UID를 추가 인증 데이터로 사용한다. D1에는 암호문만 보관하며 최대 40개 불변 조각으로 저장한다.
+- revision CAS로 다중 기기 동시 수정 충돌을 감지하며 오래된 조각은 2시간 이상 보관 후 Cron으로 안전 정리한다.
+- 기존 Firebase 장부와 자동 UID 병합 또는 데이터를 자동 이동하지 않는다. Android 신규 브리지는 별도 구현 대상.
+- **기존 키 교체/삭제 금지:** 구형 암호문을 복호화할 수 없게 된다. Secret을 GitHub 코드/일반 변수/로그에 저장하지 않는다.
 
 ## 범위 밖
 가계부 엔드투엔드 장부 이동, Android App Link 새 인증 handoff, R2 대용량 백업, 기존 Firestore 전수 덤프, 실제 SNS 제공자 승인/Cloudflare 배포는 별도 작업이며 준비되지 않았는데 완료로 보고하지 않는다.
