@@ -17,6 +17,26 @@ test('cookie is __Host HttpOnly Secure SameSite=Lax',()=>{
   assert.match(cookie('session','value',300),/__Host-sh_session=value; Path=\/; HttpOnly; Secure; SameSite=Lax; Max-Age=300/);
   assert.equal(cookies(new Request('https://example.com',{headers:{Cookie:'a=1; __Host-sh_session=abc'}}))['__Host-sh_session'],'abc');
 });
+test('site connect can redirect directly to a requested configured SNS only',async()=>{
+  const token=random(),proof=random(),requestId=random();
+  const env={
+    DB:{prepare:()=>({bind:()=>({run:async()=>({meta:{changes:1}})})})},
+    PUBLIC_BASE_URL:'https://worker.example',
+    GOOGLE_CLIENT_ID:'mock-id',GOOGLE_CLIENT_SECRET:'mock-secret',
+    NAVER_PUBLIC_ENABLED:'false'
+  };
+  const query=new URLSearchParams({site:'gagyebu',origin:'https://softm.github.io',challenge:proof,request:requestId,provider:'google'});
+  const res=await worker.fetch(new Request('https://worker.example/connect?'+query),env);
+  assert.equal(res.status,303);
+  assert.equal(res.headers.get('location'),'/auth/google');
+  assert.match(res.headers.get('set-cookie')||'',/__Host-sh_connect=/);
+  query.set('provider','naver');
+  const blocked=await worker.fetch(new Request('https://worker.example/connect?'+query),env);
+  assert.equal(blocked.status,503);
+  query.set('provider','other');
+  const unknown=await worker.fetch(new Request('https://worker.example/connect?'+query),env);
+  assert.equal(unknown.status,404);
+});
 test('provider validation and Google OAuth PKCE',async()=>{
   const env={GOOGLE_CLIENT_ID:'test-id',GOOGLE_CLIENT_SECRET:'test-secret',NAVER_PUBLIC_ENABLED:'false'};
   assert.equal(providerConfig('google',env).clientId,'test-id');
