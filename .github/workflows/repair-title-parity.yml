@@ -93,3 +93,5 @@ jobs:
           path: |
             ${{ runner.temp }}/title-parity-main.json
             ${{ runner.temp }}/title-parity-pages.json
+
+          retention-days: 1
