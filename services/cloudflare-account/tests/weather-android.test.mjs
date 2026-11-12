@@ -1,16 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {webcrypto} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {createCloudflareAccountClient} from '../src/client.mjs';
 import {clientScript} from '../src/ui.mjs';
 
 test('weather Android launches browser, exchanges a PKCE-bound code and never opens a WebView popup',async()=>{
  const original={window:globalThis.window,location:globalThis.location,
-  sessionStorage:globalThis.sessionStorage,fetch:globalThis.fetch,crypto:globalThis.crypto};
+  sessionStorage:globalThis.sessionStorage,fetch:globalThis.fetch};
  const mem=new Map();let captured=null,exchange=null;
  try{
-  globalThis.crypto=webcrypto;
   globalThis.location={origin:'https://softm.github.io'};
   globalThis.sessionStorage={getItem:k=>mem.get(k)??null,setItem:(k,v)=>mem.set(k,v),removeItem:k=>mem.delete(k)};
   const window=new EventTarget();
@@ -44,7 +42,9 @@ test('weather Android launches browser, exchanges a PKCE-bound code and never op
   assert.match(exchange.verifier,/^[A-Za-z0-9_-]{43}$/);
   assert.equal(captured.searchParams.get('challenge')?.length,43);
   assert.equal(mem.size,1);
- }finally{Object.assign(globalThis,original);}
+ }finally{for(const [name,value] of Object.entries(original)){
+  if(value===undefined)delete globalThis[name];else globalThis[name]=value;
+ }}
 });
 test('native handoff requires fixed weather site and does not change PC opener flow',()=>{
  assert.match(clientScript,/intent\.site==='weatherhannun'/);
