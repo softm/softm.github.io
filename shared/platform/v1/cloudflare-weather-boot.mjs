@@ -15,7 +15,7 @@ function mount(){
   }
   const account=createAccountContext({
     siteId,
-    sdkLoader:()=>import('./cloudflare-weather-sdk.mjs?v=20261112-cloudflare-1'),
+    sdkLoader:()=>import('./cloudflare-weather-sdk.mjs?v=20261113-cloudflare-3'),
     accountPageUrl:'https://softm-hannun-account.softm.workers.dev/account',
     legacyVaultUrl:null
   });
