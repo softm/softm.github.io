@@ -13,13 +13,11 @@ function mount(){
       console.warn('기존 보관소 연결을 불러오지 못했습니다.'));
     return;
   }
-  const legacy=new URL(location.href);
-  legacy.searchParams.set('legacyAccount','1');
   const account=createAccountContext({
     siteId,
     sdkLoader:()=>import('./cloudflare-weather-sdk.mjs?v=20261112-cloudflare-1'),
     accountPageUrl:'https://softm-hannun-account.softm.workers.dev/account',
-    legacyVaultUrl:legacy.href
+    legacyVaultUrl:null
   });
   // Cloudflare's encrypted item API has a different backup schema. Until a
   // verified migration is implemented, don't mount the Firebase vault against
