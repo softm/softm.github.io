@@ -20,11 +20,6 @@
       "binding": "DB",
       "database_name": "softm-hannun-account",
       "database_id": "ed975e05-b941-4f0e-9737-9b1526301b60"
-    },
-    {
-      "binding": "LEDGER_DB",
-      "database_name": "gagyebu-db",
-      "database_id": "01242e8e-4375-4478-b836-fb96efd31466"
     }
   ]
 }
