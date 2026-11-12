@@ -35,7 +35,18 @@ function sites(env){
     return result;
   }catch{error('invalid-site-configuration',503);}
 }
-function validSite(env,site,origin){const registry=sites(env);if(typeof site!=='string'||!ITEM_ID.test(site)||!Object.hasOwn(registry,site)||typeof origin!=='string')error('site-origin-not-allowed',403);const entry=registry[site];if(!entry.origins.includes(origin))error('site-origin-not-allowed',403);return entry;}
+// Native Android WebView is a fixed, app-owned asset origin. Its browser
+// authorization code is still bound to the native PKCE verifier and site.
+const GAGYEBU_NATIVE_ORIGIN='https://appassets.androidplatform.net';
+const GAGYEBU_NATIVE_RETURN='https://softm.github.io/account/android/gagyebu/';
+function validSite(env,site,origin){
+ const registry=sites(env);
+ if(typeof site!=='string'||!ITEM_ID.test(site)||!Object.hasOwn(registry,site)||typeof origin!=='string')error('site-origin-not-allowed',403);
+ const entry=registry[site];
+ if(site==='gagyebu'&&origin===GAGYEBU_NATIVE_ORIGIN)return entry;
+ if(!entry.origins.includes(origin))error('site-origin-not-allowed',403);
+ return entry;
+}
 function publicBase(request,env){
   const value=env.PUBLIC_BASE_URL;
   if(typeof value!=='string'||value.includes('<')||value.includes('your-subdomain'))error('public-url-not-configured',503);
