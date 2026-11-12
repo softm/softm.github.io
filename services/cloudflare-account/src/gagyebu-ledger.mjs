@@ -32,6 +32,7 @@ export function validateLedger(v){
 }
 async function purgeUncommitted(db,uid,revision){
  await db.prepare('DELETE FROM gagyebu_ledger_chunks WHERE user_id=? AND revision=?').bind(uid,revision).run();
+ await db.prepare('DELETE FROM gagyebu_ledger_versions WHERE user_id=? AND revision=?').bind(uid,revision).run();
 }
 export async function ledgerExchange(env,uid,body){
  if(body.uid!==uid)fail('wrong-user',403);
@@ -66,6 +67,8 @@ export async function ledgerExchange(env,uid,body){
  for(let offset=0;offset<encoded.length;offset+=CHUNK)parts.push(encoded.slice(offset,offset+CHUNK));
  const next=crypto.randomUUID();
  try{
+  await db.prepare('INSERT INTO gagyebu_ledger_versions(user_id,revision,created_at) VALUES(?,?,?)')
+    .bind(uid,next,Math.floor(Date.now()/1000)).run();
   for(let i=0;i<parts.length;i+=20){
    await db.batch(parts.slice(i,i+20).map((data,j)=>db.prepare(
      'INSERT INTO gagyebu_ledger_chunks(user_id,revision,part,data) VALUES(?,?,?,?)')
@@ -85,4 +88,23 @@ export async function ledgerExchange(env,uid,body){
   await purgeUncommitted(db,uid,next).catch(()=>{});
   throw err;
  }
+}
+
+export async function cleanupOldLedgerVersions(db,cutoff){
+ // Keep the current head and at least 2 hours of previous immutable revisions
+ // so a concurrent reader cannot lose its snapshot during a head change.
+ await db.prepare(`DELETE FROM gagyebu_ledger_chunks
+  WHERE EXISTS(
+   SELECT 1 FROM gagyebu_ledger_versions v
+   WHERE v.user_id=gagyebu_ledger_chunks.user_id
+    AND v.revision=gagyebu_ledger_chunks.revision
+    AND v.created_at<?
+    AND NOT EXISTS (SELECT 1 FROM gagyebu_ledger_heads h
+      WHERE h.user_id=v.user_id AND h.revision=v.revision)
+  )`).bind(cutoff).run();
+ await db.prepare(`DELETE FROM gagyebu_ledger_versions
+  WHERE created_at<?
+   AND NOT EXISTS(SELECT 1 FROM gagyebu_ledger_heads h
+     WHERE h.user_id=gagyebu_ledger_versions.user_id
+       AND h.revision=gagyebu_ledger_versions.revision)`).bind(cutoff).run();
 }
