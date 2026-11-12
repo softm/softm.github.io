@@ -15,5 +15,10 @@
       "database_name": "gagyebu-db",
       "database_id": "01242e8e-4375-4478-b836-fb96efd31466"
     }
-  ]
+  ],
+  "triggers": {
+    "crons": [
+      "0 2 * * *"
+    ]
+  }
 }
