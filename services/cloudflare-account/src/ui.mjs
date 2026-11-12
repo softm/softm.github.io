@@ -8,7 +8,7 @@ export function page(){
 <h3>연결된 로그인 수단</h3><div id="providers"></div>
 <p class="muted">다른 SNS를 연결하면 다음부터 같은 계정으로 로그인할 수 있습니다. 이메일이 같다고 자동으로 합치지는 않습니다.</p>
 <button id="logout" class="btn subtle">로그아웃</button><button id="withdraw" class="btn danger" disabled title="기존 Firebase 계정 이전 검증 후 활성화">회원탈퇴 (이전 준비 중)</button></section>
-<section class="card" id="terms" hidden><h2>회원가입 완료</h2><p>Google 인증이 완료되었습니다. 아래 약관에 동의하면 회원가입이 완료됩니다.</p><label><input id="t1" type="checkbox"> <a href="https://softm.github.io/account/terms.html" target="_blank" rel="noopener">이용약관</a>에 동의합니다.</label><label><input id="t2" type="checkbox"> <a href="https://softm.github.io/account/privacy.html" target="_blank" rel="noopener">개인정보 처리 안내</a>를 확인했습니다.</label><button id="accept" class="btn primary">동의하고 가입 완료</button></section>
+<section class="card" id="terms" hidden><h2>회원가입 완료</h2><p>SNS 인증이 완료되었습니다. 아래 약관에 동의하면 회원가입이 완료됩니다.</p><label><input id="t1" type="checkbox"> <a href="https://softm.github.io/account/terms.html" target="_blank" rel="noopener">이용약관</a>에 동의합니다.</label><label><input id="t2" type="checkbox"> <a href="https://softm.github.io/account/privacy.html" target="_blank" rel="noopener">개인정보 처리 안내</a>를 확인했습니다.</label><button id="accept" class="btn primary">동의하고 가입 완료</button></section>
 <section class="card" id="connect" hidden><h2>서비스 연결</h2><p id="connect-name"></p><button id="connect-button" class="btn primary">이 계정으로 연결하기</button><button id="cancel" class="btn subtle">연결 취소</button><p class="muted">로그인만으로 기기 데이터를 업로드하지 않습니다.</p></section>
 <p id="status" role="status" aria-live="polite"></p><footer>회원 기록은 계정에, 앱 데이터 관리는 각 서비스에</footer></main><script src="/client.js" defer></script></body></html>`;
 }
