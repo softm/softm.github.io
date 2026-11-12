@@ -102,3 +102,5 @@ jobs:
           path: .title-audit/
           include-hidden-files: true
           if-no-files-found: warn
+
+          retention-days: 1
