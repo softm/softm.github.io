@@ -194,12 +194,14 @@ async function registerConnect(request,env){
   const u=new URL(request.url);
   const site=u.searchParams.get('site'),origin=u.searchParams.get('origin');
   const proof=u.searchParams.get('challenge'),requestId=u.searchParams.get('request');
+  const provider=u.searchParams.get('provider');
   validSite(env,site,origin);
+  if(provider!==null)providerConfig(provider,env);
   if(!PROOF.test(proof||'')||!PROOF.test(requestId||''))error('invalid-connect-request',400);
   const token=random();
   await env.DB.prepare('INSERT INTO connect_intents(token_hash,site,origin,challenge,request_id,expires_at) VALUES(?,?,?,?,?,?)')
     .bind(await sha256(token),site,origin,proof,requestId,now()+300).run();
-  return redirect('/connect',{'Set-Cookie':cookie('connect',token,300)});
+  return redirect(provider?'/auth/'+provider:'/connect',{'Set-Cookie':cookie('connect',token,300)});
 }
 async function exchangeConnect(request,env){
   const origin=request.headers.get('Origin'),body=await readJSON(request,3000);
