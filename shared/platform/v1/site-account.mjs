@@ -15,4 +15,4 @@ export function createAccountContext({siteId,sdkLoader=()=>import('./sdk.mjs?v=2
     destroy(){unsubscribe?.();listeners.clear();policies.clear();}
   });
 }
-export {mountSiteAccount} from './account-menu.mjs?v=20261112-header-slot-1';
+export {mountSiteAccount} from './account-menu.mjs?v=20261030-menu-1';
