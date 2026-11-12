@@ -1,0 +1,48 @@
+name: Provision isolated gagyebu-db (manual, no cutover)
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: 'Type CREATE_GAGYEBU_DB to provision or verify the dedicated D1'
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  provision:
+    if: ${{ github.event.inputs.confirmation == 'CREATE_GAGYEBU_DB' }}
+    runs-on: ubuntu-latest
+    environment: cloudflare-account-staging
+    defaults:
+      run:
+        working-directory: services/cloudflare-account
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Require Cloudflare credentials
+        run: |
+          test -n "$CLOUDFLARE_API_TOKEN" && test -n "$CLOUDFLARE_ACCOUNT_ID" || {
+            echo "::error::Cloudflare credentials are missing"; exit 1;
+          }
+      - name: Install Wrangler
+        run: npm ci --no-audit --no-fund
+      - name: Provision independent database if missing
+        run: |
+          if npx wrangler d1 info gagyebu-db >/dev/null 2>&1; then
+            echo "Existing gagyebu-db found; keeping its data."
+          else
+            echo "Creating gagyebu-db (without changing the account database)."
+            npx wrangler d1 create gagyebu-db
+          fi
+      - name: Apply dedicated schema
+        run: npx wrangler d1 execute gagyebu-db --remote --file=gagyebu-db-schema.sql --yes
+      - name: Verify dedicated database
+        run: |
+          npx wrangler d1 info gagyebu-db
+          npx wrangler d1 execute gagyebu-db --remote --command="SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'gagyebu_ledger_%' ORDER BY name" --yes
+          echo "::notice::Record the new database_id from D1 info. No production Worker binding or data has been changed."
