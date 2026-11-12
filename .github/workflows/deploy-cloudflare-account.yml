@@ -58,16 +58,10 @@ jobs:
       - name: Verify existing D1 database access
         if: steps.settings.outputs.ready == 'true'
         run: npx wrangler d1 info softm-hannun-account
-      - name: Verify independent gagyebu D1
-        if: steps.settings.outputs.ready == 'true'
-        run: npx wrangler d1 info gagyebu-db
       - name: Create account database schema
         if: steps.settings.outputs.ready == 'true'
         run: npx wrangler d1 execute softm-hannun-account --remote --file=account-schema.sql --yes
-      - name: Create dedicated gagyebu schema
-        if: steps.settings.outputs.ready == 'true'
-        run: npx wrangler d1 execute gagyebu-db --remote --file=gagyebu-db-schema.sql --yes
-      - name: Deploy isolated Worker with both D1 bindings
+      - name: Deploy account-only Worker
         if: steps.settings.outputs.ready == 'true'
         run: npx wrangler deploy
       - name: Check Worker health
