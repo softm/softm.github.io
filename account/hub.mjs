@@ -56,7 +56,7 @@ function renderConnection(){
   $('#grant-user').textContent=valid&&user?(user.displayName||'현재 계정')+' 계정으로 연결할 수 있습니다.':valid?'로그인하면 이 사이트 연결까지 이어집니다.':'';
   $('#continue').hidden=!valid||!user;$('#continue').textContent=site?'이 계정으로 '+site.name+' 연결':'이 계정으로 연결';
   $('#login-card').hidden=!valid;$('#login-title').textContent=user?'다른 계정으로 연결':'로그인 방법 선택';
-  if(legacyAndroidGagyebu()){
+  if(legacyAndroidGagyebu()&&valid){
     $('#grant-description').textContent='이전에 설치한 가계부 앱의 Firebase 로그인 연결은 더 이상 지원되지 않습니다. Cloudflare 로그인 기능이 포함된 Android 1.0.6 이상으로 업데이트해야 합니다.';
     $('#grant-user').textContent='기존 앱을 삭제하거나 앱 데이터를 지우지 마세요. 설치된 앱의 장부 기록을 먼저 보존해야 합니다.';
     $('#continue').hidden=true;
