@@ -143,3 +143,5 @@ jobs:
           name: inbox-list-title-policy-evidence
           path: evidence/
           if-no-files-found: warn
+
+          retention-days: 1
