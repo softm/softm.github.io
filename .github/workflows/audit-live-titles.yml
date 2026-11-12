@@ -36,3 +36,5 @@ jobs:
         with:
           name: global-live-title-audit
           path: projects/title-audit/
+
+          retention-days: 1
