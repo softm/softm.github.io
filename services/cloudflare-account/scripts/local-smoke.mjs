@@ -25,6 +25,7 @@ function appHeader(value){return {Origin:appOrigin,Authorization:'Bearer '+value
 async function run(){
   console.log('Preparing local D1');
   cmd(['d1','execute','softm-hannun-account','--local','--file=schema.sql','--yes']);
+  cmd(['d1','execute','gagyebu-db','--local','--file=gagyebu-db-schema.sql','--yes']);
   const t=Math.floor(Date.now()/1000);
   mkdirSync(join(dir,'.wrangler'),{recursive:true});
   const seed=join(dir,'.wrangler','smoke-seed.sql');
