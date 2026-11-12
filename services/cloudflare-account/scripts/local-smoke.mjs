@@ -31,7 +31,7 @@ async function run(){
   writeFileSync(seed,"INSERT OR REPLACE INTO users(id,display_name,avatar_url,consent_version,consent_at,created_at) VALUES('"+uid+"','Test','','2026-11-11',"+t+","+t+");\n"+
     "INSERT OR REPLACE INTO web_sessions(token_hash,user_id,authenticated_at,expires_at) VALUES('"+shahex(token)+"','"+uid+"',"+t+","+(t+7200)+");\n",{mode:0o600});
   cmd(['d1','execute','softm-hannun-account','--local','--file='+seed,'--yes']);
-  child=spawn(wrangler,['dev','--local','--ip','127.0.0.1','--port','8795','--var','PUBLIC_BASE_URL:'+host],{cwd:dir,stdio:['ignore','pipe','pipe']});
+  child=spawn(wrangler,['dev','--local','--ip','127.0.0.1','--port','8795','--var','PUBLIC_BASE_URL:'+host,'--var','GAGYEBU_LEDGER_KEY_V1:'+Buffer.alloc(32,17).toString('base64')],{cwd:dir,stdio:['ignore','pipe','pipe']});
   child.stdout.on('data',x=>log+=x.toString());child.stderr.on('data',x=>log+=x.toString());
   let ready=false;
   for(let i=0;i<100;i++){
@@ -87,7 +87,35 @@ async function run(){
   check(await result('/api/account/delete',{method:'POST',headers:{Cookie:sessionCookie,Origin:host,'Content-Type':'application/json'},body:'{"confirmation":"회원탈퇴"}'}),503,'delete locked');
   check(await result('/api/apps/weatherhannun/logout',{method:'POST',headers:appHeader(access)}),200,'app logout');
   check(await result('/api/apps/weatherhannun/items/favorite',{headers:appHeader(access)}),401,'revoked app session');
-  for(let i=0;i<19;i++){const allowed=await request(target.pathname+target.search);assert.equal(allowed.status,303,'allowed connection attempt '+i);}
+
+  const gv=proof(),gc=sha64(gv),greq=proof();
+  const guestUrl=new URL('/connect',host);
+  for(const [k,v] of Object.entries({site:'gagyebu',origin:appOrigin,challenge:gc,request:greq}))guestUrl.searchParams.set(k,v);
+  const gstart=await request(guestUrl.pathname+guestUrl.search);
+  assert.equal(gstart.status,303);
+  const gmatch=(gstart.headers.get('set-cookie')||'').match(/__Host-sh_connect=[A-Za-z0-9_-]{43}/);
+  assert.ok(gmatch,'gagyebu site intent');
+  const ga=await result('/api/connect/authorize',{method:'POST',headers:{Cookie:gmatch[0]+'; '+sessionCookie,Origin:host,'Content-Type':'application/json'},body:'{}'});
+  check(ga,200,'gagyebu authorization');
+  const gx=await result('/api/connect/exchange',{method:'POST',headers:{Origin:appOrigin,'Content-Type':'application/json'},
+   body:JSON.stringify({site:'gagyebu',origin:appOrigin,code:ga.body.code,verifier:gv})});
+  check(gx,200,'gagyebu token exchange');const gtoken=gx.body.accessToken;
+  const gpost=body=>result('/api/apps/gagyebu/ledger',{method:'POST',headers:{...appHeader(gtoken),'Content-Type':'application/json'},body:JSON.stringify(body)});
+  let g=await gpost({op:'read',uid,known:null});
+  check(g,200,'empty gagyebu ledger');assert.equal(g.body.revision,null);
+  const record={version:1,accounts:[],categories:[],transactions:[],events:[],settings:{monthlyBudget:1000},budgets:{}};
+  g=await gpost({op:'write',uid,expected:null,epoch:null,ledger:record});
+  check(g,200,'encrypted gagyebu ledger write');const revision=g.body.revision;assert.ok(revision);
+  g=await gpost({op:'write',uid,expected:null,epoch:null,ledger:record});check(g,200,'revision conflict');assert.equal(g.body.conflict,true);
+  const grsp=await gpost({op:'read',uid,known:null});check(grsp,200,'gagyebu ledger read');
+  assert.deepEqual(grsp.body.ledger,record);assert.equal(grsp.body.revision,revision);
+  g=await gpost({op:'read',uid,known:revision});check(g,200,'known revision short-circuit');
+  assert.equal(Object.hasOwn(g.body,'ledger'),false);
+  record.transactions.push({id:'1',status:'confirmed',attachment:'private-photo'});
+  g=await gpost({op:'write',uid,expected:revision,ledger:record});assert.equal(g.status,400,'device-private fields rejected');
+  check(await result('/api/apps/gagyebu/ledger',{method:'POST',headers:{...appHeader(access),'Content-Type':'application/json'},body:JSON.stringify({op:'read',uid})}),401,'wrong site token cannot read gagyebu');
+
+  for(let i=0;i<18;i++){const allowed=await request(target.pathname+target.search);assert.equal(allowed.status,303,'allowed connection attempt '+i);}
   const limited=await request(target.pathname+target.search);
   assert.equal(limited.status,429,'central per-IP connection limit must stop excess requests');
   console.log('PASS local D1: health, login session, allowlisted origin, PKCE, replay, AES-GCM, revision lock, pagination, logout, deletion lock, rate limiting');
