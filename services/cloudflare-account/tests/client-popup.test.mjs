@@ -6,6 +6,7 @@ import {createCloudflareAccountClient} from '../src/client.mjs';
 test('Cloudflare login uses supplied site-menu popup and retains a display-only profile',async()=>{
   const seen={opened:0,urls:[],requests:[],listeners:new Map()};
   const previous={window:globalThis.window,location:globalThis.location,sessionStorage:globalThis.sessionStorage,crypto:globalThis.crypto,fetch:globalThis.fetch};
+  const originalCrypto=Object.getOwnPropertyDescriptor(globalThis,'crypto');
   const stored=new Map();
   const popup={closed:false,close(){this.closed=true;},location:{assign(url){
     seen.urls.push(url);
@@ -17,7 +18,6 @@ test('Cloudflare login uses supplied site-menu popup and retains a display-only 
   }}};
   try{
     Object.assign(globalThis,{
-      crypto:webcrypto,
       location:{origin:'https://softm.github.io'},
       sessionStorage:{getItem:key=>stored.get(key)||null,setItem:(key,val)=>stored.set(key,val),removeItem:key=>stored.delete(key)},
       window:{
@@ -31,6 +31,7 @@ test('Cloudflare login uses supplied site-menu popup and retains a display-only 
           expiresIn:3600,displayName:'테스트 회원',photoURL:'https://example.com/profile.png',providers:['google']})};
       }
     });
+    Object.defineProperty(globalThis,'crypto',{value:webcrypto,writable:true,configurable:true});
     const client=createCloudflareAccountClient({
       baseUrl:'https://softm-hannun-account.softm.workers.dev',siteId:'weatherhannun'
     });
@@ -50,7 +51,10 @@ test('Cloudflare login uses supplied site-menu popup and retains a display-only 
     assert.equal(stored.size,1);
     assert.doesNotMatch(JSON.stringify([...stored]),/AIza|firebase/i);
   }finally{
+    if(originalCrypto)Object.defineProperty(globalThis,'crypto',originalCrypto);
+    else delete globalThis.crypto;
     for(const [name,value] of Object.entries(previous)){
+      if(name==='crypto')continue;
       if(value===undefined)delete globalThis[name];
       else globalThis[name]=value;
     }
