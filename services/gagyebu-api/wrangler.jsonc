@@ -1,0 +1,19 @@
+{
+  "name": "gagyebu-api",
+  "main": "src/index.mjs",
+  "compatibility_date": "2026-11-10",
+  "workers_dev": true,
+  "services": [
+    {
+      "binding": "ACCOUNT",
+      "service": "softm-hannun-account"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "gagyebu-db",
+      "database_id": "01242e8e-4375-4478-b836-fb96efd31466"
+    }
+  ]
+}
