@@ -38,6 +38,15 @@ async function finishConnection(){
     location.replace(returnUrl.href);
     return;
   }
+  if((!window.opener||window.opener.closed)&&intent.site==='weatherhannun'&&intent.origin==='https://softm.github.io'){
+    // Android uses the system browser; never perform OAuth inside an embedded WebView.
+    // The one-time code is PKCE-bound and travels only in the URL fragment.
+    const returnUrl=new URL('https://softm.github.io/account/android/weatherhannun/');
+    returnUrl.hash=new URLSearchParams({request:v.request,code:v.code}).toString();
+    connectionSent=true;
+    location.replace(returnUrl.href);
+    return;
+  }
   if(!window.opener||window.opener.closed)throw Error('가계부에서 로그인 창을 다시 열어 주세요.');
   window.opener.postMessage({type:'softm:authorization',requestId:v.request,code:v.code},v.origin);
   connectionSent=true;
