@@ -88,7 +88,13 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
   async function exchangeLedger(payload){
     if(siteId!=='gagyebu')throw Error('가계부 전용 API입니다.');
     if(!payload||payload.uid!==uid())throw Error('계정이 변경됐습니다. 다시 로그인해 주세요.');
-    return api('/api/apps/gagyebu/ledger','POST',payload);
+    const response=await fetch('https://gagyebu-api.softm.workers.dev/api/apps/gagyebu/ledger',{
+      method:'POST',headers:{Authorization:'Bearer '+auth.token,'Content-Type':'application/json'},
+      body:JSON.stringify(payload),cache:'no-store'
+    });
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok)throw Error(data.error||'가계부 서버 연결에 실패했습니다.');
+    return data;
   }
   async function requestPersonal(path,method='GET',body){
     uid();
