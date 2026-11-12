@@ -28,8 +28,17 @@ async function finishConnection(){
  $('#connect-detail').textContent='원래 앱으로 자동 돌아갑니다.';
  status('');
  try{
-  if(!window.opener||window.opener.closed)throw Error('가계부에서 로그인 창을 다시 열어 주세요.');
   const v=await call('/api/connect/authorize','POST',{});
+  if(intent.origin==='https://appassets.androidplatform.net'&&intent.site==='gagyebu'){
+    // Native Android handoff: no opener in a system browser. The one-time
+    // code stays in the URL fragment and is bound to the app's PKCE verifier.
+    const returnUrl=new URL('https://softm.github.io/account/android/gagyebu/');
+    returnUrl.hash=new URLSearchParams({request:v.request,code:v.code}).toString();
+    connectionSent=true;
+    location.replace(returnUrl.href);
+    return;
+  }
+  if(!window.opener||window.opener.closed)throw Error('가계부에서 로그인 창을 다시 열어 주세요.');
   window.opener.postMessage({type:'softm:authorization',requestId:v.request,code:v.code},v.origin);
   connectionSent=true;
   $('#connect-heading').textContent='연결 요청을 전달했습니다';
