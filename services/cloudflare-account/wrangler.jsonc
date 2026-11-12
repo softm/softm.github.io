@@ -11,7 +11,7 @@
   },
   "vars": {
     "PUBLIC_BASE_URL": "https://softm-hannun-account.softm.workers.dev",
-    "ALLOW_NEW_REGISTRATIONS": "false",
+    "ALLOW_NEW_REGISTRATIONS": "true",
     "NAVER_PUBLIC_ENABLED": "false",
     "ENABLE_ACCOUNT_DELETION": "false"
   },
