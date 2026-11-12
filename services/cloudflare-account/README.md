@@ -18,7 +18,7 @@ npx wrangler d1 execute softm-hannun-account --local --file=schema.sql
 npx wrangler dev --var PUBLIC_BASE_URL:http://localhost:8787
 ```
 
-운영 전: wrangler.jsonc의 placeholder PUBLIC_BASE_URL을 배포될 실제 Workers 주소로 수정한다. Google·카카오·네이버 개발자 콘솔에 정확한 `PUBLIC_BASE_URL/auth/callback/{provider}` URL을 등록한다. 클라이언트 ID/secret은 `npx wrangler secret put ...`으로 등록한다. `ALLOW_NEW_REGISTRATIONS`는 기존 사용자 매핑 이관 전까지 false, `ENABLE_ACCOUNT_DELETION`도 마이그레이션 완결 전까지 false로 유지.
+운영 전: wrangler.jsonc의 placeholder PUBLIC_BASE_URL을 배포될 실제 Workers 주소로 수정한다. Google·카카오·네이버 개발자 콘솔에 정확한 `PUBLIC_BASE_URL/auth/callback/{provider}` URL을 등록한다. 클라이언트 ID/secret은 `npx wrangler secret put ...`으로 등록한다. 현재 `ALLOW_NEW_REGISTRATIONS=true`(Firebase 사용자 이전 생략), `ENABLE_ACCOUNT_DELETION=false`로 운영한다.
 
 > D1 바인딩 자동 프로비저닝은 최근 Wrangler에서 지원하지만, 배포 후 반드시 실제 생성된 database ID·schema.sql 적용 결과를 확인할 것. 페이지는 Cloudflare Worker의 `/account`에서 제공하며 기존 계정 페이지는 그대로 둔다.
 
@@ -48,5 +48,15 @@ npx wrangler dev --var PUBLIC_BASE_URL:http://localhost:8787
 - 배포 워크플로를 `wrangler d1 info` → `schema.sql --remote` → `wrangler deploy` → `/health` 순서로 수정해 오류 위치를 분리했다.
 - 스키마와 Worker가 실제 배포되고 `/health`가 200을 반환하기 전까지 배포 완료라고 보고하지 않는다.
 
+## 가계부 PC Cloudflare 동기화
+
+`gagyebu` 사이트별 장부 API는 `POST /api/apps/gagyebu/ledger`이며, Worker Secret `GAGYEBU_LEDGER_KEY_V1`을 등록해야 실제로 활성화된다. 32바이트 난수 키의 Base64 값을 Production Secret에 설정한다. **등록한 키를 삭제/재발급하면 기존 암호화 장부를 읽지 못한다.**
+
+- `/health`의 `features.gagyebuLedger`가 true이면 PC 가계부 웹의 새 연결 모듈이 Cloudflare 계정을 사용한다.
+- false이거나 Worker 접근 불가일 때에는 기존 Firebase 로그인·장부 어댑터가 그대로 작동한다.
+- 기존 Firebase/PC/Android 장부를 Cloudflare D1으로 자동 이동하지 않는다. 비로그인 IndexedDB 원본 보존 및 최초 장부 합치기는 사용자 명시적 확인.
+- Android는 기존 Firebase 동기화 유지. 새 앱 네이티브 로그인과 D1 동기화는 다음 단계에서 별도 작업.
+- 서버가 계정별로 암호화하는 방식이지 E2EE가 아니며, 영수증과 원본 SMS는 전송하지 않는다.
+
 ## 상태
-코드 구현 단계. Cloudflare 배포/도메인 등록/실제 SNS 로그인/운영 Firebase 데이터 이전은 **미완료**. 현재 Firebase용 공통 SDK와 Android 앱은 이 신규 서버를 자동 사용하지 않는다. 기존 앱을 일괄 전환하면 안 된다.
+Cloudflare Workers + D1 배포 및 Google OAuth 실제 로그인 검증 완료. 기존 Firebase 계정 이전은 사용자 결정에 따라 생략했고 신규 Cloudflare 가입을 허용한다. 계정 UID·옛 원격 장부는 자동 병합되지 않는다. PC 가계부는 신규 암호화 장부 API를 구현했고 Secret `GAGYEBU_LEDGER_KEY_V1` 등록 후 자동으로 연결된다. Android 가계부와 다른 한눈 앱은 아직 개별 전환/검증 대상이다.
