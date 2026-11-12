@@ -147,7 +147,7 @@ jobs:
           path: |
             jeonsehannun/test-results/
             jeonsehannun/playwright-report/
-          retention-days: 14
+          retention-days: 1
       - name: Record publication outcome
         env:
           SOURCE_SHA: ${{ steps.source.outputs.sha }}
