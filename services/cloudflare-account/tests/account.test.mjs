@@ -30,6 +30,18 @@ test('provider validation and Google OAuth PKCE',async()=>{
   assert.equal(url.searchParams.get('code_challenge_method'),'S256');
   assert.equal(url.searchParams.get('redirect_uri'),'https://example.com/auth/callback/google');
 });
+test('first signup and registered member use exclusive screens',()=>{
+  const html=page();
+  assert.match(html,/id="login" hidden/);
+  assert.match(html,/id="profile" hidden/);
+  assert.match(html,/id="terms" hidden/);
+  assert.match(html,/회원가입 완료/);
+  assert.match(clientScript,/const member=!!user&&user\.consentVersion==='2026-11-11'/);
+  assert.match(clientScript,/\$\('#profile'\)\.hidden=!member/);
+  assert.match(clientScript,/\$\('#terms'\)\.hidden=!user\|\|member/);
+  assert.match(clientScript,/if\(!member\)\{/);
+  assert.match(clientScript,/await refresh\(\);status\('가입이 완료됐습니다\.'/);
+});
 test('minimal UI contains consent, account linking, no vault editor',()=>{
   const html=page();
   assert.match(html,/회원탈퇴/);assert.match(html,/카카오/);
