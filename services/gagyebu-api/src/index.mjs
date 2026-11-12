@@ -1,4 +1,4 @@
-import {ledgerExchange} from '../../cloudflare-account/src/gagyebu-ledger.mjs';
+import {ledgerExchange,cleanupOldLedgerVersions} from '../../cloudflare-account/src/gagyebu-ledger.mjs';
 const ALLOWED=new Set(['https://softm.github.io','https://appassets.androidplatform.net']);
 const json=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'}});
 function cors(request,response){
@@ -32,5 +32,8 @@ export default {
    }else response=json({error:'not-found'},404);
   }catch(e){const status=e.status||500;response=json({error:status===500?'internal-error':String(e.message||'unavailable')},status);}
   return cors(request,response);
+ },
+ async scheduled(event,env){
+  await cleanupOldLedgerVersions(env.DB,Math.floor(Date.now()/1000)-7200);
  }
 };
