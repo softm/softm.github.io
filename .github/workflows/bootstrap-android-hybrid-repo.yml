@@ -416,6 +416,7 @@ jobs:
                     path: |
                       app/build/outputs/apk/debug/*.apk
                       app/build/outputs/bundle/release/*.aab
+                    retention-days: 1
           EOF
 
           cat > .github/workflows/play-deploy.yml <<'EOF'
