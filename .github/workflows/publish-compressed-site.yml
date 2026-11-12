@@ -39,8 +39,76 @@ jobs:
           assert any('20261009-temu-farm-supplies' in x['url'] for x in f['links'])
           assert not any('20261009-temu-farm-supplies' in x['url'] for x in h['links'])
           PY
-      - name: Package complete existing website
-        run: tar --dereference --hard-dereference --exclude=.git --exclude=.github -cf "${{ runner.temp }}/artifact.tar" .
+      - name: Build Pages payload without APK/AAB binaries
+        env:
+          SITE_DIR: ${{ runner.temp }}/pages-site
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          rm -rf "$SITE_DIR"
+          mkdir -p "$SITE_DIR"
+          tar --dereference --hard-dereference \
+            --exclude=.git \
+            --exclude=.github \
+            --exclude='*.apk' \
+            --exclude='*.aab' \
+            -cf - . | tar -xf - -C "$SITE_DIR"
+
+          python3 - <<'PY'
+          import os, re
+          from pathlib import Path, PurePosixPath
+          from urllib.parse import urlsplit
+
+          root = Path(os.environ['SITE_DIR'])
+          sha = os.environ['SOURCE_SHA']
+          raw_base = f'https://raw.githubusercontent.com/softm/softm.github.io/{sha}/'
+          text_exts = {'.html','.htm','.js','.mjs','.css','.json','.xml','.txt','.md'}
+
+          quoted = re.compile(r'(?P<q>["\\\'])(?P<u>(?:https://softm\\.github\\.io/|/|\\./|\\.\\./)?[^"\\\'<>\\s]+?\\.(?:apk|aab)(?:\\?[^"\\\'<>\\s]*)?)(?P=q)', re.I)
+
+          def raw_url(source_file: Path, value: str):
+              base, sep, query = value.partition('?')
+              if base.startswith('https://softm.github.io/'):
+                  rel = base[len('https://softm.github.io/'):]
+              elif base.startswith('http://softm.github.io/'):
+                  rel = base[len('http://softm.github.io/'):]
+              elif base.startswith('/'):
+                  rel = base.lstrip('/')
+              elif '://' in base:
+                  return value
+              else:
+                  parent = PurePosixPath(source_file.relative_to(root).as_posix()).parent
+                  rel = str(parent.joinpath(base))
+              parts=[]
+              for part in PurePosixPath(rel).parts:
+                  if part in ('','.'): continue
+                  if part=='..':
+                      if parts: parts.pop()
+                  else: parts.append(part)
+              target='/'.join(parts)
+              return raw_base + target + (sep + query if sep else '')
+
+          changed=0
+          for path in root.rglob('*'):
+              if not path.is_file() or path.suffix.lower() not in text_exts:
+                  continue
+              try:
+                  src=path.read_text(encoding='utf-8')
+              except UnicodeDecodeError:
+                  continue
+              dst=quoted.sub(lambda m: m.group('q') + raw_url(path,m.group('u')) + m.group('q'), src)
+              if dst != src:
+                  path.write_text(dst,encoding='utf-8')
+                  changed += 1
+
+          binaries=list(root.rglob('*.apk'))+list(root.rglob('*.aab'))
+          assert not binaries, f'APK/AAB unexpectedly remained in Pages payload: {binaries[:5]}'
+          print(f'Rewrote APK/AAB download references in {changed} text file(s).')
+          PY
+
+          tar --dereference --hard-dereference -cf "${{ runner.temp }}/artifact.tar" -C "$SITE_DIR" .
+          echo "Pages payload:"
+          du -sh "$SITE_DIR" "${{ runner.temp }}/artifact.tar"
       - uses: actions/upload-artifact@v4
         with:
           name: github-pages
