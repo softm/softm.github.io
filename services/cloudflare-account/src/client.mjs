@@ -138,11 +138,23 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
     if(!response.ok){const e=Error(data.error||'개인화 저장 오류');e.status=response.status;throw e;}
     return data;
   }
+  async function requestAuctionWorkspace(method='GET',body){
+    if(siteId!=='auctionhannun'||!['GET','PUT'].includes(method))throw Error('허용되지 않은 경매 작업공간 요청입니다.');
+    uid();
+    // The auction workspace is NEVER stored in the account D1.
+    const response=await fetch('https://auctionhannun-personal.softm.workers.dev/api/workspace',{
+      method,headers:{Authorization:'Bearer '+auth.token,...(body?{'Content-Type':'application/json'}:{})},
+      body:body?JSON.stringify(body):undefined,cache:'no-store'
+    });
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok){const e=Error(data.message||data.error||'경매 작업공간 서버 연결 오류');e.code=data.error;e.status=response.status;throw e;}
+    return data;
+  }
   async function logout(){
     try{if(auth&&auth.expiresAt>Date.now())await api('/api/apps/'+siteId+'/logout','POST',{});}
     finally{auth=null;try{sessionStorage.removeItem(sessionKey);}catch{}}
   }
-  return {login,get,put,list,remove,logout,exchangeLedger,requestPersonal,
+  return {login,get,put,list,remove,logout,exchangeLedger,requestPersonal,requestAuctionWorkspace,
     get currentUser(){return auth&&auth.expiresAt>Date.now()?{
       uid:auth.uid,provider:auth.provider||null,displayName:auth.displayName||'',photoURL:auth.photoURL||'',
       providerData:(auth.providers||[]).map(provider=>({providerId:provider==='google'?'google.com':provider}))
