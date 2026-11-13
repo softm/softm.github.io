@@ -13,6 +13,7 @@ const DEFAULT_SITES={
   calc:{name:'계산기',origins:['https://softm.github.io']},
   policyfundfinder:{name:'지원한눈',origins:['https://policyfundfinder.designboard.net','https://softm.github.io']},
   auctionhannun:{name:'경매한눈',origins:['https://auctionhannun.designboard.net','https://softm.github.io']},
+  tojiiyonghannun:{name:'토지이용한눈',origins:['https://tojiiyonghannun.designboard.net']},
   homecare:{name:'돌봄한눈',origins:['https://homecare.designboard.net','https://softm.github.io']},
   bizhannun:{name:'사업자한눈',origins:['https://softm.github.io']},
   norn:{name:'노른',origins:['https://norn.designboard.net','https://softm.github.io']},
