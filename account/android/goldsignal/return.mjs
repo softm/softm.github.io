@@ -1,4 +1,4 @@
-// OAuth code is short-lived, site-bound and PKCE-bound; never include a bearer token.
+// OAuth code is short-lived, site-bound and PKCE-bound; never include a session credential.
 const params=new URLSearchParams(location.hash.slice(1));
 const proof=v=>/^[A-Za-z0-9_-]{43}$/.test(v||'');
 const request=params.get('request'),code=params.get('code');
