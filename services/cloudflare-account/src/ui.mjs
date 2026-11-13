@@ -47,6 +47,15 @@ async function finishConnection(){
     location.replace(returnUrl.href);
     return;
   }
+  if((!window.opener||window.opener.closed)&&intent.site==='goldsignal'&&intent.origin==='https://goldsignal.designboard.net'){
+    // GoldSignal Android also uses the system browser. Return only a one-time,
+    // PKCE-bound code through the public handoff page; bearer tokens never enter the URL.
+    const returnUrl=new URL('https://softm.github.io/account/android/goldsignal/');
+    returnUrl.hash=new URLSearchParams({request:v.request,code:v.code}).toString();
+    connectionSent=true;
+    location.replace(returnUrl.href);
+    return;
+  }
   if(!window.opener||window.opener.closed)throw Error('가계부에서 로그인 창을 다시 열어 주세요.');
   window.opener.postMessage({type:'softm:authorization',requestId:v.request,code:v.code},v.origin);
   connectionSent=true;
