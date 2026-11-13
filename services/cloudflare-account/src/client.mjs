@@ -26,8 +26,12 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
     const provider=options.provider??null;
     if(provider!==null&&!['google','kakao','naver'].includes(provider))throw Error('지원하지 않는 SNS 로그인입니다.');
     // Android must use its system browser. Embedded Google OAuth/WebView popups are unsupported.
-    const nativeBridge=siteId==='weatherhannun'&&typeof window.WeatherHannunAndroid?.startCloudflareLogin==='function'
-      ?window.WeatherHannunAndroid:null;
+    const nativeConfig=siteId==='weatherhannun'&&typeof window.WeatherHannunAndroid?.startCloudflareLogin==='function'
+      ?{bridge:window.WeatherHannunAndroid,event:'weatherhannun:auth-return'}
+      :siteId==='goldsignal'&&typeof window.GoldSignalAndroid?.startCloudflareLogin==='function'
+        ?{bridge:window.GoldSignalAndroid,event:'goldsignal:auth-return'}:null;
+    const nativeBridge=nativeConfig?.bridge||null;
+    const nativeEvent=nativeConfig?.event||null;
     const popup=nativeBridge?null:options.popup||window.open('about:blank','_blank','popup,width=480,height=780');
     if(!nativeBridge&&!popup)throw Error('로그인 팝업을 허용해 주세요.');
     try{
@@ -44,7 +48,7 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
         const closePopup=()=>{try{popup?.close();}catch{}};
         const clean=()=>{
           window.removeEventListener('message',receive);
-          window.removeEventListener('weatherhannun:auth-return',receiveNative);
+          if(nativeEvent)window.removeEventListener(nativeEvent,receiveNative);
           clearTimeout(timer);clearInterval(watch);
         };
         const stop=err=>{if(settled)return;settled=true;clean();closePopup();reject(err);};
@@ -75,7 +79,7 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
           void accept(event.detail?.code);
         };
         window.addEventListener('message',receive);
-        if(nativeBridge)window.addEventListener('weatherhannun:auth-return',receiveNative);
+        if(nativeBridge&&nativeEvent)window.addEventListener(nativeEvent,receiveNative);
         timer=setTimeout(()=>stop(Error('로그인 시간이 만료됐습니다.')),300000);
         if(nativeBridge){
           try{
