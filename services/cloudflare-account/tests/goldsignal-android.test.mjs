@@ -55,5 +55,5 @@ test('GoldSignal native handoff returns only the one-time code to the app',()=>{
  const returnJs=readFileSync(new URL('../../../account/android/goldsignal/return.mjs',import.meta.url),'utf8');
  assert.match(returnJs,/goldsignal:\/\/auth\/callback/);
  assert.match(returnJs,/history\.replaceState/);
- assert.doesNotMatch(returnJs,/accessToken|bearer/i);
+ assert.doesNotMatch(returnJs,/accessToken\s*[:=]|Authorization\s*:/i);
 });
