@@ -9,7 +9,7 @@ test('토지한눈 공개 주소는 공통 계정 Worker에서만 승인한다',
   }),{});
   assert.equal(ok.status,204);
   assert.equal(ok.headers.get('Access-Control-Allow-Origin'),origin);
-  assert.match(ok.headers.get('Access-Control-Allow-Methods'),'POST');
+  assert.match(ok.headers.get('Access-Control-Allow-Methods'),/POST/);
 });
 test('비등록 외부 도메인은 토지한눈으로 위장해도 CORS를 통과하지 않는다',async()=>{
   const bad=await worker.fetch(new Request('https://softm-hannun-account.softm.workers.dev/api/connect/exchange',{
