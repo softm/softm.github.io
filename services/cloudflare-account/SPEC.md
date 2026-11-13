@@ -61,3 +61,6 @@
 
 ## 범위 밖
 가계부 엔드투엔드 장부 이동, Android App Link 새 인증 handoff, R2 대용량 백업, 기존 Firestore 전수 덤프, 실제 SNS 제공자 승인/Cloudflare 배포는 별도 작업이며 준비되지 않았는데 완료로 보고하지 않는다.
+
+## 음식한눈 Android (2026-11-13)
+`foodhannun` 웹은 `https://softm.github.io` Origin으로 연결한다. Android 네이티브 브리지는 시스템 브라우저에서 OAuth 후 `https://softm.github.io/account/android/foodhannun/#request=...&code=...`의 짧은 승인 코드만 받아 `foodhannun://auth/callback` 딥링크로 전달한다. 앱은 기존 PKCE 검증값으로 서버에서 앱 전용 토큰을 교환하며 계정·레시피 데이터 자동 이관은 하지 않는다. 배포된 Worker의 `/client.js`, Android 새 빌드, 실제 SNS 로그인까지 별도 검증해야 운영 완료이다.

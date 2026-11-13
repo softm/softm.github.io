@@ -29,7 +29,9 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
     const nativeConfig=siteId==='weatherhannun'&&typeof window.WeatherHannunAndroid?.startCloudflareLogin==='function'
       ?{bridge:window.WeatherHannunAndroid,event:'weatherhannun:auth-return'}
       :siteId==='goldsignal'&&typeof window.GoldSignalAndroid?.startCloudflareLogin==='function'
-        ?{bridge:window.GoldSignalAndroid,event:'goldsignal:auth-return'}:null;
+        ?{bridge:window.GoldSignalAndroid,event:'goldsignal:auth-return'}
+        :siteId==='foodhannun'&&typeof window.FoodHannunAndroid?.startCloudflareLogin==='function'
+          ?{bridge:window.FoodHannunAndroid,event:'foodhannun:auth-return'}:null;
     const nativeBridge=nativeConfig?.bridge||null;
     const nativeEvent=nativeConfig?.event||null;
     const popup=nativeBridge?null:options.popup||window.open('about:blank','_blank','popup,width=480,height=780');

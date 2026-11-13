@@ -38,6 +38,15 @@ async function finishConnection(){
     location.replace(returnUrl.href);
     return;
   }
+  if((!window.opener||window.opener.closed)&&intent.site==='foodhannun'&&intent.origin==='https://softm.github.io'){
+    // 음식한눈 Android: external browser → app handoff, never an embedded OAuth WebView.
+    // Only the PKCE-bound, one-time code enters the URL fragment, not bearer tokens.
+    const returnUrl=new URL('https://softm.github.io/account/android/foodhannun/');
+    returnUrl.hash=new URLSearchParams({request:v.request,code:v.code}).toString();
+    connectionSent=true;
+    location.replace(returnUrl.href);
+    return;
+  }
   if((!window.opener||window.opener.closed)&&intent.site==='weatherhannun'&&intent.origin==='https://softm.github.io'){
     // Android uses the system browser; never perform OAuth inside an embedded WebView.
     // The one-time code is PKCE-bound and travels only in the URL fragment.
