@@ -369,6 +369,13 @@ async function route(request,env){
     const uid=await requireApp(request,env,'weatherhannun');
     return json({uid,site:'weatherhannun'});
   }
+  // Identity-only validation for the independent auctionhannun workspace Worker.
+  // Never store auction case notes in the shared account D1.
+  if(path==='/api/apps/auctionhannun/session'){
+    if(request.method!=='GET')error('method-not-allowed',405);
+    const uid=await requireApp(request,env,'auctionhannun');
+    return json({uid,site:'auctionhannun'});
+  }
   // Identity-only token validation for the isolated gagyebu-api Worker.
   // This route never reads or writes a service ledger.
   if(path==='/api/apps/gagyebu/session'){
