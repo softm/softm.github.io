@@ -34,6 +34,8 @@ jobs:
           node --check services/cloudflare-account/src/client.mjs
           node --check shared/platform/v1/cloudflare-weather-sdk.mjs
           node --check shared/platform/v1/cloudflare-weather-boot.mjs
+          node --check shared/platform/v1/cloudflare-goldsignal-sdk.mjs
+          node --check shared/platform/v1/cloudflare-goldsignal-boot.mjs
           node --check shared/platform/v1/site-account.mjs
       - name: Verify archive list and project assignment
         run: |
