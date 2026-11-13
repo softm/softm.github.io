@@ -85,6 +85,18 @@ test('CORS rejects unregistered origins and cross-site changes',async()=>{
   const logout=await worker.fetch(new Request('https://worker.example/api/logout',{method:'POST',headers:{Origin:'https://evil.example','Content-Type':'application/json'},body:'{}'}),env);
   assert.equal(logout.status,403);
 });
+test('auction session endpoint requires a site-scoped bearer and allowed origin',async()=>{
+  const origin='https://auctionhannun.designboard.net';
+  const unauth=await worker.fetch(new Request('https://worker.example/api/apps/auctionhannun/session',{headers:{Origin:origin}}),env);
+  assert.equal(unauth.status,401);
+  const foreign=await worker.fetch(new Request('https://worker.example/api/apps/auctionhannun/session',{headers:{Origin:'https://evil.example'}}),env);
+  assert.equal(foreign.status,403);
+  const request=new Request('https://worker.example/api/apps/auctionhannun/session',{headers:{Origin:origin,Authorization:'Bearer '+random()}});
+  const mockEnv={DB:{prepare:()=>({bind:()=>({first:async()=>({user_id:'sh_mock'})})})}};
+  const response=await worker.fetch(request,mockEnv);
+  assert.equal(response.status,200);
+  assert.deepEqual(await response.json(),{uid:'sh_mock',site:'auctionhannun'});
+});
 test('new registration and deletion default to locked',()=>{
   assert.equal(CONSENT_VERSION,'2026-11-11');
   assert.ok(ITEM_ID.test('favorite-locations'));
