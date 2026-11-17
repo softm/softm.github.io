@@ -147,6 +147,16 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
     if(!response.ok){const error=Error(data.error||'계산 이력 서버 연결에 실패했습니다.');error.code=data.error;error.status=response.status;throw error;}
     return data;
   }
+  async function exchangeJuyuFavorites(method='GET',body){
+    if(!auth?.token)throw Error('로그인이 필요합니다.');
+    const response=await fetch('https://juyuhannun-api.softm.workers.dev/api/apps/juyuhannun/favorites',{
+      method,headers:{Authorization:'Bearer '+auth.token,...(body?{'Content-Type':'application/json'}:{})},
+      body:body?JSON.stringify(body):undefined,cache:'no-store'
+    });
+    const value=await response.json().catch(()=>({}));
+    if(!response.ok){const error=Error(value.message||value.error||'찜한 주유소를 동기화하지 못했습니다.');error.code=value.error;throw error;}
+    return value;
+  }
   async function requestPersonal(path,method='GET',body){
     uid();
     const allowedPath = /^\/api\/personal\/(?:preferences|places)(?:\/[A-Za-z0-9_-]{1,80})?$/.test(path);
@@ -175,7 +185,7 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
     try{if(auth&&auth.expiresAt>Date.now())await api('/api/apps/'+siteId+'/logout','POST',{});}
     finally{auth=null;try{sessionStorage.removeItem(sessionKey);}catch{}}
   }
-  return {login,get,put,list,remove,logout,exchangeLedger,exchangeCalcHistory,requestPersonal,requestAuctionWorkspace,
+  return {login,get,put,list,remove,logout,exchangeLedger,exchangeCalcHistory,exchangeJuyuFavorites,requestPersonal,requestAuctionWorkspace,
     get currentUser(){return auth&&auth.expiresAt>Date.now()?{
       uid:auth.uid,provider:auth.provider||null,displayName:auth.displayName||'',photoURL:auth.photoURL||'',
       providerData:(auth.providers||[]).map(provider=>({providerId:provider==='google'?'google.com':provider}))

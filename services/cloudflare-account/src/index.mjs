@@ -392,6 +392,13 @@ async function route(request,env){
     const uid=await requireApp(request,env,'calc');
     return json({uid,site:'calc'});
   }
+  // Identity-only validation for the isolated juyuhannun favorites Worker.
+  // Favorite station data remains in juyuhannun-db, outside the account D1.
+  if(path==='/api/apps/juyuhannun/session'){
+    if(request.method!=='GET')error('method-not-allowed',405);
+    const uid=await requireApp(request,env,'juyuhannun');
+    return json({uid,site:'juyuhannun'});
+  }
   if(path.startsWith('/api/apps/')&&path.endsWith('/logout'))return revokeApp(request,env,url);
   if(/^\/api\/apps\/[a-z0-9_-]+\/items$/.test(path))return listItems(request,env,url);
   if(path.startsWith('/api/apps/'))return itemsAPI(request,env,url);
