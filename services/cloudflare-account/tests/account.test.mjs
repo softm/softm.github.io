@@ -97,6 +97,16 @@ test('auction session endpoint requires a site-scoped bearer and allowed origin'
   assert.equal(response.status,200);
   assert.deepEqual(await response.json(),{uid:'sh_mock',site:'auctionhannun'});
 });
+test('calc session endpoint returns only the authenticated opaque uid',async()=>{
+  const origin='https://softm.github.io',token=random();
+  const request=new Request('https://worker.example/api/apps/calc/session',{headers:{Origin:origin,Authorization:'Bearer '+token}});
+  const mockEnv={DB:{prepare:()=>({bind:()=>({first:async()=>({user_id:'sh_calc_user'})})})}};
+  const response=await worker.fetch(request,mockEnv);
+  assert.equal(response.status,200);
+  assert.deepEqual(await response.json(),{uid:'sh_calc_user',site:'calc'});
+  const denied=await worker.fetch(new Request('https://worker.example/api/apps/calc/session',{headers:{Origin:'https://evil.example',Authorization:'Bearer '+token}}),mockEnv);
+  assert.equal(denied.status,403);
+});
 test('new registration and deletion default to locked',()=>{
   assert.equal(CONSENT_VERSION,'2026-11-11');
   assert.ok(ITEM_ID.test('favorite-locations'));
