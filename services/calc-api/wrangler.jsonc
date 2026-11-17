@@ -1,0 +1,19 @@
+{
+  "name": "calc-api",
+  "main": "src/index.mjs",
+  "compatibility_date": "2026-11-17",
+  "workers_dev": true,
+  "services": [
+    {
+      "binding": "ACCOUNT",
+      "service": "softm-hannun-account"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "calc-db",
+      "database_id": "11c2ef9f-c540-4f3f-8895-6009bed25557"
+    }
+  ]
+}
