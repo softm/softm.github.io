@@ -28,6 +28,10 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
     // Android must use its system browser. Embedded Google OAuth/WebView popups are unsupported.
     const nativeConfig=siteId==='weatherhannun'&&typeof window.WeatherHannunAndroid?.startCloudflareLogin==='function'
       ?{bridge:window.WeatherHannunAndroid,event:'weatherhannun:auth-return'}
+      :siteId==='hydrogenstation'&&typeof window.HydrogenStationAndroid?.startCloudflareLogin==='function'
+        ?{bridge:window.HydrogenStationAndroid,event:'hydrogenstation:auth-return'}
+      :siteId==='evchargingstation'&&typeof window.EVChargingStationAndroid?.startCloudflareLogin==='function'
+        ?{bridge:window.EVChargingStationAndroid,event:'evchargingstation:auth-return'}
       :siteId==='goldsignal'&&typeof window.GoldSignalAndroid?.startCloudflareLogin==='function'
         ?{bridge:window.GoldSignalAndroid,event:'goldsignal:auth-return'}
         :siteId==='foodhannun'&&typeof window.FoodHannunAndroid?.startCloudflareLogin==='function'
