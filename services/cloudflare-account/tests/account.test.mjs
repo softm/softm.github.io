@@ -107,6 +107,18 @@ test('calc session endpoint returns only the authenticated opaque uid',async()=>
   const denied=await worker.fetch(new Request('https://worker.example/api/apps/calc/session',{headers:{Origin:'https://evil.example',Authorization:'Bearer '+token}}),mockEnv);
   assert.equal(denied.status,403);
 });
+test('homecare institution session returns only the site-scoped opaque uid',async()=>{
+  const origin='https://homecare.designboard.net',token=random();
+  const unauthenticated=await worker.fetch(new Request('https://worker.example/api/apps/homecare/session',{headers:{Origin:origin}}),env);
+  assert.equal(unauthenticated.status,401);
+  const request=new Request('https://worker.example/api/apps/homecare/session',{headers:{Origin:origin,Authorization:'Bearer '+token}});
+  const mockEnv={DB:{prepare:()=>({bind:()=>({first:async()=>({user_id:'sh_homecare_user'})})})}};
+  const response=await worker.fetch(request,mockEnv);
+  assert.equal(response.status,200);
+  assert.deepEqual(await response.json(),{uid:'sh_homecare_user',site:'homecare'});
+  const denied=await worker.fetch(new Request('https://worker.example/api/apps/homecare/session',{headers:{Origin:'https://evil.example',Authorization:'Bearer '+token}}),mockEnv);
+  assert.equal(denied.status,403);
+}); // SOFTM-HOMECARE-INSTITUTION 날짜:20261118 : 기관 DB가 클라이언트 UID 대신 계정 Worker 검증 결과만 신뢰하도록 계약 확인
 test('new registration and deletion default to locked',()=>{
   assert.equal(CONSENT_VERSION,'2026-11-11');
   assert.ok(ITEM_ID.test('favorite-locations'));
