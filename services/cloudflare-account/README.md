@@ -60,3 +60,11 @@ npx wrangler dev --var PUBLIC_BASE_URL:http://localhost:8787
 
 ## 상태
 Cloudflare Workers + D1 배포 및 Google OAuth 실제 로그인 검증 완료. 기존 Firebase 계정 이전은 사용자 결정에 따라 생략했고 신규 Cloudflare 가입을 허용한다. 계정 UID·옛 원격 장부는 자동 병합되지 않는다. PC 가계부는 신규 암호화 장부 API를 구현했고 Secret `GAGYEBU_LEDGER_KEY_V1` 등록 후 자동으로 연결된다. Android 가계부와 다른 한눈 앱은 아직 개별 전환/검증 대상이다.
+
+<!-- SOFTM-HOMECARE-INSTITUTION START 날짜:20261118 : 돌봄한눈 기관 운영자료가 공통 회원 DB와 섞이지 않도록 인증 책임만 문서화 -->
+## 돌봄한눈 기관 서비스 인증
+
+기관 운영정보·사진·조회 통계는 별도 `softm-homecare-pilot` Worker와 전용 D1/R2에서 관리한다. 공통 계정 Worker는 `GET /api/apps/homecare/session`에서 `homecare` Origin과 1시간짜리 사이트 전용 bearer를 확인한 뒤 불투명 UID만 반환한다. 별도 Worker는 이 UID를 자체 승인된 기관 멤버십과 다시 대조하며, 클라이언트가 보낸 UID나 기관기호만으로 권한을 부여하지 않는다.
+
+배포 환경에 `SITE_ORIGINS_JSON`을 설정했다면 기본 목록을 대체하므로 `homecare` 항목에 `https://homecare.designboard.net`과 실제 사용하는 `https://softm.github.io` Origin이 포함됐는지 먼저 확인한다. 누락된 상태에서는 기관 포털 로그인과 기관 Worker의 세션 검증이 모두 거부된다.
+<!-- SOFTM-HOMECARE-INSTITUTION END -->
