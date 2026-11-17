@@ -1,0 +1,31 @@
+name: Deploy Juyuhannun directions with existing Cloudflare credentials
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: cloudflare-account-staging
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: softm/juyuhannun
+          ref: 1d6c505d6ae0b9bd0cbe0c3d38594115465c4480
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify existing credentials without exporting them
+        run: test -n "$CLOUDFLARE_API_TOKEN" && test -n "$CLOUDFLARE_ACCOUNT_ID"
+      - name: Test directions contract
+        run: node --test services/cloudflare-directions/test/*.mjs
+      - name: Deploy dedicated directions Worker
+        working-directory: services/cloudflare-directions
+        run: npx --yes wrangler@4.163.0 deploy
+      - name: Check configured secret names
+        working-directory: services/cloudflare-directions
+        run: npx --yes wrangler@4.163.0 secret list
