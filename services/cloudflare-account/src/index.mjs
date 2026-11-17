@@ -399,6 +399,13 @@ async function route(request,env){
     const uid=await requireApp(request,env,'juyuhannun');
     return json({uid,site:'juyuhannun'});
   }
+  /** SOFTM-HOMECARE-INSTITUTION START 날짜:20261118 : 기관 운영자료는 공통 계정 D1과 분리하고 사이트 전용 UID만 별도 Worker에 전달 */
+  if(path==='/api/apps/homecare/session'){
+    if(request.method!=='GET')error('method-not-allowed',405);
+    const uid=await requireApp(request,env,'homecare');
+    return json({uid,site:'homecare'});
+  }
+  /** SOFTM-HOMECARE-INSTITUTION END */
   if(path.startsWith('/api/apps/')&&path.endsWith('/logout'))return revokeApp(request,env,url);
   if(/^\/api\/apps\/[a-z0-9_-]+\/items$/.test(path))return listItems(request,env,url);
   if(path.startsWith('/api/apps/'))return itemsAPI(request,env,url);
