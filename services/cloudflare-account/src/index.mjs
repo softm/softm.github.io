@@ -385,6 +385,13 @@ async function route(request,env){
     const uid=await requireApp(request,env,'gagyebu');
     return json({uid,site:'gagyebu'});
   }
+  // Identity-only token validation for the isolated calc-api Worker.
+  // Calculation history remains in calc-db and never enters the account D1.
+  if(path==='/api/apps/calc/session'){
+    if(request.method!=='GET')error('method-not-allowed',405);
+    const uid=await requireApp(request,env,'calc');
+    return json({uid,site:'calc'});
+  }
   if(path.startsWith('/api/apps/')&&path.endsWith('/logout'))return revokeApp(request,env,url);
   if(/^\/api\/apps\/[a-z0-9_-]+\/items$/.test(path))return listItems(request,env,url);
   if(path.startsWith('/api/apps/'))return itemsAPI(request,env,url);

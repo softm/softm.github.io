@@ -136,6 +136,17 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
     if(!response.ok)throw Error(data.error||'가계부 서버 연결에 실패했습니다.');
     return data;
   }
+  async function exchangeCalcHistory(method='GET',body){
+    if(siteId!=='calc'||!['GET','POST','DELETE'].includes(method))throw Error('허용되지 않은 계산 이력 요청입니다.');
+    uid();
+    const response=await fetch('https://calc-api.softm.workers.dev/api/apps/calc/history',{
+      method,headers:{Authorization:'Bearer '+auth.token,...(body?{'Content-Type':'application/json'}:{})},
+      body:body?JSON.stringify(body):undefined,cache:'no-store'
+    });
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok){const error=Error(data.error||'계산 이력 서버 연결에 실패했습니다.');error.code=data.error;error.status=response.status;throw error;}
+    return data;
+  }
   async function requestPersonal(path,method='GET',body){
     uid();
     const allowedPath = /^\/api\/personal\/(?:preferences|places)(?:\/[A-Za-z0-9_-]{1,80})?$/.test(path);
@@ -164,7 +175,7 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
     try{if(auth&&auth.expiresAt>Date.now())await api('/api/apps/'+siteId+'/logout','POST',{});}
     finally{auth=null;try{sessionStorage.removeItem(sessionKey);}catch{}}
   }
-  return {login,get,put,list,remove,logout,exchangeLedger,requestPersonal,requestAuctionWorkspace,
+  return {login,get,put,list,remove,logout,exchangeLedger,exchangeCalcHistory,requestPersonal,requestAuctionWorkspace,
     get currentUser(){return auth&&auth.expiresAt>Date.now()?{
       uid:auth.uid,provider:auth.provider||null,displayName:auth.displayName||'',photoURL:auth.photoURL||'',
       providerData:(auth.providers||[]).map(provider=>({providerId:provider==='google'?'google.com':provider}))
