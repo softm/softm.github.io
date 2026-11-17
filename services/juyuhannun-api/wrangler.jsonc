@@ -1,0 +1,17 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "juyuhannun-api",
+  "main": "src/index.mjs",
+  "compatibility_date": "2026-11-17",
+  "workers_dev": true,
+  "services": [
+    { "binding": "ACCOUNT", "service": "softm-hannun-account" }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "juyuhannun-db",
+      "database_id": "b143e00a-d2a4-4919-a96f-777bc8f347b4"
+    }
+  ]
+}
