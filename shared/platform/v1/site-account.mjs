@@ -10,6 +10,8 @@ export function createAccountContext({siteId,sdkLoader=()=>import('./sdk.mjs?v=2
     }).catch(error=>{pending=null;throw error;});return pending;
   }
   const externalBrowser=(siteId==='weatherhannun'&&typeof window.WeatherHannunAndroid?.startCloudflareLogin==='function')||
+    (siteId==='hydrogenstation'&&typeof window.HydrogenStationAndroid?.startCloudflareLogin==='function')||
+    (siteId==='evchargingstation'&&typeof window.EVChargingStationAndroid?.startCloudflareLogin==='function')||
     (siteId==='goldsignal'&&typeof window.GoldSignalAndroid?.startCloudflareLogin==='function')||
     (siteId==='foodhannun'&&typeof window.FoodHannunAndroid?.startCloudflareLogin==='function');
   return Object.freeze({siteId,accountPageUrl,legacyVaultUrl,externalBrowser,ready,get currentUser(){return user;},subscribe(fn){listeners.add(fn);fn(user);return ()=>listeners.delete(fn);},

@@ -1,5 +1,5 @@
 // Identity-only Cloudflare account boot; legacy Firebase vault is opt-in.
-import {createAccountContext} from './site-account.mjs?v=20261113-policyfundfinder-1';
+import {createAccountContext} from './site-account.mjs?v=20261117-hannun-rollout-1';
 import {mountSiteAccount} from './account-menu.mjs?v=20261112-header-slot-1';
 
 const siteId=new URL(import.meta.url).searchParams.get('site');
@@ -8,6 +8,25 @@ const SITES=Object.freeze({
     name:'지원한눈',
     accountTarget:'.topbar .header-actions, .mobile-header',
     legacyVaultUrl:'https://policyfundfinder.designboard.net/?legacyAccount=1'
+  },
+  evchargingstation:{
+    name:'충전한눈',
+    accountTarget:'.app-header .header-right, .app-header',
+    legacyVaultUrl:'?legacyAccount=1'
+  },
+  hydrogenstation:{
+    name:'수소한눈',
+    accountTarget:'.topbar, .mobile-map-side-actions, .map-top',
+    legacyVaultUrl:'?legacyAccount=1'
+  },
+  foodhannun:{
+    name:'음식한눈',
+    accountTarget:'.site-header .header-nav, .site-header .header-inner, .site-header'
+  },
+  homecare:{
+    name:'돌봄한눈',
+    accountTarget:'.stitch-app-header, .head-row, .page-head',
+    legacyVaultUrl:'?legacyAccount=1'
   }
 });
 
@@ -16,13 +35,13 @@ function mount(){
   if(!settings||location.protocol==='file:'||location.hostname==='appassets.androidplatform.net')return;
   if(new URL(location.href).searchParams.get('legacyAccount')==='1'){
     // Explicit recovery of old encrypted backups; never silently merge UID or data.
-    import('./boot.mjs?site=policyfundfinder&v=20261029-account-1')
+    import('./boot.mjs?site='+encodeURIComponent(siteId)+'&v=20261029-account-1')
       .catch(()=>console.warn('이전 보관소 화면을 불러올 수 없습니다.'));
     return;
   }
   const account=createAccountContext({
     siteId,
-    sdkLoader:()=>import('./cloudflare-site-sdk.mjs?v=20261113-policyfundfinder-1'),
+    sdkLoader:()=>import('./cloudflare-site-sdk.mjs?v=20261117-hannun-rollout-1'),
     accountPageUrl:'https://softm-hannun-account.softm.workers.dev/account',
     legacyVaultUrl:settings.legacyVaultUrl
   });

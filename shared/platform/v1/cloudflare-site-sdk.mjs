@@ -1,9 +1,15 @@
 // Cloudflare identity-only adapter for opt-in Hannun sites.
 // Personal records are never uploaded by login and remain service-owned.
-import {createCloudflareAccountClient} from '../../../services/cloudflare-account/src/client.mjs?v=20261113-native-auth-1';
+import {createCloudflareAccountClient} from '../../../services/cloudflare-account/src/client.mjs?v=20261117-hannun-rollout-1';
 
 export const CLOUDFLARE_ACCOUNT_BASE = 'https://softm-hannun-account.softm.workers.dev';
-const ENABLED_SITES = new Set(['policyfundfinder']);
+const ENABLED_SITES = new Set([
+  'policyfundfinder',
+  'evchargingstation',
+  'hydrogenstation',
+  'foodhannun',
+  'homecare'
+]);
 
 export function createSiteClient({siteId}={}) {
   if(!ENABLED_SITES.has(siteId))throw Error('Cloudflare 계정으로 전환되지 않은 서비스입니다.');
