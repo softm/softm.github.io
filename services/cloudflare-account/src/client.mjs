@@ -35,7 +35,9 @@ export function createCloudflareAccountClient({baseUrl,siteId}){
       :siteId==='goldsignal'&&typeof window.GoldSignalAndroid?.startCloudflareLogin==='function'
         ?{bridge:window.GoldSignalAndroid,event:'goldsignal:auth-return'}
         :siteId==='foodhannun'&&typeof window.FoodHannunAndroid?.startCloudflareLogin==='function'
-          ?{bridge:window.FoodHannunAndroid,event:'foodhannun:auth-return'}:null;
+          ?{bridge:window.FoodHannunAndroid,event:'foodhannun:auth-return'}
+        :siteId==='tojihannun'&&typeof window.TojihannunAndroid?.startCloudflareLogin==='function'
+          ?{bridge:window.TojihannunAndroid,event:'tojihannun:auth-return'}:null;
     const nativeBridge=nativeConfig?.bridge||null;
     const nativeEvent=nativeConfig?.event||null;
     const popup=nativeBridge?null:options.popup||window.open('about:blank','_blank','popup,width=480,height=780');

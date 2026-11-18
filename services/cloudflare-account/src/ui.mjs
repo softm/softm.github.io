@@ -79,6 +79,15 @@ async function finishConnection(){
     location.replace(returnUrl.href);
     return;
   }
+  if((!window.opener||window.opener.closed)&&intent.site==='tojihannun'&&intent.origin==='https://tojihannun.designboard.net'){
+    // 토지한눈 Android도 OAuth를 WebView에 넣지 않고 시스템 브라우저에서 처리한다.
+    // 앱에는 PKCE에 묶인 일회용 코드만 URL fragment로 되돌린다.
+    const returnUrl=new URL('https://softm.github.io/account/android/tojihannun/');
+    returnUrl.hash=new URLSearchParams({request:v.request,code:v.code}).toString();
+    connectionSent=true;
+    location.replace(returnUrl.href);
+    return;
+  }
   if(!window.opener||window.opener.closed)throw Error('가계부에서 로그인 창을 다시 열어 주세요.');
   window.opener.postMessage({type:'softm:authorization',requestId:v.request,code:v.code},v.origin);
   connectionSent=true;
