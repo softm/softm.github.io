@@ -90,7 +90,8 @@
       "name": "맛집한눈",
       "url": "https://softm.github.io/matjiphannun/",
       "origins": [
-        "https://softm.github.io"
+        "https://softm.github.io",
+        "https://appassets.androidplatform.net"
       ],
       "storage": "encrypted-only",
       "integration": "snapshot-adapter"
