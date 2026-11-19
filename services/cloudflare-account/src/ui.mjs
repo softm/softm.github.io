@@ -47,6 +47,14 @@ async function finishConnection(){
     location.replace(returnUrl.href);
     return;
   }
+  if((!window.opener||window.opener.closed)&&intent.site==='matjiphannun'&&intent.origin==='https://appassets.androidplatform.net'){
+    // 맛집한눈의 로컬 WebView는 시스템 브라우저에서 인증하고 PKCE 일회용 코드만 앱으로 돌려보낸다.
+    const returnUrl=new URL('https://softm.github.io/account/android/matjiphannun/');
+    returnUrl.hash=new URLSearchParams({request:v.request,code:v.code}).toString();
+    connectionSent=true;
+    location.replace(returnUrl.href);
+    return;
+  }
   if((!window.opener||window.opener.closed)&&intent.site==='weatherhannun'&&intent.origin==='https://softm.github.io'){
     // Android uses the system browser; never perform OAuth inside an embedded WebView.
     // The one-time code is PKCE-bound and travels only in the URL fragment.

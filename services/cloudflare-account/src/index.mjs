@@ -8,7 +8,7 @@ const DEFAULT_SITES={
   evchargingstation:{name:'충전한눈',origins:['https://softm.github.io']},
   hydrogenstation:{name:'수소충전한눈',origins:['https://softm.github.io']},
   foodhannun:{name:'음식한눈',origins:['https://softm.github.io']},
-  matjiphannun:{name:'맛집한눈',origins:['https://softm.github.io']},
+  matjiphannun:{name:'맛집한눈',origins:['https://softm.github.io','https://appassets.androidplatform.net']},
   goldsignal:{name:'금시그널',origins:['https://goldsignal.designboard.net','https://softm.github.io']},
   calc:{name:'계산기',origins:['https://softm.github.io']},
   policyfundfinder:{name:'지원한눈',origins:['https://policyfundfinder.designboard.net','https://softm.github.io']},
