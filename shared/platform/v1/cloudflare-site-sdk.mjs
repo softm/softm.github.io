@@ -8,6 +8,7 @@ const ENABLED_SITES = new Set([
   'evchargingstation',
   'hydrogenstation',
   'foodhannun',
+  'matjiphannun',
   'homecare'
 ]);
 
@@ -33,6 +34,10 @@ export function createSiteClient({siteId}={}) {
     async logout(){
       try{await client.logout();}
       finally{notify();}
-    }
+    },
+    get:(...args)=>client.get(...args),
+    put:(...args)=>client.put(...args),
+    list:(...args)=>client.list(...args),
+    remove:(...args)=>client.remove(...args)
   });
 }

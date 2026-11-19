@@ -13,7 +13,8 @@ export function createAccountContext({siteId,sdkLoader=()=>import('./sdk.mjs?v=2
     (siteId==='hydrogenstation'&&typeof window.HydrogenStationAndroid?.startCloudflareLogin==='function')||
     (siteId==='evchargingstation'&&typeof window.EVChargingStationAndroid?.startCloudflareLogin==='function')||
     (siteId==='goldsignal'&&typeof window.GoldSignalAndroid?.startCloudflareLogin==='function')||
-    (siteId==='foodhannun'&&typeof window.FoodHannunAndroid?.startCloudflareLogin==='function');
+    (siteId==='foodhannun'&&typeof window.FoodHannunAndroid?.startCloudflareLogin==='function')||
+    (siteId==='matjiphannun'&&typeof window.MatjipHannunAndroid?.startCloudflareLogin==='function');
   return Object.freeze({siteId,accountPageUrl,legacyVaultUrl,externalBrowser,ready,get currentUser(){return user;},subscribe(fn){listeners.add(fn);fn(user);return ()=>listeners.delete(fn);},
     async login({popup,mode='login'}={}){const c=await ready();return c.login({popup,mode});},async logout(){const c=await ready();return c.logout();},
     registerPolicy(policy){if(!policy?.id||policies.has(policy.id))throw Error('고유한 사이트 정책 ID가 필요합니다.');policies.set(policy.id,policy);if(user)Promise.resolve().then(()=>policy.onLogin?.(user,{siteId,client})).catch(()=>{});return ()=>policies.delete(policy.id);},

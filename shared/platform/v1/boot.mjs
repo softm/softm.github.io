@@ -6,7 +6,7 @@ const siteId=new URL(import.meta.url).searchParams.get('site');
 export function mountRegisteredSite(id=siteId) {
   const config=SITE_INTEGRATIONS[id];
   if(!config)throw Error('등록되지 않은 공통 보관소입니다.');
-  if(location.hostname==='appassets.androidplatform.net'||location.protocol==='file:')return null;
+  if((location.hostname==='appassets.androidplatform.net'&&id!=='matjiphannun')||location.protocol==='file:')return null;
   if(id==='evchargingstation'&&new URL(location.href).searchParams.get('demo')==='1')return null;
   let adapter;
   if(config.sessionKeys) {
@@ -19,8 +19,11 @@ export function mountRegisteredSite(id=siteId) {
     const bridge=()=>{const b=window.SoftmSiteState;if(b?.siteId!==id)throw Error('먼저 이 사이트에서 저장할 작업공간을 열어 주세요.');return b;};
     adapter={read:()=>bridge().read(),validate:v=>bridge().validate(v),write:v=>bridge().write(v),scope:()=>bridge().scope?.()};
   }
-  const account=createAccountContext({siteId:id});
-  const vault=mountSiteVault({siteId:id,...config,adapter,account,hideLauncher:true});
+  const sdkLoader=id==='matjiphannun'
+    ?()=>import('./cloudflare-site-sdk.mjs?v=20261119-matjip-account-1')
+    :undefined;
+  const account=createAccountContext({siteId:id,sdkLoader});
+  const vault=mountSiteVault({siteId:id,...config,adapter,account,hideLauncher:true,sdkLoader});
   if(!vault)return null;
   const ui=mountSiteAccount({siteId:id,...config,account,vault});
   window.SoftmAccounts ||= new Map();window.SoftmAccounts.set(id,account);
