@@ -4,6 +4,14 @@ import {mountSiteAccount} from './account-menu.mjs?v=20261112-header-slot-1';
 
 const siteId=new URL(import.meta.url).searchParams.get('site');
 const SITES=Object.freeze({
+  hannunae:{
+    name:'한눈애',
+    accountTarget:'#siteAccountSlot'
+  },
+  geuriumpoetry:{
+    name:'그리움과 시',
+    accountTarget:'#siteAccountSlot'
+  },
   policyfundfinder:{
     name:'지원한눈',
     accountTarget:'.topbar .header-actions, .mobile-header',

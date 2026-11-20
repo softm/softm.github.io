@@ -4,6 +4,8 @@ import {createCloudflareAccountClient} from '../../../services/cloudflare-accoun
 
 export const CLOUDFLARE_ACCOUNT_BASE = 'https://softm-hannun-account.softm.workers.dev';
 const ENABLED_SITES = new Set([
+  'hannunae',
+  'geuriumpoetry',
   'policyfundfinder',
   'evchargingstation',
   'hydrogenstation',

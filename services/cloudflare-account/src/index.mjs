@@ -3,6 +3,8 @@ import {providerConfig, authorizeUrlWithPkce, exchangeProfile} from './oauth.mjs
 import {page, clientScript} from './ui.mjs';
 
 const DEFAULT_SITES={
+  hannunae:{name:'한눈애',origins:['https://softm.github.io']},
+  geuriumpoetry:{name:'그리움과 시',origins:['https://softm.github.io']},
   weatherhannun:{name:'날씨한눈',origins:['https://softm.github.io']},
   juyuhannun:{name:'주유한눈',origins:['https://softm.github.io']},
   evchargingstation:{name:'충전한눈',origins:['https://softm.github.io']},
