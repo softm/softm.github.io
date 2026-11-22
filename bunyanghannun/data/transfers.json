@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "status": "unconfigured",
+  "generatedAt": null,
+  "source": "국토교통부 아파트 분양권전매 실거래가",
+  "sourceUrl": "https://www.data.go.kr/data/15126471/openapi.do",
+  "items": [],
+  "message": "MOLIT_API_KEY 및 수집 범위 미연결 · 실거래가 없다는 뜻이 아닙니다."
+}
