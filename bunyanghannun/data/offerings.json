@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "status": "unconfigured",
+  "generatedAt": null,
+  "source": "한국부동산원 청약홈 분양정보 조회 서비스",
+  "sourceUrl": "https://www.data.go.kr/data/15098547/openapi.do",
+  "items": [],
+  "message": "APPLYHOME_API_KEY 미연결 · 실제 청약 정보가 없다는 뜻이 아닙니다."
+}
