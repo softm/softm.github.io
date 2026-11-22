@@ -206,6 +206,7 @@
     saveLocal(key,keys);
     if (!Array.isArray(prev)||!('Notification' in window)||Notification.permission!=='granted'||!alertRule[kind]) return;
     const unseen=items.filter(x=>!prev.includes(toKey(x)) && (!alertRule.region||alertRule.region===x.region));
+    if(kind==='offer') { const dueKey=K.seen+'.due'; const dueSeen=loadLocal(dueKey,{}); const today=addDays(0); const due=items.find(x=>(!alertRule.region||alertRule.region===x.region) && delta(x.startDate)>=0 && delta(x.startDate)<=alertRule.days && dueSeen[toKey(x)]!==today); if(due) { dueSeen[toKey(due)]=today; saveLocal(dueKey,dueSeen); new Notification('분양한눈 · 접수 일정 알림',{body:due.title+' · 접수 시작 '+displayDate(due.startDate)}); } }
     if(!unseen.length)return;
     const candidate=unseen[0];
     const title=kind==='offer'?'분양한눈 · 새로운 청약 정보':'분양한눈 · 신규 분양권 거래';
@@ -244,13 +245,13 @@
       if(!('Notification' in window)){ $('alertMessage').textContent='이 브라우저는 알림을 지원하지 않습니다.';return; }
       try {const p=await Notification.requestPermission();$('alertMessage').textContent='브라우저 알림 권한: '+p;}catch(_){$('alertMessage').textContent='브라우저에서 알림 권한을 변경하세요.';}
     };
-    $('viewList').onclick=()=>{state.mobile='list';$('workspace').classList.remove('map-mobile');$('viewList').classList.add('active');$('viewMap').classList.remove('active');};
-    $('viewMap').onclick=()=>{state.mobile='map';$('workspace').classList.add('map-mobile');$('viewMap').classList.add('active');$('viewList').classList.remove('active');if(map)setTimeout(()=>map.invalidateSize(),80);};
+    $('viewList').onclick=()=>{state.mobile='list';document.querySelector('.workspace').classList.remove('map-mobile');$('viewList').classList.add('active');$('viewMap').classList.remove('active');};
+    $('viewMap').onclick=()=>{state.mobile='map';document.querySelector('.workspace').classList.add('map-mobile');$('viewMap').classList.add('active');$('viewList').classList.remove('active');if(map)setTimeout(()=>map.invalidateSize(),80);};
     const url=new URL(window.location.href);
     if(url.searchParams.get('kind')==='transfer')changeKind('transfer');
     document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadData();});
     setInterval(()=>{if(!document.hidden)loadData();},15*60*1000);
   }
-  function boot(){initMap();bindUI();loadData();}
+  function boot(){const switcher=document.querySelector('.mobile-view');if(switcher)document.body.appendChild(switcher);initMap();bindUI();loadData();}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
