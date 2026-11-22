@@ -1,0 +1,49 @@
+name: Bunyang Hannun official data collection
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 0,12 * * *" # 09:15 and 21:15 KST; schedule may be delayed
+permissions:
+  contents: write
+concurrency:
+  group: bunyanghannun-data
+  cancel-in-progress: false
+jobs:
+  collect:
+    if: github.repository == 'softm/softm.github.io'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Collect official data
+        id: collect
+        continue-on-error: true
+        working-directory: bunyanghannun
+        env:
+          APPLYHOME_API_KEY: ${{ secrets.APPLYHOME_API_KEY }}
+          MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
+          GEOCODE_ENABLED: ${{ vars.BUNYANG_GEOCODE_ENABLED }}
+          NAVER_MAP_CLIENT_ID: ${{ secrets.BUNYANG_NAVER_MAP_CLIENT_ID }}
+          NAVER_MAP_CLIENT_SECRET: ${{ secrets.BUNYANG_NAVER_MAP_CLIENT_SECRET }}
+        run: node scripts/collect.mjs
+      - name: Commit official JSON only
+        run: |
+          git add bunyanghannun/data/offerings.json bunyanghannun/data/transfers.json bunyanghannun/data/coordinates.json
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "data(bunyanghannun): refresh official feeds"
+            git push
+          else
+            echo "No feed changes."
+          fi
+      - name: Report errors
+        if: steps.collect.outcome == 'failure'
+        run: |
+          echo "::error::Official data source error; previous valid files retained."
+          exit 1
