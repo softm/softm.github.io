@@ -1,0 +1,19 @@
+{
+  "name": "분양한눈 - 청약·분양권 지도",
+  "short_name": "분양한눈",
+  "description": "청약 일정과 분양권 실거래 정보를 지도에서 확인하는 서비스",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f2f7ff",
+  "theme_color": "#173f73",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
