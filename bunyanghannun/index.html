@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#173f73">
+  <meta name="description" content="청약 모집 일정과 분양권 전매 실거래를 지도에서 나란히 탐색하고 관심 지역을 저장하는 분양한눈">
+  <title>분양한눈 | 청약·분양권 지도</title>
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyo4SLu0h6O/4=" crossorigin="">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip" href="#listing">목록으로 바로가기</a>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="분양한눈 홈"><span class="brand-mark">분</span><span><b>분양한눈</b><small>청약과 분양권을 지도 한눈에</small></span></a>
+    <div class="top-actions">
+      <button class="text-button" id="btnCalendar" type="button">📅 일정</button>
+      <button class="text-button" id="btnSaved" type="button">☆ 관심 <span id="savedCount">0</span></button>
+      <button class="primary small" id="btnAlerts" type="button">♧ 맞춤 알림</button>
+    </div>
+  </header>
+  <section class="intro-strip" aria-label="서비스 안내">
+    <div><b>어디에, 언제, 얼마에?</b><span>청약 일정부터 분양권 실거래까지 별도 데이터로 투명하게 표시합니다.</span></div>
+    <a href="#sourceNotice">데이터 기준 보기 ↗</a>
+  </section>
+  <div class="workspace">
+    <aside class="sidebar" aria-label="검색과 목록">
+      <div class="filters">
+        <div class="seg" role="tablist" aria-label="정보 유형">
+          <button type="button" id="tabOffer" role="tab" aria-selected="true" class="active">🏘 청약 · 분양</button>
+          <button type="button" id="tabTransfer" role="tab" aria-selected="false">↗ 분양권 거래</button>
+        </div>
+        <div class="search-wrap"><label class="sr-only" for="keyword">단지명·지역 검색</label><span aria-hidden="true">⌕</span><input id="keyword" type="search" placeholder="단지명, 시군구, 주소로 검색" autocomplete="off"><button id="clearKeyword" type="button" aria-label="검색어 지우기">×</button></div>
+        <div class="filter-grid">
+          <label>지역<select id="region"><option value="">전국 전체</option><option>서울</option><option>경기</option><option>인천</option><option>부산</option><option>대구</option><option>광주</option><option>대전</option><option>울산</option><option>세종</option><option>강원</option><option>충북</option><option>충남</option><option>전북</option><option>전남</option><option>경북</option><option>경남</option><option>제주</option></select></label>
+          <label><span id="statusLabel">접수 상태</span><select id="status"><option value="">상태 전체</option><option>예정</option><option>접수중</option><option>마감</option><option>무순위</option></select></label>
+        </div>
+        <div class="quick-filters" id="quickFilters" aria-label="빠른 필터">
+          <button type="button" data-filter="" class="active">전체</button><button type="button" data-filter="예정">청약 예정</button><button type="button" data-filter="접수중">접수 중</button><button type="button" data-filter="무순위">무순위</button>
+        </div>
+        <div class="filter-row"><label class="checkbox-label"><input type="checkbox" id="withinMap"> 현재 지도 영역만</label><label class="checkbox-label"><input type="checkbox" id="savedOnly"> 관심만</label><button type="button" class="reset-link" id="resetFilters">초기화</button></div>
+      </div>
+      <div class="result-heading" id="listing"><div><h1 id="listTitle">청약·분양 정보</h1><p id="resultDesc">공식 데이터를 확인합니다</p></div><label class="sr-only" for="sort">정렬 기준</label><select id="sort"><option value="recent">최신순</option><option value="soon">일정 임박순</option><option value="name">이름순</option></select></div>
+      <div class="status-banner" id="statusBanner" role="status">데이터 불러오는 중…</div>
+      <div id="cards" class="cards" aria-live="polite"></div>
+      <section id="sourceNotice" class="source-note"><b>정보 이용 안내</b><p>청약 일정은 모집공고, 분양권 가격은 신고된 거래 자료입니다. 분양권 실거래는 현재 매도 호가나 판매 중인 매물이 아닙니다. 주소·좌표를 확인하지 못한 자료는 지도 핀 대신 목록에만 표시합니다.</p><div id="sourceStatus"></div><a href="https://www.applyhome.co.kr/" target="_blank" rel="noopener noreferrer">청약홈 ↗</a><a href="https://rt.molit.go.kr/" target="_blank" rel="noopener noreferrer">국토교통부 실거래 ↗</a></section>
+    </aside>
+    <main class="map-section">
+      <div id="map" aria-label="분양 정보 지도"></div>
+      <div id="mapFallback" hidden>지도를 연결할 수 없습니다. 목록은 계속 이용할 수 있습니다.</div>
+      <div class="map-toolbar"><span id="mapCount">지도에 0건</span><button id="mapHome" type="button">⌖ 전국 보기</button><button id="mapLocate" type="button">◎ 내 위치</button></div>
+      <div class="map-key"><span><i class="dot blue"></i>청약</span><span><i class="dot amber"></i>분양권 거래</span><span><i class="dot gray"></i>위치 미확인: 목록만</span></div>
+      <div class="mobile-view"><button type="button" class="active" id="viewList">☰ 목록 보기</button><button type="button" id="viewMap">▧ 지도 보기</button></div>
+    </main>
+  </div>
+  <aside id="detail" class="detail" aria-label="상세 정보" aria-hidden="true"><div class="detail-head"><b>단지 상세</b><button type="button" id="closeDetail" aria-label="닫기">×</button></div><div id="detailBody"></div></aside>
+  <div id="scrim" class="scrim" hidden></div>
+  <dialog id="dialogAlert" class="modal"><form method="dialog"><div class="modal-head"><div><small>내 관심 지역</small><h2>맞춤 알림 설정</h2></div><button type="submit" class="close">×</button></div><p>원하는 지역과 종류를 선택해 관심 조건을 저장합니다. 웹 브라우저 알림은 <b>사이트를 열어 둔 동안 새 데이터를 확인할 때만</b> 동작합니다. 종료 상태 푸시는 서버 구독 연동 전까지 제공되지 않습니다.</p><label class="modal-label">관심 지역<select id="alertRegion"><option value="">전국</option><option>서울</option><option>경기</option><option>인천</option><option>부산</option><option>대구</option><option>광주</option><option>대전</option><option>울산</option><option>세종</option><option>강원</option><option>충북</option><option>충남</option><option>전북</option><option>전남</option><option>경북</option><option>경남</option><option>제주</option></select></label><label class="modal-check"><input type="checkbox" id="alertOffer" checked> 새로운 청약 공고 / 접수 예정</label><label class="modal-check"><input type="checkbox" id="alertTransfer" checked> 신규 분양권 실거래</label><label class="modal-label">청약 일정 사전 확인<select id="alertDays"><option value="1">1일 전</option><option value="3">3일 전</option><option value="7">7일 전</option></select></label><div class="modal-footer"><button class="ghost" type="button" id="btnNotifyPermission">브라우저 알림 권한</button><button class="primary" type="button" id="saveAlert">조건 저장</button></div><small id="alertMessage"></small></form></dialog>
+  <dialog id="dialogCalendar" class="modal"><form method="dialog"><div class="modal-head"><h2>다가오는 청약 일정</h2><button type="submit" class="close">×</button></div><div id="calendarList"></div><p class="fine">접수 일정은 공고 변경 가능성이 있으므로 신청 전 공식 모집공고를 확인하세요.</p></form></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script defer src="./app.js"></script>
+</body></html>
