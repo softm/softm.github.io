@@ -140,13 +140,13 @@
     banner.className='status-banner'+(state.demo?' demo':(meta.status!=='ok'?' warn':''));
     let message;
     if(state.demo) message='이 화면은 <b>가상 예시</b>이며 실제 단지·가격·일정이 아닙니다.';
-    else if(meta.status==='ok') message='공식 수집 데이터 · 마지막 수집 ' + esc(meta.generatedAt?new Date(meta.generatedAt).toLocaleString('ko-KR'):'미기록');
+    else if(meta.status==='ok'||meta.status==='partial') message=(meta.status==='partial'?'일부 지역·유형만 수집됨 · ':'공식 수집 데이터 · ')+'마지막 수집 '+esc(meta.generatedAt?new Date(meta.generatedAt).toLocaleString('ko-KR'):'미기록');
     else if(meta.status==='error') message='데이터를 불러오지 못했습니다. 연결 상태를 확인해 주세요.';
     else message='공식 데이터 연동 대기 중 · 실제 분양·거래가 없는 것으로 해석하지 마세요.';
     banner.innerHTML = message + '<button type="button" id="toggleDemo">' + (state.demo?'실제 데이터로 돌아가기':'예시 데이터 보기') + '</button>';
     $('toggleDemo').addEventListener('click',()=>{state.demo=!state.demo;resetFilters();render();});
     const o=META.offer,t=META.transfer;
-    $('sourceStatus').textContent='청약: '+(o.status==='ok'?'연동':'미연동')+' · 분양권: '+(t.status==='ok'?'연동':'미연동')+' · 표시 기준: '+(state.demo?'가상 예시':'공식 데이터만');
+    $('sourceStatus').textContent='청약: '+(['ok','partial'].includes(o.status)?'연동':'미연동')+' · 분양권: '+(['ok','partial'].includes(t.status)?'연동':'미연동')+' · 표시 기준: '+(state.demo?'가상 예시':'공식 데이터만');
   }
   function render() {
     state.filtered=getFiltered();
