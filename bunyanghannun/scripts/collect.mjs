@@ -6,7 +6,7 @@ const path=s=>new URL('../'+s,import.meta.url);
 const read=async(f,def)=>{try{return JSON.parse(await readFile(path(f),'utf8'));}catch{return def;}};
 const write=(f,v)=>writeFile(path(f),JSON.stringify(v,null,2)+'\n');
 const hash=s=>createHash('sha256').update(s).digest('hex').slice(0,18);
-const now=new Date(),today=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit'}).format(now);
+const now=new Date(),today=new Date(Date.now()+9*3600000).toISOString().slice(0,10);
 const d=s=>{const t=String(s||'').replace(/\D/g,'');return t.length>=8?t.slice(0,4)+'-'+t.slice(4,6)+'-'+t.slice(6,8):'';};
 const cutoff=()=>{const n=new Date(Date.now()-180*864e5);return n.toISOString().slice(0,10);};
 const n=x=>Number(String(x||'').replace(/[,\s]/g,''))||0;
