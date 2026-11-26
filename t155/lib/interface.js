@@ -543,6 +543,10 @@ function fn_GoMain(restart) {
  * API 112 : GoPermission : onCreate
  */
 function fn_GoPermission(P_CHECK_MODE,P_PARAMS) {
+	if (String(P_CHECK_MODE || "").toLowerCase() === "accessibility") {
+		fn_StartSetting("accessibility", ""); // SOFTM-ACCESSIBILITY-SETTING 날짜:20261126 : MainActivity 재호출로 권한 페이지가 새로고침되는 대신 시스템 접근성 설정을 직접 연다
+		return;
+	}
 	var result = { "header":{ "api":"112" }, "body":{ "P_CHECK_MODE":P_CHECK_MODE,"P_PARAMS":P_PARAMS } };
 	if(CommonUtil.fn_IS_APP() == "I" || CommonUtil.fn_IS_APP() == "A"){
 	    fn_Js_Bridge(result);
