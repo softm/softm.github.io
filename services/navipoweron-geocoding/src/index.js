@@ -24,7 +24,7 @@ export default {
     if (cached) return withCors(cached, corsOrigin);
 
     const response = await fetch(upstream, { headers: { Accept: "application/json" } });
-    if (!response.ok) return json({ error: response.status === 429 ? "quota_exceeded" : "provider_error" }, response.status === 429 ? 429 : 502, corsOrigin);
+    if (!response.ok) return json({ error: response.status === 429 ? "quota_exceeded" : "provider_error", provider_status: response.status }, response.status === 429 ? 429 : 502, corsOrigin);
     const body = await response.text();
     const stored = new Response(body, { status: 200, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=300" } });
     ctx.waitUntil(cache.put(cacheKey, stored.clone()));
