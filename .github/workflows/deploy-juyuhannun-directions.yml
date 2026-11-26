@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: softm/juyuhannun
-          ref: 1d6c505d6ae0b9bd0cbe0c3d38594115465c4480
+          ref: ef2d68c130329a14dbe43d7120f29f399e1773d4
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
