@@ -405,10 +405,11 @@ function fn_Toast(msg) {
 function fn_ResolveMapModeUrl(url) {
 	var useStoredMapMode = typeof isWeb === "undefined" || isWeb; // SOFTM-MAPROUTE: 앱에서는 네이티브 info를 기준으로 하고 웹 테스트에서만 저장값을 우선한다. 2026-05-19
 	var mapMode = (useStoredMapMode ? localStorage.getItem("_MAP_MODE") : "") || (window.info && window.info.mapMode);
-	if (!url || String(mapMode) !== "2") return url; // SOFTM-MAPMODE-INDEPENDENT 날짜:20260525 : search/home_company는 내비앱 패키지가 아니라 사용자가 선택한 지도 모드만 기준으로 라우팅
+	if (!url || (String(mapMode) !== "2" && String(mapMode) !== "3")) return url;
+	var suffix = String(mapMode) === "3" ? "_google" : "_world";
 	return String(url)
-		.replace(/(^|\/)search\.html(?=([?#]|$))/g, "$1search_google.html")
-		.replace(/(^|\/)home_company\.html(?=([?#]|$))/g, "$1home_company_google.html");
+		.replace(/(^|\/)search\.html(?=([?#]|$))/g, "$1search" + suffix + ".html")
+		.replace(/(^|\/)home_company\.html(?=([?#]|$))/g, "$1home_company" + suffix + ".html");
 }
 
 function fn_IsGoogleMapPackage(packageName) {
@@ -424,21 +425,23 @@ function fn_ShouldSuppressOverlayAutoResumeForPop(url) {
 	var normalizedUrl = rawUrl.split("#")[0].split("?")[0];
 	var pageName = normalizedUrl.substring(normalizedUrl.lastIndexOf("/") + 1);
 	var queryString = rawUrl.split("#")[0].split("?")[1] || "";
-	var isFavoritePage = (pageName === "search.html" || pageName === "search_google.html") &&
+	var isFavoritePage = (pageName === "search.html" || pageName === "search_world.html" || pageName === "search_google.html") &&
 		/(^|&)idx=2(&|$)/.test(queryString);
-	return pageName === "home_company.html" || pageName === "home_company_google.html" || isFavoritePage; // SOFTM-FAVORITE-OVERLAY-HIDE 날짜:20260521: 메뉴 즐겨찾기 팝업 진입 시 오버레이 자동 재표시 방지
+	return pageName === "home_company.html" || pageName === "home_company_world.html" || pageName === "home_company_google.html" || isFavoritePage;
 }
 /** SOFTM-HOMECOMPANY-OVERLAY-HIDE END 날짜:20260521 */
 
 /** SOFTM-MAPSWITCH START: search/home_company 화면에서 티맵지도와 구글지도 화면을 즉시 전환한다. 2026-05-19 */
 function fn_SwitchMapMode(mapMode) {
 	var page = location.pathname.split("/").pop();
-	var googlePage = page.indexOf("_google.html") >= 0;
-	var nextMapMode = mapMode ? String(mapMode) : (googlePage ? "1" : "2");
+	var alternatePage = /_(world|google)\.html$/.test(page);
+	var nextMapMode = mapMode ? String(mapMode) : (alternatePage ? "1" : "2");
 	var targetMap = {
-		"search.html": "search_google.html",
+		"search.html": "search_world.html",
+		"search_world.html": "search.html",
 		"search_google.html": "search.html",
-		"home_company.html": "home_company_google.html",
+		"home_company.html": "home_company_world.html",
+		"home_company_world.html": "home_company.html",
 		"home_company_google.html": "home_company.html"
 	};
 	var targetPage = targetMap[page];
@@ -472,8 +475,8 @@ function fn_StopOverlaySafely() {
 function fn_InitMapModeSwitchButton() {
 	var button = document.getElementById("btnSwitchMapMode");
 	if (!button) return;
-	var googlePage = location.pathname.split("/").pop().indexOf("_google.html") >= 0;
-	var label = googlePage ? fn_MapModeSwitchText("google_navi.switch_to_tmap", "티맵지도 보기") : fn_MapModeSwitchText("google_navi.switch_to_google", "구글지도 보기"); // SOFTM-MAPSWITCH: 지도 전환 버튼 문구를 보기 액션으로 변경. 2026-05-19
+	var alternatePage = /_(world|google)\.html$/.test(location.pathname.split("/").pop());
+	var label = alternatePage ? fn_MapModeSwitchText("google_navi.switch_to_tmap", "티맵지도 보기") : "해외 지도 보기";
 	var labelText = label; // SOFTM-MAPSWITCH: 버튼 라벨도 대상 지도명이 아닌 전환 액션 문구로 표시. 2026-05-19
 	button.setAttribute("title", label);
 	button.setAttribute("aria-label", label);

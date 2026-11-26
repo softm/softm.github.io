@@ -262,6 +262,7 @@ var messages  = {
             copy_order_id:"Copy order number",
             /* SOFTM-I18N-POLISH START 날짜:20260521 : 지도/유지시간 관련 영어 라벨을 제품 용어에 맞게 정리 */
             tmap_map:"TMAP Map",
+            world_map:"World Map",
             google_map:"Google Map",
             destination_execution_hold_time:"Keep previous destination guidance",
             destination_execution_hold_time2:"Hold time",
@@ -903,6 +904,7 @@ var messages  = {
             app_purchase3: "쏘기]",
             copy_order_id:"주문번호 복사",
             tmap_map:"티맵지도",
+            world_map:"해외 지도",
             google_map:"구글지도",
             destination_execution_hold_time:"내비 목적지 안내 유지 시간",
             destination_execution_hold_time2:"유지 시간",

@@ -49,7 +49,7 @@
 
   window.SOFTM_GOOGLE_MAPS_API_KEY = window.SOFTM_GOOGLE_MAPS_API_KEY ||
     (getParam("google_key") || getParam("key")) ||
-    "AIzaSyDniUOLnoMUueAw3d_J_7EKoL9JvjMXCXw";
+    ""; // Google 지도는 사용 제한 상태이며 API 키를 앱/웹 자산에 포함하지 않는다.
 
   function initGoogleNaviPage(pageType) {
     if (typeof fn_StopOverlaySafely === "function") fn_StopOverlaySafely(); // SOFTM-MAPSWITCH-OVERLAY-HIDE 날짜:20260521: 구글지도 화면 직접 진입 시 오버레이 제거 실패가 초기화를 막지 않도록 안전 호출
