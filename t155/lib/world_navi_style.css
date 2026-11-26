@@ -8,4 +8,3 @@
 .world-navi-marker.my-location { width: 20px; height: 20px; border-radius: 50%; background: #1e88e5; transform: none; box-shadow: 0 0 0 8px rgba(30,136,229,.2); }
 .maplibregl-ctrl-bottom-left { display: none; }
 .maplibregl-ctrl-bottom-right { bottom: 65px; }
-.world-service-note { padding: 6px 12px; color: #5f6368; background: #f6f8fb; font-size: 12px; border-bottom: 1px solid #d9e0e8; }
