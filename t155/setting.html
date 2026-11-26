@@ -926,7 +926,8 @@ function initMapMode(v) {
 
     // 맵모드
     var idx = parseInt(v.mapMode || "1", 10) - 1;
-    if (idx < 0 || idx > 1 || isNaN(idx)) {
+    if (idx === 2) idx = 1; // 제한된 Google 지도 설정은 해외 지도로 자동 이전
+    if (idx < 0 || idx > 2 || isNaN(idx)) {
         idx = 0;
     }
     setMapModeByIndex(idx, { save: false, notify: false });
@@ -937,9 +938,19 @@ function initMapMode(v) {
 function setMapModeByIndex(index, option) {
     option = option || {};
     index = parseInt(index, 10);
-    if (index < 0 || index > 1 || isNaN(index)) index = 0;
+    if (index < 0 || index > 2 || isNaN(index)) index = 0;
+    if (index === 2) {
+        var previousIndex = window.info && String(window.info.mapMode) === "2" ? 1 : 0;
+        if (chipSetMapMode && chipSetMapMode.chips) {
+            chipSetMapMode.chips[2].selected = false;
+            chipSetMapMode.chips[previousIndex].selected = true;
+        }
+        chipMapModeSelectedIndex = previousIndex;
+        if (option.notify) snackbar("Google 지도는 현재 결제 제한으로 사용할 수 없습니다.");
+        return;
+    }
     var mapValue = index == 1 ? "2" : "1";
-    var mapName = index == 1 ? t("label.google_map") : t("label.tmap_map");
+    var mapName = index == 1 ? (t("label.world_map") === "label.world_map" ? "해외 지도" : t("label.world_map")) : t("label.tmap_map");
     var mapGuide = document.querySelector('#map_mode_guide');
     if (mapGuide) mapGuide.innerHTML = t("message.map_mode_guide",{"mapName":mapName});
     if (chipSetMapMode && chipSetMapMode.chips) {
@@ -959,14 +970,14 @@ function applyGoogleMapModeForNaviApp(app, notify) {
      * 변경내용: 내비앱과 지도 화면 선택을 분리하고, Google 계열 내비앱 선택 시에만 Google 지도 모드로 자동 보정
      */
     var google = isGoogleMapApp(app);
-    if (!google) return false; // SOFTM-MAPMODE-INDEPENDENT 날짜:20260525 : TMAP/기타 내비앱 선택이 사용자의 Google 지도 선택을 TMAP으로 되돌리지 않게 함
-    var targetIndex = google ? 1 : 0;
-    var targetMode = google ? "2" : "1";
+    if (!google) return false;
+    var targetIndex = 1;
+    var targetMode = "2";
     if (window.info && String(window.info.mapMode) == targetMode && chipMapModeSelectedIndex == targetIndex) return false;
     setMapModeByIndex(targetIndex, {
         save: true,
         notify: notify,
-        message: t(google ? "message.map_mode_auto_google" : "message.save",{"mapName":t(google ? "label.google_map" : "label.tmap_map")})
+        message: "Google 계열 내비 선택에 맞춰 해외 지도로 변경했습니다."
     });
     /** SOFTM-MAPMODE-SYNC END */
     return true;
@@ -1380,9 +1391,15 @@ function saveStartStopOnOff(callBack) {
                         <div class="mdc-chip__ripple"></div>
                         <span role="gridcell">
                         <span role="button" tabindex="-1" class="mdc-chip__primary-action">
-                            <span class="mdc-chip__text" data-i18n="label.google_map">구글지도</span>
+                            <span class="mdc-chip__text" data-i18n="label.world_map">해외 지도</span>
                         </span>
                         </span>
+                    </div>
+                    <div class="mdc-chip" role="row" aria-disabled="true" title="Google 지도 사용 제한" style="opacity:.48">
+                        <div class="mdc-chip__ripple"></div>
+                        <span role="gridcell"><span role="button" tabindex="-1" class="mdc-chip__primary-action">
+                            <span class="mdc-chip__text">Google 지도 · 사용 제한</span>
+                        </span></span>
                     </div>
                 </div>
             </div>
