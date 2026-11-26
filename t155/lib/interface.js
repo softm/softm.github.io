@@ -401,12 +401,12 @@ function fn_Toast(msg) {
  * @corrector  WooYoung.Yoon
  * @date 2016. 07. 13.
  */
-/** SOFTM-MAPROUTE START: 구글지도 모드에서는 검색/집회사 화면을 Google 전용 페이지로 연결한다. 2026-05-19 */
+/** SOFTM-MAPROUTE START: 해외지도 모드에서는 검색/집회사 화면을 해외 지도 페이지로 연결한다. 2026-05-19 */
 function fn_ResolveMapModeUrl(url) {
 	var useStoredMapMode = typeof isWeb === "undefined" || isWeb; // SOFTM-MAPROUTE: 앱에서는 네이티브 info를 기준으로 하고 웹 테스트에서만 저장값을 우선한다. 2026-05-19
 	var mapMode = (useStoredMapMode ? localStorage.getItem("_MAP_MODE") : "") || (window.info && window.info.mapMode);
 	if (!url || (String(mapMode) !== "2" && String(mapMode) !== "3")) return url;
-	var suffix = String(mapMode) === "3" ? "_google" : "_world";
+	var suffix = "_world"; // SOFTM-WORLD-MAP 날짜:20261126 : 기존 Google 모드 저장값(3)도 해외 지도로 자동 이전
 	return String(url)
 		.replace(/(^|\/)search\.html(?=([?#]|$))/g, "$1search" + suffix + ".html")
 		.replace(/(^|\/)home_company\.html(?=([?#]|$))/g, "$1home_company" + suffix + ".html");
