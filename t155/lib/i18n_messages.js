@@ -513,6 +513,8 @@ var messages  = {
             /* SOFTM-OVERLAY-NAMING END 날짜:20260521 */
           },
           google_navi: {
+            world_map_title: "World Map",
+            home_world_map_title: "Home/Work · World Map",
             current_location: "Current location",
             selected_location: "Selected location",
             edit_location: "Edit location",
@@ -1162,6 +1164,8 @@ var messages  = {
             /* SOFTM-OVERLAY-NAMING END 날짜:20260521 */
           },
           google_navi: {
+            world_map_title: "해외 지도",
+            home_world_map_title: "집/회사 · 해외 지도",
             current_location: "현재 위치",
             selected_location: "선택 위치",
             edit_location: "위치 수정",
@@ -1496,6 +1500,8 @@ var messages  = {
             "destination_overlay_intro_keep_basic": "O modo básico será mantido."
           },
           "google_navi": {
+            "world_map_title": "Mapa mundial",
+            "home_world_map_title": "Casa/Trabalho · Mapa mundial",
             "current_location": "Local atual",
             "selected_location": "Local selecionado",
             "edit_location": "Editar local",
@@ -1781,6 +1787,8 @@ var messages  = {
             "destination_overlay_intro_keep_basic": "Se mantendrá el modo básico."
           },
           "google_navi": {
+            "world_map_title": "Mapa mundial",
+            "home_world_map_title": "Casa/Trabajo · Mapa mundial",
             "current_location": "Ubicación actual",
             "selected_location": "Ubicación seleccionada",
             "edit_location": "Editar ubicación",
@@ -2066,6 +2074,8 @@ var messages  = {
             "destination_overlay_intro_keep_basic": "Mode dasar tetap digunakan."
           },
           "google_navi": {
+            "world_map_title": "Peta Dunia",
+            "home_world_map_title": "Rumah/Kantor · Peta Dunia",
             "current_location": "Lokasi saat ini",
             "selected_location": "Lokasi dipilih",
             "edit_location": "Edit lokasi",
@@ -2351,6 +2361,8 @@ var messages  = {
             "destination_overlay_intro_keep_basic": "基本方式を維持します。"
           },
           "google_navi": {
+            "world_map_title": "海外地図",
+            "home_world_map_title": "自宅/職場・海外地図",
             "current_location": "現在地",
             "selected_location": "選択位置",
             "edit_location": "位置を編集",
@@ -2636,6 +2648,8 @@ var messages  = {
             "destination_overlay_intro_keep_basic": "จะใช้โหมดพื้นฐานต่อ"
           },
           "google_navi": {
+            "world_map_title": "แผนที่ทั่วโลก",
+            "home_world_map_title": "บ้าน/ที่ทำงาน · แผนที่ทั่วโลก",
             "current_location": "ตำแหน่งปัจจุบัน",
             "selected_location": "ตำแหน่งที่เลือก",
             "edit_location": "แก้ไขตำแหน่ง",
@@ -2921,6 +2935,8 @@ var messages  = {
             "destination_overlay_intro_keep_basic": "Sẽ giữ chế độ cơ bản."
           },
           "google_navi": {
+            "world_map_title": "Bản đồ thế giới",
+            "home_world_map_title": "Nhà/Cơ quan · Bản đồ thế giới",
             "current_location": "Vị trí hiện tại",
             "selected_location": "Vị trí đã chọn",
             "edit_location": "Sửa vị trí",
@@ -3206,6 +3222,8 @@ var messages  = {
             "destination_overlay_intro_keep_basic": "Der Standardmodus bleibt erhalten."
           },
           "google_navi": {
+            "world_map_title": "Weltkarte",
+            "home_world_map_title": "Zuhause/Arbeit · Weltkarte",
             "current_location": "Aktueller Standort",
             "selected_location": "Ausgewählter Standort",
             "edit_location": "Standort bearbeiten",
@@ -3491,6 +3509,8 @@ var messages  = {
             "destination_overlay_intro_keep_basic": "Le mode basique sera conservé."
           },
           "google_navi": {
+            "world_map_title": "Carte mondiale",
+            "home_world_map_title": "Domicile/Travail · Carte mondiale",
             "current_location": "Position actuelle",
             "selected_location": "Position sélectionnée",
             "edit_location": "Modifier la position",
