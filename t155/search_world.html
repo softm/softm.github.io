@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>해외 지도</title>
+  <title data-i18n="google_navi.world_map_title">해외 지도</title>
   <link rel="stylesheet" href="lib/material-components-web.min.css">
   <link rel="stylesheet" href="lib/icon.css">
   <link rel="stylesheet" href="lib/common.css?a=6">
@@ -13,20 +13,20 @@
 <body>
   <div class="i18n google-navi-shell">
     <header class="mdc-top-app-bar mdc-top-app-bar--fixed"><div class="mdc-top-app-bar__row">
-      <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start"><button type="button" id="btnBack" class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded">arrow_back_ios</button><span class="mdc-top-app-bar__title">해외 지도</span></section>
-      <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end"><button type="button" id="btnSwitchMapMode" onclick="return fn_SwitchMapMode();" class="mdc-icon-button mdc-top-app-bar__action-item--unbounded map-mode-switch-button"><span class="material-icons map-mode-switch-icon" aria-hidden="true">swap_horiz</span><span class="map-mode-switch-label">티맵지도 보기</span></button></section>
+      <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start"><button type="button" id="btnBack" class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon--unbounded">arrow_back_ios</button><span class="mdc-top-app-bar__title" data-i18n="google_navi.world_map_title">해외 지도</span></section>
+      <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end"><button type="button" id="btnSwitchMapMode" onclick="return fn_SwitchMapMode();" class="mdc-icon-button mdc-top-app-bar__action-item--unbounded map-mode-switch-button"><span class="material-icons map-mode-switch-icon" aria-hidden="true">swap_horiz</span><span class="map-mode-switch-label" data-i18n="google_navi.switch_to_tmap">티맵지도 보기</span></button></section>
     </div></header>
     <div class="google-navi-page google-navi-page--with-top-app-bar">
-      <button type="button" id="btnMyLocation" class="icon-button" title="현재 위치" aria-label="현재 위치">◎</button>
-      <nav class="google-navi-tabs" aria-label="검색 유형">
+      <button type="button" id="btnMyLocation" class="icon-button" title="현재 위치" aria-label="현재 위치" data-i18n="[title]google_navi.current_location;[aria-label]google_navi.current_location">◎</button>
+      <nav class="google-navi-tabs" aria-label="검색 유형" data-i18n="[aria-label]google_navi.search_type">
         <button type="button" class="google-navi-tab" data-mode="recent"><span class="material-icons google-navi-tab-icon">search</span><span class="google-navi-tab-label" data-i18n="label.recent">최근</span></button>
         <button type="button" class="google-navi-tab" data-mode="search"><span class="material-icons google-navi-tab-icon">star</span><span class="google-navi-tab-label" data-i18n="label.search">검색</span></button>
         <button type="button" class="google-navi-tab" data-mode="favorite"><span class="material-icons google-navi-tab-icon">place</span><span class="google-navi-tab-label" data-i18n="label.favorite">즐겨찾기</span></button>
         <button type="button" class="google-navi-tab" data-mode="map"><span class="material-icons google-navi-tab-icon">map</span><span class="google-navi-tab-label" data-i18n="label.map">지도</span></button>
       </nav>
-      <section id="searchPanel" class="google-navi-search"><input id="keyword" type="search" autocomplete="off" placeholder="장소명 또는 주소"><button type="button" id="btnSearch" class="google-navi-button" data-i18n="label.search">검색</button></section>
-      <div id="statusText" class="google-navi-status">초기화 중입니다...</div>
-      <main class="google-navi-content"><section id="poiList" class="google-navi-list empty" aria-label="목적지 목록"></section><section id="googleMap" class="google-navi-map" aria-label="해외 지도"></section></main>
+      <section id="searchPanel" class="google-navi-search"><input id="keyword" type="search" autocomplete="off" placeholder="장소명 또는 주소" data-i18n="[placeholder]google_navi.place_or_address"><button type="button" id="btnSearch" class="google-navi-button" data-i18n="label.search">검색</button></section>
+      <div id="statusText" class="google-navi-status" data-i18n="google_navi.initializing">초기화 중입니다...</div>
+      <main class="google-navi-content"><section id="poiList" class="google-navi-list empty" aria-label="목적지 목록" data-i18n="[aria-label]google_navi.destination_list"></section><section id="googleMap" class="google-navi-map" aria-label="해외 지도" data-i18n="[aria-label]google_navi.world_map_title"></section></main>
       <div id="placeAddress" class="google-navi-address-overlay"></div><div id="googleNaviSnackbar" class="google-navi-snackbar"></div>
       <footer class="google-navi-footer"><button type="button" id="btnNavi" class="google-navi-button" data-i18n="google_navi.start_navi">내비 시작</button><button type="button" id="btnDelete" class="google-navi-button danger" data-i18n="google_navi.delete">삭제</button><button type="button" id="btnPrimary" class="google-navi-button primary" data-i18n="google_navi.add_favorite">즐겨찾기 추가</button></footer>
     </div>
